@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Layers,
   BookOpen,
@@ -116,14 +117,32 @@ export interface ClassDetailData {
 }
 
 // 4 TAB IKONIK GOOGLE CLASSROOM
-export const CLASSROOM_TABS = [
+export const TA_CLASSROOM_TABS = [
+  { id: 'bantu-presensi', label: 'Bantu Presensi', icon: CalendarCheck2, badgeLabel: 'Presensi' },
+  { id: 'jawab-forum', label: 'Jawab Forum', icon: MessagesSquare, badgeLabel: 'Forum' },
+  { id: 'materi-asisten', label: 'Materi Asisten', icon: BookOpen, badgeLabel: 'Materi' },
+  { id: 'peserta', label: 'Peserta', icon: Users, badgeLabel: 'Peserta' },
+] as const;
+
+export const LECTURER_CLASSROOM_TABS = [
+  { id: 'forum', label: 'Forum & Pengumuman', icon: MessagesSquare, badgeLabel: 'Stream' },
+  { id: 'tugas', label: 'Tugas & Penilaian', icon: ClipboardList, badgeLabel: 'Classwork' },
+  { id: 'materi', label: 'Materi', icon: BookOpen, badgeLabel: 'Materi' },
+  { id: 'peserta', label: 'Peserta', icon: Users, badgeLabel: 'Peserta' },
+  { id: 'asisten', label: 'Asisten', icon: UserCheck, badgeLabel: 'Asisten' },
+  { id: 'presensi', label: 'Presensi', icon: CalendarCheck2, badgeLabel: 'Presensi' },
+  { id: 'nilai', label: 'Nilai', icon: GraduationCap, badgeLabel: 'Grades' },
+] as const;
+
+export const STUDENT_CLASSROOM_TABS = [
   { id: 'forum', label: 'Forum', icon: MessagesSquare, badgeLabel: 'Stream' },
   { id: 'tugas', label: 'Tugas Kelas', icon: ClipboardList, badgeLabel: 'Classwork' },
   { id: 'anggota', label: 'Anggota', icon: Users, badgeLabel: 'People' },
   { id: 'nilai', label: 'Nilai', icon: GraduationCap, badgeLabel: 'Grades' },
 ] as const;
 
-export type ClassroomTabId = (typeof CLASSROOM_TABS)[number]['id'];
+export const CLASSROOM_TABS = STUDENT_CLASSROOM_TABS;
+export type ClassroomTabId = string;
 
 const fmt = (iso: string) =>
   `${new Date(iso).toLocaleString('id-ID', {
@@ -133,7 +152,9 @@ const fmt = (iso: string) =>
   })} WIB`;
 
 export function ClassHubTabs({ data }: { data: ClassDetailData }) {
-  const [activeTab, setActiveTab] = useState<ClassroomTabId>('forum');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [copiedCode, setCopiedCode] = useState(false);
   const [classworkFilter, setClassworkFilter] = useState<'all' | 'tugas' | 'materi' | 'ujian' | 'presensi'>('all');
   const [isAnnounceOpen, setIsAnnounceOpen] = useState(false);
@@ -164,6 +185,24 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
   const student = viewer === 'STUDENT';
   const can = (p: string) => !!perms?.includes(p);
 
+  const roleTabs = ta
+    ? TA_CLASSROOM_TABS
+    : lecturer
+    ? LECTURER_CLASSROOM_TABS
+    : STUDENT_CLASSROOM_TABS;
+
+  const tabParam = searchParams?.get('tab');
+  const validTabIds = roleTabs.map((t) => t.id as string);
+  const activeTab = (tabParam && validTabIds.includes(tabParam))
+    ? tabParam
+    : (roleTabs[0].id as string);
+
+  const setActiveTab = (tabId: string) => {
+    const params = new URLSearchParams(searchParams?.toString() || '');
+    params.set('tab', tabId);
+    router.push(`/classes/${cls.id}?${params.toString()}`);
+  };
+
   const handleCopyCode = () => {
     navigator.clipboard.writeText(cls.join_code);
     setCopiedCode(true);
@@ -178,7 +217,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
   return (
     <div className="w-full space-y-6 sm:space-y-8 animate-fade-up font-sans p-4 sm:p-6 lg:p-9">
       {/* ======================================================== */}
-      {/* 1. TOP NAVIGASI GOOGLE CLASSROOM (4 TAB BESAR)          */}
+      {/* 1. TOP NAVIGASI GOOGLE CLASSROOM (TAB BESAR PER PERAN)   */}
       {/* ======================================================== */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-black pb-4">
         {/* Tombol Kembali ke Daftar Kelas */}
@@ -190,9 +229,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           <span>Daftar Kelas</span>
         </Link>
 
-        {/* 4 TAB UTAMA GOOGLE CLASSROOM */}
+        {/* TAB PER PERAN TERPISAH (SINKRON DENGAN ?tab=...) */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 overflow-x-auto no-scrollbar py-1">
-          {CLASSROOM_TABS.map((tab) => {
+          {roleTabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
@@ -201,7 +240,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  'flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0',
+                  'flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0 cursor-pointer',
                   isActive
                     ? 'border-2 border-black bg-black text-white shadow-retro scale-[1.02]'
                     : 'border-2 border-black bg-white text-black shadow-xs hover:bg-retro-warm'
@@ -239,9 +278,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       </div>
 
       {/* ======================================================== */}
-      {/* TAB 1: FORUM (STREAM GOOGLE CLASSROOM)                   */}
+      {/* TAB: FORUM / JAWAB FORUM                                 */}
       {/* ======================================================== */}
-      {activeTab === 'forum' && (
+      {(activeTab === 'forum' || activeTab === 'jawab-forum') && (
         <div className="space-y-6">
           {/* A. HERO COVER BANNER ALA GOOGLE CLASSROOM */}
           <div className="rounded-2xl border-2 border-black bg-[#FFE4D6] shadow-[6px_6px_0px_#000000] p-6 sm:p-8 lg:p-10 relative overflow-hidden">
@@ -819,9 +858,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       )}
 
       {/* ======================================================== */}
-      {/* TAB 3: ANGGOTA (PEOPLE GOOGLE CLASSROOM)                 */}
+      {/* TAB: ANGGOTA / PESERTA KELAS                             */}
       {/* ======================================================== */}
-      {activeTab === 'anggota' && (
+      {(activeTab === 'anggota' || activeTab === 'peserta') && (
         <div className="space-y-8">
           {/* Section Pengajar */}
           <div className="space-y-4">
@@ -922,6 +961,195 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   </div>
                 ))}
               </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: ASISTEN (KHUSUS DOSEN PENGAMPU)                     */}
+      {/* ======================================================== */}
+      {activeTab === 'asisten' && (
+        <div className="space-y-6">
+          <div className="p-4 bg-retro-warm border-2 border-black rounded-2xl flex items-center justify-between">
+            <div>
+              <h3 className="font-heading font-black text-lg text-black">Kelola Asisten Dosen & Hak Akses</h3>
+              <p className="text-xs text-black/70 font-medium">Delegasikan izin pengelolaan presensi, koreksi tugas, dan materi kelas kepada asisten resmi.</p>
+            </div>
+            <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+              {assistants?.length ?? 0} Asisten Aktif
+            </span>
+          </div>
+
+          {/* Daftar Asisten */}
+          {assistants && assistants.length > 0 && (
+            <div className="space-y-3">
+              {assistants.map((ast) => (
+                <div key={ast.user_id} className="p-4 rounded-2xl border-2 border-black bg-white shadow-retro flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-3.5">
+                    <div className="h-10 w-10 rounded-full border-2 border-black bg-retro-warm flex items-center justify-center font-bold text-xs text-black shrink-0">
+                      {ast.name.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-black">{ast.name}</h4>
+                      <span className="text-xs text-black/60">{ast.email}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold bg-retro-mint border border-black px-2.5 py-1 rounded">Asisten Dosen</span>
+                    {lecturer && <RevokeAssistant classId={cls.id} email={ast.email} name={ast.name} />}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Form Tambah Asisten untuk Dosen */}
+          {lecturer && (
+            <div className="p-5 rounded-2xl border-2 border-black bg-retro-warm/40 space-y-3">
+              <h4 className="font-bold text-sm text-black">+ Tambah Asisten Dosen Baru</h4>
+              <AssistantForm classId={cls.id} />
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: MATERI / MATERI ASISTEN                             */}
+      {/* ======================================================== */}
+      {(activeTab === 'materi' || activeTab === 'materi-asisten') && (
+        <div className="space-y-6">
+          <div className="p-4 bg-retro-warm border-2 border-black rounded-2xl flex items-center justify-between">
+            <div>
+              <h3 className="font-heading font-black text-lg text-black">Modul & Bahan Pembelajaran</h3>
+              <p className="text-xs text-black/70 font-medium">Bahan ajar kuliah, slide presentasi, panduan praktikum lab, dan referensi bacaan.</p>
+            </div>
+            {(lecturer || ta) && (
+              <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+                {materials.length} Modul Terbit
+              </span>
+            )}
+          </div>
+
+          {(lecturer || ta) && (
+            <div className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
+              <h4 className="font-bold text-sm text-black flex items-center gap-2">
+                <FolderArchive className="h-4 w-4 text-retro-orange" /> Unggah Modul / Materi Baru
+              </h4>
+              <CreateMaterialForm classId={cls.id} />
+            </div>
+          )}
+
+          {/* Daftar Materi */}
+          <div className="space-y-3">
+            {materials.length === 0 ? (
+              <p className="text-xs text-black/60 italic p-6 bg-white rounded-xl border border-black/20 text-center">
+                Belum ada modul materi kuliah yang diunggah.
+              </p>
+            ) : (
+              materials.map((m, idx) => (
+                <div key={m.id} className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-xl border-2 border-black bg-[#E0F4FF] text-black">
+                        <BookOpen className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-base text-black">{m.title}</h4>
+                        <span className="text-xs font-normal text-black/60">{fmt(m.created_at)}</span>
+                      </div>
+                    </div>
+                    <span className="text-xs font-medium bg-retro-warm px-2.5 py-1 rounded border border-black">
+                      Modul #{idx + 1}
+                    </span>
+                  </div>
+                  {m.body_md && (
+                    <div className="p-4 rounded-xl border border-black/20 bg-retro-warm/20 text-xs sm:text-sm">
+                      <MarkdownViewer content={m.body_md} />
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: PRESENSI / BANTU PRESENSI                           */}
+      {/* ======================================================== */}
+      {(activeTab === 'presensi' || activeTab === 'bantu-presensi') && (
+        <div className="space-y-6">
+          <div className="p-4 bg-retro-warm border-2 border-black rounded-2xl flex items-center justify-between">
+            <div>
+              <h3 className="font-heading font-black text-lg text-black">
+                {ta ? 'Bantu Presensi Kelas & Sesi Kehadiran' : 'Presensi Perkuliahan Kelas'}
+              </h3>
+              <p className="text-xs text-black/70 font-medium">
+                {ta
+                  ? 'Bantu dosen memvalidasi kehadiran mahasiswa via kode sesi, QR token berputar, dan rekap partisipasi.'
+                  : 'Kelola sesi kehadiran pertemuan tatap muka, monitoring QR berputar, dan verifikasi izin dispensasi.'}
+              </p>
+            </div>
+            {lecturer && (
+              <CreateAttendanceSessionModal classId={cls.id} nextMeetingNumber={attendanceSessions.length + 1} />
+            )}
+          </div>
+
+          {attendanceSummary && (
+            <AttendanceSummaryCard
+              summary={{
+                total_sessions: attendanceSummary.total_sessions,
+                hadir_count:
+                  (attendanceSummary as any).hadir_count ??
+                  (attendanceSummary as any).attended_count ??
+                  0,
+                percentage: attendanceSummary.percentage,
+                can_take_uas: attendanceSummary.can_take_uas,
+              }}
+            />
+          )}
+
+          {/* Daftar Sesi Presensi */}
+          <div className="space-y-3">
+            {attendanceSessions.length === 0 ? (
+              <p className="text-xs text-black/60 italic p-6 bg-white rounded-xl border border-black/20 text-center">
+                Belum ada sesi presensi yang dibuat di kelas ini.
+              </p>
+            ) : (
+              attendanceSessions.map((s) => (
+                <div key={s.id} className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3.5">
+                    <div className="p-2.5 rounded-xl border-2 border-black bg-retro-warm text-black shrink-0">
+                      <CalendarCheck2 className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h4 className="font-semibold text-sm sm:text-base text-black">{s.title}</h4>
+                        <span className={cn('text-[10px] font-semibold px-2 py-0.5 rounded border border-black', s.is_open ? 'bg-retro-mint text-black' : 'bg-neutral-200 text-black/60')}>
+                          {s.is_open ? 'BUKA' : 'DITUTUP'}
+                        </span>
+                      </div>
+                      <span className="text-xs font-normal text-black/60">
+                        Pertemuan #{s.meeting_number} · {s.date} ({s.start_time} - {s.end_time} WIB)
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    {(lecturer || ta) && (
+                      <span className="text-xs font-bold bg-retro-warm border border-black px-2.5 py-1 rounded">
+                        Kode: {s.code}
+                      </span>
+                    )}
+                    <Link
+                      href={`/classes/${cls.id}/attendance`}
+                      className="px-3.5 py-1.5 rounded-xl border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-bold shadow-xs"
+                    >
+                      Detail Sesi &rarr;
+                    </Link>
+                  </div>
+                </div>
+              ))
             )}
           </div>
         </div>

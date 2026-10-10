@@ -119,7 +119,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       roles: ['STUDENT'],
       items: [
         { id: 'mhs-nilai', label: 'Nilai & Progres', href: '/grades', icon: CheckSquare, roles: ['STUDENT'] },
-        { id: 'mhs-presensi', label: 'Presensi', href: '/attendance/history', icon: Clock, roles: ['STUDENT'] },
+        { id: 'mhs-presensi', label: 'Presensi', href: '/attendance', icon: Clock, roles: ['STUDENT'] },
         { id: 'mhs-sertifikat', label: 'Sertifikat & Portofolio', href: '/certificates', icon: Award, roles: ['STUDENT'] },
       ],
     },
@@ -174,7 +174,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       roles: ['TEACHING_ASSISTANT'],
       items: [
         { id: 'ta-nilai', label: 'Nilai & Progres', href: '/grades', icon: CheckSquare, roles: ['TEACHING_ASSISTANT'] },
-        { id: 'ta-presensi', label: 'Presensi', href: '/attendance/history', icon: Clock, roles: ['TEACHING_ASSISTANT'] },
+        { id: 'ta-presensi', label: 'Presensi', href: '/attendance', icon: Clock, roles: ['TEACHING_ASSISTANT'] },
         { id: 'ta-sertifikat', label: 'Sertifikat & Portofolio', href: '/certificates', icon: Award, roles: ['TEACHING_ASSISTANT'] },
       ],
     },
