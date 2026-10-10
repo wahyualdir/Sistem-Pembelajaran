@@ -57,9 +57,58 @@ const COORDINATOR_METRICS = [
   },
 ];
 
-export default function CoordinatorSubpage({ params }: PageProps) {
+import { redirect } from 'next/navigation';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+
+export default async function CoordinatorSubpage({ params }: PageProps) {
+  const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole;
+
+  if (role !== 'PROGRAM_COORDINATOR' && role !== 'SYSTEM_ADMIN' && role !== 'SUPER_ADMIN') {
+    if (role === 'LECTURER') redirect('/lecturer');
+    if (role === 'STUDENT') redirect('/student');
+    if (role === 'TEACHING_ASSISTANT') redirect('/ta');
+    if (role === 'ACADEMIC_STAFF') redirect('/staff');
+    redirect('/login');
+  }
+
   const parts = params.slug || [];
   const fullSlug = parts.join('/');
+
+  // Redirection mappings for merged subroutes into new tabbed hubs
+  if (fullSlug === 'lecturers') {
+    redirect('/coordinator/assignments?tab=dosen-pengampu');
+  }
+  if (fullSlug === 'classes') {
+    redirect('/coordinator/assignments?tab=kelas-prodi');
+  }
+  if (fullSlug === 'monitoring/classes') {
+    redirect('/coordinator/monitoring?tab=kelas');
+  }
+  if (fullSlug === 'monitoring/lecturers') {
+    redirect('/coordinator/monitoring?tab=dosen');
+  }
+  if (fullSlug === 'monitoring/attendance') {
+    redirect('/coordinator/monitoring?tab=presensi');
+  }
+  if (fullSlug === 'monitoring/exams') {
+    redirect('/coordinator/monitoring?tab=ujian');
+  }
+  if (fullSlug === 'approvals/classes') {
+    redirect('/coordinator/approvals?tab=kelas-baru');
+  }
+  if (fullSlug === 'approvals/exams') {
+    redirect('/coordinator/approvals?tab=soal-ujian');
+  }
+  if (fullSlug === 'approvals/grades') {
+    redirect('/coordinator/approvals?tab=perubahan-nilai');
+  }
+  if (fullSlug === 'approvals/other') {
+    redirect('/coordinator/approvals?tab=lainnya');
+  }
+  if (fullSlug === 'reports' || fullSlug === 'evaluations' || fullSlug === 'cpl') {
+    redirect('/coordinator/reports');
+  }
 
   const sectionTitles: Record<string, { title: string; subtitle: string; icon: any; desc: string }> = {
     curriculum: {

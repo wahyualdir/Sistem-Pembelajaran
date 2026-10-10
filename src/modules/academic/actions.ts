@@ -917,6 +917,41 @@ type DemoChange = ChangeRequestItem & { submission_id: string; requested_by: str
 // Mode demo tidak memiliki data prodi, jadi koordinator demo melihat semua pengajuan; di database pembatasan prodi berlaku lewat RLS.
 const perubahan: DemoChange[] = ((globalThis as any).__siajarUbah ??= []);
 
+if (perubahan.length === 0) {
+  perubahan.push(
+    {
+      id: 'cr-demo-001',
+      submission_id: 'sub-demo-001',
+      requested_by: 'a0000002-0000-0000-0000-000000000002',
+      class_id: DEMO_CLASS_ID,
+      class_title: 'Pemrograman Web Lanjut (IF-3A)',
+      assignment_title: 'Tugas 3: Integrasi REST API',
+      student_name: 'Ahmad Mahasiswa (2024001)',
+      old_score: 72,
+      proposed_score: 85,
+      reason: 'Mahasiswa telah mengunggah revisi unit test yang tertinggal karena kendala listrik padam, hasil pengujian valid.',
+      status: 'PENDING',
+      review_note: null,
+      created_at: new Date(Date.now() - 3600000 * 4).toISOString(),
+    },
+    {
+      id: 'cr-demo-002',
+      submission_id: 'sub-demo-002',
+      requested_by: 'a0000002-0000-0000-0000-000000000002',
+      class_id: DEMO_CLASS_ID,
+      class_title: 'Basis Data Terdistribusi (IF-3B)',
+      assignment_title: 'UTS Praktikum Query Sharding',
+      student_name: 'Siti Rahma (2024025)',
+      old_score: 78,
+      proposed_score: 88,
+      reason: 'Penyesuaian rubrik penilaian esai nomor 4 setelah verifikasi rekaman live coding saat sesi ujian.',
+      status: 'PENDING',
+      review_note: null,
+      created_at: new Date(Date.now() - 3600000 * 18).toISOString(),
+    }
+  );
+}
+
 const changeSchema = z.object({
   submission_id: z.string().uuid(),
   score: z.coerce.number({ invalid_type_error: 'Isi nilai berupa angka.' }).min(0, 'Nilai tidak boleh negatif.').max(100, 'Nilai maksimum 100.'),
@@ -949,6 +984,7 @@ export async function requestGradeChangeAction(input: unknown): Promise<ActionRe
   }
   revalidatePath('/classes/[id]/assignments/[aid]', 'page');
   revalidatePath('/coordinator');
+  revalidatePath('/coordinator/approvals');
   return { ok: true };
 }
 
@@ -970,16 +1006,14 @@ export async function decideGradeChangeAction(input: unknown): Promise<ActionRes
     if (r.status !== 'PENDING') return { ok: false, error: ERR.NOT_PENDING };
     r.status = approve ? 'APPROVED' : 'REJECTED';
     r.review_note = note;
-    if (approve) {
-      const s = tugas.submissions.find((x) => x.id === r.submission_id);
-      const n = s && demoGrade(s.assignment_id, s.student_id);
-      if (s && n) {
-        n.score = r.proposed_score;
-        notify(s.student_id, 'GRADE_UPDATED', `Nilai diperbarui: ${r.assignment_title}`, 'Nilai Anda diubah melalui persetujuan koordinator prodi.', r.class_id);
-      }
+    // Sesuai aturan alur: Kaprodi menyetujui, status menjadi "disetujui, menunggu eksekusi Staf". Nilai final TIDAK langsung diubah. Eksekusi penulisan nilai akhir dilakukan oleh Staf di Fase 2D.
+    const s = tugas.submissions.find((x) => x.id === r.submission_id);
+    if (s) {
+      notify(s.student_id, 'GRADE_CHANGE_DECIDED', `Persetujuan Koreksi Nilai: ${r.assignment_title}`, approve ? 'Permohonan revisi nilai Anda telah disetujui Kaprodi dan sedang menunggu eksekusi berkas oleh Staf Akademik.' : `Permohonan revisi nilai ditolak Kaprodi: ${note}`, r.class_id);
     }
   }
   revalidatePath('/coordinator');
+  revalidatePath('/coordinator/approvals');
   revalidatePath('/classes/[id]', 'page');
   revalidatePath('/classes/[id]/assignments/[aid]', 'page');
   return { ok: true };

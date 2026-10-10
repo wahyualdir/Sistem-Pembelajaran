@@ -20,7 +20,21 @@ const fmt = (iso: string) =>
     timeStyle: 'short',
   })} WIB`;
 
+import { redirect } from 'next/navigation';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+
 export default async function CoordinatorPortalPage() {
+  const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole;
+
+  if (role !== 'PROGRAM_COORDINATOR' && role !== 'SYSTEM_ADMIN' && role !== 'SUPER_ADMIN') {
+    if (role === 'LECTURER') redirect('/lecturer');
+    if (role === 'STUDENT') redirect('/student');
+    if (role === 'TEACHING_ASSISTANT') redirect('/ta');
+    if (role === 'ACADEMIC_STAFF') redirect('/staff');
+    redirect('/login');
+  }
+
   const all = await listChangeRequestsAction();
   const pending = all.filter((r) => r.status === 'PENDING');
   const approved = all.filter((r) => r.status === 'APPROVED');

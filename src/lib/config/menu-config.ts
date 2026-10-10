@@ -265,7 +265,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       items: [
         { id: 'kaprodi-kurikulum', label: 'Kurikulum & CPL', href: '/coordinator/curriculum', icon: BookOpen, roles: ['PROGRAM_COORDINATOR'] },
         { id: 'kaprodi-matkul', label: 'Mata Kuliah', href: '/coordinator/courses', icon: Layers, roles: ['PROGRAM_COORDINATOR'] },
-        { id: 'kaprodi-penugasan', label: 'Penugasan & Kelas', href: '/coordinator/classes', icon: Users, roles: ['PROGRAM_COORDINATOR'] },
+        { id: 'kaprodi-penugasan', label: 'Penugasan & Kelas', href: '/coordinator/assignments', icon: Users, roles: ['PROGRAM_COORDINATOR'] },
       ],
     },
     {
@@ -273,7 +273,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'MONITORING',
       roles: ['PROGRAM_COORDINATOR'],
       items: [
-        { id: 'kaprodi-monitoring', label: 'Monitoring', href: '/coordinator/monitoring/classes', icon: Activity, roles: ['PROGRAM_COORDINATOR'] },
+        { id: 'kaprodi-monitoring', label: 'Monitoring', href: '/coordinator/monitoring', icon: Activity, roles: ['PROGRAM_COORDINATOR'] },
         { id: 'kaprodi-mhs-berisiko', label: 'Mahasiswa Berisiko', href: '/coordinator/monitoring/at-risk', icon: AlertCircle, roles: ['PROGRAM_COORDINATOR'] },
       ],
     },
@@ -282,7 +282,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'PERSETUJUAN',
       roles: ['PROGRAM_COORDINATOR'],
       items: [
-        { id: 'kaprodi-persetujuan', label: 'Persetujuan', href: '/coordinator/approvals/classes', icon: CheckCircle2, roles: ['PROGRAM_COORDINATOR'] },
+        { id: 'kaprodi-persetujuan', label: 'Persetujuan', href: '/coordinator/approvals', icon: CheckCircle2, roles: ['PROGRAM_COORDINATOR'] },
       ],
     },
     {

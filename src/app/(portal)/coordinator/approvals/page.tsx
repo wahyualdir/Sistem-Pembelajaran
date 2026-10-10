@@ -1,0 +1,29 @@
+import React from 'react';
+import { redirect } from 'next/navigation';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+import { listChangeRequestsAction } from '@/modules/academic/actions';
+import { isDemoMode } from '@/lib/config/features';
+import { CoordinatorApprovalsHubView } from '@/modules/academic/coordinator-approvals-hub-view';
+
+export default async function CoordinatorApprovalsPage() {
+  const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole;
+
+  if (role !== 'PROGRAM_COORDINATOR' && role !== 'SYSTEM_ADMIN' && role !== 'SUPER_ADMIN') {
+    if (role === 'LECTURER') redirect('/lecturer');
+    if (role === 'STUDENT') redirect('/student');
+    if (role === 'TEACHING_ASSISTANT') redirect('/ta');
+    if (role === 'ACADEMIC_STAFF') redirect('/staff');
+    redirect('/login');
+  }
+
+  const changeRequests = await listChangeRequestsAction().catch(() => []);
+  const isDemo = isDemoMode();
+
+  return (
+    <CoordinatorApprovalsHubView
+      changeRequests={changeRequests}
+      isDemo={isDemo}
+    />
+  );
+}
