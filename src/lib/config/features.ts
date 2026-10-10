@@ -12,3 +12,11 @@ export const FEATURES = {
   liveExams: true,
   advancedAttendance: true,
 };
+
+/**
+ * Memeriksa apakah aplikasi berjalan dalam mode demo/development.
+ * Di production, mode demo mati total kecuali ALLOW_DEMO_AUTH="true" secara eksplisit.
+ */
+export function isDemoMode(): boolean {
+  return process.env.NODE_ENV !== 'production' || process.env.ALLOW_DEMO_AUTH === 'true';
+}

@@ -670,8 +670,28 @@ export async function listPendingReviewsAction(): Promise<{ classes: number; ite
 export interface NotificationItem { id: string; type: string; title: string; body: string; class_id: string | null; read_at: string | null; created_at: string }
 type Notif = NotificationItem & { user_id: string };
 const notifs: Notif[] = ((globalThis as any).__siajarNotif ??= []);
-const notify = (user_id: string, type: string, title: string, body: string, class_id: string) =>
-  notifs.push({ id: randomUUID(), user_id, type, title, body, class_id, read_at: null, created_at: new Date().toISOString() });
+const notify = (user_id: string, type: string, title: string, body: string, class_id: string) => {
+  // Cegah notifikasi ganda dalam jendela waktu 60 detik
+  const isDuplicate = notifs.some(
+    (n) =>
+      n.user_id === user_id &&
+      n.class_id === class_id &&
+      n.title === title &&
+      Date.now() - Date.parse(n.created_at) < 60000
+  );
+  if (!isDuplicate) {
+    notifs.push({
+      id: randomUUID(),
+      user_id,
+      type,
+      title,
+      body,
+      class_id: class_id || null,
+      read_at: null,
+      created_at: new Date().toISOString(),
+    });
+  }
+};
 
 export async function createNotification(payload: {
   user_id: string;
@@ -680,7 +700,21 @@ export async function createNotification(payload: {
   body: string;
   class_id?: string | null;
 }): Promise<void> {
-  notify(payload.user_id, payload.type, payload.title, payload.body, payload.class_id ?? '');
+  const cid = payload.class_id ?? '';
+  // (a) Jika penerima adalah ALL_STUDENTS, distribusikan HANYA kepada mahasiswa yang terdaftar di kelas terkait
+  if (payload.user_id === 'ALL_STUDENTS' && cid) {
+    const students = mem.enrollments.filter((e) => e.class_id === cid);
+    if (students.length > 0) {
+      students.forEach((s) => {
+        notify(s.student_id, payload.type, payload.title, payload.body, cid);
+      });
+    } else {
+      // Fallback untuk demo/synthetic student jika belum ada enrollment terdaftar
+      notify('d0000001-0000-0000-0000-000000000001', payload.type, payload.title, payload.body, cid);
+    }
+  } else {
+    notify(payload.user_id, payload.type, payload.title, payload.body, cid);
+  }
 }
 
 export async function listNotificationsAction(): Promise<NotificationItem[]> {

@@ -243,14 +243,23 @@ const EVENTS = [
   },
 ];
 
-export default function CommunityPage() {
+import { isDemoMode } from '@/lib/config/features';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+
+export default async function CommunityPage() {
+  const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole || 'STUDENT';
+  const isLecturer = role === 'LECTURER' || role === 'SYSTEM_ADMIN' || role === 'SUPER_ADMIN';
+  const isDemo = isDemoMode();
+
   return (
     <CommunityHubView
-      announcements={ANNOUNCEMENTS}
-      threads={THREADS}
-      groups={GROUPS}
-      mentors={MENTORS}
-      events={EVENTS}
+      announcements={isDemo ? ANNOUNCEMENTS : []}
+      threads={isDemo ? THREADS : []}
+      groups={isDemo ? GROUPS : []}
+      mentors={isDemo ? MENTORS : []}
+      events={isDemo ? EVENTS : []}
+      isLecturer={isLecturer}
     />
   );
 }

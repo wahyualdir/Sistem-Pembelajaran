@@ -125,11 +125,11 @@ export const TA_CLASSROOM_TABS = [
 ] as const;
 
 export const LECTURER_CLASSROOM_TABS = [
-  { id: 'forum', label: 'Forum & Pengumuman', icon: MessagesSquare, badgeLabel: 'Stream' },
-  { id: 'tugas', label: 'Tugas & Penilaian', icon: ClipboardList, badgeLabel: 'Classwork' },
   { id: 'materi', label: 'Materi', icon: BookOpen, badgeLabel: 'Materi' },
+  { id: 'tugas', label: 'Tugas & Penilaian', icon: ClipboardList, badgeLabel: 'Classwork' },
   { id: 'peserta', label: 'Peserta', icon: Users, badgeLabel: 'Peserta' },
   { id: 'asisten', label: 'Asisten', icon: UserCheck, badgeLabel: 'Asisten' },
+  { id: 'forum', label: 'Forum & Pengumuman', icon: MessagesSquare, badgeLabel: 'Stream' },
   { id: 'presensi', label: 'Presensi', icon: CalendarCheck2, badgeLabel: 'Presensi' },
   { id: 'nilai', label: 'Nilai', icon: GraduationCap, badgeLabel: 'Grades' },
 ] as const;

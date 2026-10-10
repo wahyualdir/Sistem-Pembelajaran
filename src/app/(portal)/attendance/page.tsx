@@ -86,12 +86,59 @@ const DEMO_LEAVE_REQUESTS: LeaveRequestRecord[] = [
   },
 ];
 
+import { isDemoMode } from '@/lib/config/features';
+import { listLeavePermitsAction, listAttendanceSessionsAction, getClassAttendanceSummaryAction } from '@/modules/academic/attendance-actions';
+import { listMyClassesAction, getClassDetailAction } from '@/modules/academic/actions';
+import { LecturerAttendanceHubView } from '@/modules/academic/lecturer-attendance-hub-view';
+
 export default async function AttendancePage() {
   const user = await getCurrentUserWithRoles();
+  const realLeaves = await listLeavePermitsAction();
+  const isDemo = isDemoMode();
+  const isLecturer = user?.activeRole === 'LECTURER' || user?.activeRole === 'SYSTEM_ADMIN' || user?.activeRole === 'SUPER_ADMIN';
+
+  // Jika Dosen: Tampilkan Hub Bertab Dosen [Sesi Presensi | Rekap Kehadiran | Izin & Sakit | Pengaturan Lokasi]
+  if (isLecturer) {
+    const classes = await listMyClassesAction().catch(() => []);
+    const firstClass = classes[0];
+    const detail = firstClass ? await getClassDetailAction(firstClass.id).catch(() => null) : null;
+    const sessions = firstClass ? await listAttendanceSessionsAction(firstClass.id).catch(() => []) : [];
+    const classSummary = firstClass && detail?.members
+      ? await getClassAttendanceSummaryAction(firstClass.id, detail.members).catch(() => [])
+      : [];
+
+    return (
+      <LecturerAttendanceHubView
+        classes={classes}
+        sessions={sessions}
+        classSummary={classSummary}
+        leaves={realLeaves}
+      />
+    );
+  }
+
+  const records = isDemo ? DEMO_ATTENDANCE_RECORDS : [];
+  const leaves = realLeaves.length > 0
+    ? realLeaves.map((l) => ({
+        id: l.id,
+        type: l.type,
+        courseTitle: l.course_title,
+        meetingNumber: l.meeting_number,
+        date: l.date,
+        reason: l.reason,
+        attachmentName: l.attachment_name,
+        status: l.status,
+        submittedAt: l.submitted_at,
+        feedback: l.feedback,
+      }))
+    : isDemo
+    ? DEMO_LEAVE_REQUESTS
+    : [];
+
   return (
     <AttendanceHubView
-      records={DEMO_ATTENDANCE_RECORDS}
-      leaves={DEMO_LEAVE_REQUESTS}
+      records={records}
+      leaves={leaves}
     />
   );
 }

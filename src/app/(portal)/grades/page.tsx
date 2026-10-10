@@ -76,10 +76,14 @@ const DEMO_GRADES: CourseGrade[] = [
   },
 ];
 
+import { isDemoMode } from '@/lib/config/features';
+
 export default async function GradesPage() {
   const user = await getCurrentUserWithRoles();
   const attempts = await getAllAttemptsAction().catch(() => []);
   const quizzes = await getAllQuizzesAction().catch(() => []);
+  const isDemo = isDemoMode();
+  const grades = isDemo ? DEMO_GRADES : [];
 
-  return <GradesHubView grades={DEMO_GRADES} attempts={attempts} quizzes={quizzes} />;
+  return <GradesHubView grades={grades} attempts={attempts} quizzes={quizzes} />;
 }

@@ -1,14 +1,6 @@
 import React from 'react';
-import Link from 'next/link';
-import {
-  BookOpen,
-  Download,
-  Bookmark,
-  Search,
-  ExternalLink,
-  Layers,
-} from 'lucide-react';
-import { RetroWindow } from '@/components/retro/retro-window';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+import { LibraryHubView } from '@/modules/academic/library-hub-view';
 
 const BOOKS = [
   {
@@ -67,80 +59,15 @@ const BOOKS = [
   },
 ];
 
-export default function LibraryPage() {
-  return (
-    <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
-      <RetroWindow
-        title="pustaka_digital_referensi.app"
-        subtitle="Koleksi Buku Elektronik, Modul Praktikum, dan Jurnal Rujukan"
-        headerBadge="Koleksi Terbuka"
-        headerBadgeVariant="success"
-      >
-        <div className="p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
-              <BookOpen className="h-7 w-7 text-retro-orange" />
-              <span>Pustaka Digital & Modul Terbuka</span>
-            </h1>
-            <p className="text-base sm:text-lg text-black font-medium max-w-3xl leading-relaxed">
-              Akses literatur akademik terverifikasi, e-book resmi, diktat perkuliahan, dan jurnal ilmiah untuk mendukung pembelajaran mandiri.
-            </p>
-          </div>
+export default async function LibraryPage() {
+  const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole || 'STUDENT';
+  const isStaffOrLecturer =
+    role === 'LECTURER' ||
+    role === 'ACADEMIC_STAFF' ||
+    role === 'PROGRAM_COORDINATOR' ||
+    role === 'SYSTEM_ADMIN' ||
+    role === 'SUPER_ADMIN';
 
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-full border-2 border-black bg-white px-4 py-1.5 text-sm sm:text-base font-mono font-black text-black shadow-xs">
-              {BOOKS.length} Dokumen Tersedia
-            </span>
-          </div>
-        </div>
-      </RetroWindow>
-
-      {/* Grid 3 Kolom Pustaka Full Width */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {BOOKS.map((book) => (
-          <div
-            key={book.id}
-            className="rounded-xl border-2 border-black bg-white p-6 shadow-retro flex flex-col justify-between space-y-5 hover:-translate-y-1 hover:shadow-retro-md transition-all"
-          >
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="px-3 py-1 rounded border-2 border-black bg-retro-mint text-xs sm:text-sm font-mono font-black text-black">
-                  {book.badge}
-                </span>
-                <span className="text-sm font-mono font-bold text-black">
-                  {book.pages} Hlm · {book.year}
-                </span>
-              </div>
-
-              <h2 className="font-heading font-black text-xl sm:text-2xl text-black leading-snug">
-                {book.title}
-              </h2>
-
-              <p className="text-sm sm:text-base text-black font-medium">
-                Penulis: <span className="font-bold text-black">{book.author}</span> · {book.category}
-              </p>
-            </div>
-
-            <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
-              <button
-                type="button"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border-2 border-black bg-white text-black text-sm font-black hover:bg-retro-warm shadow-xs transition-colors"
-              >
-                <Bookmark className="h-4 w-4" />
-                <span>Simpan</span>
-              </button>
-
-              <button
-                type="button"
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border-2 border-black bg-retro-yellow text-black text-sm font-black shadow-xs hover:bg-black hover:text-white transition-all"
-              >
-                <Download className="h-4 w-4" />
-                <span>Unduh PDF</span>
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  return <LibraryHubView books={BOOKS} isStaffOrLecturer={isStaffOrLecturer} />;
 }

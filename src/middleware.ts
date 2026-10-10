@@ -78,7 +78,9 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const demoSession = request.cookies.get('demo_session')?.value;
+  const isProd = process.env.NODE_ENV === 'production';
+  const allowDemo = !isProd || process.env.ALLOW_DEMO_AUTH === 'true';
+  const demoSession = allowDemo ? request.cookies.get('demo_session')?.value : undefined;
   const isAuthenticated = !!user || !!demoSession;
   const activeRole = request.cookies.get('active_role')?.value;
 

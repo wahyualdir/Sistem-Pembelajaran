@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
+import { submitLeavePermitAction } from './attendance-actions';
 
 export interface AttendanceHistoryRecord {
   id: string;
@@ -85,6 +86,9 @@ export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
   const [isPermitSuccess, setIsPermitSuccess] = useState(false);
   const [isPending, startTransition] = useTransition();
 
+  // Real state for leaves list
+  const [leavesList, setLeavesList] = useState<LeaveRequestRecord[]>(leaves);
+
   // Metrik kehadiran
   const totalHadir = records.filter((a) => a.status === 'HADIR' || a.status === 'TERLAMBAT').length;
   const attendanceRate = records.length > 0 ? Math.round((totalHadir / records.length) * 100) : 100;
@@ -92,14 +96,26 @@ export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
   const handlePermitSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     startTransition(async () => {
-      // TODO(backend): Di Fase 3, unggah lampiran dan simpan ke database presensi dosen
-      setIsPermitSuccess(true);
-      setTimeout(() => {
-        setIsPermitModalOpen(false);
-        setIsPermitSuccess(false);
-        setPermitReason('');
-        setPermitFile(null);
-      }, 1500);
+      const res = await submitLeavePermitAction({
+        course_title: permitCourse,
+        meeting_number: Number(permitMeeting),
+        type: permitType,
+        date: permitDate,
+        reason: permitReason,
+        attachment_name: permitFile?.name || 'surat_keterangan.pdf',
+      });
+      if (res.ok && res.data) {
+        setLeavesList((prev) => [res.data as any, ...prev]);
+        setIsPermitSuccess(true);
+        setTimeout(() => {
+          setIsPermitModalOpen(false);
+          setIsPermitSuccess(false);
+          setPermitReason('');
+          setPermitFile(null);
+        }, 1500);
+      } else {
+        alert(res.error || 'Gagal mengirim permohonan izin');
+      }
     });
   };
 
@@ -217,10 +233,21 @@ export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
             </span>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
-                <tr>
+          {records.length === 0 ? (
+            <div className="p-10 text-center space-y-3">
+              <Clock className="h-10 w-10 text-black/40 mx-auto" />
+              <h3 className="font-heading font-black text-base sm:text-lg text-black">
+                Belum Ada Catatan Presensi
+              </h3>
+              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+                Anda belum memiliki log presensi masuk perkuliahan pada semester berjalan.
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm">
+                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <tr>
                   <th className="p-3.5 sm:p-4">Pertemuan & Mata Kuliah</th>
                   <th className="p-3.5 sm:p-4">Waktu Presensi</th>
                   <th className="p-3.5 sm:p-4 text-center">Metode Verifikasi</th>
@@ -268,6 +295,7 @@ export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
               </tbody>
             </table>
           </div>
+          )}
         </div>
       )}
 
@@ -277,7 +305,7 @@ export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="p-4 bg-retro-warm border-b-2 border-black flex items-center justify-between">
               <h2 className="font-heading font-black text-sm sm:text-base text-black">
-                Daftar Permohonan Izin & Sakit ({leaves.length})
+                Daftar Permohonan Izin & Sakit ({leavesList.length})
               </h2>
               <button
                 type="button"
@@ -288,7 +316,7 @@ export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
               </button>
             </div>
 
-            {leaves.length === 0 ? (
+            {leavesList.length === 0 ? (
               <div className="p-10 text-center space-y-3">
                 <FileCheck className="h-10 w-10 text-black/40 mx-auto" />
                 <h3 className="font-heading font-black text-base sm:text-lg text-black">
@@ -311,7 +339,7 @@ export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
                     </tr>
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
-                    {leaves.map((l) => (
+                    {leavesList.map((l) => (
                       <tr key={l.id} className="hover:bg-retro-warm/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div className="flex items-center gap-2">

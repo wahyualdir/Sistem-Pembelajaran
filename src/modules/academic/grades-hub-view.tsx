@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
+import { submitExamDisputeAction } from './quiz-actions';
 
 export interface CourseGrade {
   code: string;
@@ -81,6 +82,8 @@ export function GradesHubView({ grades, attempts, quizzes }: GradesHubViewProps)
 
   // State Modal "Ajukan Keberatan Nilai"
   const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
+  const [disputeType, setDisputeType] = useState<'EXAM' | 'COURSE'>('EXAM');
+  const [selectedAttemptId, setSelectedAttemptId] = useState(attempts[0]?.id || '');
   const [disputeCourse, setDisputeCourse] = useState(grades[0]?.code || '');
   const [disputeComponent, setDisputeComponent] = useState('Tugas');
   const [disputeReason, setDisputeReason] = useState('');
@@ -94,14 +97,25 @@ export function GradesHubView({ grades, attempts, quizzes }: GradesHubViewProps)
 
   const handleDisputeSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (disputeType === 'COURSE') {
+      return;
+    }
+    if (!selectedAttemptId) {
+      alert('Pilih sesi ujian yang ingin diajukan keberatan.');
+      return;
+    }
     startTransition(async () => {
-      // TODO(backend): Di Fase 3, kirimkan pengajuan ke endpoint API keberatan nilai dosen
-      setDisputeSubmitted(true);
-      setTimeout(() => {
-        setIsDisputeModalOpen(false);
-        setDisputeSubmitted(false);
-        setDisputeReason('');
-      }, 1500);
+      const res = await submitExamDisputeAction(selectedAttemptId, disputeReason);
+      if (res.ok) {
+        setDisputeSubmitted(true);
+        setTimeout(() => {
+          setIsDisputeModalOpen(false);
+          setDisputeSubmitted(false);
+          setDisputeReason('');
+        }, 1500);
+      } else {
+        alert(res.error || 'Gagal mengajukan keberatan nilai.');
+      }
     });
   };
 
@@ -230,10 +244,19 @@ export function GradesHubView({ grades, attempts, quizzes }: GradesHubViewProps)
             </span>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm">
-              <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
-                <tr>
+          {grades.length === 0 ? (
+            <div className="p-10 text-center space-y-3">
+              <CheckSquare className="h-10 w-10 text-black/40 mx-auto" />
+              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Nilai Terbit</h3>
+              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+                Nilai semester Anda belum dipublikasikan oleh bagian akademik atau dosen pengampu.
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm">
+                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <tr>
                   <th className="p-3.5 sm:p-4">Kode & Mata Kuliah</th>
                   <th className="p-3.5 sm:p-4 text-center">SKS</th>
                   <th className="p-3.5 sm:p-4 text-center">Hadir</th>
@@ -277,6 +300,7 @@ export function GradesHubView({ grades, attempts, quizzes }: GradesHubViewProps)
               </tbody>
             </table>
           </div>
+          )}
         </div>
       )}
 
@@ -447,37 +471,93 @@ export function GradesHubView({ grades, attempts, quizzes }: GradesHubViewProps)
               <form onSubmit={handleDisputeSubmit} className="space-y-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-black uppercase text-black font-mono">
-                    Pilih Mata Kuliah
+                    Kategori Keberatan Nilai
                   </label>
-                  <select
-                    value={disputeCourse}
-                    onChange={(e) => setDisputeCourse(e.target.value)}
-                    className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
-                  >
-                    {grades.map((g) => (
-                      <option key={g.code} value={g.code}>
-                        {g.code} — {g.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setDisputeType('EXAM')}
+                      className={cn(
+                        'p-2.5 rounded-lg border-2 border-black text-xs font-bold transition-all cursor-pointer',
+                        disputeType === 'EXAM'
+                          ? 'bg-retro-orange text-white shadow-retro'
+                          : 'bg-white text-black hover:bg-neutral-100'
+                      )}
+                    >
+                      Ujian & Kuis CBT
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDisputeType('COURSE')}
+                      className={cn(
+                        'p-2.5 rounded-lg border-2 border-black text-xs font-bold transition-all cursor-pointer',
+                        disputeType === 'COURSE'
+                          ? 'bg-retro-orange text-white shadow-retro'
+                          : 'bg-white text-black hover:bg-neutral-100'
+                      )}
+                    >
+                      Nilai Semester Non-CBT
+                    </button>
+                  </div>
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-black uppercase text-black font-mono">
-                    Komponen Nilai yang Dikeberatkan
-                  </label>
-                  <select
-                    value={disputeComponent}
-                    onChange={(e) => setDisputeComponent(e.target.value)}
-                    className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
-                  >
-                    <option value="Tugas">Nilai Tugas & Praktikum</option>
-                    <option value="Kuis">Nilai Kuis</option>
-                    <option value="UTS">Nilai UTS (Ujian Tengah Semester)</option>
-                    <option value="UAS">Nilai UAS (Ujian Akhir Semester)</option>
-                    <option value="Presensi">Persentase Presensi Kehadiran</option>
-                  </select>
-                </div>
+                {disputeType === 'EXAM' ? (
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-black uppercase text-black font-mono">
+                      Pilih Sesi Ujian / Kuis
+                    </label>
+                    {attempts.length === 0 ? (
+                      <p className="text-xs text-amber-950 bg-amber-50 p-2.5 rounded border border-amber-300 font-medium">
+                        Belum ada riwayat pengerjaan ujian CBT untuk diajukan keberatan.
+                      </p>
+                    ) : (
+                      <select
+                        value={selectedAttemptId}
+                        onChange={(e) => setSelectedAttemptId(e.target.value)}
+                        className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
+                      >
+                        {attempts.map((att: any, idx: number) => {
+                          const quiz = quizzes.find((q: any) => q.id === att.quiz_id);
+                          return (
+                            <option key={att.id || idx} value={att.id}>
+                              {quiz?.title || att.quiz_title || `Sesi Ujian #${idx + 1}`} (Skor: {att.score ?? 0})
+                            </option>
+                          );
+                        })}
+                      </select>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <div className="p-3 rounded-lg border-2 border-black bg-amber-50 text-xs text-amber-950 font-medium space-y-1">
+                      <p className="font-bold flex items-center gap-1.5">
+                        <AlertCircle className="h-4 w-4 text-amber-900" />
+                        <span>Fitur Segera Aktif di Fase 3</span>
+                      </p>
+                      <p>
+                        Pengajuan keberatan nilai komponen tugas/UTS/UAS non-CBT sedang dalam penyiapan backend Fase 3. Pengajuan belum dapat disimpan ke database dosen.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5 opacity-60">
+                      <label className="text-xs font-black uppercase text-black font-mono">
+                        Pilih Mata Kuliah
+                      </label>
+                      <select
+                        disabled
+                        value={disputeCourse}
+                        onChange={(e) => setDisputeCourse(e.target.value)}
+                        className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-neutral-100"
+                      >
+                        {grades.map((g) => (
+                          <option key={g.code} value={g.code}>
+                            {g.code} — {g.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
 
                 <div className="space-y-1.5">
                   <label className="text-xs font-black uppercase text-black font-mono">
@@ -501,14 +581,25 @@ export function GradesHubView({ grades, attempts, quizzes }: GradesHubViewProps)
                   >
                     Batal
                   </button>
-                  <button
-                    type="submit"
-                    disabled={isPending}
-                    className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
-                  >
-                    <Send className="h-4 w-4" />
-                    <span>{isPending ? 'Mengirim...' : 'Kirim Pengajuan'}</span>
-                  </button>
+
+                  {disputeType === 'COURSE' || (disputeType === 'EXAM' && attempts.length === 0) ? (
+                    <button
+                      type="button"
+                      disabled
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-neutral-200 text-neutral-500 text-xs sm:text-sm font-black cursor-not-allowed"
+                    >
+                      <span>Fitur Segera Aktif (Belum Tersimpan)</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={isPending}
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
+                    >
+                      <Send className="h-4 w-4" />
+                      <span>{isPending ? 'Mengirim...' : 'Kirim Pengajuan Keberatan'}</span>
+                    </button>
+                  )}
                 </div>
               </form>
             )}

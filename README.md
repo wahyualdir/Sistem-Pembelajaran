@@ -1,5 +1,10 @@
 # SIAJAR — Sistem Informasi Ajar Terpadu
 
+> [!CAUTION]
+> **PERINGATAN PENTING DEPLOYMENT:**
+> **JANGAN DEPLOY ke production sebelum Fase 2E selesai.**
+> Sistem navigasi dan perampingan rute sedang dalam masa transisi restrukturisasi Hub Bertab (Fase 2A - 2E). Fitur-fitur untuk Staf, Koordinator Prodi, System Admin, dan Super Admin yang belum di-hub-kan sementara tidak terjangkau langsung dari menu navigasi ringkas sidebar sampai fase masing-masing selesai.
+
 Implementasi dokumen perencanaan `docs/SIAJAR_Dokumen_Lengkap_v3.md` (Next.js 14, Supabase, RLS). Satu ruang kerja akademik untuk kelas, materi, pengumuman, tugas, penilaian, notifikasi, dan kalender, dengan role Mahasiswa, Dosen, Koordinator Prodi, dan Staf Akademik.
 
 ## Status terhadap rencana

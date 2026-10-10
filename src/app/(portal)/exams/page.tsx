@@ -53,6 +53,8 @@ const DEFAULT_DEMO_EXAMS = [
   },
 ];
 
+import { LecturerExamsHubView } from '@/modules/academic/lecturer-exams-hub-view';
+
 export default async function ExamsPage() {
   const fetchedQuizzes = await getAllQuizzesAction().catch(() => []);
   const user = await getCurrentUserWithRoles();
@@ -60,6 +62,11 @@ export default async function ExamsPage() {
 
   // Gabungkan dengan demo exams agar tampilan cards selalu full dan informatif
   const quizzes = fetchedQuizzes.length > 0 ? fetchedQuizzes : DEFAULT_DEMO_EXAMS;
+
+  // Jika Dosen / Admin: Tampilkan Hub Bertab Dosen [Daftar & Buat | Panel Live | Log Pelanggaran]
+  if (isLecturer) {
+    return <LecturerExamsHubView quizzes={quizzes} />;
+  }
 
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">

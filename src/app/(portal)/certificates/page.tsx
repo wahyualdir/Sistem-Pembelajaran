@@ -91,11 +91,14 @@ const DEMO_PROJECTS: PortfolioProjectItem[] = [
   },
 ];
 
+import { isDemoMode } from '@/lib/config/features';
+
 export default function CertificatesPage() {
+  const isDemo = isDemoMode();
   return (
     <CertificatesHubView
-      certificates={DEMO_CERTIFICATES}
-      projects={DEMO_PROJECTS}
+      certificates={isDemo ? DEMO_CERTIFICATES : []}
+      projects={isDemo ? DEMO_PROJECTS : []}
     />
   );
 }

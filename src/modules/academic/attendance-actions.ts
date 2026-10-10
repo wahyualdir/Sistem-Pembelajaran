@@ -78,14 +78,67 @@ export interface StudentAttendanceSummary {
   can_take_uas: boolean; // >= 75%
 }
 
+export interface LeavePermitRecord {
+  id: string;
+  student_id: string;
+  student_name: string;
+  course_title: string;
+  meeting_number: number;
+  type: 'SAKIT' | 'IZIN';
+  date: string;
+  reason: string;
+  attachment_name: string;
+  status: 'MENUNGGU VERIFIKASI' | 'DISETUJUI' | 'DITOLAK';
+  submitted_at: string;
+  feedback?: string;
+}
+
 // In-memory store for attendance (persisted in globalThis for Next.js hot reload)
 const presensiStore: {
   sessions: AttendanceSession[];
   records: AttendanceRecord[];
+  leaves: LeavePermitRecord[];
 } = ((globalThis as any).__siajarPresensi ??= {
   sessions: [],
   records: [],
+  leaves: [],
 });
+
+presensiStore.leaves ??= [];
+
+// Seed default leaves if empty
+if (presensiStore.leaves.length === 0) {
+  presensiStore.leaves.push(
+    {
+      id: 'leave-1',
+      student_id: 'd0000001-0000-0000-0000-000000000001',
+      student_name: 'Wahyu Hidayat',
+      course_title: 'Basis Data Terdistribusi',
+      meeting_number: 5,
+      type: 'SAKIT',
+      date: '2026-09-24',
+      reason: 'Rawat jalan demam berdarah di RS Islam Ibnu Sina',
+      attachment_name: 'surat_dokter_rs_ibnusina.pdf',
+      status: 'DISETUJUI',
+      submitted_at: '2026-09-24T09:00:00Z',
+      feedback: 'Dispensasi diterima. Segera pelajari materi slide pertemuan 5.',
+    },
+    {
+      id: 'leave-2',
+      student_id: 'd0000001-0000-0000-0000-000000000001',
+      student_name: 'Wahyu Hidayat',
+      course_title: 'Rekayasa Perangkat Lunak',
+      meeting_number: 4,
+      type: 'IZIN',
+      date: '2026-09-15',
+      reason: 'Delegasi Lomba Gemastik Pemrograman Divisi UI/UX',
+      attachment_name: 'surat_tugas_dekanat_ft.pdf',
+      status: 'DISETUJUI',
+      submitted_at: '2026-09-14T14:30:00Z',
+      feedback: 'Selamat berlomba dan semoga sukses.',
+    }
+  );
+}
 
 // Seed default session if empty
 if (presensiStore.sessions.length === 0) {
@@ -531,4 +584,63 @@ export async function getMyClassAttendanceAction(classId: string) {
     can_take_uas: percentage >= 75,
     sessions: list,
   };
+}
+
+// ==========================================
+// 5. PENGAJUAN & VERIFIKASI IZIN/SAKIT MAHASISWA
+// ==========================================
+export async function submitLeavePermitAction(payload: {
+  course_title: string;
+  meeting_number: number;
+  type: 'SAKIT' | 'IZIN';
+  date: string;
+  reason: string;
+  attachment_name?: string;
+}): Promise<ActionResponse<LeavePermitRecord>> {
+  const user = await getCurrentUserWithRoles();
+  if (!user) return { ok: false, error: 'Silakan login terlebih dahulu.' };
+
+  const record: LeavePermitRecord = {
+    id: 'leave-' + randomUUID().slice(0, 8),
+    student_id: user.user.id,
+    student_name: user.profile?.full_name ?? 'Mahasiswa',
+    course_title: payload.course_title,
+    meeting_number: payload.meeting_number,
+    type: payload.type,
+    date: payload.date,
+    reason: payload.reason.trim(),
+    attachment_name: payload.attachment_name || 'surat_keterangan.pdf',
+    status: 'MENUNGGU VERIFIKASI',
+    submitted_at: new Date().toISOString(),
+  };
+
+  presensiStore.leaves.unshift(record);
+  safeRevalidate('/attendance', 'page');
+  return { ok: true, data: record };
+}
+
+export async function listLeavePermitsAction(): Promise<LeavePermitRecord[]> {
+  const user = await getCurrentUserWithRoles();
+  if (!user) return [];
+  if (user.activeRole === 'STUDENT') {
+    return presensiStore.leaves.filter((l) => l.student_id === user.user.id);
+  }
+  return presensiStore.leaves;
+}
+
+export async function reviewLeavePermitAction(input: {
+  permit_id: string;
+  status: 'DISETUJUI' | 'DITOLAK';
+  feedback?: string;
+}): Promise<ActionResponse> {
+  const user = await getCurrentUserWithRoles();
+  if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
+    return { ok: false, error: 'Hanya dosen pengampu yang berwenang memverifikasi izin presensi.' };
+  }
+  const item = presensiStore.leaves.find((l) => l.id === input.permit_id);
+  if (!item) return { ok: false, error: 'Pengajuan izin tidak ditemukan.' };
+  item.status = input.status;
+  item.feedback = input.feedback;
+  safeRevalidate('/attendance', 'page');
+  return { ok: true };
 }

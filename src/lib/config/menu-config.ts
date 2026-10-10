@@ -224,7 +224,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'PRESENSI',
       roles: ['LECTURER'],
       items: [
-        { id: 'dsn-presensi', label: 'Presensi', href: '/attendance/recap', icon: FileSpreadsheet, roles: ['LECTURER'] },
+        { id: 'dsn-presensi', label: 'Presensi', href: '/attendance', icon: FileSpreadsheet, roles: ['LECTURER'] },
       ],
     },
     {
@@ -232,7 +232,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'ANALITIK & NILAI',
       roles: ['LECTURER'],
       items: [
-        { id: 'dsn-analitik-nilai', label: 'Analitik & Nilai', href: '/analytics/classes', icon: Activity, roles: ['LECTURER'] },
+        { id: 'dsn-analitik-nilai', label: 'Analitik & Nilai', href: '/analytics', icon: Activity, roles: ['LECTURER'] },
       ],
     },
     {

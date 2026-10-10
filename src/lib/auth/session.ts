@@ -48,8 +48,11 @@ export async function getSession(): Promise<AuthSession | null> {
   }
 
   // Fallback sinkronisasi dari portal identity (demo_session / active_role)
-  const demoSessionId = cookieStore.get("demo_session")?.value;
-  const activeRoleCode = cookieStore.get("active_role")?.value;
+  // Di production, demo_session hanya diizinkan jika ALLOW_DEMO_AUTH === 'true'
+  const isProd = process.env.NODE_ENV === 'production';
+  const allowDemo = !isProd || process.env.ALLOW_DEMO_AUTH === 'true';
+  const demoSessionId = allowDemo ? cookieStore.get("demo_session")?.value : undefined;
+  const activeRoleCode = allowDemo ? cookieStore.get("active_role")?.value : undefined;
 
   if (demoSessionId || activeRoleCode) {
     const role: Role =
