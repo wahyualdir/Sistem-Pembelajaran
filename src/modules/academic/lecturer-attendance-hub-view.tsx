@@ -39,6 +39,7 @@ interface LecturerAttendanceHubViewProps {
   classSummary: any[];
   leaves: any[];
   classes: any[];
+  isDemo?: boolean;
 }
 
 export function LecturerAttendanceHubView({
@@ -46,6 +47,7 @@ export function LecturerAttendanceHubView({
   classSummary,
   leaves,
   classes,
+  isDemo = true,
 }: LecturerAttendanceHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -539,6 +541,18 @@ export function LecturerAttendanceHubView({
               </div>
             </div>
 
+            {!isDemo && (
+              <div className="p-3 rounded-lg border-2 border-black bg-amber-50 text-xs text-amber-950 font-medium space-y-1">
+                <p className="font-bold flex items-center gap-1.5">
+                  <AlertCircle className="h-4 w-4 text-amber-900" />
+                  <span>Pemberitahuan Persistensi Database (Fase 3)</span>
+                </p>
+                <p>
+                  Penyimpanan konfigurasi Geofence ke tabel database kelas sedang dalam penyiapan. Di luar mode demo, tombol simpan dinonaktifkan untuk mencegah sukses palsu.
+                </p>
+              </div>
+            )}
+
             <div className="pt-3 border-t-2 border-black flex items-center justify-between">
               {isSavedLocation && (
                 <span className="text-xs font-bold font-mono text-emerald-800 flex items-center gap-1.5">
@@ -546,12 +560,22 @@ export function LecturerAttendanceHubView({
                   Pengaturan lokasi berhasil disimpan!
                 </span>
               )}
-              <button
-                type="submit"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer ml-auto"
-              >
-                <span>Simpan Pengaturan Geofence</span>
-              </button>
+              {!isDemo ? (
+                <button
+                  type="button"
+                  disabled
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black bg-neutral-200 text-neutral-500 text-xs sm:text-sm font-black cursor-not-allowed ml-auto"
+                >
+                  <span>Fitur Segera Aktif (Belum Tersimpan ke Database)</span>
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer ml-auto"
+                >
+                  <span>Simpan Pengaturan Geofence</span>
+                </button>
+              )}
             </div>
           </form>
         </div>

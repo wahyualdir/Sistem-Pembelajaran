@@ -53,19 +53,30 @@ const DEFAULT_DEMO_EXAMS = [
   },
 ];
 
+import { redirect } from 'next/navigation';
+import { isDemoMode } from '@/lib/config/features';
 import { LecturerExamsHubView } from '@/modules/academic/lecturer-exams-hub-view';
 
 export default async function ExamsPage() {
-  const fetchedQuizzes = await getAllQuizzesAction().catch(() => []);
   const user = await getCurrentUserWithRoles();
-  const isLecturer = user?.activeRole === 'LECTURER' || user?.activeRole === 'SYSTEM_ADMIN' || user?.activeRole === 'SUPER_ADMIN';
+  const role = user?.activeRole;
+
+  if (role === 'PROGRAM_COORDINATOR') {
+    redirect('/coordinator/monitoring');
+  }
+  if (role === 'ACADEMIC_STAFF') {
+    redirect('/staff');
+  }
+
+  const fetchedQuizzes = await getAllQuizzesAction().catch(() => []);
+  const isLecturer = role === 'LECTURER' || role === 'SYSTEM_ADMIN' || role === 'SUPER_ADMIN';
 
   // Gabungkan dengan demo exams agar tampilan cards selalu full dan informatif
   const quizzes = fetchedQuizzes.length > 0 ? fetchedQuizzes : DEFAULT_DEMO_EXAMS;
 
   // Jika Dosen / Admin: Tampilkan Hub Bertab Dosen [Daftar & Buat | Panel Live | Log Pelanggaran]
   if (isLecturer) {
-    return <LecturerExamsHubView quizzes={quizzes} />;
+    return <LecturerExamsHubView quizzes={quizzes} isDemo={isDemoMode()} />;
   }
 
   return (

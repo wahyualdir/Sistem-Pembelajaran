@@ -365,7 +365,6 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
     c.activeRole === 'ACADEMIC_STAFF';
   const lecturer = c.activeRole === 'LECTURER';
   const ta = c.activeRole === 'TEACHING_ASSISTANT';
-  const viewer = lecturer || isAdminOrStaff ? 'LECTURER' : ta ? 'TA' : 'STUDENT';
 
   if (await checkSupabaseOnline()) {
     const supabase = await createClient();
@@ -386,15 +385,18 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
     const { data: dis } = await supabase.from('discussions').select('id,title,author_name,created_at,is_pinned,is_locked,discussion_replies(count)').eq('class_id', id).order('is_pinned', { ascending: false }).order('created_at', { ascending: false });
     let assistants: AssistantItem[] | undefined;
     let perms: string[] | undefined;
-    if (lecturer || ta || isAdminOrStaff) {
-      const { data: ca } = await supabase.from('class_assistants').select('user_id,permission,profiles(full_name,email)').eq('class_id', id);
-      if (ta) perms = (ca ?? []).map((x: any) => x.permission);
+    const { data: ca } = await supabase.from('class_assistants').select('user_id,permission,profiles(full_name,email)').eq('class_id', id);
+    const isActualTa = ta && (ca ?? []).some((x: any) => x.user_id === c.user.id);
+    const viewer = lecturer || isAdminOrStaff ? 'LECTURER' : isActualTa ? 'TA' : 'STUDENT';
+
+    if (lecturer || isActualTa || isAdminOrStaff) {
+      if (isActualTa) perms = (ca ?? []).filter((x: any) => x.user_id === c.user.id).map((x: any) => x.permission);
       else if (isAdminOrStaff) perms = [...DELEGABLE_CODES];
       else assistants = groupAssistants(ca ?? []);
     }
     let mine = new Map<string, any>();
     let notasMap = new Map<string, any>();
-    if (!lecturer && !ta && !isAdminOrStaff && rows?.length) {
+    if (!lecturer && !isActualTa && !isAdminOrStaff && rows?.length) {
       const { data: subs } = await supabase
         .from('submissions')
         .select('assignment_id,text_body,is_late,submitted_at')
@@ -414,7 +416,7 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
       discussions: (dis ?? []).map((d: any) => ({ id: d.id, title: d.title, author_name: d.author_name, created_at: d.created_at, is_pinned: d.is_pinned, is_locked: d.is_locked, reply_count: d.discussion_replies?.[0]?.count ?? 0 })),
       assignments: (rows ?? []).map((r: any) => ({
         ...r,
-        submissions: lecturer || ta || isAdminOrStaff ? r.submissions?.[0]?.count ?? 0 : undefined,
+        submissions: lecturer || isActualTa || isAdminOrStaff ? r.submissions?.[0]?.count ?? 0 : undefined,
         mine: mine.get(r.id) ? { ...mine.get(r.id), grade: notasMap.get(r.id) ?? null } : null,
       })),
     };
@@ -424,7 +426,10 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
   if (!row) return null;
 
   const isDemoClass = id === DEMO_CLASS_ID;
-  if (isDemoClass && !lecturer && !ta && !isAdminOrStaff && !mem.enrollments.some((e) => e.class_id === id && e.student_id === c.user.id)) {
+  const isActualTa = ta && (demoPerms(id, c.user.id) !== null);
+  const isStudentEnrolled = mem.enrollments.some((e) => e.class_id === id && e.student_id === c.user.id);
+
+  if (isDemoClass && !lecturer && !isActualTa && !isAdminOrStaff && !isStudentEnrolled) {
     mem.enrollments.push({
       class_id: id,
       student_id: c.user.id,
@@ -439,16 +444,18 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
       ? true
       : lecturer
         ? row.created_by === c.user.id
-        : ta
-          ? demoPerms(id, c.user.id) !== null
-          : mem.enrollments.some((e) => e.class_id === id && e.student_id === c.user.id));
+        : isActualTa
+          ? true
+          : isStudentEnrolled);
   if (!allowed) return null;
+
+  const viewer = lecturer || isAdminOrStaff ? 'LECTURER' : isActualTa ? 'TA' : 'STUDENT';
 
   return {
     cls: pub(row),
     viewer,
     discussions: demoDiscussions(id, lecturer || isAdminOrStaff),
-    perms: ta ? demoPerms(id, c.user.id) ?? [] : (isAdminOrStaff ? [...DELEGABLE_CODES] : undefined),
+    perms: isActualTa ? demoPerms(id, c.user.id) ?? [] : (isAdminOrStaff ? [...DELEGABLE_CODES] : undefined),
     assistants: lecturer || isAdminOrStaff ? asisten.filter((x) => x.class_id === id).map((x) => ({ user_id: x.user_id, name: x.name, email: x.email, permissions: x.perms })) : undefined,
     announcements: pengumuman.filter((a) => a.class_id === id).sort((a, b) => b.created_at.localeCompare(a.created_at)),
     materials: bahan.filter((m) => m.class_id === id).sort((a, b) => b.created_at.localeCompare(a.created_at)),
@@ -458,8 +465,8 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
       .sort((a, b) => a.due_at.localeCompare(b.due_at))
       .map((a) => ({
         ...a,
-        submissions: lecturer || ta || isAdminOrStaff ? tugas.submissions.filter((x) => x.assignment_id === a.id).length : undefined,
-        mine: lecturer || ta || isAdminOrStaff ? null : demoMine(a.id, c.user.id),
+        submissions: lecturer || isActualTa || isAdminOrStaff ? tugas.submissions.filter((x) => x.assignment_id === a.id).length : undefined,
+        mine: lecturer || isActualTa || isAdminOrStaff ? null : demoMine(a.id, c.user.id),
       })),
   };
 }
@@ -671,12 +678,13 @@ export interface NotificationItem { id: string; type: string; title: string; bod
 type Notif = NotificationItem & { user_id: string };
 const notifs: Notif[] = ((globalThis as any).__siajarNotif ??= []);
 const notify = (user_id: string, type: string, title: string, body: string, class_id: string) => {
-  // Cegah notifikasi ganda dalam jendela waktu 60 detik
+  // Cegah notifikasi ganda persis dalam jendela waktu 60 detik dengan kunci (user_id, class_id, title, body)
   const isDuplicate = notifs.some(
     (n) =>
       n.user_id === user_id &&
       n.class_id === class_id &&
       n.title === title &&
+      n.body === body &&
       Date.now() - Date.parse(n.created_at) < 60000
   );
   if (!isDuplicate) {
@@ -701,7 +709,44 @@ export async function createNotification(payload: {
   class_id?: string | null;
 }): Promise<void> {
   const cid = payload.class_id ?? '';
-  // (a) Jika penerima adalah ALL_STUDENTS, distribusikan HANYA kepada mahasiswa yang terdaftar di kelas terkait
+
+  // 1. Jalur Penyimpanan Database Supabase (Production / Online)
+  if (await checkSupabaseOnline()) {
+    try {
+      const supabase = await createClient();
+      if (payload.user_id === 'ALL_STUDENTS' && cid) {
+        const { data: enrolled } = await supabase
+          .from('enrollments')
+          .select('student_id')
+          .eq('class_id', cid)
+          .eq('status', 'ACTIVE');
+        if (enrolled && enrolled.length > 0) {
+          const rows = enrolled.map((e: any) => ({
+            user_id: e.student_id,
+            type: payload.type,
+            title: payload.title,
+            body: payload.body,
+            class_id: cid,
+          }));
+          await supabase.from('notifications').insert(rows);
+          return;
+        }
+      } else {
+        await supabase.from('notifications').insert({
+          user_id: payload.user_id,
+          type: payload.type,
+          title: payload.title,
+          body: payload.body,
+          class_id: cid || null,
+        });
+        return;
+      }
+    } catch {
+      // Fallback ke in-memory jika database error
+    }
+  }
+
+  // 2. Jalur In-Memory (Mode Demo / Offline Development)
   if (payload.user_id === 'ALL_STUDENTS' && cid) {
     const students = mem.enrollments.filter((e) => e.class_id === cid);
     if (students.length > 0) {
@@ -709,7 +754,6 @@ export async function createNotification(payload: {
         notify(s.student_id, payload.type, payload.title, payload.body, cid);
       });
     } else {
-      // Fallback untuk demo/synthetic student jika belum ada enrollment terdaftar
       notify('d0000001-0000-0000-0000-000000000001', payload.type, payload.title, payload.body, cid);
     }
   } else {

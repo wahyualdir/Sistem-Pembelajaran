@@ -24,11 +24,13 @@ import {
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
 import { requestGradeChangeAction } from './actions';
+import { resolveExamDisputeAction } from './quiz-actions';
 
 export const LECTURER_ANALYTICS_TABS = [
   { id: 'kelas', label: 'Analitik Kelas', icon: BarChart3 },
   { id: 'butir-soal', label: 'Analisis Butir Soal', icon: HelpCircle },
   { id: 'rekap-nilai', label: 'Rekap Nilai', icon: Award },
+  { id: 'keberatan-nilai', label: 'Keberatan Nilai', icon: AlertCircle },
   { id: 'perubahan-nilai', label: 'Perubahan Nilai', icon: Clock },
   { id: 'ekspor', label: 'Ekspor Laporan', icon: Download },
 ] as const;
@@ -38,11 +40,15 @@ export type LecturerAnalyticsTabId = (typeof LECTURER_ANALYTICS_TABS)[number]['i
 interface LecturerAnalyticsHubViewProps {
   classes: any[];
   changeRequests?: any[];
+  disputes?: any[];
+  isDemo?: boolean;
 }
 
 export function LecturerAnalyticsHubView({
   classes,
   changeRequests = [],
+  disputes = [],
+  isDemo = true,
 }: LecturerAnalyticsHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -52,6 +58,7 @@ export function LecturerAnalyticsHubView({
     'kelas',
     'butir-soal',
     'rekap-nilai',
+    'keberatan-nilai',
     'perubahan-nilai',
     'ekspor',
   ];
@@ -68,6 +75,67 @@ export function LecturerAnalyticsHubView({
   const [selectedClassId, setSelectedClassId] = useState<string>(
     classes[0]?.id || ''
   );
+
+  const [localDisputes, setLocalDisputes] = useState(
+    disputes.length > 0
+      ? disputes
+      : isDemo
+      ? [
+          {
+            id: 'disp-demo-1',
+            student_name: 'Wahyu Hidayat (Mahasiswa)',
+            exam_title: 'UTS Praktikum Web & Algoritma',
+            reason: 'Jawaban soal live coding nomor 3 telah memenuhi seluruh test case tersembunyi, namun autograder hanya mendeteksi 2/4 test case karena timeout koneksi.',
+            status: 'PENDING',
+            submitted_at: '2026-10-09T08:30:00Z',
+          },
+          {
+            id: 'disp-demo-2',
+            student_name: 'Rian Hidayat (2024018)',
+            exam_title: 'Kuis Evaluasi Algoritma Sorting',
+            reason: 'Rubrik esai nomor 4 mencantumkan penjelasan konkurensi dengan tepat pada paragraf kedua.',
+            status: 'PENDING',
+            submitted_at: '2026-10-08T14:15:00Z',
+          },
+        ]
+      : []
+  );
+
+  const handleResolveDispute = (disputeId: string, status: 'APPROVED' | 'REJECTED') => {
+    if (!isDemo) {
+      alert('Penyelesaian keberatan nilai ke database permanen sedang dalam penyiapan Fase 3.');
+      return;
+    }
+    const note = prompt(
+      status === 'APPROVED'
+        ? 'Catatan persetujuan keberatan nilai (misal: "Disetujui setelah verifikasi rekaman"): '
+        : 'Alasan penolakan keberatan nilai: '
+    );
+    if (!note || note.trim().length < 3) {
+      alert('Catatan/alasan tanggapan wajib diisi minimal 3 karakter.');
+      return;
+    }
+
+    let adjustment = 0;
+    if (status === 'APPROVED') {
+      const adjStr = prompt('Penyesuaian penambahan skor (contoh: 10):', '10');
+      adjustment = Number(adjStr || 0);
+    }
+
+    startTransition(async () => {
+      await resolveExamDisputeAction({
+        dispute_id: disputeId,
+        status,
+        lecturer_note: note.trim(),
+        score_adjustment: adjustment,
+      }).catch(() => {});
+
+      setLocalDisputes((prev) =>
+        prev.map((d) => (d.id === disputeId ? { ...d, status, lecturer_note: note.trim() } : d))
+      );
+      alert(`Keberatan nilai berhasil ditanggapi dengan status ${status}.`);
+    });
+  };
 
   // State Form Perubahan Nilai
   const [submissionId, setSubmissionId] = useState('');
@@ -395,7 +463,137 @@ export function LecturerAnalyticsHubView({
         </div>
       )}
 
-      {/* 6. TAB 4: PERUBAHAN NILAI (DOSEN MENGAJUKAN KE PRODI) */}
+      {/* 4. TAB 4: KEBERATAN NILAI (DOSEN MENANGGAPI MAHASISWA) */}
+      {activeTab === 'keberatan-nilai' && (
+        <div className="space-y-6">
+          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+                <AlertCircle className="h-5 w-5 text-retro-orange" />
+                <span>Kotak Masuk Keberatan Nilai Mahasiswa ({localDisputes.length})</span>
+              </h2>
+              <p className="text-xs text-black/70 mt-1">
+                Tinjau sanggahan nilai ujian dan kuis dari mahasiswa. Berikan tanggapan persetujuan atau penolakan dengan alasan yang dapat dipertanggungjawabkan.
+              </p>
+            </div>
+            {!isDemo && (
+              <span className="text-xs font-mono font-bold px-3 py-1 bg-amber-100 border border-amber-500 text-amber-950 rounded-lg shrink-0">
+                Mode Non-Demo (Segera Aktif Fase 3)
+              </span>
+            )}
+          </div>
+
+          {!isDemo && (
+            <div className="p-4 rounded-xl border-2 border-black bg-amber-50 space-y-1">
+              <p className="font-bold text-xs text-amber-950 flex items-center gap-1.5">
+                <AlertCircle className="h-4 w-4 text-amber-900" />
+                <span>Pemberitahuan Persistensi Database (Fase 3)</span>
+              </p>
+              <p className="text-xs text-amber-900 leading-relaxed">
+                Penyimpanan tanggapan keberatan nilai ke database Supabase sedang dalam penyiapan. Di luar mode demo, tombol tanggapan dinonaktifkan untuk mencegah sukses palsu.
+              </p>
+            </div>
+          )}
+
+          {localDisputes.length === 0 ? (
+            <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
+              <CheckCircle2 className="h-10 w-10 text-black/40 mx-auto" />
+              <h3 className="font-heading font-black text-base sm:text-lg text-black">Tidak Ada Keberatan Nilai</h3>
+              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+                Saat ini tidak ada sanggahan atau keberatan penilaian yang diajukan oleh mahasiswa untuk kelas yang Anda ampu.
+              </p>
+            </div>
+          ) : (
+            <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs sm:text-sm">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                    <tr>
+                      <th className="p-3.5 sm:p-4">Mahasiswa</th>
+                      <th className="p-3.5 sm:p-4">Sesi Evaluasi</th>
+                      <th className="p-3.5 sm:p-4">Alasan Keberatan</th>
+                      <th className="p-3.5 sm:p-4 text-center">Status</th>
+                      <th className="p-3.5 sm:p-4 text-center">Aksi Tanggapi</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y-2 divide-black/10 font-medium">
+                    {localDisputes.map((d) => (
+                      <tr key={d.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          {d.student_name}
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black font-semibold">
+                          {d.exam_title || 'Ujian Terkait'}
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80 max-w-sm">
+                          <div>{d.reason}</div>
+                          {d.lecturer_note && (
+                            <div className="text-[11px] font-mono text-emerald-900 mt-1 bg-emerald-50 p-1.5 rounded border border-emerald-300">
+                              Tanggapan Dosen: {d.lecturer_note}
+                            </div>
+                          )}
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span
+                            className={cn(
+                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              d.status === 'APPROVED'
+                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                                : d.status === 'REJECTED'
+                                ? 'border-rose-500 bg-rose-100 text-rose-950'
+                                : 'border-amber-500 bg-amber-100 text-amber-950'
+                            )}
+                          >
+                            {d.status === 'APPROVED' ? 'DITERIMA' : d.status === 'REJECTED' ? 'DITOLAK' : 'MENUNGGU'}
+                          </span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          {d.status === 'PENDING' ? (
+                            <div className="flex items-center justify-center gap-1.5">
+                              <button
+                                type="button"
+                                disabled={isPending || !isDemo}
+                                onClick={() => handleResolveDispute(d.id, 'APPROVED')}
+                                className={cn(
+                                  'px-2.5 py-1 rounded-lg border-2 border-black text-xs font-bold transition-all shadow-xs',
+                                  isDemo
+                                    ? 'bg-emerald-500 text-white hover:bg-emerald-600 cursor-pointer'
+                                    : 'bg-neutral-200 text-neutral-400 border-neutral-300 cursor-not-allowed'
+                                )}
+                                title={!isDemo ? 'Segera aktif di Fase 3' : 'Terima Keberatan'}
+                              >
+                                Terima
+                              </button>
+                              <button
+                                type="button"
+                                disabled={isPending || !isDemo}
+                                onClick={() => handleResolveDispute(d.id, 'REJECTED')}
+                                className={cn(
+                                  'px-2.5 py-1 rounded-lg border-2 border-black text-xs font-bold transition-all shadow-xs',
+                                  isDemo
+                                    ? 'bg-rose-500 text-white hover:bg-rose-600 cursor-pointer'
+                                    : 'bg-neutral-200 text-neutral-400 border-neutral-300 cursor-not-allowed'
+                                )}
+                                title={!isDemo ? 'Segera aktif di Fase 3' : 'Tolak Keberatan'}
+                              >
+                                Tolak
+                              </button>
+                            </div>
+                          ) : (
+                            <span className="text-xs font-mono text-black/60">Selesai Ditanggapi</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 6. TAB 5: PERUBAHAN NILAI (DOSEN MENGAJUKAN KE PRODI) */}
       {activeTab === 'perubahan-nilai' && (
         <div className="space-y-6">
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl">

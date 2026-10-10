@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import type { ActionResponse } from '@/modules/identity/types';
 import { createNotification } from '@/modules/academic/actions';
+import { isDemoMode } from '@/lib/config/features';
 
 export type QuestionType =
   | 'MULTIPLE_CHOICE'
@@ -169,6 +170,34 @@ const quizStore: {
   questionBank: [],
   disputes: [],
 });
+
+quizStore.disputes ??= [];
+
+// Seed default disputes if empty (Demo mode)
+if (quizStore.disputes.length === 0) {
+  quizStore.disputes.push(
+    {
+      id: 'disp-demo-1',
+      attempt_id: 'att-demo-1',
+      exam_id: 'exam-demo-001',
+      student_id: 'd0000001-0000-0000-0000-000000000001',
+      student_name: 'Wahyu Hidayat (Mahasiswa)',
+      reason: 'Jawaban soal live coding nomor 3 telah memenuhi seluruh test case tersembunyi, namun autograder hanya mendeteksi 2/4 test case karena timeout koneksi.',
+      status: 'PENDING',
+      submitted_at: new Date(Date.now() - 3600000 * 5).toISOString(),
+    },
+    {
+      id: 'disp-demo-2',
+      attempt_id: 'att-demo-2',
+      exam_id: 'exam-demo-001',
+      student_id: 'mhs-102',
+      student_name: 'Rian Hidayat (2024018)',
+      reason: 'Rubrik esai nomor 4 mencantumkan penjelasan konkurensi dengan tepat pada paragraf kedua.',
+      status: 'PENDING',
+      submitted_at: new Date(Date.now() - 3600000 * 12).toISOString(),
+    }
+  );
+}
 
 // Seed default Question Bank & Demo Exams if empty
 if (quizStore.questionBank.length === 0) {
@@ -706,11 +735,23 @@ export async function lecturerInterventionAction(input: {
   exam_id: string;
   student_id: string;
   action_type: 'WARN' | 'ADD_TIME' | 'PAUSE' | 'RESUME' | 'TERMINATE' | 'RESET';
+  reason?: string;
   value?: string | number;
 }): Promise<ActionResponse> {
   const user = await getCurrentUserWithRoles();
   if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
     return { ok: false, error: 'Tidak memiliki izin intervensi ujian.' };
+  }
+
+  // Alasan wajib diisi
+  const reasonText = (input.reason || String(input.value || '')).trim();
+  if (!reasonText || reasonText.length < 3) {
+    return { ok: false, error: 'Alasan intervensi ujian wajib diisi (minimal 3 karakter).' };
+  }
+
+  // Pengecekan server: di luar mode demo, tolak jika database telemetri belum ada
+  if (!isDemoMode()) {
+    return { ok: false, error: 'Penyimpanan telemetri intervensi ujian ke database permanen sedang dalam penyiapan Fase 3.' };
   }
 
   const examLive = quizStore.liveStatus[input.exam_id];
@@ -720,7 +761,7 @@ export async function lecturerInterventionAction(input: {
 
   const st = examLive[input.student_id];
   if (input.action_type === 'WARN') {
-    st.warning_message = String(input.value || 'Peringatan: Harap perhatikan tata tertib ujian!');
+    st.warning_message = String(input.value || reasonText);
   } else if (input.action_type === 'ADD_TIME') {
     const mins = Number(input.value || 5);
     st.extra_minutes = (st.extra_minutes || 0) + mins;
@@ -734,9 +775,19 @@ export async function lecturerInterventionAction(input: {
   } else if (input.action_type === 'RESET') {
     st.status = 'NOT_STARTED';
     st.violations_count = 0;
-    // remove existing attempt if any
     quizStore.attempts = quizStore.attempts.filter((a) => !(a.quiz_id === input.exam_id && a.student_id === input.student_id));
   }
+
+  // Catat di Audit Log
+  quizStore.events.push({
+    id: randomUUID(),
+    exam_id: input.exam_id,
+    student_id: input.student_id,
+    student_name: st.student_name,
+    event_type: input.action_type === 'WARN' ? 'WINDOW_BLUR' : input.action_type === 'ADD_TIME' ? 'TAB_SWITCH' : 'EXIT_FULLSCREEN',
+    details: `Intervensi Dosen (${user.profile?.full_name}): ${input.action_type}. Alasan: ${reasonText}`,
+    created_at: new Date().toISOString(),
+  });
 
   revalidatePath('/classes/[id]', 'page');
   return { ok: true };
@@ -746,6 +797,10 @@ export async function lecturerInterventionAction(input: {
 export async function submitExamDisputeAction(attemptId: string, reason: string): Promise<ActionResponse<ExamDispute>> {
   const user = await getCurrentUserWithRoles();
   if (!user) return { ok: false, error: 'Silakan login terlebih dahulu.' };
+
+  if (!isDemoMode()) {
+    return { ok: false, error: 'Penyimpanan keberatan nilai ke database permanen sedang dalam penyiapan Fase 3.' };
+  }
 
   const attempt = quizStore.attempts.find((a) => a.id === attemptId);
   if (!attempt) return { ok: false, error: 'Pengerjaan tidak ditemukan.' };
@@ -777,11 +832,15 @@ export async function resolveExamDisputeAction(input: {
 }): Promise<ActionResponse> {
   const user = await getCurrentUserWithRoles();
   if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
-    return { ok: false, error: 'Hanya dosen pengampu yang berwenang menyelesaikan sengketa nilai.' };
+    return { ok: false, error: 'Hanya dosen pengampu yang berwenang menyelesaikan keberatan nilai.' };
+  }
+
+  if (!isDemoMode()) {
+    return { ok: false, error: 'Penyelesaian keberatan nilai ke database permanen sedang dalam penyiapan Fase 3.' };
   }
 
   const dispute = quizStore.disputes.find((d) => d.id === input.dispute_id);
-  if (!dispute) return { ok: false, error: 'Sengketa nilai tidak ditemukan.' };
+  if (!dispute) return { ok: false, error: 'Keberatan nilai tidak ditemukan.' };
 
   dispute.status = input.status;
   dispute.lecturer_note = input.lecturer_note;
@@ -796,7 +855,18 @@ export async function resolveExamDisputeAction(input: {
   }
 
   revalidatePath('/classes/[id]', 'page');
+  revalidatePath('/analytics', 'page');
   return { ok: true };
+}
+
+// Grade Dispute: List Disputes for Lecturer / Student
+export async function listExamDisputesAction(): Promise<ExamDispute[]> {
+  const user = await getCurrentUserWithRoles();
+  if (!user) return [];
+  if (user.activeRole === 'STUDENT') {
+    return (quizStore.disputes || []).filter((d) => d.student_id === user.user.id);
+  }
+  return quizStore.disputes || [];
 }
 
 // Question Bank: List & Search

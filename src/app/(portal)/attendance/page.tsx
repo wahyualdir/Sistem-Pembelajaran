@@ -91,11 +91,22 @@ import { listLeavePermitsAction, listAttendanceSessionsAction, getClassAttendanc
 import { listMyClassesAction, getClassDetailAction } from '@/modules/academic/actions';
 import { LecturerAttendanceHubView } from '@/modules/academic/lecturer-attendance-hub-view';
 
+import { redirect } from 'next/navigation';
+
 export default async function AttendancePage() {
   const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole;
+
+  if (role === 'PROGRAM_COORDINATOR') {
+    redirect('/coordinator/monitoring');
+  }
+  if (role === 'ACADEMIC_STAFF') {
+    redirect('/staff');
+  }
+
   const realLeaves = await listLeavePermitsAction();
   const isDemo = isDemoMode();
-  const isLecturer = user?.activeRole === 'LECTURER' || user?.activeRole === 'SYSTEM_ADMIN' || user?.activeRole === 'SUPER_ADMIN';
+  const isLecturer = role === 'LECTURER' || role === 'SYSTEM_ADMIN' || role === 'SUPER_ADMIN';
 
   // Jika Dosen: Tampilkan Hub Bertab Dosen [Sesi Presensi | Rekap Kehadiran | Izin & Sakit | Pengaturan Lokasi]
   if (isLecturer) {
@@ -113,6 +124,7 @@ export default async function AttendancePage() {
         sessions={sessions}
         classSummary={classSummary}
         leaves={realLeaves}
+        isDemo={isDemo}
       />
     );
   }
@@ -139,6 +151,7 @@ export default async function AttendancePage() {
     <AttendanceHubView
       records={records}
       leaves={leaves}
+      isDemo={isDemo}
     />
   );
 }

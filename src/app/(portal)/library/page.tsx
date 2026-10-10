@@ -59,6 +59,8 @@ const BOOKS = [
   },
 ];
 
+import { isDemoMode } from '@/lib/config/features';
+
 export default async function LibraryPage() {
   const user = await getCurrentUserWithRoles();
   const role = user?.activeRole || 'STUDENT';
@@ -68,6 +70,7 @@ export default async function LibraryPage() {
     role === 'PROGRAM_COORDINATOR' ||
     role === 'SYSTEM_ADMIN' ||
     role === 'SUPER_ADMIN';
+  const isDemo = isDemoMode();
 
-  return <LibraryHubView books={BOOKS} isStaffOrLecturer={isStaffOrLecturer} />;
+  return <LibraryHubView books={BOOKS} isStaffOrLecturer={isStaffOrLecturer} isDemo={isDemo} />;
 }

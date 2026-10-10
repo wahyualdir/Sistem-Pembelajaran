@@ -91,9 +91,27 @@ const DEMO_PROJECTS: PortfolioProjectItem[] = [
   },
 ];
 
+import { redirect } from 'next/navigation';
 import { isDemoMode } from '@/lib/config/features';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
-export default function CertificatesPage() {
+export default async function CertificatesPage() {
+  const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole;
+
+  if (role === 'LECTURER') {
+    redirect('/lecturer');
+  }
+  if (role === 'PROGRAM_COORDINATOR') {
+    redirect('/coordinator');
+  }
+  if (role === 'ACADEMIC_STAFF') {
+    redirect('/staff');
+  }
+  if (role === 'TEACHING_ASSISTANT') {
+    redirect('/ta');
+  }
+
   const isDemo = isDemoMode();
   return (
     <CertificatesHubView

@@ -76,14 +76,30 @@ const DEMO_GRADES: CourseGrade[] = [
   },
 ];
 
+import { redirect } from 'next/navigation';
 import { isDemoMode } from '@/lib/config/features';
 
 export default async function GradesPage() {
   const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole;
+
+  if (role === 'LECTURER') {
+    redirect('/analytics?tab=rekap-nilai');
+  }
+  if (role === 'PROGRAM_COORDINATOR') {
+    redirect('/coordinator/reports');
+  }
+  if (role === 'ACADEMIC_STAFF') {
+    redirect('/staff');
+  }
+  if (role === 'TEACHING_ASSISTANT') {
+    redirect('/ta/grading');
+  }
+
   const attempts = await getAllAttemptsAction().catch(() => []);
   const quizzes = await getAllQuizzesAction().catch(() => []);
   const isDemo = isDemoMode();
   const grades = isDemo ? DEMO_GRADES : [];
 
-  return <GradesHubView grades={grades} attempts={attempts} quizzes={quizzes} />;
+  return <GradesHubView grades={grades} attempts={attempts} quizzes={quizzes} isDemo={isDemo} />;
 }

@@ -63,9 +63,10 @@ interface GradesHubViewProps {
   grades: CourseGrade[];
   attempts: any[];
   quizzes: any[];
+  isDemo?: boolean;
 }
 
-export function GradesHubView({ grades, attempts, quizzes }: GradesHubViewProps) {
+export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: GradesHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -582,13 +583,13 @@ export function GradesHubView({ grades, attempts, quizzes }: GradesHubViewProps)
                     Batal
                   </button>
 
-                  {disputeType === 'COURSE' || (disputeType === 'EXAM' && attempts.length === 0) ? (
+                  {disputeType === 'COURSE' || !isDemo || (disputeType === 'EXAM' && attempts.length === 0) ? (
                     <button
                       type="button"
                       disabled
                       className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-neutral-200 text-neutral-500 text-xs sm:text-sm font-black cursor-not-allowed"
                     >
-                      <span>Fitur Segera Aktif (Belum Tersimpan)</span>
+                      <span>Fitur Segera Aktif (Belum Tersimpan ke Database)</span>
                     </button>
                   ) : (
                     <button

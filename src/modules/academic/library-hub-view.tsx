@@ -33,9 +33,10 @@ interface BookItem {
 interface LibraryHubViewProps {
   books: BookItem[];
   isStaffOrLecturer: boolean;
+  isDemo?: boolean;
 }
 
-export function LibraryHubView({ books, isStaffOrLecturer }: LibraryHubViewProps) {
+export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: LibraryHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -361,6 +362,18 @@ export function LibraryHubView({ books, isStaffOrLecturer }: LibraryHubViewProps
               </div>
             </div>
 
+            {!isDemo && (
+              <div className="p-3 rounded-lg border-2 border-black bg-amber-50 text-xs text-amber-950 font-medium space-y-1">
+                <p className="font-bold flex items-center gap-1.5">
+                  <AlertCircle className="h-4 w-4 text-amber-900" />
+                  <span>Pemberitahuan Persistensi Database (Fase 3)</span>
+                </p>
+                <p>
+                  Penyimpanan dokumen e-book/modul ke Supabase Storage bucket 'library-books' sedang dalam penyiapan. Di luar mode demo, publikasi dinonaktifkan untuk mencegah sukses palsu.
+                </p>
+              </div>
+            )}
+
             <div className="pt-3 border-t-2 border-black flex items-center justify-between">
               {isSuccessUpload && (
                 <span className="text-xs font-bold font-mono text-emerald-800 flex items-center gap-1.5">
@@ -368,13 +381,23 @@ export function LibraryHubView({ books, isStaffOrLecturer }: LibraryHubViewProps
                   Koleksi berhasil diunggah ke katalog pustaka!
                 </span>
               )}
-              <button
-                type="submit"
-                disabled={isPending}
-                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer ml-auto"
-              >
-                <span>{isPending ? 'Mengunggah...' : 'Publikasikan ke Katalog'}</span>
-              </button>
+              {!isDemo ? (
+                <button
+                  type="button"
+                  disabled
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-black bg-neutral-200 text-neutral-500 text-xs sm:text-sm font-black cursor-not-allowed ml-auto"
+                >
+                  <span>Fitur Segera Aktif (Belum Tersimpan ke Database)</span>
+                </button>
+              ) : (
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer ml-auto"
+                >
+                  <span>{isPending ? 'Mengunggah...' : 'Publikasikan ke Katalog'}</span>
+                </button>
+              )}
             </div>
           </form>
         </div>

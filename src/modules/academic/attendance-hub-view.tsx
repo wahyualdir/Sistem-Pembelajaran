@@ -58,9 +58,10 @@ export type AttendanceTabId = (typeof ATTENDANCE_TABS)[number]['id'];
 interface AttendanceHubViewProps {
   records: AttendanceHistoryRecord[];
   leaves: LeaveRequestRecord[];
+  isDemo?: boolean;
 }
 
-export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
+export function AttendanceHubView({ records, leaves, isDemo = true }: AttendanceHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -525,6 +526,18 @@ export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
                   </div>
                 </div>
 
+                {!isDemo && (
+                  <div className="p-3 rounded-lg border-2 border-black bg-amber-50 text-xs text-amber-950 font-medium space-y-1">
+                    <p className="font-bold flex items-center gap-1.5">
+                      <AlertCircle className="h-4 w-4 text-amber-900" />
+                      <span>Pemberitahuan Persistensi Database (Fase 3)</span>
+                    </p>
+                    <p>
+                      Penyimpanan surat izin/sakit ke database Supabase sedang dalam penyiapan. Di luar mode demo, formulir dinonaktifkan untuk mencegah sukses palsu.
+                    </p>
+                  </div>
+                )}
+
                 <div className="pt-2 flex items-center justify-end gap-3 border-t-2 border-black/10">
                   <button
                     type="button"
@@ -533,14 +546,24 @@ export function AttendanceHubView({ records, leaves }: AttendanceHubViewProps) {
                   >
                     Batal
                   </button>
-                  <button
-                    type="submit"
-                    disabled={isPending}
-                    className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
-                  >
-                    <Send className="h-4 w-4" />
-                    <span>{isPending ? 'Mengirim...' : 'Kirim Permohonan Izin'}</span>
-                  </button>
+                  {!isDemo ? (
+                    <button
+                      type="button"
+                      disabled
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-neutral-200 text-neutral-500 text-xs sm:text-sm font-black cursor-not-allowed"
+                    >
+                      <span>Fitur Segera Aktif (Belum Tersimpan ke Database)</span>
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={isPending}
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
+                    >
+                      <Send className="h-4 w-4" />
+                      <span>{isPending ? 'Mengirim...' : 'Kirim Permohonan Izin'}</span>
+                    </button>
+                  )}
                 </div>
               </form>
             )}

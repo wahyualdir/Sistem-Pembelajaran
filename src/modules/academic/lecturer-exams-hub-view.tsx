@@ -39,9 +39,14 @@ export type LecturerExamTabId = (typeof LECTURER_EXAM_TABS)[number]['id'];
 interface LecturerExamsHubViewProps {
   quizzes: any[];
   liveData?: any;
+  isDemo?: boolean;
 }
 
-export function LecturerExamsHubView({ quizzes, liveData }: LecturerExamsHubViewProps) {
+export function LecturerExamsHubView({
+  quizzes,
+  liveData,
+  isDemo = true,
+}: LecturerExamsHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -139,39 +144,44 @@ export function LecturerExamsHubView({ quizzes, liveData }: LecturerExamsHubView
   ]);
 
   const handleIntervention = (studentId: string, action: 'WARN' | 'ADD_TIME' | 'TERMINATE') => {
+    if (!isDemo) {
+      alert('Pemberitahuan: Intervensi ujian live proctoring ke database permanen sedang dalam penyiapan Fase 3.');
+      return;
+    }
+    const student = liveStudents.find((s) => s.student_id === studentId);
+    const actionLabel = action === 'WARN' ? 'memberi peringatan kepada' : action === 'ADD_TIME' ? 'menambahkan 10 menit waktu untuk' : 'mendiskualifikasi ujian';
+    if (!confirm(`Konfirmasi Tindakan Pengawas:\nApakah Anda yakin ingin ${actionLabel} ${student?.student_name ?? 'mahasiswa'}?`)) {
+      return;
+    }
+
+    const defaultReason = action === 'WARN' ? 'Terdeteksi beralih jendela/tab peramban saat pengerjaan' : action === 'ADD_TIME' ? 'Kompensasi kendala jaringan internet saat pengerjaan' : 'Pelanggaran berat integritas akademik saat ujian';
+    const reason = prompt(`Masukkan alasan intervensi ujian (wajib diisi, minimal 3 karakter):`, defaultReason);
+    if (!reason || reason.trim().length < 3) {
+      alert('Alasan intervensi wajib diisi minimal 3 karakter.');
+      return;
+    }
+
     startTransition(async () => {
-      if (action === 'WARN') {
-        const msg = prompt('Masukkan pesan peringatan untuk mahasiswa:', 'Peringatan: Tetap berada di halaman ujian!');
-        if (!msg) return;
-        await lecturerInterventionAction({
-          exam_id: selectedExamId,
-          student_id: studentId,
-          action_type: 'WARN',
-          value: msg,
-        }).catch(() => {});
-        alert(`Peringatan terkirim ke mahasiswa.`);
-      } else if (action === 'ADD_TIME') {
-        await lecturerInterventionAction({
-          exam_id: selectedExamId,
-          student_id: studentId,
-          action_type: 'ADD_TIME',
-          value: 10,
-        }).catch(() => {});
-        setLiveStudents((prev) =>
-          prev.map((s) => (s.student_id === studentId ? { ...s, time_left_seconds: s.time_left_seconds + 600 } : s))
-        );
-        alert(`Berhasil menambahkan 10 menit waktu pengerjaan.`);
-      } else if (action === 'TERMINATE') {
-        if (!confirm('Yakin ingin mendiskualifikasi / menghentikan paksa ujian mahasiswa ini?')) return;
-        await lecturerInterventionAction({
-          exam_id: selectedExamId,
-          student_id: studentId,
-          action_type: 'TERMINATE',
-        }).catch(() => {});
-        setLiveStudents((prev) =>
-          prev.map((s) => (s.student_id === studentId ? { ...s, status: 'TERMINATED' } : s))
-        );
-        alert(`Ujian mahasiswa berhasil dihentikan.`);
+      const res = await lecturerInterventionAction({
+        exam_id: selectedExamId,
+        student_id: studentId,
+        action_type: action,
+        reason: reason.trim(),
+        value: action === 'ADD_TIME' ? 10 : reason.trim(),
+      });
+      if (res.ok) {
+        if (action === 'ADD_TIME') {
+          setLiveStudents((prev) =>
+            prev.map((s) => (s.student_id === studentId ? { ...s, time_left_seconds: s.time_left_seconds + 600 } : s))
+          );
+        } else if (action === 'TERMINATE') {
+          setLiveStudents((prev) =>
+            prev.map((s) => (s.student_id === studentId ? { ...s, status: 'TERMINATED' } : s))
+          );
+        }
+        alert(`Tindakan ${action} berhasil dieksekusi dan dicatat di Audit Log.`);
+      } else {
+        alert(res.error || 'Gagal mengeksekusi intervensi.');
       }
     });
   };
