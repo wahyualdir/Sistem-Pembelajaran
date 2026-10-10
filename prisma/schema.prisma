@@ -1,0 +1,664 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum PeranPengguna {
+  ADMIN
+  DOSEN
+  MAHASISWA
+}
+
+enum StatusMahasiswa {
+  AKTIF
+  CUTI
+  LULUS
+  KELUAR
+}
+
+enum JenisMataKuliah {
+  WAJIB
+  PILIHAN
+}
+
+enum SemesterTahunAjaran {
+  GANJIL
+  GENAP
+}
+
+enum StatusKRS {
+  DRAF
+  DIAJUKAN
+  DISETUJUI
+  DITOLAK
+}
+
+enum StatusPresensi {
+  HADIR
+  IZIN
+  SAKIT
+  ALPA
+}
+
+enum StatusBimbingan {
+  DIAJUKAN
+  SELESAI
+}
+
+enum StatusTagihan {
+  BELUM
+  LUNAS
+  DISPENSASI
+}
+
+enum JenisUjian {
+  UTS
+  UAS
+}
+
+enum TargetPengumuman {
+  SEMUA
+  PRODI
+  ANGKATAN
+  KELAS
+}
+
+enum JenisKegiatanAkademik {
+  KRS
+  KRS_REVISI
+  UTS
+  UAS
+  LIBUR
+  INPUT_NILAI
+}
+
+enum JenisSurat {
+  AKTIF_KULIAH
+  CUTI_AKADEMIK
+  BEASISWA
+  KETERANGAN_LAIN
+}
+
+enum StatusPengajuanSurat {
+  DIAJUKAN
+  DIPROSES
+  DISETUJUI
+  DITOLAK
+}
+
+model Pengguna {
+  id            String        @id @default(uuid())
+  email         String        @unique
+  peran         PeranPengguna
+  passwordHash  String?
+  aktif         Boolean       @default(true)
+  loginTerakhir DateTime?
+  authId        String?       @unique
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  mahasiswa     Mahasiswa?
+  dosen         Dosen?
+  pembacaPengumuman PengumumanDibaca[]
+  logAudit      LogAudit[]
+  notifikasi    Notifikasi[]
+  preferensiNotifikasi PreferensiNotifikasi?
+  perangkatLogin PerangkatLogin[]
+
+  @@index([email])
+}
+
+model ProgramStudi {
+  id         String       @id @default(uuid())
+  kode       String       @unique
+  nama       String
+  jenjang    String       @default("S1")
+  kaprodiId  String?      @unique
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  kaprodi    Dosen?       @relation("KaprodiProdi", fields: [kaprodiId], references: [id])
+  mahasiswa  Mahasiswa[]
+  mataKuliah MataKuliah[]
+}
+
+model Dosen {
+  id             String        @id @default(uuid())
+  nidn           String        @unique
+  nama           String
+  email          String        @unique
+  penandaWali    Boolean       @default(false)
+  penandaKaprodi Boolean       @default(false)
+  statusAktif    Boolean       @default(true)
+  penggunaId     String?       @unique
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  pengguna       Pengguna?     @relation(fields: [penggunaId], references: [id], onDelete: SetNull)
+  kaprodiDi      ProgramStudi? @relation("KaprodiProdi")
+  mahasiswaWali  Mahasiswa[]   @relation("DosenWaliMahasiswa")
+  kelas          Kelas[]
+  bimbinganWali  BimbinganWali[]
+
+  @@index([email])
+  @@index([nidn])
+}
+
+model Mahasiswa {
+  id            String          @id @default(uuid())
+  nim           String          @unique
+  nama          String
+  email         String          @unique
+  angkatan      Int
+  prodiId       String
+  dosenWaliId   String?
+  status        StatusMahasiswa @default(AKTIF)
+  penggunaId    String?         @unique
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  prodi         ProgramStudi    @relation(fields: [prodiId], references: [id])
+  dosenWali     Dosen?          @relation("DosenWaliMahasiswa", fields: [dosenWaliId], references: [id])
+  pengguna      Pengguna?       @relation(fields: [penggunaId], references: [id], onDelete: SetNull)
+  krs           KRS[]
+  tagihan       Tagihan[]
+  pengumpulan   PengumpulanTugas[]
+  bimbingan     BimbinganWali[]
+  pengajuanSurat PengajuanSurat[]
+
+  @@index([prodiId, angkatan])
+  @@index([nim])
+  @@index([email])
+}
+
+model MataKuliah {
+  id            String                @id @default(uuid())
+  kode          String                @unique
+  nama          String
+  sks           Int
+  jenis         JenisMataKuliah       @default(WAJIB)
+  semesterPaket Int
+  prodiId       String
+  statusAktif   Boolean               @default(true)
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  prodi         ProgramStudi          @relation(fields: [prodiId], references: [id])
+  kelas         Kelas[]
+  prasyaratUntuk PrasyaratMataKuliah[] @relation("MKPrasyarat")
+  syaratDari     PrasyaratMataKuliah[] @relation("MKTujuan")
+
+  @@index([kode])
+  @@index([prodiId])
+}
+
+model PrasyaratMataKuliah {
+  id           String     @id @default(uuid())
+  mataKuliahId String
+  prasyaratId  String
+  nilaiMinimal String     @default("D")
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  mataKuliah   MataKuliah @relation("MKTujuan", fields: [mataKuliahId], references: [id], onDelete: Cascade)
+  prasyarat    MataKuliah @relation("MKPrasyarat", fields: [prasyaratId], references: [id], onDelete: Cascade)
+
+  @@unique([mataKuliahId, prasyaratId])
+}
+
+model TahunAjaran {
+  id             String               @id @default(uuid())
+  kode           String
+  semester       SemesterTahunAjaran
+  tanggalMulai   DateTime
+  tanggalSelesai DateTime
+  aktif          Boolean              @default(false)
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+
+  kelas          Kelas[]
+  krs            KRS[]
+  tagihan        Tagihan[]
+  kalender       KalenderAkademik[]
+
+  @@unique([kode, semester])
+  @@index([aktif])
+}
+
+model Ruang {
+  id           String         @id @default(uuid())
+  kode         String         @unique
+  nama         String
+  kapasitas    Int
+  gedung       String
+  statusAktif  Boolean        @default(true)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  jadwalKuliah JadwalKuliah[]
+  ujian        Ujian[]
+
+  @@index([kode])
+}
+
+model Kelas {
+  id            String          @id @default(uuid())
+  kode          String
+  mataKuliahId  String
+  tahunAjaranId String
+  dosenId       String
+  kuota         Int
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  mataKuliah    MataKuliah      @relation(fields: [mataKuliahId], references: [id])
+  tahunAjaran   TahunAjaran     @relation(fields: [tahunAjaranId], references: [id])
+  dosen         Dosen           @relation(fields: [dosenId], references: [id])
+  jadwalKuliah  JadwalKuliah[]
+  krsDetail     KRSDetail[]
+  komponenNilai KomponenNilai[]
+  pertemuan     Pertemuan[]
+  materi        Materi[]
+  tugas         Tugas[]
+  ujian         Ujian[]
+
+  @@unique([mataKuliahId, tahunAjaranId, kode])
+  @@index([tahunAjaranId])
+  @@index([dosenId])
+}
+
+model JadwalKuliah {
+  id         String   @id @default(uuid())
+  kelasId    String
+  hari       String
+  jamMulai   String
+  jamSelesai String
+  ruangId    String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  kelas      Kelas    @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  ruang      Ruang    @relation(fields: [ruangId], references: [id])
+
+  @@index([kelasId, hari])
+  @@index([ruangId, hari])
+}
+
+model KRS {
+  id                 String     @id @default(uuid())
+  mahasiswaId        String
+  tahunAjaranId      String
+  status             StatusKRS  @default(DRAF)
+  totalSks           Int        @default(0)
+  catatanWali        String?
+  tanggalPengajuan   DateTime?
+  tanggalPersetujuan DateTime?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  mahasiswa          Mahasiswa   @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
+  tahunAjaran        TahunAjaran @relation(fields: [tahunAjaranId], references: [id])
+  krsDetail          KRSDetail[]
+
+  @@unique([mahasiswaId, tahunAjaranId])
+  @@index([mahasiswaId, tahunAjaranId])
+  @@index([status])
+}
+
+model KRSDetail {
+  id         String      @id @default(uuid())
+  krsId      String
+  kelasId    String
+  nilaiAkhir Decimal?    @db.Decimal(5, 2)
+  nilaiHuruf String?
+  bobot      Decimal?    @db.Decimal(3, 2)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  krs        KRS         @relation(fields: [krsId], references: [id], onDelete: Cascade)
+  kelas      Kelas       @relation(fields: [kelasId], references: [id])
+  nilai      Nilai[]
+  presensi   Presensi[]
+
+  @@unique([krsId, kelasId])
+  @@index([krsId])
+  @@index([kelasId])
+}
+
+model KomponenNilai {
+  id          String     @id @default(uuid())
+  kelasId     String
+  nama        String
+  bobotPersen Decimal    @db.Decimal(5, 2)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  kelas       Kelas      @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  nilai       Nilai[]
+  tugas       Tugas[]
+
+  @@index([kelasId])
+}
+
+model Nilai {
+  id          String        @id @default(uuid())
+  krsDetailId String
+  komponenId  String
+  angka       Decimal       @db.Decimal(5, 2)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  krsDetail   KRSDetail     @relation(fields: [krsDetailId], references: [id], onDelete: Cascade)
+  komponen    KomponenNilai @relation(fields: [komponenId], references: [id], onDelete: Cascade)
+
+  @@unique([krsDetailId, komponenId])
+  @@index([krsDetailId])
+}
+
+model Pertemuan {
+  id            String     @id @default(uuid())
+  kelasId       String
+  nomor         Int
+  tanggal       DateTime
+  materiSingkat String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  kelas         Kelas      @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  presensi      Presensi[]
+
+  @@unique([kelasId, nomor])
+  @@index([kelasId])
+}
+
+model Presensi {
+  id          String         @id @default(uuid())
+  pertemuanId String
+  krsDetailId String
+  status      StatusPresensi @default(HADIR)
+  catatan     String?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  pertemuan   Pertemuan      @relation(fields: [pertemuanId], references: [id], onDelete: Cascade)
+  krsDetail   KRSDetail      @relation(fields: [krsDetailId], references: [id], onDelete: Cascade)
+
+  @@unique([pertemuanId, krsDetailId])
+  @@index([pertemuanId])
+  @@index([krsDetailId])
+}
+
+model BimbinganWali {
+  id          String          @id @default(uuid())
+  mahasiswaId String
+  dosenId     String
+  tanggal     DateTime        @default(now())
+  topik       String
+  catatan     String
+  status      StatusBimbingan @default(SELESAI)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  mahasiswa   Mahasiswa       @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
+  dosen       Dosen           @relation(fields: [dosenId], references: [id])
+
+  @@index([mahasiswaId])
+  @@index([dosenId])
+}
+
+model Materi {
+  id           String   @id @default(uuid())
+  kelasId      String
+  judul        String
+  deskripsi    String?
+  pathFile     String
+  ukuran       Int
+  diunggahOleh String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  kelas        Kelas    @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+
+  @@index([kelasId])
+}
+
+model Tugas {
+  id          String             @id @default(uuid())
+  kelasId     String
+  judul       String
+  deskripsi   String
+  tenggat     DateTime
+  komponenId  String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  kelas       Kelas              @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  komponen    KomponenNilai?     @relation(fields: [komponenId], references: [id], onDelete: SetNull)
+  pengumpulan PengumpulanTugas[]
+
+  @@index([kelasId])
+}
+
+model PengumpulanTugas {
+  id          String    @id @default(uuid())
+  tugasId     String
+  mahasiswaId String
+  pathFile    String
+  waktuKumpul DateTime  @default(now())
+  terlambat   Boolean   @default(false)
+  nilai       Decimal?  @db.Decimal(5, 2)
+  catatan     String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  tugas       Tugas     @relation(fields: [tugasId], references: [id], onDelete: Cascade)
+  mahasiswa   Mahasiswa @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
+
+  @@unique([tugasId, mahasiswaId])
+  @@index([tugasId])
+  @@index([mahasiswaId])
+}
+
+model Tagihan {
+  id               String        @id @default(uuid())
+  mahasiswaId      String
+  tahunAjaranId    String
+  jumlah           Decimal       @db.Decimal(12, 2)
+  status           StatusTagihan @default(BELUM)
+  batasDispensasi  DateTime?
+  tanggalBayar     DateTime?
+  buktiPembayaran  String?
+  catatan          String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  mahasiswa        Mahasiswa     @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
+  tahunAjaran      TahunAjaran   @relation(fields: [tahunAjaranId], references: [id])
+
+  @@unique([mahasiswaId, tahunAjaranId])
+  @@index([mahasiswaId, tahunAjaranId])
+  @@index([status])
+}
+
+model Ujian {
+  id         String     @id @default(uuid())
+  kelasId    String
+  jenis      JenisUjian
+  tanggal    DateTime
+  jamMulai   String
+  jamSelesai String
+  ruangId    String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  kelas      Kelas      @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  ruang      Ruang      @relation(fields: [ruangId], references: [id])
+
+  @@unique([kelasId, jenis])
+  @@index([kelasId])
+  @@index([ruangId])
+}
+
+model Pengumuman {
+  id         String             @id @default(uuid())
+  judul      String
+  isi        String
+  target     TargetPengumuman   @default(SEMUA)
+  targetId   String?
+  penulisId  String
+  terbitPada DateTime           @default(now())
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+
+  pembaca    PengumumanDibaca[]
+
+  @@index([terbitPada])
+  @@index([target])
+}
+
+model PengumumanDibaca {
+  id           String     @id @default(uuid())
+  pengumumanId String
+  penggunaId   String
+  dibacaPada   DateTime   @default(now())
+
+  pengumuman   Pengumuman @relation(fields: [pengumumanId], references: [id], onDelete: Cascade)
+  pengguna     Pengguna   @relation(fields: [penggunaId], references: [id], onDelete: Cascade)
+
+  @@unique([pengumumanId, penggunaId])
+  @@index([penggunaId])
+}
+
+model KalenderAkademik {
+  id            String                @id @default(uuid())
+  tahunAjaranId String
+  jenis         JenisKegiatanAkademik
+  keterangan    String?
+  mulai         DateTime
+  selesai       DateTime
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  tahunAjaran   TahunAjaran           @relation(fields: [tahunAjaranId], references: [id], onDelete: Cascade)
+
+  @@index([tahunAjaranId])
+  @@index([mulai, selesai])
+}
+
+model PengajuanSurat {
+  id               String               @id @default(uuid())
+  mahasiswaId      String
+  jenis            JenisSurat
+  keterangan       String
+  status           StatusPengajuanSurat @default(DIAJUKAN)
+  nomorSurat       String?
+  diprosesOleh     String?
+  alasanTolak      String?
+  fileUrl          String?
+  tanggalPengajuan DateTime             @default(now())
+  tanggalSelesai   DateTime?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  mahasiswa        Mahasiswa            @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
+
+  @@index([mahasiswaId])
+  @@index([status])
+}
+
+model KonfigurasiAkademik {
+  id        String   @id @default(uuid())
+  kunci     String   @unique
+  nilai     String   @db.Text
+  deskripsi String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LogAudit {
+  id         String    @id @default(uuid())
+  penggunaId String?
+  aksi       String
+  entitas    String
+  entitasId  String
+  nilaiLama  String?   @db.Text
+  nilaiBaru  String?   @db.Text
+  ipAddress  String?
+  waktu      DateTime  @default(now())
+
+  pengguna   Pengguna? @relation(fields: [penggunaId], references: [id], onDelete: SetNull)
+
+  @@index([entitas, entitasId])
+  @@index([waktu])
+}
+
+enum JenisNotifikasi {
+  TUGAS_TENGGAT
+  KEHADIRAN
+  KRS
+  UKT
+  NILAI
+  JADWAL
+  KEAMANAN
+  BRIEFING
+  PENGUMUMAN
+}
+
+enum TingkatNotifikasi {
+  INFO
+  PENTING
+  MENDESAK
+}
+
+model Notifikasi {
+  id            String             @id @default(uuid())
+  penggunaId    String
+  jenis         JenisNotifikasi
+  tingkat       TingkatNotifikasi
+  judul         String
+  isiTemplate   String
+  isiAI         String?
+  tautan        String?
+  kunciDedup    String
+  dibacaPada    DateTime?
+  ditundaSampai DateTime?
+  dibuatPada    DateTime           @default(now())
+
+  pengguna      Pengguna           @relation(fields: [penggunaId], references: [id], onDelete: Cascade)
+
+  @@unique([penggunaId, kunciDedup])
+  @@index([penggunaId, dibacaPada, dibuatPada])
+}
+
+model PreferensiNotifikasi {
+  penggunaId       String   @id
+  jamTenangMulai   String?
+  jamTenangSelesai String?
+  jenisAktif       Json
+  emailCadangan    String?
+
+  pengguna         Pengguna @relation(fields: [penggunaId], references: [id], onDelete: Cascade)
+}
+
+model PerangkatLogin {
+  id              String   @id @default(uuid())
+  penggunaId      String
+  hashUserAgent   String
+  namaPerangkat   String
+  ipKasar         String
+  perkiraanLokasi String?
+  pertamaDilihat  DateTime @default(now())
+  terakhirDilihat DateTime
+  tepercaya       Boolean  @default(false)
+  sesiId          String?
+
+  pengguna        Pengguna @relation(fields: [penggunaId], references: [id], onDelete: Cascade)
+
+  @@unique([penggunaId, hashUserAgent])
+  @@index([penggunaId])
+}

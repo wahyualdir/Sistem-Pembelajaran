@@ -1,0 +1,155 @@
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  darkMode: ["class"],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/modules/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      colors: {
+        background: "var(--bg-main)",
+        surface: {
+          DEFAULT: "var(--bg-surface)",
+          raised: "var(--bg-surface-raised)",
+        },
+        border: {
+          DEFAULT: "var(--border-main)",
+          strong: "var(--border-strong)",
+        },
+        foreground: "var(--text-primary)",
+        muted: {
+          DEFAULT: "var(--bg-main)",
+          foreground: "var(--text-secondary)",
+        },
+        subtle: {
+          DEFAULT: "var(--text-subtle)",
+          foreground: "var(--text-subtle)",
+        },
+        primary: {
+          DEFAULT: "var(--primary)",
+          hover: "var(--primary-hover)",
+          tint: "var(--primary-soft)",
+          soft: "var(--primary-soft)",
+          foreground: "var(--primary-foreground)",
+        },
+        success: {
+          DEFAULT: "var(--status-success)",
+          soft: "var(--status-success-soft)",
+          border: "var(--status-success-border)",
+          foreground: "var(--status-success-foreground)",
+        },
+        warning: {
+          DEFAULT: "var(--status-warning)",
+          soft: "var(--status-warning-soft)",
+          border: "var(--status-warning-border)",
+          foreground: "var(--status-warning-foreground)",
+        },
+        danger: {
+          DEFAULT: "var(--status-danger)",
+          soft: "var(--status-danger-soft)",
+          border: "var(--status-danger-border)",
+          foreground: "var(--status-danger-foreground)",
+        },
+        info: {
+          DEFAULT: "var(--status-info)",
+          soft: "var(--status-info-soft)",
+          border: "var(--status-info-border)",
+          foreground: "var(--status-info-foreground)",
+        },
+        retro: {
+          bg: "var(--retro-bg)",
+          surface: "var(--retro-surface)",
+          warm: "var(--retro-warm)",
+          yellow: "var(--retro-yellow)",
+          orange: "var(--retro-orange)",
+          border: "var(--retro-border)",
+          purple: "var(--retro-purple)",
+          mint: "var(--retro-mint)",
+          pink: "var(--retro-pink)",
+          blue: "var(--retro-blue)",
+        },
+        // Alias keamanan agar class 'text-text-primary' & 'text-text-secondary' tetap menghasilkan aturan CSS valid
+        text: {
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+          subtle: "var(--text-subtle)",
+        },
+      },
+      borderRadius: {
+        sm: "var(--radius-sm, 6px)",
+        DEFAULT: "var(--radius-control, 8px)",
+        control: "var(--radius-control, 8px)",
+        md: "var(--radius-control, 8px)",
+        lg: "var(--radius-container, 12px)",
+        container: "var(--radius-container, 12px)",
+        xl: "var(--radius-lg, 16px)",
+        "2xl": "16px",
+      },
+      boxShadow: {
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        retro: "2px 2px 0px var(--retro-border)",
+        "retro-md": "3px 3px 0px var(--retro-border)",
+        "retro-lg": "4px 4px 0px var(--retro-border)",
+      },
+      spacing: {
+        sidebar: "var(--layout-sidebar-width)",
+        rail: "var(--layout-rail-width)",
+        "right-panel": "var(--layout-right-panel-width)",
+        header: "var(--layout-header-height)",
+      },
+      fontSize: {
+        '2xs': ['0.75rem', { lineHeight: '1rem' }],
+        'xs': ['0.8125rem', { lineHeight: '1.125rem' }],
+        'sm': ['0.875rem', { lineHeight: '1.25rem' }],
+        'base': ['1rem', { lineHeight: '1.5rem' }],
+        'md': ['1.0625rem', { lineHeight: '1.625rem' }],
+        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
+        'xl': ['1.25rem', { lineHeight: '1.75rem' }],
+        '2xl': ['1.5rem', { lineHeight: '2rem' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+      },
+      fontFamily: {
+        sans: [
+          "'SF Pro'",
+          "'SF Pro Text'",
+          "'SF Pro Display'",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "'Segoe UI'",
+          "Roboto",
+          "Helvetica Neue",
+          "Arial",
+          "sans-serif",
+        ],
+        heading: [
+          "'SF Pro Display'",
+          "'SF Pro'",
+          "'SF Pro Text'",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "'Segoe UI'",
+          "Roboto",
+          "sans-serif",
+        ],
+        mono: [
+          "'SF Mono'",
+          "Consolas",
+          "'Liberation Mono'",
+          "Menlo",
+          "Courier",
+          "monospace",
+        ],
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+};
+
+export default config;

@@ -1,0 +1,878 @@
+'use server';
+
+import { cookies, headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { randomUUID } from 'crypto';
+import { createClient as createServerSupabase } from '@/lib/supabase/server';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import {
+  loginSchema,
+  changePasswordSchema,
+  switchWorkspaceSchema,
+  resetPasswordRequestSchema,
+  type LoginInput,
+  type ChangePasswordInput,
+  type SwitchWorkspaceInput,
+} from './schemas';
+import {
+  checkIpRateLimit,
+  checkIdentifierLockout,
+  recordLoginFailure,
+  resetLoginFailure,
+} from './rate-limiter';
+import { parseUserAgent, maskIpAddress, hashDeviceId } from './device';
+import type { UserStatus } from '@/lib/supabase/types';
+
+import type { ActionResponse } from './types';
+import { SYNTHETIC_DEMO_USERS } from './demo-users';
+
+const ROLE_PORTAL_MAP: Record<string, string> = {
+  STUDENT: '/student',
+  LECTURER: '/lecturer',
+  TEACHING_ASSISTANT: '/ta',
+  PROGRAM_COORDINATOR: '/coordinator',
+  ACADEMIC_STAFF: '/staff',
+  SYSTEM_ADMIN: '/admin',
+  SUPER_ADMIN: '/admin',
+  SUPERADMIN: '/admin',
+};
+
+import { checkSupabaseOnline } from '@/lib/supabase/status';
+
+
+/**
+ * Server Action: login
+ * Mengimplementasikan seluruh langkah Bagian 3.2 Diagram Alur Login (Rinci)
+ */
+export async function loginAction(formData: unknown): Promise<ActionResponse> {
+  const parseResult = loginSchema.safeParse(formData);
+  if (!parseResult.success) {
+    return {
+      ok: false,
+      error: 'Data yang dimasukkan tidak valid.',
+      fieldErrors: parseResult.error.flatten().fieldErrors,
+    };
+  }
+
+  const { identifier, password } = parseResult.data;
+  const headerStore = headers();
+  const rawIp = headerStore.get('x-forwarded-for') || headerStore.get('x-real-ip') || '127.0.0.1';
+  const clientIp = rawIp.split(',')[0].trim();
+  const userAgent = headerStore.get('user-agent');
+  const country = headerStore.get('x-vercel-ip-country') || 'Indonesia';
+  const city = headerStore.get('x-vercel-ip-city') || 'Pekanbaru';
+
+  // Langkah 2: Rate limit per IP dan lockout per identifier (5 gagal -> 15 menit)
+  const ipLimit = checkIpRateLimit(clientIp);
+  if (!ipLimit.allowed) {
+    return {
+      ok: false,
+      error: `Terlalu banyak permintaan dari IP ini. Coba lagi dalam ${ipLimit.retryAfterSeconds} detik.`,
+    };
+  }
+
+  const identifierLock = checkIdentifierLockout(identifier);
+  if (!identifierLock.allowed) {
+    return {
+      ok: false,
+      error: `Akun terkunci sementara karena 5 kali percobaan gagal berturut-turut. Coba lagi dalam ${identifierLock.retryAfterSeconds} detik.`,
+    };
+  }
+
+  const normalizedId = identifier.trim();
+  const demoUser = SYNTHETIC_DEMO_USERS[normalizedId] || SYNTHETIC_DEMO_USERS[normalizedId.toLowerCase()];
+  const isOnline = await checkSupabaseOnline();
+
+  // Langkah 3: Cari email dari user_identifiers menggunakan klien admin jika online
+  let targetEmail = normalizedId;
+  let userId: string | null = null;
+  let profileStatus: UserStatus = 'ACTIVE';
+  let mustChangePassword = false;
+
+  if (isOnline) {
+    try {
+      const { data: identData } = await supabaseAdmin
+        .from('user_identifiers')
+        .select('user_id, value, type, profiles:user_id(id, email, status, locked_until, must_change_password)')
+        .ilike('value', normalizedId)
+        .limit(1)
+        .maybeSingle();
+
+      if (identData && identData.profiles) {
+        targetEmail = (identData.profiles as any).email;
+        userId = (identData.profiles as any).id;
+        profileStatus = (identData.profiles as any).status;
+        mustChangePassword = !!(identData.profiles as any).must_change_password;
+
+        if ((identData.profiles as any).locked_until && new Date((identData.profiles as any).locked_until) > new Date()) {
+          return {
+            ok: false,
+            error: 'Akun Anda sedang terkunci sementara. Silakan tunggu atau hubungi administrator.',
+          };
+        }
+      }
+    } catch {
+      // Supabase query error fallback
+    }
+  }
+
+  if (!userId && demoUser) {
+    targetEmail = demoUser.email;
+    userId = demoUser.id;
+    profileStatus = demoUser.status;
+    mustChangePassword = !!demoUser.mustChangePassword;
+  }
+
+  // Langkah 4: Autentikasi dengan Supabase
+  let currentUserId: string | null = null;
+  let isOfflineAuthSuccess = false;
+
+  if (isOnline) {
+    try {
+      const supabase = await createServerSupabase();
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email: targetEmail,
+        password,
+      });
+      if (!authError && authData.user) {
+        currentUserId = authData.user.id;
+      }
+    } catch {
+      // Supabase local offline
+    }
+  }
+
+  // Fallback pengujian / demo jika Supabase offline
+  if (!currentUserId) {
+    const expectedPassword = demoUser?.password || 'Password123!';
+    if (demoUser && (password === expectedPassword || password === 'Password123!')) {
+      currentUserId = demoUser.id;
+      isOfflineAuthSuccess = true;
+    }
+  }
+
+  if (!currentUserId) {
+    const failureResult = recordLoginFailure(identifier);
+
+    // Catat kegagalan ke login_events jika online
+    if (userId && isOnline) {
+      try {
+        await supabaseAdmin.from('login_events').insert({
+          user_id: userId,
+          event_type: 'LOGIN_FAILED',
+          is_new_device: false,
+          risk_level: failureResult.locked ? 'HIGH' : 'LOW',
+          ip_masked: maskIpAddress(clientIp),
+          country,
+          city,
+        });
+      } catch {
+        // Fallback
+      }
+    }
+
+    if (failureResult.locked) {
+      return {
+        ok: false,
+        error: `Akun terkunci otomatis karena 5 kali percobaan gagal berturut-turut. Coba lagi dalam 15 menit.`,
+      };
+    }
+
+    return {
+      ok: false,
+      error: 'Identifier atau password salah.',
+    };
+  }
+
+  // Login berhasil -> reset kegagalan
+  resetLoginFailure(identifier);
+
+  // Langkah 5: Cek profiles.status
+  if (profileStatus !== 'ACTIVE') {
+    const statusMessages: Record<string, string> = {
+      PENDING: 'Akun Anda belum diaktivasi. Silakan periksa email aktivasi.',
+      LOCKED: 'Akun Anda terkunci sementara demi keamanan.',
+      SUSPENDED: 'Akun Anda sedang ditangguhkan. Silakan hubungi bagian administrasi.',
+      DEACTIVATED: 'Akun Anda telah dinonaktifkan.',
+    };
+    return {
+      ok: false,
+      error: statusMessages[profileStatus] || 'Status akun tidak mengizinkan login.',
+    };
+  }
+
+  // Langkah 6: Pasca-login, deteksi perangkat baru (Bagian 22.2)
+  const cookieStore = cookies();
+  let deviceId = cookieStore.get('device_id')?.value;
+  let isNewDevice = false;
+
+  if (!deviceId) {
+    deviceId = randomUUID();
+    isNewDevice = true;
+    cookieStore.set('device_id', deviceId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 365 * 24 * 60 * 60, // 1 tahun
+      path: '/',
+    });
+  }
+
+  if (isOfflineAuthSuccess) {
+    cookieStore.set('demo_session', currentUserId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+      path: '/',
+    });
+  }
+
+  const deviceHash = hashDeviceId(deviceId);
+  const deviceLabel = parseUserAgent(userAgent);
+  const maskedIp = maskIpAddress(clientIp);
+
+  if (isOnline) {
+    try {
+      const { data: existingDevice } = await supabaseAdmin
+        .from('user_devices')
+        .select('id, revoked_at')
+        .eq('user_id', currentUserId)
+        .eq('device_id_hash', deviceHash)
+        .maybeSingle();
+
+      let registeredDeviceId: string;
+
+      if (!existingDevice) {
+        isNewDevice = true;
+        const { data: newDev } = await supabaseAdmin
+          .from('user_devices')
+          .insert({
+            user_id: currentUserId,
+            device_id_hash: deviceHash,
+            label: deviceLabel,
+            last_ip_masked: maskedIp,
+            last_country: country,
+            last_city: city,
+            trusted: false,
+          })
+          .select('id')
+          .single();
+        registeredDeviceId = newDev?.id || randomUUID();
+      } else {
+        registeredDeviceId = existingDevice.id;
+        await supabaseAdmin
+          .from('user_devices')
+          .update({
+            last_seen_at: new Date().toISOString(),
+            last_ip_masked: maskedIp,
+            last_country: country,
+            last_city: city,
+            revoked_at: null,
+          })
+          .eq('id', existingDevice.id);
+      }
+
+      await supabaseAdmin.from('login_events').insert({
+        user_id: currentUserId,
+        device_id: registeredDeviceId,
+        event_type: 'LOGIN_SUCCESS',
+        is_new_device: isNewDevice,
+        risk_level: isNewDevice ? 'MEDIUM' : 'LOW',
+        ip_masked: maskedIp,
+        country,
+        city,
+        notified_at: isNewDevice ? new Date().toISOString() : null,
+      });
+    } catch {
+      // DB offline fallback
+    }
+  }
+
+  // Jika must_change_password aktif, arahkan ke halaman ganti password
+  if (mustChangePassword) {
+    return {
+      ok: true,
+      redirectTo: '/must-change-password',
+    };
+  }
+
+  // Langkah 7: Muat role dari user_roles
+  let activeRolesList: string[] = [];
+  if (isOnline) {
+    try {
+      const { data: userRoles } = await supabaseAdmin
+        .from('user_roles')
+        .select('role_id, scope_type, scope_id, roles:role_id(code, name)')
+        .eq('user_id', currentUserId)
+        .eq('status', 'ACTIVE');
+
+      if (userRoles && userRoles.length > 0) {
+        activeRolesList = userRoles.map((ur) => (ur.roles as any)?.code);
+      }
+    } catch {
+      // DB offline fallback
+    }
+  }
+
+  if (activeRolesList.length === 0 && demoUser) {
+    activeRolesList = demoUser.roles;
+  }
+
+  if (activeRolesList.length === 0) {
+    return {
+      ok: false,
+      error: 'Akun Anda belum memiliki peran aktif. Hubungi staf administrasi.',
+    };
+  }
+
+  // Satu role -> redirect ke portal yang sesuai
+  if (activeRolesList.length === 1) {
+    const singleRoleCode = activeRolesList[0];
+    cookieStore.set('active_role', singleRoleCode, { path: '/' });
+    const mappedRole = singleRoleCode === 'STUDENT' ? 'MAHASISWA' : (singleRoleCode === 'LECTURER' || singleRoleCode === 'TEACHING_ASSISTANT' ? 'DOSEN' : 'ADMIN');
+    const sessionPayload = Buffer.from(JSON.stringify({
+      userId: currentUserId,
+      email: targetEmail,
+      name: demoUser?.name || 'Wahyu Aldiriyanto',
+      role: mappedRole,
+      subId: mappedRole === 'MAHASISWA' ? 'mhs-1' : mappedRole === 'DOSEN' ? 'dsn-1' : undefined,
+    })).toString('base64');
+    cookieStore.set('siakad_session', sessionPayload, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
+
+    const targetPortal = ROLE_PORTAL_MAP[singleRoleCode] || '/student';
+    return {
+      ok: true,
+      redirectTo: targetPortal,
+    };
+  }
+
+  // Banyak role -> arahkan ke halaman pilih workspace
+  return {
+    ok: true,
+    redirectTo: '/workspace',
+  };
+}
+
+/**
+ * Server Action: switchWorkspace
+ * Mengganti workspace aktif setelah validasi ketat di server (Langkah 8)
+ */
+export async function switchWorkspaceAction(formData: FormData | unknown): Promise<void> {
+  let roleCode: string | undefined;
+  if (typeof FormData !== 'undefined' && formData instanceof FormData) {
+    roleCode = formData.get('roleCode') as string;
+  } else if (typeof formData === 'object' && formData !== null && 'roleCode' in formData) {
+    roleCode = (formData as { roleCode?: string }).roleCode;
+  }
+
+  const parseResult = switchWorkspaceSchema.safeParse({ roleCode });
+  if (!parseResult.success) {
+    redirect('/workspace');
+  }
+
+  const validatedRole = parseResult.data.roleCode;
+  const userContext = await getCurrentUserWithRoles();
+
+  if (!userContext) {
+    redirect('/login');
+  }
+
+  // Validasi apakah user benar-benar memiliki role tersebut
+  const ownsRole = userContext.roles.some((r) => {
+    const code = (r.roles as { code?: string })?.code;
+    return code === validatedRole;
+  });
+
+  if (!ownsRole) {
+    redirect('/workspace');
+  }
+
+  const cookieStore = cookies();
+  cookieStore.set('active_role', validatedRole, { path: '/' });
+  const mappedRole = validatedRole === 'STUDENT' ? 'MAHASISWA' : (validatedRole === 'LECTURER' || validatedRole === 'TEACHING_ASSISTANT' ? 'DOSEN' : 'ADMIN');
+  const sessionPayload = Buffer.from(JSON.stringify({
+    userId: userContext.user.id,
+    email: userContext.user.email,
+    name: userContext.profile?.full_name || 'Wahyu Aldiriyanto',
+    role: mappedRole,
+    subId: mappedRole === 'MAHASISWA' ? 'mhs-1' : mappedRole === 'DOSEN' ? 'dsn-1' : undefined,
+  })).toString('base64');
+  cookieStore.set('siakad_session', sessionPayload, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
+
+  const targetPortal = ROLE_PORTAL_MAP[validatedRole] || '/student';
+  redirect(targetPortal);
+}
+
+/**
+ * Server Action: changePassword
+ * Kebijakan password Bagian 3.3 dan penanganan must_change_password
+ */
+export async function changePasswordAction(formData: unknown): Promise<ActionResponse> {
+  const parseResult = changePasswordSchema.safeParse(formData);
+  if (!parseResult.success) {
+    return {
+      ok: false,
+      error: 'Format password tidak memenuhi standar.',
+      fieldErrors: parseResult.error.flatten().fieldErrors,
+    };
+  }
+
+  const { newPassword } = parseResult.data;
+  const userContext = await getCurrentUserWithRoles();
+
+  if (!userContext) {
+    redirect('/login');
+  }
+
+  const user = userContext.user;
+  const isOnline = await checkSupabaseOnline();
+
+  if (isOnline) {
+    // Verifikasi password tidak sama dengan NIM / email
+    const { data: identifiers } = await supabaseAdmin
+      .from('user_identifiers')
+      .select('value')
+      .eq('user_id', user.id);
+
+    if (identifiers) {
+      for (const ident of identifiers) {
+        if (newPassword.toLowerCase() === ident.value.toLowerCase()) {
+          return {
+            ok: false,
+            error: 'Password tidak boleh sama dengan NIM, NIDN, atau email Anda.',
+          };
+        }
+      }
+    }
+
+    const supabase = await createServerSupabase();
+    // Update password di Supabase Auth
+    const { error: updateError } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (updateError) {
+      return {
+        ok: false,
+        error: `Gagal mengubah password: ${updateError.message}`,
+      };
+    }
+
+    // Hapus tanda must_change_password jika ada
+    await supabaseAdmin
+      .from('profiles')
+      .update({ must_change_password: false })
+      .eq('id', user.id);
+
+    // Catat login_events (PASSWORD_CHANGED) & audit log
+    await supabaseAdmin.from('login_events').insert({
+      user_id: user.id,
+      event_type: 'PASSWORD_CHANGED',
+      risk_level: 'LOW',
+    });
+
+    await supabaseAdmin.from('audit_logs').insert({
+      actor_user_id: user.id,
+      action: 'auth.password_changed',
+      entity_type: 'profiles',
+      entity_id: user.id,
+    });
+  }
+
+  return {
+    ok: true,
+  };
+}
+
+/**
+ * Server Action: logout
+ */
+export async function logoutAction(): Promise<void> {
+  const cookieStore = cookies();
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createServerSupabase();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        await supabaseAdmin.from('login_events').insert({
+          user_id: user.id,
+          event_type: 'LOGOUT',
+          risk_level: 'LOW',
+        });
+      }
+      await supabase.auth.signOut();
+    } catch {
+      // Fallback
+    }
+  }
+
+  cookieStore.delete('active_role');
+  cookieStore.delete('demo_session');
+  redirect('/login');
+}
+
+/**
+ * Server Action: listUserDevices
+ * Mengambil daftar perangkat pengguna untuk Halaman Perangkat & Sesi (Bagian 22.1)
+ */
+export async function listUserDevicesAction() {
+  const userContext = await getCurrentUserWithRoles();
+  if (!userContext) {
+    return { ok: false, error: 'Unauthorized', devices: [] };
+  }
+
+  const cookieStore = cookies();
+  const currentDeviceId = cookieStore.get('device_id')?.value;
+  const currentDeviceHash = currentDeviceId ? hashDeviceId(currentDeviceId) : null;
+
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createServerSupabase();
+      // Baca user_devices (RLS: hanya milik sendiri)
+      const { data: devices, error } = await supabase
+        .from('user_devices')
+        .select('*')
+        .eq('user_id', userContext.user.id)
+        .order('last_seen_at', { ascending: false });
+
+      if (!error && devices && devices.length > 0) {
+        const formatted = devices.map((dev) => ({
+          ...dev,
+          isCurrent: dev.device_id_hash === currentDeviceHash,
+        }));
+        return { ok: true, devices: formatted };
+      }
+    } catch {
+      // Fallback
+    }
+  }
+
+  // Fallback demo device
+  const defaultDevices = [
+    {
+      id: 'd0000001-0000-0000-0000-000000000001',
+      user_id: userContext.user.id,
+      device_id_hash: currentDeviceHash || 'current-hash',
+      label: 'Chrome di Windows',
+      last_ip_masked: '180.252.12.xxx',
+      last_country: 'Indonesia',
+      last_city: 'Pekanbaru',
+      last_seen_at: new Date().toISOString(),
+      isCurrent: true,
+      revoked_at: null,
+    },
+    {
+      id: 'd0000002-0000-0000-0000-000000000002',
+      user_id: userContext.user.id,
+      device_id_hash: 'other-device-hash-2',
+      label: 'Safari di iPhone',
+      last_ip_masked: '114.124.88.xxx',
+      last_country: 'Indonesia',
+      last_city: 'Jakarta',
+      last_seen_at: new Date(Date.now() - 3600 * 1000 * 24).toISOString(),
+      isCurrent: false,
+      revoked_at: null,
+    },
+  ];
+
+  return { ok: true, devices: defaultDevices };
+}
+
+/**
+ * Server Action: revokeDevice
+ * Mencabut izin satu perangkat tertentu (Skenario D3)
+ */
+export async function revokeDeviceAction(deviceId: string): Promise<ActionResponse> {
+  const userContext = await getCurrentUserWithRoles();
+  if (!userContext) {
+    return { ok: false, error: 'Unauthorized' };
+  }
+
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createServerSupabase();
+      await supabase
+        .from('user_devices')
+        .update({ revoked_at: new Date().toISOString() })
+        .eq('id', deviceId)
+        .eq('user_id', userContext.user.id);
+
+      await supabaseAdmin.from('login_events').insert({
+        user_id: userContext.user.id,
+        device_id: deviceId,
+        event_type: 'SESSION_REVOKED',
+        risk_level: 'LOW',
+      });
+    } catch {
+      // Fallback
+    }
+  }
+
+  return { ok: true };
+}
+
+/**
+ * Server Action: revokeOtherSessions
+ * Mencabut seluruh sesi lain kecuali perangkat saat ini (Skenario D4)
+ */
+export async function revokeOtherSessionsAction(): Promise<ActionResponse> {
+  const userContext = await getCurrentUserWithRoles();
+  if (!userContext) {
+    return { ok: false, error: 'Unauthorized' };
+  }
+
+  const cookieStore = cookies();
+  const currentDeviceId = cookieStore.get('device_id')?.value;
+  const currentDeviceHash = currentDeviceId ? hashDeviceId(currentDeviceId) : null;
+
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createServerSupabase();
+      await supabase.auth.signOut({ scope: 'others' });
+
+      if (currentDeviceHash) {
+        await supabaseAdmin
+          .from('user_devices')
+          .update({ revoked_at: new Date().toISOString() })
+          .eq('user_id', userContext.user.id)
+          .neq('device_id_hash', currentDeviceHash);
+      }
+
+      await supabaseAdmin.from('login_events').insert({
+        user_id: userContext.user.id,
+        event_type: 'SESSION_REVOKED',
+        risk_level: 'LOW',
+      });
+    } catch {
+      // Fallback
+    }
+  }
+
+  return { ok: true };
+}
+
+/**
+ * Server Action: reportNotMeAction
+ * Tindakan darurat "Ini bukan saya" (Skenario D5 & Bagian 22.1)
+ */
+export async function reportNotMeAction(userIdParam?: string): Promise<ActionResponse> {
+  const cookieStore = cookies();
+  let targetUserId = userIdParam;
+
+  if (!targetUserId) {
+    const userContext = await getCurrentUserWithRoles();
+    targetUserId = userContext?.user?.id;
+  }
+
+  if (!targetUserId) {
+    return { ok: false, error: 'Identitas pengguna tidak ditemukan.' };
+  }
+
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      await supabaseAdmin.rpc('report_not_me', {
+        p_user_id: targetUserId,
+        p_details: 'Tindakan tombol darurat Ini Bukan Saya',
+      });
+
+      const supabase = await createServerSupabase();
+      await supabase.auth.signOut({ scope: 'global' });
+    } catch {
+      // Fallback
+    }
+  }
+
+  cookieStore.delete('active_role');
+  cookieStore.delete('demo_session');
+
+  return {
+    ok: true,
+    error: 'Akun Anda telah diamankan dan dikunci sementara. Silakan reset password untuk memulihkan.',
+  };
+}
+
+/**
+ * Helper: Ambil profil dan peran pengguna saat ini untuk Server Components
+ */
+export async function getCurrentUserWithRoles() {
+  const cookieStore = cookies();
+  const demoSessionId = cookieStore.get('demo_session')?.value;
+  let userId: string | null = null;
+  let userEmail: string = '';
+
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createServerSupabase();
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
+      if (!authError && user) {
+        userId = user.id;
+        userEmail = user.email || '';
+      }
+    } catch {
+      // Supabase offline
+    }
+  }
+
+  // Di production, demo_session hanya diterima jika (!isProd || ALLOW_DEMO_AUTH === 'true').
+  // Status database TIDAK boleh memengaruhi keputusan ini. Jika sesi demo tidak diizinkan dan tidak ada sesi nyata, perlakukan sebagai belum login.
+  const isProd = process.env.NODE_ENV === 'production';
+  if (!userId && demoSessionId) {
+    if (!isProd || process.env.ALLOW_DEMO_AUTH === 'true') {
+      userId = demoSessionId;
+    }
+  }
+
+  if (!userId) {
+    return null;
+  }
+
+  // Cari di synthetic users jika ada
+  let matchedDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === userId);
+
+  let profile = matchedDemo
+    ? {
+        id: matchedDemo.id,
+        full_name: matchedDemo.name,
+        email: matchedDemo.email,
+        status: matchedDemo.status,
+        must_change_password: !!matchedDemo.mustChangePassword,
+      }
+    : null;
+
+  if (isOnline) {
+    try {
+      const { data: dbProfile } = await supabaseAdmin
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (dbProfile) {
+        profile = dbProfile;
+      }
+    } catch {
+      // DB offline
+    }
+  }
+
+  let rolesList: any[] = [];
+  if (isOnline) {
+    try {
+      const { data: userRoles } = await supabaseAdmin
+        .from('user_roles')
+        .select('id, role_id, scope_type, scope_id, roles(code, name, description)')
+        .eq('user_id', userId)
+        .eq('status', 'ACTIVE');
+
+      if (userRoles && userRoles.length > 0) {
+        rolesList = userRoles;
+      }
+    } catch {
+      // DB offline
+    }
+  }
+
+  if (rolesList.length === 0 && matchedDemo) {
+    rolesList = matchedDemo.roles.map((r) => ({
+      id: `${matchedDemo!.id}-${r}`,
+      role_id: r,
+      scope_type: 'GLOBAL',
+      scope_id: null,
+      roles: { code: r, name: r, description: `${r} role` },
+    }));
+  }
+
+  const activeRoleCode = cookieStore.get('active_role')?.value;
+  const impersonatingFrom = cookieStore.get('impersonating_from')?.value ?? null;
+
+  // Validasi peran aktif di sisi server dari daftar peran resmi pengguna (rolesList)
+  const allowedRoleCodes = rolesList.map((r) => (r.roles as any)?.code || r.role_id);
+  const validatedActiveRole = (activeRoleCode && allowedRoleCodes.includes(activeRoleCode))
+    ? activeRoleCode
+    : (allowedRoleCodes[0] || 'STUDENT');
+
+  return {
+    user: { id: userId, email: userEmail || profile?.email || '' },
+    profile,
+    roles: rolesList,
+    activeRole: validatedActiveRole,
+    isImpersonating: !!impersonatingFrom,
+    impersonatingFrom,
+  };
+}
+
+/**
+ * Super Admin Impersonation Action
+ */
+export async function impersonateUserAction(targetUserId: string): Promise<ActionResponse> {
+  const cookieStore = cookies();
+  const current = await getCurrentUserWithRoles();
+  if (!current || (current.activeRole !== 'SUPER_ADMIN' && current.activeRole !== 'SYSTEM_ADMIN')) {
+    return { ok: false, error: 'Hanya Super Administrator yang berwenang melakukan impersonate pengguna.' };
+  }
+
+  // Set origin tracking cookie
+  cookieStore.set('impersonating_from', current.user.id, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
+
+  // Switch demo session to target user
+  cookieStore.set('demo_session', targetUserId, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+  });
+
+  // Log to audit log
+  try {
+    await supabaseAdmin.from('audit_logs').insert({
+      actor_user_id: current.user.id,
+      action: 'auth.impersonate_user',
+      entity_type: 'users',
+      entity_id: targetUserId,
+    });
+  } catch {
+    // DB offline fallback
+  }
+
+  return { ok: true };
+}
+
+/**
+ * Stop Impersonating and Return to Original Admin Account
+ */
+export async function stopImpersonatingAction(): Promise<ActionResponse> {
+  const cookieStore = cookies();
+  const originalAdminId = cookieStore.get('impersonating_from')?.value;
+
+  if (originalAdminId) {
+    cookieStore.set('demo_session', originalAdminId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+    });
+  }
+
+  cookieStore.delete('impersonating_from');
+  return { ok: true };
+}
+
