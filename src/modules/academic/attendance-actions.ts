@@ -599,6 +599,9 @@ export async function submitLeavePermitAction(payload: {
 }): Promise<ActionResponse<LeavePermitRecord>> {
   const user = await getCurrentUserWithRoles();
   if (!user) return { ok: false, error: 'Silakan login terlebih dahulu.' };
+  if (user.activeRole !== 'STUDENT') {
+    return { ok: false, error: 'Hanya mahasiswa yang dapat mengajukan surat izin atau sakit.' };
+  }
 
   const record: LeavePermitRecord = {
     id: 'leave-' + randomUUID().slice(0, 8),
@@ -634,8 +637,8 @@ export async function reviewLeavePermitAction(input: {
   feedback?: string;
 }): Promise<ActionResponse> {
   const user = await getCurrentUserWithRoles();
-  if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
-    return { ok: false, error: 'Hanya dosen pengampu yang berwenang memverifikasi izin presensi.' };
+  if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'TEACHING_ASSISTANT')) {
+    return { ok: false, error: 'Hanya dosen pengampu atau asisten yang berwenang memverifikasi izin presensi.' };
   }
   const item = presensiStore.leaves.find((l) => l.id === input.permit_id);
   if (!item) return { ok: false, error: 'Pengajuan izin tidak ditemukan.' };

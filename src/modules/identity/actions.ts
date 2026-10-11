@@ -116,7 +116,10 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
     }
   }
 
-  if (!userId && demoUser) {
+  const isProd = process.env.NODE_ENV === 'production';
+  const allowDemo = !isProd || process.env.ALLOW_DEMO_AUTH === 'true';
+
+  if (!userId && demoUser && allowDemo) {
     targetEmail = demoUser.email;
     userId = demoUser.id;
     profileStatus = demoUser.status;
@@ -142,8 +145,8 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
     }
   }
 
-  // Fallback pengujian / demo jika Supabase offline
-  if (!currentUserId) {
+  // Fallback pengujian / demo jika Supabase offline (Hanya diizinkan di non-production atau jika ALLOW_DEMO_AUTH='true')
+  if (!currentUserId && allowDemo) {
     const expectedPassword = demoUser?.password || 'Password123!';
     if (demoUser && (password === expectedPassword || password === 'Password123!')) {
       currentUserId = demoUser.id;

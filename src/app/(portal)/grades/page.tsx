@@ -83,6 +83,12 @@ export default async function GradesPage() {
   const user = await getCurrentUserWithRoles();
   const role = user?.activeRole;
 
+  if (role === 'SYSTEM_ADMIN') {
+    redirect('/admin/system');
+  }
+  if (role === 'SUPER_ADMIN' && !user?.isImpersonating) {
+    redirect('/admin');
+  }
   if (role === 'LECTURER') {
     redirect('/analytics?tab=rekap-nilai');
   }

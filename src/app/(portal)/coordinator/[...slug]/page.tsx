@@ -64,7 +64,13 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
   const user = await getCurrentUserWithRoles();
   const role = user?.activeRole;
 
-  if (role !== 'PROGRAM_COORDINATOR' && role !== 'SYSTEM_ADMIN' && role !== 'SUPER_ADMIN') {
+  if (role === 'SYSTEM_ADMIN') {
+    redirect('/admin/system');
+  }
+  if (role === 'SUPER_ADMIN' && !user?.isImpersonating) {
+    redirect('/admin');
+  }
+  if (role !== 'PROGRAM_COORDINATOR' && !user?.isImpersonating) {
     if (role === 'LECTURER') redirect('/lecturer');
     if (role === 'STUDENT') redirect('/student');
     if (role === 'TEACHING_ASSISTANT') redirect('/ta');
@@ -94,6 +100,9 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
   if (fullSlug === 'monitoring/exams') {
     redirect('/coordinator/monitoring?tab=ujian');
   }
+  if (fullSlug === 'monitoring/at-risk') {
+    redirect('/coordinator/monitoring?tab=kelas');
+  }
   if (fullSlug === 'approvals/classes') {
     redirect('/coordinator/approvals?tab=kelas-baru');
   }
@@ -106,8 +115,14 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
   if (fullSlug === 'approvals/other') {
     redirect('/coordinator/approvals?tab=lainnya');
   }
-  if (fullSlug === 'reports' || fullSlug === 'evaluations' || fullSlug === 'cpl') {
-    redirect('/coordinator/reports');
+  if (fullSlug === 'evaluations') {
+    redirect('/coordinator/reports?tab=evaluasi-dosen');
+  }
+  if (fullSlug === 'cpl') {
+    redirect('/coordinator/reports?tab=capaian-cpl');
+  }
+  if (fullSlug === 'reports') {
+    redirect('/coordinator/reports?tab=laporan-prodi');
   }
 
   const sectionTitles: Record<string, { title: string; subtitle: string; icon: any; desc: string }> = {

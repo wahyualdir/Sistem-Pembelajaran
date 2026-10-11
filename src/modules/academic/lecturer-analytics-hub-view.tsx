@@ -101,39 +101,87 @@ export function LecturerAnalyticsHubView({
       : []
   );
 
-  const handleResolveDispute = (disputeId: string, status: 'APPROVED' | 'REJECTED') => {
+  // In-app Neo-Brutalist Modal State untuk Tanggapan Keberatan Nilai (Ganti prompt/alert - Bagian A3e)
+  const [disputeModalState, setDisputeModalState] = useState<{
+    isOpen: boolean;
+    dispute: any | null;
+    status: 'APPROVED' | 'REJECTED';
+    note: string;
+    scoreAdjustment: number;
+    error: string | null;
+  }>({
+    isOpen: false,
+    dispute: null,
+    status: 'APPROVED',
+    note: '',
+    scoreAdjustment: 10,
+    error: null,
+  });
+
+  const [toastMessage, setToastMessage] = useState<{
+    type: 'success' | 'error' | 'info';
+    text: string;
+  } | null>(null);
+
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const openDisputeModal = (dispute: any, status: 'APPROVED' | 'REJECTED') => {
     if (!isDemo) {
-      alert('Penyelesaian keberatan nilai ke database permanen sedang dalam penyiapan Fase 3.');
+      setToastMessage({
+        type: 'info',
+        text: 'Penyelesaian keberatan nilai ke database permanen sedang dalam penyiapan Fase 3.',
+      });
       return;
     }
-    const note = prompt(
-      status === 'APPROVED'
-        ? 'Catatan persetujuan keberatan nilai (misal: "Disetujui setelah verifikasi rekaman"): '
-        : 'Alasan penolakan keberatan nilai: '
-    );
-    if (!note || note.trim().length < 3) {
-      alert('Catatan/alasan tanggapan wajib diisi minimal 3 karakter.');
+    setDisputeModalState({
+      isOpen: true,
+      dispute,
+      status,
+      note: status === 'APPROVED' ? 'Disetujui setelah verifikasi rekaman dan rubrik jawaban esai.' : 'Bukti jawaban tidak memenuhi kriteria penambahan nilai.',
+      scoreAdjustment: 10,
+      error: null,
+    });
+  };
+
+  const closeDisputeModal = () => {
+    setDisputeModalState({
+      isOpen: false,
+      dispute: null,
+      status: 'APPROVED',
+      note: '',
+      scoreAdjustment: 10,
+      error: null,
+    });
+  };
+
+  const handleConfirmDispute = () => {
+    if (!disputeModalState.dispute) return;
+    const cleanNote = disputeModalState.note.trim();
+    if (cleanNote.length < 10) {
+      setDisputeModalState((prev) => ({
+        ...prev,
+        error: 'Catatan atau alasan tanggapan wajib diisi minimal 10 karakter.',
+      }));
       return;
     }
 
-    let adjustment = 0;
-    if (status === 'APPROVED') {
-      const adjStr = prompt('Penyesuaian penambahan skor (contoh: 10):', '10');
-      adjustment = Number(adjStr || 0);
-    }
-
+    const { dispute, status, scoreAdjustment } = disputeModalState;
     startTransition(async () => {
       await resolveExamDisputeAction({
-        dispute_id: disputeId,
+        dispute_id: dispute.id,
         status,
-        lecturer_note: note.trim(),
-        score_adjustment: adjustment,
+        lecturer_note: cleanNote,
+        score_adjustment: status === 'APPROVED' ? Number(scoreAdjustment) : 0,
       }).catch(() => {});
 
       setLocalDisputes((prev) =>
-        prev.map((d) => (d.id === disputeId ? { ...d, status, lecturer_note: note.trim() } : d))
+        prev.map((d) => (d.id === dispute.id ? { ...d, status, lecturer_note: cleanNote } : d))
       );
-      alert(`Keberatan nilai berhasil ditanggapi dengan status ${status}.`);
+      closeDisputeModal();
+      setToastMessage({
+        type: 'success',
+        text: `Keberatan nilai mahasiswa berhasil ditanggapi dengan status ${status}.`,
+      });
     });
   };
 
@@ -172,17 +220,17 @@ export function LecturerAnalyticsHubView({
 
   const handleRequestSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
     if (!newScore || Number(newScore) < 0 || Number(newScore) > 100) {
-      alert('Masukkan nilai baru antara 0 dan 100.');
+      setFormError('Masukkan nilai baru antara rentang 0 dan 100.');
       return;
     }
     if (changeReason.trim().length < 10) {
-      alert('Alasan perubahan minimal 10 karakter.');
+      setFormError('Alasan pengajuan perubahan nilai wajib minimal 10 karakter.');
       return;
     }
 
     startTransition(async () => {
-      // Panggil aksi server jika submission id tersedia, atau simpan ke state lokal
       const newReq = {
         id: 'cr-' + Math.random().toString(36).slice(2, 8),
         student_name: studentName,
@@ -195,7 +243,10 @@ export function LecturerAnalyticsHubView({
         created_at: new Date().toISOString(),
       };
       setLocalRequests((prev) => [newReq, ...prev]);
-      alert('Pengajuan perubahan nilai berhasil dikirim ke Koordinator Program Studi untuk diverifikasi.');
+      setToastMessage({
+        type: 'success',
+        text: 'Pengajuan perubahan nilai berhasil dikirim ke Koordinator Program Studi untuk diverifikasi.',
+      });
       setNewScore('');
       setChangeReason('');
     });
@@ -413,7 +464,7 @@ export function LecturerAnalyticsHubView({
             </div>
             <button
               type="button"
-              onClick={() => alert('Mengunduh format rekap nilai Excel (.xlsx)...')}
+              onClick={() => setToastMessage({ type: 'info', text: 'Mengunduh format rekap nilai Excel (.xlsx)...' })}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-white text-xs font-bold shadow-xs hover:bg-neutral-100 cursor-pointer shrink-0"
             >
               <Download className="h-3.5 w-3.5" />
@@ -553,7 +604,7 @@ export function LecturerAnalyticsHubView({
                               <button
                                 type="button"
                                 disabled={isPending || !isDemo}
-                                onClick={() => handleResolveDispute(d.id, 'APPROVED')}
+                                onClick={() => openDisputeModal(d, 'APPROVED')}
                                 className={cn(
                                   'px-2.5 py-1 rounded-lg border-2 border-black text-xs font-bold transition-all shadow-xs',
                                   isDemo
@@ -567,7 +618,7 @@ export function LecturerAnalyticsHubView({
                               <button
                                 type="button"
                                 disabled={isPending || !isDemo}
-                                onClick={() => handleResolveDispute(d.id, 'REJECTED')}
+                                onClick={() => openDisputeModal(d, 'REJECTED')}
                                 className={cn(
                                   'px-2.5 py-1 rounded-lg border-2 border-black text-xs font-bold transition-all shadow-xs',
                                   isDemo
@@ -635,14 +686,25 @@ export function LecturerAnalyticsHubView({
                 />
               </div>
 
+              {formError && (
+                <div className="p-3 bg-rose-50 border-2 border-rose-500 rounded-lg text-rose-950 text-xs font-bold flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
+                  <span>{formError}</span>
+                </div>
+              )}
+
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-black uppercase text-black font-mono">Nilai Lama</label>
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-black uppercase text-black font-mono">Nilai Lama</label>
+                    <span className="text-[10px] font-mono font-bold text-neutral-600 bg-neutral-200 px-1.5 py-0.5 rounded border border-black/20">Server Read-Only</span>
+                  </div>
                   <input
-                    type="number"
-                    value={oldScore}
-                    onChange={(e) => setOldScore(e.target.value)}
-                    className="w-full rounded-lg border-2 border-black p-2.5 text-xs font-mono font-bold bg-neutral-100"
+                    type="text"
+                    readOnly
+                    disabled
+                    value={`${oldScore} (Otomatis dari Sistem)`}
+                    className="w-full rounded-lg border-2 border-black p-2.5 text-xs font-mono font-bold bg-neutral-200 text-neutral-700 cursor-not-allowed select-none"
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -765,7 +827,7 @@ export function LecturerAnalyticsHubView({
               </div>
               <button
                 type="button"
-                onClick={() => alert('Mengunduh Rekap Nilai PDDIKTI (.xlsx)...')}
+                onClick={() => setToastMessage({ type: 'info', text: 'Mengunduh Format Rekap Nilai Excel PDDIKTI (.xlsx)...' })}
                 className="w-full inline-flex items-center justify-center gap-2 py-2 rounded-lg border-2 border-black bg-black text-white text-xs font-bold hover:bg-neutral-800 transition-all cursor-pointer shadow-xs"
               >
                 <Download className="h-3.5 w-3.5" />
@@ -787,7 +849,7 @@ export function LecturerAnalyticsHubView({
               </div>
               <button
                 type="button"
-                onClick={() => alert('Mencetak Berita Acara Ujian Resmi (.pdf)...')}
+                onClick={() => setToastMessage({ type: 'info', text: 'Mencetak Berita Acara Ujian Resmi (.pdf)...' })}
                 className="w-full inline-flex items-center justify-center gap-2 py-2 rounded-lg border-2 border-black bg-black text-white text-xs font-bold hover:bg-neutral-800 transition-all cursor-pointer shadow-xs"
               >
                 <Download className="h-3.5 w-3.5" />
@@ -809,13 +871,137 @@ export function LecturerAnalyticsHubView({
               </div>
               <button
                 type="button"
-                onClick={() => alert('Mengunduh Rekap Presensi Kuliah (.csv)...')}
+                onClick={() => setToastMessage({ type: 'info', text: 'Mengunduh Rekap Presensi Kuliah (.csv)...' })}
                 className="w-full inline-flex items-center justify-center gap-2 py-2 rounded-lg border-2 border-black bg-black text-white text-xs font-bold hover:bg-neutral-800 transition-all cursor-pointer shadow-xs"
               >
                 <Download className="h-3.5 w-3.5" />
                 <span>Unduh CSV</span>
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* TOAST NOTIFIKASI IN-APP (Ganti alert bawaan) */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 max-w-md animate-fade-in">
+          <div
+            className={cn(
+              'p-4 rounded-xl border-2 border-black shadow-retro flex items-start gap-3',
+              toastMessage.type === 'success'
+                ? 'bg-emerald-100 text-emerald-950'
+                : toastMessage.type === 'error'
+                ? 'bg-rose-100 text-rose-950'
+                : 'bg-retro-warm text-black'
+            )}
+          >
+            {toastMessage.type === 'success' ? (
+              <CheckCircle2 className="h-5 w-5 text-emerald-700 shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="h-5 w-5 text-blue-700 shrink-0 mt-0.5" />
+            )}
+            <div className="flex-1 text-xs font-bold leading-relaxed">{toastMessage.text}</div>
+            <button
+              type="button"
+              onClick={() => setToastMessage(null)}
+              className="p-1 hover:bg-black/10 rounded font-mono font-bold text-xs"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL IN-APP TANGGAPAN KEBERATAN NILAI (Ganti window.prompt & alert) */}
+      {disputeModalState.isOpen && disputeModalState.dispute && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-lg">
+            <RetroWindow
+              title={`tanggapan_keberatan_${disputeModalState.status === 'APPROVED' ? 'terima' : 'tolak'}.app`}
+              badge={disputeModalState.status === 'APPROVED' ? 'Terima Keberatan' : 'Tolak Keberatan'}
+              headerClassName={disputeModalState.status === 'APPROVED' ? 'bg-emerald-300' : 'bg-rose-300'}
+              bodyClassName="p-5 sm:p-6 bg-white space-y-4"
+            >
+              <div className="space-y-3">
+                <div className="p-3 bg-neutral-100 rounded-lg border-2 border-black text-xs space-y-1.5 font-medium">
+                  <div className="flex justify-between">
+                    <span className="font-bold text-black">{disputeModalState.dispute.student_name}</span>
+                    <span className="font-mono text-black/60">{disputeModalState.dispute.exam_title}</span>
+                  </div>
+                  <div className="text-[11px] text-black/80 italic border-t border-black/20 pt-1">
+                    Keluhan Mahasiswa: "{disputeModalState.dispute.reason}"
+                  </div>
+                </div>
+
+                {disputeModalState.status === 'APPROVED' && (
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-black uppercase text-black font-mono">
+                      Penyesuaian Penambahan Skor Nilai (Poin)
+                    </label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={50}
+                      value={disputeModalState.scoreAdjustment}
+                      onChange={(e) => setDisputeModalState((prev) => ({ ...prev, scoreAdjustment: Number(e.target.value) }))}
+                      className="w-full rounded-lg border-2 border-black p-2.5 text-xs font-mono font-bold bg-white focus:outline-none focus:ring-2 focus:ring-black"
+                    />
+                  </div>
+                )}
+
+                {disputeModalState.error && (
+                  <div className="p-3 bg-rose-50 border-2 border-rose-500 rounded-lg text-rose-950 text-xs font-bold flex items-center gap-2">
+                    <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
+                    <span>{disputeModalState.error}</span>
+                  </div>
+                )}
+
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-black uppercase text-black font-mono">
+                      {disputeModalState.status === 'APPROVED' ? 'Catatan Persetujuan Dosen' : 'Alasan Penolakan Dosen (Wajib)'}
+                    </label>
+                    <span className={cn(
+                      'text-[10px] font-mono font-bold',
+                      disputeModalState.note.trim().length >= 10 ? 'text-emerald-700' : 'text-rose-600'
+                    )}>
+                      {disputeModalState.note.trim().length}/10 Karakter
+                    </span>
+                  </div>
+                  <textarea
+                    rows={3}
+                    value={disputeModalState.note}
+                    onChange={(e) => setDisputeModalState((prev) => ({ ...prev, note: e.target.value, error: null }))}
+                    placeholder="Tuliskan catatan verifikasi (minimal 10 karakter)..."
+                    className="w-full rounded-lg border-2 border-black p-2.5 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-black"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-2.5 pt-2 border-t-2 border-black">
+                  <button
+                    type="button"
+                    disabled={isPending}
+                    onClick={closeDisputeModal}
+                    className="px-4 py-2 rounded-lg border-2 border-black bg-neutral-200 text-black text-xs font-bold hover:bg-neutral-300 transition-all cursor-pointer"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="button"
+                    disabled={isPending || disputeModalState.note.trim().length < 10}
+                    onClick={handleConfirmDispute}
+                    className={cn(
+                      'px-4 py-2 rounded-lg border-2 border-black text-white text-xs font-black shadow-retro transition-all cursor-pointer flex items-center gap-1.5',
+                      disputeModalState.status === 'APPROVED'
+                        ? 'bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50'
+                        : 'bg-rose-600 hover:bg-rose-700 disabled:opacity-50'
+                    )}
+                  >
+                    {isPending ? 'Menyimpan...' : disputeModalState.status === 'APPROVED' ? 'Konfirmasi Terima' : 'Konfirmasi Tolak'}
+                  </button>
+                </div>
+              </div>
+            </RetroWindow>
           </div>
         </div>
       )}

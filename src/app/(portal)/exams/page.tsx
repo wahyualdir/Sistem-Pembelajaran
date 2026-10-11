@@ -61,6 +61,12 @@ export default async function ExamsPage() {
   const user = await getCurrentUserWithRoles();
   const role = user?.activeRole;
 
+  if (role === 'SYSTEM_ADMIN') {
+    redirect('/admin/system');
+  }
+  if (role === 'SUPER_ADMIN' && !user?.isImpersonating) {
+    redirect('/admin');
+  }
   if (role === 'PROGRAM_COORDINATOR') {
     redirect('/coordinator/monitoring');
   }
@@ -69,7 +75,7 @@ export default async function ExamsPage() {
   }
 
   const fetchedQuizzes = await getAllQuizzesAction().catch(() => []);
-  const isLecturer = role === 'LECTURER' || role === 'SYSTEM_ADMIN' || role === 'SUPER_ADMIN';
+  const isLecturer = role === 'LECTURER';
 
   // Gabungkan dengan demo exams agar tampilan cards selalu full dan informatif
   const quizzes = fetchedQuizzes.length > 0 ? fetchedQuizzes : DEFAULT_DEMO_EXAMS;

@@ -9,7 +9,13 @@ export default async function CoordinatorApprovalsPage() {
   const user = await getCurrentUserWithRoles();
   const role = user?.activeRole;
 
-  if (role !== 'PROGRAM_COORDINATOR' && role !== 'SYSTEM_ADMIN' && role !== 'SUPER_ADMIN') {
+  if (role === 'SYSTEM_ADMIN') {
+    redirect('/admin/system');
+  }
+  if (role === 'SUPER_ADMIN' && !user?.isImpersonating) {
+    redirect('/admin');
+  }
+  if (role !== 'PROGRAM_COORDINATOR' && !user?.isImpersonating) {
     if (role === 'LECTURER') redirect('/lecturer');
     if (role === 'STUDENT') redirect('/student');
     if (role === 'TEACHING_ASSISTANT') redirect('/ta');

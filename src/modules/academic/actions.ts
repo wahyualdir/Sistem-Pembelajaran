@@ -9,6 +9,7 @@ import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import type { ActionResponse } from '@/modules/identity/types';
 import { SYNTHETIC_DEMO_USERS } from '@/modules/identity/demo-users';
 import { DELEGABLE_CODES } from './permissions';
+import { recordSystemAuditLog } from '@/lib/audit';
 
 export interface ClassItem {
   id: string;
@@ -53,8 +54,8 @@ const ERR: Record<string, string> = {
   NO_CHANGE: 'Nilai usulan sama dengan nilai saat ini.',
   ALREADY_PENDING: 'Sudah ada pengajuan yang menunggu keputusan.',
   NOT_PENDING: 'Pengajuan ini sudah diputuskan.',
-  SELF_APPROVAL: 'Pemohon tidak dapat memutuskan pengajuannya sendiri.',
-  NOTE_REQUIRED: 'Catatan keputusan wajib diisi (minimal 3 karakter).',
+  SELF_APPROVAL: 'Tidak dapat menyetujui pengajuan sendiri. Pengajuan harus dieskalasi ke Dekan / Pimpinan Fakultas.',
+  NOTE_REQUIRED: 'Alasan penolakan / catatan keputusan minimal 10 karakter.',
   USER_NOT_FOUND: 'Pengguna tidak ditemukan atau belum aktif.',
   INVALID_ASSISTANT: 'Anda tidak dapat menjadikan diri sendiri asisten.',
   INVALID_PERMISSION: 'Izin tersebut tidak dapat didelegasikan.',
@@ -473,7 +474,7 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
 
 // ---------- Review dan penilaian (Bagian 13, langkah 5-6) ----------
 export interface GradeInfo { score: number; max_score: number; comment: string; status: 'DRAFT' | 'FINAL' }
-export interface SubmissionItem { id: string; student_name: string; text_body: string; is_late: boolean; submitted_at: string; grade: GradeInfo | null; change?: { status: 'PENDING' | 'APPROVED' | 'REJECTED'; proposed_score: number; reason: string; review_note: string | null } | null }
+export interface SubmissionItem { id: string; student_name: string; text_body: string; is_late: boolean; submitted_at: string; grade: GradeInfo | null; change?: { status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXECUTED'; proposed_score: number; reason: string; review_note: string | null } | null }
 export interface ReviewData { class_title: string; title: string; max_score: number; rows: SubmissionItem[]; mode: 'full' | 'draft' | 'read' }
 
 const notas: { assignment_id: string; student_id: string; score: number; comment: string; status: 'DRAFT' | 'FINAL' }[] =
@@ -907,11 +908,22 @@ export async function listMasterDataAction(): Promise<MasterData> {
   };
 }
 
-// ---------- Perubahan nilai final dengan persetujuan koordinator (Bagian 8.2) ----------
+// ---------- Perubahan nilai final dengan persetujuan koordinator (Bagian 8.2 & Fase 2D) ----------
 export interface ChangeRequestItem {
-  id: string; class_id: string; class_title: string; assignment_title: string; student_name: string;
-  old_score: number; proposed_score: number; reason: string; status: 'PENDING' | 'APPROVED' | 'REJECTED';
-  review_note: string | null; created_at: string;
+  id: string;
+  class_id: string;
+  class_title: string;
+  assignment_title: string;
+  student_name: string;
+  old_score: number;
+  proposed_score: number;
+  reason: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXECUTED';
+  review_note: string | null;
+  created_at: string;
+  executed_by?: string | null;
+  executed_at?: string | null;
+  execution_note?: string | null;
 }
 type DemoChange = ChangeRequestItem & { submission_id: string; requested_by: string };
 // Mode demo tidak memiliki data prodi, jadi koordinator demo melihat semua pengajuan; di database pembatasan prodi berlaku lewat RLS.
@@ -948,6 +960,36 @@ if (perubahan.length === 0) {
       status: 'PENDING',
       review_note: null,
       created_at: new Date(Date.now() - 3600000 * 18).toISOString(),
+    },
+    {
+      id: 'cr-demo-003',
+      submission_id: 'sub-demo-003',
+      requested_by: 'a0000002-0000-0000-0000-000000000002',
+      class_id: DEMO_CLASS_ID,
+      class_title: 'Pemrograman Web & Arsitektur Cloud',
+      assignment_title: 'Tugas 1: Pengenalan HTML & CSS Modern',
+      student_name: 'Budi Santoso Jr. (2024019)',
+      old_score: 65,
+      proposed_score: 80,
+      reason: 'Revisi repositori GitHub telah diverifikasi valid oleh dosen pengampu dan disetujui Kaprodi.',
+      status: 'APPROVED',
+      review_note: 'Disetujui Kaprodi, berkas diteruskan ke Biro Akademik untuk eksekusi nilai resmi.',
+      created_at: new Date(Date.now() - 3600000 * 24).toISOString(),
+    },
+    {
+      id: 'cr-demo-004-self',
+      submission_id: 'sub-demo-004',
+      requested_by: 'a0000004-0000-0000-0000-000000000004', // Prof. Dewi Lestari (Kaprodi sendiri sebagai dosen pengampu)
+      class_id: DEMO_CLASS_ID,
+      class_title: 'Pemrograman Web & Arsitektur Cloud',
+      assignment_title: 'Ujian Tengah Semester (Teori)',
+      student_name: 'Dewi Mahasiswi (2024099)',
+      old_score: 70,
+      proposed_score: 85,
+      reason: 'Klarifikasi rubrik esai oleh dosen pengampu sendiri (Prof. Dewi Lestari).',
+      status: 'PENDING',
+      review_note: null,
+      created_at: new Date(Date.now() - 3600000 * 2).toISOString(),
     }
   );
 }
@@ -989,7 +1031,11 @@ export async function requestGradeChangeAction(input: unknown): Promise<ActionRe
 }
 
 export async function decideGradeChangeAction(input: unknown): Promise<ActionResponse> {
-  const p = z.object({ request_id: z.string().uuid(), approve: z.boolean(), note: z.string().trim().min(3, ERR.NOTE_REQUIRED).max(1000) }).safeParse(input);
+  const p = z.object({
+    request_id: z.string().uuid(),
+    approve: z.boolean(),
+    note: z.string().trim().min(10, 'Alasan penolakan / catatan keputusan minimal 10 karakter.').max(1000),
+  }).safeParse(input);
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
   const me = await actor('PROGRAM_COORDINATOR');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
@@ -998,24 +1044,159 @@ export async function decideGradeChangeAction(input: unknown): Promise<ActionRes
   if (me.online) {
     const supabase = await createClient();
     const { error } = await supabase.rpc('decide_grade_change', { p_request: request_id, p_approve: approve, p_note: note });
-    if (error) return { ok: false, error: pesan(error.message) };
+    if (error) {
+      if (error.message.includes('SELF_APPROVAL')) {
+        return { ok: false, error: 'Tidak dapat menyetujui pengajuan sendiri. Pengajuan harus dieskalasi ke Dekan / Pimpinan Fakultas.' };
+      }
+      return { ok: false, error: pesan(error.message) };
+    }
   } else {
     const r = perubahan.find((x) => x.id === request_id);
     if (!r) return { ok: false, error: ERR.NOT_FOUND };
-    if (r.requested_by === me.id) return { ok: false, error: ERR.SELF_APPROVAL };
+    if (r.requested_by === me.id) {
+      return { ok: false, error: 'Tidak dapat menyetujui pengajuan sendiri. Pengajuan harus dieskalasi ke Dekan / Pimpinan Fakultas.' };
+    }
     if (r.status !== 'PENDING') return { ok: false, error: ERR.NOT_PENDING };
     r.status = approve ? 'APPROVED' : 'REJECTED';
     r.review_note = note;
+
+    // Jejak Audit Log Sistem (Bagian A1 & A3)
+    await recordSystemAuditLog({
+      actorId: me.id,
+      actorName: me.name,
+      actorRole: 'PROGRAM_COORDINATOR',
+      action: approve ? 'grade.change_approve' : 'grade.change_reject',
+      entityType: 'grade_change_requests',
+      entityId: r.id,
+      description: approve
+        ? `Kaprodi menyetujui perubahan nilai mahasiswa ${r.student_name} (${r.old_score} -> ${r.proposed_score}) pada ${r.assignment_title}. Catatan: ${note}`
+        : `Kaprodi menolak perubahan nilai mahasiswa ${r.student_name} pada ${r.assignment_title}. Alasan: ${note}`,
+      scopeType: 'CLASS',
+      scopeId: r.class_id,
+      valueBefore: String(r.old_score),
+      valueAfter: String(r.proposed_score),
+      metadata: {
+        review_note: note,
+        status: r.status,
+      },
+    });
+
     // Sesuai aturan alur: Kaprodi menyetujui, status menjadi "disetujui, menunggu eksekusi Staf". Nilai final TIDAK langsung diubah. Eksekusi penulisan nilai akhir dilakukan oleh Staf di Fase 2D.
     const s = tugas.submissions.find((x) => x.id === r.submission_id);
     if (s) {
-      notify(s.student_id, 'GRADE_CHANGE_DECIDED', `Persetujuan Koreksi Nilai: ${r.assignment_title}`, approve ? 'Permohonan revisi nilai Anda telah disetujui Kaprodi dan sedang menunggu eksekusi berkas oleh Staf Akademik.' : `Permohonan revisi nilai ditolak Kaprodi: ${note}`, r.class_id);
+      notify(
+        s.student_id,
+        'GRADE_CHANGE_DECIDED',
+        `Persetujuan Koreksi Nilai: ${r.assignment_title}`,
+        approve
+          ? 'Permohonan revisi nilai Anda telah disetujui Kaprodi dan sedang menunggu eksekusi berkas oleh Staf Akademik.'
+          : `Permohonan revisi nilai ditolak Kaprodi: ${note}`,
+        r.class_id
+      );
     }
+    notify(
+      r.requested_by,
+      'GRADE_CHANGE_DECIDED',
+      `Tanggapan Kaprodi: ${r.assignment_title}`,
+      approve
+        ? `Permohonan perubahan nilai mahasiswa ${r.student_name} telah disetujui Kaprodi dan siap dieksekusi Staf Akademik.`
+        : `Permohonan perubahan nilai mahasiswa ${r.student_name} ditolak Kaprodi: ${note}`,
+      r.class_id
+    );
   }
   revalidatePath('/coordinator');
   revalidatePath('/coordinator/approvals');
   revalidatePath('/classes/[id]', 'page');
   revalidatePath('/classes/[id]/assignments/[aid]', 'page');
+  return { ok: true };
+}
+
+export async function executeGradeChangeAction(input: unknown): Promise<ActionResponse> {
+  const p = z.object({
+    request_id: z.string().uuid(),
+    note: z.string().trim().max(1000).optional(),
+  }).safeParse(input);
+  if (!p.success) return { ok: false, error: p.error.issues[0].message };
+  const me = await actor('ACADEMIC_STAFF');
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+  const { request_id, note } = p.data;
+
+  if (me.online) {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc('execute_grade_change', {
+      p_request: request_id,
+      p_note: note ?? null,
+    });
+    if (error) return { ok: false, error: pesan(error.message) };
+  } else {
+    const r = perubahan.find((x) => x.id === request_id);
+    if (!r) return { ok: false, error: ERR.NOT_FOUND };
+    if (r.status !== 'APPROVED') {
+      return { ok: false, error: 'Hanya pengajuan berstatus disetujui yang dapat dieksekusi.' };
+    }
+
+    // Verifikasi integritas: nilai saat ini masih sama dengan old_score di permohonan
+    const s = tugas.submissions.find((x) => x.id === r.submission_id);
+    const n = s ? demoGrade(tugas.assignments.find((a) => a.id === s.assignment_id)?.id ?? '', s.student_id) : null;
+    if (n && n.score !== r.old_score) {
+      return {
+        ok: false,
+        error: `Nilai saat ini (${n.score}) berbeda dengan nilai awal pengajuan (${r.old_score}). Eksekusi dibatalkan untuk investigasi.`,
+      };
+    }
+
+    // Eksekusi pembaruan nilai di database / memori
+    if (n) {
+      n.score = r.proposed_score;
+    }
+    r.status = 'EXECUTED';
+    r.executed_by = me.id;
+    r.executed_at = new Date().toISOString();
+    r.execution_note = note || 'Eksekusi administratif nilai perkuliahan oleh Staf Akademik';
+
+    // Jejak Audit Log Sistem (Bagian A1 & A3f & 2D)
+    await recordSystemAuditLog({
+      actorId: me.id,
+      actorName: me.name,
+      actorRole: 'ACADEMIC_STAFF',
+      action: 'grade.change_execute',
+      entityType: 'grade_change_requests',
+      entityId: r.id,
+      description: `Staf Akademik mengeksekusi perubahan nilai resmi mahasiswa ${r.student_name} (${r.old_score} -> ${r.proposed_score}) pada ${r.assignment_title}.`,
+      scopeType: 'CLASS',
+      scopeId: r.class_id,
+      valueBefore: String(r.old_score),
+      valueAfter: String(r.proposed_score),
+      metadata: {
+        requested_by: r.requested_by,
+        executed_by: me.id,
+        executed_at: r.executed_at,
+        execution_note: r.execution_note,
+      },
+    });
+
+    // Notifikasi ke Mahasiswa dan Dosen Pengampu
+    if (s) {
+      notify(
+        s.student_id,
+        'GRADE_UPDATED',
+        `Nilai Akhir Diperbarui: ${r.assignment_title}`,
+        `Nilai Anda pada kelas ${r.class_title} telah resmi diubah menjadi ${r.proposed_score} oleh Biro Akademik.`,
+        r.class_id
+      );
+    }
+    notify(
+      r.requested_by,
+      'GRADE_CHANGE_EXECUTED',
+      `Eksekusi Selesai: ${r.assignment_title}`,
+      `Permohonan revisi nilai mahasiswa ${r.student_name} telah dieksekusi oleh Staf Akademik menjadi ${r.proposed_score}.`,
+      r.class_id
+    );
+  }
+
+  revalidatePath('/staff/grades');
+  revalidatePath('/coordinator/approvals');
+  revalidatePath('/classes/[id]', 'page');
   return { ok: true };
 }
 
@@ -1031,7 +1212,50 @@ export async function listChangeRequestsAction(): Promise<ChangeRequestItem[]> {
       .limit(100);
     return (data ?? []).map((r: any) => ({ ...r, old_score: Number(r.old_score), proposed_score: Number(r.proposed_score) }));
   }
-  return [...perubahan].reverse().map((x) => ({ id: x.id, class_id: x.class_id, class_title: x.class_title, assignment_title: x.assignment_title, student_name: x.student_name, old_score: x.old_score, proposed_score: x.proposed_score, reason: x.reason, status: x.status, review_note: x.review_note, created_at: x.created_at }));
+  return [...perubahan].reverse().map((x) => ({
+    id: x.id,
+    class_id: x.class_id,
+    class_title: x.class_title,
+    assignment_title: x.assignment_title,
+    student_name: x.student_name,
+    old_score: x.old_score,
+    proposed_score: x.proposed_score,
+    reason: x.reason,
+    status: x.status,
+    review_note: x.review_note,
+    created_at: x.created_at,
+  }));
+}
+
+export async function listStaffGradeChangesAction(): Promise<ChangeRequestItem[]> {
+  const c = await getCurrentUserWithRoles();
+  if (!c || (c.activeRole !== 'ACADEMIC_STAFF' && c.activeRole !== 'SUPER_ADMIN' && c.activeRole !== 'SYSTEM_ADMIN')) {
+    return [];
+  }
+  if (await checkSupabaseOnline()) {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from('grade_change_requests')
+      .select('id,class_id,class_title,assignment_title,student_name,old_score,proposed_score,reason,status,review_note,created_at,executed_by,executed_at,execution_note')
+      .order('created_at', { ascending: false });
+    return (data ?? []).map((r: any) => ({ ...r, old_score: Number(r.old_score), proposed_score: Number(r.proposed_score) }));
+  }
+  return [...perubahan].reverse().map((x) => ({
+    id: x.id,
+    class_id: x.class_id,
+    class_title: x.class_title,
+    assignment_title: x.assignment_title,
+    student_name: x.student_name,
+    old_score: x.old_score,
+    proposed_score: x.proposed_score,
+    reason: x.reason,
+    status: x.status,
+    review_note: x.review_note,
+    created_at: x.created_at,
+    executed_by: x.executed_by,
+    executed_at: x.executed_at,
+    execution_note: x.execution_note,
+  }));
 }
 
 // ---------- Pengumuman kelas (Bagian 5.1) ----------

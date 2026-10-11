@@ -42,6 +42,7 @@ export function MahasiswaKrsView({
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [errorFeedback, setErrorFeedback] = useState<string | null>(null);
+  const [showConfirmAjukan, setShowConfirmAjukan] = useState(false);
 
   const selectedClassIds = new Set(krs.items.map((i) => i.kelasId));
 
@@ -83,8 +84,12 @@ export function MahasiswaKrsView({
     }
   };
 
-  const handleAjukan = async () => {
-    if (!confirm("Ajukan rencana studi ke Dosen Pembimbing Akademik (Wali)?")) return;
+  const handleAjukan = () => {
+    setShowConfirmAjukan(true);
+  };
+
+  const executeAjukan = async () => {
+    setShowConfirmAjukan(false);
     setLoading(true);
     setFeedback(null);
     setErrorFeedback(null);
@@ -403,6 +408,25 @@ export function MahasiswaKrsView({
           </Card>
         </div>
       </div>
+
+      {showConfirmAjukan && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-md bg-white border-2 border-black rounded-xl p-5 shadow-retro space-y-4">
+            <h3 className="font-heading font-black text-base text-black">Konfirmasi Pengajuan KRS</h3>
+            <p className="text-xs text-black/80 leading-relaxed">
+              Apakah Anda yakin ingin mengajukan rencana studi ini ke Dosen Pembimbing Akademik (Wali)? Setelah diajukan, perubahan mata kuliah memerlukan persetujuan dosen wali.
+            </p>
+            <div className="flex justify-end gap-2 pt-2 border-t-2 border-black">
+              <Button variant="outline" size="sm" onClick={() => setShowConfirmAjukan(false)}>
+                Batal
+              </Button>
+              <Button variant="default" size="sm" onClick={executeAjukan} disabled={loading}>
+                {loading ? "Mengajukan..." : "Ya, Ajukan KRS"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

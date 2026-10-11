@@ -89,7 +89,29 @@ const DEFAULT_SAMPLE_QUESTIONS = [
   },
 ];
 
+import { redirect } from 'next/navigation';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+
 export default async function ExamSubpage({ params }: PageProps) {
+  const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole;
+
+  if (role === 'SYSTEM_ADMIN') {
+    redirect('/admin/system');
+  }
+  if (role === 'SUPER_ADMIN' && !user?.isImpersonating) {
+    redirect('/admin');
+  }
+  if (role === 'PROGRAM_COORDINATOR') {
+    redirect('/coordinator/monitoring');
+  }
+  if (role === 'ACADEMIC_STAFF') {
+    redirect('/staff');
+  }
+  if (role === 'STUDENT') {
+    redirect('/exams');
+  }
+
   const subroute = params.slug?.[0] || '';
   const quizzes = await getAllQuizzesAction().catch(() => []);
   const rawBank = await getQuestionBankAction().catch(() => []);

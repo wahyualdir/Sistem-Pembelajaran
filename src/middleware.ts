@@ -9,12 +9,21 @@ const ROLE_PORTAL_MAP: Record<string, string> = {
   TEACHING_ASSISTANT: '/ta',
   PROGRAM_COORDINATOR: '/coordinator',
   ACADEMIC_STAFF: '/staff',
-  SYSTEM_ADMIN: '/admin',
+  SYSTEM_ADMIN: '/admin/system',
   SUPER_ADMIN: '/admin',
   SUPERADMIN: '/admin',
 };
 
 const PORTAL_PREFIXES = ['/student', '/lecturer', '/ta', '/coordinator', '/staff', '/admin'];
+
+const ACADEMIC_ROUTES = [
+  '/attendance',
+  '/analytics',
+  '/grades',
+  '/exams',
+  '/classes',
+  '/coordinator',
+];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -117,9 +126,42 @@ export async function middleware(request: NextRequest) {
 
   // 4. Pengalihan cepat jika role aktif tidak cocok dengan portal yang dibuka
   if (isAuthenticated && activeRole) {
+    const isImpersonating = !!request.cookies.get('impersonating_from')?.value;
+
+    // A2: SYSTEM_ADMIN dilarang membuka rute data akademik & portal non-admin
+    if (activeRole === 'SYSTEM_ADMIN') {
+      const isAcademic =
+        ACADEMIC_ROUTES.some((route) => pathname.startsWith(route)) ||
+        pathname.startsWith('/student') ||
+        pathname.startsWith('/lecturer') ||
+        pathname.startsWith('/ta') ||
+        pathname.startsWith('/staff') ||
+        pathname === '/admin' ||
+        (pathname === '/library' && request.nextUrl.searchParams.get('tab') === 'kelola');
+
+      if (isAcademic) {
+        return NextResponse.redirect(new URL('/admin/system', request.url));
+      }
+    }
+
+    // A2: SUPER_ADMIN tidak merender tampilan dosen/mahasiswa/akademik kecuali sesi impersonate aktif
+    if ((activeRole === 'SUPER_ADMIN' || activeRole === 'SUPERADMIN') && !isImpersonating) {
+      const isAcademicOrRolePortal =
+        ACADEMIC_ROUTES.some((route) => pathname.startsWith(route)) ||
+        pathname.startsWith('/student') ||
+        pathname.startsWith('/lecturer') ||
+        pathname.startsWith('/ta') ||
+        pathname.startsWith('/staff') ||
+        (pathname === '/library' && request.nextUrl.searchParams.get('tab') === 'kelola');
+
+      if (isAcademicOrRolePortal) {
+        return NextResponse.redirect(new URL('/admin', request.url));
+      }
+    }
+
     const expectedPrefix = ROLE_PORTAL_MAP[activeRole];
     const matchedPrefix = PORTAL_PREFIXES.find((p) => pathname.startsWith(p));
-    if (matchedPrefix && expectedPrefix && matchedPrefix !== expectedPrefix) {
+    if (matchedPrefix && expectedPrefix && !expectedPrefix.startsWith(matchedPrefix) && matchedPrefix !== expectedPrefix) {
       return NextResponse.redirect(new URL(expectedPrefix, request.url));
     }
   }

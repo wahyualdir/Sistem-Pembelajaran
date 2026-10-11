@@ -97,6 +97,12 @@ export default async function AttendancePage() {
   const user = await getCurrentUserWithRoles();
   const role = user?.activeRole;
 
+  if (role === 'SYSTEM_ADMIN') {
+    redirect('/admin/system');
+  }
+  if (role === 'SUPER_ADMIN' && !user?.isImpersonating) {
+    redirect('/admin');
+  }
   if (role === 'PROGRAM_COORDINATOR') {
     redirect('/coordinator/monitoring');
   }
@@ -106,7 +112,7 @@ export default async function AttendancePage() {
 
   const realLeaves = await listLeavePermitsAction();
   const isDemo = isDemoMode();
-  const isLecturer = role === 'LECTURER' || role === 'SYSTEM_ADMIN' || role === 'SUPER_ADMIN';
+  const isLecturer = role === 'LECTURER';
 
   // Jika Dosen: Tampilkan Hub Bertab Dosen [Sesi Presensi | Rekap Kehadiran | Izin & Sakit | Pengaturan Lokasi]
   if (isLecturer) {

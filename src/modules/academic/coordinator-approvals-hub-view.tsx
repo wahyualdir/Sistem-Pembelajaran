@@ -61,53 +61,94 @@ export function CoordinatorApprovalsHubView({
 
   // Hitung total berkas menunggu persetujuan nyata
   const pendingGradeCount = requestsList.filter((r) => r.status === 'PENDING').length;
-  const totalPending = pendingGradeCount; // Jika tab lain ada data nyata, tambahkan di sini
+  const totalPending = pendingGradeCount;
 
-  const handleDecideGradeChange = (requestId: string, approve: boolean) => {
-    const actionLabel = approve ? 'menyetujui' : 'menolak';
-    if (!confirm(`Konfirmasi Tindakan Kaprodi:\nApakah Anda yakin ingin ${actionLabel} permohonan perubahan nilai ini?`)) {
-      return;
-    }
+  // In-app Neo-Brutalist Modal State (Ganti window.confirm, prompt, alert - Bagian A3e)
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    request: ChangeRequestItem | null;
+    approve: boolean;
+    note: string;
+    error: string | null;
+  }>({
+    isOpen: false,
+    request: null,
+    approve: true,
+    note: '',
+    error: null,
+  });
 
-    const promptMessage = approve
-      ? 'Catatan persetujuan Kaprodi (minimal 3 karakter):'
-      : 'Alasan penolakan pengajuan perubahan nilai (wajib diisi, minimal 3 karakter):';
-    const defaultNote = approve
-      ? 'Disetujui Kaprodi, berkas diteruskan ke Staf Akademik untuk eksekusi final.'
-      : 'Bukti pendukung revisi nilai tidak mencukupi.';
+  const [toastMessage, setToastMessage] = useState<{
+    type: 'success' | 'error' | 'info';
+    text: string;
+  } | null>(null);
 
-    const note = prompt(promptMessage, defaultNote);
-    if (!note || note.trim().length < 3) {
-      alert('Catatan/alasan tanggapan wajib diisi minimal 3 karakter.');
+  const openDecisionModal = (request: ChangeRequestItem, approve: boolean) => {
+    setModalState({
+      isOpen: true,
+      request,
+      approve,
+      note: approve
+        ? 'Disetujui Kaprodi, berkas diteruskan ke Biro Akademik untuk eksekusi nilai resmi.'
+        : 'Bukti pendukung revisi nilai tidak mencukupi standar pembuktian.',
+      error: null,
+    });
+  };
+
+  const closeDecisionModal = () => {
+    setModalState({
+      isOpen: false,
+      request: null,
+      approve: true,
+      note: '',
+      error: null,
+    });
+  };
+
+  const handleConfirmDecision = () => {
+    if (!modalState.request) return;
+    const cleanNote = modalState.note.trim();
+    if (cleanNote.length < 10) {
+      setModalState((prev) => ({
+        ...prev,
+        error: 'Alasan penolakan / catatan keputusan wajib diisi minimal 10 karakter.',
+      }));
       return;
     }
 
     startTransition(async () => {
       const res = await decideGradeChangeAction({
-        request_id: requestId,
-        approve,
-        note: note.trim(),
+        request_id: modalState.request!.id,
+        approve: modalState.approve,
+        note: cleanNote,
       });
 
       if (res.ok) {
+        const approved = modalState.approve;
+        const targetId = modalState.request!.id;
         setRequestsList((prev) =>
           prev.map((r) =>
-            r.id === requestId
+            r.id === targetId
               ? {
                   ...r,
-                  status: approve ? 'APPROVED' : 'REJECTED',
-                  review_note: note.trim(),
+                  status: approved ? 'APPROVED' : 'REJECTED',
+                  review_note: cleanNote,
                 }
               : r
           )
         );
-        alert(
-          approve
+        closeDecisionModal();
+        setToastMessage({
+          type: 'success',
+          text: approved
             ? 'Permohonan perubahan nilai BERHASIL DISETUJUI. Status: "Disetujui, menunggu eksekusi Staf".'
-            : 'Permohonan perubahan nilai BERHASIL DITOLAK.'
-        );
+            : 'Permohonan perubahan nilai BERHASIL DITOLAK.',
+        });
       } else {
-        alert(res.error || 'Gagal memproses persetujuan perubahan nilai.');
+        setModalState((prev) => ({
+          ...prev,
+          error: res.error || 'Gagal memproses persetujuan perubahan nilai.',
+        }));
       }
     });
   };
@@ -317,7 +358,7 @@ export function CoordinatorApprovalsHubView({
                               <button
                                 type="button"
                                 disabled={isPending}
-                                onClick={() => handleDecideGradeChange(r.id, true)}
+                                onClick={() => openDecisionModal(r, true)}
                                 className="px-2.5 py-1 rounded-lg border-2 border-black bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition-all cursor-pointer shadow-xs"
                               >
                                 Setujui
@@ -325,7 +366,7 @@ export function CoordinatorApprovalsHubView({
                               <button
                                 type="button"
                                 disabled={isPending}
-                                onClick={() => handleDecideGradeChange(r.id, false)}
+                                onClick={() => openDecisionModal(r, false)}
                                 className="px-2.5 py-1 rounded-lg border-2 border-black bg-rose-500 text-white text-xs font-bold hover:bg-rose-600 transition-all cursor-pointer shadow-xs"
                               >
                                 Tolak
@@ -367,6 +408,130 @@ export function CoordinatorApprovalsHubView({
               Saat ini belum ada pengajuan dispensasi atau cuti kuliah yang memerlukan tanda tangan elektronik Kaprodi.
             </p>
             {/* TODO(backend): Di Fase 3, sambungkan ke modul pengajuan cuti & dispensasi mahasiswa */}
+          </div>
+        </div>
+      )}
+
+      {/* TOAST NOTIFIKASI IN-APP (Ganti alert bawaan) */}
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 max-w-md animate-fade-in">
+          <div
+            className={cn(
+              'p-4 rounded-xl border-2 border-black shadow-retro flex items-start gap-3',
+              toastMessage.type === 'success'
+                ? 'bg-emerald-100 text-emerald-950'
+                : toastMessage.type === 'error'
+                ? 'bg-rose-100 text-rose-950'
+                : 'bg-retro-warm text-black'
+            )}
+          >
+            {toastMessage.type === 'success' ? (
+              <CheckCircle2 className="h-5 w-5 text-emerald-700 shrink-0 mt-0.5" />
+            ) : (
+              <AlertCircle className="h-5 w-5 text-rose-700 shrink-0 mt-0.5" />
+            )}
+            <div className="flex-1 text-xs font-bold leading-relaxed">{toastMessage.text}</div>
+            <button
+              type="button"
+              onClick={() => setToastMessage(null)}
+              className="p-1 hover:bg-black/10 rounded font-mono font-bold text-xs"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL IN-APP OTORISASI REVISI NILAI (Ganti window.confirm & prompt) */}
+      {modalState.isOpen && modalState.request && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-lg">
+            <RetroWindow
+              title={`otorisasi_${modalState.approve ? 'setujui' : 'tolak'}_nilai.app`}
+              badge={modalState.approve ? 'Setujui Pengajuan' : 'Tolak Pengajuan'}
+              headerClassName={modalState.approve ? 'bg-emerald-300' : 'bg-rose-300'}
+              bodyClassName="p-5 sm:p-6 bg-white space-y-4"
+            >
+              <div className="space-y-3">
+                <div className="p-3 bg-neutral-100 rounded-lg border-2 border-black text-xs space-y-1.5 font-medium">
+                  <div className="flex justify-between">
+                    <span className="font-bold text-black">{modalState.request.student_name}</span>
+                    <span className="font-mono text-black/60">{modalState.request.class_title}</span>
+                  </div>
+                  <div className="text-black/80 font-mono">
+                    Komponen: <span className="font-bold">{modalState.request.assignment_title}</span>
+                  </div>
+                  <div className="flex items-center gap-2 font-mono">
+                    <span>Nilai:</span>
+                    <span className="line-through text-rose-700 font-bold">{modalState.request.old_score}</span>
+                    <span>&rarr;</span>
+                    <span className="text-emerald-700 font-black text-sm">{modalState.request.proposed_score}</span>
+                  </div>
+                  <div className="text-[11px] text-black/70 italic border-t border-black/20 pt-1">
+                    Alasan Dosen: "{modalState.request.reason}"
+                  </div>
+                </div>
+
+                {modalState.error && (
+                  <div className="p-3 bg-rose-50 border-2 border-rose-500 rounded-lg text-rose-950 text-xs font-bold flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
+                    <div>
+                      <div>{modalState.error}</div>
+                      {modalState.error.includes('sendiri') && (
+                        <div className="text-[11px] font-normal text-rose-800 mt-1">
+                          Catatan Eskalasi: Berkas pengajuan yang diajukan oleh dosen yang merangkap Kaprodi harus dialihkan persetujuannya ke Dekan / Wakil Dekan Akademik.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-1.5">
+                  <div className="flex justify-between items-center">
+                    <label className="text-xs font-black uppercase text-black font-mono">
+                      {modalState.approve ? 'Catatan Persetujuan Kaprodi' : 'Alasan Penolakan Kaprodi (Wajib)'}
+                    </label>
+                    <span className={cn(
+                      'text-[10px] font-mono font-bold',
+                      modalState.note.trim().length >= 10 ? 'text-emerald-700' : 'text-rose-600'
+                    )}>
+                      {modalState.note.trim().length}/10 Karakter
+                    </span>
+                  </div>
+                  <textarea
+                    rows={3}
+                    value={modalState.note}
+                    onChange={(e) => setModalState((prev) => ({ ...prev, note: e.target.value, error: null }))}
+                    placeholder={modalState.approve ? 'Tuliskan catatan persetujuan...' : 'Jelaskan alasan penolakan...'}
+                    className="w-full rounded-lg border-2 border-black p-2.5 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-black"
+                  />
+                </div>
+
+                <div className="flex items-center justify-end gap-2.5 pt-2 border-t-2 border-black">
+                  <button
+                    type="button"
+                    disabled={isPending}
+                    onClick={closeDecisionModal}
+                    className="px-4 py-2 rounded-lg border-2 border-black bg-neutral-200 text-black text-xs font-bold hover:bg-neutral-300 transition-all cursor-pointer"
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="button"
+                    disabled={isPending || modalState.note.trim().length < 10}
+                    onClick={handleConfirmDecision}
+                    className={cn(
+                      'px-4 py-2 rounded-lg border-2 border-black text-white text-xs font-black shadow-retro transition-all cursor-pointer flex items-center gap-1.5',
+                      modalState.approve
+                        ? 'bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50'
+                        : 'bg-rose-600 hover:bg-rose-700 disabled:opacity-50'
+                    )}
+                  >
+                    {isPending ? 'Memproses...' : modalState.approve ? 'Konfirmasi Setujui' : 'Konfirmasi Tolak'}
+                  </button>
+                </div>
+              </div>
+            </RetroWindow>
           </div>
         </div>
       )}

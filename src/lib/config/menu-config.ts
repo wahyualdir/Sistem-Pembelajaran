@@ -511,8 +511,9 @@ export function getRoleHomeHref(role?: string | null): string {
   const norm = normalizeRoleCode(role);
   switch (norm) {
     case 'SUPER_ADMIN':
-    case 'SYSTEM_ADMIN':
       return '/admin';
+    case 'SYSTEM_ADMIN':
+      return '/admin/system';
     case 'LECTURER':
       return '/lecturer';
     case 'PROGRAM_COORDINATOR':
@@ -594,8 +595,43 @@ export const LEGACY_ROUTE_REDIRECTS: Record<string, string> = {
 /**
  * Pemeriksaan apakah rute boleh diakses oleh peran aktif (RBAC di server)
  */
-export function isRouteAllowedForRole(pathname: string, role?: string | null): boolean {
+export function isRouteAllowedForRole(pathname: string, role?: string | null, isImpersonating?: boolean): boolean {
   const norm = normalizeRoleCode(role);
+
+  // A2: SYSTEM_ADMIN dilarang mengakses rute akademik dan portal non-admin
+  if (norm === 'SYSTEM_ADMIN') {
+    const isAcademic =
+      pathname.startsWith('/attendance') ||
+      pathname.startsWith('/analytics') ||
+      pathname.startsWith('/grades') ||
+      pathname.startsWith('/exams') ||
+      pathname.startsWith('/classes') ||
+      pathname.startsWith('/coordinator') ||
+      pathname.startsWith('/student') ||
+      pathname.startsWith('/lecturer') ||
+      pathname.startsWith('/ta') ||
+      pathname.startsWith('/staff');
+    if (isAcademic) return false;
+    return true;
+  }
+
+  // A2: SUPER_ADMIN dilarang merender rute akademik/role portals kecuali saat impersonate aktif
+  if (norm === 'SUPER_ADMIN' && !isImpersonating) {
+    const isAcademicOrRolePortal =
+      pathname.startsWith('/attendance') ||
+      pathname.startsWith('/analytics') ||
+      pathname.startsWith('/grades') ||
+      pathname.startsWith('/exams') ||
+      pathname.startsWith('/classes') ||
+      pathname.startsWith('/coordinator') ||
+      pathname.startsWith('/student') ||
+      pathname.startsWith('/lecturer') ||
+      pathname.startsWith('/ta') ||
+      pathname.startsWith('/staff');
+    if (isAcademicOrRolePortal) return false;
+    return true;
+  }
+
   if (norm === 'SUPER_ADMIN') return true;
 
   // Proteksi admin

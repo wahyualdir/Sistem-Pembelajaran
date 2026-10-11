@@ -59,17 +59,24 @@ const BOOKS = [
   },
 ];
 
+import { redirect } from 'next/navigation';
 import { isDemoMode } from '@/lib/config/features';
 
 export default async function LibraryPage() {
   const user = await getCurrentUserWithRoles();
   const role = user?.activeRole || 'STUDENT';
+
+  if (role === 'SYSTEM_ADMIN') {
+    redirect('/admin/system');
+  }
+  if (role === 'SUPER_ADMIN' && !user?.isImpersonating) {
+    redirect('/admin');
+  }
+
   const isStaffOrLecturer =
     role === 'LECTURER' ||
     role === 'ACADEMIC_STAFF' ||
-    role === 'PROGRAM_COORDINATOR' ||
-    role === 'SYSTEM_ADMIN' ||
-    role === 'SUPER_ADMIN';
+    role === 'PROGRAM_COORDINATOR';
   const isDemo = isDemoMode();
 
   return <LibraryHubView books={BOOKS} isStaffOrLecturer={isStaffOrLecturer} isDemo={isDemo} />;

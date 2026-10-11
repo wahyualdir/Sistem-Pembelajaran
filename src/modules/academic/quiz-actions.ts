@@ -7,6 +7,7 @@ import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import type { ActionResponse } from '@/modules/identity/types';
 import { createNotification } from '@/modules/academic/actions';
 import { isDemoMode } from '@/lib/config/features';
+import { recordSystemAuditLog } from '@/lib/audit';
 
 export type QuestionType =
   | 'MULTIPLE_CHOICE'
@@ -87,7 +88,7 @@ export interface QuizItem {
   attempts_allowed?: number;
 }
 
-export type ExamEventType =
+export type StudentViolationEventType =
   | 'TAB_SWITCH'
   | 'WINDOW_BLUR'
   | 'EXIT_FULLSCREEN'
@@ -97,6 +98,33 @@ export type ExamEventType =
   | 'NETWORK_DISCONNECT'
   | 'IP_CHANGE';
 
+const STUDENT_VIOLATION_TYPES: Set<string> = new Set([
+  'TAB_SWITCH',
+  'WINDOW_BLUR',
+  'EXIT_FULLSCREEN',
+  'COPY',
+  'PASTE',
+  'CONTEXT_MENU',
+  'NETWORK_DISCONNECT',
+  'IP_CHANGE',
+]);
+
+function isStudentViolationEvent(eventType: string): boolean {
+  return STUDENT_VIOLATION_TYPES.has(eventType);
+}
+
+export type LecturerInterventionSubtype =
+  | 'WARN'
+  | 'ADD_TIME'
+  | 'PAUSE'
+  | 'RESUME'
+  | 'TERMINATE'
+  | 'RESET';
+
+export type ExamEventType =
+  | StudentViolationEventType
+  | 'LECTURER_INTERVENTION';
+
 export interface ExamEvent {
   id: string;
   exam_id: string;
@@ -104,6 +132,13 @@ export interface ExamEvent {
   student_id: string;
   student_name: string;
   event_type: ExamEventType;
+  intervention_subtype?: LecturerInterventionSubtype;
+  actor_id?: string;
+  actor_name?: string;
+  actor_role?: string;
+  reason?: string;
+  value_before?: string | number;
+  value_after?: string | number;
   duration_seconds?: number;
   details?: string;
   created_at: string;
@@ -545,6 +580,11 @@ export async function recordExamEventAction(input: {
   const user = await getCurrentUserWithRoles();
   if (!user) return { ok: false, error: 'Silakan masuk terlebih dahulu.' };
 
+  // Hanya jenis event pelanggaran mahasiswa yang dapat dicatat lewat aksi ini
+  if (!isStudentViolationEvent(input.event_type)) {
+    return { ok: false, error: 'Jenis event bukan pelanggaran mahasiswa.' };
+  }
+
   const event: ExamEvent = {
     id: randomUUID(),
     exam_id: input.exam_id,
@@ -559,7 +599,7 @@ export async function recordExamEventAction(input: {
 
   quizStore.events.push(event);
 
-  // Update live status violation counter
+  // Update live status violation counter (HANYA untuk pelanggaran mahasiswa)
   const examLive = (quizStore.liveStatus[input.exam_id] ??= {});
   const studentLive = (examLive[user.user.id] ??= {
     student_id: user.user.id,
@@ -739,11 +779,11 @@ export async function lecturerInterventionAction(input: {
   value?: string | number;
 }): Promise<ActionResponse> {
   const user = await getCurrentUserWithRoles();
-  if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
-    return { ok: false, error: 'Tidak memiliki izin intervensi ujian.' };
+  if (!user || user.activeRole !== 'LECTURER') {
+    return { ok: false, error: 'Hanya dosen pengampu yang berwenang melakukan intervensi ujian.' };
   }
 
-  // Alasan wajib diisi
+  // Alasan wajib diisi (minimal 3 karakter)
   const reasonText = (input.reason || String(input.value || '')).trim();
   if (!reasonText || reasonText.length < 3) {
     return { ok: false, error: 'Alasan intervensi ujian wajib diisi (minimal 3 karakter).' };
@@ -760,33 +800,74 @@ export async function lecturerInterventionAction(input: {
   }
 
   const st = examLive[input.student_id];
+  let valBefore: string = '';
+  let valAfter: string = '';
+
   if (input.action_type === 'WARN') {
-    st.warning_message = String(input.value || reasonText);
+    valBefore = st.warning_message || 'Tidak ada peringatan aktif';
+    valAfter = String(input.value || reasonText);
+    st.warning_message = valAfter;
   } else if (input.action_type === 'ADD_TIME') {
     const mins = Number(input.value || 5);
+    valBefore = `${Math.round(st.time_left_seconds / 60)} menit tersisa`;
     st.extra_minutes = (st.extra_minutes || 0) + mins;
     st.time_left_seconds += mins * 60;
+    valAfter = `${Math.round(st.time_left_seconds / 60)} menit tersisa (+${mins} menit)`;
   } else if (input.action_type === 'PAUSE') {
+    valBefore = st.status;
     st.status = 'PAUSED';
+    valAfter = 'PAUSED';
   } else if (input.action_type === 'RESUME') {
+    valBefore = st.status;
     st.status = 'IN_PROGRESS';
+    valAfter = 'IN_PROGRESS';
   } else if (input.action_type === 'TERMINATE') {
+    valBefore = st.status;
     st.status = 'TERMINATED';
+    valAfter = 'TERMINATED (Didiskualifikasi)';
   } else if (input.action_type === 'RESET') {
+    valBefore = `${st.status}, pelanggaran: ${st.violations_count}`;
     st.status = 'NOT_STARTED';
     st.violations_count = 0;
     quizStore.attempts = quizStore.attempts.filter((a) => !(a.quiz_id === input.exam_id && a.student_id === input.student_id));
+    valAfter = 'NOT_STARTED (Reset pengerjaan)';
   }
 
-  // Catat di Audit Log
-  quizStore.events.push({
+  // Catat event tersendiri LECTURER_INTERVENTION (TIDAK memakai event pelanggaran mahasiswa dan TIDAK menambah hitungan pelanggaran mahasiswa)
+  const interventionEvent: ExamEvent = {
     id: randomUUID(),
     exam_id: input.exam_id,
     student_id: input.student_id,
     student_name: st.student_name,
-    event_type: input.action_type === 'WARN' ? 'WINDOW_BLUR' : input.action_type === 'ADD_TIME' ? 'TAB_SWITCH' : 'EXIT_FULLSCREEN',
-    details: `Intervensi Dosen (${user.profile?.full_name}): ${input.action_type}. Alasan: ${reasonText}`,
+    event_type: 'LECTURER_INTERVENTION',
+    intervention_subtype: input.action_type,
+    actor_id: user.user.id,
+    actor_name: user.profile?.full_name ?? 'Dosen',
+    actor_role: user.activeRole ?? 'LECTURER',
+    reason: reasonText,
+    value_before: valBefore,
+    value_after: valAfter,
+    details: `Intervensi Dosen (${user.profile?.full_name ?? 'Dosen'}): ${input.action_type}. Alasan: ${reasonText}`,
     created_at: new Date().toISOString(),
+  };
+  quizStore.events.push(interventionEvent);
+
+  // Catat ke Audit Log sistem (in-memory dan Supabase jika online)
+  await recordSystemAuditLog({
+    actorId: user.user.id,
+    actorName: user.profile?.full_name ?? 'Dosen',
+    actorRole: user.activeRole ?? 'LECTURER',
+    action: `EXAM_INTERVENTION_${input.action_type}`,
+    entityType: 'ExamStudentLiveStatus',
+    entityId: `${input.exam_id}:${input.student_id}`,
+    description: `Intervensi Pengawas Ujian (${input.action_type}) untuk ${st.student_name}. Alasan: ${reasonText}`,
+    valueBefore: valBefore,
+    valueAfter: valAfter,
+    metadata: {
+      exam_id: input.exam_id,
+      student_id: input.student_id,
+      action_type: input.action_type,
+    },
   });
 
   revalidatePath('/classes/[id]', 'page');
@@ -831,7 +912,7 @@ export async function resolveExamDisputeAction(input: {
   score_adjustment?: number;
 }): Promise<ActionResponse> {
   const user = await getCurrentUserWithRoles();
-  if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
+  if (!user || user.activeRole !== 'LECTURER') {
     return { ok: false, error: 'Hanya dosen pengampu yang berwenang menyelesaikan keberatan nilai.' };
   }
 
@@ -842,17 +923,44 @@ export async function resolveExamDisputeAction(input: {
   const dispute = quizStore.disputes.find((d) => d.id === input.dispute_id);
   if (!dispute) return { ok: false, error: 'Keberatan nilai tidak ditemukan.' };
 
+  const note = (input.lecturer_note || '').trim();
+  if (note.length < 3) {
+    return { ok: false, error: 'Catatan/alasan tanggapan wajib diisi minimal 3 karakter.' };
+  }
+
   dispute.status = input.status;
-  dispute.lecturer_note = input.lecturer_note;
+  dispute.lecturer_note = note;
   dispute.score_adjustment = input.score_adjustment;
   dispute.resolved_at = new Date().toISOString();
+
+  let oldScore: number | undefined;
+  let newScore: number | undefined;
 
   if (input.status === 'APPROVED' && input.score_adjustment) {
     const attempt = quizStore.attempts.find((a) => a.id === dispute.attempt_id);
     if (attempt) {
+      oldScore = attempt.score;
       attempt.score = Math.min(attempt.max_score, Math.max(0, attempt.score + input.score_adjustment));
+      newScore = attempt.score;
     }
   }
+
+  // Audit Log
+  await recordSystemAuditLog({
+    actorId: user.user.id,
+    actorName: user.profile?.full_name ?? 'Dosen',
+    actorRole: 'LECTURER',
+    action: `EXAM_DISPUTE_${input.status}`,
+    entityType: 'ExamDispute',
+    entityId: dispute.id,
+    description: `Tanggapan Sengketa Nilai Mahasiswa (${input.status}): ${dispute.student_name}. Catatan: ${note}`,
+    valueBefore: oldScore !== undefined ? String(oldScore) : null,
+    valueAfter: newScore !== undefined ? String(newScore) : null,
+    metadata: {
+      attempt_id: dispute.attempt_id,
+      score_adjustment: input.score_adjustment,
+    },
+  });
 
   revalidatePath('/classes/[id]', 'page');
   revalidatePath('/analytics', 'page');
