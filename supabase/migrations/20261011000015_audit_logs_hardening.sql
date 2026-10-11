@@ -32,6 +32,11 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_on_behalf_of ON public.audit_logs(on_b
 CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON public.audit_logs(action);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at_desc ON public.audit_logs(created_at DESC);
 
+-- Pastikan role SUPER_ADMIN terdaftar pada tabel public.roles
+INSERT INTO public.roles (id, code, name, description)
+VALUES ('10000000-0000-0000-0000-000000000010', 'SUPER_ADMIN', 'Super Administrator', 'Akses tertinggi sistem')
+ON CONFLICT (code) DO NOTHING;
+
 -- 2. Memastikan Trigger Pencegah Modifikasi / Penghapusan Tetap Aktif (Append-Only Enforced)
 CREATE OR REPLACE FUNCTION public.fn_prevent_audit_log_modification()
 RETURNS TRIGGER AS $$
@@ -99,19 +104,23 @@ DECLARE
     v_id uuid := gen_random_uuid();
     v_actor_role text;
 BEGIN
-    IF v_uid IS NULL THEN
+    IF v_uid IS NULL AND COALESCE(auth.role(), '') <> 'service_role' AND current_user <> 'service_role' THEN
         RAISE EXCEPTION 'UNAUTHORIZED: Pengguna tidak terautentikasi.';
     END IF;
 
-    -- Dapatkan role aktif pengguna dari user_roles
-    SELECT r.code INTO v_actor_role
-    FROM public.user_roles ur
-    JOIN public.roles r ON r.id = ur.role_id
-    WHERE ur.user_id = v_uid AND ur.status = 'ACTIVE'
-    LIMIT 1;
+    IF v_uid IS NOT NULL THEN
+        -- Dapatkan role aktif pengguna dari user_roles
+        SELECT r.code INTO v_actor_role
+        FROM public.user_roles ur
+        JOIN public.roles r ON r.id = ur.role_id
+        WHERE ur.user_id = v_uid AND ur.status = 'ACTIVE'
+        LIMIT 1;
 
-    IF v_actor_role IS NULL THEN
-        v_actor_role := 'STUDENT';
+        IF v_actor_role IS NULL THEN
+            v_actor_role := 'STUDENT';
+        END IF;
+    ELSE
+        v_actor_role := 'SERVICE_ROLE';
     END IF;
 
     INSERT INTO public.audit_logs (
@@ -126,8 +135,8 @@ BEGIN
 END;
 $$;
 
-REVOKE ALL ON FUNCTION public.log_audit FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.log_audit TO authenticated;
+REVOKE ALL ON FUNCTION public.log_audit FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.log_audit TO service_role;
 
 -- 5. Fungsi Pemeliharaan Retensi Sah (UU PDP) (A5b):
 -- Hanya service_role/cron, batas minimal retensi >= 365 hari, dan mencatat pemanggilannya sendiri
@@ -188,9 +197,9 @@ GRANT EXECUTE ON FUNCTION public.purge_expired_audit_logs(interval) TO service_r
 CREATE OR REPLACE FUNCTION public.anonymize_user(p_user_id uuid)
 RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
 BEGIN
-    -- Validasi wewenang: Super Admin atau service_role
-    IF (SELECT auth.uid()) IS NOT NULL AND NOT (public.has_global_role('SUPER_ADMIN') OR public.has_global_role('SYSTEM_ADMIN')) THEN
-        RAISE EXCEPTION 'FORBIDDEN: Hanya Super Admin atau service role yang dapat menganonimkan pengguna.';
+    -- Validasi wewenang: Hanya Super Administrator atau service_role (C4)
+    IF (SELECT auth.uid()) IS NOT NULL AND NOT public.has_global_role('SUPER_ADMIN') THEN
+        RAISE EXCEPTION 'FORBIDDEN: Hanya Super Administrator atau service_role yang berwenang menganonimkan pengguna.';
     END IF;
 
     -- Anonimkan data identitas pribadi pada profiles tanpa melanggar immutability audit_logs
@@ -226,4 +235,4 @@ END;
 $$;
 
 REVOKE ALL ON FUNCTION public.anonymize_user(uuid) FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.anonymize_user(uuid) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.anonymize_user(uuid) TO authenticated, service_role;

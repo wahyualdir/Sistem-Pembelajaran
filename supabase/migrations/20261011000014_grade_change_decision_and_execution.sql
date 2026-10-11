@@ -272,5 +272,5 @@ $$;
 -- Izin Eksekusi Fungsi (Revoke dari public/anon, grant ke authenticated)
 REVOKE ALL ON FUNCTION public.decide_grade_change(uuid, boolean, text) FROM PUBLIC, anon;
 REVOKE ALL ON FUNCTION public.execute_grade_change(uuid, text) FROM PUBLIC, anon;
-GRANT EXECUTE ON FUNCTION public.decide_grade_change(uuid, boolean, text) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.execute_grade_change(uuid, text) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.decide_grade_change(uuid, boolean, text) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.execute_grade_change(uuid, text) TO authenticated, service_role;

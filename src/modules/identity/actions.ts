@@ -1179,6 +1179,27 @@ export async function deleteUserAction(input: {
     }
   }
 
+  // C4: Pakai anonymize_user RPC di DB (karena hard delete ditolak RESTRICT oleh baris audit)
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const { error: rpcError } = await supabaseAdmin.rpc('anonymize_user', {
+        p_user_id: input.targetUserId,
+      });
+      if (rpcError) {
+        return {
+          ok: false,
+          error: `Gagal menganonimkan pengguna di DB: ${rpcError.message}`,
+        };
+      }
+    } catch (err: any) {
+      return {
+        ok: false,
+        error: `Eksepsi anonimisasi DB: ${err.message}`,
+      };
+    }
+  }
+
   // A5: Catat ke Audit Log
   try {
     await recordSystemAuditLog({
@@ -1188,7 +1209,7 @@ export async function deleteUserAction(input: {
       action: 'user.delete',
       entityType: 'users',
       entityId: input.targetUserId,
-      description: `Super Admin menghapus pengguna ID ${input.targetUserId}.`,
+      description: `Super Admin menghapus dan menganonimkan pengguna ID ${input.targetUserId}.`,
     });
   } catch {
     // Fallback

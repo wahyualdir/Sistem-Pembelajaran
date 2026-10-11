@@ -88,7 +88,7 @@ Sesuai spesifikasi pengetatan A7:
 | 12 | **Attempt Ujian & Lembar Jawaban** | *Belum ada tabel di DB* (usulan: `exam_attempts`, `exam_answers`) | **TIDAK** | **In-Memory** | 🚨 **KRITIS: HANYA IN-MEMORY** | `QuizStore.attempts` dan `QuizStore.answers` beroperasi in-memory. Skor autograder kuis hilang saat server redeploy. |
 | 13 | **Telemetri Proctoring & Anomali** | *Belum ada tabel di DB* (usulan: `exam_events`, `proctoring_logs`) | **TIDAK** | **In-Memory** | 🚨 **KRITIS: HANYA IN-MEMORY** | Event `TAB_SWITCH`, `WINDOW_BLUR`, `EXIT_FULLSCREEN`, dan `LECTURER_INTERVENTION` disimpan di `QuizStore.events`. Audit proctoring belum persisten ke database. |
 | 14 | **Sanggahan / Keberatan Nilai Ujian** | *Belum ada tabel di DB* (usulan: `exam_disputes`) | **TIDAK** | **In-Memory** | 🚨 **KRITIS: HANYA IN-MEMORY** | Sanggahan nilai ujian mahasiswa disimpan di `QuizStore.disputes`. |
-| 15 | **Perubahan Nilai Final (Grade Change)** | `public.grade_change_requests` (kolom: `old_score`, `proposed_score`, `executed_by`)<br>`20260930000009_grade_changes.sql`<br>`20261011000014_grade_change_decision_and_execution.sql` | **YA** | **Campuran** | **Siap DB (Migrasi Dibuat)** | Skema tabel menggunakan kolom `old_score` (bukan `previous_score`), RLS prodi, RPC `decide_grade_change` dan `execute_grade_change` sudah lengkap di berkas migrasi; kode memiliki fallback ke `NilaiStore` jika Supabase offline. |
+| 15 | **Perubahan Nilai Final (Grade Change)** | `public.grade_change_requests` (kolom: `old_score`, `proposed_score`, `executed_by`)<br>`20260930000009_grade_changes.sql`<br>`20261011000010_grade_status_executed.sql`<br>`20261011000014_grade_change_decision_and_execution.sql` | **YA** | **Campuran** | **Siap DB (Migrasi Dibuat)** | Skema tabel menggunakan kolom `old_score` (bukan `previous_score`), RLS prodi, RPC `decide_grade_change` dan `execute_grade_change` sudah lengkap di berkas migrasi; kode memiliki fallback ke `NilaiStore` jika Supabase offline. |
 | 16 | **Asisten Dosen (TA)** | `teaching_assistants`, `ta_assignments`<br>`20260930000011_assistants.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Penugasan asisten ke kelas dan batasan wewenang koreksi tugas/kuis. |
 | 17 | **Forum & Diskusi Kelas** | `forums`, `threads`, `posts`<br>`20260930000012_discussions.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Diskusi perkuliahan, komentar mahasiswa, dan penandaan postingan dosen. |
 | 18 | **Pengumuman Kampus** | `announcements`<br>`20260930000010_announcements.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Broadcast pengumuman tingkat prodi maupun universitas. |
@@ -105,22 +105,63 @@ Sesuai spesifikasi pengetatan A7:
 
 Sesuai instruksi ketat, **asisten AI dilarang menjalankan migrasi ke database remote mana pun**. Administrator basis data dapat mengeksekusi berkas migrasi baru berikut secara berurutan di pangkalan data Supabase:
 
-### Berkas 1: Penguatan Putusan & Eksekusi Nilai (Fase 2C & 2D)
-- **Berkas**: `supabase/migrations/20261011000014_grade_change_decision_and_execution.sql`
-- **Tujuan**: Mengaktifkan RPC `decide_grade_change` dan `execute_grade_change` dengan row-level lock (`FOR UPDATE`), atomic update ke master `grades`, audit log, dan enforcement pemisahan tugas 3 pihak. Nilai enum `EXECUTED` telah diakomodasi terlebih dahulu pada migrasi 9 dan 13 untuk menjamin keabsahan transaksi.
+### Berkas 1: Penambahan Nilai Enum EXECUTED (C1)
+- **Berkas**: `supabase/migrations/20261011000010_grade_status_executed.sql`
+- **Tujuan**: Menambahkan nilai enum `'EXECUTED'` pada tipe `public.change_request_status` dalam transaksi mandiri sebelum migrasi 14 dijalankan, memulihkan migrasi 9 dan 13 ke konten orisinal tanpa modifikasi histori.
 - **Cara Eksekusi**:
   ```bash
   # Menggunakan Supabase CLI terhubung ke proyek:
   supabase db push
   # Atau melalui SQL Editor di Supabase Dashboard:
+  # Salin isi berkas 20261011000010_grade_status_executed.sql dan jalankan "Run".
+  ```
+
+### Berkas 2: Penguatan Putusan & Eksekusi Nilai (Fase 2C & 2D)
+- **Berkas**: `supabase/migrations/20261011000014_grade_change_decision_and_execution.sql`
+- **Tujuan**: Mengaktifkan RPC `decide_grade_change` dan `execute_grade_change` dengan row-level lock (`FOR UPDATE`), atomic update ke master `grades`, audit log, dan enforcement pemisahan tugas 3 pihak.
+- **Cara Eksekusi**:
+  ```bash
+  # Melalui SQL Editor di Supabase Dashboard:
   # Salin isi berkas 20261011000014_grade_change_decision_and_execution.sql dan jalankan "Run".
   ```
 
-### Berkas 2: Pengerasan Imutabilitas Audit Log & Kolom Impersonasi (Fase 2E)
+### Berkas 3: Pengerasan Imutabilitas Audit Log, Anonimisasi Pengguna & Kolom Impersonasi (Fase 2E / C3-C4)
 - **Berkas**: `supabase/migrations/20261011000015_audit_logs_hardening.sql`
-- **Tujuan**: Menambahkan kolom `on_behalf_of` UUID untuk jejak impersonasi, memasang trigger anti-tamper `tr_audit_logs_immutable` yang mencegah `UPDATE` dan `DELETE`, mencabut INSERT langsung dari role authenticated, menyediakan SECURITY DEFINER `log_audit()`, serta fungsi pemeliharaan retensi sah `purge_expired_audit_logs(interval)` minimal 365 hari dan anonimisasi pengguna sah UU PDP `anonymize_user(uuid)`.
+- **Tujuan**: Menambahkan kolom `on_behalf_of` UUID untuk jejak impersonasi, memasang trigger anti-tamper `tr_audit_logs_immutable` yang mencegah `UPDATE` dan `DELETE`, mencabut eksekusi `log_audit()` dari `PUBLIC`, `anon`, dan `authenticated` (hanya `service_role`), menyediakan RPC `anonymize_user(p_user_id)` eksklusif `SUPER_ADMIN`/`service_role` sesuai UU PDP, serta fungsi pemeliharaan retensi sah `purge_expired_audit_logs(interval)` minimal 365 hari.
 - **Cara Eksekusi**:
   ```bash
   # Melalui SQL Editor di Supabase Dashboard:
   # Salin isi berkas 20261011000015_audit_logs_hardening.sql dan jalankan "Run".
   ```
+
+---
+
+## 5. Prosedur Pengelolaan & Penghapusan Pengguna (UU PDP & RESTRICT Constraint)
+
+### Larangan Hard Delete Langsung di Supabase Dashboard
+Tabel `public.profiles` dan `auth.users` memiliki integritas referensial foreign key (`ON DELETE RESTRICT`) terhadap beberapa tabel transaksional dan kepatuhan sistem, antara lain:
+- `public.audit_logs.user_id`
+- `public.grades.grader_id`
+- `public.submissions.student_id`
+- `public.enrollments.student_id`
+- `public.classes.lecturer_id`
+
+Mencoba melakukan **Hard Delete** baris pengguna secara langsung via Table Editor di Supabase Dashboard atau via query `DELETE FROM auth.users WHERE id = ...` akan **DITOLAK SECARA OTOMATIS** oleh PostgreSQL dengan error `violates foreign key constraint (RESTRICT)`. Hal ini merupakan desain keamanan yang disengaja untuk mencegah penghapusan jejak forensik audit dan integritas riwayat akademik.
+
+### Prosedur yang Benar: Soft-Anonymization (Hak untuk Dilupakan / UU PDP)
+Untuk memenuhi hak penghapusan data pribadi (Right to be Forgotten) sesuai UU Perlindungan Data Pribadi (UU PDP):
+1. Pengguna wajib diproses melalui fungsi RPC keamanan:
+   ```sql
+   SELECT public.anonymize_user('USER-UUID-HER');
+   ```
+   Atau dieksekusi oleh `SUPER_ADMIN` melalui Server Action:
+   ```typescript
+   // src/modules/identity/actions.ts: deleteUserAction(targetUserId)
+   ```
+2. Fungsi `anonymize_user` akan:
+   - Memvalidasi bahwa pemanggil adalah `SUPER_ADMIN` atau `service_role`.
+   - Mengganti seluruh PII di `public.profiles` (`full_name = 'Anonymized User'`, `email = 'anonymized-<id>@deleted.local'`, `avatar_url = NULL`).
+   - Mencabut seluruh role aktif pengguna dari tabel `public.user_roles`.
+   - Menghapus sesi otentikasi aktif.
+   - Mencatat peristiwa anonimisasi ini secara permanen ke `public.audit_logs` dengan aksi `USER_ANONYMIZED`.
+   - Membiarkan entri baris UUID tetap ada sehingga integritas foreign key `RESTRICT` pada log audit dan rekaman nilai masa lalu tetap utuh.

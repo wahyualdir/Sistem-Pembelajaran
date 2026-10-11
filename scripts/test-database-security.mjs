@@ -73,9 +73,38 @@ async function runDatabaseSecurityTests() {
     GRANT USAGE ON SCHEMA public TO authenticated, anon, service_role;
     GRANT ALL ON ALL TABLES IN SCHEMA public TO authenticated, service_role;
     GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO authenticated, service_role;
-    GRANT ALL ON ALL FUNCTIONS IN SCHEMA public TO authenticated, service_role;
-    REVOKE INSERT ON public.audit_logs FROM authenticated, anon, public;
+    REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON public.audit_logs FROM authenticated, anon, public;
+    REVOKE ALL ON FUNCTION public.log_audit FROM PUBLIC, anon, authenticated;
+    GRANT EXECUTE ON FUNCTION public.log_audit TO service_role;
+    REVOKE ALL ON FUNCTION public.purge_expired_audit_logs(interval) FROM PUBLIC, anon, authenticated;
+    GRANT EXECUTE ON FUNCTION public.purge_expired_audit_logs(interval) TO service_role;
+    GRANT EXECUTE ON FUNCTION public.anonymize_user(uuid) TO authenticated, service_role;
+    GRANT EXECUTE ON FUNCTION public.decide_grade_change(uuid, boolean, text) TO authenticated, service_role;
+    GRANT EXECUTE ON FUNCTION public.execute_grade_change(uuid, text) TO authenticated, service_role;
   `);
+
+  // --- C3: Tampilkan has_function_privilege untuk 5 fungsi pada anon, authenticated, service_role ---
+  console.log('--- C3: LAPORAN HAS_FUNCTION_PRIVILEGE PADA DATABASE ---');
+  const privRes = await db.query(`
+    SELECT 
+      f.func_name,
+      r.role_name,
+      has_function_privilege(r.role_name, f.sig, 'execute') AS can_execute
+    FROM (
+      VALUES 
+        ('log_audit', 'public.log_audit(text,text,uuid,public.scope_type,uuid,text,jsonb,uuid)'),
+        ('anonymize_user', 'public.anonymize_user(uuid)'),
+        ('purge_expired_audit_logs', 'public.purge_expired_audit_logs(interval)'),
+        ('decide_grade_change', 'public.decide_grade_change(uuid,boolean,text)'),
+        ('execute_grade_change', 'public.execute_grade_change(uuid,text)')
+    ) AS f(func_name, sig)
+    CROSS JOIN (
+      VALUES ('anon'), ('authenticated'), ('service_role')
+    ) AS r(role_name)
+    ORDER BY f.func_name, r.role_name;
+  `);
+  console.table(privRes.rows);
+  console.log('');
 
   // Setup data akademik untuk pengujian (2 Prodi: IF dan SI)
   const PROG_IF = '20000000-0000-0000-0000-000000000001';
@@ -140,6 +169,19 @@ async function runDatabaseSecurityTests() {
 
     INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status)
     SELECT '${U_LECT_COORD}', id, 'GLOBAL', NULL, 'ACTIVE' FROM public.roles WHERE code = 'LECTURER'
+    ON CONFLICT DO NOTHING;
+
+    -- User SUPER_ADMIN untuk pengujian kontrol akses tertinggi
+    INSERT INTO auth.users (id, email) VALUES
+      ('${U_SUPER}', 'superadmin@siajar.ac.id')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.profiles (id, full_name, email, status) VALUES
+      ('${U_SUPER}', 'Super Administrator Utama', 'superadmin@siajar.ac.id', 'ACTIVE')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status)
+    SELECT '${U_SUPER}', id, 'GLOBAL', NULL, 'ACTIVE' FROM public.roles WHERE code = 'SUPER_ADMIN'
     ON CONFLICT DO NOTHING;
 
     -- Master Data Prodi & Kurikulum
@@ -488,42 +530,54 @@ async function runDatabaseSecurityTests() {
   assertTest('[+] Kontrol Positif: Kaprodi Prodi SI berwenang memutus kelas Prodi SI', pos6Ok, pos6Reason);
 
   // -------------------------------------------------------------
-  // 7. INSERT AUDIT PALSU (A5a)
+  // 7. INSERT AUDIT PALSU & PEMBATASAN LOG_AUDIT (A5a & C3)
   // -------------------------------------------------------------
-  console.log('--- 7. UJI INSERT AUDIT PALSU (A5a FORGED AUDIT PREVENTION) ---');
-  // Negatif: Authenticated user mencoba INSERT langsung ke audit_logs dengan actor_user_id palsu
+  console.log('--- 7. UJI INSERT AUDIT PALSU & PEMBATASAN LOG_AUDIT (A5a & C3) ---');
+  // Negatif 7a: Authenticated user mencoba INSERT langsung ke audit_logs dengan actor_user_id palsu
   await setAuthUser(U_STUDENT, 'authenticated');
-  let neg7Ok = false;
-  let neg7Reason = '';
+  let neg7aOk = false;
+  let neg7aReason = '';
   try {
     await db.query(`
       INSERT INTO public.audit_logs (actor_user_id, actor_role, action, entity_type, entity_id)
       VALUES ('${U_SUPER}', 'SUPER_ADMIN', 'forged.admin_action', 'users', '${U_STUDENT}');
     `);
   } catch (err) {
-    neg7Ok = err.message.includes('permission denied') || err.message.includes('tidak diizinkan');
-    neg7Reason = err.message;
+    neg7aOk = err.message.includes('permission denied') || err.message.includes('tidak diizinkan');
+    neg7aReason = err.message;
   }
-  assertTest('[-] Negatif: Authenticated user dilarang INSERT langsung ke audit_logs', neg7Ok, neg7Reason);
+  assertTest('[-] Negatif 7a: Authenticated user dilarang INSERT langsung ke audit_logs', neg7aOk, neg7aReason);
 
-  // Positif: Authenticated memanggil SECURITY DEFINER log_audit() -> actor murni diisi dari auth.uid()
+  // Negatif 7b: Authenticated user dilarang memanggil log_audit() langsung (C3: hanya service_role)
   await setAuthUser(U_STUDENT, 'authenticated');
+  let neg7bOk = false;
+  let neg7bReason = '';
+  try {
+    await db.query(`
+      SELECT public.log_audit('forged.client_action', 'exams', gen_random_uuid(), 'GLOBAL', NULL, 'Injeksi audit klien ilegal');
+    `);
+  } catch (err) {
+    neg7bOk = err.message.includes('permission denied') || err.message.includes('tidak diizinkan');
+    neg7bReason = err.message;
+  }
+  assertTest('[-] Negatif 7b: Authenticated user dilarang memanggil log_audit() langsung dari PostgREST', neg7bOk, neg7bReason);
+
+  // Positif: service_role memanggil log_audit() secara sah
+  await setAuthUser(null, 'service_role');
   let pos7Ok = false;
   let pos7Reason = '';
   try {
     const res = await db.query(`
-      SELECT public.log_audit('student.exam_view', 'exams', gen_random_uuid(), 'GLOBAL', NULL, 'Melihat ujian sah') as log_id;
+      SELECT public.log_audit('system.maintenance', 'system', gen_random_uuid(), 'GLOBAL', NULL, 'Pencatatan audit sah oleh service_role') as log_id;
     `);
     const logId = res.rows[0].log_id;
-    // Beralih ke service_role untuk memverifikasi isi tabel audit_logs (karena mahasiswa diblokir RLS membaca audit_logs)
-    await setAuthUser(null, 'service_role');
-    const check = await db.query(`SELECT actor_user_id, actor_role FROM public.audit_logs WHERE id = '${logId}';`);
-    pos7Ok = check.rows[0]?.actor_user_id === U_STUDENT;
-    pos7Reason = `Log audit tercatat via log_audit(), actor_user_id otomatis diisi: ${check.rows[0]?.actor_user_id}`;
+    const check = await db.query(`SELECT action, description FROM public.audit_logs WHERE id = '${logId}';`);
+    pos7Ok = check.rows.length > 0 && check.rows[0]?.action === 'system.maintenance';
+    pos7Reason = `Log audit sah berhasil dicatat via service_role: ${check.rows[0]?.action}`;
   } catch (err) {
     pos7Reason = err.message;
   }
-  assertTest('[+] Kontrol Positif: log_audit() mengisi actor dari auth.uid() secara sah', pos7Ok, pos7Reason);
+  assertTest('[+] Kontrol Positif: service_role berhasil memanggil log_audit() untuk pencatatan sah', pos7Ok, pos7Reason);
 
   // -------------------------------------------------------------
   // 8. PURGE DENGAN INTERVAL 0 & BATAS MINIMAL RETENSI (A5b)
@@ -613,16 +667,29 @@ async function runDatabaseSecurityTests() {
     VALUES ('${U_AUDIT_USER}', 'STUDENT', 'login.test', 'users', '${U_AUDIT_USER}');
   `);
 
-  // Negatif: Hard delete profil mahasiswa diblokir oleh FK RESTRICT (mencegah trigger conflict)
-  let neg10Ok = false;
-  let neg10Reason = '';
+  // Negatif 10a: Non-Super Admin (Mahasiswa) mencoba memanggil anonymize_user()
+  await setAuthUser(U_STUDENT, 'authenticated');
+  let neg10aOk = false;
+  let neg10aReason = '';
+  try {
+    await db.query(`SELECT public.anonymize_user('${U_AUDIT_USER}'::uuid);`);
+  } catch (err) {
+    neg10aOk = err.message.includes('FORBIDDEN') || err.message.includes('Super Administrator');
+    neg10aReason = err.message;
+  }
+  assertTest('[-] Negatif 10a: Non-Super Admin dilarang memanggil anonymize_user()', neg10aOk, neg10aReason);
+
+  // Negatif 10b: Hard delete profil mahasiswa diblokir oleh FK RESTRICT (mencegah trigger conflict)
+  await setAuthUser(null, 'service_role');
+  let neg10bOk = false;
+  let neg10bReason = '';
   try {
     await db.query(`DELETE FROM public.profiles WHERE id = '${U_AUDIT_USER}';`);
   } catch (err) {
-    neg10Ok = err.message.toLowerCase().includes('foreign key') || err.message.toLowerCase().includes('restrict');
-    neg10Reason = err.message;
+    neg10bOk = err.message.toLowerCase().includes('foreign key') || err.message.toLowerCase().includes('restrict');
+    neg10bReason = err.message;
   }
-  assertTest('[-] Negatif: Hard DELETE pada user yang memiliki baris audit diblokir RESTRICT', neg10Ok, neg10Reason);
+  assertTest('[-] Negatif 10b: Hard DELETE pada user yang memiliki baris audit diblokir RESTRICT', neg10bOk, neg10bReason);
 
   // Positif: Anonimisasi sah UU PDP via anonymize_user() berhasil tanpa merusak append-only
   await setAuthUser(U_SUPER, 'authenticated');
@@ -637,7 +704,7 @@ async function runDatabaseSecurityTests() {
   } catch (err) {
     pos10Reason = err.message;
   }
-  assertTest('[+] Kontrol Positif: anonymize_user() mendegradasi PII tanpa melanggar audit_logs', pos10Ok, pos10Reason);
+  assertTest('[+] Kontrol Positif: Super Admin berhasil memanggil anonymize_user()', pos10Ok, pos10Reason);
 
   console.log('========================================================================================');
   console.log(`  HASIL AKHIR UJI KEAMANAN DATABASE: ${passedTests}/${totalTests} UJI LOLOS (100%)       `);

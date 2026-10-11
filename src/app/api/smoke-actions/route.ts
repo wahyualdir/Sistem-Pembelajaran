@@ -62,7 +62,13 @@ const USERS = {
 import { isDemoMode } from '@/lib/config/features';
 
 export async function GET() {
-  if (process.env.NODE_ENV === 'production' || !isDemoMode()) {
+  // C7: Di environment produksi, rute ini SELALU 404 tanpa melihat ALLOW_DEMO_AUTH atau flag apa pun
+  if (process.env.NODE_ENV === 'production') {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+
+  // Di non-produksi, wajib dalam mode demo aktif
+  if (!isDemoMode()) {
     return new NextResponse('Not Found', { status: 404 });
   }
 

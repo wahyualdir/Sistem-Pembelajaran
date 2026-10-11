@@ -4,7 +4,9 @@ import fs from 'fs';
 import path from 'path';
 
 async function main() {
-  console.log('=== PGlite Disposable Local DB: Running Migrations 1..15 From Scratch ===');
+  const migrationsDir = path.join(process.cwd(), 'supabase', 'migrations');
+  const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).sort();
+  console.log(`=== PGlite Disposable Local DB: Running Migrations 1..${files.length} From Scratch ===`);
   const db = new PGlite({
     extensions: { pgcrypto }
   });
@@ -45,9 +47,6 @@ async function main() {
   `);
   console.log('Base roles and auth schema ready.');
 
-  const migrationsDir = path.join(process.cwd(), 'supabase', 'migrations');
-  const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).sort();
-
   console.log(`Found ${files.length} migration files.`);
 
   for (let i = 0; i < files.length; i++) {
@@ -55,20 +54,20 @@ async function main() {
     const filePath = path.join(migrationsDir, file);
     const sql = fs.readFileSync(filePath, 'utf-8');
     const migNum = i + 1;
-    console.log(`Starting [Migration ${migNum}/15] ${file}...`);
+    console.log(`Starting [Migration ${migNum}/${files.length}] ${file}...`);
     const startTime = Date.now();
     try {
       await db.exec(sql);
       const elapsed = Date.now() - startTime;
-      console.log(`[Migration ${migNum}/15] ${file} ... OK (${elapsed}ms)`);
+      console.log(`[Migration ${migNum}/${files.length}] ${file} ... OK (${elapsed}ms)`);
     } catch (err) {
-      console.log(`[Migration ${migNum}/15] ${file} ... FAILED!`);
+      console.log(`[Migration ${migNum}/${files.length}] ${file} ... FAILED!`);
       console.error(`Error in ${file}:`, err.message || err);
       process.exit(1);
     }
   }
 
-  console.log('\n[SUCCESS] All 15 migrations executed from scratch without error!');
+  console.log(`\n[SUCCESS] All ${files.length} migrations executed from scratch without error!`);
   process.exit(0);
 }
 

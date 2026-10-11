@@ -3,7 +3,7 @@
 -- memutuskan sendiri. Kelas tanpa mata kuliah belum memiliki koordinator yang berwenang.
 
 DO $$ BEGIN
-    CREATE TYPE public.change_request_status AS ENUM ('PENDING', 'APPROVED', 'REJECTED', 'EXECUTED');
+    CREATE TYPE public.change_request_status AS ENUM ('PENDING', 'APPROVED', 'REJECTED');
 EXCEPTION WHEN duplicate_object THEN null; END $$;
 
 CREATE TABLE IF NOT EXISTS public.grade_change_requests (

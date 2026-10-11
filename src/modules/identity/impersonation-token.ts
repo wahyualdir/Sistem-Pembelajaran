@@ -10,7 +10,7 @@ export interface ImpersonationTokenPayload {
   expiresAt: number;
 }
 
-function getImpersonationSecret(): string {
+export function getImpersonationSecret(): string {
   const secret = process.env.APP_SECRET;
   if (!secret) {
     if (process.env.NODE_ENV === 'production') {

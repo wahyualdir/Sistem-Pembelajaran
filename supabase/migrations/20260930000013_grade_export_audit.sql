@@ -16,6 +16,3 @@ $$;
 REVOKE ALL ON FUNCTION public.log_grade_export(uuid) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.log_grade_export(uuid) TO authenticated;
 
--- Memastikan nilai enum EXECUTED telah terdaftar dan ter-commit sebelum migrasi 14
-ALTER TYPE public.change_request_status ADD VALUE IF NOT EXISTS 'EXECUTED';
-
