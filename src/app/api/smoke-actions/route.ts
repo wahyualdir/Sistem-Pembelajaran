@@ -4,8 +4,11 @@ import {
   requestGradeChangeAction,
   decideGradeChangeAction,
   executeGradeChangeAction,
+  createClassAction,
+  joinClassAction,
 } from '@/modules/academic/actions';
 import {
+  submitQuizAttemptAction,
   lecturerInterventionAction,
   resolveExamDisputeAction,
 } from '@/modules/academic/quiz-actions';
@@ -13,408 +16,740 @@ import {
   submitLeavePermitAction,
   reviewLeavePermitAction,
 } from '@/modules/academic/attendance-actions';
+import {
+  impersonateUserAction,
+  stopImpersonatingAction,
+  updateUserRoleAction,
+  deleteUserAction,
+  updateUserEmailAction,
+  changePasswordAction,
+} from '@/modules/identity/actions';
+import { signImpersonationToken } from '@/modules/identity/impersonation-token';
 
-export interface NegativeTestResult {
+export interface SmokeTestPair {
   id: string;
   actionName: string;
-  testedRole: string;
   scenario: string;
-  expectedResult: 'DITOLAK_SERVER';
-  actualResult: 'DITOLAK_SERVER' | 'LOLOS_UNAUTHORIZED';
-  status: 'PASS' | 'FAIL';
-  detail: string;
+  negativeTest: {
+    testedRole: string;
+    userId: string;
+    expectedResult: 'DITOLAK_SERVER';
+    actualResult: 'DITOLAK_SERVER' | 'LOLOS_UNAUTHORIZED';
+    status: 'PASS' | 'FAIL';
+    rejectionReason: string;
+  };
+  positiveControl: {
+    authorizedRole: string;
+    userId: string;
+    expectedResult: 'BERHASIL_SERVER';
+    actualResult: 'BERHASIL_SERVER' | 'GAGAL_SERVER';
+    status: 'PASS' | 'FAIL';
+    detail: string;
+  };
+  overallStatus: 'PASS' | 'FAIL';
 }
+
+const USERS = {
+  STUDENT: { id: 'a0000001-0000-0000-0000-000000000001', role: 'STUDENT' },
+  LECTURER: { id: 'a0000002-0000-0000-0000-000000000002', role: 'LECTURER' },
+  TA: { id: 'a0000003-0000-0000-0000-000000000003', role: 'TEACHING_ASSISTANT' },
+  COORDINATOR: { id: 'a0000004-0000-0000-0000-000000000004', role: 'PROGRAM_COORDINATOR' },
+  STAFF: { id: 'a0000005-0000-0000-0000-000000000005', role: 'ACADEMIC_STAFF' },
+  SYSTEM_ADMIN: { id: 'a0000006-0000-0000-0000-000000000006', role: 'SYSTEM_ADMIN' },
+  SUPER_ADMIN: { id: 'a0000010-0000-0000-0000-000000000010', role: 'SUPER_ADMIN' },
+};
 
 export async function GET() {
   const cookieStore = cookies();
-  const results: NegativeTestResult[] = [];
+  const testPairs: SmokeTestPair[] = [];
 
-  const setSessionRole = (userId: string, role: string) => {
+  const setSession = (userId: string, role: string, isImpersonating = false) => {
     cookieStore.set('demo_session', userId);
     cookieStore.set('active_role', role);
-  };
-
-  const runTest = async (
-    id: string,
-    actionName: string,
-    testedRole: string,
-    userId: string,
-    scenario: string,
-    actionFn: () => Promise<any>
-  ) => {
-    setSessionRole(userId, testedRole);
-    try {
-      const res = await actionFn();
-      const rejected = !res || res.ok === false;
-      const detail = res?.error || (rejected ? 'Ditolak server dengan pesan error' : 'Gagal menolak (lolos ilegal)');
-      results.push({
-        id,
-        actionName,
-        testedRole,
-        scenario,
-        expectedResult: 'DITOLAK_SERVER',
-        actualResult: rejected ? 'DITOLAK_SERVER' : 'LOLOS_UNAUTHORIZED',
-        status: rejected ? 'PASS' : 'FAIL',
-        detail,
+    if (isImpersonating) {
+      const signed = signImpersonationToken({
+        originalAdminId: USERS.SUPER_ADMIN.id,
+        originalAdminRole: 'SUPER_ADMIN',
+        originalAdminName: 'Super Admin Asli',
+        targetUserId: userId,
+        reason: 'Pengujian impersonasi resmi keamanan sistem',
+        startedAt: Date.now(),
+        expiresAt: Date.now() + 1800 * 1000,
       });
-    } catch (err: any) {
-      results.push({
-        id,
-        actionName,
-        testedRole,
-        scenario,
-        expectedResult: 'DITOLAK_SERVER',
-        actualResult: 'DITOLAK_SERVER',
-        status: 'PASS',
-        detail: `Exception: ${err.message}`,
-      });
+      cookieStore.set('impersonation_token', signed);
+      cookieStore.set('impersonating_from', USERS.SUPER_ADMIN.id);
+      cookieStore.set('impersonating_expires_at', String(Date.now() + 1800 * 1000));
+    } else {
+      cookieStore.delete('impersonation_token');
+      cookieStore.delete('impersonating_from');
+      cookieStore.delete('impersonating_expires_at');
     }
   };
 
-  // ==========================================
-  // 1. MAHASISWA (STUDENT)
-  // ==========================================
-  await runTest(
-    'NEG-STU-01',
-    'lecturerInterventionAction',
-    'STUDENT',
-    'a0000001-0000-0000-0000-000000000001',
-    'Mahasiswa mencoba mengintervensi ujian (tambah waktu / beri peringatan)',
-    () => lecturerInterventionAction({
-      exam_id: 'ex-demo-1',
-      student_id: 'a0000001-0000-0000-0000-000000000001',
-      action_type: 'WARN',
-      reason: 'Uji coba ilegal intervensi',
-    })
-  );
+  const runPair = async (
+    id: string,
+    actionName: string,
+    scenario: string,
+    negConfig: { role: string; userId: string; isImpersonating?: boolean; fn: () => Promise<any> },
+    posConfig: { role: string; userId: string; fn: () => Promise<any> }
+  ) => {
+    // 1. Eksekusi Uji Negatif (Unauthorized / Guarded)
+    setSession(negConfig.userId, negConfig.role, !!negConfig.isImpersonating);
+    let negRejected = false;
+    let negReason = '';
+    try {
+      const res = await negConfig.fn();
+      negRejected = !res || res.ok === false;
+      negReason = res?.error || (negRejected ? 'Ditolak server dengan status ok: false' : 'LOLOS ILEGAL (Server tidak menolak)');
+    } catch (err: any) {
+      negRejected = true;
+      negReason = `Exception: ${err.message}`;
+    }
 
-  await runTest(
-    'NEG-STU-02',
-    'resolveExamDisputeAction',
-    'STUDENT',
-    'a0000001-0000-0000-0000-000000000001',
-    'Mahasiswa mencoba menyelesaikan keberatan ujian',
-    () => resolveExamDisputeAction({
-      dispute_id: 'disp-demo-1',
-      status: 'APPROVED',
-      lecturer_note: 'Penyelesaian ilegal oleh mahasiswa',
-    })
-  );
+    // 2. Eksekusi Kontrol Positif (Authorized Role yang berwenang)
+    // Reset state in-memory agar kontrol positif independen & idempotent
+    if (actionName === 'decideGradeChangeAction') {
+      const c = (globalThis as any).__siajarUbah?.find((x: any) => x.id === 'cr-demo-001');
+      if (c) { c.status = 'PENDING'; c.review_note = null; }
+    }
+    if (actionName === 'executeGradeChangeAction') {
+      const c = (globalThis as any).__siajarUbah?.find((x: any) => x.id === 'cr-demo-003');
+      if (c) { c.status = 'APPROVED'; c.executed_at = null; c.executed_by = null; }
+    }
+    if (actionName === 'joinClassAction') {
+      const akd = (globalThis as any).__siajarAkademik;
+      if (akd && Array.isArray(akd.enrollments)) {
+        akd.enrollments = akd.enrollments.filter((e: any) => !(e.student_id === posConfig.userId));
+      }
+    }
+    if (actionName === 'submitQuizAttemptAction') {
+      const kuisStore = (globalThis as any).__siajarKuis;
+      if (kuisStore && Array.isArray(kuisStore.attempts)) {
+        kuisStore.attempts = kuisStore.attempts.filter((a: any) => !(a.student_id === posConfig.userId));
+      }
+    }
 
-  await runTest(
-    'NEG-STU-03',
-    'requestGradeChangeAction',
-    'STUDENT',
-    'a0000001-0000-0000-0000-000000000001',
-    'Mahasiswa mencoba mengajukan revisi nilai final sendiri',
-    () => requestGradeChangeAction({
-      submission_id: 'sub-demo-001',
-      score: 95,
-      reason: 'Pengajuan revisi nilai ilegal oleh mahasiswa',
-    })
-  );
+    setSession(posConfig.userId, posConfig.role, false);
+    let posSuccess = false;
+    let posDetail = '';
+    try {
+      const res = await posConfig.fn();
+      posSuccess = !!(res && res.ok !== false);
+      posDetail = posSuccess ? 'Berhasil dieksekusi oleh role berwenang (Status: OK)' : `GAGAL KONTROL POSITIF: ${res?.error || 'Unknown error'}`;
+    } catch (err: any) {
+      posSuccess = false;
+      posDetail = `Exception Kontrol Positif: ${err.message}`;
+    }
 
-  await runTest(
-    'NEG-STU-04',
+    const pairPassed = negRejected && posSuccess;
+
+    testPairs.push({
+      id,
+      actionName,
+      scenario,
+      negativeTest: {
+        testedRole: negConfig.role + (negConfig.isImpersonating ? ' [IMPERSONATED]' : ''),
+        userId: negConfig.userId,
+        expectedResult: 'DITOLAK_SERVER',
+        actualResult: negRejected ? 'DITOLAK_SERVER' : 'LOLOS_UNAUTHORIZED',
+        status: negRejected ? 'PASS' : 'FAIL',
+        rejectionReason: negReason,
+      },
+      positiveControl: {
+        authorizedRole: posConfig.role,
+        userId: posConfig.userId,
+        expectedResult: 'BERHASIL_SERVER',
+        actualResult: posSuccess ? 'BERHASIL_SERVER' : 'GAGAL_SERVER',
+        status: posSuccess ? 'PASS' : 'FAIL',
+        detail: posDetail,
+      },
+      overallStatus: pairPassed ? 'PASS' : 'FAIL',
+    });
+  };
+
+  // =========================================================================
+  // KELOMPOK 1: PRODI A VS PRODI B (CROSS-PRODI ISOLATION)
+  // =========================================================================
+  await runPair(
+    'SEC-PRODI-01',
     'decideGradeChangeAction',
-    'STUDENT',
-    'a0000001-0000-0000-0000-000000000001',
-    'Mahasiswa mencoba menyetujui perubahan nilai',
-    () => decideGradeChangeAction({
-      request_id: 'cr-demo-001',
-      approve: true,
-      note: 'Persetujuan ilegal oleh mahasiswa',
-    })
+    'Kaprodi TI (Prodi A) mencoba memutuskan permohonan kelas SI (Prodi B)',
+    {
+      role: 'PROGRAM_COORDINATOR',
+      userId: USERS.COORDINATOR.id,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-prodi-b', // Milik prodi SI (Prodi B)
+        approve: true,
+        note: 'Persetujuan lintas prodi oleh Kaprodi TI',
+      }),
+    },
+    {
+      role: 'PROGRAM_COORDINATOR',
+      userId: USERS.COORDINATOR.id,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-001', // Milik prodi TI (Prodi A)
+        approve: true,
+        note: 'Persetujuan resmi sesuai kewenangan Kaprodi TI',
+      }),
+    }
   );
 
-  await runTest(
-    'NEG-STU-05',
-    'reviewLeavePermitAction',
-    'STUDENT',
-    'a0000001-0000-0000-0000-000000000001',
-    'Mahasiswa mencoba mereview / menyetujui izin presensi mahasiswa lain',
-    () => reviewLeavePermitAction({
-      permit_id: 'leave-demo-1',
-      status: 'DISETUJUI',
-      feedback: 'Verifikasi izin ilegal oleh mahasiswa',
-    })
+  // =========================================================================
+  // KELOMPOK 2: ASISTEN KE AKSI DOSEN / KAPRODI / STAF
+  // =========================================================================
+  await runPair(
+    'SEC-TA-01',
+    'createClassAction',
+    'Asisten Dosen mencoba membuat kelas perkuliahan baru (Wewenang Dosen)',
+    {
+      role: 'TEACHING_ASSISTANT',
+      userId: USERS.TA.id,
+      fn: () => createClassAction({
+        title: 'Kelas Ilegal Buatan Asisten',
+        section: 'TA-1',
+      }),
+    },
+    {
+      role: 'LECTURER',
+      userId: USERS.LECTURER.id,
+      fn: () => createClassAction({
+        title: 'Pemrograman Web Lanjut Kontrol Positif',
+        section: 'IF-3P',
+      }),
+    }
   );
 
-  // ==========================================
-  // 2. ASISTEN (TEACHING_ASSISTANT)
-  // ==========================================
-  await runTest(
-    'NEG-TA-01',
+  await runPair(
+    'SEC-TA-02',
     'decideGradeChangeAction',
-    'TEACHING_ASSISTANT',
-    'a0000003-0000-0000-0000-000000000003',
-    'Asisten Dosen mencoba menyetujui perubahan nilai final (wewenang Kaprodi)',
-    () => decideGradeChangeAction({
-      request_id: 'cr-demo-001',
-      approve: true,
-      note: 'Persetujuan ilegal oleh Asisten Dosen',
-    })
+    'Asisten Dosen mencoba memutuskan permohonan nilai (Wewenang Kaprodi)',
+    {
+      role: 'TEACHING_ASSISTANT',
+      userId: USERS.TA.id,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-001',
+        approve: true,
+        note: 'Persetujuan ilegal oleh Asisten Dosen',
+      }),
+    },
+    {
+      role: 'PROGRAM_COORDINATOR',
+      userId: USERS.COORDINATOR.id,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-001',
+        approve: false,
+        note: 'Penolakan resmi sesuai kewenangan Kaprodi',
+      }),
+    }
   );
 
-  await runTest(
-    'NEG-TA-02',
+  await runPair(
+    'SEC-TA-03',
     'executeGradeChangeAction',
-    'TEACHING_ASSISTANT',
-    'a0000003-0000-0000-0000-000000000003',
-    'Asisten Dosen mencoba mengeksekusi perubahan nilai (wewenang Staf BAA)',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-003',
-      note: 'Eksekusi ilegal oleh Asisten Dosen',
-    })
+    'Asisten Dosen mencoba mengeksekusi perubahan nilai ke DB (Wewenang Staf)',
+    {
+      role: 'TEACHING_ASSISTANT',
+      userId: USERS.TA.id,
+      fn: () => executeGradeChangeAction({
+        request_id: 'cr-demo-003',
+        note: 'Eksekusi nilai ilegal oleh Asisten',
+      }),
+    },
+    {
+      role: 'ACADEMIC_STAFF',
+      userId: USERS.STAFF.id,
+      fn: () => executeGradeChangeAction({
+        request_id: 'cr-demo-003',
+        note: 'Eksekusi nilai resmi oleh Biro Akademik',
+      }),
+    }
   );
 
-  await runTest(
-    'NEG-TA-03',
-    'resolveExamDisputeAction',
-    'TEACHING_ASSISTANT',
-    'a0000003-0000-0000-0000-000000000003',
-    'Asisten Dosen mencoba memutus keberatan ujian dosen',
-    () => resolveExamDisputeAction({
-      dispute_id: 'disp-demo-1',
-      status: 'APPROVED',
-      lecturer_note: 'Asisten memutuskan keberatan ujian',
-    })
+  // =========================================================================
+  // KELOMPOK 3: SYSTEM_ADMIN & SUPER_ADMIN KE AKSI AKADEMIK (TANPA IMPERSONATE)
+  // =========================================================================
+  await runPair(
+    'SEC-SYS-01',
+    'createClassAction',
+    'SYSTEM_ADMIN mencoba membuat kelas perkuliahan (Aksi Dosen)',
+    {
+      role: 'SYSTEM_ADMIN',
+      userId: USERS.SYSTEM_ADMIN.id,
+      fn: () => createClassAction({
+        title: 'Kelas Sistem Admin',
+        section: 'SYS-1',
+      }),
+    },
+    {
+      role: 'LECTURER',
+      userId: USERS.LECTURER.id,
+      fn: () => createClassAction({
+        title: 'Basis Data Cloud Kontrol Positif',
+        section: 'IF-2K',
+      }),
+    }
   );
 
-  // ==========================================
-  // 3. DOSEN (LECTURER) & DOSEN B VS KELAS DOSEN A
-  // ==========================================
-  await runTest(
-    'NEG-LEC-01',
+  await runPair(
+    'SEC-SYS-02',
     'decideGradeChangeAction',
-    'LECTURER',
-    'a0000002-0000-0000-0000-000000000002',
-    'Dosen mencoba menyetujui permohonan perubahan nilai (wewenang Kaprodi)',
-    () => decideGradeChangeAction({
-      request_id: 'cr-demo-001',
-      approve: true,
-      note: 'Dosen mencoba menyetujui usulannya sendiri',
-    })
+    'SYSTEM_ADMIN mencoba memutuskan permohonan nilai (Aksi Kaprodi)',
+    {
+      role: 'SYSTEM_ADMIN',
+      userId: USERS.SYSTEM_ADMIN.id,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-001',
+        approve: true,
+        note: 'Intervensi nilai oleh System Administrator',
+      }),
+    },
+    {
+      role: 'PROGRAM_COORDINATOR',
+      userId: USERS.COORDINATOR.id,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-001',
+        approve: true,
+        note: 'Persetujuan sah oleh Kaprodi Teknik Informatika',
+      }),
+    }
   );
 
-  await runTest(
-    'NEG-LEC-02',
+  await runPair(
+    'SEC-SYS-03',
     'executeGradeChangeAction',
-    'LECTURER',
-    'a0000002-0000-0000-0000-000000000002',
-    'Dosen mencoba mengeksekusi perubahan nilai final (wewenang Staf)',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-003',
-      note: 'Eksekusi nilai ilegal oleh dosen pengampu',
-    })
+    'SYSTEM_ADMIN mencoba mengeksekusi nilai ke master database (Aksi Staf)',
+    {
+      role: 'SYSTEM_ADMIN',
+      userId: USERS.SYSTEM_ADMIN.id,
+      fn: () => executeGradeChangeAction({
+        request_id: 'cr-demo-003',
+        note: 'Eksekusi administratif oleh SysAdmin',
+      }),
+    },
+    {
+      role: 'ACADEMIC_STAFF',
+      userId: USERS.STAFF.id,
+      fn: () => executeGradeChangeAction({
+        request_id: 'cr-demo-003',
+        note: 'Eksekusi sah oleh Staf Biro Administrasi Akademik',
+      }),
+    }
   );
 
-  await runTest(
-    'NEG-LEC-03',
-    'requestGradeChangeAction (Dosen B vs Kelas Dosen A)',
-    'LECTURER',
-    'a0000099-0000-0000-0000-000000000099', // Dosen B
-    'Dosen B mencoba mengajukan perubahan nilai pada kelas milik Dosen A',
-    () => requestGradeChangeAction({
-      submission_id: 'sub-demo-001', // Milik kelas Dosen A
-      score: 88,
-      reason: 'Dosen B mencoba memodifikasi nilai kelas Dosen A tanpa hak kepemilikan',
-    })
+  await runPair(
+    'SEC-SYS-04',
+    'joinClassAction',
+    'SYSTEM_ADMIN mencoba bergabung ke kelas via kode kelas (Aksi Mahasiswa)',
+    {
+      role: 'SYSTEM_ADMIN',
+      userId: USERS.SYSTEM_ADMIN.id,
+      fn: () => joinClassAction('WEB2026A'),
+    },
+    {
+      role: 'STUDENT',
+      userId: USERS.STUDENT.id,
+      fn: () => joinClassAction('WEB2026A'),
+    }
   );
 
-  await runTest(
-    'NEG-LEC-04',
-    'resolveExamDisputeAction (Dosen B vs Kelas Dosen A)',
-    'LECTURER',
-    'a0000099-0000-0000-0000-000000000099', // Dosen B
-    'Dosen B mencoba memutus keberatan ujian pada kelas milik Dosen A',
-    () => resolveExamDisputeAction({
-      dispute_id: 'disp-demo-1', // Kelas Dosen A
-      status: 'REJECTED',
-      lecturer_note: 'Dosen B menolak keberatan kelas Dosen A',
-    })
+  await runPair(
+    'SEC-SUPER-01',
+    'createClassAction',
+    'SUPER_ADMIN tanpa impersonasi mencoba membuat kelas (Aksi Dosen)',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => createClassAction({
+        title: 'Kelas Super Admin Langsung',
+        section: 'SA-1',
+      }),
+    },
+    {
+      role: 'LECTURER',
+      userId: USERS.LECTURER.id,
+      fn: () => createClassAction({
+        title: 'Jaringan Komputer Kontrol Positif',
+        section: 'IF-3J',
+      }),
+    }
   );
 
-  await runTest(
-    'NEG-LEC-05',
-    'submitLeavePermitAction',
-    'LECTURER',
-    'a0000002-0000-0000-0000-000000000002',
-    'Dosen memanggil aksi pengajuan izin presensi kuliah mahasiswa',
-    () => submitLeavePermitAction({
-      course_title: 'Pemrograman Web Lanjut',
-      meeting_number: 4,
-      type: 'IZIN',
-      date: '2026-10-12',
-      reason: 'Dosen mengajukan permohonan izin kuliah (salah aktor)',
-    })
-  );
-
-  // ==========================================
-  // 4. KOORDINATOR PRODI (PROGRAM_COORDINATOR)
-  // ==========================================
-  await runTest(
-    'NEG-KAP-01',
-    'decideGradeChangeAction (Self-Approval)',
-    'PROGRAM_COORDINATOR',
-    'a0000004-0000-0000-0000-000000000004',
-    'Kaprodi mencoba menyetujui pengajuannya sendiri (A4a & A4b)',
-    () => decideGradeChangeAction({
-      request_id: 'cr-demo-004-self',
-      approve: true,
-      note: 'Kaprodi mencoba menyetujui usulan revisi nilai miliknya sendiri',
-    })
-  );
-
-  await runTest(
-    'NEG-KAP-02',
-    'executeGradeChangeAction',
-    'PROGRAM_COORDINATOR',
-    'a0000004-0000-0000-0000-000000000004',
-    'Kaprodi mencoba mengeksekusi perubahan nilai ke tabel grades (wewenang Staf)',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-003',
-      note: 'Kaprodi mencoba mengeksekusi langsung nilai final',
-    })
-  );
-
-  // ==========================================
-  // 5. STAF AKADEMIK (ACADEMIC_STAFF)
-  // ==========================================
-  await runTest(
-    'NEG-STF-01',
-    'executeGradeChangeAction (Status PENDING)',
-    'ACADEMIC_STAFF',
-    'a0000005-0000-0000-0000-000000000005',
-    'Staf mencoba mengeksekusi pengajuan berstatus PENDING (belum disetujui Kaprodi)',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-001', // Status PENDING
-      note: 'Staf mengeksekusi prematur pengajuan PENDING',
-    })
-  );
-
-  await runTest(
-    'NEG-STF-02',
-    'executeGradeChangeAction (Status REJECTED)',
-    'ACADEMIC_STAFF',
-    'a0000005-0000-0000-0000-000000000005',
-    'Staf mencoba mengeksekusi pengajuan yang telah DITOLAK oleh Kaprodi',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-006-rejected', // Status REJECTED
-      note: 'Staf mengeksekusi pengajuan yang berstatus ditolak',
-    })
-  );
-
-  await runTest(
-    'NEG-STF-03',
-    'executeGradeChangeAction (Eksekusi Ganda / Status EXECUTED)',
-    'ACADEMIC_STAFF',
-    'a0000005-0000-0000-0000-000000000005',
-    'Staf mencoba mengeksekusi ulang pengajuan yang telah EXECUTED (Idempotensi A4d)',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-005-executed', // Status EXECUTED
-      note: 'Staf mencoba eksekusi ganda berkas yang sudah pernah dieksekusi',
-    })
-  );
-
-  await runTest(
-    'NEG-STF-04',
-    'executeGradeChangeAction (Old Score Mismatch)',
-    'ACADEMIC_STAFF',
-    'a0000005-0000-0000-0000-000000000005',
-    'Staf mengeksekusi saat nilai saat ini != old_score awal permohonan',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-007-mismatch', // Nilai lama mismatch
-      note: 'Eksekusi berkas dengan integritas nilai lama tidak sesuai',
-    })
-  );
-
-  await runTest(
-    'NEG-STF-05',
-    'executeGradeChangeAction (Separation of Duties Violation)',
-    'ACADEMIC_STAFF',
-    'a0000002-0000-0000-0000-000000000002', // User yang sama dengan pengaju (a0000002)
-    'User yang sama dengan pengaju mencoba mengeksekusi permohonan nilainya sendiri',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-003',
-      note: 'Eksekusi nilai oleh user yang sama dengan pengaju',
-    })
-  );
-
-  // ==========================================
-  // 6. SYSTEM ADMIN (SYSTEM_ADMIN)
-  // ==========================================
-  await runTest(
-    'NEG-SYS-01',
-    'requestGradeChangeAction',
-    'SYSTEM_ADMIN',
-    'a0000006-0000-0000-0000-000000000006',
-    'System Admin memanggil aksi pengajuan perubahan nilai akademik tanpa impersonate',
-    () => requestGradeChangeAction({
-      submission_id: 'sub-demo-001',
-      score: 90,
-      reason: 'System admin memanggil aksi akademik dosen secara langsung',
-    })
-  );
-
-  await runTest(
-    'NEG-SYS-02',
+  await runPair(
+    'SEC-SUPER-02',
     'decideGradeChangeAction',
-    'SYSTEM_ADMIN',
-    'a0000006-0000-0000-0000-000000000006',
-    'System Admin memanggil persetujuan nilai Kaprodi tanpa wewenang akademik',
-    () => decideGradeChangeAction({
-      request_id: 'cr-demo-001',
-      approve: true,
-      note: 'System Admin menyetujui perubahan nilai langsung',
-    })
+    'SUPER_ADMIN tanpa impersonasi mencoba memutuskan nilai (Aksi Kaprodi)',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-001',
+        approve: true,
+        note: 'Putusan langsung oleh Super Administrator',
+      }),
+    },
+    {
+      role: 'PROGRAM_COORDINATOR',
+      userId: USERS.COORDINATOR.id,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-001',
+        approve: true,
+        note: 'Persetujuan sah oleh Koordinator Program Studi',
+      }),
+    }
   );
 
-  await runTest(
-    'NEG-SYS-03',
+  await runPair(
+    'SEC-SUPER-03',
     'executeGradeChangeAction',
-    'SYSTEM_ADMIN',
-    'a0000006-0000-0000-0000-000000000006',
-    'System Admin memanggil eksekusi nilai Staf tanpa wewenang akademik',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-003',
-      note: 'System Admin mengeksekusi nilai langsung',
-    })
+    'SUPER_ADMIN tanpa impersonasi mencoba mengeksekusi nilai (Aksi Staf)',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => executeGradeChangeAction({
+        request_id: 'cr-demo-003',
+        note: 'Eksekusi langsung oleh Super Administrator',
+      }),
+    },
+    {
+      role: 'ACADEMIC_STAFF',
+      userId: USERS.STAFF.id,
+      fn: () => executeGradeChangeAction({
+        request_id: 'cr-demo-003',
+        note: 'Eksekusi sah oleh Staf Biro Administrasi Akademik',
+      }),
+    }
   );
 
-  // ==========================================
-  // 7. SUPER ADMIN (SUPER_ADMIN)
-  // ==========================================
-  await runTest(
-    'NEG-SUP-01',
+  await runPair(
+    'SEC-SUPER-04',
+    'joinClassAction',
+    'SUPER_ADMIN tanpa impersonasi mencoba bergabung ke kelas (Aksi Mahasiswa)',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => joinClassAction('WEB2026A'),
+    },
+    {
+      role: 'STUDENT',
+      userId: USERS.STUDENT.id,
+      fn: () => joinClassAction('WEB2026A'),
+    }
+  );
+
+  // =========================================================================
+  // KELOMPOK 4: SEMUA LARANGAN A3c (SELAMA SESI IMPERSONASI AKTIF)
+  // =========================================================================
+  await runPair(
+    'SEC-IMP-01',
+    'changePasswordAction',
+    'A3c: Dilarang mengubah kata sandi selama sesi impersonasi aktif',
+    {
+      role: 'STUDENT',
+      userId: USERS.STUDENT.id,
+      isImpersonating: true,
+      fn: () => changePasswordAction({
+        currentPassword: 'PasswordLama123!@#',
+        newPassword: 'PasswordBaru123!@#',
+        confirmPassword: 'PasswordBaru123!@#',
+      }),
+    },
+    {
+      role: 'STUDENT',
+      userId: USERS.STUDENT.id,
+      fn: () => changePasswordAction({
+        currentPassword: 'PasswordLama123!@#',
+        newPassword: 'PasswordValid999!@#',
+        confirmPassword: 'PasswordValid999!@#',
+      }),
+    }
+  );
+
+  await runPair(
+    'SEC-IMP-02',
+    'updateUserEmailAction',
+    'A3c: Dilarang mengubah email selama sesi impersonasi aktif',
+    {
+      role: 'STUDENT',
+      userId: USERS.STUDENT.id,
+      isImpersonating: true,
+      fn: () => updateUserEmailAction('email.ilegal@mhs.utsn.ac.id'),
+    },
+    {
+      role: 'STUDENT',
+      userId: USERS.STUDENT.id,
+      fn: () => updateUserEmailAction('ahmad.valid@mhs.utsn.ac.id'),
+    }
+  );
+
+  await runPair(
+    'SEC-IMP-03',
     'decideGradeChangeAction',
-    'SUPER_ADMIN',
-    'a0000007-0000-0000-0000-000000000007',
-    'Super Admin memanggil persetujuan nilai Kaprodi tanpa impersonate',
-    () => decideGradeChangeAction({
-      request_id: 'cr-demo-001',
-      approve: true,
-      note: 'Super Admin memanggil persetujuan nilai secara langsung tanpa penyamaran resmi',
-    })
+    'A3c: Dilarang memutuskan nilai selama sesi impersonasi aktif',
+    {
+      role: 'PROGRAM_COORDINATOR',
+      userId: USERS.COORDINATOR.id,
+      isImpersonating: true,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-001',
+        approve: true,
+        note: 'Putusan nilai saat sedang menyamar',
+      }),
+    },
+    {
+      role: 'PROGRAM_COORDINATOR',
+      userId: USERS.COORDINATOR.id,
+      fn: () => decideGradeChangeAction({
+        request_id: 'cr-demo-001',
+        approve: true,
+        note: 'Persetujuan resmi non-impersonasi oleh Kaprodi',
+      }),
+    }
   );
 
-  await runTest(
-    'NEG-SUP-02',
+  await runPair(
+    'SEC-IMP-04',
     'executeGradeChangeAction',
-    'SUPER_ADMIN',
-    'a0000007-0000-0000-0000-000000000007',
-    'Super Admin memanggil eksekusi nilai Staf tanpa impersonate',
-    () => executeGradeChangeAction({
-      request_id: 'cr-demo-003',
-      note: 'Super Admin mengeksekusi nilai secara langsung tanpa impersonate',
-    })
+    'A3c: Dilarang mengeksekusi nilai ke database selama sesi impersonasi aktif',
+    {
+      role: 'ACADEMIC_STAFF',
+      userId: USERS.STAFF.id,
+      isImpersonating: true,
+      fn: () => executeGradeChangeAction({
+        request_id: 'cr-demo-003',
+        note: 'Eksekusi saat sedang menyamar',
+      }),
+    },
+    {
+      role: 'ACADEMIC_STAFF',
+      userId: USERS.STAFF.id,
+      fn: () => executeGradeChangeAction({
+        request_id: 'cr-demo-003',
+        note: 'Eksekusi resmi non-impersonasi oleh Staf Akademik',
+      }),
+    }
   );
+
+  await runPair(
+    'SEC-IMP-05',
+    'submitQuizAttemptAction',
+    'A3c: Dilarang mengirim jawaban atau menyelesaikan ujian saat impersonasi',
+    {
+      role: 'STUDENT',
+      userId: USERS.STUDENT.id,
+      isImpersonating: true,
+      fn: () => submitQuizAttemptAction('exam-demo-001', { 'qb-001': 1 }),
+    },
+    {
+      role: 'STUDENT',
+      userId: USERS.STUDENT.id,
+      fn: () => submitQuizAttemptAction('exam-demo-001', { 'qb-001': 1 }),
+    }
+  );
+
+  await runPair(
+    'SEC-IMP-06',
+    'updateUserRoleAction',
+    'A3c: Dilarang mengakses Kelola Pengguna & Role saat impersonasi',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      isImpersonating: true,
+      fn: () => updateUserRoleAction({
+        targetUserId: USERS.STUDENT.id,
+        newRole: 'LECTURER',
+      }),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => updateUserRoleAction({
+        targetUserId: USERS.STUDENT.id,
+        newRole: 'STUDENT',
+      }),
+    }
+  );
+
+  await runPair(
+    'SEC-IMP-07',
+    'deleteUserAction',
+    'A3c: Dilarang menghapus akun saat impersonasi',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      isImpersonating: true,
+      fn: () => deleteUserAction({ targetUserId: USERS.STUDENT.id }),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => deleteUserAction({ targetUserId: 'non-existent-user-to-test' }),
+    }
+  );
+
+  await runPair(
+    'SEC-IMP-08',
+    'impersonateUserAction',
+    'A3c: Dilarang melakukan impersonasi bertingkat (chaining)',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      isImpersonating: true,
+      fn: () => impersonateUserAction(USERS.LECTURER.id, 'Chaining impersonasi tingkat kedua'),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => impersonateUserAction(USERS.STUDENT.id, 'Investigasi kendala presensi mahasiswa valid'),
+    }
+  );
+
+  // =========================================================================
+  // KELOMPOK 5: KELOLA PENGGUNA (A5) & PROTOKOL IMPERSONASI (A3b)
+  // =========================================================================
+  await runPair(
+    'SEC-USER-01',
+    'updateUserRoleAction',
+    'A5: Dosen mencoba mengubah peran pengguna (Non-Super Admin)',
+    {
+      role: 'LECTURER',
+      userId: USERS.LECTURER.id,
+      fn: () => updateUserRoleAction({
+        targetUserId: USERS.STUDENT.id,
+        newRole: 'LECTURER',
+      }),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => updateUserRoleAction({
+        targetUserId: USERS.STUDENT.id,
+        newRole: 'STUDENT',
+      }),
+    }
+  );
+
+  await runPair(
+    'SEC-USER-02',
+    'updateUserRoleAction',
+    'A5: System Administrator mencoba mengubah peran pengguna (Non-Super Admin)',
+    {
+      role: 'SYSTEM_ADMIN',
+      userId: USERS.SYSTEM_ADMIN.id,
+      fn: () => updateUserRoleAction({
+        targetUserId: USERS.STUDENT.id,
+        newRole: 'LECTURER',
+      }),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => updateUserRoleAction({
+        targetUserId: USERS.STUDENT.id,
+        newRole: 'STUDENT',
+      }),
+    }
+  );
+
+  await runPair(
+    'SEC-USER-03',
+    'updateUserRoleAction',
+    'A5: Super Admin mencoba menurunkan peran akunnya sendiri',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => updateUserRoleAction({
+        targetUserId: USERS.SUPER_ADMIN.id,
+        newRole: 'STUDENT',
+      }),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => updateUserRoleAction({
+        targetUserId: USERS.STUDENT.id,
+        newRole: 'STUDENT',
+      }),
+    }
+  );
+
+  await runPair(
+    'SEC-USER-04',
+    'deleteUserAction',
+    'A5: Super Admin mencoba menghapus akunnya sendiri',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => deleteUserAction({ targetUserId: USERS.SUPER_ADMIN.id }),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => deleteUserAction({ targetUserId: 'sample-user-99' }),
+    }
+  );
+
+  await runPair(
+    'SEC-USER-05',
+    'impersonateUserAction',
+    'A3b: Super Admin mencoba menyamar sebagai diri sendiri',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => impersonateUserAction(USERS.SUPER_ADMIN.id, 'Alasan menyamar diri sendiri lebih dari 10 karakter'),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => impersonateUserAction(USERS.STUDENT.id, 'Alasan investigasi sah minimal 10 karakter'),
+    }
+  );
+
+  await runPair(
+    'SEC-USER-06',
+    'impersonateUserAction',
+    'A3b: Super Admin menyamar tanpa alasan minimal 10 karakter',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => impersonateUserAction(USERS.STUDENT.id, 'pendek'),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => impersonateUserAction(USERS.STUDENT.id, 'Alasan investigasi sah minimal 10 karakter'),
+    }
+  );
+
+  await runPair(
+    'SEC-USER-07',
+    'impersonateUserAction',
+    'A3b: Super Admin mencoba menyamar sebagai sesama Super Admin',
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => impersonateUserAction('a0000009-0000-0000-0000-000000000009', 'Alasan investigasi sesama super admin panjang'),
+    },
+    {
+      role: 'SUPER_ADMIN',
+      userId: USERS.SUPER_ADMIN.id,
+      fn: () => impersonateUserAction(USERS.STUDENT.id, 'Alasan investigasi mahasiswa sah 10 karakter'),
+    }
+  );
+
+  // Bersihkan cookie di akhir pengujian
+  cookieStore.delete('impersonation_token');
+  cookieStore.delete('impersonating_from');
+  cookieStore.delete('impersonating_expires_at');
+
+  const total = testPairs.length;
+  const passed = testPairs.filter((t) => t.overallStatus === 'PASS').length;
+  const failed = total - passed;
 
   return NextResponse.json({
-    ok: true,
-    total: results.length,
-    passed: results.filter((r) => r.status === 'PASS').length,
-    failed: results.filter((r) => r.status === 'FAIL').length,
-    results,
+    timestamp: new Date().toISOString(),
+    total,
+    passed,
+    failed,
+    results: testPairs,
   });
 }

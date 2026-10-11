@@ -185,7 +185,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             <button
               type="button"
               disabled={!isDemo}
-              title={!isDemo ? 'TODO(backend): Form tambah prodi aktif di Fase 3' : undefined}
+              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
                 'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
                 isDemo
@@ -195,7 +195,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Program Studi</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-300 px-1.5 py-0.2 rounded font-mono">TODO(backend)</span>}
+              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -316,7 +316,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                           <button
                             type="button"
                             disabled={!isDemo}
-                            title={!isDemo ? 'TODO(backend): Alur persetujuan usulan MK sedang disiapkan' : undefined}
+                            title={!isDemo ? 'Fitur ini belum aktif' : undefined}
                             className={cn(
                               'px-3 py-1 rounded-lg border-2 border-black text-xs font-bold transition-all',
                               isDemo
@@ -325,7 +325,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                             )}
                           >
                             <span>Validasi MK</span>
-                            {!isDemo && <span className="ml-1 text-[10px] font-mono">TODO(backend)</span>}
+                            {!isDemo && <span className="ml-1 text-[10px] font-mono">(Belum Aktif)</span>}
                           </button>
                         )}
                       </td>
@@ -355,7 +355,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             <button
               type="button"
               disabled={!isDemo}
-              title={!isDemo ? 'TODO(backend): Form tambah TA aktif di Fase 3' : undefined}
+              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
                 'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
                 isDemo
@@ -365,7 +365,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             >
               <Plus className="h-4 w-4" />
               <span>Buka Semester Baru</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-300 px-1.5 py-0.2 rounded font-mono">TODO(backend)</span>}
+              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -436,7 +436,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             <button
               type="button"
               disabled={!isDemo}
-              title={!isDemo ? 'TODO(backend): Form kalibrasi GPS aktif di Fase 3' : undefined}
+              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
                 'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
                 isDemo
@@ -446,7 +446,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Titik Ruang</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-300 px-1.5 py-0.2 rounded font-mono">TODO(backend)</span>}
+              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 

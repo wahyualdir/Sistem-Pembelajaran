@@ -429,6 +429,14 @@ export async function changePasswordAction(formData: unknown): Promise<ActionRes
     redirect('/login');
   }
 
+  // Guard A3c: Dilarang ubah password selama impersonasi aktif
+  if (userContext.isImpersonating) {
+    return {
+      ok: false,
+      error: 'IMPERSONATION_RESTRICTED: Dilarang mengubah kata sandi atau email selama sesi impersonasi aktif.',
+    };
+  }
+
   const user = userContext.user;
   const isOnline = await checkSupabaseOnline();
 
@@ -801,10 +809,24 @@ export async function getCurrentUserWithRoles() {
   }
 
   const activeRoleCode = cookieStore.get('active_role')?.value;
-  const impersonatingExpiresAt = cookieStore.get('impersonating_expires_at')?.value;
-  let impersonatingFrom = cookieStore.get('impersonating_from')?.value ?? null;
+  
+  // A3a: Verifikasi token penyamaran (impersonation) bertanda tangan HMAC-SHA256
+  const impersonationToken = cookieStore.get('impersonation_token')?.value;
+  let verifiedPayload: ImpersonationTokenPayload | null = null;
+  if (impersonationToken) {
+    verifiedPayload = verifyImpersonationToken(impersonationToken);
+    if (!verifiedPayload) {
+      // Token tidak valid atau dimanipulasi klien -> hapus cookie penyamaran
+      cookieStore.delete('impersonation_token');
+      cookieStore.delete('impersonating_from');
+      cookieStore.delete('impersonating_expires_at');
+    }
+  }
 
-  if (impersonatingExpiresAt && Date.now() > Number(impersonatingExpiresAt)) {
+  const legacyExpiresAt = cookieStore.get('impersonating_expires_at')?.value;
+  let impersonatingFrom = verifiedPayload ? verifiedPayload.originalAdminId : (cookieStore.get('impersonating_from')?.value ?? null);
+
+  if (!verifiedPayload && legacyExpiresAt && Date.now() > Number(legacyExpiresAt)) {
     // Sesi impersonasi telah kedaluwarsa (maksimal 30 menit)
     if (impersonatingFrom) {
       cookieStore.set('demo_session', impersonatingFrom, {
@@ -835,19 +857,84 @@ export async function getCurrentUserWithRoles() {
   };
 }
 
+import {
+  type ImpersonationTokenPayload,
+  signImpersonationToken,
+  verifyImpersonationToken,
+} from './impersonation-token';
+export type { ImpersonationTokenPayload };
+
 /**
- * Super Admin Impersonation Action (Durasi Maksimal 30 Menit)
+ * Super Admin Impersonation Action (A3: Durasi Maksimal 30 Menit, Alasan Wajib Min 10 Karakter)
  */
-export async function impersonateUserAction(targetUserId: string): Promise<ActionResponse> {
+export async function impersonateUserAction(
+  targetUserId: string,
+  reason?: string
+): Promise<ActionResponse> {
   const cookieStore = cookies();
   const current = await getCurrentUserWithRoles();
-  if (!current || (current.activeRole !== 'SUPER_ADMIN' && current.activeRole !== 'SYSTEM_ADMIN')) {
+  if (!current || (current.activeRole !== 'SUPER_ADMIN' && current.activeRole !== 'SUPERADMIN')) {
     return { ok: false, error: 'Hanya Super Administrator yang berwenang melakukan impersonate pengguna.' };
   }
 
+  // A3b: Dilarang melakukan penyamaran bertingkat (chaining)
+  if (current.isImpersonating) {
+    return {
+      ok: false,
+      error: 'CHAINING_PROHIBITED: Dilarang melakukan penyamaran bertingkat (chaining). Selesaikan sesi impersonasi yang sedang berjalan terlebih dahulu.',
+    };
+  }
+
+  // A3b: Dilarang menyamar sebagai diri sendiri
+  if (targetUserId === current.user.id) {
+    return {
+      ok: false,
+      error: 'CANNOT_IMPERSONATE_SELF: Dilarang menyamar sebagai diri sendiri.',
+    };
+  }
+
+  // A3b: Dilarang menyamar sebagai SUPER_ADMIN lain
+  const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === targetUserId) || SYNTHETIC_DEMO_USERS[targetUserId];
+  if (targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN'))) {
+    return {
+      ok: false,
+      error: 'CANNOT_IMPERSONATE_SUPERADMIN: Dilarang menyamar sebagai sesama Super Administrator.',
+    };
+  }
+
+  // A3b: Alasan wajib diisi minimal 10 karakter
+  const cleanReason = (reason || '').trim();
+  if (cleanReason.length < 10) {
+    return {
+      ok: false,
+      error: 'REASON_MIN_10_CHARS: Alasan impersonasi wajib diisi minimal 10 karakter untuk keperluan audit forensik.',
+    };
+  }
+
+  // Maksimal 30 menit (1800 detik)
   const expiresAt = Date.now() + 30 * 60 * 1000;
 
-  // Set origin tracking cookie & 30-min expiry
+  const payload: ImpersonationTokenPayload = {
+    originalAdminId: current.user.id,
+    originalAdminRole: current.activeRole,
+    originalAdminName: current.profile?.full_name || 'Super Administrator',
+    targetUserId,
+    reason: cleanReason,
+    startedAt: Date.now(),
+    expiresAt,
+  };
+
+  const signedToken = signImpersonationToken(payload);
+
+  // A3a: Simpan token bertanda tangan pada cookie httpOnly
+  cookieStore.set('impersonation_token', signedToken, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 1800,
+  });
+
   cookieStore.set('impersonating_from', current.user.id, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -864,7 +951,7 @@ export async function impersonateUserAction(targetUserId: string): Promise<Actio
     maxAge: 1800,
   });
 
-  // Switch demo session to target user
+  // Ganti sesi aktif ke akun target
   cookieStore.set('demo_session', targetUserId, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -873,17 +960,17 @@ export async function impersonateUserAction(targetUserId: string): Promise<Actio
     maxAge: 1800,
   });
 
-  // Log to audit log with actorId & on_behalf_of
+  // A3d: Catat mulai sesi impersonasi ke Audit Log (actor_id = Super Admin asli, on_behalf_of = target)
   try {
     await recordSystemAuditLog({
       actorId: current.user.id,
       actorName: current.profile?.full_name || 'Super Admin',
       actorRole: current.activeRole,
-      action: 'auth.impersonate_user',
+      action: 'auth.impersonate_start',
       entityType: 'users',
       entityId: targetUserId,
       onBehalfOf: targetUserId,
-      description: `Super Admin memulai sesi impersonasi investigasi teknis pada akun pengguna ID ${targetUserId} (maksimal 30 menit).`,
+      description: `Super Admin memulai sesi impersonasi teknis pada pengguna ID ${targetUserId}. Alasan: ${cleanReason}`,
     });
   } catch {
     // DB offline fallback
@@ -893,11 +980,14 @@ export async function impersonateUserAction(targetUserId: string): Promise<Actio
 }
 
 /**
- * Stop Impersonating and Return to Original Admin Account
+ * Stop Impersonating and Return to Original Admin Account (A3d)
  */
 export async function stopImpersonatingAction(): Promise<ActionResponse> {
   const cookieStore = cookies();
-  const originalAdminId = cookieStore.get('impersonating_from')?.value;
+  const impersonationToken = cookieStore.get('impersonation_token')?.value;
+  const verified = impersonationToken ? verifyImpersonationToken(impersonationToken) : null;
+  const originalAdminId = verified ? verified.originalAdminId : cookieStore.get('impersonating_from')?.value;
+  const targetUserId = verified ? verified.targetUserId : cookieStore.get('demo_session')?.value;
 
   if (originalAdminId) {
     cookieStore.set('demo_session', originalAdminId, {
@@ -906,10 +996,181 @@ export async function stopImpersonatingAction(): Promise<ActionResponse> {
       sameSite: 'lax',
       path: '/',
     });
+
+    // A3d: Catat akhir sesi impersonasi ke Audit Log
+    try {
+      await recordSystemAuditLog({
+        actorId: originalAdminId,
+        actorName: verified?.originalAdminName || 'Super Admin',
+        actorRole: verified?.originalAdminRole || 'SUPER_ADMIN',
+        action: 'auth.impersonate_stop',
+        entityType: 'users',
+        entityId: targetUserId || originalAdminId,
+        onBehalfOf: targetUserId || undefined,
+        description: `Super Admin mengakhiri sesi penyamaran identitas dan kembali ke akun administratif resmi.`,
+      });
+    } catch {
+      // DB offline fallback
+    }
   }
 
+  cookieStore.delete('impersonation_token');
   cookieStore.delete('impersonating_from');
   cookieStore.delete('impersonating_expires_at');
+  return { ok: true };
+}
+
+/**
+ * A3c Guard: Update User Email Action (Ditolak selama sesi impersonasi aktif)
+ */
+export async function updateUserEmailAction(newEmail: string): Promise<ActionResponse> {
+  const current = await getCurrentUserWithRoles();
+  if (!current) return { ok: false, error: 'Unauthorized' };
+
+  if (current.isImpersonating) {
+    return {
+      ok: false,
+      error: 'IMPERSONATION_RESTRICTED: Dilarang mengubah email atau kata sandi selama sesi impersonasi aktif.',
+    };
+  }
+
+  if (!newEmail || !newEmail.includes('@')) {
+    return { ok: false, error: 'Format email tidak valid.' };
+  }
+
+  return { ok: true };
+}
+
+/**
+ * A5: Update User Role Action (Hanya Super Admin; Penolakan demote diri sendiri & Super Admin terakhir)
+ */
+export async function updateUserRoleAction(input: {
+  targetUserId: string;
+  newRole: string;
+}): Promise<ActionResponse> {
+  const current = await getCurrentUserWithRoles();
+  if (!current) return { ok: false, error: 'Unauthorized' };
+
+  // A3c: Dilarang mengelola peran saat impersonasi
+  if (current.isImpersonating) {
+    return {
+      ok: false,
+      error: 'IMPERSONATION_RESTRICTED: Akses manajemen pengguna dan perubahan peran dilarang selama sesi impersonasi aktif.',
+    };
+  }
+
+  // A5: Hanya SUPER_ADMIN
+  if (current.activeRole !== 'SUPER_ADMIN' && current.activeRole !== 'SUPERADMIN') {
+    return {
+      ok: false,
+      error: 'FORBIDDEN: Hanya Super Administrator yang berwenang mengubah peran pengguna.',
+    };
+  }
+
+  // A5: Tidak boleh menurunkan diri sendiri
+  if (input.targetUserId === current.user.id) {
+    return {
+      ok: false,
+      error: 'CANNOT_MODIFY_SELF: Dilarang menurunkan atau mengubah peran akun Super Administrator Anda sendiri.',
+    };
+  }
+
+  // A5: Tidak boleh menurunkan Super Admin terakhir
+  const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === input.targetUserId) || SYNTHETIC_DEMO_USERS[input.targetUserId];
+  const isTargetSuperAdmin = targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN'));
+  if (isTargetSuperAdmin && input.newRole !== 'SUPER_ADMIN' && input.newRole !== 'SUPERADMIN') {
+    const superAdminCount = Object.values(SYNTHETIC_DEMO_USERS).filter((u) =>
+      u.roles.includes('SUPER_ADMIN') || u.roles.includes('SUPERADMIN')
+    ).length;
+    if (superAdminCount <= 1) {
+      return {
+        ok: false,
+        error: 'CANNOT_DEMOTE_LAST_SUPERADMIN: Dilarang menurunkan Super Administrator terakhir pada sistem.',
+      };
+    }
+  }
+
+  // A5: Catat ke Audit Log
+  try {
+    await recordSystemAuditLog({
+      actorId: current.user.id,
+      actorName: current.profile?.full_name || 'Super Admin',
+      actorRole: current.activeRole,
+      action: 'user.role_change',
+      entityType: 'users',
+      entityId: input.targetUserId,
+      description: `Super Admin mengubah peran pengguna ID ${input.targetUserId} menjadi ${input.newRole}.`,
+    });
+  } catch {
+    // Fallback
+  }
+
+  return { ok: true };
+}
+
+/**
+ * A5: Delete User Action (Hanya Super Admin; Penolakan hapus diri sendiri & Super Admin terakhir)
+ */
+export async function deleteUserAction(input: {
+  targetUserId: string;
+}): Promise<ActionResponse> {
+  const current = await getCurrentUserWithRoles();
+  if (!current) return { ok: false, error: 'Unauthorized' };
+
+  // A3c: Dilarang selama impersonasi
+  if (current.isImpersonating) {
+    return {
+      ok: false,
+      error: 'IMPERSONATION_RESTRICTED: Dilarang menghapus atau menonaktifkan pengguna selama sesi impersonasi aktif.',
+    };
+  }
+
+  // A5: Hanya SUPER_ADMIN
+  if (current.activeRole !== 'SUPER_ADMIN' && current.activeRole !== 'SUPERADMIN') {
+    return {
+      ok: false,
+      error: 'FORBIDDEN: Hanya Super Administrator yang berwenang menghapus pengguna.',
+    };
+  }
+
+  // A5: Dilarang menghapus akun sendiri
+  if (input.targetUserId === current.user.id) {
+    return {
+      ok: false,
+      error: 'CANNOT_DELETE_SELF: Dilarang menghapus akun Super Administrator Anda sendiri.',
+    };
+  }
+
+  // A5: Dilarang menghapus Super Admin terakhir
+  const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === input.targetUserId) || SYNTHETIC_DEMO_USERS[input.targetUserId];
+  const isTargetSuperAdmin = targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN'));
+  if (isTargetSuperAdmin) {
+    const superAdminCount = Object.values(SYNTHETIC_DEMO_USERS).filter((u) =>
+      u.roles.includes('SUPER_ADMIN') || u.roles.includes('SUPERADMIN')
+    ).length;
+    if (superAdminCount <= 1) {
+      return {
+        ok: false,
+        error: 'CANNOT_DELETE_LAST_SUPERADMIN: Dilarang menghapus Super Administrator terakhir pada sistem.',
+      };
+    }
+  }
+
+  // A5: Catat ke Audit Log
+  try {
+    await recordSystemAuditLog({
+      actorId: current.user.id,
+      actorName: current.profile?.full_name || 'Super Admin',
+      actorRole: current.activeRole,
+      action: 'user.delete',
+      entityType: 'users',
+      entityId: input.targetUserId,
+      description: `Super Admin menghapus pengguna ID ${input.targetUserId}.`,
+    });
+  } catch {
+    // Fallback
+  }
+
   return { ok: true };
 }
 

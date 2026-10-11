@@ -42,9 +42,10 @@ export function SystemBackupHubView() {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* TODO(backend): Menunggu migrasi snapshot diterapkan */}
             <button
               disabled={!isDemo}
-              title={!isDemo ? 'TODO(backend): Menunggu migrasi snapshot diterapkan' : undefined}
+              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className="px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-mono font-bold text-xs hover:bg-neutral-800 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-retro"
             >
               <RefreshCw className="h-4 w-4" />
@@ -60,65 +61,102 @@ export function SystemBackupHubView() {
           <h3 className="font-heading font-black text-lg text-black">
             Riwayat Cadangan Otomatis (Daily Automated Snapshots)
           </h3>
-          <span className="text-xs font-mono font-bold text-black/60">Retensi: 30 Hari</span>
+          <span className="text-xs font-mono font-bold text-black/60">
+            {isDemo ? 'Retensi: 30 Hari' : 'Status: Belum dikonfigurasi'}
+          </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm border-collapse">
-            <thead>
-              <tr className="border-b-2 border-black bg-retro-warm font-mono font-black text-black">
-                <th className="p-3">Nama Berkas Snapshot</th>
-                <th className="p-3">Tipe Backup</th>
-                <th className="p-3">Ukuran</th>
-                <th className="p-3">Waktu Selesai</th>
-                <th className="p-3 text-center">Integritas Checksum</th>
-                <th className="p-3 text-center">Aksi</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y border-b border-black font-mono">
-              <tr>
-                <td className="p-3 font-bold text-black">siajar_db_daily_20261011_020000.sql.gz</td>
-                <td className="p-3 text-black/80 font-sans">Full Database Snapshot</td>
-                <td className="p-3 font-bold">148 MB</td>
-                <td className="p-3">11 Okt 2026, 02:14 WIB</td>
-                <td className="p-3 text-center">
-                  <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">
-                    ✓ SHA-256 VALID
-                  </span>
-                </td>
-                <td className="p-3 text-center">
-                  <button
-                    disabled={!isDemo}
-                    title={!isDemo ? 'TODO(backend): Menunggu migrasi snapshot diterapkan' : undefined}
-                    className="px-2.5 py-1 rounded border border-black bg-retro-warm font-bold hover:bg-neutral-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Unduh
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td className="p-3 font-bold text-black">siajar_db_daily_20261010_020000.sql.gz</td>
-                <td className="p-3 text-black/80 font-sans">Full Database Snapshot</td>
-                <td className="p-3 font-bold">146 MB</td>
-                <td className="p-3">10 Okt 2026, 02:15 WIB</td>
-                <td className="p-3 text-center">
-                  <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">
-                    ✓ SHA-256 VALID
-                  </span>
-                </td>
-                <td className="p-3 text-center">
-                  <button
-                    disabled={!isDemo}
-                    title={!isDemo ? 'TODO(backend): Menunggu migrasi snapshot diterapkan' : undefined}
-                    className="px-2.5 py-1 rounded border border-black bg-retro-warm font-bold hover:bg-neutral-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Unduh
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        {!isDemo ? (
+          <div className="p-8 text-center border-2 border-dashed border-black/30 rounded-xl bg-retro-warm/20 space-y-2">
+            <FolderArchive className="h-10 w-10 text-black/40 mx-auto" />
+            <p className="text-sm font-mono font-bold text-black">Belum ada snapshot cadangan tersimpan</p>
+            <p className="text-xs font-mono text-black/60">
+              Layanan snapshot otomatis belum dikonfigurasi pada lingkungan produksi saat ini.
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm border-collapse">
+              <thead>
+                <tr className="border-b-2 border-black bg-retro-warm font-mono font-black text-black">
+                  <th className="p-3">Nama Berkas Snapshot</th>
+                  <th className="p-3">Tipe Backup</th>
+                  <th className="p-3">Ukuran</th>
+                  <th className="p-3">Waktu Selesai</th>
+                  <th className="p-3 text-center">Integritas Checksum</th>
+                  <th className="p-3 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y border-b border-black font-mono">
+                <tr>
+                  <td className="p-3 font-bold text-black">siajar_db_daily_20261011_020000.sql.gz</td>
+                  <td className="p-3 text-black/80 font-sans">Full Database Snapshot</td>
+                  <td className="p-3 font-bold">148 MB</td>
+                  <td className="p-3">11 Okt 2026, 02:14 WIB</td>
+                  <td className="p-3 text-center">
+                    <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">
+                      ✓ SHA-256 VALID
+                    </span>
+                  </td>
+                  <td className="p-3 text-center">
+                    <button
+                      className="px-2.5 py-1 rounded border border-black bg-retro-warm font-bold hover:bg-neutral-200 cursor-pointer"
+                    >
+                      Unduh
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-bold text-black">siajar_db_daily_20261010_020000.sql.gz</td>
+                  <td className="p-3 text-black/80 font-sans">Full Database Snapshot</td>
+                  <td className="p-3 font-bold">146 MB</td>
+                  <td className="p-3">10 Okt 2026, 02:15 WIB</td>
+                  <td className="p-3 text-center">
+                    <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">
+                      ✓ SHA-256 VALID
+                    </span>
+                  </td>
+                  <td className="p-3 text-center">
+                    <button
+                      className="px-2.5 py-1 rounded border border-black bg-retro-warm font-bold hover:bg-neutral-200 cursor-pointer"
+                    >
+                      Unduh
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="p-3 font-bold text-black">siajar_db_daily_20261009_020000.sql.gz</td>
+                  <td className="p-3 text-black/80 font-sans">Full Database Snapshot</td>
+                  <td className="p-3 font-bold">145 MB</td>
+                  <td className="p-3">09 Okt 2026, 02:12 WIB</td>
+                  <td className="p-3 text-center">
+                    <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">
+                      ✓ SHA-256 VALID
+                    </span>
+                  </td>
+                  <td className="p-3 text-center">
+                    <button
+                      className="px-2.5 py-1 rounded border border-black bg-retro-warm font-bold hover:bg-neutral-200 cursor-pointer"
+                    >
+                      Unduh
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {/* 3. INFORMASI TITIK PEMULIHAN */}
+      <div className="p-5 rounded-xl border-2 border-black bg-retro-warm/40 shadow-retro space-y-3">
+        <h4 className="font-heading font-black text-sm text-black flex items-center gap-2">
+          <Database className="h-4 w-4 text-retro-orange" />
+          <span>Panduan Pemulihan Bencana (Disaster Recovery Runbook)</span>
+        </h4>
+        <p className="text-xs text-black/80 leading-relaxed font-mono">
+          Untuk memulihkan basis data ke titik waktu tertentu (*Point-in-Time Recovery*), gunakan perintah CLI Supabase: <code className="bg-white px-2 py-0.5 rounded border border-black font-bold">supabase db restore [snapshot_id]</code> atau melalui panel pangkalan data cloud PostgreSQL terkelola.
+        </p>
       </div>
     </div>
   );

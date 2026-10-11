@@ -34,14 +34,16 @@ export function SystemIntegrationsHubView() {
   const [showSecret, setShowSecret] = useState<Record<string, boolean>>({});
   const isDemo = isDemoMode();
 
-  // Helper mask secret: hanya menampilkan 4 digit terakhir
+  // A4 & A2: Helper sensor rahasia: di non-demo mode nilai penuh tidak pernah diekspos ke klien
   const maskSecret = (key: string, secret: string) => {
+    if (!isDemo) return '•••••••••••••••• (Tersimpan di Env Server)';
     if (showSecret[key]) return secret;
     const last4 = secret.slice(-4);
     return `••••••••••••••••${last4}`;
   };
 
   const toggleShow = (key: string) => {
+    if (!isDemo) return;
     setShowSecret((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
@@ -246,8 +248,12 @@ export function SystemIntegrationsHubView() {
                   className="w-full p-2 rounded border border-black bg-retro-warm/30 font-mono font-bold"
                 />
               </div>
-              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-bold text-xs">
-                STATUS: TERHUBUNG
+              <span className={`inline-block px-2 py-0.5 rounded border font-bold text-xs ${
+                isDemo
+                  ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                  : 'border-neutral-400 bg-neutral-100 text-neutral-700'
+              }`}>
+                {isDemo ? 'STATUS: TERHUBUNG' : 'STATUS: BELUM DIKONFIGURASI'}
               </span>
             </div>
 
@@ -262,8 +268,12 @@ export function SystemIntegrationsHubView() {
                   className="w-full p-2 rounded border border-black bg-retro-warm/30 font-mono font-bold"
                 />
               </div>
-              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-bold text-xs">
-                STATUS: TERVERIFIKASI
+              <span className={`inline-block px-2 py-0.5 rounded border font-bold text-xs ${
+                isDemo
+                  ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                  : 'border-neutral-400 bg-neutral-100 text-neutral-700'
+              }`}>
+                {isDemo ? 'STATUS: TERVERIFIKASI' : 'STATUS: BELUM DIKONFIGURASI'}
               </span>
             </div>
           </div>

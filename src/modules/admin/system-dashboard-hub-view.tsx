@@ -21,6 +21,7 @@ import { isDemoMode } from '@/lib/config/features';
 
 export function SystemDashboardHubView() {
   const isDemo = isDemoMode();
+  const dbConfigured = !!process.env.NEXT_PUBLIC_SUPABASE_URL;
 
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
@@ -47,9 +48,11 @@ export function SystemDashboardHubView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-emerald-100 text-emerald-950 font-mono text-xs font-bold shadow-retro-sm">
-              <span className="h-2.5 w-2.5 rounded-full bg-emerald-600 animate-pulse" />
-              INFRASTRUKTUR ONLINE
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black font-mono text-xs font-bold shadow-retro-sm ${
+              isDemo || dbConfigured ? 'bg-emerald-100 text-emerald-950' : 'bg-retro-warm text-black'
+            }`}>
+              <span className={`h-2.5 w-2.5 rounded-full ${isDemo || dbConfigured ? 'bg-emerald-600 animate-pulse' : 'bg-black/40'}`} />
+              {isDemo ? 'INFRASTRUKTUR ONLINE' : dbConfigured ? 'BASIS DATA TERHUBUNG' : 'STATUS: BELUM TERHUBUNG'}
             </span>
           </div>
         </div>
@@ -61,8 +64,12 @@ export function SystemDashboardHubView() {
               <span>Status Server</span>
               <Activity className="h-4 w-4" />
             </div>
-            <div className="text-xl sm:text-2xl font-black font-mono text-emerald-800 mt-1">100% ONLINE</div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">Uptime 18 Hari</div>
+            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
+              {isDemo ? '100% ONLINE' : (dbConfigured ? 'TERHUBUNG' : 'Belum terhubung')}
+            </div>
+            <div className="text-[11px] font-mono text-black/60 mt-1">
+              {isDemo ? 'Uptime 18 Hari' : 'Tidak tersedia'}
+            </div>
           </div>
 
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
@@ -70,8 +77,12 @@ export function SystemDashboardHubView() {
               <span>PostgreSQL Pool</span>
               <Database className="h-4 w-4" />
             </div>
-            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">42 / 200 Pool</div>
-            <div className="text-[11px] font-mono text-emerald-800 mt-1">Latensi 12ms</div>
+            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
+              {isDemo ? '42 / 200 Pool' : (dbConfigured ? 'Aktif' : 'Tidak tersedia')}
+            </div>
+            <div className="text-[11px] font-mono text-black/60 mt-1">
+              {isDemo ? 'Latensi 12ms' : 'Tidak tersedia'}
+            </div>
           </div>
 
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
@@ -79,8 +90,12 @@ export function SystemDashboardHubView() {
               <span>WebSocket Realtime</span>
               <Radio className="h-4 w-4" />
             </div>
-            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">142 Conn</div>
-            <div className="text-[11px] font-mono text-emerald-800 mt-1">1.2k msg/s</div>
+            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
+              {isDemo ? '142 Conn' : 'Tidak tersedia'}
+            </div>
+            <div className="text-[11px] font-mono text-black/60 mt-1">
+              {isDemo ? '1.2k msg/s' : 'Tidak tersedia'}
+            </div>
           </div>
 
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
@@ -88,8 +103,12 @@ export function SystemDashboardHubView() {
               <span>Audit Anti-Tamper</span>
               <ShieldCheck className="h-4 w-4" />
             </div>
-            <div className="text-xl sm:text-2xl font-black font-mono text-emerald-800 mt-1">IMMUTABLE</div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">Trigger Aktif</div>
+            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
+              {isDemo ? 'IMMUTABLE' : (dbConfigured ? 'Trigger Aktif' : 'Belum dikonfigurasi')}
+            </div>
+            <div className="text-[11px] font-mono text-black/60 mt-1">
+              {isDemo ? 'Trigger Aktif' : 'Menunggu migrasi'}
+            </div>
           </div>
         </div>
       </RetroWindow>
@@ -108,7 +127,7 @@ export function SystemDashboardHubView() {
           </div>
           <Link
             href="/admin/system/monitoring"
-            className="p-2.5 rounded-lg border-2 border-black bg-retro-warm hover:bg-neutral-200 text-xs font-mono font-bold flex items-center justify-between transition-all"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
             <span>Buka Monitoring</span>
             <ArrowRight className="h-4 w-4" />
@@ -122,12 +141,12 @@ export function SystemDashboardHubView() {
               <h3 className="font-heading font-black text-lg text-black">Integrasi Layanan</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
-              Kelola kredensial Zoom, Google Maps, Sandbox Judge0, WhatsApp/Email Gateway, SSO SAML, dan Webhook API keys dengan sensor rahasia aman.
+              Kelola kredensial Zoom, Google Meet, Google Maps API, Sandbox Judge0, Gateway Notifikasi, dan Single Sign-On (SSO).
             </p>
           </div>
           <Link
             href="/admin/system/integrations"
-            className="p-2.5 rounded-lg border-2 border-black bg-retro-warm hover:bg-neutral-200 text-xs font-mono font-bold flex items-center justify-between transition-all"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
             <span>Kelola Integrasi</span>
             <ArrowRight className="h-4 w-4" />
@@ -141,14 +160,14 @@ export function SystemDashboardHubView() {
               <h3 className="font-heading font-black text-lg text-black">Keamanan & Sesi</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
-              Audit sesi login aktif lintas perangkat, pencegahan brute-force, deteksi login mencurigakan, dan konfigurasi rate limiting.
+              Inspeksi daftar sesi pengguna aktif, deteksi percobaan login mencurigakan (*brute-force*), dan pembatasan laju panggilan API.
             </p>
           </div>
           <Link
             href="/admin/system/security"
-            className="p-2.5 rounded-lg border-2 border-black bg-retro-warm hover:bg-neutral-200 text-xs font-mono font-bold flex items-center justify-between transition-all"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
-            <span>Buka Keamanan</span>
+            <span>Pusat Keamanan</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -160,14 +179,14 @@ export function SystemDashboardHubView() {
               <h3 className="font-heading font-black text-lg text-black">Backup & Restore</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
-              Jadwal snapshot otomatis harian, verifikasi checksum berkas cadangan, dan prosedur pemulihan data tepat-waktu.
+              Manajemen cadangan basis data otomatis, verifikasi integritas checksum SHA-256, dan pemulihan bencana (*disaster recovery*).
             </p>
           </div>
           <Link
             href="/admin/system/backup"
-            className="p-2.5 rounded-lg border-2 border-black bg-retro-warm hover:bg-neutral-200 text-xs font-mono font-bold flex items-center justify-between transition-all"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
-            <span>Kelola Cadangan</span>
+            <span>Cadangan Sistem</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -179,14 +198,14 @@ export function SystemDashboardHubView() {
               <h3 className="font-heading font-black text-lg text-black">Pengaturan Platform</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
-              Konfigurasi branding universitas, parameter mesin evaluasi AI LLM SIAJAR, dan batas kuota penyimpanan berkas materi.
+              Konfigurasi nama institusi kampus, parameter model AI evaluator akademik, dan alokasi batas kuota penyimpanan berkas.
             </p>
           </div>
           <Link
             href="/admin/system/settings"
-            className="p-2.5 rounded-lg border-2 border-black bg-retro-warm hover:bg-neutral-200 text-xs font-mono font-bold flex items-center justify-between transition-all"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
-            <span>Ubah Pengaturan</span>
+            <span>Pengaturan Umum</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -195,17 +214,17 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-5 w-5 text-retro-orange" />
-              <h3 className="font-heading font-black text-lg text-black">Log Audit (Read-Only)</h3>
+              <h3 className="font-heading font-black text-lg text-black">Log Audit Sistem</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
-              Jejak forensik transaksi tak terhapuskan yang mencatat perubahan nilai, eskalasi izin, dan sesi impersonasi secara kronologis.
+              Tinjauan jejak audit forensik menyeluruh bersifat *append-only* (read-only) untuk kepatuhan regulasi dan transparansi transaksi.
             </p>
           </div>
           <Link
             href="/admin/system/audit"
-            className="p-2.5 rounded-lg border-2 border-black bg-retro-warm hover:bg-neutral-200 text-xs font-mono font-bold flex items-center justify-between transition-all"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
-            <span>Periksa Log Audit</span>
+            <span>Tinjau Audit Log</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

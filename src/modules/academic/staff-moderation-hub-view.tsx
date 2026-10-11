@@ -220,7 +220,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                               <button
                                 type="button"
                                 disabled={!isDemo}
-                                title={!isDemo ? 'TODO(backend): Fitur moderasi konten aktif di Fase 3' : undefined}
+                                title={!isDemo ? 'Fitur ini belum aktif' : undefined}
                                 className={cn(
                                   'px-2.5 py-1 rounded border-2 border-black text-xs font-bold transition-all',
                                   isDemo
@@ -233,7 +233,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                               <button
                                 type="button"
                                 disabled={!isDemo}
-                                title={!isDemo ? 'TODO(backend): Fitur moderasi konten aktif di Fase 3' : undefined}
+                                title={!isDemo ? 'Fitur ini belum aktif' : undefined}
                                 className={cn(
                                   'px-2.5 py-1 rounded border-2 border-black text-xs font-bold transition-all',
                                   isDemo
@@ -243,7 +243,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                               >
                                 Abaikan
                               </button>
-                              {!isDemo && <span className="text-[10px] bg-neutral-300 px-1 py-0.5 rounded font-mono">TODO(backend)</span>}
+                              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
                             </div>
                           ) : (
                             <span className="text-xs font-mono text-black/50">Telah Dihapus</span>
@@ -338,7 +338,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
             <button
               type="button"
               disabled={!isDemo}
-              title={!isDemo ? 'TODO(backend): Form pendaftaran program mentoring aktif di Fase 3' : undefined}
+              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
                 'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
                 isDemo
@@ -348,7 +348,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
             >
               <Plus className="h-4 w-4" />
               <span>Daftarkan Program Mentoring</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-300 px-1.5 py-0.2 rounded font-mono">TODO(backend)</span>}
+              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 

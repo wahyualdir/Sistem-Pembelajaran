@@ -17,48 +17,54 @@ Dokumen ini disusun sebagai audit kesiapan rilis produksi (*production readiness
 
 ---
 
-## 2. Matriks Status Kesiapan (Peran x Menu x Fitur)
+## 2. Matriks Status Kesiapan (Peran x Menu x Fungsi Utama)
 
-Kategori Status:
-- **SIAP_PRODUKSI**: Backend, RLS, skema database telah aktif dan teruji, siap melayani transaksi riil.
-- **BUTUH_MIGRASI**: Backend action siap, file migrasi database telah dibuat di `supabase/migrations/`, namun menunggu eksekusi migrasi ke remote database oleh administrator. Tombol aksi dinonaktifkan di non-demo (`disabled` + tooltip `TODO(backend)`).
-- **DESAIN_ONLY**: Fitur antarmuka frontend/presentasi, belum memiliki tabel database khusus (termasuk fitur baru yang berjalan in-memory di mode demo). Di lingkungan produksi non-demo, antarmuka menampilkan tabel kosong (*clean empty state*) dan tombol aksi dinonaktifkan.
+Sesuai spesifikasi A8a, setiap fungsi utama diklasifikasikan ke dalam salah satu dari tiga status pasti:
+- **berfungsi di production (DB)**: Skema tabel database Supabase telah ada dan mutasi data/query tersambung langsung ke database PostgreSQL secara persisten.
+- **baca saja**: Fitur antarmuka hanya menampilkan data baca/referensi (misalnya Matriks RBAC atau riwayat baca-saja) tanpa mutasi data aktif, atau mode non-demo menyajikan data riil tanpa izin manipulasi langsung.
+- **nonaktif**: Fitur mutasi/transaksi yang belum memiliki tabel migrasi atau RPC di remote database dinonaktifkan di antarmuka produksi (`disabled` dengan tooltip ramah `"Fitur ini belum aktif"`).
 
-| Peran | Menu / Hub | Tab / Fitur | Status | Ketergantungan Backend | Status Uji | Dampak Pengguna di Produksi |
+| Peran | Menu / Hub | Fungsi Utama | Status Operasional di Produksi | Ketergantungan Backend / DB | Status Uji | Keterangan Perilaku Produksi |
 |---|---|---|---|---|---|---|
-| **Mahasiswa** | Portal Home | Ringkasan Akademik | SIAP_PRODUKSI | `auth.users`, `classes`, `enrollments` | LOLOS | Menampilkan daftar kelas aktif mahasiswa |
-| **Mahasiswa** | Perkuliahan | Presensi Kuliah & QR Code | BUTUH_MIGRASI | In-Memory (`AttendanceStore`) -> Usulan Batch 1 | LOLOS | Presensi aktif, data presensi tersimpan sementara di memori |
-| **Mahasiswa** | Evaluasi | CBT Ujian & Kuis | BUTUH_MIGRASI | In-Memory (`QuizStore`) -> Usulan Batch 2 | LOLOS | Mahasiswa dapat mengerjakan kuis CBT di sesi aktif |
-| **Mahasiswa** | Evaluasi | Keberatan Nilai Ujian | BUTUH_MIGRASI | In-Memory (`QuizStore.disputes`) -> Usulan Batch 2 | LOLOS | Mahasiswa dapat mengajukan sanggahan butir soal |
-| **Dosen** | Portal Home | Dashboard Dosen | SIAP_PRODUKSI | `classes`, `enrollments`, `courses` | LOLOS | Menampilkan beban ajar kelas yang diampu |
-| **Dosen** | Perkuliahan | Sesi Presensi & Geofence | BUTUH_MIGRASI | In-Memory (`AttendanceStore`) -> Usulan Batch 1 | LOLOS | Dosen dapat membuka sesi presensi dan QR dinamis |
-| **Dosen** | Evaluasi | Bank Soal & Pelaksanaan CBT | BUTUH_MIGRASI | In-Memory (`QuizStore`) -> Usulan Batch 2 | LOLOS | Dosen dapat merilis kuis dan memantau attempt |
-| **Dosen** | Evaluasi | Intervensi & Log Ujian | BUTUH_MIGRASI | In-Memory (`QuizStore.events`) -> Usulan Batch 2 | LOLOS | Event LECTURER_INTERVENTION tercatat terpisah |
-| **Dosen** | Nilai | Pengajuan Ubah Nilai | BUTUH_MIGRASI | `grade_change_requests` (Migrasi 000014) | LOLOS | Dosen pengampu mengajukan revisi nilai final |
-| **Kaprodi** | Penugasan | Plotting Dosen Pengampu | SIAP_PRODUKSI | `classes.lecturer_id`, `study_programs` | LOLOS | Kaprodi menetapkan dosen ke kelas semester |
-| **Kaprodi** | Penugasan | Kelas Prodi | SIAP_PRODUKSI | `classes`, `courses` | LOLOS | Monitoring seluruh kelas pada lingkup prodi |
-| **Kaprodi** | Persetujuan | Persetujuan Kelas Baru | SIAP_PRODUKSI | `classes.status` | LOLOS | Menyetujui usulan pembukaan kelas |
-| **Kaprodi** | Persetujuan | Putusan Perubahan Nilai | BUTUH_MIGRASI | RPC `decide_grade_change` (Migrasi 000014) | LOLOS | Kaprodi menyetujui/menolak pengajuan nilai dosen |
-| **Kaprodi** | Monitoring | Monitoring Ujian CBT | BUTUH_MIGRASI | In-Memory (`QuizStore`) -> Usulan Batch 2 | LOLOS | Memantau anomali dan ujian serentak prodi |
-| **Kaprodi** | Laporan | Evaluasi Dosen & Capaian CPL | DESAIN_ONLY | In-Memory / Agregasi Nilai | LOLOS | Menampilkan grafik capaian CPL dan audit mutu |
-| **Staf** | Master Data | Program Studi & Mata Kuliah | SIAP_PRODUKSI | `study_programs`, `courses` (Migrasi 000003) | LOLOS | Di non-demo menampilkan baris kosong pangkalan data |
-| **Staf** | Master Data | Tahun Ajaran & Ruang GPS | SIAP_PRODUKSI | `academic_years`, `rooms` (Migrasi 000008) | LOLOS | Kalibrasi titik koordinat GPS ruang perkuliahan |
-| **Staf** | Jadwal | Jadwal Kuliah & Ujian | SIAP_PRODUKSI | `classes`, `rooms` | LOLOS | Matriks alokasi ruang dan jam perkuliahan |
-| **Staf** | Kelas | Enroll Peserta & Pindah Kelas | SIAP_PRODUKSI | `enrollments` (Migrasi 000003) | LOLOS | Pengelolaan rombel kelas perkuliahan |
-| **Staf** | Kelas | Impor CSV Peserta | SIAP_PRODUKSI | `enrollments` + FileReader Parser Hardened | LOLOS | Sanitasi formula injection & validasi 500 baris |
-| **Staf** | Nilai | Rekap Nilai & Rekap Presensi | SIAP_PRODUKSI | `student_grades` (Migrasi 000005) | LOLOS | Rekap kelayakan kehadiran ujian semester |
-| **Staf** | Nilai | Eksekusi Nilai Disetujui | BUTUH_MIGRASI | RPC `execute_grade_change` (Migrasi 000014) | LOLOS | Staf mengeksekusi pengajuan APPROVED ke master nilai |
-| **Staf** | Pengumuman | Pengumuman & Agenda Kampus | SIAP_PRODUKSI | `announcements` (Migrasi 000010) | LOLOS | Broadcast informasi resmi universitas |
-| **Staf** | Layanan | Verifikasi Berkas Mahasiswa | DESAIN_ONLY | File Storage Bucket 'student-docs' | LOLOS | Antarmuka verifikasi transkrip dan surat aktif |
-| **Staf** | Konten | Pustaka & Sertifikat Digital | DESAIN_ONLY | Storage Bucket 'library-books' | LOLOS | Antarmuka kurasi e-book dan sertifikat digital |
-| **Staf** | Moderasi | Laporan Konten & Grup Belajar | DESAIN_ONLY | Storage & Discussion System | LOLOS | Pengawasan komunitas belajar mahasiswa |
-| **System Admin** | Monitoring | Status Server & Telemetri WS | SIAP_PRODUKSI | Internal Health API & System Telemetry | LOLOS | Pemantauan latency, websocket, dan background tasks |
-| **System Admin** | Integrasi | Gateway Zoom, Email, WA, SSO | SIAP_PRODUKSI | Configuration Stores (Masked Secret) | LOLOS | Manajemen kredensial pihak ketiga (sensor 4 digit) |
-| **System Admin** | Keamanan | Sesi Aktif, Brute-Force, Rate Limit | SIAP_PRODUKSI | `auth.audit_logs`, Network Guard | LOLOS | Pemutusan sesi mencurigakan & IP blocking |
-| **System Admin** | Audit | Log Audit Sistem (Read-Only) | SIAP_PRODUKSI | `public.audit_logs` (Migrasi 000015) | LOLOS | Jejak audit append-only dengan filter forensik |
-| **Super Admin** | Manajemen | Kelola Pengguna & Penugasan Role | SIAP_PRODUKSI | `profiles`, `user_roles` (Migrasi 000001) | LOLOS | Pembuatan akun, aktivasi, dan pemetaan role |
-| **Super Admin** | Kebijakan | Kebijakan Retensi & Proctoring | SIAP_PRODUKSI | System Settings KV Store | LOLOS | Penentuan ambang pelanggaran dan retensi data |
-| **Super Admin** | Akses | Impersonasi Pengguna (Audit) | SIAP_PRODUKSI | Audit Log + Session Context Banner | LOLOS | Waktu 30 menit, banner permanen, aksi destruktif diblokir |
+| **Mahasiswa** | Portal Home | Lihat Kelas & Ringkasan Akademik | **berfungsi di production (DB)** | `auth.users`, `classes`, `enrollments` | LOLOS | Query riil dari database Supabase |
+| **Mahasiswa** | Perkuliahan | Presensi Kuliah (QR & Geofence) | **nonaktif** | Usulan Batch 1 (`attendance_sessions`) | LOLOS | Tombol check-in nonaktif di non-demo tanpa DB |
+| **Mahasiswa** | Perkuliahan | Riwayat Presensi Masuk | **baca saja** | Usulan Batch 1 | LOLOS | Menampilkan daftar riwayat (empty state di non-demo) |
+| **Mahasiswa** | Perkuliahan | Pengajuan Izin/Sakit | **nonaktif** | Usulan Batch 1 (`leave_permits`) | LOLOS | Tombol unggah dokumen izin dinonaktifkan |
+| **Mahasiswa** | Nilai | Rincian Nilai & Rekap Mahasiswa | **berfungsi di production (DB)** | `student_grades`, `grade_components` | LOLOS | Menampilkan nilai tersimpan di DB |
+| **Mahasiswa** | Nilai | Riwayat Pengerjaan Ujian | **baca saja** | Usulan Batch 2 (`exam_attempts`) | LOLOS | Riwayat attempt dibaca dari memori/DB |
+| **Mahasiswa** | Evaluasi | Pengerjaan Kuis/Ujian CBT | **nonaktif** | Usulan Batch 2 (`quizzes`, `exam_attempts`) | LOLOS | Tombol mulai ujian dinonaktifkan bila belum ada DB |
+| **Mahasiswa** | Evaluasi | Sanggahan/Keberatan Nilai Ujian | **nonaktif** | Usulan Batch 2 (`exam_disputes`) | LOLOS | Tombol ajukan sanggahan dinonaktifkan |
+| **Dosen** | Portal Home | Dashboard Dosen & Beban Ajar | **berfungsi di production (DB)** | `classes`, `enrollments`, `courses` | LOLOS | Membaca penugasan kelas dosen dari DB |
+| **Dosen** | Perkuliahan | Buka Sesi Presensi & QR | **nonaktif** | Usulan Batch 1 (`attendance_sessions`) | LOLOS | Tombol buat sesi presensi dinonaktifkan di non-demo |
+| **Dosen** | Evaluasi | Pembuatan Kuis & Bank Soal | **nonaktif** | Usulan Batch 2 (`quizzes`, `quiz_questions`) | LOLOS | Tombol simpan soal dinonaktifkan di non-demo |
+| **Dosen** | Evaluasi | Log Intervensi & Pelanggaran CBT | **baca saja** | Usulan Batch 2 (`exam_events`) | LOLOS | Log telemetri disajikan secara baca-saja |
+| **Dosen** | Nilai | Pengajuan Perubahan Nilai | **nonaktif** | `grade_change_requests` (Migrasi 000014) | LOLOS | Form dinonaktifkan menunggu migrasi DB 000014 |
+| **Kaprodi** | Penugasan | Plotting Dosen Pengampu | **berfungsi di production (DB)** | `classes.lecturer_id`, `study_programs` | LOLOS | Tersambung ke tabel `classes` di DB |
+| **Kaprodi** | Penugasan | Monitoring Kelas Prodi | **baca saja** | `classes`, `courses` | LOLOS | Daftar kelas se-prodi disajikan secara baca-saja |
+| **Kaprodi** | Persetujuan | Persetujuan Kelas Baru | **berfungsi di production (DB)** | `classes.status` | LOLOS | Server action mutasi status kelas di DB |
+| **Kaprodi** | Persetujuan | Putusan Perubahan Nilai | **nonaktif** | RPC `decide_grade_change` (Migrasi 000014) | LOLOS | Tombol Setujui/Tolak nonaktif hingga RPC dipasang |
+| **Kaprodi** | Monitoring | Monitoring Ujian CBT | **baca saja** | Usulan Batch 2 | LOLOS | Dasbor pemantauan aktif secara baca-saja |
+| **Kaprodi** | Laporan | Evaluasi Dosen & Capaian CPL | **baca saja** | In-Memory / Agregasi Nilai | LOLOS | Matriks CPL ditampilkan sebagai referensi visual |
+| **Staf** | Master Data | Program Studi & Mata Kuliah | **berfungsi di production (DB)** | `study_programs`, `courses` (000003) | LOLOS | Query riil dari database PostgreSQL |
+| **Staf** | Master Data | Tahun Ajaran & Ruang GPS | **berfungsi di production (DB)** | `academic_years`, `rooms` (000008) | LOLOS | Persisten di DB dengan titik koordinat geofence |
+| **Staf** | Jadwal | Jadwal Kuliah & Ujian | **berfungsi di production (DB)** | `classes`, `rooms` | LOLOS | Relasi jadwal kuliah dan ruang di DB |
+| **Staf** | Kelas | Enroll Peserta & Pindah Kelas | **berfungsi di production (DB)** | `enrollments` (000003) | LOLOS | Mutasi penambahan/pemindahan mahasiswa di DB |
+| **Staf** | Kelas | Impor CSV Peserta | **berfungsi di production (DB)** | `enrollments` + Validasi NIM Hardened | LOLOS | Parse client in-memory, simpan batch ke DB |
+| **Staf** | Nilai | Rekap Nilai & Presensi | **baca saja** | `student_grades` (000005) | LOLOS | Rekap agregat disajikan secara baca-saja |
+| **Staf** | Nilai | Eksekusi Nilai Disetujui | **nonaktif** | RPC `execute_grade_change` (Migrasi 000014) | LOLOS | Tombol eksekusi nonaktif hingga migrasi 000014 jalan |
+| **Staf** | Pengumuman | Siarkan Pengumuman Kampus | **berfungsi di production (DB)** | `announcements` (000010) | LOLOS | Persisten di tabel `announcements` |
+| **Staf** | Layanan | Verifikasi Berkas Mahasiswa | **nonaktif** | Storage Bucket 'student-docs' | LOLOS | Tombol verifikasi nonaktif di non-demo |
+| **Staf** | Konten | Pustaka Digital & Sertifikat | **baca saja** | Storage Bucket 'library-books' | LOLOS | Katalog pustaka disajikan secara baca-saja |
+| **Staf** | Moderasi | Laporan Konten & Forum | **baca saja** | `forums`, `posts` (000012) | LOLOS | Daftar moderasi komunitas disajikan secara baca-saja |
+| **System Admin** | Monitoring | Status Server & Telemetri WS | **baca saja** | Internal Health Check API | LOLOS | Panel telemetri menyajikan metrik nyata baca-saja |
+| **System Admin** | Integrasi | Gateway Zoom, Email, WA, SSO | **baca saja** | Env Config (Masked Secret) | LOLOS | Nilai secret disensor `••••••`, tombol ubah nonaktif |
+| **System Admin** | Keamanan | Manajemen Sesi & Blokir IP | **nonaktif** | Network Guard / Redis Session Store | LOLOS | Tombol cabut sesi & blokir nonaktif ("Belum aktif") |
+| **System Admin** | Backup | Snapshot DB & Berkas Cadangan | **nonaktif** | Automated Cloud Storage Snapshot | LOLOS | Tombol trigger snapshot nonaktif ("Belum dikonfigurasi") |
+| **System Admin** | Audit | Log Audit Sistem | **baca saja** | `public.audit_logs` (Migrasi 000015) | LOLOS | Entri append-only disajikan secara baca-saja forensik |
+| **Super Admin** | Manajemen | Kelola Pengguna (Role Assignment) | **berfungsi di production (DB)** | `profiles`, `user_roles` (000001) | LOLOS | CRUD pengguna & role dengan guard perlindungan diri |
+| **Super Admin** | Manajemen | Matriks Role & Permission | **baca saja** | Referensi RBAC Sistem | LOLOS | Disajikan sebagai matriks referensi baca-saja |
+| **Super Admin** | Akses | Impersonasi Pengguna (HMAC Token) | **berfungsi di production (DB)** | Signed httpOnly Cookie + Audit Log | LOLOS | Sesi 30 menit, reason min 10 char, guard aksi terlarang |
+| **Super Admin** | Broadcast | Pengumuman Global Rektorat | **nonaktif** | `announcements` (000010) | LOLOS | Form dinonaktifkan menunggu pengkoneksian DB |
 
 ---
 

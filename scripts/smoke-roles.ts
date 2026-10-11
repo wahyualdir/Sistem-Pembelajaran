@@ -28,7 +28,7 @@ const USERS = {
   COORDINATOR: { id: 'a0000004-0000-0000-0000-000000000004', role: 'PROGRAM_COORDINATOR' },
   STAFF: { id: 'a0000005-0000-0000-0000-000000000005', role: 'ACADEMIC_STAFF' },
   SYSTEM_ADMIN: { id: 'a0000006-0000-0000-0000-000000000006', role: 'SYSTEM_ADMIN' },
-  SUPER_ADMIN: { id: 'a0000007-0000-0000-0000-000000000007', role: 'SUPER_ADMIN' },
+  SUPER_ADMIN: { id: 'a0000010-0000-0000-0000-000000000010', role: 'SUPER_ADMIN' },
 };
 
 const TEST_CASES: TestCase[] = [
@@ -707,7 +707,7 @@ const TEST_CASES: TestCase[] = [
     userId: USERS.SYSTEM_ADMIN.id,
     path: '/admin/system/settings?tab=penyimpanan-file',
     expectedStatus: 200,
-    uniqueMarker: 'Penyimpanan Berkas (Object Storage S3)',
+    uniqueMarker: 'Penyimpanan Berkas (Supabase Storage)',
   },
   {
     name: '[SysAdmin 2E] Log Audit Sistem Read-Only',
@@ -910,9 +910,9 @@ async function runTest(test: TestCase): Promise<{ success: boolean; message: str
 }
 
 async function runNegativeActionTests() {
-  console.log('---------------------------------------------------------------');
-  console.log('  UJI NEGATIF SERVER ACTION (A5): AKSI x ROLE x HASIL         ');
-  console.log('---------------------------------------------------------------');
+  console.log('------------------------------------------------------------------------------------------------------------------------');
+  console.log('  UJI NEGATIF SERVER ACTION (A6): NEGATIVE TEST + POSITIVE CONTROL PAIRS & REJECTION REASONS                            ');
+  console.log('------------------------------------------------------------------------------------------------------------------------');
   try {
     const res = await fetch(`${BASE_URL}/api/smoke-actions`, { method: 'GET' });
     if (!res.ok) {
@@ -920,19 +920,25 @@ async function runNegativeActionTests() {
       return false;
     }
     const data = await res.json();
-    console.log(`Total Aksi Negatif Diuji: ${data.total} | Lolos: ${data.passed} | Gagal: ${data.failed}\n`);
+    console.log(`Total Pasangan Uji: ${data.total} | Pasangan Lolos: ${data.passed} | Gagal: ${data.failed}\n`);
     
-    console.log('| Server Action                            | Peran Pemanggil     | Ekspektasi Server | Hasil Server       | Status |');
-    console.log('|------------------------------------------|---------------------|-------------------|--------------------|--------|');
-    for (const r of data.results) {
-      const statusBadge = r.status === 'PASS' ? 'PASS' : 'FAIL';
-      const actionPadded = r.actionName.padEnd(40, ' ');
-      const rolePadded = r.testedRole.padEnd(19, ' ');
-      const expPadded = r.expectedResult.padEnd(17, ' ');
-      const actPadded = r.actualResult.padEnd(18, ' ');
-      console.log(`| ${actionPadded} | ${rolePadded} | ${expPadded} | ${actPadded} | ${statusBadge}   |`);
+    for (const p of data.results) {
+      const isPassed = p.overallStatus === 'PASS';
+      const badge = isPassed ? '\x1b[32m[PASS]\x1b[0m' : '\x1b[31m[FAIL]\x1b[0m';
+      console.log(`${badge} [${p.id}] ${p.actionName}: ${p.scenario}`);
+      // Negative test output
+      const negPassed = p.negativeTest.status === 'PASS';
+      const negStatus = negPassed ? '\x1b[32mDITOLAK_SERVER (OK)\x1b[0m' : '\x1b[31mLOLOS_UNAUTHORIZED (FAIL)\x1b[0m';
+      console.log(`   ├─ [-] NEGATIF : Role '${p.negativeTest.testedRole}' -> ${p.actionName}`);
+      console.log(`   │      Hasil    : ${negStatus}`);
+      console.log(`   │      Alasan   : "${p.negativeTest.rejectionReason || 'N/A'}"`);
+      // Positive control output
+      const posPassed = p.positiveControl.status === 'PASS';
+      const posStatus = posPassed ? '\x1b[32mBERHASIL_SERVER (OK)\x1b[0m' : `\x1b[31mGAGAL_SERVER (FAIL: ${p.positiveControl.detail})\x1b[0m`;
+      console.log(`   └─ [+] KONTROL : Role '${p.positiveControl.authorizedRole}' -> ${p.actionName}`);
+      console.log(`          Hasil    : ${posStatus}`);
+      console.log('');
     }
-    console.log('');
     return data.failed === 0;
   } catch (err: any) {
     console.log(`\x1b[31m[FAIL]\x1b[0m Error memanggil /api/smoke-actions: ${err.message}`);

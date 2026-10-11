@@ -282,7 +282,7 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
             <button
               type="button"
               disabled={!isDemo}
-              title={!isDemo ? 'TODO(backend): Form pendaftaran manual aktif di Fase 3' : undefined}
+              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
                 'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
                 isDemo
@@ -292,7 +292,7 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
             >
               <Plus className="h-4 w-4" />
               <span>Enroll Manual</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-300 px-1.5 py-0.2 rounded font-mono">TODO(backend)</span>}
+              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -484,7 +484,7 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
               >
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Simpan & Daftarkan {csvRows.filter((r) => r.isValid).length} Baris Valid</span>
-                {!isDemo && <span className="text-[10px] bg-neutral-300 px-1.5 py-0.5 rounded font-mono">TODO(backend)</span>}
+                {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
               </button>
             </div>
           </div>
@@ -507,7 +507,7 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
             <button
               type="button"
               disabled={!isDemo}
-              title={!isDemo ? 'TODO(backend): Mutasi kelas terintegrasi di Fase 3' : undefined}
+              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
                 'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
                 isDemo
@@ -517,7 +517,7 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
             >
               <Plus className="h-4 w-4" />
               <span>Ajukan Mutasi Kelas</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-300 px-1.5 py-0.2 rounded font-mono">TODO(backend)</span>}
+              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 

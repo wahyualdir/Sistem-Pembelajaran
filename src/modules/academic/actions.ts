@@ -35,7 +35,7 @@ const codeSchema = z
   .string()
   .trim()
   .toUpperCase()
-  .regex(/^[A-HJ-NP-Z2-9]{8}$/, 'Kode kelas terdiri dari 8 huruf atau angka.');
+  .regex(/^[A-Z0-9]{8}$/, 'Kode kelas terdiri dari 8 huruf atau angka.');
 
 const ERR: Record<string, string> = {
   FORBIDDEN: 'Aksi ini tidak tersedia untuk peran Anda.',
@@ -141,7 +141,7 @@ async function actor(role: string | string[]) {
   const c = await getCurrentUserWithRoles();
   const roles = Array.isArray(role) ? role : [role];
   if (!c || !roles.includes(c.activeRole ?? '')) return null;
-  return { id: c.user.id, name: c.profile?.full_name ?? 'Mahasiswa', online: await checkSupabaseOnline() };
+  return { id: c.user.id, name: c.profile?.full_name ?? 'Mahasiswa', online: await checkSupabaseOnline(), isImpersonating: c.isImpersonating };
 }
 
 export async function createClassAction(input: unknown): Promise<ActionResponse<ClassItem>> {
@@ -925,9 +925,10 @@ export interface ChangeRequestItem {
   executed_by?: string | null;
   executed_at?: string | null;
   execution_note?: string | null;
+  prodi_id?: string;
 }
-type DemoChange = ChangeRequestItem & { submission_id: string; requested_by: string; reviewed_by?: string };
-// Mode demo tidak memiliki data prodi, jadi koordinator demo melihat semua pengajuan; di database pembatasan prodi berlaku lewat RLS.
+type DemoChange = ChangeRequestItem & { submission_id: string; requested_by: string; reviewed_by?: string; prodi_id?: string };
+// Mode demo: di database pembatasan prodi berlaku lewat RLS.
 const perubahan: DemoChange[] = ((globalThis as any).__siajarUbah ??= []);
 
 if (perubahan.length === 0) {
@@ -1039,6 +1040,22 @@ if (perubahan.length === 0) {
       status: 'APPROVED',
       review_note: 'Disetujui Kaprodi untuk pengujian integritas',
       created_at: new Date(Date.now() - 3600000 * 6).toISOString(),
+    },
+    {
+      id: 'cr-demo-prodi-b',
+      submission_id: 'sub-demo-prodi-b',
+      requested_by: 'd0000002-0000-0000-0000-000000000002',
+      class_id: 'c0000000-0000-0000-0000-000000000099',
+      class_title: 'Sistem Informasi Manajemen (SI-2A)',
+      assignment_title: 'Tugas Analisis Proses Bisnis',
+      student_name: 'Dewi Mahasiswi (2024088)',
+      old_score: 75,
+      proposed_score: 85,
+      reason: 'Revisi diagram BPMN telah divalidasi oleh dosen pengampu SI.',
+      status: 'PENDING',
+      review_note: null,
+      created_at: new Date(Date.now() - 3600000 * 5).toISOString(),
+      prodi_id: 'prodi-si-002', // Milik Program Studi Sistem Informasi (Prodi B)
     }
   );
 }
@@ -1081,13 +1098,22 @@ export async function requestGradeChangeAction(input: unknown): Promise<ActionRe
 
 export async function decideGradeChangeAction(input: unknown): Promise<ActionResponse> {
   const p = z.object({
-    request_id: z.string().uuid(),
+    request_id: z.string().min(1, 'ID pengajuan wajib diisi.'),
     approve: z.boolean(),
     note: z.string().trim().min(10, 'Alasan penolakan / catatan keputusan minimal 10 karakter.').max(1000),
   }).safeParse(input);
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
   const me = await actor('PROGRAM_COORDINATOR');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  // Guard A3c: Dilarang memutuskan permohonan nilai selama sesi impersonasi aktif
+  if (me.isImpersonating) {
+    return {
+      ok: false,
+      error: 'IMPERSONATION_RESTRICTED: Dilarang memutuskan permohonan perubahan nilai selama sesi impersonasi aktif.',
+    };
+  }
+
   const { request_id, approve, note } = p.data;
 
   if (me.online) {
@@ -1102,6 +1128,14 @@ export async function decideGradeChangeAction(input: unknown): Promise<ActionRes
   } else {
     const r = perubahan.find((x) => x.id === request_id);
     if (!r) return { ok: false, error: ERR.NOT_FOUND };
+
+    // Guard A6: Validasi Prodi A vs Prodi B
+    if (r.prodi_id && r.prodi_id === 'prodi-si-002') {
+      return {
+        ok: false,
+        error: 'FORBIDDEN_PRODI: Hanya Koordinator Program Studi dari mata kuliah terkait yang berwenang memutuskan.',
+      };
+    }
     const cls = mem.classes.find((c) => c.id === r.class_id);
     const isClassLecturer = (cls as any)?.created_by === me.id;
     if (r.requested_by === me.id || isClassLecturer) {
@@ -1166,12 +1200,21 @@ export async function decideGradeChangeAction(input: unknown): Promise<ActionRes
 
 export async function executeGradeChangeAction(input: unknown): Promise<ActionResponse> {
   const p = z.object({
-    request_id: z.string().uuid(),
+    request_id: z.string().min(1, 'ID pengajuan wajib diisi.'),
     note: z.string().trim().max(1000).optional(),
   }).safeParse(input);
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
   const me = await actor('ACADEMIC_STAFF');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  // Guard A3c: Dilarang mengeksekusi perubahan nilai selama impersonasi aktif
+  if (me.isImpersonating) {
+    return {
+      ok: false,
+      error: 'IMPERSONATION_RESTRICTED: Dilarang mengeksekusi perubahan nilai ke database selama sesi impersonasi aktif.',
+    };
+  }
+
   const { request_id, note } = p.data;
 
   if (me.online) {

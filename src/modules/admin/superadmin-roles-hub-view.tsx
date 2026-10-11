@@ -57,8 +57,15 @@ export function SuperadminRolesHubView() {
               </h1>
             </div>
             <p className="text-xs sm:text-sm text-black/70 font-medium max-w-2xl">
-              Matriks pemisahan tugas (*Separation of Duties*) dan pembagian hak akses granular lintas 7 tingkatan peran sistem.
+              Matriks referensi pemisahan tugas (*Separation of Duties*) dan pembagian hak akses granular lintas 7 peran sistem. Penegakan hak akses dilakukan secara ketat di sisi server melalui Server Actions dan database via RLS & RPC terisolasi.
             </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-neutral-100 text-neutral-950 font-mono text-xs font-bold shadow-retro-sm">
+              <ShieldCheck className="h-4 w-4 text-emerald-700" />
+              MATRIKS REFERENSI RBAC (READ-ONLY)
+            </span>
           </div>
         </div>
       </RetroWindow>

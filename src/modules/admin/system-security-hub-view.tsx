@@ -91,57 +91,65 @@ export function SystemSecurityHubView() {
             <h3 className="font-heading font-black text-lg text-black">
               Daftar Sesi Pengguna Aktif di Perangkat
             </h3>
-            <span className="text-xs font-mono font-bold text-black/60">Total: 4 Sesi Terpantau</span>
+            <span className="text-xs font-mono font-bold text-black/60">
+              Total: {isDemo ? '2 Sesi Terpantau' : '0 Sesi (Belum Terhubung)'}
+            </span>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs sm:text-sm border-collapse">
-              <thead>
-                <tr className="border-b-2 border-black bg-retro-warm font-mono font-black text-black">
-                  <th className="p-3">Pengguna</th>
-                  <th className="p-3">Peran</th>
-                  <th className="p-3">Perangkat / Browser</th>
-                  <th className="p-3">Alamat IP</th>
-                  <th className="p-3">Waktu Login</th>
-                  <th className="p-3 text-center">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y border-b border-black font-mono">
-                <tr>
-                  <td className="p-3 font-bold text-black">Dr. Budi Santoso</td>
-                  <td className="p-3 text-black/80 font-sans">LECTURER</td>
-                  <td className="p-3 text-black/80 font-sans">macOS • Chrome 129</td>
-                  <td className="p-3">180.252.12.90</td>
-                  <td className="p-3">10 Menit Lalu</td>
-                  <td className="p-3 text-center">
-                    <button
-                      disabled={!isDemo}
-                      title={!isDemo ? 'TODO(backend): Menunggu migrasi security diterapkan' : undefined}
-                      className="px-2.5 py-1 rounded border border-black bg-rose-100 text-rose-950 font-bold hover:bg-rose-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Cabut Sesi
-                    </button>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-3 font-bold text-black">Ahmad Mahasiswa</td>
-                  <td className="p-3 text-black/80 font-sans">STUDENT</td>
-                  <td className="p-3 text-black/80 font-sans">Windows 11 • Edge 128</td>
-                  <td className="p-3">36.88.21.144</td>
-                  <td className="p-3">45 Menit Lalu</td>
-                  <td className="p-3 text-center">
-                    <button
-                      disabled={!isDemo}
-                      title={!isDemo ? 'TODO(backend): Menunggu migrasi security diterapkan' : undefined}
-                      className="px-2.5 py-1 rounded border border-black bg-rose-100 text-rose-950 font-bold hover:bg-rose-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Cabut Sesi
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          {!isDemo ? (
+            <div className="p-8 text-center text-black/60 font-mono text-xs border-2 border-dashed border-black/20 rounded-xl">
+              Pangkalan data sesi pengguna aktif belum terhubung ke database. Fitur pencabutan sesi jarak jauh saat ini berstatus belum aktif.
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs sm:text-sm border-collapse">
+                <thead>
+                  <tr className="border-b-2 border-black bg-retro-warm font-mono font-black text-black">
+                    <th className="p-3">Pengguna</th>
+                    <th className="p-3">Peran</th>
+                    <th className="p-3">Perangkat / Browser</th>
+                    <th className="p-3">Alamat IP</th>
+                    <th className="p-3">Waktu Login</th>
+                    <th className="p-3 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y border-b border-black font-mono">
+                  <tr>
+                    <td className="p-3 font-bold text-black">Dr. Budi Santoso</td>
+                    <td className="p-3 text-black/80 font-sans">LECTURER</td>
+                    <td className="p-3 text-black/80 font-sans">macOS • Chrome 129</td>
+                    <td className="p-3">180.252.12.90</td>
+                    <td className="p-3">10 Menit Lalu</td>
+                    <td className="p-3 text-center">
+                      <button
+                        disabled={!isDemo}
+                        title={!isDemo ? 'Fitur ini belum aktif' : undefined}
+                        className="px-2.5 py-1 rounded border border-black bg-rose-100 text-rose-950 font-bold hover:bg-rose-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Cabut Sesi
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="p-3 font-bold text-black">Ahmad Mahasiswa</td>
+                    <td className="p-3 text-black/80 font-sans">STUDENT</td>
+                    <td className="p-3 text-black/80 font-sans">Windows 11 • Edge 128</td>
+                    <td className="p-3">36.88.21.144</td>
+                    <td className="p-3">45 Menit Lalu</td>
+                    <td className="p-3 text-center">
+                      <button
+                        disabled={!isDemo}
+                        title={!isDemo ? 'Fitur ini belum aktif' : undefined}
+                        className="px-2.5 py-1 rounded border border-black bg-rose-100 text-rose-950 font-bold hover:bg-rose-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Cabut Sesi
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       )}
 

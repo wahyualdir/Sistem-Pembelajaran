@@ -71,7 +71,7 @@ export function SuperadminAnnouncementsHubView() {
           <div className="flex items-center gap-2">
             <button
               disabled={!isDemo}
-              title={!isDemo ? 'TODO(backend): Menunggu migrasi pengumuman diterapkan' : undefined}
+              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className="px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-mono font-bold text-xs hover:bg-neutral-800 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-retro"
             >
               <Plus className="h-4 w-4" />
@@ -88,11 +88,16 @@ export function SuperadminAnnouncementsHubView() {
             Maklumat & Siaran Resmi Aktif
           </h3>
           <span className="text-xs font-mono font-bold text-black/60">
-            Total: {SAMPLE_GLOBAL_ANNOUNCEMENTS.length} Maklumat
+            Total: {isDemo ? `${SAMPLE_GLOBAL_ANNOUNCEMENTS.length} Maklumat` : '0 Maklumat (Belum Terhubung)'}
           </span>
         </div>
 
-        <div className="space-y-3 font-mono text-xs">
+        {!isDemo ? (
+          <div className="p-8 text-center text-black/60 font-mono text-xs border-2 border-dashed border-black/20 rounded-xl">
+            Tabel pangkalan data pengumuman global belum terhubung ke database production.
+          </div>
+        ) : (
+          <div className="space-y-3 font-mono text-xs">
           {SAMPLE_GLOBAL_ANNOUNCEMENTS.map((a) => (
             <div
               key={a.id}
@@ -114,7 +119,8 @@ export function SuperadminAnnouncementsHubView() {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

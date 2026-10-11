@@ -360,7 +360,7 @@ export function CoordinatorApprovalsHubView({
                                   <button
                                     type="button"
                                     disabled
-                                    title="TODO(backend): Menunggu migrasi database 20261011000014 diterapkan ke production."
+                                    title="Fitur ini belum aktif: Menunggu migrasi database diterapkan ke production."
                                     className="px-2.5 py-1 rounded-lg border-2 border-neutral-400 bg-neutral-200 text-neutral-500 text-xs font-bold cursor-not-allowed shadow-xs"
                                   >
                                     Setujui
@@ -368,14 +368,14 @@ export function CoordinatorApprovalsHubView({
                                   <button
                                     type="button"
                                     disabled
-                                    title="TODO(backend): Menunggu migrasi database 20261011000014 diterapkan ke production."
+                                    title="Fitur ini belum aktif: Menunggu migrasi database diterapkan ke production."
                                     className="px-2.5 py-1 rounded-lg border-2 border-neutral-400 bg-neutral-200 text-neutral-500 text-xs font-bold cursor-not-allowed shadow-xs"
                                   >
                                     Tolak
                                   </button>
                                 </div>
                                 <span className="text-[10px] text-amber-900 font-mono font-bold bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
-                                  TODO(backend): Migrasi 20261011000014
+                                  Menunggu Migrasi DB
                                 </span>
                               </div>
                             ) : (

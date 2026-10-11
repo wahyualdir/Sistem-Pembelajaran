@@ -635,6 +635,14 @@ export async function submitQuizAttemptAction(
   const user = await getCurrentUserWithRoles();
   if (!user) return { ok: false, error: 'Silakan login terlebih dahulu.' };
 
+  // Guard A3c: Dilarang mengirim jawaban atau menyelesaikan ujian selama impersonasi aktif
+  if (user.isImpersonating) {
+    return {
+      ok: false,
+      error: 'IMPERSONATION_RESTRICTED: Dilarang mengirim jawaban atau menyelesaikan ujian selama sesi impersonasi aktif.',
+    };
+  }
+
   const quiz = quizStore.quizzes.find((q) => q.id === quizId);
   if (!quiz) return { ok: false, error: 'Kuis/Ujian tidak ditemukan.' };
 

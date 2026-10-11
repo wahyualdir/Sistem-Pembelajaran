@@ -99,9 +99,9 @@ export function SystemAuditHubView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-emerald-100 text-emerald-950 font-mono text-xs font-bold shadow-retro-sm">
-              <Lock className="h-4 w-4 text-emerald-700" />
-              TRIGGER ANTI-TAMPER AKTIF
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-retro-warm text-black font-mono text-xs font-bold shadow-retro-sm">
+              <Lock className="h-4 w-4 text-black" />
+              {isDemo ? 'LOG AUDIT (MEMORI DEMO)' : 'LOG AUDIT (MENUNGGU MIGRASI DB)'}
             </span>
           </div>
         </div>
@@ -125,12 +125,17 @@ export function SystemAuditHubView() {
             </select>
           </div>
           <span className="text-xs font-mono font-bold text-black/60">
-            Total Entri: {filteredLogs.length} Log
+            Total Entri: {isDemo ? `${filteredLogs.length} Log` : '0 Log (Belum Terhubung)'}
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs sm:text-sm border-collapse">
+        {!isDemo ? (
+          <div className="p-8 text-center text-black/60 font-mono text-xs border-2 border-dashed border-black/20 rounded-xl">
+            Tabel pangkalan data log audit belum terhubung ke database production. Menunggu migrasi <code>20261011000015_audit_logs_hardening.sql</code> diterapkan.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm border-collapse">
             <thead>
               <tr className="border-b-2 border-black bg-retro-warm font-mono font-black text-black">
                 <th className="p-3">Waktu Pencatatan</th>
@@ -171,6 +176,7 @@ export function SystemAuditHubView() {
             </tbody>
           </table>
         </div>
+        )}
       </div>
     </div>
   );

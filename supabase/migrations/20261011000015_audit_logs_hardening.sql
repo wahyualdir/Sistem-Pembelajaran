@@ -14,9 +14,17 @@ CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON public.audit_logs(action);
 CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at_desc ON public.audit_logs(created_at DESC);
 
 -- 2. Memastikan Trigger Pencegah Modifikasi / Penghapusan Tetap Aktif (Append-Only Enforced)
+-- Mendukung Kebijakan Retensi Sah (UU PDP) via session setting khusus atau maintenance function
 CREATE OR REPLACE FUNCTION public.fn_prevent_audit_log_modification()
 RETURNS TRIGGER AS $$
 BEGIN
+    -- Penanganan Kebijakan Retensi Terjadwal yang Sah (UU PDP):
+    -- Penghapusan berkala hanya dapat dijalankan jika session setting khusus diaktifkan
+    -- oleh fungsi pemeliharaan berwenang (Security Definer dengan search_path terkunci).
+    IF TG_OP = 'DELETE' AND current_setting('siajar.lawful_retention_purge', true) = 'on' THEN
+        RETURN OLD;
+    END IF;
+
     RAISE EXCEPTION 'AUDIT_LOG_IMMUTABLE: Tabel audit_logs bersifat murni append-only dan dilarang diubah (UPDATE) atau dihapus (DELETE).';
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = '';
@@ -60,3 +68,31 @@ DROP POLICY IF EXISTS audit_logs_delete ON public.audit_logs;
 
 -- Cabut wewenang modifikasi dari role anonim dan publik
 REVOKE UPDATE, DELETE, TRUNCATE ON public.audit_logs FROM anon, authenticated, public;
+
+-- 4. Fungsi Pemeliharaan Retensi Sah (UU PDP): Khusus SUPER_ADMIN atau Service Role Pemeliharaan
+CREATE OR REPLACE FUNCTION public.purge_expired_audit_logs(p_older_than_interval interval)
+RETURNS integer LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
+DECLARE
+    v_deleted_count integer := 0;
+BEGIN
+    -- Validasi: Hanya dapat dieksekusi jika pengguna memiliki role SUPER_ADMIN atau dijalankan service_role
+    IF auth.uid() IS NOT NULL AND NOT public.has_global_role('SUPER_ADMIN') THEN
+        RAISE EXCEPTION 'FORBIDDEN: Hanya Super Admin atau service role pemeliharaan yang berwenang mengeksekusi retensi log audit.';
+    END IF;
+
+    -- Aktifkan session flag pembersihan retensi sah
+    PERFORM set_config('siajar.lawful_retention_purge', 'on', true);
+
+    DELETE FROM public.audit_logs
+    WHERE created_at < (now() - p_older_than_interval);
+    GET DIAGNOSTICS v_deleted_count = ROW_COUNT;
+
+    -- Kembalikan session flag ke default
+    PERFORM set_config('siajar.lawful_retention_purge', 'off', true);
+
+    RETURN v_deleted_count;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.purge_expired_audit_logs(interval) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.purge_expired_audit_logs(interval) TO authenticated;
