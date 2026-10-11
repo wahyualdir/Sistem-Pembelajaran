@@ -83,6 +83,11 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
     { code: 'R-AUD-01', name: 'Auditorium Utama Universitas', building: 'Gedung Rektorat & Konvensi', floor: 'Lantai 1', capacity: 300, lat: -6.200500, lng: 106.817000, radius: 50, status: 'KALIBRASI_AKTIF' },
   ];
 
+  const programs = isDemo ? PROGRAMS : [];
+  const courses = isDemo ? COURSES : [];
+  const academicYears = isDemo ? ACADEMIC_YEARS : [];
+  const rooms = isDemo ? ROOMS : [];
+
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. HEADER RETRO */}
@@ -208,23 +213,31 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {PROGRAMS.map((p) => (
-                    <tr key={p.code} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{p.name}</div>
-                        <span className="text-xs font-mono text-black/60">{p.code}</span>
+                  {programs.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada data program studi tersimpan di pangkalan data produksi.
                       </td>
-                      <td className="p-3.5 sm:p-4 font-mono font-bold">{p.degree}</td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{p.faculty}</td>
-                      <td className="p-3.5 sm:p-4 font-semibold text-black">{p.coordinator}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-black bg-retro-warm font-mono font-bold text-xs">
-                          {p.accreditation}
-                        </span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{p.activeStudents} Mhs</td>
                     </tr>
-                  ))}
+                  ) : (
+                    programs.map((p) => (
+                      <tr key={p.code} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{p.name}</div>
+                          <span className="text-xs font-mono text-black/60">{p.code}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 font-mono font-bold">{p.degree}</td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{p.faculty}</td>
+                        <td className="p-3.5 sm:p-4 font-semibold text-black">{p.coordinator}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-black bg-retro-warm font-mono font-bold text-xs">
+                            {p.accreditation}
+                          </span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{p.activeStudents} Mhs</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -267,7 +280,14 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {COURSES.map((c) => (
+                  {courses.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada data mata kuliah tersimpan di pangkalan data produksi.
+                      </td>
+                    </tr>
+                  ) : (
+                    courses.map((c) => (
                     <tr key={c.code} className="hover:bg-retro-warm/30 transition-colors">
                       <td className="p-3.5 sm:p-4 font-bold text-black">
                         <div>{c.name}</div>
@@ -310,8 +330,9 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                         )}
                       </td>
                     </tr>
-                  ))}
-                </tbody>
+                  ))
+                )}
+              </tbody>
               </table>
             </div>
           </div>
@@ -361,29 +382,37 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {ACADEMIC_YEARS.map((y) => (
-                    <tr key={y.code} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{y.name}</div>
-                        <span className="text-xs font-mono text-black/60">{y.code}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs">{y.startDate} - {y.endDate}</td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs text-retro-orange font-bold">{y.krsLock}</td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs font-bold">{y.gradeLock}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span
-                          className={cn(
-                            'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
-                            y.isCurrent
-                              ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                              : 'border-neutral-400 bg-neutral-100 text-neutral-800'
-                          )}
-                        >
-                          {y.isCurrent ? 'SEMESTER AKTIF BERJALAN' : 'ARSIP PERIODE'}
-                        </span>
+                  {academicYears.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada periode tahun ajaran tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    academicYears.map((y) => (
+                      <tr key={y.code} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{y.name}</div>
+                          <span className="text-xs font-mono text-black/60">{y.code}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs">{y.startDate} - {y.endDate}</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs text-retro-orange font-bold">{y.krsLock}</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs font-bold">{y.gradeLock}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span
+                            className={cn(
+                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              y.isCurrent
+                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                                : 'border-neutral-400 bg-neutral-100 text-neutral-800'
+                            )}
+                          >
+                            {y.isCurrent ? 'SEMESTER AKTIF BERJALAN' : 'ARSIP PERIODE'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -435,26 +464,34 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {ROOMS.map((r) => (
-                    <tr key={r.code} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{r.name}</div>
-                        <span className="text-xs font-mono text-black/60">{r.code}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">
-                        <div>{r.building}</div>
-                        <span className="text-xs text-black/60">{r.floor}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{r.capacity} Kursi</td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs">{r.lat.toFixed(6)}, {r.lng.toFixed(6)}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{r.radius} Meter</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
-                          TERKALIBRASI AKTIF
-                        </span>
+                  {rooms.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada data ruang dan titik geofence tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    rooms.map((r) => (
+                      <tr key={r.code} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{r.name}</div>
+                          <span className="text-xs font-mono text-black/60">{r.code}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">
+                          <div>{r.building}</div>
+                          <span className="text-xs text-black/60">{r.floor}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{r.capacity} Kursi</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs">{r.lat.toFixed(6)}, {r.lng.toFixed(6)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{r.radius} Meter</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            TERKALIBRASI AKTIF
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

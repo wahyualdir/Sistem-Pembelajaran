@@ -99,6 +99,9 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
     },
   ];
 
+  const announcements = isDemo ? ANNOUNCEMENTS : [];
+  const events = isDemo ? EVENTS : [];
+
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. HEADER RETRO */}
@@ -223,26 +226,34 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {ANNOUNCEMENTS.map((a) => (
-                    <tr key={a.id} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black max-w-md">
-                        <div>{a.title}</div>
-                      </td>
-                      <td className="p-3.5 sm:p-4">
-                        <span className="px-2 py-0.5 rounded border border-black bg-retro-warm text-[10px] font-mono font-bold">
-                          {a.category}
-                        </span>
-                        <div className="text-xs text-black/60 mt-0.5">{a.target}</div>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{a.author}</td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs">{a.date}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
-                          PUBLIK
-                        </span>
+                  {announcements.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada siaran pengumuman tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    announcements.map((a) => (
+                      <tr key={a.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black max-w-md">
+                          <div>{a.title}</div>
+                        </td>
+                        <td className="p-3.5 sm:p-4">
+                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm text-[10px] font-mono font-bold">
+                            {a.category}
+                          </span>
+                          <div className="text-xs text-black/60 mt-0.5">{a.target}</div>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{a.author}</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs">{a.date}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            PUBLIK
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -293,32 +304,40 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {EVENTS.map((e) => (
-                    <tr key={e.id} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
-                        <div>{e.title}</div>
-                        <span className="text-xs font-mono text-black/60">Pembicara: {e.speaker}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs">
-                        <div>{e.date}</div>
-                        <span className="text-black/60">{e.time}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-center text-xs font-mono">{e.quota}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{e.registered} Orang</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span
-                          className={cn(
-                            'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
-                            e.status === 'REGISTRASI_DIBUKA'
-                              ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                              : 'border-amber-500 bg-amber-100 text-amber-950'
-                          )}
-                        >
-                          {e.status === 'REGISTRASI_DIBUKA' ? 'DIBUKA' : 'KUOTA PENUH'}
-                        </span>
+                  {events.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada agenda event atau webinar tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    events.map((e) => (
+                      <tr key={e.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
+                          <div>{e.title}</div>
+                          <span className="text-xs font-mono text-black/60">Pembicara: {e.speaker}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs">
+                          <div>{e.date}</div>
+                          <span className="text-black/60">{e.time}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-center text-xs font-mono">{e.quota}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{e.registered} Orang</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span
+                            className={cn(
+                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              e.status === 'REGISTRASI_DIBUKA'
+                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                                : 'border-amber-500 bg-amber-100 text-amber-950'
+                            )}
+                          >
+                            {e.status === 'REGISTRASI_DIBUKA' ? 'DIBUKA' : 'KUOTA PENUH'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

@@ -26,11 +26,8 @@ export function DashboardShell({
   const [isNavOpen, setIsNavOpen] = useState(true);
   const router = useRouter();
 
-  if (isAlreadyInShell) {
-    return <div className="page-enter w-full space-y-6">{children}</div>;
-  }
-
   useEffect(() => {
+    if (isAlreadyInShell) return;
     const handleResize = () => {
       if (window.innerWidth < 768) {
         setIsNavOpen(false);
@@ -43,7 +40,11 @@ export function DashboardShell({
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [isAlreadyInShell]);
+
+  if (isAlreadyInShell) {
+    return <div className="page-enter w-full space-y-6">{children}</div>;
+  }
 
   const toggleNav = () => {
     setIsNavOpen((prev) => {

@@ -354,24 +354,50 @@ export function CoordinatorApprovalsHubView({
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
                           {r.status === 'PENDING' ? (
-                            <div className="flex items-center justify-center gap-1.5">
-                              <button
-                                type="button"
-                                disabled={isPending}
-                                onClick={() => openDecisionModal(r, true)}
-                                className="px-2.5 py-1 rounded-lg border-2 border-black bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition-all cursor-pointer shadow-xs"
-                              >
-                                Setujui
-                              </button>
-                              <button
-                                type="button"
-                                disabled={isPending}
-                                onClick={() => openDecisionModal(r, false)}
-                                className="px-2.5 py-1 rounded-lg border-2 border-black bg-rose-500 text-white text-xs font-bold hover:bg-rose-600 transition-all cursor-pointer shadow-xs"
-                              >
-                                Tolak
-                              </button>
-                            </div>
+                            !isDemo ? (
+                              <div className="flex flex-col items-center gap-1">
+                                <div className="flex items-center justify-center gap-1.5 opacity-50">
+                                  <button
+                                    type="button"
+                                    disabled
+                                    title="TODO(backend): Menunggu migrasi database 20261011000014 diterapkan ke production."
+                                    className="px-2.5 py-1 rounded-lg border-2 border-neutral-400 bg-neutral-200 text-neutral-500 text-xs font-bold cursor-not-allowed shadow-xs"
+                                  >
+                                    Setujui
+                                  </button>
+                                  <button
+                                    type="button"
+                                    disabled
+                                    title="TODO(backend): Menunggu migrasi database 20261011000014 diterapkan ke production."
+                                    className="px-2.5 py-1 rounded-lg border-2 border-neutral-400 bg-neutral-200 text-neutral-500 text-xs font-bold cursor-not-allowed shadow-xs"
+                                  >
+                                    Tolak
+                                  </button>
+                                </div>
+                                <span className="text-[10px] text-amber-900 font-mono font-bold bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                                  TODO(backend): Migrasi 20261011000014
+                                </span>
+                              </div>
+                            ) : (
+                              <div className="flex items-center justify-center gap-1.5">
+                                <button
+                                  type="button"
+                                  disabled={isPending}
+                                  onClick={() => openDecisionModal(r, true)}
+                                  className="px-2.5 py-1 rounded-lg border-2 border-black bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition-all cursor-pointer shadow-xs"
+                                >
+                                  Setujui
+                                </button>
+                                <button
+                                  type="button"
+                                  disabled={isPending}
+                                  onClick={() => openDecisionModal(r, false)}
+                                  className="px-2.5 py-1 rounded-lg border-2 border-black bg-rose-500 text-white text-xs font-bold hover:bg-rose-600 transition-all cursor-pointer shadow-xs"
+                                >
+                                  Tolak
+                                </button>
+                              </div>
+                            )
                           ) : (
                             <span className="text-xs font-mono text-black/60">Selesai Ditinjau</span>
                           )}
@@ -468,7 +494,7 @@ export function CoordinatorApprovalsHubView({
                     <span className="text-emerald-700 font-black text-sm">{modalState.request.proposed_score}</span>
                   </div>
                   <div className="text-[11px] text-black/70 italic border-t border-black/20 pt-1">
-                    Alasan Dosen: "{modalState.request.reason}"
+                    Alasan Dosen: &ldquo;{modalState.request.reason}&rdquo;
                   </div>
                 </div>
 

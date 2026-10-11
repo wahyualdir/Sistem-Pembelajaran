@@ -60,6 +60,9 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
     { id: 'crt-3', name: 'Lencana Kontributor Riset & Open Source Kampus', type: 'KOMPETENSI', issuer: 'Pusat Inovasi & Riset Software', criteria: 'Minimal 3 repositori kontribusi disetujui', issuedCount: 24, status: 'AKTIF' },
   ];
 
+  const books = isDemo ? LIBRARY_BOOKS : [];
+  const certificates = isDemo ? CERTIFICATES : [];
+
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. HEADER RETRO */}
@@ -185,23 +188,31 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {LIBRARY_BOOKS.map((b) => (
-                    <tr key={b.id} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
-                        <div>{b.title}</div>
-                        <span className="text-xs font-mono text-black/60">ISBN: {b.isbn}</span>
+                  {books.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada koleksi buku pustaka tersimpan di pangkalan data produksi.
                       </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{b.author}</td>
-                      <td className="p-3.5 sm:p-4">
-                        <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-[10px] font-bold">
-                          {b.category}
-                        </span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{b.copies} Eks</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-black text-emerald-800">{b.available} Eks</td>
-                      <td className="p-3.5 sm:p-4 text-xs font-mono text-black/70">{b.location}</td>
                     </tr>
-                  ))}
+                  ) : (
+                    books.map((b) => (
+                      <tr key={b.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
+                          <div>{b.title}</div>
+                          <span className="text-xs font-mono text-black/60">ISBN: {b.isbn}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{b.author}</td>
+                        <td className="p-3.5 sm:p-4">
+                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-[10px] font-bold">
+                            {b.category}
+                          </span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{b.copies} Eks</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-black text-emerald-800">{b.available} Eks</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-mono text-black/70">{b.location}</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -253,26 +264,34 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {CERTIFICATES.map((c) => (
-                    <tr key={c.id} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
-                        <div>{c.name}</div>
-                      </td>
-                      <td className="p-3.5 sm:p-4">
-                        <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-[10px] font-bold">
-                          {c.type}
-                        </span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{c.issuer}</td>
-                      <td className="p-3.5 sm:p-4 text-xs text-black/70">{c.criteria}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{c.issuedCount} Penerima</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
-                          TERVERIFIKASI
-                        </span>
+                  {certificates.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada template sertifikat tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    certificates.map((c) => (
+                      <tr key={c.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
+                          <div>{c.name}</div>
+                        </td>
+                        <td className="p-3.5 sm:p-4">
+                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-[10px] font-bold">
+                            {c.type}
+                          </span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{c.issuer}</td>
+                        <td className="p-3.5 sm:p-4 text-xs text-black/70">{c.criteria}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{c.issuedCount} Penerima</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            TERVERIFIKASI
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

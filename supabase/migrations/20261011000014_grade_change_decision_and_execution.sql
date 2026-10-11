@@ -1,5 +1,5 @@
--- SIAJAR Migration: Alur Otorisasi & Eksekusi Perubahan Nilai (Fase 2C & 2D)
--- Mengikuti pola 20260930000009_grade_changes.sql dengan RLS per Prodi dan wewenang Staf Akademik.
+-- SIAJAR Migration: Alur Otorisasi & Eksekusi Perubahan Nilai (Fase 2C, 2D & 2E)
+-- Mengikuti pola 20260930000009_grade_changes.sql dengan RLS per Prodi, penegakan pemisahan tugas (Separation of Duties), dan mesin status ketat.
 -- CATATAN: JANGAN MENJALANKAN MIGRASI INI KE DATABASE PRODUCTION SECARA OTOMATIS.
 -- Gunakan instruksi penerapan pada laporan akhir.
 
@@ -31,34 +31,51 @@ USING (
 );
 
 -- 4. RPC: Keputusan Kaprodi (Persetujuan / Penolakan)
--- Aturan:
--- a. Minimal 10 karakter catatan
--- b. Pemohon DILARANG memutuskan pengajuannya sendiri (SELF_APPROVAL)
--- c. Hanya Kaprodi dari prodi mata kuliah kelas terkait yang berwenang (is_class_coordinator)
--- d. Persetujuan TIDAK langsung mengubah nilai final (status menjadi 'APPROVED', menunggu eksekusi Staf di 2D)
+-- Aturan Keamanan (A4b, A4d, A4e):
+-- a. Aktor diambil murni dari auth.uid() (BUKAN parameter klien)
+-- b. Role dan wewenang dicek di database (is_class_coordinator)
+-- c. Pemohon DILARANG memutuskan pengajuannya sendiri, DAN dosen pengampu kelas terkait DILARANG menyetujui (A4b)
+-- d. Pesan blokir: "Anda tidak dapat menyetujui pengajuan sendiri. Pengajuan perlu ditinjau oleh penyetuju lain."
+-- e. Mesin status ketat: Hanya status 'PENDING' yang dapat diproses menjadi 'APPROVED' atau 'REJECTED' (A4d)
+-- f. Minimal 10 karakter catatan keputusan
+-- g. Persetujuan TIDAK langsung mengubah nilai final (status menjadi 'APPROVED', menunggu eksekusi Staf di 2D)
 CREATE OR REPLACE FUNCTION public.decide_grade_change(p_request uuid, p_approve boolean, p_note text)
 RETURNS public.grade_change_requests LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
 DECLARE
     v_uid uuid := (SELECT auth.uid());
     v_r public.grade_change_requests;
     v_clean_note text := trim(COALESCE(p_note, ''));
+    v_is_class_lecturer boolean;
 BEGIN
+    -- Validasi sesi autentikasi
+    IF v_uid IS NULL THEN
+        RAISE EXCEPTION 'UNAUTHORIZED: Pengguna tidak terautentikasi.';
+    END IF;
+
+    -- Kunci baris permohonan untuk transaksi konkuren
     SELECT * INTO v_r FROM public.grade_change_requests WHERE id = p_request FOR UPDATE;
-    IF NOT FOUND THEN RAISE EXCEPTION 'NOT_FOUND'; END IF;
+    IF NOT FOUND THEN 
+        RAISE EXCEPTION 'NOT_FOUND: Berkas permohonan perubahan nilai tidak ditemukan.'; 
+    END IF;
     
-    -- Validasi wewenang Kaprodi per Prodi
-    IF v_uid IS NULL OR NOT public.is_class_coordinator(v_r.class_id) THEN 
-        RAISE EXCEPTION 'FORBIDDEN'; 
+    -- Validasi wewenang Kaprodi per Prodi terkait
+    IF NOT public.is_class_coordinator(v_r.class_id) THEN 
+        RAISE EXCEPTION 'FORBIDDEN: Hanya Koordinator Program Studi dari mata kuliah terkait yang berwenang memutuskan.'; 
     END IF;
 
-    -- Validasi pemohon tidak boleh menyetujui pengajuannya sendiri
-    IF v_r.requested_by = v_uid THEN 
-        RAISE EXCEPTION 'SELF_APPROVAL: Tidak dapat menyetujui pengajuan sendiri. Pengajuan harus dieskalasi ke Dekan / Pimpinan Fakultas.'; 
+    -- Validasi A4b: Cek apakah peninjau adalah dosen pengampu kelas terkait
+    SELECT EXISTS (
+        SELECT 1 FROM public.classes c WHERE c.id = v_r.class_id AND c.lecturer_id = v_uid
+    ) INTO v_is_class_lecturer;
+
+    -- Validasi A4b: Penolakan jika penyetuju adalah (i) pengaju, ATAU (ii) dosen pengampu kelas terkait, ATAU (iii) user id sama
+    IF v_r.requested_by = v_uid OR v_is_class_lecturer THEN 
+        RAISE EXCEPTION 'SELF_OR_LECTURER_APPROVAL: Anda tidak dapat menyetujui pengajuan sendiri. Pengajuan perlu ditinjau oleh penyetuju lain.'; 
     END IF;
 
-    -- Validasi status harus PENDING
+    -- Validasi A4d: Mesin status ketat, hanya PENDING yang boleh diproses
     IF v_r.status <> 'PENDING' THEN 
-        RAISE EXCEPTION 'NOT_PENDING'; 
+        RAISE EXCEPTION 'INVALID_STATE: Hanya pengajuan berstatus PENDING yang dapat diproses.'; 
     END IF;
 
     -- Validasi alasan minimal 10 karakter untuk pengajuan DAN penolakan
@@ -66,7 +83,7 @@ BEGIN
         RAISE EXCEPTION 'NOTE_MIN_10_CHARS: Catatan atau alasan keputusan minimal 10 karakter.'; 
     END IF;
 
-    -- Perbarui status permohonan
+    -- Perbarui status permohonan dalam SATU transaksi
     UPDATE public.grade_change_requests
     SET status = (CASE WHEN p_approve THEN 'APPROVED' ELSE 'REJECTED' END)::public.change_request_status,
         reviewed_by = v_uid, 
@@ -89,7 +106,7 @@ BEGIN
         v_r.class_id
     );
 
-    -- Catat ke Audit Log
+    -- Catat ke Audit Log Sistem
     INSERT INTO public.audit_logs (actor_user_id, actor_role, action, entity_type, entity_id, scope_type, scope_id, after_json)
     VALUES (
         v_uid, 
@@ -112,13 +129,14 @@ END;
 $$;
 
 -- 5. RPC: Eksekusi Perubahan Nilai oleh Staf Akademik (Fase 2D)
--- Aturan:
--- a. Hanya peran ACADEMIC_STAFF yang berwenang
--- b. Hanya pengajuan berstatus 'APPROVED' yang dapat dieksekusi
--- c. Server memverifikasi nilai saat ini masih sama dengan old_score (mencegah double execution / drift)
--- d. Nilai final pada tabel grades diperbarui dan grade_history dicatat
--- e. Status pengajuan menjadi 'EXECUTED' lengkap dengan executed_by dan executed_at
--- f. Catat jejak lengkap di audit_logs dan kirim notifikasi ke mahasiswa + dosen
+-- Aturan Keamanan (A4c, A4d, A4e):
+-- a. Aktor diambil dari auth.uid() (BUKAN parameter klien)
+-- b. Hanya peran ACADEMIC_STAFF yang berwenang (dicek di database)
+-- c. Pemisahan Tugas (A4c): Pengaju, Penyetuju, dan Eksekutor harus TIGA user id yang BERBEDA
+-- d. Mesin status ketat & Idempotensi (A4d): Hanya status 'APPROVED' yang dapat dieksekusi; Tolak eksekusi ganda jika status sudah 'EXECUTED'
+-- e. Validasi rentang nilai 0-100 (A4e)
+-- f. Nilai saat ini diverifikasi sama persis dengan old_score (FOR UPDATE)
+-- g. Nilai berubah + status + audit ditulis dalam SATU transaksi atomik
 CREATE OR REPLACE FUNCTION public.execute_grade_change(p_request uuid, p_note text DEFAULT NULL)
 RETURNS public.grade_change_requests LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
 DECLARE
@@ -128,46 +146,70 @@ DECLARE
     v_is_staff boolean;
     v_clean_note text := trim(COALESCE(p_note, 'Eksekusi administratif nilai perkuliahan oleh Staf Akademik'));
 BEGIN
-    -- Validasi wewenang Staf Akademik
+    -- Validasi sesi autentikasi
+    IF v_uid IS NULL THEN
+        RAISE EXCEPTION 'UNAUTHORIZED: Pengguna tidak terautentikasi.';
+    END IF;
+
+    -- Validasi wewenang Staf Akademik di database
     SELECT EXISTS (
         SELECT 1 FROM public.user_roles ur
         JOIN public.roles r ON r.id = ur.role_id
         WHERE ur.user_id = v_uid AND r.code = 'ACADEMIC_STAFF' AND ur.status = 'ACTIVE'
     ) INTO v_is_staff;
 
-    IF v_uid IS NULL OR NOT v_is_staff THEN
+    IF NOT v_is_staff THEN
         RAISE EXCEPTION 'FORBIDDEN: Hanya Staf Akademik yang berwenang mengeksekusi perubahan nilai.';
     END IF;
 
-    -- Kunci baris permohonan
+    -- Kunci baris permohonan untuk transaksi atomik
     SELECT * INTO v_r FROM public.grade_change_requests WHERE id = p_request FOR UPDATE;
-    IF NOT FOUND THEN RAISE EXCEPTION 'NOT_FOUND: Berkas permohonan tidak ditemukan.'; END IF;
-
-    -- Validasi status harus APPROVED
-    IF v_r.status <> 'APPROVED' THEN
-        RAISE EXCEPTION 'NOT_APPROVED: Hanya pengajuan berstatus disetujui yang dapat dieksekusi.';
+    IF NOT FOUND THEN 
+        RAISE EXCEPTION 'NOT_FOUND: Berkas permohonan tidak ditemukan.'; 
     END IF;
 
-    -- Kunci dan verifikasi tabel grades
+    -- Validasi A4d: Tolak eksekusi ganda (Idempoten)
+    IF v_r.status = 'EXECUTED' THEN
+        RAISE EXCEPTION 'ALREADY_EXECUTED: Pengajuan ini telah dieksekusi sebelumnya (eksekusi hanya dapat dilakukan satu kali).';
+    END IF;
+
+    -- Validasi A4d: Mesin status ketat (Hanya APPROVED yang boleh dieksekusi)
+    IF v_r.status <> 'APPROVED' THEN
+        RAISE EXCEPTION 'NOT_APPROVED: Hanya pengajuan berstatus APPROVED yang dapat dieksekusi.';
+    END IF;
+
+    -- Validasi A4c: Pemisahan tugas (Pengaju, Penyetuju, Eksekutor harus 3 user id berbeda)
+    IF v_uid = v_r.requested_by OR v_uid = v_r.reviewed_by OR (v_r.reviewed_by IS NOT NULL AND v_r.requested_by = v_r.reviewed_by) THEN
+        RAISE EXCEPTION 'SEPARATION_OF_DUTIES_VIOLATION: Pemisahan tugas dilanggar: Pengaju, penyetuju, dan eksekutor harus tiga pengguna yang berbeda.';
+    END IF;
+
+    -- Validasi A4e: Rentang nilai 0-100
+    IF v_r.proposed_score < 0 OR v_r.proposed_score > 100 THEN
+        RAISE EXCEPTION 'INVALID_SCORE_RANGE: Nilai usulan harus berada dalam rentang 0-100.';
+    END IF;
+
+    -- Kunci dan verifikasi tabel grades (FOR UPDATE)
     SELECT * INTO v_g FROM public.grades WHERE id = v_r.grade_id FOR UPDATE;
-    IF NOT FOUND THEN RAISE EXCEPTION 'GRADE_NOT_FOUND: Data nilai final tidak ditemukan.'; END IF;
+    IF NOT FOUND THEN 
+        RAISE EXCEPTION 'GRADE_NOT_FOUND: Data nilai final tidak ditemukan.'; 
+    END IF;
 
     -- Verifikasi integritas: nilai saat ini masih sama dengan nilai lama pada saat pengajuan
     IF v_g.score <> v_r.old_score THEN
         RAISE EXCEPTION 'OLD_SCORE_MISMATCH: Nilai saat ini ( % ) berbeda dengan nilai awal pengajuan ( % ). Eksekusi dibatalkan untuk investigasi.', v_g.score, v_r.old_score;
     END IF;
 
-    -- Eksekusi pembaruan nilai final
+    -- 1. Eksekusi pembaruan nilai final
     UPDATE public.grades 
     SET score = v_r.proposed_score, updated_at = now() 
     WHERE id = v_r.grade_id 
     RETURNING * INTO v_g;
 
-    -- Catat riwayat perubahan nilai resmi
+    -- 2. Catat riwayat perubahan nilai resmi
     INSERT INTO public.grade_history (grade_id, class_id, old_score, new_score, old_status, new_status, changed_by, reason)
     VALUES (v_g.id, v_r.class_id, v_r.old_score, v_r.proposed_score, 'FINAL', 'FINAL', v_uid, v_r.reason);
 
-    -- Perbarui status berkas permohonan menjadi EXECUTED
+    -- 3. Perbarui status berkas permohonan menjadi EXECUTED
     UPDATE public.grade_change_requests
     SET status = 'EXECUTED'::public.change_request_status,
         executed_by = v_uid,
@@ -175,7 +217,7 @@ BEGIN
         execution_note = v_clean_note
     WHERE id = p_request RETURNING * INTO v_r;
 
-    -- Notifikasi kepada Mahasiswa
+    -- 4. Notifikasi kepada Mahasiswa
     INSERT INTO public.notifications (user_id, type, title, body, entity_type, entity_id, class_id)
     VALUES (
         v_g.student_id,
@@ -187,7 +229,7 @@ BEGIN
         v_r.class_id
     );
 
-    -- Notifikasi kepada Dosen Pengampu
+    -- 5. Notifikasi kepada Dosen Pengampu
     INSERT INTO public.notifications (user_id, type, title, body, entity_type, entity_id, class_id)
     VALUES (
         v_r.requested_by,
@@ -199,7 +241,7 @@ BEGIN
         v_r.class_id
     );
 
-    -- Catat jejak audit lengkap
+    -- 6. Catat jejak audit lengkap dalam satu transaksi atomik
     INSERT INTO public.audit_logs (actor_user_id, actor_role, action, entity_type, entity_id, scope_type, scope_id, after_json)
     VALUES (
         v_uid,
@@ -223,7 +265,7 @@ BEGIN
 END;
 $$;
 
--- Izin Eksekusi Fungsi
+-- Izin Eksekusi Fungsi (Revoke dari public/anon, grant ke authenticated)
 REVOKE ALL ON FUNCTION public.decide_grade_change(uuid, boolean, text) FROM PUBLIC, anon;
 REVOKE ALL ON FUNCTION public.execute_grade_change(uuid, text) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.decide_grade_change(uuid, boolean, text) TO authenticated;

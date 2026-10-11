@@ -638,7 +638,7 @@ export function LecturerExamsHubView({
                 </p>
               </div>
               <span className="text-xs font-mono font-bold px-3 py-1 rounded border border-black bg-white shrink-0">
-                Verified Audit Log
+                Log Audit
               </span>
             </div>
 

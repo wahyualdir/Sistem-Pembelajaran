@@ -369,7 +369,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
                   <span>Pemberitahuan Persistensi Database (Fase 3)</span>
                 </p>
                 <p>
-                  Penyimpanan dokumen e-book/modul ke Supabase Storage bucket 'library-books' sedang dalam penyiapan. Di luar mode demo, publikasi dinonaktifkan untuk mencegah sukses palsu.
+                  Penyimpanan dokumen e-book/modul ke Supabase Storage bucket &lsquo;library-books&rsquo; sedang dalam penyiapan. Di luar mode demo, publikasi dinonaktifkan untuk mencegah sukses palsu.
                 </p>
               </div>
             )}

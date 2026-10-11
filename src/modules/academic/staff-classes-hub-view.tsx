@@ -71,6 +71,15 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
   const [csvError, setCsvError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
 
+  const sanitizeCsvCell = (val: string): string => {
+    const trimmed = (val ?? '').trim().replace(/^"(.*)"$/, '$1');
+    // Netralisasi sel berawalan = + - @ (CSV formula injection)
+    if (/^[=+\-@]/.test(trimmed)) {
+      return "'" + trimmed;
+    }
+    return trimmed;
+  };
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -86,13 +95,79 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
 
     setCsvError(null);
     setCsvFileName(file.name);
-    // Simulasikan parsing baris CSV
-    setCsvRows([
-      { row: 1, nim: '2024031', name: 'Bagus Pratama', email: 'bagus.p@mahasiswa.ac.id', classCode: 'IF-301-A', isValid: true },
-      { row: 2, nim: '2024032', name: 'Dwi Cahyani', email: 'dwi.c@mahasiswa.ac.id', classCode: 'IF-301-A', isValid: true },
-      { row: 3, nim: '2024033', name: 'Eko Wahyudi', email: 'eko.w@mahasiswa.ac.id', classCode: 'IF-302-B', isValid: true },
-      { row: 4, nim: 'INVALID_NIM', name: 'Fajar Nugroho', email: 'fajar@invalid', classCode: 'XX-000', isValid: false, error: 'NIM harus numerik 7 digit dan kode kelas wajib terdaftar.' },
-    ]);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = event.target?.result as string;
+        if (!text) {
+          setCsvError('Berkas CSV kosong atau tidak dapat dibaca.');
+          return;
+        }
+
+        const rawLines = text.split(/\r?\n/).map((l) => l.trim()).filter((l) => l.length > 0);
+        if (rawLines.length <= 1) {
+          setCsvError('Berkas CSV tidak memiliki baris data (hanya header atau kosong).');
+          return;
+        }
+
+        // Batas maksimal 500 baris data
+        const dataLines = rawLines.slice(1);
+        if (dataLines.length > 500) {
+          setCsvError(`Batas maksimum adalah 500 baris data. Ditemukan ${dataLines.length} baris.`);
+          return;
+        }
+
+        const seenNims = new Set<string>();
+        const parsedRows = dataLines.map((line, idx) => {
+          const cols = line.split(',').map((c) => sanitizeCsvCell(c));
+          const nim = cols[0] || '';
+          const name = cols[1] || '';
+          const email = cols[2] || '';
+          const classCode = cols[3] || '';
+
+          let isValid = true;
+          let error = '';
+
+          if (!nim || !/^\d{7}$/.test(nim.replace(/^'/, ''))) {
+            isValid = false;
+            error = 'NIM harus berupa 7 digit numerik.';
+          } else if (seenNims.has(nim)) {
+            isValid = false;
+            error = 'Duplikasi NIM terdeteksi dalam berkas impor batch.';
+          } else if (!classCode) {
+            isValid = false;
+            error = 'Kode kelas wajib diisi.';
+          } else if (!name) {
+            isValid = false;
+            error = 'Nama mahasiswa wajib diisi.';
+          }
+
+          if (isValid) {
+            seenNims.add(nim);
+          }
+
+          return {
+            row: idx + 1,
+            nim,
+            name,
+            email,
+            classCode,
+            isValid,
+            error: error || undefined,
+          };
+        });
+
+        // Pratinjau murni di memori, tidak menyimpan ke backend sebelum konfirmasi
+        setCsvRows(parsedRows);
+      } catch {
+        setCsvError('Gagal memproses encoding berkas CSV. Pastikan format teks UTF-8.');
+      }
+    };
+    reader.onerror = () => {
+      setCsvError('Gagal membaca berkas CSV.');
+    };
+    reader.readAsText(file, 'UTF-8');
   };
 
   const ENROLLED_STUDENTS = [
@@ -101,6 +176,14 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
     { nim: '2024025', name: 'Siti Rahma', prodi: 'Teknik Informatika (S1)', classCode: 'IF-302-B', course: 'Basis Data Terdistribusi', enrolledAt: '03 Sep 2026', status: 'TERDAFTAR' },
     { nim: '2024039', name: 'Dimas Aditya', prodi: 'Teknik Informatika (S1)', classCode: 'IF-401-A', course: 'Kecerdasan Buatan', enrolledAt: '04 Sep 2026', status: 'TERDAFTAR' },
   ];
+
+  const CLASS_MUTATIONS = [
+    { nim: '2024018', name: 'Rian Hidayat', course: 'Pemrograman Web Lanjut', from: 'IF-3B (Sore)', to: 'IF-3A (Pagi)', reason: 'Jadwal kerja shift malam bertabrakan dengan kelas sore.', status: 'DISETUJUI' },
+    { nim: '2024039', name: 'Dimas Aditya', course: 'Basis Data Terdistribusi', from: 'IF-3A (Pagi)', to: 'IF-3B (Siang)', reason: 'Menyesuaikan beban SKS praktikum lintas fakultas.', status: 'DISETUJUI' },
+  ];
+
+  const enrolledStudents = isDemo ? ENROLLED_STUDENTS : [];
+  const classMutations = isDemo ? CLASS_MUTATIONS : [];
 
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
@@ -226,25 +309,33 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {ENROLLED_STUDENTS.map((s) => (
-                    <tr key={s.nim} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{s.name}</div>
-                        <span className="text-xs font-mono text-black/60">{s.nim}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{s.prodi}</td>
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{s.course}</div>
-                        <span className="text-xs font-mono text-black/60">{s.classCode}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs text-black/70">{s.enrolledAt}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
-                          TERDAFTAR
-                        </span>
+                  {enrolledStudents.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada mahasiswa terdaftar di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    enrolledStudents.map((s) => (
+                      <tr key={s.nim} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{s.name}</div>
+                          <span className="text-xs font-mono text-black/60">{s.nim}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{s.prodi}</td>
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{s.course}</div>
+                          <span className="text-xs font-mono text-black/60">{s.classCode}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs text-black/70">{s.enrolledAt}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            TERDAFTAR
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -444,26 +535,31 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {[
-                    { nim: '2024018', name: 'Rian Hidayat', course: 'Pemrograman Web Lanjut', from: 'IF-3B (Sore)', to: 'IF-3A (Pagi)', reason: 'Jadwal kerja shift malam bertabrakan dengan kelas sore.', status: 'DISETUJUI' },
-                    { nim: '2024039', name: 'Dimas Aditya', course: 'Basis Data Terdistribusi', from: 'IF-3A (Pagi)', to: 'IF-3B (Siang)', reason: 'Menyesuaikan beban SKS praktikum lintas fakultas.', status: 'DISETUJUI' },
-                  ].map((m) => (
-                    <tr key={m.nim} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{m.name}</div>
-                        <span className="text-xs font-mono text-black/60">{m.nim}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 font-bold text-black">{m.course}</td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs text-rose-800">{m.from}</td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs text-emerald-800 font-bold">{m.to}</td>
-                      <td className="p-3.5 sm:p-4 text-xs text-black/80">{m.reason}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
-                          {m.status}
-                        </span>
+                  {classMutations.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada permohonan mutasi pindah kelas di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    classMutations.map((m) => (
+                      <tr key={m.nim} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{m.name}</div>
+                          <span className="text-xs font-mono text-black/60">{m.nim}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 font-bold text-black">{m.course}</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs text-rose-800">{m.from}</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs text-emerald-800 font-bold">{m.to}</td>
+                        <td className="p-3.5 sm:p-4 text-xs text-black/80">{m.reason}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            {m.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

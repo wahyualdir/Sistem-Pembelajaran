@@ -137,7 +137,7 @@ const TEST_CASES: TestCase[] = [
     userId: USERS.LECTURER.id,
     path: '/exams?tab=pelanggaran',
     expectedStatus: 200,
-    uniqueMarker: 'Verified Audit Log',
+    uniqueMarker: 'Log Audit',
   },
 
   // --- 3. KAPRODI (PROGRAM_COORDINATOR) ---

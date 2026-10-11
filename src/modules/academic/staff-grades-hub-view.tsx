@@ -227,28 +227,41 @@ export function StaffGradesHubView({
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {[
+                  {(!isDemo ? [] : [
                     { nim: '2024001', name: 'Ahmad Fauzi', prodi: 'Teknik Informatika (S1)', sks: 21, ips: 3.85, ipk: 3.78, status: 'AKTIF (MEMUASKAN)' },
                     { nim: '2024018', name: 'Rian Hidayat', prodi: 'Teknik Informatika (S1)', sks: 20, ips: 3.42, ipk: 3.35, status: 'AKTIF' },
                     { nim: '2024025', name: 'Siti Rahma', prodi: 'Teknik Informatika (S1)', sks: 24, ips: 3.92, ipk: 3.88, status: 'AKTIF (CUMLAUDE)' },
                     { nim: '2024039', name: 'Dimas Aditya', prodi: 'Teknik Informatika (S1)', sks: 18, ips: 3.25, ipk: 3.30, status: 'AKTIF' },
-                  ].map((m) => (
-                    <tr key={m.nim} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{m.name}</div>
-                        <span className="text-xs font-mono text-black/60">{m.nim}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{m.prodi}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{m.sks} SKS</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-retro-orange">{m.ips.toFixed(2)}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-black text-black">{m.ipk.toFixed(2)}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
-                          {m.status}
-                        </span>
+                  ]).length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada data rekapitulasi nilai mahasiswa di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    [
+                      { nim: '2024001', name: 'Ahmad Fauzi', prodi: 'Teknik Informatika (S1)', sks: 21, ips: 3.85, ipk: 3.78, status: 'AKTIF (MEMUASKAN)' },
+                      { nim: '2024018', name: 'Rian Hidayat', prodi: 'Teknik Informatika (S1)', sks: 20, ips: 3.42, ipk: 3.35, status: 'AKTIF' },
+                      { nim: '2024025', name: 'Siti Rahma', prodi: 'Teknik Informatika (S1)', sks: 24, ips: 3.92, ipk: 3.88, status: 'AKTIF (CUMLAUDE)' },
+                      { nim: '2024039', name: 'Dimas Aditya', prodi: 'Teknik Informatika (S1)', sks: 18, ips: 3.25, ipk: 3.30, status: 'AKTIF' },
+                    ].map((m) => (
+                      <tr key={m.nim} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{m.name}</div>
+                          <span className="text-xs font-mono text-black/60">{m.nim}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{m.prodi}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{m.sks} SKS</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-retro-orange">{m.ips.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-black text-black">{m.ipk.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            {m.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -290,38 +303,51 @@ export function StaffGradesHubView({
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {[
+                  {(!isDemo ? [] : [
                     { nim: '2024001', name: 'Ahmad Fauzi', course: 'Pemrograman Web Lanjut (IF-3A)', total: 14, hadir: 13, izin: 1, alpa: 0, pct: 92.8, eligible: true },
                     { nim: '2024018', name: 'Rian Hidayat', course: 'Pemrograman Web Lanjut (IF-3A)', total: 14, hadir: 11, izin: 2, alpa: 1, pct: 78.5, eligible: true },
                     { nim: '2024025', name: 'Siti Rahma', course: 'Basis Data Terdistribusi (IF-3B)', total: 14, hadir: 14, izin: 0, alpa: 0, pct: 100.0, eligible: true },
                     { nim: '2024099', name: 'Zulkifli Mansur', course: 'Basis Data Terdistribusi (IF-3B)', total: 14, hadir: 9, izin: 1, alpa: 4, pct: 64.2, eligible: false },
-                  ].map((p) => (
-                    <tr key={p.nim} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{p.name}</div>
-                        <span className="text-xs font-mono text-black/60">{p.nim}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{p.course}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono">{p.total}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-emerald-800">{p.hadir}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono text-amber-800">{p.izin}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono text-rose-800">{p.alpa}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{p.pct.toFixed(1)}%</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span
-                          className={cn(
-                            'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
-                            p.eligible
-                              ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                              : 'border-rose-500 bg-rose-100 text-rose-950'
-                          )}
-                        >
-                          {p.eligible ? '✓ MEMENUHI SYARAT' : '✗ TIDAK MEMENUHI'}
-                        </span>
+                  ]).length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada data rekapitulasi presensi kuliah di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
-                </tbody>
+                  ) : (
+                    [
+                      { nim: '2024001', name: 'Ahmad Fauzi', course: 'Pemrograman Web Lanjut (IF-3A)', total: 14, hadir: 13, izin: 1, alpa: 0, pct: 92.8, eligible: true },
+                      { nim: '2024018', name: 'Rian Hidayat', course: 'Pemrograman Web Lanjut (IF-3A)', total: 14, hadir: 11, izin: 2, alpa: 1, pct: 78.5, eligible: true },
+                      { nim: '2024025', name: 'Siti Rahma', course: 'Basis Data Terdistribusi (IF-3B)', total: 14, hadir: 14, izin: 0, alpa: 0, pct: 100.0, eligible: true },
+                      { nim: '2024099', name: 'Zulkifli Mansur', course: 'Basis Data Terdistribusi (IF-3B)', total: 14, hadir: 9, izin: 1, alpa: 4, pct: 64.2, eligible: false },
+                    ].map((p) => (
+                      <tr key={p.nim} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{p.name}</div>
+                          <span className="text-xs font-mono text-black/60">{p.nim}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{p.course}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono">{p.total}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-emerald-800">{p.hadir}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono text-amber-800">{p.izin}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono text-rose-800">{p.alpa}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{p.pct.toFixed(1)}%</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span
+                            className={cn(
+                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              p.eligible
+                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                                : 'border-rose-500 bg-rose-100 text-rose-950'
+                            )}
+                          >
+                            {p.eligible ? '✓ MEMENUHI SYARAT' : '✗ TIDAK MEMENUHI'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+              </tbody>
               </table>
             </div>
           </div>
@@ -418,17 +444,33 @@ export function StaffGradesHubView({
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
                           {req.status === 'APPROVED' ? (
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setSelectedRequest(req);
-                                setModalError(null);
-                                setExecutionNote('');
-                              }}
-                              className="px-3 py-1.5 rounded-lg border-2 border-black bg-retro-orange text-white text-xs font-black shadow-xs hover:bg-black transition-all cursor-pointer"
-                            >
-                              Eksekusi Nilai
-                            </button>
+                            !isDemo ? (
+                              <div className="flex flex-col items-center gap-1">
+                                <button
+                                  type="button"
+                                  disabled
+                                  title="TODO(backend): Menunggu migrasi database 20261011000014 diterapkan ke production."
+                                  className="px-3 py-1.5 rounded-lg border-2 border-neutral-400 bg-neutral-200 text-neutral-500 text-xs font-bold cursor-not-allowed shadow-xs"
+                                >
+                                  Eksekusi Nilai
+                                </button>
+                                <span className="text-[10px] text-amber-900 font-mono font-bold bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                                  TODO(backend): Migrasi 20261011000014
+                                </span>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setSelectedRequest(req);
+                                  setModalError(null);
+                                  setExecutionNote('');
+                                }}
+                                className="px-3 py-1.5 rounded-lg border-2 border-black bg-retro-orange text-white text-xs font-black shadow-xs hover:bg-black transition-all cursor-pointer"
+                              >
+                                Eksekusi Nilai
+                              </button>
+                            )
                           ) : req.status === 'EXECUTED' ? (
                             <span className="text-xs font-mono font-bold text-emerald-700 flex items-center justify-center gap-1">
                               <CheckCircle2 className="h-3.5 w-3.5" />

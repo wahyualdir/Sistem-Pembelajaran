@@ -54,7 +54,7 @@ const ERR: Record<string, string> = {
   NO_CHANGE: 'Nilai usulan sama dengan nilai saat ini.',
   ALREADY_PENDING: 'Sudah ada pengajuan yang menunggu keputusan.',
   NOT_PENDING: 'Pengajuan ini sudah diputuskan.',
-  SELF_APPROVAL: 'Tidak dapat menyetujui pengajuan sendiri. Pengajuan harus dieskalasi ke Dekan / Pimpinan Fakultas.',
+  SELF_APPROVAL: 'Anda tidak dapat menyetujui pengajuan sendiri. Pengajuan perlu ditinjau oleh penyetuju lain.',
   NOTE_REQUIRED: 'Alasan penolakan / catatan keputusan minimal 10 karakter.',
   USER_NOT_FOUND: 'Pengguna tidak ditemukan atau belum aktif.',
   INVALID_ASSISTANT: 'Anda tidak dapat menjadikan diri sendiri asisten.',
@@ -920,12 +920,13 @@ export interface ChangeRequestItem {
   reason: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXECUTED';
   review_note: string | null;
+  reviewed_by?: string | null;
   created_at: string;
   executed_by?: string | null;
   executed_at?: string | null;
   execution_note?: string | null;
 }
-type DemoChange = ChangeRequestItem & { submission_id: string; requested_by: string };
+type DemoChange = ChangeRequestItem & { submission_id: string; requested_by: string; reviewed_by?: string };
 // Mode demo tidak memiliki data prodi, jadi koordinator demo melihat semua pengajuan; di database pembatasan prodi berlaku lewat RLS.
 const perubahan: DemoChange[] = ((globalThis as any).__siajarUbah ??= []);
 
@@ -990,6 +991,54 @@ if (perubahan.length === 0) {
       status: 'PENDING',
       review_note: null,
       created_at: new Date(Date.now() - 3600000 * 2).toISOString(),
+    },
+    {
+      id: 'cr-demo-005-executed',
+      submission_id: 'sub-demo-005',
+      requested_by: 'a0000002-0000-0000-0000-000000000002',
+      class_id: DEMO_CLASS_ID,
+      class_title: 'Pemrograman Web & Arsitektur Cloud',
+      assignment_title: 'Tugas 2: Desain Database Relasional',
+      student_name: 'Ahmad Mahasiswa (2024001)',
+      old_score: 70,
+      proposed_score: 80,
+      reason: 'Revisi skema database telah disetujui Kaprodi dan dieksekusi.',
+      status: 'EXECUTED',
+      review_note: 'Disetujui Kaprodi',
+      executed_by: 'a0000005-0000-0000-0000-000000000005',
+      executed_at: new Date(Date.now() - 3600000 * 12).toISOString(),
+      execution_note: 'Eksekusi administratif oleh Staf BAA',
+      created_at: new Date(Date.now() - 3600000 * 48).toISOString(),
+    },
+    {
+      id: 'cr-demo-006-rejected',
+      submission_id: 'sub-demo-006',
+      requested_by: 'a0000002-0000-0000-0000-000000000002',
+      class_id: DEMO_CLASS_ID,
+      class_title: 'Pemrograman Web & Arsitektur Cloud',
+      assignment_title: 'Kuis 1: Pengenalan Sintaks JS',
+      student_name: 'Rian Hidayat (2024018)',
+      old_score: 60,
+      proposed_score: 75,
+      reason: 'Pengajuan revisi kuis terlambat diajukan melampaui batas semester.',
+      status: 'REJECTED',
+      review_note: 'Ditolak Kaprodi: Pengajuan melampaui batas waktu semester berjalan.',
+      created_at: new Date(Date.now() - 3600000 * 72).toISOString(),
+    },
+    {
+      id: 'cr-demo-007-mismatch',
+      submission_id: 'sub-demo-001',
+      requested_by: 'a0000002-0000-0000-0000-000000000002',
+      class_id: DEMO_CLASS_ID,
+      class_title: 'Pemrograman Web & Arsitektur Cloud',
+      assignment_title: 'Tugas 3: Integrasi REST API',
+      student_name: 'Ahmad Mahasiswa (2024001)',
+      old_score: 99, // Sengaja tidak sama dengan nilai actual di memori (old score mismatch)
+      proposed_score: 100,
+      reason: 'Uji integritas nilai lama tidak sesuai untuk pengujian keamanan.',
+      status: 'APPROVED',
+      review_note: 'Disetujui Kaprodi untuk pengujian integritas',
+      created_at: new Date(Date.now() - 3600000 * 6).toISOString(),
     }
   );
 }
@@ -1045,19 +1094,23 @@ export async function decideGradeChangeAction(input: unknown): Promise<ActionRes
     const supabase = await createClient();
     const { error } = await supabase.rpc('decide_grade_change', { p_request: request_id, p_approve: approve, p_note: note });
     if (error) {
-      if (error.message.includes('SELF_APPROVAL')) {
-        return { ok: false, error: 'Tidak dapat menyetujui pengajuan sendiri. Pengajuan harus dieskalasi ke Dekan / Pimpinan Fakultas.' };
+      if (error.message.includes('SELF_APPROVAL') || error.message.includes('SELF_OR_LECTURER_APPROVAL')) {
+        return { ok: false, error: 'Anda tidak dapat menyetujui pengajuan sendiri. Pengajuan perlu ditinjau oleh penyetuju lain.' };
       }
       return { ok: false, error: pesan(error.message) };
     }
   } else {
     const r = perubahan.find((x) => x.id === request_id);
     if (!r) return { ok: false, error: ERR.NOT_FOUND };
-    if (r.requested_by === me.id) {
-      return { ok: false, error: 'Tidak dapat menyetujui pengajuan sendiri. Pengajuan harus dieskalasi ke Dekan / Pimpinan Fakultas.' };
+    const cls = mem.classes.find((c) => c.id === r.class_id);
+    const isClassLecturer = (cls as any)?.created_by === me.id;
+    if (r.requested_by === me.id || isClassLecturer) {
+      // TODO(backend): Mekanisme penyetuju pengganti belum tersedia. Status pengajuan tetap PENDING.
+      return { ok: false, error: 'Anda tidak dapat menyetujui pengajuan sendiri. Pengajuan perlu ditinjau oleh penyetuju lain.' };
     }
-    if (r.status !== 'PENDING') return { ok: false, error: ERR.NOT_PENDING };
+    if (r.status !== 'PENDING') return { ok: false, error: 'Hanya pengajuan berstatus PENDING yang dapat diproses.' };
     r.status = approve ? 'APPROVED' : 'REJECTED';
+    r.reviewed_by = me.id;
     r.review_note = note;
 
     // Jejak Audit Log Sistem (Bagian A1 & A3)
@@ -1131,8 +1184,25 @@ export async function executeGradeChangeAction(input: unknown): Promise<ActionRe
   } else {
     const r = perubahan.find((x) => x.id === request_id);
     if (!r) return { ok: false, error: ERR.NOT_FOUND };
+
+    // Validasi A4d: Tolak eksekusi ganda (Idempoten)
+    if (r.status === 'EXECUTED') {
+      return { ok: false, error: 'Pengajuan ini telah dieksekusi sebelumnya (eksekusi hanya dapat dilakukan satu kali).' };
+    }
+
+    // Validasi A4d: Mesin status ketat (Hanya APPROVED yang boleh dieksekusi)
     if (r.status !== 'APPROVED') {
-      return { ok: false, error: 'Hanya pengajuan berstatus disetujui yang dapat dieksekusi.' };
+      return { ok: false, error: 'Hanya pengajuan berstatus APPROVED yang dapat dieksekusi.' };
+    }
+
+    // Validasi A4c: Pemisahan tugas (Pengaju, Penyetuju, Eksekutor harus 3 user id berbeda)
+    if (me.id === r.requested_by || me.id === r.reviewed_by || (r.reviewed_by && r.requested_by === r.reviewed_by)) {
+      return { ok: false, error: 'Pemisahan tugas dilanggar: Pengaju, penyetuju, dan eksekutor harus tiga pengguna yang berbeda.' };
+    }
+
+    // Validasi A4e: Rentang nilai 0-100
+    if (r.proposed_score < 0 || r.proposed_score > 100) {
+      return { ok: false, error: 'Nilai usulan harus berada dalam rentang 0-100.' };
     }
 
     // Verifikasi integritas: nilai saat ini masih sama dengan old_score di permohonan

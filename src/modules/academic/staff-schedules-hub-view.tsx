@@ -72,6 +72,10 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
     { room: 'Auditorium Utama Rektorat', type: 'Aula Serbaguna', capacity: 300, monday: 'Kosong (Tersedia)', tuesday: 'Kosong (Tersedia)', wednesday: 'Kuliah Umum 09:00-12:00', thursday: 'Kosong (Tersedia)', friday: 'Kosong (Tersedia)', status: 'TERSEDIA' },
   ];
 
+  const classSchedules = isDemo ? CLASS_SCHEDULES : [];
+  const examSchedules = isDemo ? EXAM_SCHEDULES : [];
+  const roomOccupancy = isDemo ? ROOM_OCCUPANCY : [];
+
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. HEADER RETRO */}
@@ -187,25 +191,33 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {CLASS_SCHEDULES.map((s) => (
-                    <tr key={s.id} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{s.day}</div>
-                        <span className="text-xs font-mono text-black/60">{s.time}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 font-bold text-black">{s.course}</td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{s.room}</td>
-                      <td className="p-3.5 sm:p-4 font-semibold text-black">{s.lecturer}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold">
-                        {s.enrolled} / {s.capacity}
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
-                          AKTIF BERJALAN
-                        </span>
+                  {classSchedules.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada jadwal perkuliahan tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    classSchedules.map((s) => (
+                      <tr key={s.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{s.day}</div>
+                          <span className="text-xs font-mono text-black/60">{s.time}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 font-bold text-black">{s.course}</td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{s.room}</td>
+                        <td className="p-3.5 sm:p-4 font-semibold text-black">{s.lecturer}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">
+                          {s.enrolled} / {s.capacity}
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            AKTIF BERJALAN
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -256,23 +268,31 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {EXAM_SCHEDULES.map((e) => (
-                    <tr key={e.id} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{e.date}</div>
-                        <span className="text-xs font-mono text-black/60">{e.time}</span>
+                  {examSchedules.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada jadwal ujian semester tersimpan di pangkalan data produksi.
                       </td>
-                      <td className="p-3.5 sm:p-4">
-                        <div className="font-bold text-black">{e.course}</div>
-                        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-retro-warm border border-black/30 font-bold">
-                          {e.type}
-                        </span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{e.room}</td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs">{e.format}</td>
-                      <td className="p-3.5 sm:p-4 font-semibold text-black">{e.proctor}</td>
                     </tr>
-                  ))}
+                  ) : (
+                    examSchedules.map((e) => (
+                      <tr key={e.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{e.date}</div>
+                          <span className="text-xs font-mono text-black/60">{e.time}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4">
+                          <div className="font-bold text-black">{e.course}</div>
+                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-retro-warm border border-black/30 font-bold">
+                            {e.type}
+                          </span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{e.room}</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs">{e.format}</td>
+                        <td className="p-3.5 sm:p-4 font-semibold text-black">{e.proctor}</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -313,31 +333,39 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {ROOM_OCCUPANCY.map((r, idx) => (
-                    <tr key={idx} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black">
-                        <div>{r.room}</div>
-                        <span className="text-xs font-mono text-black/60">{r.type} ({r.capacity} Kursi)</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-xs font-mono">{r.monday}</td>
-                      <td className="p-3.5 sm:p-4 text-xs font-mono">{r.tuesday}</td>
-                      <td className="p-3.5 sm:p-4 text-xs font-mono">{r.wednesday}</td>
-                      <td className="p-3.5 sm:p-4 text-xs font-mono">{r.thursday}</td>
-                      <td className="p-3.5 sm:p-4 text-xs font-mono">{r.friday}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span
-                          className={cn(
-                            'px-2 py-0.5 rounded border text-[10px] font-mono font-bold',
-                            r.status === 'OKUPANSI_TINGGI'
-                              ? 'border-amber-500 bg-amber-100 text-amber-950'
-                              : 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                          )}
-                        >
-                          {r.status === 'OKUPANSI_TINGGI' ? 'PADAT (>75%)' : 'TERSEDIA (<50%)'}
-                        </span>
+                  {roomOccupancy.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada matriks pemakaian ruang tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    roomOccupancy.map((r, idx) => (
+                      <tr key={idx} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black">
+                          <div>{r.room}</div>
+                          <span className="text-xs font-mono text-black/60">{r.type} ({r.capacity} Kursi)</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.monday}</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.tuesday}</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.wednesday}</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.thursday}</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.friday}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span
+                            className={cn(
+                              'px-2 py-0.5 rounded border text-[10px] font-mono font-bold',
+                              r.status === 'OKUPANSI_TINGGI'
+                                ? 'border-amber-500 bg-amber-100 text-amber-950'
+                                : 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                            )}
+                          >
+                            {r.status === 'OKUPANSI_TINGGI' ? 'PADAT (>75%)' : 'TERSEDIA (<50%)'}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

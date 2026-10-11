@@ -929,7 +929,7 @@ export function LecturerAnalyticsHubView({
                     <span className="font-mono text-black/60">{disputeModalState.dispute.exam_title}</span>
                   </div>
                   <div className="text-[11px] text-black/80 italic border-t border-black/20 pt-1">
-                    Keluhan Mahasiswa: "{disputeModalState.dispute.reason}"
+                    Keluhan Mahasiswa: &ldquo;{disputeModalState.dispute.reason}&rdquo;
                   </div>
                 </div>
 

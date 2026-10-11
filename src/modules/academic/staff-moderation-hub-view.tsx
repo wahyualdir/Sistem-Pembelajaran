@@ -65,6 +65,10 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
     { id: 'mnt-2', name: 'Mentoring Skripsi & Tugas Akhir Bidang Software Engineering', coordinator: 'Tim Dosen KBK RPL', mentorsCount: 12, menteesCount: 36, duration: 'Semester 7 - 8', status: 'BERJALAN' },
   ];
 
+  const reportedContent = isDemo ? REPORTED_CONTENT : [];
+  const studyGroups = isDemo ? STUDY_GROUPS : [];
+  const mentoringPrograms = isDemo ? MENTORING_PROGRAMS : [];
+
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. HEADER RETRO */}
@@ -178,68 +182,76 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {REPORTED_CONTENT.map((r) => (
-                    <tr key={r.id} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
-                        <div>{r.postTitle}</div>
-                        <span className="text-xs font-mono text-black/60">Pembuat: {r.author}</span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{r.reporter}</td>
-                      <td className="p-3.5 sm:p-4">
-                        <span className="px-2 py-0.5 rounded border border-rose-500 bg-rose-100 text-rose-950 font-mono text-[10px] font-bold">
-                          {r.category}
-                        </span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs">{r.date}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span
-                          className={cn(
-                            'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
-                            r.status === 'MENUNGGU_REVIEW'
-                              ? 'border-amber-500 bg-amber-100 text-amber-950'
-                              : 'border-neutral-400 bg-neutral-100 text-neutral-800'
-                          )}
-                        >
-                          {r.status === 'MENUNGGU_REVIEW' ? 'PERLU REVIEW' : 'SUDAH DITINDAK'}
-                        </span>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        {r.status === 'MENUNGGU_REVIEW' ? (
-                          <div className="flex items-center justify-center gap-1.5">
-                            <button
-                              type="button"
-                              disabled={!isDemo}
-                              title={!isDemo ? 'TODO(backend): Fitur moderasi konten aktif di Fase 3' : undefined}
-                              className={cn(
-                                'px-2.5 py-1 rounded border-2 border-black text-xs font-bold transition-all',
-                                isDemo
-                                  ? 'bg-rose-100 text-rose-950 hover:bg-rose-200 cursor-pointer'
-                                  : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
-                              )}
-                            >
-                              Hapus
-                            </button>
-                            <button
-                              type="button"
-                              disabled={!isDemo}
-                              title={!isDemo ? 'TODO(backend): Fitur moderasi konten aktif di Fase 3' : undefined}
-                              className={cn(
-                                'px-2.5 py-1 rounded border-2 border-black text-xs font-bold transition-all',
-                                isDemo
-                                  ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
-                                  : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
-                              )}
-                            >
-                              Abaikan
-                            </button>
-                            {!isDemo && <span className="text-[10px] bg-neutral-300 px-1 py-0.5 rounded font-mono">TODO(backend)</span>}
-                          </div>
-                        ) : (
-                          <span className="text-xs font-mono text-black/50">Telah Dihapus</span>
-                        )}
+                  {reportedContent.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Tidak ada laporan pelanggaran konten yang menunggu tinjauan.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    reportedContent.map((r) => (
+                      <tr key={r.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
+                          <div>{r.postTitle}</div>
+                          <span className="text-xs font-mono text-black/60">Pembuat: {r.author}</span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{r.reporter}</td>
+                        <td className="p-3.5 sm:p-4">
+                          <span className="px-2 py-0.5 rounded border border-rose-500 bg-rose-100 text-rose-950 font-mono text-[10px] font-bold">
+                            {r.category}
+                          </span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs">{r.date}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span
+                            className={cn(
+                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              r.status === 'MENUNGGU_REVIEW'
+                                ? 'border-amber-500 bg-amber-100 text-amber-950'
+                                : 'border-neutral-400 bg-neutral-100 text-neutral-800'
+                            )}
+                          >
+                            {r.status === 'MENUNGGU_REVIEW' ? 'PERLU REVIEW' : 'SUDAH DITINDAK'}
+                          </span>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          {r.status === 'MENUNGGU_REVIEW' ? (
+                            <div className="flex items-center justify-center gap-1.5">
+                              <button
+                                type="button"
+                                disabled={!isDemo}
+                                title={!isDemo ? 'TODO(backend): Fitur moderasi konten aktif di Fase 3' : undefined}
+                                className={cn(
+                                  'px-2.5 py-1 rounded border-2 border-black text-xs font-bold transition-all',
+                                  isDemo
+                                    ? 'bg-rose-100 text-rose-950 hover:bg-rose-200 cursor-pointer'
+                                    : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
+                                )}
+                              >
+                                Hapus
+                              </button>
+                              <button
+                                type="button"
+                                disabled={!isDemo}
+                                title={!isDemo ? 'TODO(backend): Fitur moderasi konten aktif di Fase 3' : undefined}
+                                className={cn(
+                                  'px-2.5 py-1 rounded border-2 border-black text-xs font-bold transition-all',
+                                  isDemo
+                                    ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
+                                    : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
+                                )}
+                              >
+                                Abaikan
+                              </button>
+                              {!isDemo && <span className="text-[10px] bg-neutral-300 px-1 py-0.5 rounded font-mono">TODO(backend)</span>}
+                            </div>
+                          ) : (
+                            <span className="text-xs font-mono text-black/50">Telah Dihapus</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -279,22 +291,30 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {STUDY_GROUPS.map((g) => (
-                    <tr key={g.id} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
-                        <div>{g.name}</div>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80 font-semibold">{g.leader}</td>
-                      <td className="p-3.5 sm:p-4 text-black/70">{g.topic}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{g.members} Mhs</td>
-                      <td className="p-3.5 sm:p-4 font-mono text-xs">{g.createdDate}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
-                          AKTIF
-                        </span>
+                  {studyGroups.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada grup belajar mahasiswa di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    studyGroups.map((g) => (
+                      <tr key={g.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
+                          <div>{g.name}</div>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80 font-semibold">{g.leader}</td>
+                        <td className="p-3.5 sm:p-4 text-black/70">{g.topic}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{g.members} Mhs</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs">{g.createdDate}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            AKTIF
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -346,22 +366,30 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                   </tr>
                 </thead>
                 <tbody className="divide-y-2 divide-black/10 font-medium">
-                  {MENTORING_PROGRAMS.map((m) => (
-                    <tr key={m.id} className="hover:bg-retro-warm/30 transition-colors">
-                      <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
-                        <div>{m.name}</div>
-                      </td>
-                      <td className="p-3.5 sm:p-4 text-black/80">{m.coordinator}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{m.mentorsCount} Orang</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-retro-orange">{m.menteesCount} Mhs</td>
-                      <td className="p-3.5 sm:p-4 text-xs font-mono">{m.duration}</td>
-                      <td className="p-3.5 sm:p-4 text-center">
-                        <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
-                          BERJALAN
-                        </span>
+                  {mentoringPrograms.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                        Belum ada program mentoring tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    mentoringPrograms.map((m) => (
+                      <tr key={m.id} className="hover:bg-retro-warm/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
+                          <div>{m.name}</div>
+                        </td>
+                        <td className="p-3.5 sm:p-4 text-black/80">{m.coordinator}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{m.mentorsCount} Orang</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-retro-orange">{m.menteesCount} Mhs</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-mono">{m.duration}</td>
+                        <td className="p-3.5 sm:p-4 text-center">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            BERJALAN
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
