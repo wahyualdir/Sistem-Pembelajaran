@@ -859,6 +859,56 @@ const TEST_CASES: TestCase[] = [
     expectedStatus: 307,
     expectedRedirect: '/admin/system',
   },
+
+  // --- 8. UJI KEAMANAN SERVER-SIDE ROLE GUARD (A2: SPOOFING COOKIE active_role) ---
+  {
+    name: '[A2 Server Guard] Mahasiswa spoof cookie active_role=SUPER_ADMIN di /admin -> Ditolak Redirect /workspace',
+    role: 'SUPER_ADMIN',
+    userId: USERS.STUDENT.id,
+    path: '/admin',
+    expectedStatus: 307,
+    expectedRedirect: '/workspace',
+  },
+  {
+    name: '[A2 Server Guard] Mahasiswa spoof cookie active_role=SUPER_ADMIN di /admin/system -> Ditolak Redirect /workspace',
+    role: 'SUPER_ADMIN',
+    userId: USERS.STUDENT.id,
+    path: '/admin/system',
+    expectedStatus: 307,
+    expectedRedirect: '/workspace',
+  },
+  {
+    name: '[A2 Server Guard] Mahasiswa spoof cookie active_role=SUPER_ADMIN di /admin/users -> Ditolak Redirect /workspace',
+    role: 'SUPER_ADMIN',
+    userId: USERS.STUDENT.id,
+    path: '/admin/users',
+    expectedStatus: 307,
+    expectedRedirect: '/workspace',
+  },
+  {
+    name: '[A2 Server Guard] Mahasiswa spoof cookie active_role=SUPER_ADMIN di /admin/policies -> Ditolak Redirect /workspace',
+    role: 'SUPER_ADMIN',
+    userId: USERS.STUDENT.id,
+    path: '/admin/policies',
+    expectedStatus: 307,
+    expectedRedirect: '/workspace',
+  },
+  {
+    name: '[A2 Server Guard] Mahasiswa spoof cookie active_role=SUPER_ADMIN di /admin/announcements -> Ditolak Redirect /workspace',
+    role: 'SUPER_ADMIN',
+    userId: USERS.STUDENT.id,
+    path: '/admin/announcements',
+    expectedStatus: 307,
+    expectedRedirect: '/workspace',
+  },
+  {
+    name: '[A2 Server Guard] Mahasiswa spoof cookie active_role=SUPER_ADMIN di /admin/roles -> Ditolak Redirect /workspace',
+    role: 'SUPER_ADMIN',
+    userId: USERS.STUDENT.id,
+    path: '/admin/roles',
+    expectedStatus: 307,
+    expectedRedirect: '/workspace',
+  },
 ];
 
 async function runTest(test: TestCase): Promise<{ success: boolean; message: string }> {
@@ -911,7 +961,7 @@ async function runTest(test: TestCase): Promise<{ success: boolean; message: str
 
 async function runNegativeActionTests() {
   console.log('------------------------------------------------------------------------------------------------------------------------');
-  console.log('  UJI NEGATIF SERVER ACTION (A6): NEGATIVE TEST + POSITIVE CONTROL PAIRS & REJECTION REASONS                            ');
+  console.log('  UJI MODE DEMO: NEGATIVE TEST + POSITIVE CONTROL PAIRS & REJECTION REASONS                                              ');
   console.log('------------------------------------------------------------------------------------------------------------------------');
   try {
     const res = await fetch(`${BASE_URL}/api/smoke-actions`, { method: 'GET' });

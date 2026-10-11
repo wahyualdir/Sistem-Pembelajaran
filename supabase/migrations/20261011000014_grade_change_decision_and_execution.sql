@@ -3,12 +3,10 @@
 -- CATATAN: JANGAN MENJALANKAN MIGRASI INI KE DATABASE PRODUCTION SECARA OTOMATIS.
 -- Gunakan instruksi penerapan pada laporan akhir.
 
--- 1. Tambah nilai enum EXECUTED jika belum ada
-DO $$ BEGIN
-    ALTER TYPE public.change_request_status ADD VALUE IF NOT EXISTS 'EXECUTED';
-EXCEPTION WHEN duplicate_object THEN null; END $$;
+-- 1. Kolom jejak audit eksekusi staf pada tabel grade_change_requests (nilai enum EXECUTED telah ter-commit pada migrasi sebelumnya)
+ALTER TABLE public.classes
+    ADD COLUMN IF NOT EXISTS lecturer_id UUID NULL REFERENCES public.profiles(id) ON DELETE RESTRICT;
 
--- 2. Tambah kolom jejak audit eksekusi staf pada tabel grade_change_requests
 ALTER TABLE public.grade_change_requests
     ADD COLUMN IF NOT EXISTS executed_by UUID NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
     ADD COLUMN IF NOT EXISTS executed_at TIMESTAMPTZ NULL,
@@ -65,7 +63,13 @@ BEGIN
 
     -- Validasi A4b: Cek apakah peninjau adalah dosen pengampu kelas terkait
     SELECT EXISTS (
-        SELECT 1 FROM public.classes c WHERE c.id = v_r.class_id AND c.lecturer_id = v_uid
+        SELECT 1 FROM public.classes c
+        WHERE c.id = v_r.class_id AND (c.lecturer_id = v_uid OR c.created_by = v_uid)
+    ) OR EXISTS (
+        SELECT 1 FROM public.user_roles ur
+        JOIN public.roles r ON r.id = ur.role_id
+        WHERE ur.user_id = v_uid AND r.code = 'LECTURER'
+          AND ur.status = 'ACTIVE' AND ur.scope_type = 'CLASS' AND ur.scope_id = v_r.class_id
     ) INTO v_is_class_lecturer;
 
     -- Validasi A4b: Penolakan jika penyetuju adalah (i) pengaju, ATAU (ii) dosen pengampu kelas terkait, ATAU (iii) user id sama

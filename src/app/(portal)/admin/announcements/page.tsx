@@ -6,6 +6,9 @@ export const metadata = {
   description: 'Maklumat resmi dan surat edaran universitas',
 };
 
-export default function SuperadminAnnouncementsPage() {
+import { assertServerRole } from '@/lib/auth/server-guards';
+
+export default async function SuperadminAnnouncementsPage() {
+  await assertServerRole(['SUPER_ADMIN', 'SUPERADMIN']);
   return <SuperadminAnnouncementsHubView />;
 }

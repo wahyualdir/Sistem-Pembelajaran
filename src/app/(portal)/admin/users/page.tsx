@@ -6,6 +6,9 @@ export const metadata = {
   description: 'Manajemen akun civitas akademika dan sesi impersonasi teknis',
 };
 
-export default function SuperadminUsersPage() {
+import { assertServerRole } from '@/lib/auth/server-guards';
+
+export default async function SuperadminUsersPage() {
+  await assertServerRole(['SUPER_ADMIN', 'SUPERADMIN']);
   return <SuperadminUsersHubView />;
 }

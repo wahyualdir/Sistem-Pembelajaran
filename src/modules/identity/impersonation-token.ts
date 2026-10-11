@@ -11,7 +11,14 @@ export interface ImpersonationTokenPayload {
 }
 
 function getImpersonationSecret(): string {
-  return process.env.APP_SECRET || process.env.SUPABASE_SERVICE_ROLE_KEY || 'siajar-impersonation-hmac-salt-secret-key-2026';
+  const secret = process.env.APP_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('APP_SECRET wajib ada dan disetel di lingkungan produksi!');
+    }
+    throw new Error('APP_SECRET wajib disetel di file environment (.env.local / process.env)!');
+  }
+  return secret;
 }
 
 /**

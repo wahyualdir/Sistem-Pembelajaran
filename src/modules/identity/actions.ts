@@ -718,7 +718,7 @@ export async function reportNotMeAction(userIdParam?: string): Promise<ActionRes
 export async function getCurrentUserWithRoles() {
   const cookieStore = cookies();
   const demoSessionId = cookieStore.get('demo_session')?.value;
-  let userId: string | null = null;
+  let realUserId: string | null = null;
   let userEmail: string = '';
 
   const isOnline = await checkSupabaseOnline();
@@ -731,7 +731,7 @@ export async function getCurrentUserWithRoles() {
       } = await supabase.auth.getUser();
 
       if (!authError && user) {
-        userId = user.id;
+        realUserId = user.id;
         userEmail = user.email || '';
       }
     } catch {
@@ -740,17 +740,80 @@ export async function getCurrentUserWithRoles() {
   }
 
   // Di production, demo_session hanya diterima jika (!isProd || ALLOW_DEMO_AUTH === 'true').
-  // Status database TIDAK boleh memengaruhi keputusan ini. Jika sesi demo tidak diizinkan dan tidak ada sesi nyata, perlakukan sebagai belum login.
   const isProd = process.env.NODE_ENV === 'production';
-  if (!userId && demoSessionId) {
+  if (!realUserId && demoSessionId) {
     if (!isProd || process.env.ALLOW_DEMO_AUTH === 'true') {
-      userId = demoSessionId;
+      realUserId = demoSessionId;
     }
   }
 
-  if (!userId) {
+  if (!realUserId) {
     return null;
   }
+
+  // A3a: Identitas efektif TIDAK boleh berasal dari cookie demo_session.
+  // Turunkan di server dari token bertanda tangan, dan HANYA berlaku jika:
+  // (1) sesi NYATA pengguna = originalAdminId, dan
+  // (2) originalAdminId memiliki role SUPER_ADMIN di DB (user_roles).
+  // Hapus kepercayaan pada cookie tak bertanda tangan impersonating_from dan impersonating_expires_at.
+  const impersonationToken = cookieStore.get('impersonation_token')?.value;
+  let verifiedPayload: ImpersonationTokenPayload | null = null;
+  let isImpersonating = false;
+  let impersonatingFrom: string | null = null;
+  let effectiveUserId = realUserId;
+
+  if (impersonationToken) {
+    verifiedPayload = verifyImpersonationToken(impersonationToken);
+    if (verifiedPayload && verifiedPayload.originalAdminId === realUserId) {
+      // Verifikasi bahwa admin asli memiliki role SUPER_ADMIN di DB
+      let isOriginalSuperAdmin = false;
+      if (isOnline) {
+        try {
+          const { data: adminRoles } = await supabaseAdmin
+            .from('user_roles')
+            .select('roles(code), role_id')
+            .eq('user_id', verifiedPayload.originalAdminId)
+            .eq('status', 'ACTIVE');
+          isOriginalSuperAdmin = !!adminRoles?.some(
+            (r: any) => r.roles?.code === 'SUPER_ADMIN' || r.role_id === 'SUPER_ADMIN'
+          );
+        } catch {
+          // DB offline
+        }
+      }
+      if (!isOriginalSuperAdmin) {
+        const adminDemo = Object.values(SYNTHETIC_DEMO_USERS).find(
+          (u) => u.id === verifiedPayload!.originalAdminId
+        );
+        isOriginalSuperAdmin = !!adminDemo?.roles.includes('SUPER_ADMIN');
+      }
+
+      if (isOriginalSuperAdmin) {
+        effectiveUserId = verifiedPayload.targetUserId;
+        isImpersonating = true;
+        impersonatingFrom = verifiedPayload.originalAdminId;
+      }
+    }
+  }
+
+  // Cookie tak bertanda tangan impersonating_from & impersonating_expires_at
+  // diabaikan sepenuhnya di server (A3a). Jangan memanggil cookieStore.delete
+  // tanpa try-catch agar Server Components tidak melempar error read-only.
+  try {
+    if (!isImpersonating && cookieStore.has('impersonation_token')) {
+      cookieStore.delete('impersonation_token');
+    }
+    if (cookieStore.has('impersonating_from')) {
+      cookieStore.delete('impersonating_from');
+    }
+    if (cookieStore.has('impersonating_expires_at')) {
+      cookieStore.delete('impersonating_expires_at');
+    }
+  } catch {
+    // Read-only context di Server Components
+  }
+
+  const userId = effectiveUserId;
 
   // Cari di synthetic users jika ada
   let matchedDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === userId);
@@ -809,50 +872,19 @@ export async function getCurrentUserWithRoles() {
   }
 
   const activeRoleCode = cookieStore.get('active_role')?.value;
-  
-  // A3a: Verifikasi token penyamaran (impersonation) bertanda tangan HMAC-SHA256
-  const impersonationToken = cookieStore.get('impersonation_token')?.value;
-  let verifiedPayload: ImpersonationTokenPayload | null = null;
-  if (impersonationToken) {
-    verifiedPayload = verifyImpersonationToken(impersonationToken);
-    if (!verifiedPayload) {
-      // Token tidak valid atau dimanipulasi klien -> hapus cookie penyamaran
-      cookieStore.delete('impersonation_token');
-      cookieStore.delete('impersonating_from');
-      cookieStore.delete('impersonating_expires_at');
-    }
-  }
-
-  const legacyExpiresAt = cookieStore.get('impersonating_expires_at')?.value;
-  let impersonatingFrom = verifiedPayload ? verifiedPayload.originalAdminId : (cookieStore.get('impersonating_from')?.value ?? null);
-
-  if (!verifiedPayload && legacyExpiresAt && Date.now() > Number(legacyExpiresAt)) {
-    // Sesi impersonasi telah kedaluwarsa (maksimal 30 menit)
-    if (impersonatingFrom) {
-      cookieStore.set('demo_session', impersonatingFrom, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/',
-      });
-    }
-    cookieStore.delete('impersonating_from');
-    cookieStore.delete('impersonating_expires_at');
-    impersonatingFrom = null;
-  }
-
   // Validasi peran aktif di sisi server dari daftar peran resmi pengguna (rolesList)
   const allowedRoleCodes = rolesList.map((r) => (r.roles as any)?.code || r.role_id);
-  const validatedActiveRole = (activeRoleCode && allowedRoleCodes.includes(activeRoleCode))
-    ? activeRoleCode
-    : (allowedRoleCodes[0] || 'STUDENT');
+  const validatedActiveRole =
+    activeRoleCode && allowedRoleCodes.includes(activeRoleCode)
+      ? activeRoleCode
+      : allowedRoleCodes[0] || 'STUDENT';
 
   return {
     user: { id: userId, email: userEmail || profile?.email || '' },
     profile,
     roles: rolesList,
     activeRole: validatedActiveRole,
-    isImpersonating: !!impersonatingFrom,
+    isImpersonating,
     impersonatingFrom,
   };
 }
@@ -893,9 +925,29 @@ export async function impersonateUserAction(
     };
   }
 
-  // A3b: Dilarang menyamar sebagai SUPER_ADMIN lain
-  const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === targetUserId) || SYNTHETIC_DEMO_USERS[targetUserId];
-  if (targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN'))) {
+  // A3b: Larangan menyamar sebagai Super Admin lain harus memeriksa user_roles di DB, bukan SYNTHETIC_DEMO_USERS
+  const isOnline = await checkSupabaseOnline();
+  let isTargetSuperAdmin = false;
+  if (isOnline) {
+    try {
+      const { data: targetRoles } = await supabaseAdmin
+        .from('user_roles')
+        .select('roles(code), role_id')
+        .eq('user_id', targetUserId)
+        .eq('status', 'ACTIVE');
+      isTargetSuperAdmin = !!targetRoles?.some(
+        (r: any) => r.roles?.code === 'SUPER_ADMIN' || r.role_id === 'SUPER_ADMIN'
+      );
+    } catch {
+      // DB offline
+    }
+  }
+  if (!isTargetSuperAdmin) {
+    const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === targetUserId) || SYNTHETIC_DEMO_USERS[targetUserId];
+    isTargetSuperAdmin = !!(targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN')));
+  }
+
+  if (isTargetSuperAdmin) {
     return {
       ok: false,
       error: 'CANNOT_IMPERSONATE_SUPERADMIN: Dilarang menyamar sebagai sesama Super Administrator.',
@@ -935,30 +987,9 @@ export async function impersonateUserAction(
     maxAge: 1800,
   });
 
-  cookieStore.set('impersonating_from', current.user.id, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 1800,
-  });
-
-  cookieStore.set('impersonating_expires_at', String(expiresAt), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 1800,
-  });
-
-  // Ganti sesi aktif ke akun target
-  cookieStore.set('demo_session', targetUserId, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 1800,
-  });
+  // Hapus cookie tak bertanda tangan
+  cookieStore.delete('impersonating_from');
+  cookieStore.delete('impersonating_expires_at');
 
   // A3d: Catat mulai sesi impersonasi ke Audit Log (actor_id = Super Admin asli, on_behalf_of = target)
   try {
@@ -986,18 +1017,10 @@ export async function stopImpersonatingAction(): Promise<ActionResponse> {
   const cookieStore = cookies();
   const impersonationToken = cookieStore.get('impersonation_token')?.value;
   const verified = impersonationToken ? verifyImpersonationToken(impersonationToken) : null;
-  const originalAdminId = verified ? verified.originalAdminId : cookieStore.get('impersonating_from')?.value;
-  const targetUserId = verified ? verified.targetUserId : cookieStore.get('demo_session')?.value;
+  const originalAdminId = verified ? verified.originalAdminId : null;
+  const targetUserId = verified ? verified.targetUserId : null;
 
   if (originalAdminId) {
-    cookieStore.set('demo_session', originalAdminId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-    });
-
-    // A3d: Catat akhir sesi impersonasi ke Audit Log
     try {
       await recordSystemAuditLog({
         actorId: originalAdminId,

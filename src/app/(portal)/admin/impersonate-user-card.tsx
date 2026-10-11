@@ -51,11 +51,15 @@ const DEMO_TARGETS: DemoUserItem[] = [
   },
 ];
 
+import { isDemoMode } from '@/lib/config/features';
+
 export function ImpersonateUserCard() {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const isDemo = isDemoMode();
 
   const handleImpersonate = (userId: string) => {
+    if (!isDemo) return;
     startTransition(async () => {
       const res = await impersonateUserAction(userId);
       if (res.ok) {
@@ -88,12 +92,17 @@ export function ImpersonateUserCard() {
 
             <button
               type="button"
-              disabled={pending}
+              disabled={!isDemo || pending}
               onClick={() => handleImpersonate(u.id)}
-              className="w-full rounded border-2 border-retro-border bg-black text-white px-2.5 py-1.5 text-xs font-bold hover:bg-retro-warm hover:text-black transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
+              className={`w-full rounded border-2 border-retro-border px-2.5 py-1.5 text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                !isDemo
+                  ? 'bg-neutral-300 text-neutral-600 border-neutral-400 cursor-not-allowed opacity-75'
+                  : 'bg-black text-white hover:bg-retro-warm hover:text-black cursor-pointer'
+              }`}
             >
               <UserCheck className="h-3.5 w-3.5" />
-              <span>{pending ? 'Beralih Sesi...' : 'Impersonate Pengguna'}</span>
+              <span>{!isDemo ? 'Fitur ini belum aktif' : pending ? 'Beralih Sesi...' : 'Impersonate Pengguna'}</span>
             </button>
           </div>
         ))}

@@ -59,14 +59,21 @@ const USERS = {
   SUPER_ADMIN: { id: 'a0000010-0000-0000-0000-000000000010', role: 'SUPER_ADMIN' },
 };
 
+import { isDemoMode } from '@/lib/config/features';
+
 export async function GET() {
+  if (process.env.NODE_ENV === 'production' || !isDemoMode()) {
+    return new NextResponse('Not Found', { status: 404 });
+  }
+
   const cookieStore = cookies();
   const testPairs: SmokeTestPair[] = [];
 
   const setSession = (userId: string, role: string, isImpersonating = false) => {
-    cookieStore.set('demo_session', userId);
-    cookieStore.set('active_role', role);
     if (isImpersonating) {
+      // Sesi nyata di server adalah Super Admin (A3a), target penyamaran adalah userId
+      cookieStore.set('demo_session', USERS.SUPER_ADMIN.id);
+      cookieStore.set('active_role', role);
       const signed = signImpersonationToken({
         originalAdminId: USERS.SUPER_ADMIN.id,
         originalAdminRole: 'SUPER_ADMIN',
@@ -80,6 +87,8 @@ export async function GET() {
       cookieStore.set('impersonating_from', USERS.SUPER_ADMIN.id);
       cookieStore.set('impersonating_expires_at', String(Date.now() + 1800 * 1000));
     } else {
+      cookieStore.set('demo_session', userId);
+      cookieStore.set('active_role', role);
       cookieStore.delete('impersonation_token');
       cookieStore.delete('impersonating_from');
       cookieStore.delete('impersonating_expires_at');

@@ -302,12 +302,17 @@ export function SuperadminUsersHubView() {
                     <td className="p-3 text-center">
                       <button
                         type="button"
-                        disabled={pending}
+                        disabled={!isDemo || pending}
                         onClick={() => handleOpenImpersonate(u)}
-                        className="px-3 py-1.5 rounded border-2 border-black bg-black text-white hover:bg-retro-warm hover:text-black font-bold text-xs transition-all cursor-pointer flex items-center gap-1.5 mx-auto disabled:opacity-50"
+                        title={!isDemo ? 'Fitur ini belum aktif' : undefined}
+                        className={`px-3 py-1.5 rounded border-2 font-bold text-xs transition-all flex items-center gap-1.5 mx-auto ${
+                          !isDemo
+                            ? 'border-neutral-400 bg-neutral-200 text-neutral-500 cursor-not-allowed opacity-75'
+                            : 'border-black bg-black text-white hover:bg-retro-warm hover:text-black cursor-pointer'
+                        }`}
                       >
                         <UserCheck className="h-3.5 w-3.5" />
-                        <span>Impersonate</span>
+                        <span>{!isDemo ? 'Fitur ini belum aktif' : 'Impersonate'}</span>
                       </button>
                     </td>
                   </tr>

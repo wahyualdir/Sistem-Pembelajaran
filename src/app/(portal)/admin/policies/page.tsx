@@ -6,6 +6,9 @@ export const metadata = {
   description: 'Pengaturan standar baku kelulusan, batas pengawasan ujian, dan privasi UU PDP',
 };
 
-export default function SuperadminPoliciesPage() {
+import { assertServerRole } from '@/lib/auth/server-guards';
+
+export default async function SuperadminPoliciesPage() {
+  await assertServerRole(['SUPER_ADMIN', 'SUPERADMIN']);
   return <SuperadminPoliciesHubView />;
 }

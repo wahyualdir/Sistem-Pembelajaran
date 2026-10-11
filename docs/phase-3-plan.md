@@ -178,7 +178,7 @@ Urutan implementasi migrasi persistensi basis data dirancang secara berjenjang (
 ### Domain 6: Sengketa Nilai Ujian & Putusan Perubahan Nilai Final
 - **Tabel & Kolom Kunci**:
   - `public.exam_disputes` (`id`, `attempt_id` FK exam_attempts, `question_id` FK quiz_questions, `student_id` FK profiles, `reason` TEXT, `status` [SUBMITTED, RESOLVED, REJECTED], `lecturer_feedback` TEXT, `adjusted_points` NUMERIC(4,2), `updated_at` TIMESTAMPTZ)
-  - `public.grade_change_requests` (`id`, `enrollment_id` FK enrollments, `component_id` FK grade_components, `lecturer_id` FK profiles, `student_id` FK profiles, `previous_score` NUMERIC(5,2), `proposed_score` NUMERIC(5,2) CHECK (proposed_score >= 0 AND proposed_score <= 100), `reason` TEXT, `status` [PENDING, APPROVED, REJECTED, EXECUTED], `coordinator_id` FK profiles, `decided_at` TIMESTAMPTZ, `staff_id` FK profiles, `executed_at` TIMESTAMPTZ)
+  - `public.grade_change_requests` (`id`, `grade_id` FK grades, `class_id` FK classes, `requested_by` FK profiles, `class_title` TEXT, `assignment_title` TEXT, `student_name` TEXT, `old_score` NUMERIC(6,2), `proposed_score` NUMERIC(6,2), `reason` TEXT, `status` [PENDING, APPROVED, REJECTED, EXECUTED], `reviewed_by` FK profiles, `reviewed_at` TIMESTAMPTZ, `executed_by` FK profiles, `executed_at` TIMESTAMPTZ)
 - **Relasi**: Terikat ke pangkalan data nilai dan attempt ujian.
 - **Nama Berkas Migrasi**: `20261011000014_grade_change_decision_and_execution.sql` (Tahap Verifikasi).
 - **Kebijakan RLS Per Peran**:

@@ -6,6 +6,9 @@ export const metadata = {
   description: 'Matriks izin granular 7 peran pengguna SIAJAR',
 };
 
-export default function SuperadminRolesPage() {
+import { assertServerRole } from '@/lib/auth/server-guards';
+
+export default async function SuperadminRolesPage() {
+  await assertServerRole(['SUPER_ADMIN', 'SUPERADMIN']);
   return <SuperadminRolesHubView />;
 }

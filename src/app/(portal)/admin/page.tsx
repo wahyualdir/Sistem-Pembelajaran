@@ -14,8 +14,10 @@ import {
   Server,
 } from 'lucide-react';
 
+import { assertServerRole } from '@/lib/auth/server-guards';
+
 export default async function AdminPortalPage() {
-  const userContext = await getCurrentUserWithRoles();
+  const userContext = await assertServerRole(['SUPER_ADMIN', 'SUPERADMIN']);
   const profile = userContext?.profile;
 
   // Query data nyata dari tabel audit_logs dan login_events

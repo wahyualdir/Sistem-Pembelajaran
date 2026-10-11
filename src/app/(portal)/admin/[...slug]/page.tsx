@@ -69,9 +69,24 @@ const SYSTEM_HEALTH_CARDS = [
   },
 ];
 
-export default function AdminSubpage({ params }: PageProps) {
+import { assertServerRole } from '@/lib/auth/server-guards';
+
+export default async function AdminSubpage({ params }: PageProps) {
   const parts = params.slug || [];
   const fullSlug = parts.join('/');
+
+  const isSystemSubpage =
+    fullSlug.startsWith('system') ||
+    fullSlug.startsWith('integrations') ||
+    fullSlug.startsWith('security') ||
+    fullSlug.startsWith('backup') ||
+    fullSlug.startsWith('audit');
+
+  if (isSystemSubpage) {
+    await assertServerRole(['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUPERADMIN']);
+  } else {
+    await assertServerRole(['SUPER_ADMIN', 'SUPERADMIN']);
+  }
 
   const sectionTitles: Record<string, { title: string; subtitle: string; icon: any; desc: string }> = {
     'system/status': {

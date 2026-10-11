@@ -6,6 +6,9 @@ export const metadata = {
   description: 'Monitoring infrastruktur, basis data, keamanan, dan integrasi SIAJAR',
 };
 
-export default function SystemAdminDashboardPage() {
+import { assertServerRole } from '@/lib/auth/server-guards';
+
+export default async function SystemAdminDashboardPage() {
+  await assertServerRole(['SYSTEM_ADMIN', 'SUPER_ADMIN', 'SUPERADMIN']);
   return <SystemDashboardHubView />;
 }
