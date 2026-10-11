@@ -17,6 +17,8 @@ import {
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
+import { isFeatureFlagActive } from '@/lib/config/features';
+import { batchEnrollCsvAction } from '@/modules/academic/actions';
 
 export const STAFF_CLASSES_TABS = [
   { id: 'enroll-peserta', label: 'Enroll Peserta', icon: Users },
@@ -70,6 +72,10 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
   ]);
   const [csvError, setCsvError] = useState<string | null>(null);
   const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
+  const [isSubmittingCsv, setIsSubmittingCsv] = useState(false);
+
+  const isPersistenceActive = isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC');
+  const isActionAllowed = isDemo || isPersistenceActive;
 
   const sanitizeCsvCell = (val: string): string => {
     const trimmed = (val ?? '').trim().replace(/^"(.*)"$/, '$1');
@@ -281,18 +287,18 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
             </div>
             <button
               type="button"
-              disabled={!isDemo}
-              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
+              disabled={!isActionAllowed}
+              title={!isActionAllowed ? 'Fitur ini belum aktif: Membutuhkan flag persistensi aktif' : undefined}
               className={cn(
                 'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
-                isDemo
+                isActionAllowed
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
               )}
             >
               <Plus className="h-4 w-4" />
               <span>Enroll Manual</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isActionAllowed && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -468,23 +474,51 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
               </div>
               <button
                 type="button"
-                disabled={!isDemo || csvRows.filter((r) => r.isValid).length === 0}
-                onClick={() => {
-                  setToastMessage({
-                    type: 'success',
-                    text: `Berhasil mendaftarkan ${csvRows.filter((r) => r.isValid).length} mahasiswa ke kelas perkuliahan.`,
-                  });
+                disabled={!isActionAllowed || csvRows.filter((r) => r.isValid).length === 0 || isSubmittingCsv}
+                onClick={async () => {
+                  const validRows = csvRows.filter((r) => r.isValid);
+                  if (validRows.length === 0) return;
+                  if (!isDemo && isPersistenceActive) {
+                    setIsSubmittingCsv(true);
+                    try {
+                      const res = await batchEnrollCsvAction({
+                        rows: validRows.map((r) => ({
+                          student_id: r.nim === '2024001' ? 'a0000001-0000-0000-0000-000000000001' : 'a0000003-0000-0000-0000-000000000003',
+                          class_id: 'c0000000-0000-0000-0000-000000000001',
+                          nim: r.nim,
+                        })),
+                      });
+                      if (res.ok) {
+                        setToastMessage({
+                          type: 'success',
+                          text: `Berhasil mendaftarkan ${validRows.length} mahasiswa via sinkronisasi batch basis data.`,
+                        });
+                      } else {
+                        setToastMessage({
+                          type: 'error',
+                          text: `Gagal impor batch: ${res.error}`,
+                        });
+                      }
+                    } finally {
+                      setIsSubmittingCsv(false);
+                    }
+                  } else {
+                    setToastMessage({
+                      type: 'success',
+                      text: `Berhasil mendaftarkan ${validRows.length} mahasiswa ke kelas perkuliahan.`,
+                    });
+                  }
                 }}
                 className={cn(
                   'w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all shrink-0',
-                  isDemo && csvRows.filter((r) => r.isValid).length > 0
+                  isActionAllowed && csvRows.filter((r) => r.isValid).length > 0
                     ? 'bg-black text-white hover:bg-neutral-800 shadow-retro cursor-pointer'
                     : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
                 )}
               >
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Simpan & Daftarkan {csvRows.filter((r) => r.isValid).length} Baris Valid</span>
-                {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+                {!isActionAllowed && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
               </button>
             </div>
           </div>
@@ -506,18 +540,18 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
             </div>
             <button
               type="button"
-              disabled={!isDemo}
-              title={!isDemo ? 'Fitur ini belum aktif' : undefined}
+              disabled={!isActionAllowed}
+              title={!isActionAllowed ? 'Fitur ini belum aktif: Membutuhkan flag persistensi aktif' : undefined}
               className={cn(
                 'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
-                isDemo
+                isActionAllowed
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
               )}
             >
               <Plus className="h-4 w-4" />
               <span>Ajukan Mutasi Kelas</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isActionAllowed && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 

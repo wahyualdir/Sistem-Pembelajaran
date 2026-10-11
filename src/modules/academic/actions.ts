@@ -10,6 +10,7 @@ import type { ActionResponse } from '@/modules/identity/types';
 import { SYNTHETIC_DEMO_USERS } from '@/modules/identity/demo-users';
 import { DELEGABLE_CODES } from './permissions';
 import { recordSystemAuditLog } from '@/lib/audit';
+import { isFeatureFlagActive } from '@/lib/config/features';
 
 export interface ClassItem {
   id: string;
@@ -1745,3 +1746,249 @@ export async function logGradeExportAction(classId: string): Promise<boolean> {
   const { error } = await supabase.rpc('log_grade_export', { p_class: classId });
   return !error;
 }
+
+// ============================================================================
+// FASE 3A: DOMAIN 1 & 2 SERVER ACTIONS (NON-DEMO PERSISTENCE + DEMO FALLBACK)
+// ============================================================================
+
+/**
+ * Pendaftaran Peserta Kelas Manual (Staf Akademik / Admin)
+ */
+export async function enrollStudentAction(input: {
+  class_id: string;
+  student_id: string;
+}): Promise<ActionResponse<{ id: string; class_id: string; student_id: string; status: string }>> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isImpersonating) {
+    return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang mendaftarkan peserta selama sesi impersonasi aktif.' };
+  }
+  const me = await actor(['ACADEMIC_STAFF', 'SUPER_ADMIN']);
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  const parsed = z.object({
+    class_id: z.string().uuid('ID kelas tidak valid.'),
+    student_id: z.string().uuid('ID mahasiswa tidak valid.'),
+  }).safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
+
+  const { class_id, student_id } = parsed.data;
+
+  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc('enroll_student', {
+      p_class_id: class_id,
+      p_student_id: student_id,
+    });
+    if (error) return { ok: false, error: error.message || pesan(error.message) };
+    revalidatePath('/staff/classes');
+    return { ok: true, data: data as any };
+  }
+
+  // Fallback demo in-memory
+  const cls = mem.classes.find((x) => x.id === class_id);
+  if (!cls) return { ok: false, error: ERR.NOT_FOUND };
+  if (mem.enrollments.some((e) => e.class_id === class_id && e.student_id === student_id)) {
+    return { ok: false, error: ERR.ALREADY_ENROLLED };
+  }
+  if (cls.capacity && mem.enrollments.filter((e) => e.class_id === class_id).length >= cls.capacity) {
+    return { ok: false, error: ERR.CLASS_FULL };
+  }
+  const newEnr = {
+    id: randomUUID(),
+    class_id,
+    student_id,
+    student_name: 'Mahasiswa Terdaftar',
+    status: 'ACTIVE',
+    enrolled_at: new Date().toISOString(),
+  };
+  mem.enrollments.push(newEnr);
+  revalidatePath('/staff/classes');
+  return { ok: true, data: newEnr };
+}
+
+/**
+ * Mutasi Pindah Kelas Paralel Mahasiswa (Staf Akademik / Admin)
+ */
+export async function transferClassAction(input: {
+  source_class_id: string;
+  target_class_id: string;
+  student_id: string;
+  reason?: string;
+}): Promise<ActionResponse<boolean>> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isImpersonating) {
+    return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang memindahkan kelas selama sesi impersonasi aktif.' };
+  }
+  const me = await actor(['ACADEMIC_STAFF', 'SUPER_ADMIN']);
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  const parsed = z.object({
+    source_class_id: z.string().uuid('ID kelas asal tidak valid.'),
+    target_class_id: z.string().uuid('ID kelas tujuan tidak valid.'),
+    student_id: z.string().uuid('ID mahasiswa tidak valid.'),
+    reason: z.string().trim().max(500).optional(),
+  }).safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
+
+  const { source_class_id, target_class_id, student_id, reason } = parsed.data;
+
+  if (source_class_id === target_class_id) {
+    return { ok: false, error: 'Kelas tujuan tidak boleh sama dengan kelas asal.' };
+  }
+
+  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+    const supabase = await createClient();
+    const { error } = await supabase.rpc('transfer_class', {
+      p_source_class_id: source_class_id,
+      p_target_class_id: target_class_id,
+      p_student_id: student_id,
+      p_reason: reason ?? '',
+    });
+    if (error) return { ok: false, error: error.message || pesan(error.message) };
+    revalidatePath('/staff/classes');
+    return { ok: true, data: true };
+  }
+
+  // Fallback demo in-memory
+  const existing = mem.enrollments.find((e) => e.class_id === source_class_id && e.student_id === student_id);
+  if (!existing) return { ok: false, error: 'Mahasiswa tidak terdaftar pada kelas asal.' };
+  const targetClass = mem.classes.find((x) => x.id === target_class_id);
+  if (!targetClass) return { ok: false, error: 'Kelas tujuan tidak ditemukan.' };
+  if (targetClass.capacity && mem.enrollments.filter((e) => e.class_id === target_class_id).length >= targetClass.capacity) {
+    return { ok: false, error: 'Kapasitas kelas tujuan sudah penuh.' };
+  }
+  existing.class_id = target_class_id;
+  revalidatePath('/staff/classes');
+  return { ok: true, data: true };
+}
+
+/**
+ * Batch Enroll Mahasiswa via CSV (Staf Akademik / Admin)
+ */
+export async function batchEnrollCsvAction(input: {
+  rows: Array<{ student_id: string; class_id: string; nim?: string }>;
+}): Promise<ActionResponse<{ total: number; success: number; failed: number; errors?: any[] }>> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isImpersonating) {
+    return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang mengimpor data CSV selama sesi impersonasi aktif.' };
+  }
+  const me = await actor(['ACADEMIC_STAFF', 'SUPER_ADMIN']);
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  if (!input.rows || !Array.isArray(input.rows) || input.rows.length === 0) {
+    return { ok: false, error: 'Data baris CSV tidak boleh kosong.' };
+  }
+
+  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc('batch_enroll_students', {
+      p_rows: input.rows,
+    });
+    if (error) return { ok: false, error: error.message || pesan(error.message) };
+    revalidatePath('/staff/classes');
+    return { ok: true, data: data as any };
+  }
+
+  // Fallback demo in-memory
+  let successCount = 0;
+  for (const r of input.rows) {
+    if (r.student_id && r.class_id && !mem.enrollments.some((e) => e.class_id === r.class_id && e.student_id === r.student_id)) {
+      mem.enrollments.push({
+        class_id: r.class_id,
+        student_id: r.student_id,
+        student_name: r.nim ? `Mahasiswa NIM ${r.nim}` : 'Mahasiswa Impor CSV',
+        enrolled_at: new Date().toISOString(),
+      });
+      successCount++;
+    }
+  }
+  revalidatePath('/staff/classes');
+  return { ok: true, data: { total: input.rows.length, success: successCount, failed: input.rows.length - successCount } };
+}
+
+/**
+ * Persetujuan Kelas Perkuliahan (Kaprodi / Admin)
+ */
+export async function approveClassAction(input: {
+  class_id: string;
+  status: 'OPEN' | 'ACTIVE' | 'CLOSED' | 'ARCHIVED';
+}): Promise<ActionResponse<ClassItem>> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isImpersonating) {
+    return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang menyetujui kelas selama sesi impersonasi aktif.' };
+  }
+  const me = await actor(['PROGRAM_COORDINATOR', 'SUPER_ADMIN']);
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  const parsed = z.object({
+    class_id: z.string().uuid('ID kelas tidak valid.'),
+    status: z.enum(['OPEN', 'ACTIVE', 'CLOSED', 'ARCHIVED']),
+  }).safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
+
+  const { class_id, status } = parsed.data;
+
+  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc('approve_class', {
+      p_class_id: class_id,
+      p_status: status,
+    });
+    if (error) return { ok: false, error: error.message || pesan(error.message) };
+    revalidatePath('/coordinator/approvals');
+    revalidatePath('/classes');
+    return { ok: true, data: data as any };
+  }
+
+  // Fallback demo in-memory
+  const cls = mem.classes.find((x) => x.id === class_id);
+  if (!cls) return { ok: false, error: ERR.NOT_FOUND };
+  cls.status = status;
+  revalidatePath('/coordinator/approvals');
+  revalidatePath('/classes');
+  return { ok: true, data: pub(cls) };
+}
+
+/**
+ * Penugasan Dosen Pengampu Kelas (Kaprodi / Admin)
+ */
+export async function assignLecturerAction(input: {
+  class_id: string;
+  lecturer_id: string;
+}): Promise<ActionResponse<ClassItem>> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isImpersonating) {
+    return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang menugaskan dosen selama sesi impersonasi aktif.' };
+  }
+  const me = await actor(['PROGRAM_COORDINATOR', 'SUPER_ADMIN']);
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  const parsed = z.object({
+    class_id: z.string().uuid('ID kelas tidak valid.'),
+    lecturer_id: z.string().uuid('ID dosen tidak valid.'),
+  }).safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
+
+  const { class_id, lecturer_id } = parsed.data;
+
+  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc('assign_lecturer', {
+      p_class_id: class_id,
+      p_lecturer_id: lecturer_id,
+    });
+    if (error) return { ok: false, error: error.message || pesan(error.message) };
+    revalidatePath('/coordinator/assignments');
+    revalidatePath('/classes');
+    return { ok: true, data: data as any };
+  }
+
+  // Fallback demo in-memory
+  const cls = mem.classes.find((x) => x.id === class_id);
+  if (!cls) return { ok: false, error: ERR.NOT_FOUND };
+  (cls as any).lecturer_id = lecturer_id;
+  revalidatePath('/coordinator/assignments');
+  revalidatePath('/classes');
+  return { ok: true, data: pub(cls) };
+}
+

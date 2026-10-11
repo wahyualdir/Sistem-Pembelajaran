@@ -106,13 +106,13 @@ Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... 
 - `public.programs` (Bukan `study_programs`): `id` UUID, `code` VARCHAR(20) UNIQUE, `name` VARCHAR(100), `degree` VARCHAR(20), `is_active` BOOLEAN, `created_at`, `updated_at`.
 - `public.semesters` (Bukan `academic_years`): `id` UUID, `code` VARCHAR(20) UNIQUE, `name` VARCHAR(50), `start_date` DATE, `end_date` DATE, `is_active` BOOLEAN, `created_at`, `updated_at`.
 - `public.courses`: `id` UUID, `program_id` UUID (FK programs RESTRICT), `code` VARCHAR(20), `name` VARCHAR(100), `credits` INTEGER, `status` VARCHAR(20), `created_at`, `updated_at`.
-- `public.classes`: `id` UUID, `course_id` UUID (FK courses RESTRICT), `semester_id` UUID (FK semesters RESTRICT), `title` VARCHAR(100), `section` VARCHAR(10), `capacity` INTEGER, `status` (`class_status`: DRAFT, OPEN, ACTIVE, CLOSED, ARCHIVED), `created_by` UUID (FK profiles RESTRICT), `created_at`, `updated_at`.
-- `public.enrollments`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `user_id` UUID (FK profiles RESTRICT), `status` (`enrollment_status`: ACTIVE, DROPPED, COMPLETED, REMOVED), `created_at`, `updated_at`.
+- `public.classes`: `id` UUID, `course_id` UUID (FK courses RESTRICT), `semester_id` UUID (FK semesters RESTRICT), `lecturer_id` UUID (FK profiles RESTRICT — SUDAH ADA di snapshot), `title` VARCHAR(100), `section` VARCHAR(10), `join_code` VARCHAR(8) UNIQUE, `capacity` SMALLINT, `status` (`class_status`: DRAFT, OPEN, ACTIVE, CLOSED, ARCHIVED), `created_by` UUID (FK profiles RESTRICT), `created_at`, `updated_at`.
+- `public.enrollments`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `student_id` UUID (FK profiles RESTRICT), `status` (`enrollment_status`: ACTIVE, DROPPED, COMPLETED, REMOVED), `enrolled_at`, `dropped_at`.
 - `public.class_assistants` (Bukan `teaching_assistants`): `id` UUID, `class_id` UUID (FK classes RESTRICT), `user_id` UUID (FK profiles RESTRICT), `permission` VARCHAR(50), `assigned_by` UUID (FK profiles RESTRICT), `assigned_at` TIMESTAMPTZ.
 
-#### B. TABEL / KOLOM BARU (Fase 3):
-- `ALTER TABLE public.classes ADD COLUMN IF NOT EXISTS lecturer_id UUID REFERENCES public.profiles(id) ON DELETE RESTRICT;`
-- `CREATE TABLE IF NOT EXISTS public.rooms ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), code VARCHAR(50) UNIQUE NOT NULL, name VARCHAR(100) NOT NULL, building VARCHAR(100), capacity INT, latitude NUMERIC(10,7), longitude NUMERIC(10,7), radius_meters INT DEFAULT 50, created_at TIMESTAMPTZ DEFAULT now() );`
+#### B. TABEL BARU (Fase 3):
+- Ruang Perkuliahan (`rooms`):
+  `CREATE TABLE IF NOT EXISTS public.rooms ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), code VARCHAR(50) UNIQUE NOT NULL, name VARCHAR(100) NOT NULL, building VARCHAR(100), capacity INT, latitude NUMERIC(10,7), longitude NUMERIC(10,7), radius_meters INT DEFAULT 50, created_at TIMESTAMPTZ DEFAULT now() );`
 
 #### C. Status Server Actions:
 - `createClassAction()` [SUDAH ADA di Kode]
@@ -217,8 +217,10 @@ Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... 
 #### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
 - *Belum ada tabel CBT di skema 1..16* (saat ini beroperasi in-memory pada `QuizStore`).
 
-#### B. TABEL BARU (Fase 3):
-- Bank Kuis & Pengaturan Ujian:
+#### B. TABEL BARU & ARSITEKTUR KEAMANAN EVALUASI (Fase 3):
+- **1. Bank Soal, Opsi & Pemisahan Kunci Jawaban (Perlindungan Kebocoran Kunci)**:
+  - Opsi jawaban untuk mahasiswa (`quiz_options`) **TIDAK MEMUAT** penanda kunci benar `is_correct`.
+  - Kunci jawaban dipisahkan ke tabel terisolasi dengan RLS ketat:
   ```sql
   CREATE TABLE IF NOT EXISTS public.quizzes (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -249,50 +251,95 @@ Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... 
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     question_id UUID NOT NULL REFERENCES public.quiz_questions(id) ON DELETE CASCADE,
     option_text TEXT NOT NULL,
-    is_correct BOOLEAN NOT NULL DEFAULT false,
     order_index INT NOT NULL DEFAULT 0
   );
+
+  -- KUNCI JAWABAN TERPISAH (RLS HANYA DOSEN PENGAMPU / PENGAWAS):
+  -- Role Mahasiswa DILARANG membaca baris tabel ini! Penilaian wajib melalui RPC SECURITY DEFINER.
+  CREATE TABLE IF NOT EXISTS public.quiz_question_keys (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    question_id UUID NOT NULL REFERENCES public.quiz_questions(id) ON DELETE CASCADE,
+    correct_option_id UUID NOT NULL REFERENCES public.quiz_options(id) ON DELETE CASCADE,
+    explanation TEXT,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT uq_question_key UNIQUE (question_id)
+  );
+  ALTER TABLE public.quiz_question_keys ENABLE ROW LEVEL SECURITY;
+  -- Kebijakan RLS: SELECT hanya untuk dosen pengampu kelas terkait / SUPER_ADMIN.
   ```
-- Sesi Ujian Mahasiswa & Lembar Jawaban:
+
+- **2. Sesi Ujian, Batas Waktu Server, & Partial Index Satu Attempt Aktif**:
   ```sql
   CREATE TABLE IF NOT EXISTS public.exam_attempts (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     quiz_id UUID NOT NULL REFERENCES public.quizzes(id) ON DELETE RESTRICT,
     student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
     started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    deadline_at TIMESTAMPTZ NOT NULL, -- SERVER ENFORCED: dihitung DB = started_at + (duration_minutes * interval '1 minute')
     finished_at TIMESTAMPTZ,
     total_score NUMERIC(5,2) DEFAULT 0.00,
     status VARCHAR(50) NOT NULL DEFAULT 'IN_PROGRESS', -- 'IN_PROGRESS', 'SUBMITTED', 'TIMED_OUT', 'DISQUALIFIED'
-    CONSTRAINT uq_quiz_attempt UNIQUE (quiz_id, student_id, started_at)
+    created_at TIMESTAMPTZ DEFAULT now()
   );
 
+  -- INDEKS UNIK PARSIAL: HANYA BOLEH ADA 1 ATTEMPT BERSTATUS 'IN_PROGRESS' PER MAHASISWA-UJIAN
+  CREATE UNIQUE INDEX IF NOT EXISTS uq_active_attempt_per_student
+    ON public.exam_attempts (quiz_id, student_id)
+    WHERE status = 'IN_PROGRESS';
+  ```
+
+- **3. Draf Jawaban Berkala & Pengumpulan Final Idempoten**:
+  ```sql
   CREATE TABLE IF NOT EXISTS public.exam_answers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     attempt_id UUID NOT NULL REFERENCES public.exam_attempts(id) ON DELETE CASCADE,
     question_id UUID NOT NULL REFERENCES public.quiz_questions(id) ON DELETE RESTRICT,
-    selected_option_id UUID REFERENCES public.quiz_options(id) ON DELETE RESTRICT,
+    selected_option_id UUID REFERENCES public.quiz_options(id) ON DELETE SET NULL,
     essay_text TEXT,
+    is_draft BOOLEAN NOT NULL DEFAULT true, -- Autosave berkala ke server
+    last_saved_at TIMESTAMPTZ DEFAULT now(),
     score_earned NUMERIC(5,2) DEFAULT 0.00,
     graded_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT,
     graded_at TIMESTAMPTZ,
     CONSTRAINT uq_attempt_question UNIQUE (attempt_id, question_id)
   );
+  -- RPC submit_exam_attempt() bersifat IDEMPOTEN:
+  -- Menilai otomatis pilihan ganda lewat quiz_question_keys (SECURITY DEFINER),
+  -- mengunci status 'SUBMITTED', dan jika dipanggil berulang mengembalikan hasil tanpa menduplikasi data.
+  -- Submit setelah deadline_at otomatis ditolak dan dialihkan ke status 'TIMED_OUT'.
+  ```
 
-  CREATE TABLE IF NOT EXISTS public.exam_events (
+- **4. Pemisahan Telemetri Mahasiswa vs Intervensi Dosen Pengawas**:
+  ```sql
+  -- Tabel A: Telemetri Integritas Klien Mahasiswa (Logging Event Browser)
+  CREATE TABLE IF NOT EXISTS public.exam_telemetry_events (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     attempt_id UUID NOT NULL REFERENCES public.exam_attempts(id) ON DELETE CASCADE,
-    event_type VARCHAR(100) NOT NULL, -- 'TAB_SWITCH', 'WINDOW_BLUR', 'EXIT_FULLSCREEN', 'DEVTOOLS_OPEN', 'LECTURER_INTERVENTION'
-    details JSONB DEFAULT '{}'::jsonb,
+    student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    event_type VARCHAR(100) NOT NULL, -- 'TAB_SWITCH', 'WINDOW_BLUR', 'EXIT_FULLSCREEN', 'DEVTOOLS_OPEN', 'IP_CHANGED'
+    client_timestamp TIMESTAMPTZ NOT NULL,
+    metadata JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ DEFAULT now()
+  );
+
+  -- Tabel B: Intervensi & Tindakan Pengawas Dosen (Tindakan Administratif Proctor)
+  CREATE TABLE IF NOT EXISTS public.exam_proctor_interventions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    attempt_id UUID NOT NULL REFERENCES public.exam_attempts(id) ON DELETE CASCADE,
+    proctor_user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    action_type VARCHAR(50) NOT NULL, -- 'VERBAL_WARNING', 'FORCE_PAUSE', 'TIME_REDUCTION', 'DISQUALIFY'
+    reason TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT now()
   );
   ```
 
 #### C. Status Server Actions:
-- `submitQuizAttemptAction()` [SUDAH ADA di Kode — Teruji Guard Impersonasi A3c]
+- `submitQuizAttemptAction()` [SUDAH ADA di Kode — Teruji Guard Impersonasi A3c & Idempoten]
 - `createQuizAction()` [BARU DIBUAT di Fase 3]
 - `publishQuizAction()` [BARU DIBUAT di Fase 3]
-- `startQuizAttemptAction()` [BARU DIBUAT di Fase 3]
-- `saveAnswerAction()` [BARU DIBUAT di Fase 3]
+- `startQuizAttemptAction()` [BARU DIBUAT di Fase 3 — Server Menetapkan deadline_at]
+- `saveAnswerDraftAction()` [BARU DIBUAT di Fase 3 — Simpan Draf Berkala ke Server]
+- `interveneStudentAction()` [BARU DIBUAT di Fase 3 — Khusus Dosen/Pengawas]
 - `interveneStudentAction()` [BARU DIBUAT di Fase 3]
 
 ---
@@ -400,19 +447,15 @@ Sebuah domain dinyatakan selesai di Fase 3 hanya jika memenuhi 4 pilar:
 
 ---
 
-## 4. Daftar Keputusan yang Perlu Diambil Pengguna
+## 4. Keputusan Arsitektural Pengguna (Recorded Decisions)
 
-Sebelum pengerjaan kode atau migrasi Fase 3 dimulai, Anda perlu menetapkan pilihan pada poin-poin keputusan arsitektural berikut:
+Keputusan arsitektur persistensi Fase 3 telah ditetapkan oleh Pengguna:
 
-| No | Topik Keputusan | Pilihan Opsi Solusi | Rekomendasi Arsitektur | Keputusan Anda |
+| No | Topik Keputusan | Pilihan Opsi Solusi | Rekomendasi Arsitektur | Keputusan Resmi Pengguna |
 |---|---|---|---|---|
-| **K1** | **Skema Kolom Pengampu Kelas (`classes`)** | **A**: Menambahkan kolom `lecturer_id UUID REFERENCES profiles(id)` langsung ke tabel `classes`.<br>**B**: Menggunakan tabel perantara `class_lecturers` jika 1 kelas dapat diampu tim dosen (*team teaching*). | **Opsi A** (Simpel, konsisten dengan UI yang menampilkan dosen utama, sementara tim pengajar/asisten dapat memakai `class_assistants`). | *Menunggu Keputusan Pengguna* |
-| **K2** | **Penyimpanan Berkas Lampiran (Tugas & Surat Sakit)** | **A**: Supabase Storage Bucket bawaan dengan Signed URL privat 15 menit.<br>**B**: S3-compatible cloud storage eksternal (Cloudflare R2 / AWS S3). | **Opsi A (Supabase Storage)** agar autentikasi RLS bucket terintegrasi langsung dengan Supabase Auth. | *Menunggu Keputusan Pengguna* |
-| **K3** | **Alur Submit Jawaban Ujian CBT Berbeban Tinggi** | **A**: Setiap jawaban butir soal langsung `INSERT` ke DB per detik (risiko connection spike).<br>**B**: Single-payload submission: Jawaban disimpan lokal di browser (`localStorage`), dikirim sekaligus saat tombol "Kumpulkan Ujian" ditekan. | **Opsi B (Single-Payload)** untuk menjaga stabilitas PostgreSQL pada tier database standar. | *Menunggu Keputusan Pengguna* |
-| **K4** | **Penyelarasan Nama Semester vs Tahun Ajaran** | **A**: Tetap memakai tabel `semesters` yang ada di snapshot (kolom: `code`, `name`, `start_date`, `end_date`, `is_active`).<br>**B**: Membuat tabel baru `academic_years` terpisah dari `semesters`. | **Opsi A (Gunakan semesters yang sudah ada)** untuk menghindari tabel berlebih yang membingungkan. | *Menunggu Keputusan Pengguna* |
-| **K5** | **Penyediaan Proyek Supabase Staging** | **A**: Pengguna menyediakan URL & Service Key proyek Supabase Staging terpisah untuk pengujian nyata.<br>**B**: Pengujian tetap menggunakan database lokal sekali pakai (PGlite/Docker) sebelum staging disediakan. | **Opsi A** mutlak diperlukan sebelum deployment produksi. | *Menunggu Keputusan Pengguna* |
+| **K2** | **Penyimpanan Berkas Lampiran (Tugas & Surat Sakit)** | **A**: Supabase Storage Bucket bawaan dengan Signed URL privat 15 menit.<br>**B**: S3-compatible cloud storage eksternal (Cloudflare R2 / AWS S3). | **Opsi A (Supabase Storage)** agar autentikasi RLS bucket terintegrasi langsung dengan Supabase Auth. | **OPSI A DITERIMA**: Supabase Storage Bucket privat + Signed URL masa berlaku 15 menit. |
+| **K3** | **Alur Submit Jawaban Ujian CBT Berbeban Tinggi** | **A**: Setiap jawaban butir soal langsung `INSERT` ke DB per detik.<br>**B**: Single-payload submission dengan draf berkala ke server (autosave) dan submit final idempoten. | **Opsi B (Single-Payload + Draf Berkala)** untuk menjaga integritas data dan kestabilan DB. | **OPSI B DITERIMA**: Draf berkala ke server (autosave) + single-payload final submit yang idempoten. |
+| **K4** | **Penyelarasan Nama Semester vs Tahun Ajaran** | **A**: Tetap memakai tabel `semesters` yang ada di snapshot (kolom: `code`, `name`, `start_date`, `end_date`, `is_active`).<br>**B**: Membuat tabel baru `academic_years`. | **Opsi A (Gunakan semesters yang sudah ada)** untuk menghindari tabel ganda. | **OPSI A DITERIMA**: Tetap memakai tabel `semesters` yang ada di snapshot. |
+| **K5** | **Penyediaan Proyek Supabase Staging** | **A**: Pengguna menyediakan URL & Service Key proyek Supabase Staging terpisah untuk pengujian nyata.<br>**B**: Pengujian lokal sekali pakai. | **Opsi A** untuk verifikasi gateway PostgREST nyata. | **OPSI A DITERIMA**: Staging Supabase terpisah via kredensial aman di `.env.local` (diabaikan git). |
 
----
-
-> **PERNYATAAN PENGHENTIAN (STOP RULE)**:  
-> Perencanaan Fase 3 telah diselaraskan penuh dengan `docs/schema-snapshot.md`. Sesuai instruksi ketat pengguna, asisten AI **BERHENTI DI SINI** dan **TIDAK MENJALANKAN MIGRASI** serta **TIDAK MENULIS KODE FASE 3** sampai dokumen rencana ini disetujui.
+*(Catatan: K1 dihapus dari daftar keputusan karena kolom `classes.lecturer_id` telah terverifikasi SUDAH ADA di snapshot skema migrasi 1..16).*
