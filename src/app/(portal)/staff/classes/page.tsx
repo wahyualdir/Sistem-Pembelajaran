@@ -1,10 +1,13 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
+import { assertServerRole } from '@/lib/auth/server-guards';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { isDemoMode } from '@/lib/config/features';
 import { StaffClassesHubView } from '@/modules/academic/staff-classes-hub-view';
 
 export default async function StaffClassesPage() {
+  // A3c: Defense in depth di level halaman sensitif
+  await assertServerRole(['ACADEMIC_STAFF']);
   const user = await getCurrentUserWithRoles();
   const role = user?.activeRole;
 

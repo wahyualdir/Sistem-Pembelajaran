@@ -1097,6 +1097,14 @@ export async function requestGradeChangeAction(input: unknown): Promise<ActionRe
 }
 
 export async function decideGradeChangeAction(input: unknown): Promise<ActionResponse> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isImpersonating) {
+    return {
+      ok: false,
+      error: 'IMPERSONATION_RESTRICTED: Dilarang memutuskan permohonan perubahan nilai selama sesi impersonasi aktif.',
+    };
+  }
+
   const p = z.object({
     request_id: z.string().min(1, 'ID pengajuan wajib diisi.'),
     approve: z.boolean(),
@@ -1105,14 +1113,6 @@ export async function decideGradeChangeAction(input: unknown): Promise<ActionRes
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
   const me = await actor('PROGRAM_COORDINATOR');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
-
-  // Guard A3c: Dilarang memutuskan permohonan nilai selama sesi impersonasi aktif
-  if (me.isImpersonating) {
-    return {
-      ok: false,
-      error: 'IMPERSONATION_RESTRICTED: Dilarang memutuskan permohonan perubahan nilai selama sesi impersonasi aktif.',
-    };
-  }
 
   const { request_id, approve, note } = p.data;
 
@@ -1199,6 +1199,14 @@ export async function decideGradeChangeAction(input: unknown): Promise<ActionRes
 }
 
 export async function executeGradeChangeAction(input: unknown): Promise<ActionResponse> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isImpersonating) {
+    return {
+      ok: false,
+      error: 'IMPERSONATION_RESTRICTED: Dilarang mengeksekusi perubahan nilai ke database selama sesi impersonasi aktif.',
+    };
+  }
+
   const p = z.object({
     request_id: z.string().min(1, 'ID pengajuan wajib diisi.'),
     note: z.string().trim().max(1000).optional(),
@@ -1206,14 +1214,6 @@ export async function executeGradeChangeAction(input: unknown): Promise<ActionRe
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
   const me = await actor('ACADEMIC_STAFF');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
-
-  // Guard A3c: Dilarang mengeksekusi perubahan nilai selama impersonasi aktif
-  if (me.isImpersonating) {
-    return {
-      ok: false,
-      error: 'IMPERSONATION_RESTRICTED: Dilarang mengeksekusi perubahan nilai ke database selama sesi impersonasi aktif.',
-    };
-  }
 
   const { request_id, note } = p.data;
 
@@ -1267,26 +1267,40 @@ export async function executeGradeChangeAction(input: unknown): Promise<ActionRe
     r.executed_at = new Date().toISOString();
     r.execution_note = note || 'Eksekusi administratif nilai perkuliahan oleh Staf Akademik';
 
-    // Jejak Audit Log Sistem (Bagian A1 & A3f & 2D)
-    await recordSystemAuditLog({
-      actorId: me.id,
-      actorName: me.name,
-      actorRole: 'ACADEMIC_STAFF',
-      action: 'grade.change_execute',
-      entityType: 'grade_change_requests',
-      entityId: r.id,
-      description: `Staf Akademik mengeksekusi perubahan nilai resmi mahasiswa ${r.student_name} (${r.old_score} -> ${r.proposed_score}) pada ${r.assignment_title}.`,
-      scopeType: 'CLASS',
-      scopeId: r.class_id,
-      valueBefore: String(r.old_score),
-      valueAfter: String(r.proposed_score),
-      metadata: {
-        requested_by: r.requested_by,
-        executed_by: me.id,
-        executed_at: r.executed_at,
-        execution_note: r.execution_note,
-      },
-    });
+    // Jejak Audit Log Sistem (Bagian A1 & A3f & 2D & A5a)
+    try {
+      await recordSystemAuditLog({
+        actorId: me.id,
+        actorName: me.name,
+        actorRole: 'ACADEMIC_STAFF',
+        action: 'grade.change_execute',
+        entityType: 'grade_change_requests',
+        entityId: r.id,
+        description: `Staf Akademik mengeksekusi perubahan nilai resmi mahasiswa ${r.student_name} (${r.old_score} -> ${r.proposed_score}) pada ${r.assignment_title}.`,
+        scopeType: 'CLASS',
+        scopeId: r.class_id,
+        valueBefore: String(r.old_score),
+        valueAfter: String(r.proposed_score),
+        metadata: {
+          requested_by: r.requested_by,
+          executed_by: me.id,
+          executed_at: r.executed_at,
+          execution_note: r.execution_note,
+        },
+      });
+    } catch (err: any) {
+      r.status = 'APPROVED';
+      r.executed_by = undefined;
+      r.executed_at = undefined;
+      r.execution_note = undefined;
+      if (n) {
+        n.score = r.old_score;
+      }
+      return {
+        ok: false,
+        error: `AUDIT_FAILED: Gagal mencatat log audit eksekusi nilai, aksi dibatalkan: ${err.message}`,
+      };
+    }
 
     // Notifikasi ke Mahasiswa dan Dosen Pengampu
     if (s) {

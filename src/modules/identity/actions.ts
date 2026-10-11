@@ -26,6 +26,7 @@ import type { UserStatus } from '@/lib/supabase/types';
 import type { ActionResponse } from './types';
 import { SYNTHETIC_DEMO_USERS } from './demo-users';
 import { recordSystemAuditLog } from '@/lib/audit';
+import { isDemoMode } from '@/lib/config/features';
 
 const ROLE_PORTAL_MAP: Record<string, string> = {
   STUDENT: '/student',
@@ -413,18 +414,7 @@ export async function switchWorkspaceAction(formData: FormData | unknown): Promi
  * Kebijakan password Bagian 3.3 dan penanganan must_change_password
  */
 export async function changePasswordAction(formData: unknown): Promise<ActionResponse> {
-  const parseResult = changePasswordSchema.safeParse(formData);
-  if (!parseResult.success) {
-    return {
-      ok: false,
-      error: 'Format password tidak memenuhi standar.',
-      fieldErrors: parseResult.error.flatten().fieldErrors,
-    };
-  }
-
-  const { newPassword } = parseResult.data;
   const userContext = await getCurrentUserWithRoles();
-
   if (!userContext) {
     redirect('/login');
   }
@@ -436,6 +426,17 @@ export async function changePasswordAction(formData: unknown): Promise<ActionRes
       error: 'IMPERSONATION_RESTRICTED: Dilarang mengubah kata sandi atau email selama sesi impersonasi aktif.',
     };
   }
+
+  const parseResult = changePasswordSchema.safeParse(formData);
+  if (!parseResult.success) {
+    return {
+      ok: false,
+      error: 'Format password tidak memenuhi standar.',
+      fieldErrors: parseResult.error.flatten().fieldErrors,
+    };
+  }
+
+  const { newPassword } = parseResult.data;
 
   const user = userContext.user;
   const isOnline = await checkSupabaseOnline();
@@ -781,7 +782,7 @@ export async function getCurrentUserWithRoles() {
           // DB offline
         }
       }
-      if (!isOriginalSuperAdmin) {
+      if (!isOriginalSuperAdmin && !isOnline) {
         const adminDemo = Object.values(SYNTHETIC_DEMO_USERS).find(
           (u) => u.id === verifiedPayload!.originalAdminId
         );
@@ -905,16 +906,16 @@ export async function impersonateUserAction(
 ): Promise<ActionResponse> {
   const cookieStore = cookies();
   const current = await getCurrentUserWithRoles();
-  if (!current || (current.activeRole !== 'SUPER_ADMIN' && current.activeRole !== 'SUPERADMIN')) {
-    return { ok: false, error: 'Hanya Super Administrator yang berwenang melakukan impersonate pengguna.' };
-  }
-
   // A3b: Dilarang melakukan penyamaran bertingkat (chaining)
-  if (current.isImpersonating) {
+  if (current?.isImpersonating) {
     return {
       ok: false,
       error: 'CHAINING_PROHIBITED: Dilarang melakukan penyamaran bertingkat (chaining). Selesaikan sesi impersonasi yang sedang berjalan terlebih dahulu.',
     };
+  }
+
+  if (!current || (current.activeRole !== 'SUPER_ADMIN' && current.activeRole !== 'SUPERADMIN')) {
+    return { ok: false, error: 'Hanya Super Administrator yang berwenang melakukan impersonate pengguna.' };
   }
 
   // A3b: Dilarang menyamar sebagai diri sendiri
@@ -925,26 +926,37 @@ export async function impersonateUserAction(
     };
   }
 
-  // A3b: Larangan menyamar sebagai Super Admin lain harus memeriksa user_roles di DB, bukan SYNTHETIC_DEMO_USERS
+  // A4b: Larangan menyamar sebagai Super Admin lain harus memeriksa user_roles di DB
   const isOnline = await checkSupabaseOnline();
   let isTargetSuperAdmin = false;
   if (isOnline) {
-    try {
-      const { data: targetRoles } = await supabaseAdmin
-        .from('user_roles')
-        .select('roles(code), role_id')
-        .eq('user_id', targetUserId)
-        .eq('status', 'ACTIVE');
-      isTargetSuperAdmin = !!targetRoles?.some(
-        (r: any) => r.roles?.code === 'SUPER_ADMIN' || r.role_id === 'SUPER_ADMIN'
-      );
-    } catch {
-      // DB offline
+    const { data: targetRoles, error: targetRolesError } = await supabaseAdmin
+      .from('user_roles')
+      .select('roles(code), role_id')
+      .eq('user_id', targetUserId)
+      .eq('status', 'ACTIVE');
+
+    if (targetRolesError) {
+      return {
+        ok: false,
+        error: `QUERY_FAILED: Gagal memeriksa peran target pengguna dari basis data: ${targetRolesError.message}`,
+      };
     }
-  }
-  if (!isTargetSuperAdmin) {
-    const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === targetUserId) || SYNTHETIC_DEMO_USERS[targetUserId];
-    isTargetSuperAdmin = !!(targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN')));
+
+    isTargetSuperAdmin = !!targetRoles?.some(
+      (r: any) => r.roles?.code === 'SUPER_ADMIN' || r.role_id === 'SUPER_ADMIN' || r.roles?.code === 'SUPERADMIN' || r.role_id === 'SUPERADMIN'
+    );
+  } else {
+    // Mode demo fallback hanya jika mode demo aktif
+    if (isDemoMode()) {
+      const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === targetUserId) || SYNTHETIC_DEMO_USERS[targetUserId];
+      isTargetSuperAdmin = !!(targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN')));
+    } else {
+      return {
+        ok: false,
+        error: 'FAIL_CLOSED: Basis data offline dan mode demo dinonaktifkan di lingkungan produksi.',
+      };
+    }
   }
 
   if (isTargetSuperAdmin) {
@@ -991,7 +1003,7 @@ export async function impersonateUserAction(
   cookieStore.delete('impersonating_from');
   cookieStore.delete('impersonating_expires_at');
 
-  // A3d: Catat mulai sesi impersonasi ke Audit Log (actor_id = Super Admin asli, on_behalf_of = target)
+  // A3d & A5a: Catat mulai sesi impersonasi ke Audit Log. Jika gagal -> AKSI DIBATALKAN & cookie dihapus
   try {
     await recordSystemAuditLog({
       actorId: current.user.id,
@@ -1003,8 +1015,12 @@ export async function impersonateUserAction(
       onBehalfOf: targetUserId,
       description: `Super Admin memulai sesi impersonasi teknis pada pengguna ID ${targetUserId}. Alasan: ${cleanReason}`,
     });
-  } catch {
-    // DB offline fallback
+  } catch (err: any) {
+    cookieStore.delete('impersonation_token');
+    return {
+      ok: false,
+      error: `AUDIT_FAILED: Gagal mencatat log audit mulai impersonasi, aksi dibatalkan: ${err.message}`,
+    };
   }
 
   return { ok: true };
@@ -1032,8 +1048,11 @@ export async function stopImpersonatingAction(): Promise<ActionResponse> {
         onBehalfOf: targetUserId || undefined,
         description: `Super Admin mengakhiri sesi penyamaran identitas dan kembali ke akun administratif resmi.`,
       });
-    } catch {
-      // DB offline fallback
+    } catch (err: any) {
+      return {
+        ok: false,
+        error: `AUDIT_FAILED: Gagal mencatat log audit penghentian impersonasi: ${err.message}`,
+      };
     }
   }
 
@@ -1098,13 +1117,64 @@ export async function updateUserRoleAction(input: {
     };
   }
 
-  // A5: Tidak boleh menurunkan Super Admin terakhir
-  const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === input.targetUserId) || SYNTHETIC_DEMO_USERS[input.targetUserId];
-  const isTargetSuperAdmin = targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN'));
+  // A4b & A5: Pemeriksaan "Super Admin terakhir" membaca user_roles di DB saat online
+  const isOnline = await checkSupabaseOnline();
+  let isTargetSuperAdmin = false;
+  let superAdminCount = 0;
+
+  if (isOnline) {
+    const { data: targetRoles, error: targetError } = await supabaseAdmin
+      .from('user_roles')
+      .select('roles(code), role_id')
+      .eq('user_id', input.targetUserId)
+      .eq('status', 'ACTIVE');
+
+    if (targetError) {
+      return {
+        ok: false,
+        error: `QUERY_FAILED: Gagal memeriksa peran target pengguna dari basis data: ${targetError.message}`,
+      };
+    }
+
+    isTargetSuperAdmin = !!targetRoles?.some(
+      (r: any) => r.roles?.code === 'SUPER_ADMIN' || r.role_id === 'SUPER_ADMIN' || r.roles?.code === 'SUPERADMIN' || r.role_id === 'SUPERADMIN'
+    );
+
+    if (isTargetSuperAdmin) {
+      const { data: allAdmins, error: countError } = await supabaseAdmin
+        .from('user_roles')
+        .select('user_id, roles!inner(code)')
+        .eq('roles.code', 'SUPER_ADMIN')
+        .eq('status', 'ACTIVE');
+
+      if (countError) {
+        return {
+          ok: false,
+          error: `QUERY_FAILED: Gagal menghitung total Super Administrator dari basis data: ${countError.message}`,
+        };
+      }
+
+      const distinctAdmins = new Set(allAdmins?.map((r: any) => r.user_id));
+      superAdminCount = distinctAdmins.size;
+    }
+  } else {
+    if (isDemoMode()) {
+      const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === input.targetUserId) || SYNTHETIC_DEMO_USERS[input.targetUserId];
+      isTargetSuperAdmin = !!(targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN')));
+      if (isTargetSuperAdmin) {
+        superAdminCount = Object.values(SYNTHETIC_DEMO_USERS).filter((u) =>
+          u.roles.includes('SUPER_ADMIN') || u.roles.includes('SUPERADMIN')
+        ).length;
+      }
+    } else {
+      return {
+        ok: false,
+        error: 'FAIL_CLOSED: Basis data offline dan mode demo dinonaktifkan di lingkungan produksi.',
+      };
+    }
+  }
+
   if (isTargetSuperAdmin && input.newRole !== 'SUPER_ADMIN' && input.newRole !== 'SUPERADMIN') {
-    const superAdminCount = Object.values(SYNTHETIC_DEMO_USERS).filter((u) =>
-      u.roles.includes('SUPER_ADMIN') || u.roles.includes('SUPERADMIN')
-    ).length;
     if (superAdminCount <= 1) {
       return {
         ok: false,
@@ -1113,7 +1183,44 @@ export async function updateUserRoleAction(input: {
     }
   }
 
-  // A5: Catat ke Audit Log
+  // Update peran di DB bila online
+  if (isOnline) {
+    const { data: roleRow, error: roleError } = await supabaseAdmin
+      .from('roles')
+      .select('id')
+      .eq('code', input.newRole)
+      .maybeSingle();
+
+    if (roleError) {
+      return {
+        ok: false,
+        error: `QUERY_FAILED: Gagal memeriksa peran baru di basis data: ${roleError.message}`,
+      };
+    }
+    if (!roleRow) {
+      return {
+        ok: false,
+        error: `ROLE_NOT_FOUND: Peran ${input.newRole} tidak terdaftar pada tabel roles.`,
+      };
+    }
+
+    const { error: upsertError } = await supabaseAdmin
+      .from('user_roles')
+      .upsert({
+        user_id: input.targetUserId,
+        role_id: roleRow.id,
+        status: 'ACTIVE',
+      });
+
+    if (upsertError) {
+      return {
+        ok: false,
+        error: `Gagal memperbarui peran pengguna di basis data: ${upsertError.message}`,
+      };
+    }
+  }
+
+  // A5a: Catat ke Audit Log. Jika gagal -> AKSI DIBATALKAN & error jelas dikembalikan!
   try {
     await recordSystemAuditLog({
       actorId: current.user.id,
@@ -1124,8 +1231,11 @@ export async function updateUserRoleAction(input: {
       entityId: input.targetUserId,
       description: `Super Admin mengubah peran pengguna ID ${input.targetUserId} menjadi ${input.newRole}.`,
     });
-  } catch {
-    // Fallback
+  } catch (err: any) {
+    return {
+      ok: false,
+      error: `AUDIT_FAILED: Gagal mencatat log audit perubahan peran pengguna: ${err.message}`,
+    };
   }
 
   return { ok: true };
@@ -1164,13 +1274,64 @@ export async function deleteUserAction(input: {
     };
   }
 
-  // A5: Dilarang menghapus Super Admin terakhir
-  const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === input.targetUserId) || SYNTHETIC_DEMO_USERS[input.targetUserId];
-  const isTargetSuperAdmin = targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN'));
+  // A4b & A5: Pemeriksaan "Super Admin terakhir" membaca user_roles di DB saat online
+  const isOnline = await checkSupabaseOnline();
+  let isTargetSuperAdmin = false;
+  let superAdminCount = 0;
+
+  if (isOnline) {
+    const { data: targetRoles, error: targetError } = await supabaseAdmin
+      .from('user_roles')
+      .select('roles(code), role_id')
+      .eq('user_id', input.targetUserId)
+      .eq('status', 'ACTIVE');
+
+    if (targetError) {
+      return {
+        ok: false,
+        error: `QUERY_FAILED: Gagal memeriksa peran target pengguna dari basis data: ${targetError.message}`,
+      };
+    }
+
+    isTargetSuperAdmin = !!targetRoles?.some(
+      (r: any) => r.roles?.code === 'SUPER_ADMIN' || r.role_id === 'SUPER_ADMIN' || r.roles?.code === 'SUPERADMIN' || r.role_id === 'SUPERADMIN'
+    );
+
+    if (isTargetSuperAdmin) {
+      const { data: allAdmins, error: countError } = await supabaseAdmin
+        .from('user_roles')
+        .select('user_id, roles!inner(code)')
+        .eq('roles.code', 'SUPER_ADMIN')
+        .eq('status', 'ACTIVE');
+
+      if (countError) {
+        return {
+          ok: false,
+          error: `QUERY_FAILED: Gagal menghitung total Super Administrator dari basis data: ${countError.message}`,
+        };
+      }
+
+      const distinctAdmins = new Set(allAdmins?.map((r: any) => r.user_id));
+      superAdminCount = distinctAdmins.size;
+    }
+  } else {
+    if (isDemoMode()) {
+      const targetDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === input.targetUserId) || SYNTHETIC_DEMO_USERS[input.targetUserId];
+      isTargetSuperAdmin = !!(targetDemo && (targetDemo.roles.includes('SUPER_ADMIN') || targetDemo.roles.includes('SUPERADMIN')));
+      if (isTargetSuperAdmin) {
+        superAdminCount = Object.values(SYNTHETIC_DEMO_USERS).filter((u) =>
+          u.roles.includes('SUPER_ADMIN') || u.roles.includes('SUPERADMIN')
+        ).length;
+      }
+    } else {
+      return {
+        ok: false,
+        error: 'FAIL_CLOSED: Basis data offline dan mode demo dinonaktifkan di lingkungan produksi.',
+      };
+    }
+  }
+
   if (isTargetSuperAdmin) {
-    const superAdminCount = Object.values(SYNTHETIC_DEMO_USERS).filter((u) =>
-      u.roles.includes('SUPER_ADMIN') || u.roles.includes('SUPERADMIN')
-    ).length;
     if (superAdminCount <= 1) {
       return {
         ok: false,
@@ -1180,7 +1341,6 @@ export async function deleteUserAction(input: {
   }
 
   // C4: Pakai anonymize_user RPC di DB (karena hard delete ditolak RESTRICT oleh baris audit)
-  const isOnline = await checkSupabaseOnline();
   if (isOnline) {
     try {
       const { error: rpcError } = await supabaseAdmin.rpc('anonymize_user', {
@@ -1200,7 +1360,7 @@ export async function deleteUserAction(input: {
     }
   }
 
-  // A5: Catat ke Audit Log
+  // A5a: Catat ke Audit Log. Jika gagal -> AKSI DIBATALKAN & error jelas dikembalikan!
   try {
     await recordSystemAuditLog({
       actorId: current.user.id,
@@ -1211,8 +1371,11 @@ export async function deleteUserAction(input: {
       entityId: input.targetUserId,
       description: `Super Admin menghapus dan menganonimkan pengguna ID ${input.targetUserId}.`,
     });
-  } catch {
-    // Fallback
+  } catch (err: any) {
+    return {
+      ok: false,
+      error: `AUDIT_FAILED: Gagal mencatat log audit penghapusan pengguna: ${err.message}`,
+    };
   }
 
   return { ok: true };

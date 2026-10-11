@@ -1,288 +1,418 @@
-# Dokumen Rencana Kerja Fase 3 (Phase 3 Execution Plan)
+# Dokumen Rencana Kerja Fase 3 (Phase 3 Execution Plan) — Edisi Selaras Snapshot Skema
 
 > **Status Dokumen**: RENCANA SAJA (*Planning Only*) — Tidak Ada Kode atau Migrasi yang Dijalankan pada Fase Ini.  
-> **Tanggal Penyusunan**: 11 Oktober 2026  
+> **Tanggal Pembaruan**: 11 Oktober 2026  
+> **Sumber Kebenaran Tunggal (*Single Source of Truth*)**: [`docs/schema-snapshot.md`](file:///c:/Users/ACER/Downloads/implementasi/docs/schema-snapshot.md) (Hasil migrasi 1..16 pada PGlite).  
 > **Tujuan**: Menetapkan panduan arsitektur transisi lapisan persistensi aplikasi SIAJAR dari penyimpanan memori sementara (*in-memory*) ke basis data relasional permanen (Supabase PostgreSQL) dengan penegakan keamanan *Row Level Security* (RLS), *Role-Based Access Control* (RBAC), integritas transaksi ACID, dan kepatuhan regulasi UU Pelindungan Data Pribadi (UU PDP).
 
 ---
 
 ## 1. Urutan Domain yang Diusulkan & Rasional Ketergantungan (Dependency Sequence)
 
-Urutan implementasi migrasi persistensi basis data dirancang secara berjenjang (*layered dependency order*). Setiap tingkatan hanya bergantung pada lapisan di bawahnya dan tidak menimbulkan siklus ketergantungan (*circular dependency*).
+Urutan implementasi migrasi persistensi basis data dirancang secara berjenjang (*layered dependency order*). Setiap tingkatan hanya bergantung pada lapisan di bawahnya dan tidak menimbulkan siklus ketergantungan (*circular dependency*):
 
 ```
    ┌─────────────────────────────────────────────────────────────────┐
-   │ 1. PONDASI: Identitas, Pengguna, Peran & Profil                │
-   │    (auth.users, profiles, roles, user_roles, audit_logs)        │
+   │ 1. PONDASI IDENTITAS & KEAMANAN                                 │
+   │    auth.users, profiles, roles, user_roles, audit_logs         │
    └────────────────────────────────┬────────────────────────────────┘
                                     │
    ┌────────────────────────────────▼────────────────────────────────┐
-   │ 2. AKADEMIK DASAR: Master Data, Kurikulum, Kelas & Enrollment   │
-   │    (study_programs, courses, academic_years, rooms, classes,    │
-   │     enrollments, teaching_assistants)                           │
+   │ 2. AKADEMIK DASAR: Master Kurikulum, Kelas & Asisten Dosen     │
+   │    programs, semesters, courses, classes, enrollments,         │
+   │    class_assistants                                             │
    └────────────────────────────────┬────────────────────────────────┘
                                     │
             ┌───────────────────────┴───────────────────────┐
             │                                               │
    ┌────────▼───────────────────────┐              ┌────────▼───────────────────────┐
    │ 3. EVALUASI AKADEMIK & NILAI   │              │ 4. KEHADIRAN & DISPENSASI      │
-   │    (grade_components,          │              │    (attendance_sessions,       │
-   │     student_grades,            │              │     attendance_records,        │
-   │     gradebook_locks)           │              │     leave_permits)             │
+   │    grades, grade_history       │              │    attendance_sessions,        │
+   │                                │              │    attendance_records,         │
+   │                                │              │    leave_permits (BARU)        │
    └────────────────┬───────────────┘              └────────────────────────────────┘
                     │
    ┌────────────────▼────────────────────────────────┐
-   │ 5. EVALUASI BERBASIS CBT & PROCTORING           │
-   │    (quizzes, quiz_questions, quiz_options,      │
-   │     exam_attempts, exam_answers, exam_events)   │
+   │ 5. EVALUASI BERBASIS CBT & PROCTORING (BARU)    │
+   │    quizzes, quiz_questions, quiz_options,      │
+   │    exam_attempts, exam_answers, exam_events     │
    └────────────────┬────────────────────────────────┘
                     │
    ┌────────────────▼────────────────────────────────┐
-   │ 6. PENYELESAIAN SENGKETA & AKUNTABILITAS NILAI  │
-   │    (exam_disputes, grade_change_requests,       │
-   │     grade_export_logs, immutable audit logs)    │
+   │ 6. SENGKETA NILAI & PERUBAHAN NILAI FINAL       │
+   │    grade_change_requests (SUDAH ADA),           │
+   │    exam_disputes (BARU)                         │
    └────────────────┬────────────────────────────────┘
                     │
    ┌────────────────▼────────────────────────────────┐
-   │ 7. KOMUNIKASI, FORUM, MATERI & LAYANAN KONTEN   │
-   │    (materials, assignments, submissions,        │
-   │     notifications, forums, announcements,       │
-   │     library, events, certificates, portfolios)  │
+   │ 7. KOMUNIKASI, MATERI, FORUM & LAYANAN KONTEN   │
+   │    materials, assignments, submissions,         │
+   │    notifications, discussions, announcements,   │
+   │    library, campus_events, portfolios (BARU)    │
    └─────────────────────────────────────────────────┘
 ```
 
 ### Rincian Rasional Ketergantungan:
-1. **Domain 1 (Identitas & Autentikasi)**: Pondasi mutlak. Semua baris data dan kebijakan RLS di seluruh tabel membutuhkan `auth.uid()` serta pemetaan peran dari tabel `user_roles`.
-2. **Domain 2 (Master Data, Kelas & Enrollment)**: Seluruh kegiatan akademik membutuhkan entitas rombongan belajar (`classes`) dan hubungan keterikatan peserta (`enrollments`) serta dosen pengampu (`classes.lecturer_id`). Tanpa enrollment, presensi dan buku nilai tidak memiliki konteks.
-3. **Domain 3 (Nilai & Gradebook)**: Buku nilai dasar kelas, bobot komponen nilai, dan batas penguncian nilai semester. Menjadi muara akhir dari seluruh penilaian tugas, presensi, dan ujian.
-4. **Domain 4 (Presensi Kuliah & Izin Sakit)**: Bergantung pada kelas dan peserta kelas. Rekap presensi mempengaruhi kelayakan mahasiswa mengikuti ujian (ambang 75% kehadiran).
-5. **Domain 5 (CBT Ujian & Proctoring)**: Membutuhkan kelas untuk penjadwalan ujian dan mahasiswa terdaftar untuk pengerjaan ujian (*attempts*). Telemetri kecurangan merekam intervensi pengawas secara *real-time*.
-6. **Domain 6 (Sengketa Ujian & Perubahan Nilai Final)**: Membutuhkan lembar ujian (untuk sanggahan soal) dan buku nilai (untuk revisi nilai final terintegrasi 3 pihak: Dosen pengaju -> Kaprodi pemutus -> Staf eksekutor).
-7. **Domain 7 (Konten, Forum, Notifikasi, Pustaka & Event)**: Lapisan interaksi sosial dan pelengkap akademik. Bergantung pada kelas dan identitas pengguna, tetapi kegagalan pada lapisan ini tidak melumpuhkan fungsi inti operasional akademik.
+1. **Domain 1 (Identitas & Autentikasi)**: Pondasi mutlak. Semua baris data dan kebijakan RLS di seluruh tabel membutuhkan `auth.uid()`, relasi ke `public.profiles(id)`, dan verifikasi peran dari `public.user_roles`.
+2. **Domain 2 (Master Kurikulum, Kelas, Peserta & Asisten)**: Seluruh kegiatan perkuliahan membutuhkan entitas program studi (`programs`), semester aktif (`semesters`), mata kuliah (`courses`), rombongan belajar (`classes`), peserta kelas (`enrollments`), dan asisten dosen (`class_assistants`). Tanpa ini, pencatatan nilai dan presensi tidak memiliki jangkar relasional.
+3. **Domain 3 (Nilai & Gradebook)**: Buku nilai master kelas menggunakan tabel `public.grades` dan riwayat audit perubahan nilai `public.grade_history`.
+4. **Domain 4 (Presensi Kuliah & Izin Sakit)**: Bergantung pada kelas dan peserta kelas. Rekap presensi mempengaruhi kelayakan mahasiswa mengikuti evaluasi akhir.
+5. **Domain 5 (CBT Ujian & Proctoring)**: Membutuhkan kelas untuk penjadwalan kuis/ujian dan mahasiswa terdaftar untuk pengerjaan ujian (*attempts*). Telemetri kecurangan merekam intervensi pengawas secara *real-time*.
+6. **Domain 6 (Sengketa Ujian & Perubahan Nilai Final)**: Membutuhkan lembar ujian (untuk sanggahan soal CBT) dan master nilai (untuk permohonan revisi nilai terintegrasi 3 pihak di `grade_change_requests`: Dosen pengaju -> Kaprodi pemutus -> Staf eksekutor).
+7. **Domain 7 (Konten, Forum, Notifikasi, Pustaka & Event)**: Modul kolaborasi dan layanan pendukung kampus.
 
 ---
 
-## 2. Rincian Teknis Per Domain (Tabel, RLS, Actions, & Migrasi)
+## 2. Rincian Teknis Per Domain (Pemisahan Status Skema & Rencana DDL)
+
+Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... ADD COLUMN IF NOT EXISTS` atau `CREATE TABLE IF NOT EXISTS` agar **TIDAK MENCIPTAKAN TABEL GANDA** atau menimpa skema yang sudah ada di snapshot 1..16.
 
 ---
 
-### Domain 1: Identitas, Pengguna, Peran & Audit Log Dasar
-- **Tabel & Kolom Kunci**:
-  - `auth.users` (`id`, `email`, `created_at`)
-  - `public.profiles` (`id` FK auth.users, `nim_nip`, `full_name`, `avatar_url`, `phone`, `status`, `created_at`)
-  - `public.roles` (`id`, `name` [STUDENT, LECTURER, TEACHING_ASSISTANT, PROGRAM_COORDINATOR, ACADEMIC_STAFF, SYSTEM_ADMIN, SUPER_ADMIN])
-  - `public.user_roles` (`id`, `user_id` FK profiles, `role_id` FK roles, `created_at`)
-  - `public.audit_logs` (`id`, `actor_id` FK profiles, `on_behalf_of` FK profiles NULLABLE, `action`, `resource`, `resource_id`, `details`, `ip_address`, `user_agent`, `created_at`)
-- **Relasi**: `profiles` 1:N `user_roles` N:1 `roles`; `audit_logs` mereferensikan `profiles(id)`.
-- **Nama Berkas Migrasi**: `20260930000001_identity_schema.sql` (Existing), `20261011000015_audit_logs_hardening.sql` (Tahap Verifikasi).
-- **Kebijakan RLS Per Peran**:
-  - `profiles`: SELECT semua pengguna terautentikasi; UPDATE hanya milik sendiri (`auth.uid() = id`), SUPER_ADMIN dapat mengelola status semua akun.
-  - `user_roles`: SELECT pengguna terautentikasi; INSERT/UPDATE/DELETE hanya SUPER_ADMIN.
-  - `audit_logs`: INSERT dari service role / server actions; SELECT hanya untuk `SYSTEM_ADMIN` dan `SUPER_ADMIN`; UPDATE/DELETE dilarang mutlak via trigger anti-tamper.
-- **Server Action yang Disambung Ulang**:
-  - `loginAction()`, `logoutAction()`, `impersonateUserAction()`, `stopImpersonatingAction()`, `updateUserRoleAction()`, `deleteUserAction()`.
-- **Data yang Harus Dimigrasi**: Akun dummy demo ditranslasikan ke akun seeding database via script `supabase/seed.sql` jika diizinkan pengembang.
-- **Tombol yang Diaktifkan di UI**:
-  - Hub Kelola Pengguna: Ubah Role, Nonaktifkan Akun, Tombol Impersonate Super Admin (dengan modal alasan min 10 karakter).
+### Domain 1: Identitas, Pengguna, Peran & Audit Log
+
+#### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
+- `auth.users`: Managed oleh Supabase Auth (`id` UUID, `email`).
+- `public.profiles`: `id` UUID (PK -> auth.users), `full_name`, `email`, `avatar_url`, `status` (`user_status`: PENDING, ACTIVE, LOCKED, SUSPENDED, DEACTIVATED), `must_change_password`, `created_at`, `updated_at`.
+- `public.roles`: `id` UUID, `code` VARCHAR(50) UNIQUE, `name` VARCHAR(100), `description` TEXT.
+- `public.user_roles`: `id` UUID, `user_id` UUID (FK profiles RESTRICT), `role_id` UUID (FK roles RESTRICT), `scope_type` (`scope_type`: GLOBAL, PROGRAM, CLASS), `scope_id` UUID, `status` (`user_role_status`: ACTIVE, REVOKED, EXPIRED).
+- `public.user_identifiers`: `id` UUID, `user_id` UUID (FK profiles CASCADE), `type` (`identifier_type`: NIM, NIDN, NIP, EMAIL, USERNAME), `value` VARCHAR(100).
+- `public.user_devices`: `id` UUID, `user_id` UUID (FK profiles CASCADE), `device_id_hash`, `label`, `last_ip_masked`, `trusted`, `revoked_at`.
+- `public.login_events`: `id` UUID, `user_id` UUID (FK profiles CASCADE), `device_id` UUID, `event_type` (`event_type`), `risk_level` (`risk_level`).
+- `public.audit_logs`: `id` UUID, `actor_user_id` UUID (FK profiles RESTRICT), `actor_role` VARCHAR(50), `action` VARCHAR(100), `entity_type` VARCHAR(100), `entity_id` UUID, `scope_type` VARCHAR(50), `scope_id` UUID, `description` TEXT, `details` JSONB, `ip_address` INET, `user_agent` TEXT, `on_behalf_of` UUID (FK profiles RESTRICT), `before_json` JSONB, `after_json` JSONB, `created_at` TIMESTAMPTZ.
+  - *Trigger Perlindungan*: `tr_audit_logs_immutable` mencegah `UPDATE` dan `DELETE`.
+  - *Hak Akses*: `log_audit()` dicabut dari public/anon/authenticated (hanya `service_role`).
+
+#### B. TABEL BARU (Fase 3):
+- *Tidak ada tabel baru yang diperlukan*. Skema identitas, perangkat, login, dan audit log sudah lengkap dan teruji di Fase 2E.
+
+#### C. Status Server Actions:
+- `loginAction()` [SUDAH ADA di Kode]
+- `logoutAction()` [SUDAH ADA di Kode]
+- `impersonateUserAction()` [SUDAH ADA di Kode — Teruji HMAC & Fail-Closed]
+- `stopImpersonatingAction()` [SUDAH ADA di Kode]
+- `updateUserRoleAction()` [SUDAH ADA di Kode — Teruji Cek Terakhir & Audit Rollback]
+- `deleteUserAction()` [SUDAH ADA di Kode — Teruji RPC anonymize_user]
+
+#### D. Penanganan Data Akun Seed/Demo:
+- **PERINGATAN KERAS**: Akun demo/seed sintetis (`a0000010-...`, dsb.) **HANYA BOLEH DISUNTIKKAN KE LINGKUNGAN STAGING**.
+- **JANGAN PERNAH** men-seed akun demo ke lingkungan database produksi. Di produksi, akun admin awal dibuat secara mandiri via CLI Supabase / Supabase Auth Dashboard dengan kata sandi unik yang kuat.
 
 ---
 
-### Domain 2: Master Data Akademik, Kelas Perkuliahan & Enrollment
-- **Tabel & Kolom Kunci**:
-  - `public.study_programs` (`id`, `code`, `name`, `faculty`, `degree`)
-  - `public.academic_years` (`id`, `code`, `name`, `semester` [ODD, EVEN, SHORT], `is_active`, `start_date`, `end_date`)
-  - `public.rooms` (`id`, `name`, `code`, `building`, `capacity`, `latitude`, `longitude`, `radius_meters`)
-  - `public.courses` (`id`, `study_program_id` FK, `code`, `name`, `credits`, `semester_level`, `is_active`)
-  - `public.classes` (`id`, `course_id` FK, `academic_year_id` FK, `name`, `code`, `lecturer_id` FK profiles, `capacity`, `status` [DRAFT, PROPOSED, APPROVED, ACTIVE, ARCHIVED])
-  - `public.enrollments` (`id`, `class_id` FK classes, `student_id` FK profiles, `status` [ENROLLED, DROPPED, COMPLETED], `final_grade_letter`, `final_grade_score`)
-  - `public.teaching_assistants` (`id`, `class_id` FK classes, `ta_id` FK profiles, `assigned_at`)
-- **Relasi**:
-  - `classes` N:1 `courses`, `classes` N:1 `academic_years`, `classes` N:1 `profiles` (lecturer).
-  - `enrollments` N:1 `classes`, `enrollments` N:1 `profiles` (student).
-- **Nama Berkas Migrasi**: `20260930000003_academic_core.sql` (Existing), `20260930000008_master_data.sql` (Existing).
-- **Kebijakan RLS Per Peran**:
-  - `classes`: SELECT aktif untuk dosen pengampu (`lecturer_id = auth.uid()`), asisten, dan mahasiswa terdaftar via `enrollments`. Staf dan Kaprodi dapat melihat seluruh kelas pada lingkup prodi terkait. Mutasi `status` usulan kelas hanya oleh Kaprodi / Staf.
-  - `enrollments`: Mahasiswa hanya dapat membaca baris milik mereka sendiri (`student_id = auth.uid()`); Dosen/Asisten membaca enrollment kelas yang diampu; Staf mengelola mutasi tambah/pindah kelas.
-- **Server Action yang Disambung Ulang**:
-  - `createClassAction()`, `approveClassAction()`, `assignLecturerAction()`, `enrollStudentAction()`, `batchEnrollCsvAction()`, `transferClassAction()`.
-- **Data yang Harus Dimigrasi**: Daftar 21 mahasiswa demo, data mata kuliah kurikulum, dan master ruang GPS.
-- **Tombol yang Diaktifkan di UI**:
-  - Staf: Tambah Mahasiswa Manual, Simpan Plotting Kelas, Konfirmasi Impor CSV Peserta, Simpan Pindah Rombel.
-  - Kaprodi: Setujui Kelas Baru, Simpan Penugasan Dosen.
+### Domain 2: Master Kurikulum, Kelas Perkuliahan, Peserta & Asisten
+
+#### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
+- `public.programs` (Bukan `study_programs`): `id` UUID, `code` VARCHAR(20) UNIQUE, `name` VARCHAR(100), `degree` VARCHAR(20), `is_active` BOOLEAN, `created_at`, `updated_at`.
+- `public.semesters` (Bukan `academic_years`): `id` UUID, `code` VARCHAR(20) UNIQUE, `name` VARCHAR(50), `start_date` DATE, `end_date` DATE, `is_active` BOOLEAN, `created_at`, `updated_at`.
+- `public.courses`: `id` UUID, `program_id` UUID (FK programs RESTRICT), `code` VARCHAR(20), `name` VARCHAR(100), `credits` INTEGER, `status` VARCHAR(20), `created_at`, `updated_at`.
+- `public.classes`: `id` UUID, `course_id` UUID (FK courses RESTRICT), `semester_id` UUID (FK semesters RESTRICT), `title` VARCHAR(100), `section` VARCHAR(10), `capacity` INTEGER, `status` (`class_status`: DRAFT, OPEN, ACTIVE, CLOSED, ARCHIVED), `created_by` UUID (FK profiles RESTRICT), `created_at`, `updated_at`.
+- `public.enrollments`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `user_id` UUID (FK profiles RESTRICT), `status` (`enrollment_status`: ACTIVE, DROPPED, COMPLETED, REMOVED), `created_at`, `updated_at`.
+- `public.class_assistants` (Bukan `teaching_assistants`): `id` UUID, `class_id` UUID (FK classes RESTRICT), `user_id` UUID (FK profiles RESTRICT), `permission` VARCHAR(50), `assigned_by` UUID (FK profiles RESTRICT), `assigned_at` TIMESTAMPTZ.
+
+#### B. TABEL / KOLOM BARU (Fase 3):
+- `ALTER TABLE public.classes ADD COLUMN IF NOT EXISTS lecturer_id UUID REFERENCES public.profiles(id) ON DELETE RESTRICT;`
+- `CREATE TABLE IF NOT EXISTS public.rooms ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), code VARCHAR(50) UNIQUE NOT NULL, name VARCHAR(100) NOT NULL, building VARCHAR(100), capacity INT, latitude NUMERIC(10,7), longitude NUMERIC(10,7), radius_meters INT DEFAULT 50, created_at TIMESTAMPTZ DEFAULT now() );`
+
+#### C. Status Server Actions:
+- `createClassAction()` [SUDAH ADA di Kode]
+- `listMyClassesAction()` [SUDAH ADA di Kode]
+- `approveClassAction()` [BARU DIBUAT di Fase 3 — Khusus Kaprodi]
+- `assignLecturerAction()` [BARU DIBUAT di Fase 3 — Khusus Kaprodi]
+- `enrollStudentAction()` [BARU DIBUAT di Fase 3 — Khusus Staf Akademik]
+- `batchEnrollCsvAction()` [BARU DIBUAT di Fase 3 — Khusus Staf Akademik]
+- `transferClassAction()` [BARU DIBUAT di Fase 3 — Khusus Staf Akademik]
 
 ---
 
-### Domain 3: Buku Nilai & Komponen Nilai (Gradebook)
-- **Tabel & Kolom Kunci**:
-  - `public.grade_components` (`id`, `class_id` FK classes, `name`, `weight_percentage`, `type` [TASK, ATTENDANCE, QUIZ, MIDTERM, FINAL], `is_active`)
-  - `public.student_grades` (`id`, `enrollment_id` FK enrollments, `component_id` FK grade_components, `score` NUMERIC(5,2) CHECK (score >= 0 AND score <= 100), `graded_by` FK profiles, `updated_at`)
-  - `public.gradebook_locks` (`id`, `class_id` FK classes, `is_locked`, `locked_by` FK profiles, `locked_at`, `reason`)
-- **Relasi**: `student_grades` N:1 `enrollments`, `student_grades` N:1 `grade_components`.
-- **Nama Berkas Migrasi**: `20260930000005_grading.sql` (Existing).
-- **Kebijakan RLS Per Peran**:
-  - Dosen pengampu: INSERT/UPDATE skor hanya jika `gradebook_locks.is_locked = false` dan kelas milik dosen tersebut.
-  - Asisten dosen: INSERT/UPDATE hanya komponen bertipe `TASK` atau `QUIZ`.
-  - Mahasiswa: SELECT nilai milik sendiri via relasi `enrollments.student_id = auth.uid()`.
-  - Kaprodi & Staf: SELECT agregasi nilai se-prodi; DILARANG mengubah langsung nilai mahasiswa (harus via mekanisme perubahan nilai).
-- **Server Action yang Disambung Ulang**:
-  - `saveGradeComponentAction()`, `inputStudentScoreAction()`, `lockGradebookAction()`, `recalculateFinalGradesAction()`.
-- **Data yang Harus Dimigrasi**: Rekap komponen nilai dan nilai demo kelas Sistem Basis Data & Rekayasa Perangkat Lunak.
-- **Tombol yang Diaktifkan di UI**:
-  - Dosen: Simpan Bobot Komponen Nilai, Simpan Nilai Massal, Kunci Buku Nilai.
+### Domain 3: Evaluasi Akademik, Nilai & Gradebook
+
+#### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
+- `public.grades`: `id` UUID, `item_type` VARCHAR(50), `item_id` UUID, `student_id` UUID (FK profiles RESTRICT), `score` NUMERIC(5,2), `max_score` NUMERIC(5,2), `status` (`grade_status`: DRAFT, FINAL), `comment` TEXT, `created_by` UUID (FK profiles RESTRICT), `created_at`, `updated_at`.
+- `public.grade_history`: `id` UUID, `grade_id` UUID (FK grades CASCADE), `score` NUMERIC(5,2), `change_reason` TEXT, `changed_by` UUID (FK profiles RESTRICT), `changed_at` TIMESTAMPTZ.
+
+#### B. TABEL / KOLOM BARU (Fase 3):
+- Tambahkan kolom referensi kelas ke tabel `public.grades`:
+  `ALTER TABLE public.grades ADD COLUMN IF NOT EXISTS class_id UUID REFERENCES public.classes(id) ON DELETE RESTRICT;`
+- Kunci buku nilai kelas (*Gradebook Locks*):
+  `CREATE TABLE IF NOT EXISTS public.gradebook_locks ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE RESTRICT, is_locked BOOLEAN DEFAULT true, locked_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT, locked_at TIMESTAMPTZ DEFAULT now(), reason TEXT, CONSTRAINT uq_gradebook_class UNIQUE(class_id) );`
+
+#### C. Status Server Actions:
+- `saveScoreAction()` [BARU DIBUAT di Fase 3 — Dosen/Asisten sesuai izin class_assistants]
+- `lockGradebookAction()` [BARU DIBUAT di Fase 3 — Khusus Dosen Pengampu / Kaprodi]
+- `recalculateFinalGradesAction()` [BARU DIBUAT di Fase 3 — Staf Akademik]
 
 ---
 
-### Domain 4: Presensi Kuliah & Izin Sakit (Attendance & Leave Permits)
-- **Tabel & Kolom Kunci**:
-  - `public.attendance_sessions` (`id`, `class_id` FK classes, `session_number` INT, `title` VARCHAR, `session_date` DATE, `start_time` TIME, `end_time` TIME, `qr_secret` VARCHAR, `qr_refreshed_at` TIMESTAMPTZ, `room_id` FK rooms, `radius_meters` INT, `created_by` FK profiles)
-  - `public.attendance_records` (`id`, `session_id` FK attendance_sessions, `student_id` FK profiles, `check_in_time` TIMESTAMPTZ, `method` [QR, MANUAL_LECTURER, GEOFENCE, FACE_RECOGNITION], `status` [PRESENT, LATE, ABSENT, EXCUSED], `latitude` NUMERIC, `longitude` NUMERIC, `verified_by` FK profiles)
-  - `public.leave_permits` (`id`, `student_id` FK profiles, `class_id` FK classes, `session_number` INT, `permit_type` [SICK, PERMIT, BEREAVEMENT, ACADEMIC_DISPENSATION], `permit_date` DATE, `reason` TEXT, `attachment_url` TEXT, `status` [SUBMITTED, APPROVED, REJECTED], `reviewed_by` FK profiles, `reviewed_at` TIMESTAMPTZ, `rejection_reason` TEXT)
-- **Relasi**: `attendance_records` N:1 `attendance_sessions` N:1 `classes`; `leave_permits` N:1 `classes`, `leave_permits` N:1 `profiles` (student).
-- **Nama Berkas Migrasi**: `20261012000016_attendance_and_permits.sql` (Migrasi Baru Fase 3).
-- **Kebijakan RLS Per Peran**:
-  - `attendance_sessions`: Dosen pengampu dan Staf mengelola pembuatan sesi; Mahasiswa terdaftar hanya dapat melihat sesi aktif kelasnya.
-  - `attendance_records`: Mahasiswa hanya dapat membaca rekaman miliknya dan menyisipkan check-in (`INSERT`) jika sesi aktif dan dalam radius GPS yang valid; Dosen/Asisten berwenang melakukan override manual status kehadiran.
-  - `leave_permits`: Mahasiswa menyisipkan permohonan (`INSERT`) untuk dirinya sendiri; Dosen pengampu menyetujui/menolak permohonan.
-- **Server Action yang Disambung Ulang**:
-  - `createAttendanceSessionAction()`, `submitQrAttendanceAction()`, `manualOverrideAttendanceAction()`, `submitLeavePermitAction()`, `reviewLeavePermitAction()`.
-- **Data yang Harus Dimigrasi**: Translasi log array `AttendanceStore.sessions` dan `AttendanceStore.leaves` ke tabel PostgreSQL.
-- **Tombol yang Diaktifkan di UI**:
-  - Dosen: Buka Sesi Presensi Baru, Tampilkan QR Dinamis, Override Status Presensi Mahasiswa, Setujui/Tolak Izin Sakit.
-  - Mahasiswa: Check-in Presensi via QR / Geolocation, Unggah Bukti Surat Sakit / Izin.
+### Domain 4: Kehadiran Kuliah & Dispensasi (Presensi & Izin Sakit)
+
+#### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
+- *Belum ada tabel presensi di skema 1..16* (saat ini masih tersimpan pada array in-memory `AttendanceStore`).
+
+#### B. TABEL BARU (Fase 3):
+- Sesi Presensi Perkuliahan:
+  ```sql
+  CREATE TABLE IF NOT EXISTS public.attendance_sessions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE RESTRICT,
+    session_number INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    session_date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    qr_token_secret VARCHAR(100),
+    qr_refreshed_at TIMESTAMPTZ,
+    room_id UUID REFERENCES public.rooms(id) ON DELETE RESTRICT,
+    radius_meters INT DEFAULT 50,
+    created_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    CONSTRAINT uq_session_class_number UNIQUE (class_id, session_number)
+  );
+  ```
+- Rekam Kehadiran Mahasiswa:
+  ```sql
+  CREATE TABLE IF NOT EXISTS public.attendance_records (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id UUID NOT NULL REFERENCES public.attendance_sessions(id) ON DELETE CASCADE,
+    student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    check_in_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    method VARCHAR(50) NOT NULL, -- 'QR', 'MANUAL_LECTURER', 'GEOFENCE'
+    status VARCHAR(20) NOT NULL DEFAULT 'PRESENT', -- 'PRESENT', 'LATE', 'ABSENT', 'EXCUSED'
+    latitude NUMERIC(10,7),
+    longitude NUMERIC(10,7),
+    verified_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    CONSTRAINT uq_session_student UNIQUE (session_id, student_id)
+  );
+  ```
+- Permohonan Izin / Sakit (Dispensasi):
+  ```sql
+  CREATE TABLE IF NOT EXISTS public.leave_permits (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE RESTRICT,
+    session_number INT NOT NULL,
+    permit_type VARCHAR(50) NOT NULL, -- 'SICK', 'OFFICIAL_DUTY', 'BEREAVEMENT', 'OTHER'
+    permit_date DATE NOT NULL,
+    reason TEXT NOT NULL,
+    attachment_url TEXT,
+    status VARCHAR(20) NOT NULL DEFAULT 'SUBMITTED', -- 'SUBMITTED', 'APPROVED', 'REJECTED'
+    reviewed_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    reviewed_at TIMESTAMPTZ,
+    review_note TEXT,
+    created_at TIMESTAMPTZ DEFAULT now()
+  );
+  ```
+
+#### C. Status Server Actions:
+- `createAttendanceSessionAction()` [BARU DIBUAT di Fase 3]
+- `submitQrAttendanceAction()` [BARU DIBUAT di Fase 3]
+- `manualOverrideAttendanceAction()` [BARU DIBUAT di Fase 3]
+- `submitLeavePermitAction()` [BARU DIBUAT di Fase 3]
+- `reviewLeavePermitAction()` [BARU DIBUAT di Fase 3]
 
 ---
 
-### Domain 5: Kuis, Ujian CBT, Lembar Jawaban & Proctoring Telemetry
-- **Tabel & Kolom Kunci**:
-  - `public.quizzes` (`id`, `class_id` FK classes, `title`, `description`, `duration_minutes`, `start_time` TIMESTAMPTZ, `end_time` TIMESTAMPTZ, `max_attempts` INT, `shuffle_questions` BOOLEAN, `is_published` BOOLEAN, `strict_proctoring` BOOLEAN)
-  - `public.quiz_questions` (`id`, `quiz_id` FK quizzes, `question_text` TEXT, `question_type` [MULTIPLE_CHOICE, ESSAY, CODE], `points` NUMERIC(4,2), `order_index` INT)
-  - `public.quiz_options` (`id`, `question_id` FK quiz_questions, `option_text` TEXT, `is_correct` BOOLEAN, `order_index` INT)
-  - `public.exam_attempts` (`id`, `quiz_id` FK quizzes, `student_id` FK profiles, `started_at` TIMESTAMPTZ, `finished_at` TIMESTAMPTZ, `total_score` NUMERIC(5,2), `status` [IN_PROGRESS, SUBMITTED, TIMED_OUT, DISQUALIFIED])
-  - `public.exam_answers` (`id`, `attempt_id` FK exam_attempts, `question_id` FK quiz_questions, `selected_option_id` FK quiz_options NULLABLE, `essay_text` TEXT NULLABLE, `score_earned` NUMERIC(4,2), `graded_at` TIMESTAMPTZ)
-  - `public.exam_events` (`id`, `attempt_id` FK exam_attempts, `event_type` [TAB_SWITCH, WINDOW_BLUR, EXIT_FULLSCREEN, DEVTOOLS_OPEN, MULTIPLE_FACES, NO_FACE, LECTURER_INTERVENTION], `details` JSONB, `created_at` TIMESTAMPTZ)
-- **Relasi**: Hierarki kuis -> soal -> opsi; attempt -> jawaban; attempt -> event log.
-- **Nama Berkas Migrasi**: `20261012000017_quizzes_and_cbt_engine.sql` (Migrasi Baru Fase 3).
-- **Kebijakan RLS Per Peran**:
-  - `quiz_questions` & `quiz_options`: Mahasiswa DILARANG melihat `is_correct = true` sebelum ujian dipublikasikan hasil resminya.
-  - `exam_attempts` & `exam_answers`: Mahasiswa hanya dapat memanipulasi attempt milik dirinya sendiri selama status `IN_PROGRESS`; Server action melarang submit jika sesi disamarkan (`IMPERSONATION_RESTRICTED`).
-  - `exam_events`: Mahasiswa/browser hanya dapat menyisipkan (*append*) telemetri kecurangan; Dosen pengawas berhak menambahkan event `LECTURER_INTERVENTION`.
-- **Server Action yang Disambung Ulang**:
-  - `createQuizAction()`, `publishQuizAction()`, `startQuizAttemptAction()`, `saveAnswerAction()`, `submitQuizAttemptAction()`, `logExamAnomalyAction()`, `interveneStudentAction()`.
-- **Data yang Harus Dimigrasi**: Soal kuis UTS & UAS di memori demo, riwayat pelanggaran telemetri mahasiswa demo.
-- **Tombol yang Diaktifkan di UI**:
-  - Dosen: Buat Bank Soal, Publikasikan Kuis, Intervensi Pengawas (Peringatan / Tambah Waktu / Diskualifikasi).
-  - Mahasiswa: Mulai Pengerjaan Ujian, Kirim Lembar Jawaban.
+### Domain 5: Kuis, Ujian CBT & Telemetri Proctoring
+
+#### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
+- *Belum ada tabel CBT di skema 1..16* (saat ini beroperasi in-memory pada `QuizStore`).
+
+#### B. TABEL BARU (Fase 3):
+- Bank Kuis & Pengaturan Ujian:
+  ```sql
+  CREATE TABLE IF NOT EXISTS public.quizzes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE RESTRICT,
+    title VARCHAR(200) NOT NULL,
+    description TEXT DEFAULT '',
+    duration_minutes INT NOT NULL DEFAULT 60,
+    start_time TIMESTAMPTZ NOT NULL,
+    end_time TIMESTAMPTZ NOT NULL,
+    max_attempts INT NOT NULL DEFAULT 1,
+    shuffle_questions BOOLEAN NOT NULL DEFAULT true,
+    is_published BOOLEAN NOT NULL DEFAULT false,
+    strict_proctoring BOOLEAN NOT NULL DEFAULT false,
+    created_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    created_at TIMESTAMPTZ DEFAULT now()
+  );
+
+  CREATE TABLE IF NOT EXISTS public.quiz_questions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    quiz_id UUID NOT NULL REFERENCES public.quizzes(id) ON DELETE CASCADE,
+    question_text TEXT NOT NULL,
+    question_type VARCHAR(50) NOT NULL DEFAULT 'MULTIPLE_CHOICE', -- 'MULTIPLE_CHOICE', 'ESSAY'
+    points NUMERIC(5,2) NOT NULL DEFAULT 10.00,
+    order_index INT NOT NULL DEFAULT 0
+  );
+
+  CREATE TABLE IF NOT EXISTS public.quiz_options (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    question_id UUID NOT NULL REFERENCES public.quiz_questions(id) ON DELETE CASCADE,
+    option_text TEXT NOT NULL,
+    is_correct BOOLEAN NOT NULL DEFAULT false,
+    order_index INT NOT NULL DEFAULT 0
+  );
+  ```
+- Sesi Ujian Mahasiswa & Lembar Jawaban:
+  ```sql
+  CREATE TABLE IF NOT EXISTS public.exam_attempts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    quiz_id UUID NOT NULL REFERENCES public.quizzes(id) ON DELETE RESTRICT,
+    student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    finished_at TIMESTAMPTZ,
+    total_score NUMERIC(5,2) DEFAULT 0.00,
+    status VARCHAR(50) NOT NULL DEFAULT 'IN_PROGRESS', -- 'IN_PROGRESS', 'SUBMITTED', 'TIMED_OUT', 'DISQUALIFIED'
+    CONSTRAINT uq_quiz_attempt UNIQUE (quiz_id, student_id, started_at)
+  );
+
+  CREATE TABLE IF NOT EXISTS public.exam_answers (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    attempt_id UUID NOT NULL REFERENCES public.exam_attempts(id) ON DELETE CASCADE,
+    question_id UUID NOT NULL REFERENCES public.quiz_questions(id) ON DELETE RESTRICT,
+    selected_option_id UUID REFERENCES public.quiz_options(id) ON DELETE RESTRICT,
+    essay_text TEXT,
+    score_earned NUMERIC(5,2) DEFAULT 0.00,
+    graded_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    graded_at TIMESTAMPTZ,
+    CONSTRAINT uq_attempt_question UNIQUE (attempt_id, question_id)
+  );
+
+  CREATE TABLE IF NOT EXISTS public.exam_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    attempt_id UUID NOT NULL REFERENCES public.exam_attempts(id) ON DELETE CASCADE,
+    event_type VARCHAR(100) NOT NULL, -- 'TAB_SWITCH', 'WINDOW_BLUR', 'EXIT_FULLSCREEN', 'DEVTOOLS_OPEN', 'LECTURER_INTERVENTION'
+    details JSONB DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ DEFAULT now()
+  );
+  ```
+
+#### C. Status Server Actions:
+- `submitQuizAttemptAction()` [SUDAH ADA di Kode — Teruji Guard Impersonasi A3c]
+- `createQuizAction()` [BARU DIBUAT di Fase 3]
+- `publishQuizAction()` [BARU DIBUAT di Fase 3]
+- `startQuizAttemptAction()` [BARU DIBUAT di Fase 3]
+- `saveAnswerAction()` [BARU DIBUAT di Fase 3]
+- `interveneStudentAction()` [BARU DIBUAT di Fase 3]
 
 ---
 
 ### Domain 6: Sengketa Nilai Ujian & Putusan Perubahan Nilai Final
-- **Tabel & Kolom Kunci**:
-  - `public.exam_disputes` (`id`, `attempt_id` FK exam_attempts, `question_id` FK quiz_questions, `student_id` FK profiles, `reason` TEXT, `status` [SUBMITTED, RESOLVED, REJECTED], `lecturer_feedback` TEXT, `adjusted_points` NUMERIC(4,2), `updated_at` TIMESTAMPTZ)
-  - `public.grade_change_requests` (`id`, `grade_id` FK grades, `class_id` FK classes, `requested_by` FK profiles, `class_title` TEXT, `assignment_title` TEXT, `student_name` TEXT, `old_score` NUMERIC(6,2), `proposed_score` NUMERIC(6,2), `reason` TEXT, `status` [PENDING, APPROVED, REJECTED, EXECUTED], `reviewed_by` FK profiles, `reviewed_at` TIMESTAMPTZ, `executed_by` FK profiles, `executed_at` TIMESTAMPTZ)
-- **Relasi**: Terikat ke pangkalan data nilai dan attempt ujian.
-- **Nama Berkas Migrasi**: `20261011000014_grade_change_decision_and_execution.sql` (Tahap Verifikasi).
-- **Kebijakan RLS Per Peran**:
-  - Sesuai RPC `decide_grade_change` dan `execute_grade_change`:
-    - Pemisahan 3 pihak ditegakkan ketat: Dosen pengaju tidak boleh menyetujui/menolak; Kaprodi hanya memutuskan status `APPROVED`/`REJECTED`; Staf hanya mengeksekusi pengajuan berstatus `APPROVED`.
-    - Dilarang keras dipanggil selama sesi impersonasi aktif (`IMPERSONATION_RESTRICTED`).
-- **Server Action yang Disambung Ulang**:
-  - `submitExamDisputeAction()`, `resolveExamDisputeAction()`, `requestGradeChangeAction()`, `decideGradeChangeAction()`, `executeGradeChangeAction()`.
-- **Data yang Harus Dimigrasi**: Daftar pengajuan perubahan nilai demo (`cr-demo-001`, `cr-demo-002`).
-- **Tombol yang Diaktifkan di UI**:
-  - Dosen: Tanggapi Sanggahan Nilai, Ajukan Revisi Nilai Final ke Kaprodi.
-  - Kaprodi: Setujui Perubahan Nilai, Tolak Perubahan Nilai.
-  - Staf: Eksekusi Perubahan Nilai ke Master Database.
+
+#### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
+- `public.grade_change_requests`: `id` UUID, `grade_id` UUID (FK grades RESTRICT), `class_id` UUID (FK classes RESTRICT), `old_score` NUMERIC(5,2), `proposed_score` NUMERIC(5,2), `reason` TEXT, `status` (`change_request_status`: PENDING, APPROVED, REJECTED, EXECUTED), `requested_by` UUID (FK profiles RESTRICT), `reviewed_by` UUID (FK profiles RESTRICT), `reviewed_at` TIMESTAMPTZ, `review_note` TEXT, `executed_by` UUID (FK profiles RESTRICT), `executed_at` TIMESTAMPTZ, `execution_note` TEXT, `created_at` TIMESTAMPTZ.
+  - *Fungsi Keamanan*: RPC `decide_grade_change` (000014) dan `execute_grade_change` (000014) sudah diimplementasikan dengan row-level lock `FOR UPDATE` dan audit logging.
+
+#### B. TABEL BARU (Fase 3):
+- Sanggahan Nilai Ujian CBT (*Exam Disputes*):
+  ```sql
+  CREATE TABLE IF NOT EXISTS public.exam_disputes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    attempt_id UUID NOT NULL REFERENCES public.exam_attempts(id) ON DELETE RESTRICT,
+    question_id UUID NOT NULL REFERENCES public.quiz_questions(id) ON DELETE RESTRICT,
+    student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    reason TEXT NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'SUBMITTED', -- 'SUBMITTED', 'RESOLVED', 'REJECTED'
+    lecturer_feedback TEXT,
+    adjusted_points NUMERIC(5,2),
+    updated_at TIMESTAMPTZ DEFAULT now()
+  );
+  ```
+
+#### C. Status Server Actions:
+- `decideGradeChangeAction()` [SUDAH ADA di Kode — Teruji RPC & Larangan Impersonasi A3c]
+- `executeGradeChangeAction()` [SUDAH ADA di Kode — Teruji RPC & Audit Rollback]
+- `requestGradeChangeAction()` [SUDAH ADA di Kode]
+- `submitExamDisputeAction()` [BARU DIBUAT di Fase 3]
+- `resolveExamDisputeAction()` [BARU DIBUAT di Fase 3]
 
 ---
 
 ### Domain 7: Konten Pembelajaran, Forum, Notifikasi, Pustaka & Event
-- **Tabel & Kolom Kunci**:
-  - `public.materials` & `material_attachments` (Tautan modul perkuliahan per pertemuan)
-  - `public.assignments` & `submissions` (Tenggat waktu tugas dan berkas pengumpulan mahasiswa)
-  - `public.notifications` (Pemberitahuan inbox pengguna)
-  - `public.forums`, `threads`, `posts` (Diskusi kelas perkuliahan)
-  - `public.announcements` (Siaran rektorat dan prodi)
-  - `public.library_items` & `library_loans` (Katalog buku fisik dan modul digital)
-  - `public.campus_events` & `event_registrations` (Seminar dan workshop universitas)
-  - `public.certificates` & `student_portfolios` (Portofolio capaian prestasi mahasiswa)
-- **Nama Berkas Migrasi**: `20261012000018_campus_content_and_services.sql` (Migrasi Baru Fase 3).
-- **Kebijakan RLS Per Peran**: Standar kepemilikan kelas/konten per peran.
-- **Server Action yang Disambung Ulang**: `uploadMaterialAction()`, `submitAssignmentAction()`, `markNotificationReadAction()`, `postForumReplyAction()`, `createAnnouncementAction()`.
-- **Tombol yang Diaktifkan di UI**:
-  - Staf: Tambah Koleksi Pustaka, Buat Event Kampus, Terbitkan Sertifikat.
-  - Super Admin: Buat Maklumat Baru (Broadcast Global).
 
----
+#### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
+- `public.materials`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `title`, `description`, `content_url`, `status` (`material_status`), `created_by` (FK profiles RESTRICT).
+- `public.assignments`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `title`, `description`, `due_at`, `close_at`, `max_score`, `status` (`assignment_status`), `created_by` (FK profiles RESTRICT).
+- `public.submissions`: `id` UUID, `assignment_id` UUID (FK assignments RESTRICT), `student_id` UUID (FK profiles RESTRICT), `text_body`, `attachment_url`, `status` (`submission_status`), `submitted_at`, `is_late`.
+- `public.notifications`: `id` UUID, `user_id` UUID (FK profiles RESTRICT), `title`, `message`, `link`, `is_read`, `created_at`.
+- `public.discussions`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `author_id` UUID (FK profiles RESTRICT), `title`, `body`, `created_at`.
+- `public.discussion_replies`: `id` UUID, `discussion_id` UUID (FK discussions CASCADE), `author_id` UUID (FK profiles RESTRICT), `body`, `created_at`.
+- `public.announcements`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `author_id` UUID (FK profiles RESTRICT), `title`, `body`, `created_at`.
 
-## 3. Strategi Keamanan Migrasi (Staging, Backup, Rollback & Feature Flags)
+#### B. TABEL BARU (Fase 3):
+- Layanan Ekstensi Kampus (Pustaka, Event, Portofolio):
+  ```sql
+  CREATE TABLE IF NOT EXISTS public.library_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    isbn VARCHAR(50),
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    total_copies INT DEFAULT 1,
+    available_copies INT DEFAULT 1,
+    created_at TIMESTAMPTZ DEFAULT now()
+  );
 
-Untuk menjamin zero-downtime dan mencegah rusaknya integritas data produksi:
-
-### a. Lingkungan Staging Terpisah (*Isolated Staging Environment*)
-- Setiap migrasi SQL wajib diterapkan terlebih dahulu pada proyek Supabase Staging (`staging.supabase.co`) yang terisolasi penuh dari pangkalan data produksi (`prod.supabase.co`).
-- Pengujian otomatis (*automated regression & smoke tests*) dijalankan pada branch staging sebelum merge ke branch `main`.
-
-### b. Prosedur Backup Sebelum Migrasi (*Pre-Migration Snapshot*)
-- Administrator basis data wajib mengambil snapshot cadangan fisik penuh (*full logical dump*) sebelum migrasi dijalankan:
-  ```bash
-  # Perintah pencadangan skema dan data produksi:
-  supabase db dump --db-url "$DATABASE_URL" -f "backup_pre_phase3_$(date +%Y%m%d_%H%M%S).sql"
+  CREATE TABLE IF NOT EXISTS public.campus_events (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    event_date TIMESTAMPTZ NOT NULL,
+    location VARCHAR(255),
+    max_participants INT,
+    created_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    created_at TIMESTAMPTZ DEFAULT now()
+  );
   ```
 
-### c. Urutan Penerapan Migrasi (*Sequential Application Order*)
-Migrasi wajib dijalankan berurutan berdasarkan stempel waktu tanpa melompati berkas:
-1. `20261011000014_grade_change_decision_and_execution.sql`
-2. `20261011000015_audit_logs_hardening.sql`
-3. `20261012000016_attendance_and_permits.sql`
-4. `20261012000017_quizzes_and_cbt_engine.sql`
-5. `20261012000018_campus_content_and_services.sql`
-
-### d. Rencana Rollback (*Rollback Plan*)
-- Untuk setiap berkas migrasi `*.sql`, disiapkan berkas pendamping `*_rollback.sql` yang memuat perintah drop table, drop policy, drop trigger, dan drop function secara terbalik:
-  - Contoh: Rollback untuk migrasi 000014 mencakup `DROP FUNCTION IF EXISTS execute_grade_change; DROP FUNCTION IF EXISTS decide_grade_change;`.
-- Jika terjadi kegagalan eksekusi migrasi, transaksi PostgreSQL otomatis membatalkan seluruh perubahan (*automatic transactional rollback* karena skema DDL di PostgreSQL bersifat transaksional).
-
-### e. Manajemen Feature Flag Per Domain (*Domain Feature Flags*)
-Setiap domain dikendalikan melalui variabel lingkungan (*environment variables*) di server produksi:
-- `FF_PERSISTENCE_ATTENDANCE=true/false` (Kendali persistensi presensi)
-- `FF_PERSISTENCE_QUIZZES=true/false` (Kendali CBT dan proctoring)
-- `FF_PERSISTENCE_GRADE_CHANGES=true/false` (Kendali putusan revisi nilai)
-- `FF_PERSISTENCE_LIBRARY=true/false` (Kendali pustaka dan event)
-
-Jika suatu domain mengalami anomali di produksi, flag domain tersebut dapat dimatikan (`false`) tanpa menghentikan modul akademik lainnya, sehingga antarmuka kembali menampilkan status protektif *read-only* atau *clean empty state*.
+#### C. Status Server Actions:
+- `createAnnouncementAction()` [SUDAH ADA di Kode]
+- `listMyDeadlinesAction()` [SUDAH ADA di Kode]
+- `listSubmissionsAction()` [SUDAH ADA di Kode]
+- `uploadMaterialAction()` [BARU DIBUAT di Fase 3]
+- `submitAssignmentAction()` [BARU DIBUAT di Fase 3]
+- `postDiscussionReplyAction()` [BARU DIBUAT di Fase 3]
 
 ---
 
-## 4. Definisi Selesai (*Definition of Done*) Per Domain
+## 3. Strategi Keamanan Migrasi (Staging, Rollback, DoD & Mitigasi Risiko)
 
-Sebuah domain dinyatakan selesai pada Fase 3 apabila memenuhi kriteria ketat berikut:
+### A. Strategi Lingkungan Staging Terpisah (*Isolated Staging Strategy*)
+1. Seluruh migrasi database Fase 3 **WAJIB** diterapkan dan diuji secara penuh di proyek **Supabase STAGING terpisah** (`staging.supabase.co`) terlebih dahulu.
+2. Gateway PostgREST nyata, JWT parsing bawaan Supabase, dan hak akses default PostgreSQL (`anon`, `authenticated`, `service_role`) **WAJIB** divalidasi di Staging sebelum mendekati produksi.
+3. Database produksi **TIDAK BOLEH** disentuh sebelum seluruh uji lolos di Staging.
+4. **Kebijakan Akun Seed**: Script seeding akun demo/dummy **HANYA DIGUNAKAN DI STAGING** untuk kebutuhan pengujian fungsional QA. **DILARANG KERAS** menyuntikkan data seed ke database produksi.
 
-1. **Uji Produksi Nyata (*Real Production Verification*)**:
-   - Berjalan pada lingkungan build produksi (`NODE_ENV=production` dan `ALLOW_DEMO_AUTH=false`).
-   - Tidak ada status sukses palsu (*fake success*), indikator koneksi palsu, atau angka telemetri karangan.
-   - Entri baru berhasil disimpan ke tabel PostgreSQL dan dapat dibaca kembali (*persisted query*).
-2. **Uji Negatif Berpasangan (*Negative Security with Positive Controls*)**:
-   - Seluruh aksi mutasi server action diuji dengan skenario negatif (peran tidak berhak, percobaan manipulasi ID, prodi silang) dan WAJIB ditolak server disertai kode error eksplisit.
-   - Setiap uji negatif dipasangkan dengan kontrol positif (peran sah berhasil mengeksekusi) untuk membuktikan bahwa penolakan disebabkan oleh penegakan hak akses, bukan karena kegagalan internal server (*internal error*).
-3. **Uji Ketahanan Restart Kontainer (*Container Restart Resilience Test*)**:
-   - Data yang baru dimasukkan melalui mutasi server action WAJIB tetap utuh dan terbaca sempurna setelah instance server Next.js di-restart/didaur ulang (*kill & restart process*), membuktikan hilangnya ketergantungan pada memori RAM Node.js.
-4. **Verifikasi Zero TODO di Antarmuka Pengguna**:
-   - Teks `"TODO(backend)"` tidak boleh muncul di layar pengguna; digantikan dengan penjelasan operasional yang ramah dan jujur.
+### B. Strategi Rollback (*Rollback Strategy*)
+1. **Transaksional DDL**: Setiap berkas migrasi dibungkus dalam blok `BEGIN ... COMMIT` PostgreSQL sehingga kegagalan sintaks atau foreign key otomatis membatalkan seluruh perubahan (*automatic rollback*).
+2. **Skrip Rollback Pendamping**: Untuk setiap berkas migrasi baru `202610120000XX_nama.sql`, wajib disiapkan berkas `202610120000XX_nama_rollback.sql` yang berisi perintah `DROP TABLE IF EXISTS`, `DROP FUNCTION IF EXISTS`, atau `ALTER TABLE ... DROP COLUMN IF EXISTS` secara terbalik.
+3. **Pencadangan Sebelum Eksekusi (*Pre-Migration Dump*)**:
+   ```bash
+   supabase db dump --db-url "$STAGING_DATABASE_URL" -f "backup_staging_pre_phase3.sql"
+   ```
+
+### C. Definisi Selesai (*Definition of Done - DoD*) Per Domain
+Sebuah domain dinyatakan selesai di Fase 3 hanya jika memenuhi 4 pilar:
+1. **Verifikasi Database Nyata**: Data hasil mutasi tersimpan di PostgreSQL Supabase Staging dan terbaca kembali via query REST/RPC.
+2. **Uji Negatif Berpasangan (*Negative Security with Positive Controls*)**: Setiap skenario pelanggaran otorisasi (spoofing peran, prodi silang, submit saat impersonasi) menghasilkan kode error eksplisit (403/Forbidden) dan dipasangkan dengan kontrol positif akun yang sah.
+3. **Ketahanan Daur Ulang Server (*Restart Resilience*)**: Nilai dan data tetap utuh saat instance server Next.js di-restart, membuktikan hilangnya ketergantungan pada variabel in-memory Node.js.
+4. **Zero Sukses Palsu**: Tombol antarmuka hanya aktif jika fungsi backend dan tabel DB terkait telah berfungsi nyata.
 
 ---
 
-## 5. Daftar Risiko & Keputusan yang Membutuhkan Persetujuan Pengguna
+## 4. Daftar Keputusan yang Perlu Diambil Pengguna
 
-Berikut adalah daftar risiko arsitektural dan poin-poin yang memerlukan arahan resmi sebelum Fase 3 dimulai:
+Sebelum pengerjaan kode atau migrasi Fase 3 dimulai, Anda perlu menetapkan pilihan pada poin-poin keputusan arsitektural berikut:
 
-| No | Kategori | Deskripsi Risiko / Pertimbangan Arsitektur | Opsi Solusi yang Tersedia | Pilihan yang Direkomendasikan | Memerlukan Keputusan User? |
-|---|---|---|---|---|---|
-| 1 | **Kepatuhan Regulasi (UU PDP)** | Trigger append-only pada tabel `audit_logs` melarang mutasi/penghapusan selamanya. Namun UU PDP mewajibkan hak penghapusan data pribadi setelah masa retensi habis (misal: 5 tahun). | A: Bypass retensi via parameter rahasia internal `siajar.lawful_retention_purge = 'on'`.<br>B: Menggunakan tabel partisi per tahun (*partitioned table*) di mana partisi kedaluwarsa di-*drop* secara utuh tanpa melanggar trigger baris. | **Opsi B (Partisi)** untuk produksi skala besar, didukung Opsi A untuk masa transisi. | **YA (Persetujuan skema retensi UU PDP)** |
-| 2 | **Penyimpanan Berkas (Storage Buckets)** | Surat dokter izin sakit dan lampiran tugas membutuhkan penyimpanan berkas biner. | A: Supabase Storage Bucket dengan signed URL berbatas waktu (15 menit).<br>B: AWS S3 / Cloudflare R2 eksternal. | **Opsi A (Supabase Storage)** agar konsisten dengan ekosistem database saat ini. | **YA (Konfirmasi pemilihan storage)** |
-| 3 | **Penanganan Beban Ujian CBT Bersamaan** | Ratusan mahasiswa mengirimkan jawaban kuis per detik pada menit-menit akhir ujian, berpotensi memicu *connection pool exhaustion* pada PostgreSQL Supabase tier gratis/standar. | A: Direct PostgreSQL INSERT per jawaban butir soal.<br>B: Menggunakan Redis / Upstash queue sebagai buffer sementara sebelum batch sync ke PostgreSQL.<br>C: Submit hanya dilakukan di akhir ujian (*single-payload submission*), dengan draft disimpan di `localStorage` peramban mahasiswa. | **Opsi C** sebagai langkah teraman dan termurah tanpa infrastruktur tambahan. | **YA (Persetujuan alur pengumpulan jawaban CBT)** |
-| 4 | **Strategi Penanganan Data Demo Lama** | Apakah data sintetis demo (21 mahasiswa, 4 dosen, nilai in-memory) perlu dibuatkan script seeding resmi ke database staging/produksi, atau dibersihkan total saat rilis publik? | A: Bersihkan total (DB dimulai dari keadaan kosong / clean state).<br>B: Sediakan script `supabase/seed.sql` opsional untuk lingkungan evaluasi/staging. | **Opsi B (Sediakan seed.sql opsional)**. | **YA (Persetujuan penanganan seed data)** |
+| No | Topik Keputusan | Pilihan Opsi Solusi | Rekomendasi Arsitektur | Keputusan Anda |
+|---|---|---|---|---|
+| **K1** | **Skema Kolom Pengampu Kelas (`classes`)** | **A**: Menambahkan kolom `lecturer_id UUID REFERENCES profiles(id)` langsung ke tabel `classes`.<br>**B**: Menggunakan tabel perantara `class_lecturers` jika 1 kelas dapat diampu tim dosen (*team teaching*). | **Opsi A** (Simpel, konsisten dengan UI yang menampilkan dosen utama, sementara tim pengajar/asisten dapat memakai `class_assistants`). | *Menunggu Keputusan Pengguna* |
+| **K2** | **Penyimpanan Berkas Lampiran (Tugas & Surat Sakit)** | **A**: Supabase Storage Bucket bawaan dengan Signed URL privat 15 menit.<br>**B**: S3-compatible cloud storage eksternal (Cloudflare R2 / AWS S3). | **Opsi A (Supabase Storage)** agar autentikasi RLS bucket terintegrasi langsung dengan Supabase Auth. | *Menunggu Keputusan Pengguna* |
+| **K3** | **Alur Submit Jawaban Ujian CBT Berbeban Tinggi** | **A**: Setiap jawaban butir soal langsung `INSERT` ke DB per detik (risiko connection spike).<br>**B**: Single-payload submission: Jawaban disimpan lokal di browser (`localStorage`), dikirim sekaligus saat tombol "Kumpulkan Ujian" ditekan. | **Opsi B (Single-Payload)** untuk menjaga stabilitas PostgreSQL pada tier database standar. | *Menunggu Keputusan Pengguna* |
+| **K4** | **Penyelarasan Nama Semester vs Tahun Ajaran** | **A**: Tetap memakai tabel `semesters` yang ada di snapshot (kolom: `code`, `name`, `start_date`, `end_date`, `is_active`).<br>**B**: Membuat tabel baru `academic_years` terpisah dari `semesters`. | **Opsi A (Gunakan semesters yang sudah ada)** untuk menghindari tabel berlebih yang membingungkan. | *Menunggu Keputusan Pengguna* |
+| **K5** | **Penyediaan Proyek Supabase Staging** | **A**: Pengguna menyediakan URL & Service Key proyek Supabase Staging terpisah untuk pengujian nyata.<br>**B**: Pengujian tetap menggunakan database lokal sekali pakai (PGlite/Docker) sebelum staging disediakan. | **Opsi A** mutlak diperlukan sebelum deployment produksi. | *Menunggu Keputusan Pengguna* |
 
 ---
 
 > **PERNYATAAN PENGHENTIAN (STOP RULE)**:  
-> Perencanaan Fase 3 telah selesai disusun. Sesuai instruksi ketat pengguna, asisten AI **BERHENTI DI SINI** dan **TIDAK MENJALANKAN MIGRASI** serta **TIDAK MENULIS KODE FASE 3** sampai dokumen rencana ini ditinjau dan disetujui secara resmi oleh pengguna.
+> Perencanaan Fase 3 telah diselaraskan penuh dengan `docs/schema-snapshot.md`. Sesuai instruksi ketat pengguna, asisten AI **BERHENTI DI SINI** dan **TIDAK MENJALANKAN MIGRASI** serta **TIDAK MENULIS KODE FASE 3** sampai dokumen rencana ini disetujui.

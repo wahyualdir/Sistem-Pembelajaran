@@ -14,7 +14,7 @@ Dokumen ini disusun sebagai audit kesiapan rilis produksi (*production readiness
 | **Server-Side Role Guard (A2)** | Mahasiswa spoof active_role=SUPER_ADMIN di-redirect 307 ke /workspace di semua rute admin | 6/6 rute admin terblokir tanpa data bocor | **LOLOS** | `src/lib/auth/server-guards.ts` & `scripts/smoke-roles.ts` |
 | **Uji Mode Demo (/api/smoke-actions)** | 25 skenario penolakan aksi ilegal | 25/25 skenario ditolak server (0 bocor), rute 404 di produksi | **LOLOS** | Rute `/api/smoke-actions` (Mode Demo) |
 | **Uji Keamanan Database (A6)** | 22 uji negatif berpasangan kontrol positif di DB lokal (pgcrypto/pglite) | 22/22 skenario lolos (100%) | **LOLOS** | Script `scripts/test-database-security.mjs` |
-| **Koneksi Supabase Remote** | Verifikasi koneksi pangkalan data | Kredensial `.env.local` saat ini string kosong | **BELUM TERUJI** | Memerlukan input kredensial produksi nyata |
+| **Pengujian Supabase Asli (PostgREST/JWT/Grants)** | Uji akses PostgREST nyata dengan JWT per role | BELUM DILAKUKAN (verifikasi saat ini memakai PGlite lokal) | **BELUM TERUJI** | Wajib dilakukan di project Supabase STAGING terpisah sebelum produksi |
 | **Pencegahan Sukses Palsu** | Tombol tanpa backend dinonaktifkan di non-demo | Seluruh tombol di non-demo nonaktif + TODO tooltip | **LOLOS** | Verifikasi kode Hub Staf, Kaprodi, Admin |
 
 ---
@@ -165,3 +165,25 @@ Untuk memenuhi hak penghapusan data pribadi (Right to be Forgotten) sesuai UU Pe
    - Menghapus sesi otentikasi aktif.
    - Mencatat peristiwa anonimisasi ini secara permanen ke `public.audit_logs` dengan aksi `USER_ANONYMIZED`.
    - Membiarkan entri baris UUID tetap ada sehingga integritas foreign key `RESTRICT` pada log audit dan rekaman nilai masa lalu tetap utuh.
+
+---
+
+## 6. Peringatan Keamanan Kritis: Pengujian Supabase Asli Wajib di Proyek Staging Terpisah
+
+> [!WARNING]
+> **PENGUJIAN DI SUPABASE ASLI (POSTGREST / JWT / HAK AKSES BAWAAN) BELUM DILAKUKAN**
+>
+> Seluruh verifikasi migrasi dan keamanan SQL sejauh ini dilakukan pada basis data lokal sekali pakai (PGlite) serta uji unit/mock kode di lingkungan pengembang.
+>
+> **Keterbatasan Pengujian PGlite:**
+> 1. PGlite tidak menjalankan gateway PostgREST bawaan Supabase.
+> 2. PGlite tidak memvalidasi penanganan header JWT `role=anon` / `role=authenticated` bawaan GoTrue / Supabase Auth.
+> 3. Hak akses bawaan Supabase (`anon`, `authenticated`, `service_role`, `authenticator`) serta pembatasan skema via PostgREST OpenAPI belum diuji secara jaringan nyata.
+>
+> **Langkah Wajib Sebelum Produksi:**
+> Pengujian menyeluruh pada proyek **Supabase STAGING terpisah** (BUKAN database produksi) WAJIB dilakukan sebelum rilis:
+> 1. Terapkan migrasi 1..16 pada proyek Supabase Staging terpisah.
+> 2. Lakukan pengujian PostgREST REST API dengan token JWT nyata per role (`STUDENT`, `LECTURER`, `PROGRAM_COORDINATOR`, `ACADEMIC_STAFF`, `SYSTEM_ADMIN`, `SUPER_ADMIN`).
+> 3. Verifikasi bahwa endpoint PostgREST memblokir akses ke fungsi/tabel yang dibatasi (misal `audit_logs` tidak bisa di-update/delete oleh authenticated, `log_audit()` tidak bisa dieksekusi oleh anon/authenticated).
+> 4. Verifikasi bahwa akun demo/seed HANYA disuntikkan ke proyek Staging dan **JANGAN PERNAH** di-seed ke lingkungan database produksi.
+
