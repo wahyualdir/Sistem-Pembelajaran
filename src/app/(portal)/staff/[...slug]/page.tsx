@@ -1,5 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import {
   FileSpreadsheet,
   Users,
@@ -59,10 +61,55 @@ const STAFF_STATS = [
   },
 ];
 
-export default function StaffSubpage({ params }: PageProps) {
+export default async function StaffSubpage({ params }: PageProps) {
+  const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole;
+
+  if (role === 'SYSTEM_ADMIN') {
+    redirect('/admin/system');
+  }
+  if (role === 'SUPER_ADMIN' && !user?.isImpersonating) {
+    redirect('/admin');
+  }
+  if (role === 'STUDENT') {
+    redirect('/student');
+  }
+  if (role === 'LECTURER') {
+    redirect('/lecturer');
+  }
+  if (role === 'PROGRAM_COORDINATOR') {
+    redirect('/coordinator');
+  }
+  if (role === 'TEACHING_ASSISTANT') {
+    redirect('/ta');
+  }
+
   const parts = params.slug || [];
   const fullSlug = parts.join('/');
 
+  // --- REDIRECTS UNTUK RUTE /staff/* LAMA KE TAB-TAB BARU (Fase 2D) ---
+  const LEGACY_REDIRECTS: Record<string, string> = {
+    'master/departments': '/staff/master?tab=program-studi',
+    'master/courses': '/staff/master?tab=mata-kuliah',
+    'master/academic-years': '/staff/master?tab=tahun-ajaran',
+    'master/rooms': '/staff/master?tab=ruang-dan-titik-lokasi',
+    'schedules/classes': '/staff/schedules?tab=jadwal-kuliah',
+    'schedules/exams': '/staff/schedules?tab=jadwal-ujian',
+    'schedules/rooms': '/staff/schedules?tab=penggunaan-ruang',
+    'classes/enroll': '/staff/classes?tab=enroll-peserta',
+    'classes/import': '/staff/classes?tab=impor-csv',
+    'classes/transfer': '/staff/classes?tab=pindah-kelas',
+    'grades/recap': '/staff/grades?tab=rekap-nilai',
+    'attendance/recap': '/staff/grades?tab=rekap-presensi',
+    'grades/change-requests': '/staff/grades?tab=perubahan-nilai',
+    'reports/export': '/staff/grades?tab=ekspor-laporan',
+  };
+
+  if (LEGACY_REDIRECTS[fullSlug]) {
+    redirect(LEGACY_REDIRECTS[fullSlug]);
+  }
+
+  // --- HALAMAN STANDALONE (Mahasiswa, Dosen, Verifikasi Berkas) ---
   const sectionTitles: Record<string, { title: string; subtitle: string; icon: any; desc: string }> = {
     'master/students': {
       title: 'Data Master Mahasiswa',
@@ -75,90 +122,6 @@ export default function StaffSubpage({ params }: PageProps) {
       subtitle: 'Direktori NIDN & Tenaga Pengajar',
       icon: UserCheck,
       desc: 'Kelola data dosen pengampu, NIDN, jabatan fungsional, dan asosiasi program studi.',
-    },
-    'master/departments': {
-      title: 'Data Master Program Studi',
-      subtitle: 'Fakultas, Jenjang & Kode Prodi',
-      icon: Compass,
-      desc: 'Struktur departemen akademik, jenjang pendidikan (D3/S1/S2), dan kepemimpinan prodi.',
-    },
-    'master/courses': {
-      title: 'Data Master Mata Kuliah',
-      subtitle: 'Katalog Mata Kuliah & Kode MK',
-      icon: BookOpen,
-      desc: 'Repositori mata kuliah institusi, bobot SKS teori/praktikum, dan deskripsi kompetensi.',
-    },
-    'master/academic-years': {
-      title: 'Data Master Tahun Ajaran & Semester',
-      subtitle: 'Kalender Akademik & Periode Aktif',
-      icon: Calendar,
-      desc: 'Penetapan semester ganjil/genap aktif, batas pengisian nilai, dan tanggal mulai perkuliahan.',
-    },
-    'master/rooms': {
-      title: 'Data Master Ruang & Titik Lokasi Kampus',
-      subtitle: 'Geolokasi GPS, Gedung & Kapasitas Kursi',
-      icon: MapPin,
-      desc: 'Kelola koordinat GPS ruang kuliah untuk validasi presensi geofencing serta kapasitas ruang.',
-    },
-    'schedules/classes': {
-      title: 'Penjadwalan Kuliah Mingguan',
-      subtitle: 'Alokasi Hari, Jam, Ruang & Dosen Pengampu',
-      icon: CalendarDays,
-      desc: 'Penyusunan jadwal kuliah terhindar dari bentrok ruang maupun bentrok dosen.',
-    },
-    'schedules/exams': {
-      title: 'Penjadwalan Ujian (UTS & UAS)',
-      subtitle: 'Distribusi Waktu & Ruang Ujian Terpadu',
-      icon: Award,
-      desc: 'Jadwal pelaksanaan ujian semester beserta penugasan dosen pengawas ruang.',
-    },
-    'schedules/rooms': {
-      title: 'Monitoring Penggunaan Ruang Kuliah',
-      subtitle: 'Okupansi Ruang & Pemakaian Laboratorium',
-      icon: Layers,
-      desc: 'Pantau pemanfaatan ruang kelas dan laboratorium komputer secara real-time.',
-    },
-    'classes/enroll': {
-      title: 'Pendaftaran Peserta Kelas (Enroll)',
-      subtitle: 'Registrasi Mahasiswa ke Rombongan Belajar',
-      icon: Users,
-      desc: 'Pendaftaran manual atau batch mahasiswa ke dalam kelas kuliah aktif semester berjalan.',
-    },
-    'classes/import': {
-      title: 'Impor Data Kelas & Mahasiswa via CSV',
-      subtitle: 'Batch Import & Sinkronisasi Massal',
-      icon: Download,
-      desc: 'Unggah berkas spreadsheet CSV untuk registrasi massal mahasiswa, kelas, atau nilai.',
-    },
-    'classes/transfer': {
-      title: 'Pindah Kelas & Rombongan Belajar',
-      subtitle: 'Mutasi Peserta Antar Kelas Paralel',
-      icon: ArrowRight,
-      desc: 'Pemindahan mahasiswa dari satu kelas paralel ke kelas lain tanpa kehilangan riwayat belajar.',
-    },
-    'grades/recap': {
-      title: 'Rekapitulasi Nilai Tingkat Universitas',
-      subtitle: 'Laporan Nilai Bersih & Transkrip',
-      icon: GraduationCap,
-      desc: 'Kompilasi nilai akhir seluruh mata kuliah sebelum penerbitan KHS resmi.',
-    },
-    'attendance/recap': {
-      title: 'Rekapitulasi Presensi Perkuliahan',
-      subtitle: 'Statistik Kehadiran Mahasiswa Institusi',
-      icon: CheckSquare,
-      desc: 'Audit kepatuhan kehadiran mahasiswa dan verifikasi kelayakan mengikuti ujian akhir.',
-    },
-    'grades/change-requests': {
-      title: 'Pengajuan Perubahan Nilai',
-      subtitle: 'Alur Administratif Revisi Nilai Dosen',
-      icon: Clock,
-      desc: 'Staf memverifikasi kelengkapan berkas berita acara perubahan nilai yang telah disetujui Kaprodi.',
-    },
-    'reports/export': {
-      title: 'Ekspor Laporan Akademik Terpadu',
-      subtitle: 'Laporan Feeder PDDIKTI & Format Resmi',
-      icon: FileSpreadsheet,
-      desc: 'Ekspor data transaksi akademik untuk pelaporan PDDIKTI dan audit internal universitas.',
     },
     'services/verification': {
       title: 'Layanan Verifikasi Berkas Mahasiswa',
@@ -177,7 +140,7 @@ export default function StaffSubpage({ params }: PageProps) {
   const Icon = current.icon;
 
   return (
-    <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
+    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       <RetroWindow
         title={`staf_akademik_${fullSlug.replace('/', '_')}.app`}
         subtitle={current.subtitle}
@@ -196,7 +159,7 @@ export default function StaffSubpage({ params }: PageProps) {
       </RetroWindow>
 
       {/* Grid 4 Kartu Metrik Administrasi Kampus Full Width */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {STAFF_STATS.map((s) => (
           <div
             key={s.title}
@@ -218,23 +181,23 @@ export default function StaffSubpage({ params }: PageProps) {
         ))}
       </div>
 
-      {/* Grid 3 Kartu Alur Kerja Administrasi Full Width */}
+      {/* Grid 3 Kartu Navigasi Hub Terkait */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Users className="h-5 w-5 text-retro-orange" />
-              <h3 className="font-heading font-black text-base text-foreground">Enroll Peserta & CSV Batch</h3>
+              <h3 className="font-heading font-black text-base text-foreground">Kelas & Peserta Kuliah</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Daftarkan rombongan belajar baru atau lakukan sinkronisasi massal via impor berkas spreadsheet CSV.
             </p>
           </div>
           <Link
-            href="/staff/classes/enroll"
+            href="/staff/classes"
             className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
           >
-            <span>Buka Pendaftaran Kelas</span>
+            <span>Buka Kelas & Peserta</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -250,7 +213,7 @@ export default function StaffSubpage({ params }: PageProps) {
             </p>
           </div>
           <Link
-            href="/staff/schedules/classes"
+            href="/staff/schedules"
             className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
           >
             <span>Buka Penjadwalan</span>
@@ -261,18 +224,18 @@ export default function StaffSubpage({ params }: PageProps) {
         <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-retro-orange" />
-              <h3 className="font-heading font-black text-base text-foreground">Ekspor PDDIKTI & Feeder</h3>
+              <CheckSquare className="h-5 w-5 text-retro-orange" />
+              <h3 className="font-heading font-black text-base text-foreground">Nilai & Presensi Institusi</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
-              Generate laporan transaksional nilai dan presensi semester untuk pelaporan resmi Pangkalan Data Dikti.
+              Audit nilai akhir, eksekusi perubahan nilai yang disetujui Kaprodi, dan unduh laporan Feeder PDDIKTI.
             </p>
           </div>
           <Link
-            href="/staff/reports/export"
+            href="/staff/grades"
             className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
           >
-            <span>Buka Ekspor Laporan</span>
+            <span>Buka Nilai & Presensi</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

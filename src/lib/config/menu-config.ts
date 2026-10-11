@@ -295,7 +295,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
     },
   ],
 
-  // 2.5 STAF AKADEMIK (21 -> 13)
+  // 2.5 STAF AKADEMIK (13 item spesifikasi)
   ACADEMIC_STAFF: [
     {
       id: 'staf-utama',
@@ -314,7 +314,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       items: [
         { id: 'staf-mhs', label: 'Mahasiswa', href: '/staff/master/students', icon: Users, roles: ['ACADEMIC_STAFF'] },
         { id: 'staf-dosen', label: 'Dosen', href: '/staff/master/lecturers', icon: UserCheck, roles: ['ACADEMIC_STAFF'] },
-        { id: 'staf-data-akademik', label: 'Data Akademik', href: '/staff/master/departments', icon: Compass, roles: ['ACADEMIC_STAFF'] },
+        { id: 'staf-data-akademik', label: 'Data Akademik', href: '/staff/master', icon: Compass, roles: ['ACADEMIC_STAFF'] },
       ],
     },
     {
@@ -322,7 +322,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'PENJADWALAN',
       roles: ['ACADEMIC_STAFF'],
       items: [
-        { id: 'staf-jadwal', label: 'Jadwal', href: '/staff/schedules/classes', icon: CalendarDays, roles: ['ACADEMIC_STAFF'] },
+        { id: 'staf-jadwal', label: 'Jadwal', href: '/staff/schedules', icon: CalendarDays, roles: ['ACADEMIC_STAFF'] },
       ],
     },
     {
@@ -330,7 +330,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'KELAS & PESERTA',
       roles: ['ACADEMIC_STAFF'],
       items: [
-        { id: 'staf-kelas-peserta', label: 'Kelas & Peserta', href: '/staff/classes/enroll', icon: Layers, roles: ['ACADEMIC_STAFF'] },
+        { id: 'staf-kelas-peserta', label: 'Kelas & Peserta', href: '/staff/classes', icon: Layers, roles: ['ACADEMIC_STAFF'] },
       ],
     },
     {
@@ -338,7 +338,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'NILAI & PRESENSI',
       roles: ['ACADEMIC_STAFF'],
       items: [
-        { id: 'staf-nilai-presensi', label: 'Nilai & Presensi', href: '/staff/grades/recap', icon: CheckSquare, roles: ['ACADEMIC_STAFF'] },
+        { id: 'staf-nilai-presensi', label: 'Nilai & Presensi', href: '/staff/grades', icon: CheckSquare, roles: ['ACADEMIC_STAFF'] },
       ],
     },
     {
@@ -347,9 +347,9 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       roles: ['ACADEMIC_STAFF'],
       items: [
         { id: 'staf-verif-berkas', label: 'Verifikasi Berkas', href: '/staff/services/verification', icon: FileText, roles: ['ACADEMIC_STAFF'] },
-        { id: 'staf-pengumuman-event', label: 'Pengumuman & Event', href: '/announcements', icon: Bell, roles: ['ACADEMIC_STAFF'] },
-        { id: 'staf-pustaka-sertifikat', label: 'Pustaka & Sertifikat', href: '/library', icon: BookOpen, roles: ['ACADEMIC_STAFF'] },
-        { id: 'staf-moderasi-komunitas', label: 'Moderasi Komunitas', href: '/community/forum', icon: MessageSquare, roles: ['ACADEMIC_STAFF'] },
+        { id: 'staf-pengumuman-event', label: 'Pengumuman & Event', href: '/staff/announcements', icon: Bell, roles: ['ACADEMIC_STAFF'] },
+        { id: 'staf-pustaka-sertifikat', label: 'Pustaka & Sertifikat', href: '/staff/content', icon: BookOpen, roles: ['ACADEMIC_STAFF'] },
+        { id: 'staf-moderasi-komunitas', label: 'Moderasi Komunitas', href: '/staff/moderation', icon: MessageSquare, roles: ['ACADEMIC_STAFF'] },
       ],
     },
   ],

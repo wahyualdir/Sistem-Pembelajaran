@@ -17,7 +17,32 @@ import {
   Database,
 } from 'lucide-react';
 
+import { redirect } from 'next/navigation';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+
 export default async function StaffPortalPage() {
+  const user = await getCurrentUserWithRoles();
+  const role = user?.activeRole;
+
+  if (role === 'SYSTEM_ADMIN') {
+    redirect('/admin/system');
+  }
+  if (role === 'SUPER_ADMIN' && !user?.isImpersonating) {
+    redirect('/admin');
+  }
+  if (role === 'STUDENT') {
+    redirect('/student');
+  }
+  if (role === 'LECTURER') {
+    redirect('/lecturer');
+  }
+  if (role === 'PROGRAM_COORDINATOR') {
+    redirect('/coordinator');
+  }
+  if (role === 'TEACHING_ASSISTANT') {
+    redirect('/ta');
+  }
+
   const { programs, semesters, courses } = await listMasterDataAction();
 
   return (
