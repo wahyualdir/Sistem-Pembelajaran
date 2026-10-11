@@ -80,12 +80,12 @@ export type BerandaChip = (typeof BERANDA_CHIPS)[number];
 
 // Item Sistem yang digunakan ulang oleh SUPER_ADMIN dari SYSTEM_ADMIN (DRY principle)
 export const SYSTEM_ADMIN_SHARED_ITEMS: MenuItem[] = [
-  { id: 'sa-sys-monitoring', label: 'Monitoring Sistem', href: '/admin/system/status', icon: Activity, roles: ['SUPER_ADMIN'] },
-  { id: 'sa-sys-integrasi', label: 'Integrasi', href: '/admin/integrations/meeting', icon: Globe, roles: ['SUPER_ADMIN'] },
-  { id: 'sa-sys-keamanan', label: 'Keamanan', href: '/admin/security/sessions', icon: Laptop, roles: ['SUPER_ADMIN'] },
-  { id: 'sa-sys-backup', label: 'Backup & Restore', href: '/admin/security/backup', icon: FolderArchive, roles: ['SUPER_ADMIN'] },
-  { id: 'sa-sys-pengaturan', label: 'Pengaturan Platform', href: '/admin/settings/branding', icon: Sliders, roles: ['SUPER_ADMIN'] },
-  { id: 'sa-sys-audit', label: 'Audit Log', href: '/admin/audit', icon: ShieldCheck, roles: ['SUPER_ADMIN'] },
+  { id: 'sa-sys-monitoring', label: 'Monitoring Sistem', href: '/admin/system/monitoring', icon: Activity, roles: ['SUPER_ADMIN'] },
+  { id: 'sa-sys-integrasi', label: 'Integrasi', href: '/admin/system/integrations', icon: Globe, roles: ['SUPER_ADMIN'] },
+  { id: 'sa-sys-keamanan', label: 'Keamanan', href: '/admin/system/security', icon: Laptop, roles: ['SUPER_ADMIN'] },
+  { id: 'sa-sys-backup', label: 'Backup & Restore', href: '/admin/system/backup', icon: FolderArchive, roles: ['SUPER_ADMIN'] },
+  { id: 'sa-sys-pengaturan', label: 'Pengaturan Platform', href: '/admin/system/settings', icon: Sliders, roles: ['SUPER_ADMIN'] },
+  { id: 'sa-sys-audit', label: 'Log Audit', href: '/admin/system/audit', icon: ShieldCheck, roles: ['SUPER_ADMIN'] },
 ];
 
 // Konfigurasi Navigasi Lengkap SIAJAR LMS per Role (Perampingan Menu Bagian 2)
@@ -354,14 +354,14 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
     },
   ],
 
-  // 2.6 SYSTEM ADMINISTRATOR (18 -> 8)
+  // 2.6 SYSTEM ADMINISTRATOR (8 Hub Utama)
   SYSTEM_ADMIN: [
     {
       id: 'sys-utama',
       title: 'UTAMA',
       roles: ['SYSTEM_ADMIN'],
       items: [
-        { id: 'sys-dashboard', label: 'Dashboard Sistem', href: '/admin/system/status', icon: Server, roles: ['SYSTEM_ADMIN'] },
+        { id: 'sys-dashboard', label: 'Dashboard Sistem', href: '/admin/system', icon: Server, roles: ['SYSTEM_ADMIN'] },
         { id: 'sys-notifikasi', label: 'Notifikasi', href: '/notifications', icon: Bell, roles: ['SYSTEM_ADMIN'] },
       ],
     },
@@ -370,38 +370,31 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'MONITORING & INTEGRASI',
       roles: ['SYSTEM_ADMIN'],
       items: [
-        { id: 'sys-monitoring', label: 'Monitoring Sistem', href: '/admin/system/status', icon: Activity, roles: ['SYSTEM_ADMIN'] },
-        { id: 'sys-integrasi', label: 'Integrasi', href: '/admin/integrations/meeting', icon: Globe, roles: ['SYSTEM_ADMIN'] },
+        { id: 'sys-monitoring', label: 'Monitoring Sistem', href: '/admin/system/monitoring', icon: Activity, roles: ['SYSTEM_ADMIN'] },
+        { id: 'sys-integrasi', label: 'Integrasi', href: '/admin/system/integrations', icon: Globe, roles: ['SYSTEM_ADMIN'] },
       ],
     },
     {
       id: 'sys-keamanan',
-      title: 'KEAMANAN',
+      title: 'KEAMANAN & CADANGAN',
       roles: ['SYSTEM_ADMIN'],
       items: [
-        { id: 'sys-keamanan-item', label: 'Keamanan', href: '/admin/security/sessions', icon: Laptop, roles: ['SYSTEM_ADMIN'] },
-        { id: 'sys-backup', label: 'Backup & Restore', href: '/admin/security/backup', icon: FolderArchive, roles: ['SYSTEM_ADMIN'] },
+        { id: 'sys-keamanan-item', label: 'Keamanan', href: '/admin/system/security', icon: Laptop, roles: ['SYSTEM_ADMIN'] },
+        { id: 'sys-backup', label: 'Backup & Restore', href: '/admin/system/backup', icon: FolderArchive, roles: ['SYSTEM_ADMIN'] },
       ],
     },
     {
       id: 'sys-pengaturan',
-      title: 'PENGATURAN',
+      title: 'PENGATURAN & AUDIT',
       roles: ['SYSTEM_ADMIN'],
       items: [
-        { id: 'sys-pengaturan-item', label: 'Pengaturan Platform', href: '/admin/settings/branding', icon: Sliders, roles: ['SYSTEM_ADMIN'] },
-      ],
-    },
-    {
-      id: 'sys-audit',
-      title: 'AUDIT',
-      roles: ['SYSTEM_ADMIN'],
-      items: [
-        { id: 'sys-audit-log', label: 'Audit Log', href: '/admin/audit', icon: ShieldCheck, roles: ['SYSTEM_ADMIN'] },
+        { id: 'sys-pengaturan-item', label: 'Pengaturan Platform', href: '/admin/system/settings', icon: Sliders, roles: ['SYSTEM_ADMIN'] },
+        { id: 'sys-audit-log', label: 'Log Audit', href: '/admin/system/audit', icon: ShieldCheck, roles: ['SYSTEM_ADMIN'] },
       ],
     },
   ],
 
-  // 2.7 SUPER ADMIN (26 -> 6 terlihat + 1 grup SISTEM collapsed)
+  // 2.7 SUPER ADMIN (6 Hub Terlihat + 1 Grup SISTEM Collapsed)
   SUPER_ADMIN: [
     {
       id: 'sa-utama',
@@ -417,7 +410,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'PENGGUNA & AKSES',
       roles: ['SUPER_ADMIN'],
       items: [
-        { id: 'sa-master', label: 'Kelola Pengguna', href: '/admin/master', icon: Users, roles: ['SUPER_ADMIN'] },
+        { id: 'sa-master', label: 'Kelola Pengguna', href: '/admin/users', icon: Users, roles: ['SUPER_ADMIN'] },
         { id: 'sa-roles', label: 'Role & Permission', href: '/admin/roles', icon: ShieldAlert, roles: ['SUPER_ADMIN'] },
       ],
     },
@@ -426,8 +419,8 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       title: 'KEBIJAKAN & GLOBAL',
       roles: ['SUPER_ADMIN'],
       items: [
-        { id: 'sa-kebijakan', label: 'Kebijakan', href: '/admin/kebijakan', icon: BookOpen, roles: ['SUPER_ADMIN'] },
-        { id: 'sa-pengumuman', label: 'Pengumuman Global', href: '/admin/pengumuman', icon: Bell, roles: ['SUPER_ADMIN'] },
+        { id: 'sa-kebijakan', label: 'Kebijakan', href: '/admin/policies', icon: BookOpen, roles: ['SUPER_ADMIN'] },
+        { id: 'sa-pengumuman', label: 'Pengumuman Global', href: '/admin/announcements', icon: Bell, roles: ['SUPER_ADMIN'] },
       ],
     },
     {
@@ -582,6 +575,11 @@ export const LEGACY_ROUTE_REDIRECTS: Record<string, string> = {
 
   // Admin Legacy
   '/admin/dashboard': '/admin',
+  '/admin/master': '/admin/users',
+  '/admin/pengumuman': '/admin/announcements',
+  '/admin/kebijakan': '/admin/policies',
+  '/admin/audit': '/admin/system/audit',
+  '/admin/system/status': '/admin/system/monitoring',
   '/admin/ukt': '/admin',
   '/admin/surat': '/admin',
   '/admin/kalender': '/calendar',

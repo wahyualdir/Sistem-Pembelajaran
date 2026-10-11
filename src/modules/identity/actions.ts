@@ -25,6 +25,7 @@ import type { UserStatus } from '@/lib/supabase/types';
 
 import type { ActionResponse } from './types';
 import { SYNTHETIC_DEMO_USERS } from './demo-users';
+import { recordSystemAuditLog } from '@/lib/audit';
 
 const ROLE_PORTAL_MAP: Record<string, string> = {
   STUDENT: '/student',
@@ -800,7 +801,23 @@ export async function getCurrentUserWithRoles() {
   }
 
   const activeRoleCode = cookieStore.get('active_role')?.value;
-  const impersonatingFrom = cookieStore.get('impersonating_from')?.value ?? null;
+  const impersonatingExpiresAt = cookieStore.get('impersonating_expires_at')?.value;
+  let impersonatingFrom = cookieStore.get('impersonating_from')?.value ?? null;
+
+  if (impersonatingExpiresAt && Date.now() > Number(impersonatingExpiresAt)) {
+    // Sesi impersonasi telah kedaluwarsa (maksimal 30 menit)
+    if (impersonatingFrom) {
+      cookieStore.set('demo_session', impersonatingFrom, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        path: '/',
+      });
+    }
+    cookieStore.delete('impersonating_from');
+    cookieStore.delete('impersonating_expires_at');
+    impersonatingFrom = null;
+  }
 
   // Validasi peran aktif di sisi server dari daftar peran resmi pengguna (rolesList)
   const allowedRoleCodes = rolesList.map((r) => (r.roles as any)?.code || r.role_id);
@@ -819,7 +836,7 @@ export async function getCurrentUserWithRoles() {
 }
 
 /**
- * Super Admin Impersonation Action
+ * Super Admin Impersonation Action (Durasi Maksimal 30 Menit)
  */
 export async function impersonateUserAction(targetUserId: string): Promise<ActionResponse> {
   const cookieStore = cookies();
@@ -828,12 +845,23 @@ export async function impersonateUserAction(targetUserId: string): Promise<Actio
     return { ok: false, error: 'Hanya Super Administrator yang berwenang melakukan impersonate pengguna.' };
   }
 
-  // Set origin tracking cookie
+  const expiresAt = Date.now() + 30 * 60 * 1000;
+
+  // Set origin tracking cookie & 30-min expiry
   cookieStore.set('impersonating_from', current.user.id, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
+    maxAge: 1800,
+  });
+
+  cookieStore.set('impersonating_expires_at', String(expiresAt), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 1800,
   });
 
   // Switch demo session to target user
@@ -842,15 +870,20 @@ export async function impersonateUserAction(targetUserId: string): Promise<Actio
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
+    maxAge: 1800,
   });
 
-  // Log to audit log
+  // Log to audit log with actorId & on_behalf_of
   try {
-    await supabaseAdmin.from('audit_logs').insert({
-      actor_user_id: current.user.id,
+    await recordSystemAuditLog({
+      actorId: current.user.id,
+      actorName: current.profile?.full_name || 'Super Admin',
+      actorRole: current.activeRole,
       action: 'auth.impersonate_user',
-      entity_type: 'users',
-      entity_id: targetUserId,
+      entityType: 'users',
+      entityId: targetUserId,
+      onBehalfOf: targetUserId,
+      description: `Super Admin memulai sesi impersonasi investigasi teknis pada akun pengguna ID ${targetUserId} (maksimal 30 menit).`,
     });
   } catch {
     // DB offline fallback
@@ -876,6 +909,7 @@ export async function stopImpersonatingAction(): Promise<ActionResponse> {
   }
 
   cookieStore.delete('impersonating_from');
+  cookieStore.delete('impersonating_expires_at');
   return { ok: true };
 }
 

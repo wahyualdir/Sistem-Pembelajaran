@@ -14,6 +14,7 @@ export interface AuditLogInput {
   scopeId?: string | null;
   valueBefore?: string | null;
   valueAfter?: string | null;
+  onBehalfOf?: string | null;
   metadata?: Record<string, any>;
 }
 
@@ -45,6 +46,7 @@ export async function recordSystemAuditLog(input: AuditLogInput): Promise<void> 
         action: input.action,
         entity_type: input.entityType,
         entity_id: input.entityId,
+        on_behalf_of: input.onBehalfOf ?? null,
         scope_type: input.scopeType ?? 'GLOBAL',
         scope_id: input.scopeId ?? null,
         before_json: input.valueBefore ? { value: input.valueBefore } : null,

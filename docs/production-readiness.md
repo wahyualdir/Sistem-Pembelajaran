@@ -8,9 +8,9 @@ Dokumen ini disusun sebagai audit kesiapan rilis produksi (*production readiness
 
 | Parameter Uji | Ekspektasi | Hasil Pengujian Nyata | Status | Bukti / Rujukan |
 |---|---|---|---|---|
-| **TypeScript Typecheck** | `tsc --noEmit` exit 0 (0 error) | `exit code 0` (0 diagnostic error) | **LOLOS** | Task `task-1243` |
-| **Production Build** | `next build` selesai tanpa error | `exit code 0` (96/96 rute terkompilasi) | **LOLOS** | Task `task-1273` |
-| **Smoke Test Rute** | 65 rute dan redirect sesuai RBAC | 65/65 rute lolos (HTTP 200 / 307) | **LOLOS** | Script `scripts/smoke-roles.ts` |
+| **TypeScript Typecheck** | `tsc --noEmit` exit 0 (0 error) | `exit code 0` (0 diagnostic error) | **LOLOS** | Verifikasi `npm run typecheck` |
+| **Production Build** | `next build` selesai tanpa error | `exit code 0` (107/107 rute terkompilasi) | **LOLOS** | Task `npm run build` |
+| **Smoke Test Rute** | 101 rute dan redirect sesuai RBAC | 101/101 rute lolos (HTTP 200 / 307) | **LOLOS** | Script `scripts/smoke-roles.ts` |
 | **Negative Security Tests** | 25 skenario penolakan aksi ilegal | 25/25 skenario ditolak server (0 bocor) | **LOLOS** | Rute `/api/smoke-actions` |
 | **Koneksi Supabase Remote** | Verifikasi koneksi pangkalan data | Kredensial `.env.local` saat ini string kosong | **BELUM TERUJI** | Memerlukan input kredensial produksi nyata |
 | **Pencegahan Sukses Palsu** | Tombol tanpa backend dinonaktifkan di non-demo | Seluruh tombol di non-demo nonaktif + TODO tooltip | **LOLOS** | Verifikasi kode Hub Staf & Kaprodi |

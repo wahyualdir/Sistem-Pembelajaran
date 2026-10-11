@@ -584,7 +584,7 @@ export function PortalShell({
                 <div className="flex items-center gap-2">
                   <ShieldAlert className="h-4 w-4 shrink-0" />
                   <span>
-                    MODE IMPERSONATE AKTIF: Anda sedang melihat portal sebagai <u>{userName}</u> ({userSubtitle}). Tindakan tercatat di Audit Log.
+                    Sedang mengimpersonasi: <u>{userName}</u> ({userSubtitle}) — Sisa Waktu 30:00. Tindakan tercatat di Audit Log.
                   </span>
                 </div>
                 <form
@@ -594,9 +594,10 @@ export function PortalShell({
                 >
                   <button
                     type="submit"
-                    className="bg-black text-white px-3 py-1 rounded text-[11px] font-mono hover:bg-neutral-800 border border-white cursor-pointer"
+                    className="bg-black text-white px-3 py-1.5 rounded text-[11px] font-mono hover:bg-neutral-800 border-2 border-white cursor-pointer font-bold shadow-xs flex items-center gap-1.5"
                   >
-                    Kembali ke Akun Admin &rarr;
+                    <span>Keluar dari Impersonasi</span>
+                    <span>&rarr;</span>
                   </button>
                 </form>
               </div>
