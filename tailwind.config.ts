@@ -73,6 +73,19 @@ const config: Config = {
           pink: "var(--retro-pink)",
           blue: "var(--retro-blue)",
         },
+        traffic: {
+          red: "var(--retro-traffic-red, #FF5F56)",
+          yellow: "var(--retro-traffic-yellow, #FFBD2E)",
+          green: "var(--retro-traffic-green, #27C93F)",
+        },
+        pastel: {
+          peach: "var(--card-peach, #FFE4D6)",
+          mint: "var(--card-mint, #D8F3DC)",
+          sky: "var(--card-sky, #E0F4FF)",
+          lavender: "var(--card-lavender, #F3E8FF)",
+          lemon: "var(--card-lemon, #FEF08A)",
+          rose: "var(--card-rose, #FFD6E0)",
+        },
         // Alias keamanan agar class 'text-text-primary' & 'text-text-secondary' tetap menghasilkan aturan CSS valid
         text: {
           primary: "var(--text-primary)",
@@ -93,15 +106,18 @@ const config: Config = {
       boxShadow: {
         sm: "var(--shadow-sm)",
         md: "var(--shadow-md)",
+        "retro-sm": "1.5px 1.5px 0px var(--retro-border)",
         retro: "2px 2px 0px var(--retro-border)",
         "retro-md": "3px 3px 0px var(--retro-border)",
         "retro-lg": "4px 4px 0px var(--retro-border)",
+        "retro-window": "6px 6px 0px var(--retro-border)",
       },
       spacing: {
         sidebar: "var(--layout-sidebar-width)",
         rail: "var(--layout-rail-width)",
         "right-panel": "var(--layout-right-panel-width)",
         header: "var(--layout-header-height)",
+        "header-mobile": "var(--layout-header-height-mobile)",
       },
       fontSize: {
         '2xs': ['0.75rem', { lineHeight: '1rem' }],
@@ -114,6 +130,10 @@ const config: Config = {
         '2xl': ['1.5rem', { lineHeight: '2rem' }],
         '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
         '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+        // Fluid typography utilities
+        'display': ['clamp(1.5rem, 2.5vw + 0.5rem, 2.25rem)', { lineHeight: '1.2' }],
+        'title': ['clamp(1.25rem, 1.8vw + 0.4rem, 1.75rem)', { lineHeight: '1.3' }],
+        'section': ['clamp(1.1rem, 1.2vw + 0.4rem, 1.35rem)', { lineHeight: '1.4' }],
       },
       fontFamily: {
         sans: [

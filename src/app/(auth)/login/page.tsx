@@ -212,7 +212,7 @@ function LoginFormContent() {
   return (
     <div
       style={{ fontFamily: "'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif" }}
-      className="h-screen max-h-screen w-full bg-[#F6F3EB] text-black font-sans selection:bg-retro-yellow selection:text-black flex flex-col overflow-hidden antialiased"
+      className="h-screen max-h-screen w-full bg-background text-black font-sans selection:bg-retro-yellow selection:text-black flex flex-col overflow-hidden antialiased"
     >
       {/* Top Bar Navigasi Sistem Retro Konsisten dengan Dashboard */}
       <header className="h-[54px] flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 sm:border-b-3 border-black bg-retro-yellow shrink-0 select-none shadow-[0px_2px_0px_#000]">

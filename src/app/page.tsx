@@ -16,9 +16,9 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white antialiased flex flex-col">
+    <div className="min-h-screen bg-background text-black font-sans selection:bg-black selection:text-white antialiased flex flex-col">
       {/* -------------------- TOP RETRO NAVIGATION BAR -------------------- */}
-      <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-white">
+      <header className="sticky top-0 z-50 w-full border-b-2 border-black bg-background">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-12 sm:h-14 flex items-center justify-between">
           {/* Logo & Nav Links */}
           <div className="flex items-center gap-4 sm:gap-6">

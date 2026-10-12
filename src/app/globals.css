@@ -6,42 +6,42 @@
 
 :root {
   --font-sans: 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  /* Permukaan Monokrom & Retro Mac Berkontras Tinggi */
-  --bg-main: #FFFFFF;
-  --bg-surface: #FFFFFF;
-  --bg-surface-raised: #F8F7F4;
+  /* Palet Tetris Kraft Sand Persis Sesuai Gambar (#D7C7A3 & #DACBA8) */
+  --bg-main: #D7C7A3;
+  --bg-surface: #DACBA8;
+  --bg-surface-raised: #CEBF9A;
   --border-main: #000000;
   --border-strong: #000000;
 
-  /* Teks Kontras Tinggi (Sangat Jelas, Hitam Pekat, Tidak Pudar) */
+  /* Teks Kontras Tinggi (Hitam Pekat Retro) */
   --text-primary: #000000;
-  --text-secondary: #141414;
-  --text-subtle: #242424;
+  --text-secondary: #000000;
+  --text-subtle: #1C1917;
 
   /* Aksen Utama */
   --primary: #000000;
   --primary-hover: #1A1A1A;
-  --primary-soft: #F4F1EA;
+  --primary-soft: #CEBF9A;
   --primary-foreground: #FFFFFF;
   --ring: rgb(0 0 0 / 0.5);
   --panel: #000000;
   --panel-accent: #000000;
 
-  /* Status Berkontras Tinggi & Jelas */
+  /* Status Berkontras Jelas */
   --status-success: #057A55;
-  --status-success-soft: #DEF7EC;
+  --status-success-soft: #C6DBCB;
   --status-success-border: #000000;
   --status-success-foreground: #FFFFFF;
   --status-warning: #C27803;
-  --status-warning-soft: #FEF08A;
+  --status-warning-soft: #E2CF97;
   --status-warning-border: #000000;
   --status-warning-foreground: #000000;
   --status-danger: #E02424;
-  --status-danger-soft: #FDE8E8;
+  --status-danger-soft: #E8BFBF;
   --status-danger-border: #000000;
   --status-danger-foreground: #FFFFFF;
   --status-info: #1A56DB;
-  --status-info-soft: #E1EFFE;
+  --status-info-soft: #B8D3F2;
   --status-info-border: #000000;
   --status-info-foreground: #FFFFFF;
 
@@ -53,62 +53,46 @@
   --shadow-sm: 2px 2px 0px #000000;
   --shadow-md: 4px 4px 0px #000000;
 
-  /* Palet Retro Jelas & Berwarna Tajam (Bukan Abu-Abu Mati) */
-  --retro-bg: #FFFFFF;
-  --retro-surface: #FFFFFF;
-  --retro-warm: #F6F3EB;
-  --retro-yellow: #FFE500;
+  /* Palet Retro Jelas & Berwarna Tajam (Tetris Kraft Sand Sesuai Gambar) */
+  --retro-bg: #D7C7A3;
+  --retro-surface: #DACBA8;
+  --retro-warm: #CBB992;
+  --retro-yellow: #A0C4FF;
   --retro-orange: #FF5500;
   --retro-border: #000000;
   --retro-purple: #D4BBFF;
   --retro-mint: #00E599;
   --retro-pink: #FF85C0;
   --retro-blue: #70D6FF;
-  --retro-dither: #E5E1D8;
+  --retro-dither: #C5B48E;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Layout Dimension Tokens (Baseline Architecture) */
-  --layout-sidebar-width: 315px;
-  --layout-rail-width: 72px;
-  --layout-right-panel-width: 480px;
-  --layout-header-height: 72px;
-}
+  /* Layout Dimension Tokens (Rem-based Responsive Scaling) */
+  --layout-sidebar-width: 15rem;
+  --layout-rail-width: 4.5rem;
+  --layout-right-panel-width: 20rem;
+  --layout-header-height: 3.5rem;
+  --layout-header-height-mobile: 3.25rem;
 
-/* Responsif Density Scaling untuk Kepadatan Layar & Proporsi Kolom Tengah >= 59% */
-@media (min-width: 1920px) {
-  :root {
-    --layout-sidebar-width: 315px;
-    --layout-right-panel-width: 440px;
-  }
-}
+  /* Safe Area Variables */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
 
-@media (min-width: 1536px) and (max-width: 1919px) {
-  :root {
-    --layout-sidebar-width: 280px;
-    --layout-right-panel-width: 350px;
-  }
-}
+  /* Retro Window & Traffic Lights */
+  --retro-traffic-red: #FF5F56;
+  --retro-traffic-yellow: #FFBD2E;
+  --retro-traffic-green: #27C93F;
 
-@media (min-width: 1301px) and (max-width: 1535px) {
-  :root {
-    --layout-sidebar-width: 218px;
-    --layout-right-panel-width: 330px;
-  }
-}
-
-@media (min-width: 1280px) and (max-width: 1300px) {
-  :root {
-    --layout-sidebar-width: 218px;
-    --layout-right-panel-width: 305px;
-  }
-}
-
-@media (max-width: 1279px) {
-  :root {
-    --layout-sidebar-width: 218px;
-    --layout-right-panel-width: 330px;
-  }
+  /* Card Pastel Backgrounds */
+  --card-peach: #FFE4D6;
+  --card-mint: #D8F3DC;
+  --card-sky: #E0F4FF;
+  --card-lavender: #F3E8FF;
+  --card-lemon: #FEF08A;
+  --card-rose: #FFD6E0;
 }
 
 /* Kepadatan Vertikal Khusus Viewport Tinggi < 720px (Baseline ~650px) */
@@ -135,32 +119,43 @@
 }
 
 .dark {
-  --bg-main: #0C0C0C;
-  --bg-surface: #141414;
-  --bg-surface-raised: #1E1E1E;
-  --border-main: #FFFFFF;
-  --border-strong: #FFFFFF;
-  --text-primary: #FFFFFF;
-  --text-secondary: #F3F4F6;
-  --text-subtle: #E5E7EB;
-  --primary: #FFFFFF;
-  --primary-hover: #E5E5E5;
-  --primary-soft: #252525;
-  --primary-foreground: #000000;
-  --ring: rgb(255 255 255 / 0.5);
-  --panel: #1A1A1A;
+  --bg-main: #D7C7A3;
+  --bg-surface: #DACBA8;
+  --bg-surface-raised: #CEBF9A;
+  --border-main: #000000;
+  --border-strong: #000000;
+  --text-primary: #000000;
+  --text-secondary: #000000;
+  --text-subtle: #1C1917;
+  --primary: #000000;
+  --primary-hover: #1A1A1A;
+  --primary-soft: #CEBF9A;
+  --primary-foreground: #FFFFFF;
+  --ring: rgb(0 0 0 / 0.5);
+  --panel: #000000;
 
-  --retro-bg: #0C0C0C;
-  --retro-surface: #141414;
-  --retro-warm: #1F1F1F;
-  --retro-yellow: #FACC15;
-  --retro-orange: #FB923C;
-  --retro-border: #FFFFFF;
-  --retro-purple: #C084FC;
-  --retro-mint: #4ADE80;
-  --retro-pink: #F472B6;
-  --retro-blue: #60A5FA;
-  --retro-dither: #262626;
+  --retro-bg: #D7C7A3;
+  --retro-surface: #DACBA8;
+  --retro-warm: #CBB992;
+  --retro-yellow: #A0C4FF;
+  --retro-orange: #FF5500;
+  --retro-border: #000000;
+  --retro-purple: #D4BBFF;
+  --retro-mint: #00E599;
+  --retro-pink: #FF85C0;
+  --retro-blue: #70D6FF;
+  --retro-dither: #C5B48E;
+
+  --retro-traffic-red: #FF5F56;
+  --retro-traffic-yellow: #FFBD2E;
+  --retro-traffic-green: #27C93F;
+
+  --card-peach: #FFE4D6;
+  --card-mint: #D8F3DC;
+  --card-sky: #E0F4FF;
+  --card-lavender: #F3E8FF;
+  --card-lemon: #FEF08A;
+  --card-rose: #FFD6E0;
 
   --status-success: #4ADE80;
   --status-success-soft: #064E3B;
@@ -182,24 +177,42 @@
     border-color: var(--border-main);
   }
   html {
-    font-size: 16px;
-    font-family: "SF Pro", "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px; /* Mobile & tablet < 1024px */
+    font-family: var(--font-sans);
     color: var(--text-primary);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  @media (min-width: 1024px) {
+    html {
+      font-size: 14px; /* Laptop 1024-1535px & Windows scaling */
+    }
+  }
+  @media (min-width: 1536px) {
+    html {
+      font-size: 15px; /* Desktop 1536-1919px */
+    }
+  }
+  @media (min-width: 1920px) {
+    html {
+      font-size: 16px; /* Ultra-wide >= 1920px */
+    }
+  }
+
   body {
-    font-family: "SF Pro", "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--font-sans);
     background-color: var(--bg-main);
     color: var(--text-primary);
     font-size: 0.9375rem;
-    line-height: 1.55;
+    line-height: 1.5;
     letter-spacing: normal;
+    min-height: 100dvh;
+    overflow-x: hidden;
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: "SF Pro Display", "SF Pro", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-weight: 800;
+    font-family: var(--font-sans);
+    font-weight: 700;
     color: var(--text-primary);
     text-wrap: balance;
   }
@@ -208,6 +221,9 @@
   }
   input, textarea, select, button {
     font-family: inherit;
+  }
+  .bg-white {
+    background-color: var(--retro-surface) !important;
   }
 }
 
@@ -325,21 +341,54 @@
 
   /* Form fields and buttons Retro Classic Mac */
   .field {
-    width: 100%; height: 3.1rem; padding: 0 1rem; font-size: 1.05rem; font-weight: 600;
-    color: #000000; background: #FFFFFF;
-    border: 2px solid #000000; border-radius: 2px;
-    box-shadow: 3.5px 3.5px 0px 0px #000000;
+    width: 100%;
+    min-height: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.875rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #000000;
+    background: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 2px;
+    box-shadow: 3px 3px 0px 0px #000000;
     transition: border-color 0.15s, box-shadow 0.2s;
   }
-  .field::placeholder { color: #333333; font-size: 0.95rem; font-weight: 500; }
-  .field:focus-visible { outline: none; border-color: #000000; box-shadow: 5px 5px 0px 0px #000000; }
+  .field::placeholder { color: #555555; font-size: 0.875rem; font-weight: 500; }
+  .field:focus-visible { outline: none; border-color: #000000; box-shadow: 4px 4px 0px 0px #000000; }
   .field:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  @media (max-width: 767px) {
+    .field {
+      font-size: 16px !important; /* Mencegah auto-zoom iOS Safari */
+      box-shadow: 2px 2px 0px 0px #000000;
+    }
+  }
+
+  @media (pointer: coarse) {
+    .field {
+      min-height: 2.75rem;
+      height: 2.75rem;
+    }
+  }
   
   .btn-solid {
-    position: relative; overflow: hidden; width: 100%; height: 3.1rem;
-    font-size: 1.05rem; font-weight: 800; color: #000000;
-    background: #FFFFFF; border: 2px solid #000000;
-    border-radius: 2px; box-shadow: 4px 4px 0px 0px #000000;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-height: 2.5rem;
+    height: 2.5rem;
+    padding: 0 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #000000;
+    background: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 2px;
+    box-shadow: 3px 3px 0px 0px #000000;
     transition: transform 0.1s, box-shadow 0.1s, background-color 0.15s, color 0.15s;
     cursor: pointer;
   }
@@ -350,6 +399,19 @@
   .btn-solid[data-pending="true"]::after {
     content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: 100%;
     background: #000000; animation: sweep 1s var(--ease) infinite;
+  }
+
+  @media (max-width: 767px) {
+    .btn-solid {
+      box-shadow: 2px 2px 0px 0px #000000;
+    }
+  }
+
+  @media (pointer: coarse) {
+    .btn-solid {
+      min-height: 2.75rem;
+      height: 2.75rem;
+    }
   }
 }
 
