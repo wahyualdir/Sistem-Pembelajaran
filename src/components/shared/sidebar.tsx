@@ -174,20 +174,20 @@ export function Sidebar({
       {/* Sidebar Container */}
       <aside
         className={cn(
-          "fixed top-0 bottom-0 left-0 z-50 flex w-64 flex-col border-r-2 border-black bg-white transition-all duration-300 ease-in-out md:static md:sticky md:top-0 md:h-screen shrink-0",
+          "fixed top-0 bottom-0 left-0 z-50 flex w-sidebar flex-col border-r-2 border-black bg-white transition-all duration-300 ease-in-out md:static md:sticky md:top-0 md:h-[100dvh] shrink-0",
           isOpen
             ? "translate-x-0 shadow-2xl md:shadow-none"
-            : "-translate-x-full md:-ml-64"
+            : "-translate-x-full md:-ml-sidebar"
         )}
       >
         {/* Sidebar Header dengan Logo Retro Mac */}
-        <div className="flex h-16 shrink-0 items-center justify-between border-b-2 border-black bg-[#E2E2E2] px-4">
+        <div className="flex h-header shrink-0 items-center justify-between border-b-2 border-black bg-retro-warm px-4">
           <Link
             href={homeHref}
             className="flex items-center gap-2.5 group focus-visible:outline-none"
             title="SIAJAR & SIAKAD"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-none sm:rounded-[2px] border-2 border-black bg-black text-white shadow-[2px_2px_0px_#000] group-hover:bg-white group-hover:text-black transition-all">
+            <div className="flex h-10 w-10 items-center justify-center rounded-none sm:rounded-[2px] border-2 border-black bg-black text-white shadow-retro group-hover:bg-white group-hover:text-black transition-all">
               <Flame className="h-6 w-6 fill-current" />
             </div>
             <div className="flex flex-col text-left">
@@ -201,7 +201,7 @@ export function Sidebar({
           </Link>
           <button
             onClick={handleClose}
-            className="md:hidden flex h-8 w-8 items-center justify-center border-2 border-black bg-white text-black shadow-[1.5px_1.5px_0px_#000] hover:bg-[#EAEAEA] transition-colors"
+            className="md:hidden flex h-8 w-8 items-center justify-center border-2 border-black bg-white text-black shadow-retro-sm hover:bg-retro-warm transition-colors cursor-pointer"
             title="Tutup Navigasi (Burger)"
             aria-label="Tutup navigasi"
           >
@@ -252,8 +252,8 @@ export function Sidebar({
                           className={cn(
                             "flex items-center justify-between rounded-none sm:rounded-[2px] px-3.5 py-2.5 text-sm sm:text-base font-semibold transition-all focus-visible:outline-none",
                             isActive
-                              ? "border-2 border-black bg-retro-orange text-white shadow-[2px_2px_0px_#000] font-bold hover:bg-retro-orange"
-                              : "text-black hover:bg-[#EAEAEA] hover:text-black"
+                              ? "border-2 border-black bg-retro-orange text-white shadow-retro font-bold hover:bg-retro-orange"
+                              : "text-black hover:bg-retro-warm hover:text-black"
                           )}
                         >
                           <span className="flex items-center gap-3 truncate">

@@ -77,7 +77,7 @@ export function AiAcademicAssistant() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2 sm:gap-2.5 rounded-full bg-primary px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-xl hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 group"
+          className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full bg-primary px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-xl hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 group cursor-pointer"
           aria-label="Buka Asisten AI SIAJAR"
         >
           <div className="relative">
@@ -90,7 +90,7 @@ export function AiAcademicAssistant() {
 
       {/* Floating Chat Modal */}
       {isOpen && (
-        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex h-[78vh] sm:h-[32rem] w-[calc(100vw-2rem)] sm:w-96 max-w-sm flex-col rounded-2xl border-2 border-black bg-surface shadow-2xl overflow-hidden animate-fade-up">
+        <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-50 flex h-[min(78dvh,32rem)] w-[calc(100vw-2rem)] sm:w-96 max-w-sm flex-col rounded-2xl border-2 border-black bg-surface shadow-2xl overflow-hidden animate-fade-up">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-border bg-muted/60 px-4 py-3">
             <div className="flex items-center gap-2.5">

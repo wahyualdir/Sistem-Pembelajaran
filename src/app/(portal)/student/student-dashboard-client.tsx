@@ -230,7 +230,7 @@ export function StudentDashboardClient({
   const handleSelectCourse = (course: ActiveClassItem) => {
     setSelectedCourse(course);
     setRightPanelTab('detail-kelas');
-    if (typeof window !== 'undefined' && window.innerWidth < 1280) {
+    if (typeof window !== 'undefined' && window.innerWidth < 1536) {
       setIsRightDrawerOpen(true);
     }
   };
@@ -380,10 +380,10 @@ export function StudentDashboardClient({
       {/* ========================================================= */}
       {/* 2. BAGIAN KANAN: DETAIL & ACTION PANEL (BASELINE 480px)   */}
       {/* ========================================================= */}
-      {/* Mode Desktop (>= 1280px / xl): Sticky dengan scroll internal sendiri */}
+      {/* Mode Desktop (>= 1536px / 2xl): Sticky dengan scroll internal sendiri */}
       <aside
         aria-label="Panel Ringkasan & Detail"
-        className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 space-y-6 flex-col sticky top-[72px] h-[calc(100vh-72px)] overflow-y-auto pb-48 sm:pb-52"
+        className="hidden 2xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 space-y-6 flex-col sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-48 sm:pb-52"
       >
         {/* BAGIAN 2 ELEMEN BEKU: KARTU LOGO TEKNOLOGI (BASELINE IDENTIK 402x351) */}
         <div className="shrink-0 w-full">
@@ -400,13 +400,13 @@ export function StudentDashboardClient({
         />
       </aside>
 
-      {/* Mode Slide-over Drawer (< 1280px / max-xl): Panel geser dari kanan */}
+      {/* Mode Slide-over Drawer (< 1536px / max-2xl): Panel geser dari kanan */}
       {isRightDrawerOpen && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label="Panel Ringkasan & Detail"
-          className="fixed inset-0 z-50 flex justify-end xl:hidden"
+          className="fixed inset-0 z-50 flex justify-end 2xl:hidden"
         >
           {/* Backdrop Overlay */}
           <div
@@ -415,10 +415,10 @@ export function StudentDashboardClient({
             className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
           />
 
-          {/* Drawer Container (Maks 480px / Baseline Identik) */}
-          <div className="relative w-full max-w-[480px] bg-retro-bg border-l-2 border-retro-border h-full flex flex-col shadow-2xl z-10 animate-slide-in-right">
+          {/* Drawer Container (Rem-based Responsive Scaling) */}
+          <div className="relative w-full max-w-[22rem] sm:w-right-panel bg-retro-bg border-l-2 border-retro-border h-[100dvh] flex flex-col shadow-2xl z-10 animate-slide-in-right pr-[env(safe-area-inset-right,0px)] pb-[env(safe-area-inset-bottom,0px)]">
             {/* Header Drawer */}
-            <div className="flex h-[72px] items-center justify-between px-6 border-b-2 border-retro-border bg-retro-warm shrink-0">
+            <div className="flex h-header items-center justify-between px-6 border-b-2 border-retro-border bg-retro-warm shrink-0">
               <div className="flex items-center gap-2">
                 <span className="font-heading font-black text-base text-foreground tracking-tight">
                   Ringkasan & Detail
@@ -427,7 +427,7 @@ export function StudentDashboardClient({
               <button
                 type="button"
                 onClick={() => setIsRightDrawerOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-foreground hover:bg-retro-warm shadow-[1px_1px_0px_#000] active:translate-y-0.5 transition-all focus-visible:outline-none"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-foreground hover:bg-retro-warm shadow-retro-sm active:translate-y-0.5 transition-all focus-visible:outline-none cursor-pointer"
                 title="Tutup Panel (Esc)"
                 aria-label="Tutup Panel"
               >

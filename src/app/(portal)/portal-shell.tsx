@@ -281,39 +281,40 @@ export function PortalShell({
             tabIndex={-1}
             className={cn(
               'fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r-2 border-retro-border bg-retro-bg h-[100dvh] shrink-0 outline-none',
-              'xl:sticky xl:top-0 xl:h-screen xl:z-40',
+              'xl:sticky xl:top-0 xl:h-[100dvh] xl:z-40',
               'transition-all duration-200 ease-in-out motion-reduce:transition-none',
+              'pl-[env(safe-area-inset-left,0px)] pb-[env(safe-area-inset-bottom,0px)]',
               isRailActive ? 'w-sidebar xl:w-rail' : 'w-sidebar',
               isDrawerOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full xl:translate-x-0'
             )}
           >
             {/* Header Sidebar: Brand Block (Full vs Rail) */}
             {isRailActive ? (
-              <div className="flex h-[72px] shrink-0 items-center justify-center border-b-2 border-retro-border bg-retro-bg px-2 box-border">
+              <div className="flex h-header shrink-0 items-center justify-center border-b-2 border-retro-border bg-retro-bg px-2 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center justify-center group focus-visible:outline-none"
                   title={`SIAJAR & SIAKAD - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-black text-white shadow-[1.5px_1.5px_0px_#000] group-hover:scale-105 transition-transform shrink-0">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-black text-white shadow-retro-sm group-hover:scale-105 transition-transform shrink-0">
                     <Flame className="h-5 w-5 fill-white text-white" />
                   </div>
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-col justify-between h-[72px] shrink-0 border-b-2 border-retro-border bg-retro-bg px-3 pt-2 pb-2.5 box-border">
+              <div className="flex flex-col justify-between h-header shrink-0 border-b-2 border-retro-border bg-retro-bg px-3 pt-2 pb-2.5 box-border">
                 {/* Baris atas tipis: tiga titik jendela (merah, kuning, hijau), rata kiri */}
                 <div className="flex items-center gap-1.5 shrink-0">
                   <span
-                    className="h-3 w-3 rounded-full border border-black bg-[#FF5F56] inline-block shadow-[0.5px_0.5px_0px_#000]"
+                    className="h-3 w-3 rounded-full border border-black bg-traffic-red inline-block shadow-retro-sm"
                     title="Tutup"
                   />
                   <span
-                    className="h-3 w-3 rounded-full border border-black bg-[#FFBD2E] inline-block shadow-[0.5px_0.5px_0px_#000]"
+                    className="h-3 w-3 rounded-full border border-black bg-traffic-yellow inline-block shadow-retro-sm"
                     title="Kecilkan"
                   />
                   <span
-                    className="h-3 w-3 rounded-full border border-black bg-[#27C93F] inline-block shadow-[0.5px_0.5px_0px_#000]"
+                    className="h-3 w-3 rounded-full border border-black bg-traffic-green inline-block shadow-retro-sm"
                     title="Perbesar"
                   />
                 </div>
@@ -324,7 +325,7 @@ export function PortalShell({
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0 w-full"
                   title={`SIAJAR & SIAKAD - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-black text-white shadow-[1.5px_1.5px_0px_#000] group-hover:scale-105 transition-transform shrink-0">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-black text-white shadow-retro-sm group-hover:scale-105 transition-transform shrink-0">
                     <Flame className="h-5 w-5 fill-white text-white" />
                   </div>
                   <div className="flex flex-col justify-center min-w-0 flex-1">
@@ -426,7 +427,7 @@ export function PortalShell({
                               {isRailActive && (
                                 <div
                                   role="tooltip"
-                                  className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 hidden group-hover:flex group-focus-within:flex items-center z-50 whitespace-nowrap rounded-md border-2 border-black bg-black px-2.5 py-1.5 text-xs font-bold text-white shadow-[2px_2px_0px_#000] animate-fade-in"
+                                  className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 hidden group-hover:flex group-focus-within:flex items-center z-50 whitespace-nowrap rounded-md border-2 border-black bg-black px-2.5 py-1.5 text-xs font-bold text-white shadow-retro animate-fade-in"
                                 >
                                   {item.label}
                                 </div>
@@ -604,9 +605,9 @@ export function PortalShell({
             )}
 
             {/* HEADER ATAS: SEARCH BAR KUNING & NOTIFIKASI */}
-            <header className="sticky top-0 z-30 flex flex-col md:flex-row items-stretch border-b-2 border-retro-border bg-retro-bg md:h-[72px]">
+            <header className="sticky top-0 z-30 flex flex-col md:flex-row items-stretch border-b-2 border-retro-border bg-retro-bg md:h-header pt-[env(safe-area-inset-top,0px)]">
               {/* Header Mobile Ringkas (Phone < md): Baris 1: Brand, Drawer & Notifikasi */}
-              <div className="flex md:hidden items-center justify-between px-3.5 py-2.5 border-b-2 border-retro-border bg-retro-yellow">
+              <div className="flex md:hidden items-center justify-between px-3.5 h-header-mobile border-b-2 border-retro-border bg-retro-yellow">
                 <div className="flex items-center gap-2">
                   <Flame className="h-6 w-6 text-retro-orange fill-retro-orange" />
                   <span className="font-heading font-black text-lg text-black tracking-tight">SIAJAR</span>
@@ -617,24 +618,24 @@ export function PortalShell({
                     <button
                       type="button"
                       onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                      className="xl:hidden relative flex h-10 w-10 items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs"
+                      className="2xl:hidden relative flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs cursor-pointer"
                       title="Buka Ringkasan"
                       aria-label="Buka Ringkasan"
                     >
-                      <PanelRightOpen className="h-4.5 w-4.5 text-black" />
+                      <PanelRightOpen className="h-4 w-4 text-black" />
                     </button>
                   )}
-                  <span className="text-[11px] font-mono font-black text-black uppercase bg-white px-2 py-1 rounded border-2 border-black shadow-[1px_1px_0px_#000]">
+                  <span className="text-[11px] font-mono font-black text-black uppercase bg-white px-2 py-0.5 rounded border-2 border-black shadow-retro-sm">
                     2026/2027
                   </span>
                   <Link
                     href="/notifications"
-                    className="relative flex h-10 w-10 items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs"
+                    className="relative flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs"
                     title="Notifikasi"
                   >
-                    <Bell className="h-4.5 w-4.5 text-black" />
+                    <Bell className="h-4 w-4 text-black" />
                     {unread > 0 && (
-                      <span className="absolute -top-1 -right-1 flex h-4.5 w-4.5 items-center justify-center rounded-full border border-black bg-retro-orange text-[10px] font-black text-white">
+                      <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border border-black bg-retro-orange text-[10px] font-black text-white">
                         {unread}
                       </span>
                     )}
@@ -643,14 +644,14 @@ export function PortalShell({
               </div>
 
               {/* BANNER KUNING SEARCH BAR (Desktop & Mobile) */}
-              <div className="flex-1 bg-retro-yellow px-3.5 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between md:border-r-2 border-retro-border">
+              <div className="flex-1 bg-retro-yellow px-3.5 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between md:border-r-2 border-retro-border">
                 <div className="flex items-center gap-2.5 sm:gap-3 w-full max-w-2xl">
                   {/* SATU-SATUNYA TOMBOL BURGER BUKA/TUTUP MENU */}
                   <button
                     ref={burgerButtonRef}
                     type="button"
                     onClick={handleBurgerClick}
-                    className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-lg border-2 border-black bg-white text-black shadow-[2px_2px_0px_#000] hover:bg-retro-warm active:translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black shrink-0"
+                    className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border-2 border-black bg-white text-black shadow-retro hover:bg-retro-warm active:translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black shrink-0 cursor-pointer"
                     title="Buka/Tutup menu"
                     aria-label="Buka/Tutup menu"
                   >
@@ -666,14 +667,14 @@ export function PortalShell({
                     }}
                     className="relative flex-1"
                   >
-                    <div className="flex items-center rounded-lg border-2 border-retro-border bg-white px-3.5 sm:px-4 py-2 sm:py-3 shadow-retro focus-within:ring-2 focus-within:ring-black">
-                      <Search className="h-4.5 w-4.5 sm:h-5 sm:w-5 text-black mr-2.5 sm:mr-3 shrink-0" />
+                    <div className="flex items-center rounded-lg border-2 border-retro-border bg-white px-3 sm:px-3.5 py-1.5 sm:py-2 shadow-retro focus-within:ring-2 focus-within:ring-black">
+                      <Search className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-black mr-2 shrink-0" />
                       <input
                         type="text"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Cari mata kuliah, materi, tugas, topik..."
-                        className="w-full bg-transparent text-sm sm:text-base md:text-[17px] font-bold text-black placeholder:text-black/70 focus:outline-none"
+                        className="w-full bg-transparent text-sm sm:text-base font-bold text-black placeholder:text-black/70 focus:outline-none"
                       />
                     </div>
                   </form>
@@ -681,35 +682,35 @@ export function PortalShell({
 
                 {/* Badge Semester (Desktop & Tablet Lebar) */}
                 <div className="hidden lg:flex items-center gap-2 ml-4 shrink-0">
-                  <span className="text-sm font-mono font-black text-black uppercase tracking-wider bg-retro-yellow px-3.5 py-1.5 rounded-md border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
+                  <span className="text-xs sm:text-sm font-mono font-black text-black uppercase tracking-wider bg-retro-yellow px-3 py-1 rounded-md border-2 border-black shadow-retro-sm">
                     2026/2027 Ganjil
                   </span>
                 </div>
               </div>
 
               {/* KANAN ATAS: TOMBOL DRAWER PANEL KANAN & LONCENG NOTIFIKASI (Desktop & Tablet >= md) */}
-              <div className="hidden md:flex items-center justify-end gap-3 px-4 sm:px-6 py-2.5 bg-retro-bg shrink-0">
-                {/* Tombol Panel Kanan Geser (Tampil pada layar < 1280px / max-xl jika halaman memiliki panel kanan) */}
+              <div className="hidden md:flex items-center justify-end gap-2.5 px-4 sm:px-6 py-2 bg-retro-bg shrink-0">
+                {/* Tombol Panel Kanan Geser (Tampil pada layar < 1536px / max-2xl jika halaman memiliki panel kanan) */}
                 {hasRightPanel && (
                   <button
                     type="button"
                     onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                    className="xl:hidden relative flex h-11 w-11 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none"
+                    className="2xl:hidden relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none cursor-pointer"
                     title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan & Detail'}
                     aria-label="Panel Ringkasan & Detail"
                   >
-                    <PanelRightOpen className="h-5 w-5 text-foreground" />
+                    <PanelRightOpen className="h-4.5 w-4.5 text-foreground" />
                   </button>
                 )}
 
                 <Link
                   href="/notifications"
-                  className="relative flex h-11 w-11 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none"
+                  className="relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none"
                   title="Notifikasi Kuliah & Tugas"
                 >
-                  <Bell className="h-5 w-5 text-foreground" />
+                  <Bell className="h-4.5 w-4.5 text-foreground" />
                   {unread > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full border-2 border-retro-border bg-retro-orange text-xs font-black text-white shadow-xs">
+                    <span className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full border-2 border-retro-border bg-retro-orange text-xs font-black text-white shadow-xs">
                       {unread}
                     </span>
                   )}
@@ -718,7 +719,7 @@ export function PortalShell({
             </header>
 
             {/* VIEWPORT KONTEN HALAMAN */}
-            <main className="flex-1 bg-retro-bg min-w-0">
+            <main className="flex-1 bg-retro-bg min-w-0 pb-20 sm:pb-24">
               {children}
             </main>
           </div>
