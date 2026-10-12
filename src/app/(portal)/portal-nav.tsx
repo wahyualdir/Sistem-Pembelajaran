@@ -79,7 +79,7 @@ export function PortalNav({
                   className={cn(
                     'group flex items-center justify-between rounded-control px-3 py-2 min-h-[42px] text-sm sm:text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                     isActive
-                      ? 'bg-black text-white font-black shadow-[2px_2px_0px_#000]'
+                      ? 'bg-black text-white font-black shadow-retro-sm'
                       : 'text-black hover:bg-retro-warm hover:text-black'
                   )}
                 >

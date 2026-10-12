@@ -157,7 +157,7 @@ export default async function ExamsPage() {
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="px-3 py-1 rounded border-2 border-black bg-retro-yellow text-xs sm:text-sm font-mono font-black uppercase text-black shadow-[1.5px_1.5px_0px_#000]">
+                  <span className="px-3 py-1 rounded border-2 border-black bg-retro-yellow text-xs sm:text-sm font-mono font-black uppercase text-black shadow-retro-sm">
                     {quiz.exam_type ?? 'KUIS'}
                   </span>
                   <span className="inline-flex items-center gap-1.5 text-sm font-black text-black font-mono">

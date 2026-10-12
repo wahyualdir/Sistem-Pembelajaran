@@ -114,7 +114,7 @@ export default function HelpCenterPage() {
             return (
               <div
                 key={i}
-                className="rounded-xl border-2 border-black bg-white p-6 shadow-retro flex flex-col justify-between space-y-4 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#000000] transition-all animate-fade-up"
+                className="rounded-xl border-2 border-black bg-white p-6 shadow-retro flex flex-col justify-between space-y-4 hover:-translate-y-0.5 hover:shadow-retro-md transition-all animate-fade-up"
                 style={{ animationDelay: `${i * 40}ms` }}
               >
                 <div className="space-y-3">

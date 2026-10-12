@@ -62,19 +62,19 @@ export default async function TakeQuizPage({
           >
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded border-2 border-black bg-retro-orange px-2.5 py-0.5 text-xs font-black font-mono text-white shadow-[1.5px_1.5px_0px_#000]">
+                <span className="rounded border-2 border-retro-border bg-retro-orange px-2.5 py-0.5 text-xs font-black font-mono text-white shadow-retro-sm">
                   {quiz.exam_type ?? 'KUIS'}
                 </span>
-                <span className="rounded border-2 border-black bg-retro-warm px-2.5 py-0.5 text-xs font-black font-mono text-black shadow-[1.5px_1.5px_0px_#000]">
+                <span className="rounded border-2 border-retro-border bg-retro-warm px-2.5 py-0.5 text-xs font-black font-mono text-black shadow-retro-sm">
                   Level Pengawasan: {quiz.proctoring_level ?? 'STANDAR'}
                 </span>
-                <span className="rounded border-2 border-black bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-[1.5px_1.5px_0px_#000]">
+                <span className="rounded border-2 border-retro-border bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-retro-sm">
                   KKM: {quiz.kkm ?? 70}
                 </span>
-                <span className="rounded border-2 border-black bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-[1.5px_1.5px_0px_#000]">
+                <span className="rounded border-2 border-retro-border bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-retro-sm">
                   Durasi: {quiz.duration_minutes} Menit
                 </span>
-                <span className="rounded border-2 border-black bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-[1.5px_1.5px_0px_#000]">
+                <span className="rounded border-2 border-retro-border bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-retro-sm">
                   Total: {quiz.total_points} Poin
                 </span>
               </div>

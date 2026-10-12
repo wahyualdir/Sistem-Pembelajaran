@@ -108,9 +108,9 @@ export default async function MahasiswaDashboardPage() {
           {/* Header Bar Jendela Retro dengan Titik Sticker */}
           <div className="flex items-center justify-between px-4 py-2 border-b-[1.5px] border-retro-border bg-retro-warm/70">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-[#FF5F56] shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-[#FFBD2E] shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-[#27C93F] shadow-[0.5px_0.5px_0px_#000]" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-red shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-yellow shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-green shadow-retro-sm" />
               <span className="text-[11px] font-mono font-bold text-muted-foreground ml-2">
                 siakad://dashboard.mahasiswa
               </span>

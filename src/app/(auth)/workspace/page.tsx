@@ -84,29 +84,29 @@ export default async function WorkspacePage() {
         fontFamily:
           "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
       }}
-      className="min-h-screen w-full bg-[#F6F3EB] text-black font-sans selection:bg-retro-yellow selection:text-black flex flex-col justify-between antialiased relative"
+      className="min-h-[100dvh] w-full bg-background text-black font-sans selection:bg-retro-yellow selection:text-black flex flex-col justify-between antialiased relative"
     >
       {/* Background Dot-Grid Texture */}
       <div
         className="absolute inset-0 pointer-events-none opacity-40"
         style={{
-          backgroundImage: 'radial-gradient(#000000 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(black 1px, transparent 1px)',
           backgroundSize: '20px 20px',
         }}
       />
 
       {/* Top Bar Navigasi Sistem Retro Konsisten dengan Dashboard & Login */}
-      <header className="h-[54px] flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 border-black bg-retro-yellow shrink-0 select-none shadow-[0px_2px_0px_#000] relative z-10">
+      <header className="h-header-mobile md:h-header flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 border-black bg-retro-yellow shrink-0 select-none shadow-retro-sm relative z-10 pt-[env(safe-area-inset-top,0px)]">
         <div className="flex items-center gap-3">
           {/* Mac Traffic Light Buttons */}
           <div className="flex items-center gap-1.5 shrink-0">
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-[#FF5F56] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-[#FFBD2E] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-[#27C93F] inline-block shadow-[0.5px_0.5px_0px_#000]" />
+            <span className="h-3.5 w-3.5 rounded-full border border-black bg-traffic-red inline-block shadow-retro-sm" />
+            <span className="h-3.5 w-3.5 rounded-full border border-black bg-traffic-yellow inline-block shadow-retro-sm" />
+            <span className="h-3.5 w-3.5 rounded-full border border-black bg-traffic-green inline-block shadow-retro-sm" />
           </div>
 
           <div className="flex items-center gap-2.5 ml-1">
-            <div className="flex h-8 w-8 items-center justify-center rounded border-2 border-black bg-black text-white shadow-[1.5px_1.5px_0px_#000]">
+            <div className="flex h-8 w-8 items-center justify-center rounded border-2 border-black bg-black text-white shadow-retro-sm">
               <Flame className="h-4.5 w-4.5 fill-retro-orange text-retro-orange" />
             </div>
             <span className="font-heading font-bold text-lg sm:text-xl tracking-tight text-black">
@@ -116,7 +116,7 @@ export default async function WorkspacePage() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <span className="hidden sm:inline-flex items-center px-3 py-1 border-2 border-black bg-white text-xs font-mono font-bold text-black shadow-[1.5px_1.5px_0px_#000]">
+          <span className="hidden sm:inline-flex items-center px-3 py-1 border-2 border-black bg-white text-xs font-mono font-bold text-black shadow-retro-sm">
             TA 2026/2027 GANJIL
           </span>
         </div>
@@ -126,18 +126,18 @@ export default async function WorkspacePage() {
       <main className="flex-1 flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="max-w-xl mx-auto w-full">
           {/* Retro Window Container */}
-          <div className="rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-[6px_6px_0px_#000000] sm:shadow-[8px_8px_0px_#000000] overflow-hidden transition-all animate-fade-up">
+          <div className="rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-retro-md sm:shadow-retro-window overflow-hidden transition-all animate-fade-up">
             {/* Header Bar Jendela Retro */}
             <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b-2 border-black bg-retro-warm">
               <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-[#FF5F56] shadow-[0.5px_0.5px_0px_#000]" />
-                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-[#FFBD2E] shadow-[0.5px_0.5px_0px_#000]" />
-                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-[#27C93F] shadow-[0.5px_0.5px_0px_#000]" />
+                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-traffic-red shadow-retro-sm" />
+                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-traffic-yellow shadow-retro-sm" />
+                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-traffic-green shadow-retro-sm" />
                 <span className="text-xs sm:text-sm font-bold text-black ml-1.5 font-heading">
                   Pilih Ruang Kerja — SIAJAR
                 </span>
               </div>
-              <span className="text-[11px] font-mono font-bold bg-white text-black border border-black px-2.5 py-0.5 rounded shadow-[1px_1px_0px_#000]">
+              <span className="text-xs font-mono font-bold bg-white text-black border border-black px-2.5 py-0.5 rounded shadow-retro-sm">
                 Multi-Peran
               </span>
             </div>
@@ -168,12 +168,12 @@ export default async function WorkspacePage() {
                       key={r.id}
                       className={`rounded-xl border-2 border-black p-4 sm:p-5 flex items-center justify-between gap-4 transition-all ${
                         isActive
-                          ? 'bg-retro-warm border-black shadow-[4px_4px_0px_#000]'
-                          : 'bg-white hover:bg-retro-warm/30 border-black shadow-[3px_3px_0px_#000] hover:shadow-[5px_5px_0px_#000] hover:-translate-y-0.5'
+                          ? 'bg-retro-warm border-black shadow-retro'
+                          : 'bg-white hover:bg-retro-warm/30 border-black shadow-retro hover:shadow-retro-md hover:-translate-y-0.5'
                       }`}
                     >
                       <div className="flex items-start gap-3.5 min-w-0">
-                        <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl border-2 border-black bg-white flex items-center justify-center text-retro-orange shadow-[1.5px_1.5px_0px_#000] shrink-0 mt-0.5">
+                        <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl border-2 border-black bg-white flex items-center justify-center text-retro-orange shadow-retro-sm shrink-0 mt-0.5">
                           <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                         </div>
                         <div className="min-w-0">
@@ -182,7 +182,7 @@ export default async function WorkspacePage() {
                               {meta.label}
                             </h2>
                             {isActive && (
-                              <span className="text-[11px] font-bold bg-retro-mint text-black border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_#000] flex items-center gap-1 shrink-0">
+                              <span className="text-xs font-bold bg-retro-mint text-black border border-black px-2 py-0.5 rounded shadow-retro-sm flex items-center gap-1 shrink-0">
                                 <CheckCircle2 className="h-3 w-3" /> Sedang Aktif
                               </span>
                             )}
@@ -197,7 +197,7 @@ export default async function WorkspacePage() {
                         <input type="hidden" name="roleCode" value={roleCode} />
                         <button
                           type="submit"
-                          className="h-9 sm:h-10 px-4 sm:px-5 rounded-lg border-2 border-black bg-retro-orange text-white hover:bg-black font-bold text-xs sm:text-sm shadow-[2px_2px_0px_#000] hover:shadow-[3px_3px_0px_#000] active:translate-x-0.5 active:translate-y-0.5 transition-all inline-flex items-center gap-2"
+                          className="h-10 px-4 sm:px-5 rounded-lg border-2 border-black bg-retro-orange text-white hover:bg-black font-bold text-xs sm:text-sm shadow-retro hover:shadow-retro-md active:translate-x-0.5 active:translate-y-0.5 transition-all inline-flex items-center gap-2 cursor-pointer"
                         >
                           <span>Masuk</span>
                           <ArrowRight className="h-4 w-4" />

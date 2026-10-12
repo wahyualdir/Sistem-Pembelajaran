@@ -283,13 +283,13 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {(activeTab === 'forum' || activeTab === 'jawab-forum') && (
         <div className="space-y-6">
           {/* A. HERO COVER BANNER ALA GOOGLE CLASSROOM */}
-          <div className="rounded-2xl border-2 border-black bg-[#FFE4D6] shadow-[6px_6px_0px_#000000] p-6 sm:p-8 lg:p-10 relative overflow-hidden">
+          <div className="rounded-2xl border-2 border-black bg-pastel-peach shadow-retro-md p-6 sm:p-8 lg:p-10 relative overflow-hidden">
             {/* Header Baris & Status */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <span className="h-3.5 w-3.5 rounded-full border border-black bg-[#FF5F56] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-                <span className="h-3.5 w-3.5 rounded-full border border-black bg-[#FFBD2E] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-                <span className="h-3.5 w-3.5 rounded-full border border-black bg-[#27C93F] inline-block shadow-[0.5px_0.5px_0px_#000]" />
+                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-traffic-red inline-block shadow-retro-sm" />
+                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-traffic-yellow inline-block shadow-retro-sm" />
+                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-traffic-green inline-block shadow-retro-sm" />
                 <span className="text-xs font-semibold text-black ml-2">
                   Kelas {cls.section}
                 </span>
@@ -473,7 +473,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro hover:bg-retro-warm/20 cursor-pointer transition-all flex items-center justify-between gap-4"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="p-2.5 rounded-xl border-2 border-black bg-[#D8F3DC] text-black shrink-0">
+                      <div className="p-2.5 rounded-xl border-2 border-black bg-pastel-mint text-black shrink-0">
                         <FileText className="h-5 w-5" />
                       </div>
                       <div>
@@ -525,7 +525,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {activeTab === 'tugas' && (
         <div className="space-y-6">
           {/* Action Bar & Filter Chips Topik */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000]">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-2xl border-2 border-black shadow-retro">
             {/* Filter Chips */}
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
               {[
@@ -626,7 +626,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           className="p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-neutral-50 transition-colors"
                         >
                           <div className="flex items-center gap-3.5 min-w-0">
-                            <div className="p-2.5 rounded-xl border-2 border-black bg-[#D8F3DC] text-black shrink-0">
+                            <div className="p-2.5 rounded-xl border-2 border-black bg-pastel-mint text-black shrink-0">
                               <FileText className="h-5 w-5" />
                             </div>
                             <div className="min-w-0">
@@ -772,7 +772,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-xl border-2 border-black bg-[#E0F4FF] text-black">
+                          <div className="p-2 rounded-xl border-2 border-black bg-pastel-sky text-black">
                             <BookOpen className="h-4 w-4" />
                           </div>
                           <div>
@@ -877,7 +877,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             {/* Dosen Utama */}
             <div className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex items-center justify-between gap-4">
               <div className="flex items-center gap-3.5">
-                <div className="h-11 w-11 rounded-full border-2 border-black bg-[#FFE4D6] flex items-center justify-center font-bold text-sm text-black shrink-0">
+                <div className="h-11 w-11 rounded-full border-2 border-black bg-pastel-peach flex items-center justify-center font-bold text-sm text-black shrink-0">
                   BS
                 </div>
                 <div>
@@ -1051,7 +1051,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 <div key={m.id} className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl border-2 border-black bg-[#E0F4FF] text-black">
+                      <div className="p-2 rounded-xl border-2 border-black bg-pastel-sky text-black">
                         <BookOpen className="h-4 w-4" />
                       </div>
                       <div>
@@ -1161,7 +1161,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {activeTab === 'nilai' && (
         <div className="space-y-6">
           {/* Summary Card Nilai */}
-          <div className="p-6 sm:p-7 rounded-2xl border-2 border-black bg-white shadow-[6px_6px_0px_#000] space-y-4">
+          <div className="p-6 sm:p-7 rounded-2xl border-2 border-black bg-white shadow-retro-md space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/15 pb-4">
               <div>
                 <h3 className="font-bold text-lg sm:text-xl text-black flex items-center gap-2">

@@ -71,8 +71,8 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
         className={cn(
           'relative w-full rounded-2xl border-2 border-retro-border p-4 sm:p-5 lg:p-6 transition-all flex flex-col justify-between overflow-hidden',
           isUrgent
-            ? 'bg-retro-yellow text-black shadow-retro-md sm:shadow-[4px_4px_0px_#000000]'
-            : 'bg-black text-white shadow-retro-md sm:shadow-[4px_4px_0px_#000000]'
+            ? 'bg-retro-yellow text-black shadow-retro-md sm:shadow-retro-lg'
+            : 'bg-black text-white shadow-retro-md sm:shadow-retro-lg'
         )}
       >
         {/* Dekorasi Bingkai Retro Subtle */}
@@ -100,7 +100,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                 {primary.badge && (
                   <span
                     className={cn(
-                      'inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-sans font-black border-2 border-retro-border uppercase tracking-wider',
+                      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-black border-2 border-retro-border uppercase tracking-wider',
                       isUrgent
                         ? 'bg-retro-orange text-white'
                         : 'bg-retro-yellow text-black'
@@ -116,7 +116,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                     type="button"
                     onClick={() => setShowOthersModal(true)}
                     className={cn(
-                      'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-sans font-black border-2 border-retro-border transition-all hover:scale-105 focus-visible:outline-none',
+                      'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-black border-2 border-retro-border transition-all hover:scale-105 focus-visible:outline-none cursor-pointer',
                       isUrgent
                         ? 'bg-white text-black hover:bg-retro-warm shadow-xs'
                         : 'bg-retro-warm/30 text-white hover:bg-retro-warm/50 shadow-xs'
@@ -174,7 +174,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
           aria-modal="true"
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-fade-in backdrop-blur-xs"
         >
-          <div className="w-full max-w-lg rounded-2xl border-2 border-retro-border bg-retro-surface p-6 shadow-[6px_6px_0px_#000000] space-y-5 animate-scale-up">
+          <div className="w-full max-w-lg rounded-2xl border-2 border-retro-border bg-retro-surface p-6 shadow-retro-window space-y-5 animate-scale-up">
             <div className="flex items-center justify-between border-b-2 border-retro-border pb-3">
               <div className="flex items-center gap-2">
                 <span className="inline-block p-1.5 rounded-lg bg-retro-orange text-white border border-black">
@@ -201,7 +201,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                   className="p-4 rounded-xl border-2 border-retro-border bg-retro-warm/70 shadow-retro flex items-center justify-between gap-3"
                 >
                   <div className="space-y-1 min-w-0">
-                    <span className="inline-block px-2 py-0.5 rounded text-[11px] font-sans font-bold bg-black text-white">
+                    <span className="inline-block px-2 py-0.5 rounded text-xs font-sans font-bold bg-black text-white">
                       {item.badge || `Prioritas ${item.priority}`}
                     </span>
                     <h4 className="font-heading font-black text-base text-foreground truncate">

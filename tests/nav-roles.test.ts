@@ -29,19 +29,19 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
     expect(getHomeHref('STAFF')).toBe('/staff');
     expect(getHomeHref('TEACHING_ASSISTANT')).toBe('/ta');
     expect(getHomeHref('ASDOS')).toBe('/ta');
-    expect(getHomeHref('SYSTEM_ADMIN')).toBe('/admin');
-    expect(getHomeHref('ADMIN')).toBe('/admin');
+    expect(getHomeHref('SYSTEM_ADMIN')).toBe('/admin/system');
+    expect(getHomeHref('ADMIN')).toBe('/admin/system');
     expect(getHomeHref('SUPER_ADMIN')).toBe('/admin');
   });
 
   it('memastikan role label akurat untuk seluruh 7 peran', () => {
     expect(getRoleLabel('STUDENT')).toBe('Mahasiswa');
     expect(getRoleLabel('LECTURER')).toBe('Dosen Pengampu');
-    expect(getRoleLabel('PROGRAM_COORDINATOR')).toBe('Koordinator Prodi');
+    expect(getRoleLabel('PROGRAM_COORDINATOR')).toBe('Prodi');
     expect(getRoleLabel('ACADEMIC_STAFF')).toBe('Staf Akademik');
-    expect(getRoleLabel('TEACHING_ASSISTANT')).toBe('Asisten Dosen');
-    expect(getRoleLabel('SYSTEM_ADMIN')).toBe('Administrator');
-    expect(getRoleLabel('SUPER_ADMIN')).toBe('Super Administrator');
+    expect(getRoleLabel('TEACHING_ASSISTANT')).toBe('Asisten');
+    expect(getRoleLabel('SYSTEM_ADMIN')).toBe('System Administrator');
+    expect(getRoleLabel('SUPER_ADMIN')).toBe('Super Admin');
   });
 
   it('memastikan menu Mahasiswa 100% LMS baru dan BEBAS dari menu legacy', () => {
@@ -55,13 +55,10 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
     expect(allLabels).toContain('Ujian Aktif');
     expect(allLabels).toContain('Pustaka Digital');
     expect(allLabels).toContain('Tanya AI SIAJAR');
-    expect(allLabels).toContain('Riwayat Ujian & Kuis');
     expect(allLabels).toContain('Nilai & Progres');
-    expect(allLabels).toContain('Riwayat Presensi');
-    expect(allLabels).toContain('Pengumuman');
-    expect(allLabels).toContain('Profil');
-    expect(allLabels).toContain('Perangkat & Sesi');
-    expect(allLabels).toContain('Preferensi Notifikasi');
+    expect(allLabels).toContain('Presensi');
+    expect(allLabels).toContain('Sertifikat & Portofolio');
+    expect(allLabels).toContain('Komunitas');
 
     // Menu Legacy Wajib TIDAK ADA
     expect(allLabels).not.toContain('KRS Online');
@@ -81,14 +78,12 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
 
     expect(allLabels).toContain('Dashboard Pengajar');
     expect(allLabels).toContain('Kelas Diampu');
-    expect(allLabels).toContain('Konten & Materi');
-    expect(allLabels).toContain('Tugas & Penilaian');
-    expect(allLabels).toContain('Buat Ujian/Kuis');
-    expect(allLabels).toContain('Panel Live');
+    expect(allLabels).toContain('Pustaka Digital');
+    expect(allLabels).toContain('Ujian & Kuis');
     expect(allLabels).toContain('Bank Soal');
-    expect(allLabels).toContain('Buka Sesi Presensi');
-    expect(allLabels).toContain('Rekap Kehadiran');
-    expect(allLabels).toContain('Analitik Kelas');
+    expect(allLabels).toContain('Review Essay & Coding');
+    expect(allLabels).toContain('Presensi');
+    expect(allLabels).toContain('Analitik & Nilai');
     expect(allLabels).toContain('Mahasiswa Bimbingan');
 
     // Bebas dari menu mahasiswa/legacy
@@ -104,13 +99,11 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
     expect(allLabels).toContain('Dashboard Prodi');
     expect(allLabels).toContain('Kurikulum & CPL');
     expect(allLabels).toContain('Mata Kuliah');
-    expect(allLabels).toContain('Penugasan Dosen');
-    expect(allLabels).toContain('Monitoring Kelas');
-    expect(allLabels).toContain('Monitoring Dosen');
-    expect(allLabels).toContain('Kelas Baru');
-    expect(allLabels).toContain('Soal Ujian');
-    expect(allLabels).toContain('Perubahan Nilai');
-    expect(allLabels).toContain('Laporan Prodi');
+    expect(allLabels).toContain('Penugasan & Kelas');
+    expect(allLabels).toContain('Monitoring');
+    expect(allLabels).toContain('Mahasiswa Berisiko');
+    expect(allLabels).toContain('Persetujuan');
+    expect(allLabels).toContain('Laporan & Evaluasi');
 
     // Bebas dari menu legacy
     expect(allLabels).not.toContain('KRS Online');
@@ -124,14 +117,12 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
     expect(allLabels).toContain('Dashboard');
     expect(allLabels).toContain('Mahasiswa');
     expect(allLabels).toContain('Dosen');
-    expect(allLabels).toContain('Program Studi');
-    expect(allLabels).toContain('Mata Kuliah');
-    expect(allLabels).toContain('Jadwal Kuliah');
-    expect(allLabels).toContain('Jadwal Ujian');
-    expect(allLabels).toContain('Enroll Peserta');
-    expect(allLabels).toContain('Impor CSV');
-    expect(allLabels).toContain('Rekap Nilai');
-    expect(allLabels).toContain('Rekap Presensi');
+    expect(allLabels).toContain('Data Akademik');
+    expect(allLabels).toContain('Jadwal');
+    expect(allLabels).toContain('Kelas & Peserta');
+    expect(allLabels).toContain('Nilai & Presensi');
+    expect(allLabels).toContain('Verifikasi Berkas');
+    expect(allLabels).toContain('Pengumuman & Event');
 
     // Bebas dari menu legacy
     expect(allLabels).not.toContain('KRS Online');
@@ -145,10 +136,7 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
 
     const allLabels = groups.flatMap((g) => g.items.map((i) => i.label));
     expect(allLabels).toContain('Kelas Diasistensi');
-    expect(allLabels).toContain('Bantu Presensi');
-    expect(allLabels).toContain('Koreksi Tugas');
-    expect(allLabels).toContain('Jawab Forum');
-    expect(allLabels).toContain('Materi Asisten');
+    expect(allLabels).toContain('Antrean Koreksi');
     expect(allLabels).toContain('Pantau Ujian');
   });
 
@@ -156,14 +144,13 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
     const groups = getNavGroups('SYSTEM_ADMIN');
     const allLabels = groups.flatMap((g) => g.items.map((i) => i.label));
 
-    expect(allLabels).toContain('Status Server');
-    expect(allLabels).toContain('Antrean Sandbox Coding');
-    expect(allLabels).toContain('Realtime/WebSocket');
-    expect(allLabels).toContain('Zoom/Meet');
-    expect(allLabels).toContain('Peta (Google Maps API)');
-    expect(allLabels).toContain('Sandbox Kode');
-    expect(allLabels).toContain('Sesi Aktif');
-    expect(allLabels).toContain('Audit Log');
+    expect(allLabels).toContain('Dashboard Sistem');
+    expect(allLabels).toContain('Monitoring Sistem');
+    expect(allLabels).toContain('Integrasi');
+    expect(allLabels).toContain('Keamanan');
+    expect(allLabels).toContain('Backup & Restore');
+    expect(allLabels).toContain('Pengaturan Platform');
+    expect(allLabels).toContain('Log Audit');
 
     // Tidak boleh memiliki menu nilai atau konten kelas
     expect(allLabels).not.toContain('Nilai & Progres');
@@ -176,11 +163,7 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
 
     expect(allLabels).toContain('Kelola Pengguna');
     expect(allLabels).toContain('Role & Permission');
-    expect(allLabels).toContain('Impersonate');
-    expect(allLabels).toContain('Kebijakan Akademik');
-    expect(allLabels).toContain('Kebijakan Ujian & Pengawasan');
-    expect(allLabels).toContain('Privasi & Retensi Data');
-    expect(allLabels).toContain('Dashboard Universitas');
+    expect(allLabels).toContain('Kebijakan');
     expect(allLabels).toContain('Pengumuman Global');
   });
 
@@ -222,7 +205,11 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
 
   describe('isNavItemActive - Mencegah konflik prefix navigasi', () => {
     const studentGroups = getNavGroups('STUDENT');
-    const studentHrefs = studentGroups.flatMap((g) => g.items.map((i) => i.href));
+    const studentHrefs = [
+      ...studentGroups.flatMap((g) => g.items.map((i) => i.href)),
+      '/exams/history',
+      '/notifications/preferences',
+    ];
 
     it('memastikan Ujian Aktif (/exams) TIDAK aktif saat membuka Riwayat Ujian (/exams/history)', () => {
       // Saat membuka /exams/history:

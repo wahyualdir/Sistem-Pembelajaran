@@ -57,7 +57,7 @@ export default async function ClassQuizzesPage({ params }: { params: { id: strin
                 return (
                   <div
                     key={q.id}
-                    className="rounded-[3px] border-2 border-black bg-surface p-6 sm:p-7 flex flex-col justify-between space-y-5 shadow-[4px_4px_0px_#000000] hover:shadow-[6px_6px_0px_#000000] hover:-translate-y-0.5 transition-all"
+                    className="rounded-[3px] border-2 border-retro-border bg-surface p-6 sm:p-7 flex flex-col justify-between space-y-5 shadow-retro hover:shadow-retro-md hover:-translate-y-0.5 transition-all"
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between gap-2.5">

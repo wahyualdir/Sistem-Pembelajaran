@@ -85,7 +85,7 @@ export default function AiAssistantPage() {
           return (
             <div
               key={cap.title}
-              className={`p-6 rounded-xl border-2 border-black ${cap.color} shadow-retro space-y-3 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_#000000] transition-all`}
+              className={`p-6 rounded-xl border-2 border-black ${cap.color} shadow-retro space-y-3 hover:-translate-y-0.5 hover:shadow-retro-md transition-all`}
             >
               <div className="flex items-center justify-between">
                 <div className="p-2.5 rounded-lg border-2 border-black bg-white">

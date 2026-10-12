@@ -27,46 +27,46 @@ import type { CourseItem, SemesterItem } from './actions';
 // 6 Palet Warna Retro Khas Google Classroom Berbalut Macintosh
 const RETRO_BANNER_THEMES = [
   {
-    bg: 'bg-[#FFE4D6]',
+    bg: 'bg-pastel-peach',
     text: 'text-black',
-    accent: 'bg-[#FF6B6B]',
+    accent: 'bg-retro-orange',
     border: 'border-black',
-    badge: 'bg-[#FFA07A]',
+    badge: 'bg-pastel-peach',
   },
   {
-    bg: 'bg-[#D8F3DC]',
+    bg: 'bg-pastel-mint',
     text: 'text-black',
-    accent: 'bg-[#27C93F]',
+    accent: 'bg-traffic-green',
     border: 'border-black',
-    badge: 'bg-[#95D5B2]',
+    badge: 'bg-pastel-mint',
   },
   {
-    bg: 'bg-[#E0F4FF]',
+    bg: 'bg-pastel-sky',
     text: 'text-black',
-    accent: 'bg-[#0077B6]',
+    accent: 'bg-retro-blue',
     border: 'border-black',
-    badge: 'bg-[#90E0EF]',
+    badge: 'bg-pastel-sky',
   },
   {
-    bg: 'bg-[#F3E8FF]',
+    bg: 'bg-pastel-lavender',
     text: 'text-black',
-    accent: 'bg-[#9D4EDD]',
+    accent: 'bg-retro-purple',
     border: 'border-black',
-    badge: 'bg-[#D8BBFF]',
+    badge: 'bg-pastel-lavender',
   },
   {
-    bg: 'bg-[#FEF08A]',
+    bg: 'bg-pastel-lemon',
     text: 'text-black',
-    accent: 'bg-[#EAB308]',
+    accent: 'bg-retro-yellow',
     border: 'border-black',
-    badge: 'bg-[#FDE047]',
+    badge: 'bg-pastel-lemon',
   },
   {
-    bg: 'bg-[#FFD6E0]',
+    bg: 'bg-pastel-rose',
     text: 'text-black',
-    accent: 'bg-[#FF4D6D]',
+    accent: 'bg-retro-pink',
     border: 'border-black',
-    badge: 'bg-[#FF9ebb]',
+    badge: 'bg-pastel-rose',
   },
 ];
 
@@ -116,7 +116,7 @@ export function GoogleClassroomCard({
 
   return (
     <div
-      className="group rounded-2xl border-2 border-black bg-white shadow-[5px_5px_0px_#000000] hover:shadow-[7px_7px_0px_#000000] hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between overflow-hidden animate-fade-up font-sans"
+      className="group rounded-2xl border-2 border-black bg-white shadow-retro-md hover:shadow-retro-lg hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between overflow-hidden animate-fade-up font-sans"
       style={{ animationDelay: `${index * 60}ms` }}
     >
       <div>
@@ -127,15 +127,15 @@ export function GoogleClassroomCard({
           {/* Header Baris & Status */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-full border border-black bg-[#FF5F56] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 rounded-full border border-black bg-[#FFBD2E] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 rounded-full border border-black bg-[#27C93F] inline-block shadow-[0.5px_0.5px_0px_#000]" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-red inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-yellow inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-green inline-block shadow-retro-sm" />
               <span className="text-xs font-semibold text-black/80 ml-1.5 truncate">
                 Kelas {item.section}
               </span>
             </div>
 
-            <span className="text-xs font-medium bg-white/95 border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_#000] text-black">
+            <span className="text-xs font-medium bg-white/95 border border-black px-2 py-0.5 rounded shadow-retro-sm text-black">
               Aktif
             </span>
           </div>
@@ -154,7 +154,7 @@ export function GoogleClassroomCard({
           </div>
 
           {/* Dosen Avatar Bulat Tumpang-Tindih */}
-          <div className="absolute right-4 -bottom-6 h-12 w-12 rounded-full border-2 border-black bg-white shadow-[2px_2px_0px_#000] flex items-center justify-center font-bold text-sm text-black select-none z-10">
+          <div className="absolute right-4 -bottom-6 h-12 w-12 rounded-full border-2 border-black bg-white shadow-retro flex items-center justify-center font-bold text-sm text-black select-none z-10">
             {initials}
           </div>
         </div>
@@ -187,7 +187,7 @@ export function GoogleClassroomCard({
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="text-xs font-medium bg-white border border-black px-2 py-0.5 rounded shadow-[1px_1px_0px_#000] hover:bg-retro-warm transition-all flex items-center gap-1 text-black"
+                className="text-xs font-medium bg-white border border-black px-2 py-0.5 rounded shadow-retro-sm hover:bg-retro-warm transition-all flex items-center gap-1 text-black"
                 title="Salin Kode Kelas"
               >
                 <Key className="h-3 w-3 text-retro-orange" />
@@ -231,7 +231,7 @@ export function GoogleClassroomCard({
         {/* Tombol Utama Buka Kelas */}
         <Link
           href={`/classes/${item.id}`}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-semibold shadow-[2px_2px_0px_#000] transition-all"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-semibold shadow-retro transition-all"
         >
           <span>Buka Kelas</span>
           <ArrowRight className="h-3.5 w-3.5" />
@@ -258,7 +258,7 @@ export function ClassroomToolbar({
   return (
     <div className="space-y-4">
       {/* Top Bar Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-2xl border-2 border-black shadow-[4px_4px_0px_#000]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-2xl border-2 border-black shadow-retro">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
             <span className="font-bold text-base sm:text-lg text-black">

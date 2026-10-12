@@ -20,7 +20,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen bg-retro-bg font-sans text-foreground selection:bg-retro-yellow selection:text-black flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 antialiased">
+    <div className="min-h-[100dvh] bg-retro-bg font-sans text-foreground selection:bg-retro-yellow selection:text-black flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 antialiased">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="mb-4">
           <Link
@@ -37,9 +37,9 @@ export default function ResetPasswordPage() {
           {/* Header Bar Jendela Retro */}
           <div className="flex items-center justify-between px-4 py-2.5 border-b-[1.5px] border-retro-border bg-retro-warm/80">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-[#FF5F56] shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-[#FFBD2E] shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-[#27C93F] shadow-[0.5px_0.5px_0px_#000]" />
+              <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green shadow-retro-sm" />
               <span className="text-xs font-mono font-bold text-muted-foreground ml-2">
                 siajar://reset-password
               </span>
@@ -55,7 +55,7 @@ export default function ResetPasswordPage() {
                 <span className="font-heading font-black text-sm tracking-tight text-foreground leading-tight">
                   SIAJAR
                 </span>
-                <span className="text-[10px] text-muted-foreground font-mono">
+                <span className="text-xs text-muted-foreground font-mono">
                   Pemulihan Akun
                 </span>
               </div>

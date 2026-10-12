@@ -795,10 +795,10 @@ export function TakeQuizForm({
               </span>
             )}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-bold text-black bg-retro-mint border-2 border-black px-3 py-1 rounded shadow-[1.5px_1.5px_0px_#000] flex items-center gap-1.5">
+              <span className="text-xs font-bold text-black bg-retro-mint border-2 border-black px-3 py-1 rounded shadow-retro-sm flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" /> Ujian Selesai Dikerjakan
               </span>
-              <span className={`text-xs font-bold px-3 py-1 rounded border-2 border-black shadow-[1.5px_1.5px_0px_#000] ${isPassed ? 'text-black bg-retro-yellow' : 'text-white bg-danger'}`}>
+              <span className={`text-xs font-bold px-3 py-1 rounded border-2 border-black shadow-retro-sm ${isPassed ? 'text-black bg-retro-yellow' : 'text-white bg-danger'}`}>
                 {isPassed ? 'Memenuhi KKM' : 'Di Bawah KKM'}
               </span>
             </div>
@@ -870,7 +870,7 @@ export function TakeQuizForm({
                   </span>
                   {q.question_type !== 'ESSAY' && (
                     <span
-                      className={`text-xs font-bold px-2.5 py-0.5 rounded border border-black shadow-[1px_1px_0px_#000] ${
+                      className={`text-xs font-bold px-2.5 py-0.5 rounded border border-black shadow-retro-sm ${
                         isCorrect ? 'text-black bg-retro-mint' : 'text-white bg-danger'
                       }`}
                     >
@@ -999,28 +999,28 @@ export function TakeQuizForm({
 
     if (hideHeaderWindow) {
       return (
-        <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-[4px_4px_0px_#000000] overflow-hidden transition-all animate-fade-up font-sans">
+        <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-retro overflow-hidden transition-all animate-fade-up font-sans">
           {resultBody}
         </div>
       );
     }
 
     return (
-      <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-[6px_6px_0px_#000000] overflow-hidden transition-all animate-fade-up font-sans">
+      <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-retro-md overflow-hidden transition-all animate-fade-up font-sans">
         {/* Retro Window Header Bar */}
         <div className="flex h-12 sm:h-14 items-center justify-between border-b-2 border-black bg-retro-warm px-4 sm:px-6 py-2.5">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="flex items-center gap-1.5 shrink-0">
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-[#FF5F56] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-[#FFBD2E] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-[#27C93F] inline-block shadow-[0.5px_0.5px_0px_#000]" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-red inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-yellow inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-green inline-block shadow-retro-sm" />
             </div>
             <span className="text-sm sm:text-base font-bold text-black tracking-tight font-heading ml-1.5 truncate">
               Hasil Evaluasi: {quiz.title}
             </span>
           </div>
           <span
-            className={`rounded border-2 border-black px-2.5 py-0.5 text-xs font-bold font-mono shadow-[1.5px_1.5px_0px_#000] shrink-0 ${
+            className={`rounded border-2 border-black px-2.5 py-0.5 text-xs font-bold font-mono shadow-retro-sm shrink-0 ${
               isPassed ? 'bg-retro-mint text-black' : 'bg-danger text-white'
             }`}
           >
@@ -1056,7 +1056,7 @@ export function TakeQuizForm({
               </span>
             )}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-xs font-bold bg-retro-orange text-white px-2.5 py-1 rounded border-2 border-black shadow-[1.5px_1.5px_0px_#000]">
+              <span className="font-mono text-xs font-bold bg-retro-orange text-white px-2.5 py-1 rounded border-2 border-black shadow-retro-sm">
                 {quiz.exam_type ?? 'UJIAN RESMI'}
               </span>
               <span className="text-xs sm:text-sm font-bold text-black bg-retro-warm border-2 border-black/30 px-2.5 py-0.5 rounded font-mono">
@@ -1201,27 +1201,27 @@ export function TakeQuizForm({
 
     if (hideHeaderWindow) {
       return (
-        <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-[4px_4px_0px_#000000] overflow-hidden transition-all animate-fade-up font-sans">
+        <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-retro overflow-hidden transition-all animate-fade-up font-sans">
           {cardBody}
         </div>
       );
     }
 
     return (
-      <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-[6px_6px_0px_#000000] overflow-hidden transition-all animate-fade-up font-sans">
+      <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-retro-md overflow-hidden transition-all animate-fade-up font-sans">
         {/* Retro Window Header Bar */}
         <div className="flex h-12 sm:h-14 items-center justify-between border-b-2 border-black bg-retro-warm px-4 sm:px-6 py-2.5">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="flex items-center gap-1.5 shrink-0">
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-[#FF5F56] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-[#FFBD2E] inline-block shadow-[0.5px_0.5px_0px_#000]" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-[#27C93F] inline-block shadow-[0.5px_0.5px_0px_#000]" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-red inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-yellow inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-green inline-block shadow-retro-sm" />
             </div>
             <span className="text-sm sm:text-base font-bold text-black tracking-tight font-heading ml-1.5 truncate">
               Lembar Pengerjaan: {quiz.title}
             </span>
           </div>
-          <span className="rounded border-2 border-black bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-[1.5px_1.5px_0px_#000] shrink-0">
+          <span className="rounded border-2 border-black bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-retro-sm shrink-0">
             {quiz.exam_type ?? 'UJIAN'}
           </span>
         </div>
@@ -1252,7 +1252,7 @@ export function TakeQuizForm({
       )}
 
       {/* Sticky Countdown & Status Bar */}
-      <div className="sticky top-2 z-20 rounded-xl border-2 border-black bg-retro-warm/95 backdrop-blur px-5 py-3 flex flex-wrap items-center justify-between gap-3 shadow-[4px_4px_0px_#000]">
+      <div className="sticky top-2 z-20 rounded-xl border-2 border-black bg-retro-warm/95 backdrop-blur px-5 py-3 flex flex-wrap items-center justify-between gap-3 shadow-retro">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Clock className={`h-5 w-5 ${timeLeft <= 300 ? 'text-danger animate-pulse' : 'text-retro-orange'}`} />
@@ -1314,7 +1314,7 @@ export function TakeQuizForm({
                     key={optIdx}
                     className={`flex items-center gap-3.5 p-3.5 sm:p-4 rounded-lg border-2 border-black cursor-pointer text-sm font-bold transition-all shadow-retro ${
                       answers[q.id] === optIdx
-                        ? 'bg-retro-yellow text-black shadow-[3px_3px_0px_#000]'
+                        ? 'bg-retro-yellow text-black shadow-retro-md'
                         : 'bg-white hover:bg-retro-warm text-black'
                     }`}
                   >
@@ -1340,7 +1340,7 @@ export function TakeQuizForm({
                   onClick={() => setAnswers({ ...answers, [q.id]: true })}
                   className={`p-3.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold text-center shadow-retro transition-all ${
                     answers[q.id] === true
-                      ? 'bg-retro-yellow text-black shadow-[3px_3px_0px_#000]'
+                      ? 'bg-retro-yellow text-black shadow-retro-md'
                       : 'bg-white hover:bg-retro-warm text-black'
                   }`}
                 >
@@ -1351,7 +1351,7 @@ export function TakeQuizForm({
                   onClick={() => setAnswers({ ...answers, [q.id]: false })}
                   className={`p-3.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold text-center shadow-retro transition-all ${
                     answers[q.id] === false
-                      ? 'bg-retro-yellow text-black shadow-[3px_3px_0px_#000]'
+                      ? 'bg-retro-yellow text-black shadow-retro-md'
                       : 'bg-white hover:bg-retro-warm text-black'
                   }`}
                 >
@@ -1793,7 +1793,7 @@ export function LecturerExamView({
           onClick={() => setActiveTab('monitor')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all shadow-retro ${
             activeTab === 'monitor'
-              ? 'bg-black text-white shadow-[2px_2px_0px_#000]'
+              ? 'bg-black text-white shadow-retro'
               : 'bg-white text-black hover:bg-retro-warm'
           }`}
         >
@@ -1805,7 +1805,7 @@ export function LecturerExamView({
           onClick={() => setActiveTab('preview')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all shadow-retro ${
             activeTab === 'preview'
-              ? 'bg-black text-white shadow-[2px_2px_0px_#000]'
+              ? 'bg-black text-white shadow-retro'
               : 'bg-white text-black hover:bg-retro-warm'
           }`}
         >
