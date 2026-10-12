@@ -72,14 +72,14 @@ Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... 
 ### Domain 1: Identitas, Pengguna, Peran & Audit Log
 
 #### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
-- `auth.users`: Managed oleh Supabase Auth (`id` UUID, `email`).
-- `public.profiles`: `id` UUID (PK -> auth.users), `full_name`, `email`, `avatar_url`, `status` (`user_status`: PENDING, ACTIVE, LOCKED, SUSPENDED, DEACTIVATED), `must_change_password`, `created_at`, `updated_at`.
-- `public.roles`: `id` UUID, `code` VARCHAR(50) UNIQUE, `name` VARCHAR(100), `description` TEXT.
-- `public.user_roles`: `id` UUID, `user_id` UUID (FK profiles RESTRICT), `role_id` UUID (FK roles RESTRICT), `scope_type` (`scope_type`: GLOBAL, PROGRAM, CLASS), `scope_id` UUID, `status` (`user_role_status`: ACTIVE, REVOKED, EXPIRED).
-- `public.user_identifiers`: `id` UUID, `user_id` UUID (FK profiles CASCADE), `type` (`identifier_type`: NIM, NIDN, NIP, EMAIL, USERNAME), `value` VARCHAR(100).
-- `public.user_devices`: `id` UUID, `user_id` UUID (FK profiles CASCADE), `device_id_hash`, `label`, `last_ip_masked`, `trusted`, `revoked_at`.
-- `public.login_events`: `id` UUID, `user_id` UUID (FK profiles CASCADE), `device_id` UUID, `event_type` (`event_type`), `risk_level` (`risk_level`).
-- `public.audit_logs`: `id` UUID, `actor_user_id` UUID (FK profiles RESTRICT), `actor_role` VARCHAR(50), `action` VARCHAR(100), `entity_type` VARCHAR(100), `entity_id` UUID, `scope_type` VARCHAR(50), `scope_id` UUID, `description` TEXT, `details` JSONB, `ip_address` INET, `user_agent` TEXT, `on_behalf_of` UUID (FK profiles RESTRICT), `before_json` JSONB, `after_json` JSONB, `created_at` TIMESTAMPTZ.
+- `auth.users`: Managed oleh Supabase Auth (`id` uuid, `email` text).
+- `public.profiles`: `id` uuid (PK -> auth.users), `full_name` text, `email` text (UNIQUE), `status` user_status (ACTIVE, PENDING, LOCKED, SUSPENDED, DEACTIVATED), `must_change_password` boolean, `locked_until` timestamp with time zone, `last_login_at` timestamp with time zone, `preferred_locale` text, `timezone` text, `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.roles`: `id` uuid, `code` varchar (UNIQUE), `name` text, `description` text, `created_at` timestamp with time zone.
+- `public.user_roles`: `id` uuid, `user_id` uuid (FK profiles CASCADE), `role_id` uuid (FK roles RESTRICT), `scope_type` scope_type (GLOBAL, PROGRAM, CLASS), `scope_id` uuid, `valid_from` timestamp with time zone, `valid_until` timestamp with time zone, `granted_by` uuid (FK profiles SET NULL), `status` user_role_status (ACTIVE, REVOKED, EXPIRED), `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.user_identifiers`: `id` uuid, `user_id` uuid (FK profiles CASCADE), `type` identifier_type (NIM, NIDN, NIP, EMAIL, USERNAME), `value` varchar, `is_primary` boolean, `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.user_devices`: `id` uuid, `user_id` uuid (FK profiles CASCADE), `device_id_hash` text (UNIQUE), `label` text, `first_seen_at` timestamp with time zone, `last_seen_at` timestamp with time zone, `last_ip_masked` text, `last_country` text, `last_city` text, `last_session_id` uuid, `trusted` boolean, `revoked_at` timestamp with time zone, `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.login_events`: `id` uuid, `user_id` uuid (FK profiles CASCADE), `device_id` uuid, `event_type` event_type, `is_new_device` boolean, `risk_level` risk_level (LOW, MEDIUM, HIGH), `ip_masked` text, `country` text, `city` text, `notified_at` timestamp with time zone, `created_at` timestamp with time zone.
+- `public.audit_logs`: `id` uuid, `actor_user_id` uuid (FK profiles RESTRICT), `actor_role` varchar, `action` varchar, `entity_type` varchar, `entity_id` uuid, `scope_type` varchar, `scope_id` uuid, `before_json` jsonb, `after_json` jsonb, `ip_address` inet, `user_agent` text, `request_id` text, `created_at` timestamp with time zone, `on_behalf_of` uuid (FK profiles RESTRICT), `description` text, `details` jsonb.
   - *Trigger Perlindungan*: `tr_audit_logs_immutable` mencegah `UPDATE` dan `DELETE`.
   - *Hak Akses*: `log_audit()` dicabut dari public/anon/authenticated (hanya `service_role`).
 
@@ -103,12 +103,12 @@ Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... 
 ### Domain 2: Master Kurikulum, Kelas Perkuliahan, Peserta & Asisten
 
 #### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
-- `public.programs` (Bukan `study_programs`): `id` UUID, `code` VARCHAR(20) UNIQUE, `name` VARCHAR(100), `degree` VARCHAR(20), `is_active` BOOLEAN, `created_at`, `updated_at`.
-- `public.semesters` (Bukan `academic_years`): `id` UUID, `code` VARCHAR(20) UNIQUE, `name` VARCHAR(50), `start_date` DATE, `end_date` DATE, `is_active` BOOLEAN, `created_at`, `updated_at`.
-- `public.courses`: `id` UUID, `program_id` UUID (FK programs RESTRICT), `code` VARCHAR(20), `name` VARCHAR(100), `credits` INTEGER, `status` VARCHAR(20), `created_at`, `updated_at`.
-- `public.classes`: `id` UUID, `course_id` UUID (FK courses RESTRICT), `semester_id` UUID (FK semesters RESTRICT), `lecturer_id` UUID (FK profiles RESTRICT — SUDAH ADA di snapshot), `title` VARCHAR(100), `section` VARCHAR(10), `join_code` VARCHAR(8) UNIQUE, `capacity` SMALLINT, `status` (`class_status`: DRAFT, OPEN, ACTIVE, CLOSED, ARCHIVED), `created_by` UUID (FK profiles RESTRICT), `created_at`, `updated_at`.
-- `public.enrollments`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `student_id` UUID (FK profiles RESTRICT), `status` (`enrollment_status`: ACTIVE, DROPPED, COMPLETED, REMOVED), `enrolled_at`, `dropped_at`.
-- `public.class_assistants` (Bukan `teaching_assistants`): `id` UUID, `class_id` UUID (FK classes RESTRICT), `user_id` UUID (FK profiles RESTRICT), `permission` VARCHAR(50), `assigned_by` UUID (FK profiles RESTRICT), `assigned_at` TIMESTAMPTZ.
+- `public.programs` (Bukan `study_programs`): `id` uuid, `code` text (UNIQUE), `name` text, `is_active` boolean, `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.semesters` (Bukan `academic_years`): `id` uuid, `label` text (UNIQUE), `is_active` boolean, `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.courses`: `id` uuid, `program_id` uuid (FK programs RESTRICT), `code` text (UNIQUE), `name` text, `credits` smallint, `is_active` boolean, `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.classes`: `id` uuid, `title` varchar, `section` varchar, `join_code` varchar (UNIQUE), `capacity` smallint, `status` class_status (DRAFT, OPEN, ACTIVE, CLOSED, ARCHIVED), `created_by` uuid (FK profiles RESTRICT), `created_at` timestamp with time zone, `updated_at` timestamp with time zone, `deleted_at` timestamp with time zone, `course_id` uuid (FK courses RESTRICT), `semester_id` uuid (FK semesters RESTRICT), `lecturer_id` uuid (FK profiles RESTRICT).
+- `public.enrollments`: `id` uuid, `class_id` uuid (FK classes RESTRICT), `student_id` uuid (FK profiles RESTRICT), `status` enrollment_status (ACTIVE, DROPPED, COMPLETED, REMOVED), `enrolled_at` timestamp with time zone, `dropped_at` timestamp with time zone.
+- `public.class_assistants` (Bukan `teaching_assistants`): `id` uuid, `class_id` uuid (FK classes RESTRICT), `user_id` uuid (FK profiles RESTRICT), `permission` varchar, `granted_by` uuid (FK profiles RESTRICT), `created_at` timestamp with time zone.
 
 #### B. TABEL BARU (Fase 3):
 - Ruang Perkuliahan (`rooms`):
@@ -128,12 +128,11 @@ Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... 
 ### Domain 3: Evaluasi Akademik, Nilai & Gradebook
 
 #### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
-- `public.grades`: `id` UUID, `item_type` VARCHAR(50), `item_id` UUID, `student_id` UUID (FK profiles RESTRICT), `score` NUMERIC(5,2), `max_score` NUMERIC(5,2), `status` (`grade_status`: DRAFT, FINAL), `comment` TEXT, `created_by` UUID (FK profiles RESTRICT), `created_at`, `updated_at`.
-- `public.grade_history`: `id` UUID, `grade_id` UUID (FK grades CASCADE), `score` NUMERIC(5,2), `change_reason` TEXT, `changed_by` UUID (FK profiles RESTRICT), `changed_at` TIMESTAMPTZ.
+- `public.grades`: `id` uuid, `class_id` uuid (FK classes RESTRICT — SUDAH ADA di snapshot), `student_id` uuid (FK profiles RESTRICT), `item_type` text, `item_id` uuid, `score` numeric, `max_score` numeric, `comment` text, `status` grade_status (DRAFT, FINAL), `graded_by` uuid (FK profiles RESTRICT), `finalized_by` uuid (FK profiles RESTRICT), `finalized_at` timestamp with time zone, `is_visible_to_student` boolean, `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.grade_history`: `id` uuid, `grade_id` uuid (FK grades CASCADE), `class_id` uuid (FK classes RESTRICT — SUDAH ADA di snapshot), `old_score` numeric, `new_score` numeric, `old_status` grade_status, `new_status` grade_status, `changed_by` uuid (FK profiles RESTRICT), `reason` text, `changed_at` timestamp with time zone.
 
 #### B. TABEL / KOLOM BARU (Fase 3):
-- Tambahkan kolom referensi kelas ke tabel `public.grades`:
-  `ALTER TABLE public.grades ADD COLUMN IF NOT EXISTS class_id UUID REFERENCES public.classes(id) ON DELETE RESTRICT;`
+- *Catatan Skema*: Kolom referensi kelas `class_id` pada `public.grades` dan `public.grade_history` telah terverifikasi **SUDAH ADA** di snapshot skema (migrasi 1..16), sehingga perintah penambahan kolom tidak diperlukan.
 - Kunci buku nilai kelas (*Gradebook Locks*):
   `CREATE TABLE IF NOT EXISTS public.gradebook_locks ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE RESTRICT, is_locked BOOLEAN DEFAULT true, locked_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT, locked_at TIMESTAMPTZ DEFAULT now(), reason TEXT, CONSTRAINT uq_gradebook_class UNIQUE(class_id) );`
 
@@ -347,7 +346,7 @@ Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... 
 ### Domain 6: Sengketa Nilai Ujian & Putusan Perubahan Nilai Final
 
 #### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
-- `public.grade_change_requests`: `id` UUID, `grade_id` UUID (FK grades RESTRICT), `class_id` UUID (FK classes RESTRICT), `old_score` NUMERIC(5,2), `proposed_score` NUMERIC(5,2), `reason` TEXT, `status` (`change_request_status`: PENDING, APPROVED, REJECTED, EXECUTED), `requested_by` UUID (FK profiles RESTRICT), `reviewed_by` UUID (FK profiles RESTRICT), `reviewed_at` TIMESTAMPTZ, `review_note` TEXT, `executed_by` UUID (FK profiles RESTRICT), `executed_at` TIMESTAMPTZ, `execution_note` TEXT, `created_at` TIMESTAMPTZ.
+- `public.grade_change_requests`: `id` uuid, `grade_id` uuid (FK grades RESTRICT), `class_id` uuid (FK classes RESTRICT), `requested_by` uuid (FK profiles RESTRICT), `class_title` text, `assignment_title` text, `student_name` text, `old_score` numeric, `proposed_score` numeric, `reason` text, `status` change_request_status (PENDING, APPROVED, REJECTED, EXECUTED), `reviewed_by` uuid (FK profiles RESTRICT), `review_note` text, `reviewed_at` timestamp with time zone, `created_at` timestamp with time zone, `executed_by` uuid (FK profiles RESTRICT), `executed_at` timestamp with time zone, `execution_note` text.
   - *Fungsi Keamanan*: RPC `decide_grade_change` (000014) dan `execute_grade_change` (000014) sudah diimplementasikan dengan row-level lock `FOR UPDATE` dan audit logging.
 
 #### B. TABEL BARU (Fase 3):
@@ -378,13 +377,13 @@ Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... 
 ### Domain 7: Konten Pembelajaran, Forum, Notifikasi, Pustaka & Event
 
 #### A. SUDAH ADA di Skema (Snapshot Migrasi 1..16):
-- `public.materials`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `title`, `description`, `content_url`, `status` (`material_status`), `created_by` (FK profiles RESTRICT).
-- `public.assignments`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `title`, `description`, `due_at`, `close_at`, `max_score`, `status` (`assignment_status`), `created_by` (FK profiles RESTRICT).
-- `public.submissions`: `id` UUID, `assignment_id` UUID (FK assignments RESTRICT), `student_id` UUID (FK profiles RESTRICT), `text_body`, `attachment_url`, `status` (`submission_status`), `submitted_at`, `is_late`.
-- `public.notifications`: `id` UUID, `user_id` UUID (FK profiles RESTRICT), `title`, `message`, `link`, `is_read`, `created_at`.
-- `public.discussions`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `author_id` UUID (FK profiles RESTRICT), `title`, `body`, `created_at`.
-- `public.discussion_replies`: `id` UUID, `discussion_id` UUID (FK discussions CASCADE), `author_id` UUID (FK profiles RESTRICT), `body`, `created_at`.
-- `public.announcements`: `id` UUID, `class_id` UUID (FK classes RESTRICT), `author_id` UUID (FK profiles RESTRICT), `title`, `body`, `created_at`.
+- `public.materials`: `id` uuid, `class_id` uuid (FK classes RESTRICT), `title` text, `body_md` text, `status` material_status (DRAFT, PUBLISHED, HIDDEN), `created_by` uuid (FK profiles RESTRICT), `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.assignments`: `id` uuid, `class_id` uuid (FK classes RESTRICT), `title` text, `description` text, `due_at` timestamp with time zone, `close_at` timestamp with time zone, `max_score` numeric, `status` assignment_status (DRAFT, PUBLISHED, CLOSED), `created_by` uuid (FK profiles RESTRICT), `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
+- `public.submissions`: `id` uuid, `assignment_id` uuid (FK assignments RESTRICT), `student_id` uuid (FK profiles RESTRICT), `attempt_no` smallint, `status` submission_status (DRAFT, SUBMITTED, RETURNED, REVIEWED, GRADED), `text_body` text, `submitted_at` timestamp with time zone, `is_late` boolean.
+- `public.notifications`: `id` uuid, `user_id` uuid (FK profiles CASCADE), `type` text, `title` text, `body` text, `entity_type` text, `entity_id` uuid, `class_id` uuid (FK classes CASCADE), `read_at` timestamp with time zone, `created_at` timestamp with time zone.
+- `public.discussions`: `id` uuid, `class_id` uuid (FK classes RESTRICT), `author_id` uuid (FK profiles RESTRICT), `author_name` text, `title` text, `body` text, `is_pinned` boolean, `is_locked` boolean, `created_at` timestamp with time zone.
+- `public.discussion_replies`: `id` uuid, `discussion_id` uuid (FK discussions RESTRICT), `class_id` uuid (FK classes RESTRICT), `author_id` uuid (FK profiles RESTRICT), `author_name` text, `body` text, `is_hidden` boolean, `hidden_by` uuid (FK profiles SET NULL), `created_at` timestamp with time zone.
+- `public.announcements`: `id` uuid, `class_id` uuid (FK classes RESTRICT), `author_id` uuid (FK profiles RESTRICT), `title` text, `body` text, `created_at` timestamp with time zone.
 
 #### B. TABEL BARU (Fase 3):
 - Layanan Ekstensi Kampus (Pustaka, Event, Portofolio):
@@ -455,7 +454,7 @@ Keputusan arsitektur persistensi Fase 3 telah ditetapkan oleh Pengguna:
 |---|---|---|---|---|
 | **K2** | **Penyimpanan Berkas Lampiran (Tugas & Surat Sakit)** | **A**: Supabase Storage Bucket bawaan dengan Signed URL privat 15 menit.<br>**B**: S3-compatible cloud storage eksternal (Cloudflare R2 / AWS S3). | **Opsi A (Supabase Storage)** agar autentikasi RLS bucket terintegrasi langsung dengan Supabase Auth. | **OPSI A DITERIMA**: Supabase Storage Bucket privat + Signed URL masa berlaku 15 menit. |
 | **K3** | **Alur Submit Jawaban Ujian CBT Berbeban Tinggi** | **A**: Setiap jawaban butir soal langsung `INSERT` ke DB per detik.<br>**B**: Single-payload submission dengan draf berkala ke server (autosave) dan submit final idempoten. | **Opsi B (Single-Payload + Draf Berkala)** untuk menjaga integritas data dan kestabilan DB. | **OPSI B DITERIMA**: Draf berkala ke server (autosave) + single-payload final submit yang idempoten. |
-| **K4** | **Penyelarasan Nama Semester vs Tahun Ajaran** | **A**: Tetap memakai tabel `semesters` yang ada di snapshot (kolom: `code`, `name`, `start_date`, `end_date`, `is_active`).<br>**B**: Membuat tabel baru `academic_years`. | **Opsi A (Gunakan semesters yang sudah ada)** untuk menghindari tabel ganda. | **OPSI A DITERIMA**: Tetap memakai tabel `semesters` yang ada di snapshot. |
+| **K4** | **Penyelarasan Nama Semester vs Tahun Ajaran** | **A**: Tetap memakai tabel `semesters` yang ada di snapshot (kolom: `label`, `is_active`, `created_at`, `updated_at`).<br>**B**: Membuat tabel baru `academic_years`. | **Opsi A (Gunakan semesters yang sudah ada)** untuk menghindari tabel ganda. | **OPSI A DITERIMA**: Tetap memakai tabel `semesters` yang ada di snapshot. |
 | **K5** | **Penyediaan Proyek Supabase Staging** | **A**: Pengguna menyediakan URL & Service Key proyek Supabase Staging terpisah untuk pengujian nyata.<br>**B**: Pengujian lokal sekali pakai. | **Opsi A** untuk verifikasi gateway PostgREST nyata. | **OPSI A DITERIMA**: Staging Supabase terpisah via kredensial aman di `.env.local` (diabaikan git). |
 
 *(Catatan: K1 dihapus dari daftar keputusan karena kolom `classes.lecturer_id` telah terverifikasi SUDAH ADA di snapshot skema migrasi 1..16).*
