@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 async function generateSchemaSnapshot() {
-  console.log('Generating Schema Snapshot from PGlite with Migrations 1..16...');
+  console.log('Generating Schema Snapshot from PGlite...');
   const db = new PGlite({
     extensions: { pgcrypto },
   });
@@ -67,8 +67,9 @@ async function generateSchemaSnapshot() {
   `);
 
   let md = '# Snapshot Skema Database SIAJAR (Single Source of Truth)\n\n';
-  md += `> **Tanggal Dihasilkan**: 11 Oktober 2026  \n`;
-  md += `> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..16 dijalankan dari nol.  \n`;
+  console.log(`Generating Schema Snapshot from PGlite with ${files.length} Migrations...`);
+  md += `> **Tanggal Dihasilkan**: 12 Oktober 2026  \n`;
+  md += `> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..${files.length} dijalankan dari nol.  \n`;
   md += `> **Tujuan**: Sumber kebenaran tunggal (*Single Source of Truth*) nama tabel, kolom, tipe data, foreign key, dan kebijakan RLS untuk perencanaan dan implementasi Fase 3.\n\n`;
   md += '---\n\n';
 

@@ -1,7 +1,7 @@
 # Snapshot Skema Database SIAJAR (Single Source of Truth)
 
-> **Tanggal Dihasilkan**: 11 Oktober 2026  
-> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..16 dijalankan dari nol.  
+> **Tanggal Dihasilkan**: 12 Oktober 2026  
+> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..19 dijalankan dari nol.  
 > **Tujuan**: Sumber kebenaran tunggal (*Single Source of Truth*) nama tabel, kolom, tipe data, foreign key, dan kebijakan RLS untuk perencanaan dan implementasi Fase 3.
 
 ---
@@ -152,10 +152,32 @@
 
 ---
 
+### Tabel: `public.class_status_transitions`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 3
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `from_status` | `USER-DEFINED` | NO | - |
+| `to_status` | `USER-DEFINED` | NO | - |
+| `description` | `text` | YES | - |
+
+**Batasan Integritas & Foreign Key**:
+- PRIMARY KEY: `from_status`
+- PRIMARY KEY: `to_status`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `class_status_transitions_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
 ### Tabel: `public.classes`
 
 - **Status Row Level Security (RLS)**: AKTIF (Enabled)
-- **Jumlah Kolom**: 13
+- **Jumlah Kolom**: 14
 
 | Nama Kolom | Tipe Data | Nullable | Nilai Default |
 |---|---|---|---|
@@ -172,6 +194,7 @@
 | `course_id` | `uuid` | YES | - |
 | `semester_id` | `uuid` | YES | - |
 | `lecturer_id` | `uuid` | YES | - |
+| `rejection_reason` | `text` | YES | - |
 
 **Batasan Integritas & Foreign Key**:
 - FOREIGN KEY: `course_id` -> `public.courses(id)` (ON DELETE RESTRICT)
@@ -185,6 +208,7 @@
 | Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
 |---|---|---|---|
 | `classes_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `classes_update` | `UPDATE` | `authenticated` | PERMISSIVE |
 
 ---
 
@@ -303,6 +327,7 @@
 | Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
 |---|---|---|---|
 | `enrollments_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `enrollments_staff_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 
@@ -640,6 +665,35 @@
 |---|---|---|---|
 | `roles_manage` | `ALL` | `authenticated` | PERMISSIVE |
 | `roles_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.rooms`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 9
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `code` | `character varying` | NO | - |
+| `name` | `character varying` | NO | - |
+| `building` | `character varying` | YES | - |
+| `capacity` | `integer` | YES | - |
+| `latitude` | `numeric` | YES | - |
+| `longitude` | `numeric` | YES | - |
+| `radius_meters` | `integer` | YES | `50` |
+| `created_at` | `timestamp with time zone` | YES | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- PRIMARY KEY: `id`
+- UNIQUE: `code`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `rooms_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `rooms_staff_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 

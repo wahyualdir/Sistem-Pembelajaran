@@ -1,137 +1,136 @@
-# Dokumen Desain Teknis Domain 3: Evaluasi Akademik, Nilai & Gradebook (Fase 3B)
+# Dokumen Desain Teknis Domain 3: Evaluasi Akademik, Nilai & Gradebook (Revisi Komprehensif Fase 3B)
 
 > **Status Dokumen**: DESAIN SAJA (*Design Only*) — Menunggu Persetujuan Pengguna Sebelum Penulisan Kode / Migrasi.  
-> **Tanggal**: 12 Oktober 2026  
-> **Sumber Kebenaran Tunggal (*Single Source of Truth*)**: [`docs/schema-snapshot.md`](file:///c:/Users/ACER/Downloads/implementasi/docs/schema-snapshot.md) (Hasil migrasi 1..18 pada PGlite)  
-> **Target Implementasi Berikutnya**: Migrasi `20261012000019_phase3b_domain3_gradebook_schema.sql` dan `20261012000020_phase3b_domain3_gradebook_functions.sql`
+> **Tanggal Pembaruan**: 12 Oktober 2026  
+> **Sumber Kebenaran Tunggal Skema (*Single Source of Truth*)**: [`docs/schema-snapshot.md`](file:///c:/Users/ACER/Downloads/implementasi/docs/schema-snapshot.md) (Hasil migrasi 1..18 pada PGlite).  
+> **Prinsip Dasar**: Tanpa menyentuh database remote, penegakan integritas ACID, pemisahan tugas (*Separation of Duties*), satu sumber kebenaran kunci (*Single Source of Truth*), dan pencegahan sukses palsu (*Zero Fake Success*).
 
 ---
 
-## 1. Yang SUDAH ADA di Skema Basis Data (Berdasarkan Snapshot Migrasi 1..18)
+## 1. Ringkasan Arsitektur & Prinsip Desain Utama
 
-Berdasarkan audit snapshot skema pada [`docs/schema-snapshot.md`](file:///c:/Users/ACER/Downloads/implementasi/docs/schema-snapshot.md), fondasi awal penilaian telah tersedia di database PostgreSQL:
+Desain Domain 3 (Nilai & Gradebook) menetapkan tata kelola evaluasi pembelajaran perguruan tinggi yang aman, akuntabel, dan patuh regulasi:
 
-### A. Tabel `public.grades` (15 Kolom)
-- **Struktur Kolom**:
-  - `id` (`uuid`, PK)
-  - `class_id` (`uuid`, FK -> `public.classes(id)` ON DELETE RESTRICT) — *Terbukti SUDAH ADA di snapshot skema*.
-  - `student_id` (`uuid`, FK -> `public.profiles(id)` ON DELETE RESTRICT)
-  - `item_type` (`text`, CHECK: `'ASSIGNMENT'`, `'QUIZ'`, `'EXAM'`, `'MANUAL'`)
-  - `item_id` (`uuid`)
-  - `score` (`numeric(6,2)`)
-  - `max_score` (`numeric(6,2)`)
-  - `comment` (`text`, maksimal 5000 karakter)
-  - `status` (`public.grade_status`: `'DRAFT'`, `'FINAL'`)
-  - `graded_by` (`uuid`, FK -> `public.profiles(id)` ON DELETE RESTRICT)
-  - `finalized_by` (`uuid`, FK -> `public.profiles(id)` NULLABLE)
-  - `finalized_at` (`timestamp with time zone`, NULLABLE)
-  - `is_visible_to_student` (`boolean`, DEFAULT `false`)
-  - `created_at` (`timestamp with time zone`)
-  - `updated_at` (`timestamp with time zone`)
-- **Batasan Integritas**:
-  - `CONSTRAINT uq_grades_item UNIQUE (student_id, item_type, item_id)`
-  - `CONSTRAINT ck_grades_score CHECK (score BETWEEN 0 AND max_score)`
-- **Kebijakan RLS Saat Ini**:
-  - `grades_select`: Dosen kelas (`is_class_lecturer`), TA dengan izin `submission.review` atau `assignment.grade`, serta mahasiswa bersangkutan HANYA jika `is_visible_to_student = true`.
-- **Evaluasi & Kekurangan Saat Ini**:
-  1. Enum `grade_status` hanya memiliki nilai `'DRAFT'` dan `'FINAL'`; belum mendukung status pembekuan buku nilai `'LOCKED'`.
-  2. Belum ada trigger proteksi kolom sensitif (`tr_grades_protect_sensitive`) berbasis GUC `app.rpc_context`, sehingga rentan *direct update* PostgREST.
-  3. Kaprodi prodinya dan Staf Akademik belum terdaftar pada RLS `grades_select` untuk keperluan rekap nilai dan pelaporan akreditasi.
+1. **Pemetaan Butir ke Komponen Penilaian**: Setiap butir evaluasi (tugas, kuis, UTS, UAS, praktikum) dipetakan ke komponen bobot kelas (`grade_components`) via foreign key `component_id`.
+2. **Penanganan Evaluasi Non-CBT**: Sebelum Domain 5 (CBT Ujian) dibangun, evaluasi ujian tertulis/lisan (UTS & UAS) ditangani secara elegan melalui `item_type = 'MANUAL'` yang terikat ke `component_id`.
+3. **Agregasi Server-Side Deterministik**: Nilai akhir kumulatif dan huruf mutu dihitung 100% di sisi database (RPC PostgreSQL), bukan di browser/klien, dengan aturan pembulatan 2 desimal standar PDDIKTI.
+4. **Satu Sumber Kebenaran Status Kunci**: Status pembekuan buku nilai dipusatkan secara eksklusif pada tabel `public.gradebook_locks` per kelas. Status per butir pada `public.grades.status` tetap fokus pada siklus koreksi (`DRAFT` / `FINAL`), sehingga menghilangkan risiko desinkronisasi (*two sources of truth*).
+5. **Pemisahan Tugas Ketat (*Separation of Duties*)**:
+   - Pembukaan kembali buku nilai yang terkunci (`unlock_gradebook`) wajib melalui alur 3-pihak: Dosen Pengampu mengajukan $\rightarrow$ Kaprodi menyetujui $\rightarrow$ Staf Akademik mengeksekusi.
+   - Perubahan nilai setelah gradebook dikunci HANYA dapat dilakukan via alur resmi `grade_change_requests` (Dosen $\rightarrow$ Kaprodi $\rightarrow$ Staf).
+6. **Penegakan Hak Privasi Mahasiswa**: Super Admin dan System Admin **DILARANG MEMBACA** baris nilai individual mahasiswa (hanya agregat anonim sistem).
+7. **Perlindungan Kolom Sensitif**: Menerapkan konvensi GUC `app.rpc_context` pada seluruh tabel Domain 3 dengan trigger `BEFORE UPDATE`.
 
 ---
 
-### B. Tabel `public.grade_history` (10 Kolom)
-- **Struktur Kolom**:
-  - `id` (`uuid`, PK)
-  - `grade_id` (`uuid`, FK -> `public.grades(id)` ON DELETE RESTRICT)
-  - `class_id` (`uuid`, FK -> `public.classes(id)` ON DELETE RESTRICT)
-  - `old_score` (`numeric(6,2)`, NULLABLE)
-  - `new_score` (`numeric(6,2)`)
-  - `old_status` (`public.grade_status`, NULLABLE)
-  - `new_status` (`public.grade_status`)
-  - `changed_by` (`uuid`, FK -> `public.profiles(id)` ON DELETE RESTRICT)
-  - `reason` (`text`, NULLABLE)
-  - `changed_at` (`timestamp with time zone`)
-- **Integritas Immutability**:
-  - Trigger `tr_grade_history_immutable` aktif mencegah perintah `UPDATE` dan `DELETE` (append-only ledger).
-- **Evaluasi & Kekurangan Saat Ini**:
-  1. RLS `grade_history_select` saat ini hanya mengizinkan dosen pengampu kelas. Kaprodi dan Staf Akademik belum memiliki hak baca untuk audit forensik akademik.
+## 2. Kondisi Skema Saat Ini & Audit Fungsi Database
+
+### 2.1. Tabel `public.grades` (Snapshot Migrasi 1..18)
+Tabel master butir nilai telah ada di database dengan 15 kolom:
+- Kolom saat ini: `id` (uuid), `class_id` (uuid), `student_id` (uuid), `item_type` (text: 'ASSIGNMENT', 'QUIZ', 'EXAM', 'MANUAL'), `item_id` (uuid), `score` (numeric(6,2)), `max_score` (numeric(6,2)), `comment` (text), `status` (grade_status: 'DRAFT', 'FINAL'), `graded_by` (uuid), `finalized_by` (uuid), `finalized_at` (timestamptz), `is_visible_to_student` (boolean), `created_at`, `updated_at`.
+- Batasan integritas saat ini: `UNIQUE (student_id, item_type, item_id)`, `CHECK (score BETWEEN 0 AND max_score)`.
+- **Rencana Penyempurnaan pada Migrasi Domain 3**:
+  1. Tambah kolom `component_id UUID NULL REFERENCES public.grade_components(id) ON DELETE RESTRICT`.
+  2. Tambah batasan CHECK invarian visibilitas mahasiswa:
+     ```sql
+     CONSTRAINT ck_grades_visibility CHECK (
+       (is_visible_to_student = false) OR 
+       (is_visible_to_student = true AND status = 'FINAL')
+     )
+     ```
+     *Jaminan Invarian*: Mahasiswa secara struktural TIDAK AKAN PERNAH bisa melihat nilai yang masih berstatus `DRAFT`.
+  3. Pasang trigger `tr_grades_protect_sensitive` untuk mencegah manipulasi langsung PostgREST.
+
+### 2.2. Tabel `public.grade_history` (Snapshot Migrasi 1..18)
+- Menampung log audit perubahan nilai: `id`, `grade_id`, `class_id`, `old_score`, `new_score`, `old_status`, `new_status`, `changed_by`, `reason`, `changed_at`.
+- Dilindungi trigger `tr_grade_history_immutable` (append-only ledger, menolak `UPDATE` dan `DELETE`).
+- **Rencana Penyempurnaan**: Memperbarui RLS agar Kaprodi prodi terkait dan Staf Akademik dapat membaca riwayat perubahan untuk keperluan audit forensik.
+
+### 2.3. Tabel `public.assignments` & `public.submissions`
+- `assignments`: Tambahkan `component_id UUID NULL REFERENCES public.grade_components(id) ON DELETE RESTRICT` agar setiap penugasan terikat langsung ke komponen evaluasi yang tepat saat dibuat.
+- `submissions`: Keterkaitan tugas mahasiswa dengan siklus koreksi (`SUBMITTED` $\rightarrow$ `REVIEWED` saat draf $\rightarrow$ `GRADED` saat final).
+
+### 2.4. Tabel `public.grade_change_requests`
+- Menampung permohonan revisi nilai resmi: 18 kolom dengan alur otorisasi 3-pihak (`decide_grade_change` oleh Kaprodi dan `execute_grade_change` oleh Staf Akademik).
+- Terintegrasi penuh dengan row lock `FOR UPDATE` dan audit logging.
+
+### 2.5. Audit Lengkap Fungsi Lama yang Menulis `public.grades` (Katalog Postgres)
+Berdasarkan pemeriksaan katalog sistem `pg_proc.prosrc`, berikut daftar lengkap seluruh fungsi basis data yang memodifikasi baris `public.grades`:
+
+| Nama Fungsi / RPC | Lokasi Migrasi Saat Ini | Modifikasi pada `public.grades` | Status `app.rpc_context` | Rencana Tindakan di Migrasi Domain 3 |
+|---|---|---|---|---|
+| `public.save_grade_draft` | `000005_grading.sql` & `000011_assistants.sql` | `INSERT ... ON CONFLICT DO UPDATE` (skor, komentar, graded_by) | **BELUM SET** | `CREATE OR REPLACE` dengan menyetel `set_config('app.rpc_context', 'on', true)` sebelum penulisan dan reset ke `''` setelahnya; validasi `gradebook_locks`. |
+| `public.finalize_grade` | `000005_grading.sql` | `UPDATE public.grades SET status = 'FINAL', ...` | **BELUM SET** | `CREATE OR REPLACE` dengan menyetel `set_config('app.rpc_context', 'on', true)` sebelum penulisan dan reset ke `''` setelahnya; validasi `gradebook_locks`. |
+| `public.execute_grade_change`| `000014_grade_change_decision_and_execution.sql` | `UPDATE public.grades SET score = proposed_score, ...` | **BELUM SET** | `CREATE OR REPLACE` dengan menyetel `set_config('app.rpc_context', 'on', true)` sebelum penulisan dan reset ke `''` setelahnya; memicu hitung ulang nilai akhir. |
+| `public.request_grade_change` | `000009_grade_changes.sql` | *Hanya `SELECT` pada grades, `INSERT` ke grade_change_requests* | Tidak mutasi grades | Pertahankan fungsi yang ada. |
+| `public.decide_grade_change` | `000014_grade_change_decision_and_execution.sql` | *Hanya `UPDATE` pada grade_change_requests* | Tidak mutasi grades | Pertahankan fungsi yang ada. |
 
 ---
 
-### C. Tabel `public.submissions` (8 Kolom)
-- **Struktur Kolom**: `id`, `assignment_id`, `student_id`, `attempt_no`, `status` (`'DRAFT'`, `'SUBMITTED'`, `'RETURNED'`, `'REVIEWED'`, `'GRADED'`), `text_body`, `submitted_at`, `is_late`.
-- **Evaluasi & Kekurangan Saat Ini**: Menghubungkan tugas mahasiswa ke penilaian. Belum memiliki kolom berkas lampiran berbasis Supabase Storage Signed URL.
+## 3. Pemetaan Butir ke Komponen Evaluasi & Formula Agregasi (D1 & D2)
+
+### 3.1. Penambahan Kolom `component_id`
+- Kolom `component_id` ditambahkan pada `public.assignments` dan `public.grades` dengan sifat:
+  - `NULLABLE` saat inisialisasi awal agar kompatibel dengan data yang sudah ada.
+  - **Kondisi Prasyarat Wajib**: Sebelum fungsi `calculate_final_grades` dijalankan, setiap butir nilai yang diikutsertakan dalam buku nilai **WAJIB MEMILIKI `component_id IS NOT NULL`**. Jika ada butir nilai tanpa komponen bobot, fungsi akan menolak komputasi dengan eksepsi:
+    `RAISE EXCEPTION 'UNMAPPED_GRADE_ITEM: Butir nilai % belum dipetakan ke komponen evaluasi.';`
+
+### 3.2. Penanganan Ujian Tertulis (UTS & UAS) Sebelum Domain 5 (CBT)
+Sebelum Domain 5 (kuis daring dan CBT terproctor) diimplementasikan, evaluasi ujian tengah semester dan akhir semester konvensional ditangani melalui:
+- **`item_type = 'MANUAL'`**:
+  Dosen membuat butir nilai ujian di tabel `grades` dengan:
+  - `item_type = 'MANUAL'`
+  - `item_id = gen_random_uuid()` (pengenal unik sesi evaluasi)
+  - `component_id = <ID komponen UTS atau UAS pada grade_components>`
+  - `score = <nilai mahasiswa>`
+  - `max_score = 100.00`
+- Dosen menginput nilai ujian manual melalui RPC `save_grade_draft` / antarmuka gradebook dosen, kemudian memfinalisasikannya via `finalize_grade`.
+
+### 3.3. Formula Agregasi Nilai dalam Satu Komponen
+
+Terdapat dua model matematis umum untuk agregasi butir dalam satu komponen bobot:
+1. **Model A: Rasio Akumulasi Skor terhadap Maksimum ($\frac{\sum \text{Skor}}{\sum \text{Maks}} \times 100$)**:
+   $$\text{Skor Komponen} = \frac{\sum_{i=1}^n \text{skor}_i}{\sum_{i=1}^n \text{max\_score}_i} \times 100$$
+2. **Model B: Rata-Rata Persentase Murni ($\frac{1}{n} \sum \frac{\text{skor}_i}{\text{max\_score}_i} \times 100$)**:
+   $$\text{Skor Komponen} = \frac{1}{n} \sum_{i=1}^n \left( \frac{\text{skor}_i}{\text{max\_score}_i} \times 100 \right)$$
+
+#### Pilihan Desain & Alasan Pedagogis:
+SIAJAR secara eksplisit menetapkan **Model A (Rasio Akumulasi Skor terhadap Maksimum)** sebagai formula baku:
+- **Rasional**: Model A menghargai bobot alami dari skala rubrik tugas. Dosen seringkali memberikan tugas kecil (skor maksimal 20) dan proyek besar (skor maksimal 100). Model A secara adil memberikan pengaruh 5x lebih besar pada proyek besar. Pada Model B, kesalahan kecil pada tugas bernilai maksimal 20 akan menghancurkan persentase secara tidak proporsional.
+- **Pengecualian**: Jika seluruh butir memiliki skala skor maksimum yang sama (misal semua tugas berskala 100), Model A dan Model B menghasilkan angka yang identik secara matematis.
+
+#### Contoh Hitung Numerik Konkret:
+Seorang mahasiswa pada komponen "Tugas" (bobot kelas = 20%) memiliki 2 butir tugas:
+- Tugas 1 (Latihan Mingguan): skor = $18.00$, max_score = $20.00$ ($90.00\%$)
+- Tugas 2 (Proyek Kelompok): skor = $70.00$, max_score = $100.00$ ($70.00\%$)
+
+Perhitungan Skor Komponen Tugas:
+$$\text{Skor Komponen Tugas} = \frac{18.00 + 70.00}{20.00 + 100.00} \times 100 = \frac{88.00}{120.00} \times 100 = 73.33\%$$
+
+Kontribusi terhadap Nilai Akhir Kelas:
+$$\text{Kontribusi Tugas} = 73.33 \times \frac{20\%}{100} = 14.67 \text{ poin}$$
+
+*(Bandingkan jika menggunakan Model B: $\frac{90\% + 70\%}{2} = 80.00\%$, yang secara keliru menganggap latihan bernilai 20 sama pentingnya dengan proyek bernilai 100).*
+
+### 3.4. Aturan Nilai Kosong / Belum Final (K10) & Immutability Bobot
+1. **Aturan Nilai Kosong & Draf (K10)**:
+   - RPC `calculate_final_grades` **MENOLAK KERAS** kalkulasi jika terdapat mahasiswa terdaftar yang memiliki butir nilai pada komponen aktif yang belum berstatus `FINAL` (misal masih `DRAFT` atau belum dinilai).
+   - *Pengecualian*: Mahasiswa yang bersangkutan secara resmi ditandai "tidak dinilai" (*exempted* / dispensasi sakit / cuti akademik yang disetujui).
+   - Menghindari terbitnya nilai akhir prematur atau huruf mutu palsu akibat kelalaian dosen yang belum memfinalisasi penilaian.
+2. **Aturan Bobot Komponen (`grade_components`)**:
+   - Total bobot komponen per kelas $\sum \text{weight\_pct}$ **WAJIB TEPAT 100.00%**. Divalidasi secara ketat di RPC kalkulasi:
+     ```sql
+     IF (SELECT coalesce(sum(weight_pct), 0) FROM public.grade_components WHERE class_id = p_class_id AND is_active = true) <> 100.00 THEN
+         RAISE EXCEPTION 'INVALID_COMPONENT_WEIGHT_SUM: Total bobot komponen kelas harus tepat 100.00%%.';
+     END IF;
+     ```
+   - **Immutability Pasca-Nilai Final**: Dosen **DILARANG MENGUBAH ATAU MENGHAPUS** konfigurasi bobot komponen jika sudah ada minimal satu butir nilai berstatus `FINAL` pada kelas tersebut. Hal ini mencegah manipulasi formula penilaian di tengah jalan yang merugikan mahasiswa.
 
 ---
 
-### D. Tabel `public.assignments` (11 Kolom)
-- **Struktur Kolom**: `id`, `class_id`, `title`, `description`, `due_at`, `close_at`, `max_score`, `status` (`'DRAFT'`, `'PUBLISHED'`, `'CLOSED'`), `created_by`, `created_at`, `updated_at`.
-- **Evaluasi & Kekurangan Saat Ini**: Belum memiliki relasi ke komponen pembobotan evaluasi kelas (`grade_components`).
+## 4. Rancangan Skema Baru (DDL, Indeks, Foreign Keys & Constraints)
 
----
-
-### E. Tabel `public.grade_change_requests` (18 Kolom)
-- **Struktur Kolom**: `id`, `grade_id`, `class_id`, `requested_by`, `class_title`, `assignment_title`, `student_name`, `old_score`, `proposed_score`, `reason`, `status` (`'PENDING'`, `'APPROVED'`, `'REJECTED'`, `'EXECUTED'`), `reviewed_by`, `review_note`, `reviewed_at`, `created_at`, `executed_by`, `executed_at`, `execution_note`.
-- **RPC Terkait**:
-  - `public.decide_grade_change(p_request, p_approve, p_note)` (Kaprodi).
-  - `public.execute_grade_change(p_request, p_note)` (Staf Akademik).
-- **Evaluasi & Kekurangan Saat Ini**: Alur 3-pihak (Dosen -> Kaprodi -> Staf) sudah sangat solid dengan Separation of Duties, namun belum terintegrasi dengan penutupan/pembekuan buku nilai (`gradebook_locks`) dan komputasi ulang nilai akhir otomatis.
-
----
-
-### F. Fungsi RPC yang Sudah Ada
-1. **`public.save_grade_draft(p_submission, p_score, p_comment)`**:
-   - Dosen kelas atau asisten dengan izin `assignment.grade` dapat menyimpan draf nilai.
-   - Mengubah status submission menjadi `'REVIEWED'`.
-   - *Kekurangan*: Belum memeriksa apakah kelas terkunci (`gradebook_locks.is_locked = true`), dan belum menyetel `app.rpc_context`.
-2. **`public.finalize_grade(p_submission)`**:
-   - Hanya dosen kelas yang berwenang (asisten ditolak).
-   - Mengubah status menjadi `'FINAL'`, membuat `is_visible_to_student = true`, dan submission menjadi `'GRADED'`.
-   - *Kekurangan*: Belum memvalidasi kunci gradebook, belum memicu hitung ulang nilai akhir kumulatif, dan belum menyetel `app.rpc_context`.
-3. **`public.log_grade_export(p_class)`**:
-   - Dosen mencatat jejak audit saat mengunduh Excel/PDF nilai kelas.
-   - *Kekurangan*: Belum mengakomodasi ekspor tingkat prodi oleh Kaprodi atau tingkat universitas oleh Staf Akademik.
-
----
-
-## 2. Yang BARU (Rancangan Skema & Usulan Migrasi Domain 3)
-
-Untuk melengkapi Domain 3 menjadi sistem buku nilai (*gradebook*) akademik yang utuh dan berstandar perguruan tinggi, diusulkan penambahan 3 entitas baru:
-
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        public.classes (id)                             │
-└──────────┬─────────────────────────────┬───────────────────────────────┘
-           │ 1:N                         │ 1:N                         │ 1:1
-           ▼                             ▼                             ▼
-┌───────────────────────┐   ┌──────────────────────────┐   ┌──────────────────────┐
-│public.grade_components│   │   public.grades          │   │public.gradebook_locks│
-│- class_id             │   │   - class_id             │   │- class_id (UQ)       │
-│- name (Tugas, UTS..)  │   │   - student_id           │   │- is_locked           │
-│- weight_pct (20%, 30%)│   │   - item_type, score     │   │- locked_by, reason   │
-└──────────┬────────────┘   └────────────┬─────────────┘   └──────────────────────┘
-           │                             │
-           └──────────────┬──────────────┘
-                          ▼
-             [RPC calculate_final_grades]
-                          │
-                          ▼
-            ┌───────────────────────────┐
-            │public.class_final_grades  │
-            │- class_id, student_id (UQ)│
-            │- total_score (0.00-100.00)│
-            │- letter_grade (A, B, C...)│
-            │- grade_point (4.00, 3.00) │
-            │- status (DRAFT/FINAL/LOCK)│
-            └───────────────────────────┘
-```
-
----
-
-### A. Tabel Baru 1: `public.grade_components` (Bobot Komponen per Kelas)
-Menyimpan konfigurasi bobot penilaian per kelas yang dapat disesuaikan dosen pengampu (misal: Tugas 20%, Kuis 15%, UTS 30%, UAS 35% -> Total 100%).
-
+### 4.1. Tabel `public.grade_components` (Bobot Komponen per Kelas)
 ```sql
 CREATE TABLE IF NOT EXISTS public.grade_components (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -140,6 +139,7 @@ CREATE TABLE IF NOT EXISTS public.grade_components (
     code VARCHAR(50) NOT NULL,
     weight_pct NUMERIC(5,2) NOT NULL,
     order_index SMALLINT NOT NULL DEFAULT 0,
+    is_active BOOLEAN NOT NULL DEFAULT true,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     CONSTRAINT uq_class_comp_code UNIQUE (class_id, code),
@@ -149,42 +149,8 @@ CREATE TABLE IF NOT EXISTS public.grade_components (
 CREATE INDEX IF NOT EXISTS idx_grade_components_class ON public.grade_components(class_id);
 ```
 
----
-
-### B. Tabel Baru 2: `public.class_final_grades` (Nilai Akhir Kumulatif Mahasiswa)
-Menyimpan hasil kalkulasi komputasi server untuk nilai angka final, huruf mutu, angka mutu, dan status kelulusan mahasiswa per kelas.
-
-```sql
-CREATE TABLE IF NOT EXISTS public.class_final_grades (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE RESTRICT,
-    student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
-    total_score NUMERIC(5,2) NOT NULL,
-    letter_grade VARCHAR(2) NOT NULL,
-    grade_point NUMERIC(3,2) NOT NULL,
-    is_passed BOOLEAN NOT NULL DEFAULT false,
-    status public.grade_status NOT NULL DEFAULT 'DRAFT',
-    calculated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    calculated_by UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
-    published_at TIMESTAMPTZ NULL,
-    published_by UUID NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    CONSTRAINT uq_final_grade_class_student UNIQUE (class_id, student_id),
-    CONSTRAINT ck_final_score_range CHECK (total_score BETWEEN 0.00 AND 100.00),
-    CONSTRAINT ck_letter_grade_valid CHECK (letter_grade IN ('A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'D', 'E', 'F')),
-    CONSTRAINT ck_grade_point_range CHECK (grade_point BETWEEN 0.00 AND 4.00)
-);
-
-CREATE INDEX IF NOT EXISTS idx_final_grades_class ON public.class_final_grades(class_id);
-CREATE INDEX IF NOT EXISTS idx_final_grades_student ON public.class_final_grades(student_id);
-```
-
----
-
-### C. Tabel Baru 3: `public.gradebook_locks` (Penguncian Gradebook per Kelas)
-Menyediakan mekanisme pembekuan buku nilai ketika perkuliahan semester berakhir atau telah disahkan oleh Kaprodi/Dosen.
-
+### 4.2. Tabel `public.gradebook_locks` (Satu Sumber Kebenaran Kunci per Kelas)
+Selaras dengan prinsip D4 dan D5, seluruh referensi pengguna menggunakan `ON DELETE RESTRICT`:
 ```sql
 CREATE TABLE IF NOT EXISTS public.gradebook_locks (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -192,8 +158,9 @@ CREATE TABLE IF NOT EXISTS public.gradebook_locks (
     is_locked BOOLEAN NOT NULL DEFAULT true,
     locked_by UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
     locked_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    unlocked_by UUID NULL REFERENCES public.profiles(id) ON DELETE SET NULL,
+    unlocked_by UUID NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
     unlocked_at TIMESTAMPTZ NULL,
+    unlock_request_id UUID NULL REFERENCES public.grade_change_requests(id) ON DELETE RESTRICT,
     lock_reason TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -204,252 +171,280 @@ CREATE TABLE IF NOT EXISTS public.gradebook_locks (
 CREATE INDEX IF NOT EXISTS idx_gradebook_lock_class ON public.gradebook_locks(class_id);
 ```
 
----
+### 4.3. Tabel Konfigurasi Skala Huruf Mutu Dinamis (D6 & K9)
+Memindahkan penentuan huruf mutu dari batasan CHECK hardcoded ke tabel konfigurasi relasional. Skala yang dicantumkan di bawah ini berstatus **CONTOH REFERENSI** (penetapan resmi menunggu keputusan Pengguna pada **K9**):
 
-### D. Perluasan Enum Status Nilai
 ```sql
-ALTER TYPE public.grade_status ADD VALUE IF NOT EXISTS 'LOCKED';
+CREATE TABLE IF NOT EXISTS public.grade_scales (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    code VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    is_default BOOLEAN NOT NULL DEFAULT false,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS public.grade_scale_bands (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    scale_id UUID NOT NULL REFERENCES public.grade_scales(id) ON DELETE RESTRICT,
+    letter_grade VARCHAR(2) NOT NULL,
+    grade_point NUMERIC(3,2) NOT NULL CHECK (grade_point BETWEEN 0.00 AND 4.00),
+    min_score NUMERIC(5,2) NOT NULL CHECK (min_score >= 0.00 AND min_score <= 100.00),
+    max_score NUMERIC(5,2) NOT NULL CHECK (max_score >= 0.00 AND max_score <= 100.00),
+    is_passed BOOLEAN NOT NULL DEFAULT true,
+    order_index INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CONSTRAINT uq_scale_letter UNIQUE (scale_id, letter_grade),
+    CONSTRAINT ck_scale_band_range CHECK (min_score <= max_score)
+);
+
+CREATE INDEX IF NOT EXISTS idx_scale_bands_lookup ON public.grade_scale_bands(scale_id, min_score, max_score);
 ```
 
----
+*(Catatan: Data seed awal pada tabel ini ditandai sebagai contoh standar 4.00, menunggu ketetapan kurikulum resmi Pengguna).*
 
-### E. Rencana File Migrasi (Fase 3B)
-1. **`supabase/migrations/20261012000019_phase3b_domain3_gradebook_schema.sql`**:
-   - `ALTER TYPE public.grade_status ADD VALUE IF NOT EXISTS 'LOCKED';`
-   - DDL tabel `public.grade_components`, `public.class_final_grades`, `public.gradebook_locks`.
-   - Indeks performa, foreign keys, CHECK constraints, dan trigger `fn_set_updated_at()`.
-   - Kebijakan RLS dasar untuk pembacaan dan isolasi per peran.
-2. **`supabase/migrations/20261012000020_phase3b_domain3_gradebook_functions.sql`**:
-   - Trigger `BEFORE UPDATE` pencegah mutasi langsung (`tr_grades_protect_sensitive`, `tr_final_grades_protect_sensitive`, `tr_gradebook_locks_protect_sensitive`).
-   - RPC `public.calculate_final_grades(p_class_id UUID)`.
-   - RPC `public.publish_final_grades(p_class_id UUID)`.
-   - RPC `public.lock_gradebook(p_class_id UUID, p_reason TEXT)`.
-   - Pembaruan RPC `save_grade_draft` dan `finalize_grade` dengan validasi pengecekan kunci gradebook dan set GUC `app.rpc_context`.
-   - `REVOKE ALL FROM PUBLIC, anon` dan `GRANT EXECUTE TO authenticated, service_role`.
+### 4.4. Tabel `public.class_final_grades` (Nilai Akhir Kumulatif Mahasiswa)
+```sql
+CREATE TABLE IF NOT EXISTS public.class_final_grades (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE RESTRICT,
+    student_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    scale_id UUID NOT NULL REFERENCES public.grade_scales(id) ON DELETE RESTRICT,
+    total_score NUMERIC(5,2) NOT NULL CHECK (total_score BETWEEN 0.00 AND 100.00),
+    letter_grade VARCHAR(2) NOT NULL,
+    grade_point NUMERIC(3,2) NOT NULL CHECK (grade_point BETWEEN 0.00 AND 4.00),
+    is_passed BOOLEAN NOT NULL DEFAULT false,
+    status public.grade_status NOT NULL DEFAULT 'DRAFT',
+    calculated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    calculated_by UUID NOT NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    published_at TIMESTAMPTZ NULL,
+    published_by UUID NULL REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CONSTRAINT uq_final_grade_class_student UNIQUE (class_id, student_id)
+);
 
----
-
-## 3. Matriks Aturan Akses per Peran (Role-Based Access Control)
-
-| Peran (*Role*) | Butir Nilai Tugas/Kuis (`grades`) | Komponen Bobot (`grade_components`) | Nilai Akhir Kumulatif (`class_final_grades`) | Penguncian Buku Nilai (`gradebook_locks`) | Riwayat Perubahan (`grade_history`) |
-|---|---|---|---|---|---|
-| **Mahasiswa** | **BACA**: Hanya baris miliknya yang `is_visible_to_student = true` (`status = 'FINAL'` atau `'LOCKED'`). Baris `DRAFT` **TIDAK TERLIHAT**.<br>**TULIS**: Ditolak 403. | **BACA**: Komponen kelas yang terdaftar aktif (`ACTIVE`).<br>**TULIS**: Ditolak 403. | **BACA**: Hanya baris miliknya jika status `'FINAL'` atau `'LOCKED'`. Draf **TIDAK TERLIHAT**.<br>**TULIS**: Ditolak 403. | **BACA**: Status kunci kelasnya.<br>**TULIS**: Ditolak 403. | **BACA & TULIS**: Ditolak 403 (Rahasia Dosen). |
-| **Dosen Pengampu** | **BACA**: Seluruh peserta kelas miliknya.<br>**TULIS**: `save_grade_draft` & `finalize_grade` (Ditolak jika kelas berstatus `is_locked`). | **BACA & TULIS**: Konfigurasi bobot kelas miliknya (`is_class_lecturer`). | **BACA**: Seluruh peserta kelasnya.<br>**TULIS**: Menjalankan `calculate_final_grades` & `publish_final_grades`. | **BACA & TULIS**: Mengeksekusi `lock_gradebook` di akhir semester. | **BACA**: Seluruh riwayat kelasnya.<br>**TULIS**: Otomatis via DB trigger (Append-only). |
-| **Asisten Dosen (TA)** | **BACA**: Hanya jika didelegasikan `submission.review` atau `assignment.grade`.<br>**TULIS**: `save_grade_draft` HANYA jika punya izin `assignment.grade`. **DILARANG FINALISASI** (`finalize_grade` ditolak). **DILARANG MENILAI DIRI SENDIRI** (`SELF_REVIEW`). | **BACA**: Komponen kelas yang diasisteni.<br>**TULIS**: Ditolak 403. | **BACA**: Sesuai izin baca kelas.<br>**TULIS**: Ditolak 403. | **BACA & TULIS**: Ditolak 403. | **BACA & TULIS**: Ditolak 403. |
-| **Kaprodi** | **BACA**: Seluruh butir nilai kelas se-program studinya.<br>**TULIS**: Ditolak mutasi langsung (Hanya memutuskan permohonan `decide_grade_change`). | **BACA**: Seluruh kelas se-prodinya.<br>**TULIS**: Ditolak mutasi langsung. | **BACA**: Seluruh rekap nilai akhir kelas se-prodinya.<br>**TULIS**: Ditolak mutasi langsung. | **BACA**: Status kunci se-prodinya.<br>**TULIS**: Berwenang Kunci Massal Prodi saat batas kalender akademik tercapai. | **BACA**: Seluruh log riwayat se-prodinya.<br>**TULIS**: Ditolak (Append-only). |
-| **Staf Akademik** | **BACA**: Seluruh nilai untuk urusan transkrip/KHS.<br>**TULIS**: HANYA melalui eksekusi permohonan yang disetujui Kaprodi (`execute_grade_change`). | **BACA**: Master data kurikulum.<br>**TULIS**: Ditolak. | **BACA**: Pencetakan KHS, Buku Induk Nilai, & PDDIKTI.<br>**TULIS**: Ditolak mutasi langsung. | **BACA**: Status kunci.<br>**TULIS**: Buka Kunci Darurat Khusus dengan otorisasi resmi rektorat. | **BACA**: Seluruh riwayat audit.<br>**TULIS**: Ditolak. |
-| **Super Admin & System Admin** | **DILARANG TULIS NILAI** (Fail-closed 403, dicabut dari kebijakan tulis & RPC). Akses baca dibatasi hanya untuk monitoring teknis & pemulihan bencana. | **DILARANG TULIS**. | **DILARANG TULIS NILAI**. | **DILARANG TULIS / KUNCI NILAI**. | **BACA**: Jejak forensik sistem.<br>**TULIS**: Ditolak mutlak (Immutable). |
-
----
-
-## 4. Daur Hidup Status Nilai & Tabel Transisi (State Machine)
-
-```
-                 [save_grade_draft]
-                         │
-                         ▼
-                  ┌──────────────┐
-     ┌───────────►│    DRAFT     │◄────────────┐
-     │            └──────┬───────┘             │
-     │                   │                     │
-     │                   │ [finalize_grade]    │ [reopen_draft]
-     │                   ▼                     │ (hanya jika belum LOCKED)
-     │            ┌──────────────┐             │
-     │            │    FINAL     ├─────────────┘
-     │            └──────┬───────┘
-     │                   │
-     │                   │ [lock_gradebook]
-     │                   ▼
-     │            ┌──────────────┐
-     └────────────┤    LOCKED    │
-                  └──────────────┘
-                         │
-                         │ [grade_change_requests]
-                         │ (Dosen Usul -> Kaprodi Setuju -> Staf Eksekusi)
-                         ▼
-                  [Nilai Diperbarui + Status Tetap LOCKED + Tercatat di Audit]
+CREATE INDEX IF NOT EXISTS idx_final_grades_class ON public.class_final_grades(class_id);
+CREATE INDEX IF NOT EXISTS idx_final_grades_student ON public.class_final_grades(student_id);
 ```
 
-### A. Tabel Transisi Status Nilai (`public.grade_status_transitions`)
-Untuk memastikan integritas mesin status di level database, dibuat tabel transisi eksplisit:
+### 4.5. Struktur Relasional Transisi Status Nilai (D4)
+Mengganti kolom string role yang rapuh dengan struktur relasional berbasis tabel referensi peran `public.roles`:
 
 ```sql
 CREATE TABLE IF NOT EXISTS public.grade_status_transitions (
     from_status public.grade_status NOT NULL,
     to_status public.grade_status NOT NULL,
-    allowed_role VARCHAR(50) NOT NULL,
     description TEXT,
     PRIMARY KEY (from_status, to_status)
 );
 
-INSERT INTO public.grade_status_transitions (from_status, to_status, allowed_role, description) VALUES
-    ('DRAFT', 'FINAL', 'LECTURER', 'Dosen memfinalisasi draf nilai; nilai dipublikasikan ke mahasiswa'),
-    ('FINAL', 'DRAFT', 'LECTURER', 'Dosen membuka kembali draf koreksi sebelum gradebook dikunci'),
-    ('FINAL', 'LOCKED', 'LECTURER,PROGRAM_COORDINATOR', 'Dosen atau Kaprodi membekukan nilai akhir semester'),
-    ('LOCKED', 'LOCKED', 'ACADEMIC_STAFF', 'Staf mengeksekusi revisi resmi grade_change_requests pasca-penguncian')
-ON CONFLICT (from_status, to_status) DO NOTHING;
+CREATE TABLE IF NOT EXISTS public.grade_transition_roles (
+    from_status public.grade_status NOT NULL,
+    to_status public.grade_status NOT NULL,
+    role_id UUID NOT NULL REFERENCES public.roles(id) ON DELETE RESTRICT,
+    PRIMARY KEY (from_status, to_status, role_id),
+    FOREIGN KEY (from_status, to_status) REFERENCES public.grade_status_transitions(from_status, to_status) ON DELETE CASCADE
+);
 ```
 
-### B. Prosedur Perubahan Nilai Setelah Status `LOCKED`
-Setelah status buku nilai berubah menjadi `LOCKED`:
-1. **Dosen Pengampu** DILARANG memanggil `save_grade_draft` maupun `finalize_grade` (akan dilempar eksepsi `GRADEBOOK_LOCKED`).
-2. Satu-satunya pintu perubahan nilai adalah alur permohonan 3-pihak:
-   - **Langkah 1 (Pengajuan)**: Dosen memanggil `request_grade_change` dengan bukti revisi dan skor usulan baru (status permohonan: `PENDING`).
-   - **Langkah 2 (Keputusan)**: Kaprodi memverifikasi keabsahan akademik dan memanggil `decide_grade_change` (status permohonan: `APPROVED` atau `REJECTED`).
-   - **Langkah 3 (Eksekusi)**: Staf Akademik memanggil `execute_grade_change` (status permohonan: `EXECUTED`). RPC ini akan membuka sesi transaksi dengan `app.rpc_context = 'on'`, memperbarui nilai di tabel `grades`, menulis riwayat di `grade_history`, memicu perhitungan ulang `class_final_grades`, dan segera mereset `app.rpc_context = ''`.
+---
+
+## 5. Matriks Hak Akses & Penegakan Privasi per Peran (D4 & D7)
+
+| Peran (*Role*) | Butir Nilai Tugas/Kuis (`grades`) | Komponen Bobot (`grade_components`) | Nilai Akhir Kumulatif (`class_final_grades`) | Penguncian Gradebook (`gradebook_locks`) | Riwayat Perubahan (`grade_history`) |
+|---|---|---|---|---|---|
+| **Mahasiswa** | **BACA**: Hanya baris miliknya yang `is_visible_to_student = true` (`status = 'FINAL'`). Draf **TIDAK TERLIHAT**.<br>**TULIS**: Ditolak 403. | **BACA**: Komponen kelas yang di-enroll aktif.<br>**TULIS**: Ditolak 403. | **BACA**: Hanya baris miliknya jika status `'FINAL'` (`published_at IS NOT NULL`). Draf **TIDAK TERLIHAT**.<br>**TULIS**: Ditolak 403. | **BACA**: Status kunci kelasnya.<br>**TULIS**: Ditolak 403. | **BACA & TULIS**: Ditolak 403 (Rahasia Akademik). |
+| **Dosen Pengampu** | **BACA**: Seluruh peserta kelas miliknya.<br>**TULIS**: `save_grade_draft` & `finalize_grade` (Ditolak jika kelas berstatus `is_locked`). | **BACA & TULIS**: Konfigurasi bobot kelas miliknya sebelum ada nilai final. | **BACA**: Seluruh peserta kelasnya.<br>**TULIS**: Menjalankan `calculate_final_grades` & `publish_final_grades`. | **BACA & TULIS**: Mengeksekusi `lock_gradebook` di akhir semester. | **BACA**: Seluruh riwayat kelasnya.<br>**TULIS**: Otomatis via DB trigger (Append-only). |
+| **Asisten Dosen (TA)** | **BACA**: Hanya jika didelegasikan `submission.review` atau `assignment.grade`.<br>**TULIS**: `save_grade_draft` HANYA jika punya izin `assignment.grade`. **DILARANG FINALISASI** dan **DILARANG MENILAI DIRI SENDIRI** (`SELF_REVIEW`). | **BACA**: Komponen kelas yang diasisteni.<br>**TULIS**: Ditolak 403. | **BACA**: Sesuai izin baca kelas.<br>**TULIS**: Ditolak 403. | **BACA & TULIS**: Ditolak 403. | **BACA & TULIS**: Ditolak 403. |
+| **Kaprodi** | **BACA**: Seluruh butir nilai kelas se-program studinya.<br>**TULIS**: Ditolak mutasi langsung (Hanya memutuskan permohonan `decide_grade_change`). | **BACA**: Seluruh kelas se-prodinya.<br>**TULIS**: Ditolak mutasi langsung. | **BACA**: Seluruh rekap nilai akhir kelas se-prodinya.<br>**TULIS**: Ditolak mutasi langsung. | **BACA**: Status kunci se-prodinya.<br>**TULIS**: Berwenang Kunci Massal Semester (Tindakan TERBATAS pada tabel kunci, **BUKAN mutasi nilai**). Menyetujui permohonan buka kunci. | **BACA**: Seluruh log riwayat se-prodinya.<br>**TULIS**: Ditolak (Append-only). |
+| **Staf Akademik** | **BACA**: Seluruh nilai untuk urusan transkrip/KHS.<br>**TULIS**: HANYA melalui eksekusi permohonan yang disetujui Kaprodi (`execute_grade_change`). | **BACA**: Master data kurikulum.<br>**TULIS**: Ditolak. | **BACA**: Pencetakan KHS, Buku Induk Nilai, & PDDIKTI.<br>**TULIS**: Ditolak mutasi langsung. | **BACA**: Status kunci.<br>**TULIS**: Mengeksekusi `unlock_gradebook` setelah permohonan disetujui Kaprodi. | **BACA**: Seluruh riwayat audit.<br>**TULIS**: Ditolak. |
+| **Super Admin & System Admin** | **DILARANG MEMBACA NILAI MAHASISWA** (Hanya agregat anonim/telemetri sistem).<br>**DILARANG MENULIS NILAI** (Fail-closed 403, dicabut dari kebijakan tulis & RPC). | **BACA**: Backup & infrastruktur.<br>**DILARANG MENULIS**. | **DILARANG MEMBACA NILAI MAHASISWA**.<br>**DILARANG MENULIS NILAI**. | **DILARANG MENULIS / KUNCI NILAI**. | **BACA**: Jejak forensik keamanan sistem.<br>**DILARANG MENULIS** (Immutable). |
 
 ---
 
-## 5. Integritas ACID, Komputasi Server & Pencegahan Kecurangan
+## 6. Mekanisme Penguncian & Alur Pembukaan Kunci Gradebook (D4)
 
-### A. Riwayat Audit Nilai Append-Only
-Tabel `public.grade_history` dilindungi oleh trigger `tr_grade_history_immutable` yang memanggil `public.fn_prevent_audit_log_modification()`. Percobaan apapun untuk menjalankan kueri `UPDATE` atau `DELETE` pada tabel riwayat ini akan langsung digagalkan PostgreSQL.
+### 6.1. Satu Sumber Kebenaran Kunci (*Single Source of Truth*)
+- Status pembekuan buku nilai dipusatkan 100% pada tabel `public.gradebook_locks` (`is_locked = true/false`).
+- Status butir nilai pada `public.grades.status` tetap berada di domain siklus penilaian (`'DRAFT'` atau `'FINAL'`). Nilai `'LOCKED'` pada `grades.status` **DIHAPUS DARI DESAIN** agar tidak terjadi pertentangan dua sumber kebenaran data.
+- Setiap operasi mutasi nilai (`save_grade_draft`, `finalize_grade`) memverifikasi status kunci secara langsung ke tabel `gradebook_locks`:
+  ```sql
+  IF EXISTS (SELECT 1 FROM public.gradebook_locks WHERE class_id = v_class_id AND is_locked = true) THEN
+      RAISE EXCEPTION 'GRADEBOOK_LOCKED: Buku nilai kelas telah dibekukan dan tidak dapat diubah.';
+  END IF;
+  ```
 
-### B. Perhitungan Nilai Akhir Wajib di Sisi Server (Database RPC)
-Nilai akhir mahasiswa **DILARANG DIHITUNG DI SISI KLIEN ATAU BROWSER**. Klien hanya mengirimkan instruksi pemicu, sementara seluruh kalkulasi dilakukan secara atomik di dalam PostgreSQL via RPC:
+### 6.2. Prosedur Pembekuan Buku Nilai (`lock_gradebook`)
+- **Aktor**: Dosen Pengampu kelas bersangkutan, atau Kaprodi program studi terkait (saat batas kalender akademik tercapai).
+- **Validasi**:
+  1. Seluruh butir nilai pada komponen wajib harus sudah berstatus `'FINAL'`.
+  2. Nilai akhir kumulatif `class_final_grades` sudah dihitung (`calculated_at IS NOT NULL`).
+  3. Alasan penguncian minimal 5 karakter.
+- **Eksekusi**: Menyisipkan baris ke `public.gradebook_locks` dengan `is_locked = true`, mencatat audit log `'gradebook.lock'`.
 
-$$\text{Nilai Komponen}_k = \frac{\sum \text{Skor Tugas}}{\sum \text{Skor Maksimal}} \times 100$$
+### 6.3. Prosedur Pembukaan Kembali Kunci (`unlock_gradebook`)
+Membuka kunci buku nilai yang sudah dibekukan adalah tindakan administratif luar biasa yang berisiko tinggi. Demi menjaga integritas dan akuntabilitas akademik, diterapkan alur **Pemisahan Tugas 3-Pihak**:
 
-$$\text{Total Nilai Akhir} = \sum_{k=1}^m \left( \text{Nilai Komponen}_k \times \frac{\text{Weight \%}_k}{100} \right)$$
+```
+[Dosen Pengampu]                  [Kaprodi]                   [Staf Akademik]
+       │                              │                              │
+       │ 1. Ajukan Buka Kunci         │                              │
+       │    (Alasan min 20 karakter)  │                              │
+       ├─────────────────────────────►│                              │
+       │                              │ 2. Tinjau & Setujui          │
+       │                              │    (Putusan Persetujuan)     │
+       │                              ├─────────────────────────────►│
+       │                              │                              │ 3. Eksekusi Buka Kunci
+       │                              │                              │    (RPC unlock_gradebook)
+       │                              │                              │    - is_locked = false
+       │                              │                              │    - Audit Log dicatat
+       │◄─────────────────────────────┴──────────────────────────────┤
+```
 
-### C. Standar Pembulatan & Skala Konversi Huruf Mutu
-- Pembulatan kalkulasi angka: `ROUND(total_score, 2)` (2 angka di belakang koma).
-- Rentang skor angka dijamin valid oleh `CHECK (total_score BETWEEN 0.00 AND 100.00)`.
-- Tabel Standar Konversi Otomatis Akademik di PostgreSQL:
-
-| Rentang Skor Akhir | Huruf Mutu | Angka Mutu (*Grade Point*) | Status Kelulusan |
-|---|---|---|---|
-| $85.00 - 100.00$ | **A** | 4.00 | **Lulus** |
-| $80.00 - 84.99$ | **A-** | 3.70 | **Lulus** |
-| $75.00 - 79.99$ | **B+** | 3.30 | **Lulus** |
-| $70.00 - 74.99$ | **B** | 3.00 | **Lulus** |
-| $65.00 - 69.99$ | **B-** | 2.70 | **Lulus** |
-| $60.00 - 64.99$ | **C+** | 2.30 | **Lulus** |
-| $55.00 - 59.99$ | **C** | 2.00 | **Lulus** |
-| $40.00 - 54.99$ | **D** | 1.00 | **Tidak Lulus** |
-| $0.00 - 39.99$ | **E** | 0.00 | **Tidak Lulus** |
-
-### D. Idempotensi & Concurrency Control (Row-Level Locking)
-- Seluruh RPC mutasi (`save_grade_draft`, `finalize_grade`, `calculate_final_grades`, `lock_gradebook`) mengunci baris kelas dan nilai terkait menggunakan klausa `FOR UPDATE` untuk mencegah *race condition* atau penulisan ganda konkuren.
-- Panggilan berulang pada `finalize_grade` bersifat idempoten: jika baris sudah `FINAL`, sistem tidak menduplikasi rekaman di `grade_history`.
+1. **Langkah 1 (Pengajuan)**: Dosen pengampu mengajukan permohonan buka kunci secara tertulis dengan alasan rinci (minimal 20 karakter).
+2. **Langkah 2 (Persetujuan)**: Koordinator Program Studi (Kaprodi) meninjau alasan dan menyetujui permohonan buka kunci.
+3. **Langkah 3 (Eksekusi)**: Staf Akademik memanggil RPC `public.unlock_gradebook(p_class_id UUID, p_request_id UUID)`.
+   - RPC memvalidasi bahwa permohonan telah berstatus `APPROVED` oleh Kaprodi dan pengaju $\neq$ penyetuju $\neq$ eksekutor (pemisahan tugas).
+   - Memperbarui `gradebook_locks`: `is_locked = false`, `unlocked_by = auth.uid()`, `unlocked_at = now()`.
+   - Mencatat peristiwa pembukaan kunci ke `public.audit_logs` dengan aksi `'gradebook.unlock'`.
 
 ---
 
-## 6. Kolom Terlindungi & Penegakan Konvensi `app.rpc_context`
+## 7. Perlindungan Kolom Terlindungi & Penegakan GUC `app.rpc_context` (D3)
 
-Mengikuti konvensi keamanan Fase 3A (G1 & G4), setiap kolom sensitif dilindungi oleh trigger `BEFORE UPDATE` yang menolak manipulasi langsung dari REST API/PostgREST jika sesi `current_setting('app.rpc_context', true) != 'on'`:
+### 7.1. Daftar Kolom Terlindungi per Tabel
+Sesuai konvensi keamanan Fase 3A (G1 & G4), trigger `BEFORE UPDATE` akan memblokir setiap pembaruan kolom sensitif jika GUC `current_setting('app.rpc_context', true) != 'on'`:
 
-### A. Daftar Kolom Terlindungi
-1. **Tabel `public.grades`** (Trigger: `tr_grades_protect_sensitive`):
-   - Kolom: `score`, `max_score`, `status`, `student_id`, `class_id`, `item_id`, `item_type`, `finalized_by`, `finalized_at`, `is_visible_to_student`.
-2. **Tabel `public.class_final_grades`** (Trigger: `tr_final_grades_protect_sensitive`):
-   - Kolom: `total_score`, `letter_grade`, `grade_point`, `is_passed`, `status`, `published_at`, `published_by`.
-3. **Tabel `public.gradebook_locks`** (Trigger: `tr_gradebook_locks_protect_sensitive`):
-   - Kolom: `is_locked`, `locked_by`, `locked_at`, `unlocked_by`, `unlocked_at`.
+1. **`public.grades`** (`tr_grades_protect_sensitive`):
+   - Kolom terlindungi: `score`, `max_score`, `status`, `student_id`, `class_id`, `item_id`, `item_type`, `component_id`, `finalized_by`, `finalized_at`, `is_visible_to_student`.
+2. **`public.class_final_grades`** (`tr_final_grades_protect_sensitive`):
+   - Kolom terlindungi: `total_score`, `letter_grade`, `grade_point`, `is_passed`, `status`, `scale_id`, `published_at`, `published_by`.
+3. **`public.gradebook_locks`** (`tr_gradebook_locks_protect_sensitive`):
+   - Kolom terlindungi: `is_locked`, `locked_by`, `locked_at`, `unlocked_by`, `unlocked_at`.
+4. **`public.grade_components`** (`tr_grade_components_protect_sensitive`):
+   - Kolom terlindungi: `weight_pct`, `code`, `class_id`.
 
-### B. Pola Eksekusi pada Fungsi RPC Resmi
-Setiap fungsi RPC yang memperbarui kolom terlindungi **WAJIB** menerapkan pola buka-dan-reset konteks segera:
-
+### 7.2. Perbaikan Fungsi Lama pada Migrasi Domain 3
+Seluruh fungsi lama yang memodifikasi `grades` akan di-`CREATE OR REPLACE` dengan membungkus operasi mutasinya menggunakan pola:
 ```sql
 -- 1. Buka konteks sebelum penulisan
 PERFORM set_config('app.rpc_context', 'on', true);
 
--- 2. Operasi mutasi tabel terlindungi
-UPDATE public.grades SET score = p_score, status = 'FINAL' WHERE id = v_grade_id;
+-- 2. Mutasi baris tabel
+UPDATE public.grades SET ... WHERE ...;
 
 -- 3. SEGERA kembalikan konteks ke '' setelah penulisan selesai
 PERFORM set_config('app.rpc_context', '', true);
 ```
 
+### 7.3. Perluasan Uji Katalog Otomatis (G4) & Uji Regresi
+1. **Perluasan Uji Katalog**:
+   Skrip CI `scripts/test-phase3a-domain1-2.mjs` diperluas untuk memindai seluruh fungsi yang menulis kolom terlindungi pada **6 tabel**:
+   - `classes`, `enrollments`, `grades`, `class_final_grades`, `gradebook_locks`, `grade_components`.
+   - Memastikan 100% fungsi memanggil `set_config('app.rpc_context', 'on'`.
+2. **Uji Regresi Pasca-Pemasangan Trigger**:
+   - Menjalankan uji regresi alur `execute_grade_change` setelah trigger `tr_grades_protect_sensitive` dipasang.
+   - Memastikan eksekusi perubahan nilai oleh Staf Akademik tetap berhasil 100% (karena RPC resmi menyetel `app.rpc_context`), sementara direct `UPDATE` oleh klien/staf tanpa RPC ditolak tegas dengan eksepsi `DIRECT_UPDATE_RESTRICTED`.
+
 ---
 
-## 7. Pemetaan Server Actions & Tombol UI (Pencegahan Sukses Palsu F2)
+## 8. Tahapan Berkas Migrasi Database (D3b)
 
-### A. Matriks Server Actions (Domain 3)
+Untuk mematuhi batasan transaksional PostgreSQL DDL:
+- Jika di kemudian hari diperlukan penambahan enum baru, berkas penambahan enum dipisahkan ke migrasi khusus lebih awal tanpa menggunakan nilai baru tersebut dalam berkas transaksi yang sama (meniru preseden `20261011000010_grade_status_executed.sql`).
+- Rencana berkas migrasi Fase 3B:
+  1. `supabase/migrations/20261012000019_phase3b_domain3_gradebook_schema.sql`:
+     - Penambahan kolom `component_id` pada `assignments` dan `grades`.
+     - Penambahan batasan CHECK invarian `ck_grades_visibility` pada `grades`.
+     - DDL tabel `grade_scales`, `grade_scale_bands`, `grade_components`, `class_final_grades`, `gradebook_locks`, `grade_status_transitions`, `grade_transition_roles`.
+     - Foreign keys `ON DELETE RESTRICT` untuk seluruh referensi pengguna.
+     - Indeks performa dan kebijakan RLS dasar.
+  2. `supabase/migrations/20261012000020_phase3b_domain3_gradebook_functions.sql`:
+     - Trigger proteksi kolom terlindungi (`tr_grades_protect_sensitive`, dll.).
+     - Pembaruan fungsi lama (`save_grade_draft`, `finalize_grade`, `execute_grade_change`) dengan penyetelan `app.rpc_context` dan validasi `gradebook_locks`.
+     - RPC baru: `calculate_final_grades`, `publish_final_grades`, `lock_gradebook`, `unlock_gradebook`.
+     - Pencabutan hak eksekusi publik dan pemberian izin ke `authenticated` & `service_role`.
+
+---
+
+## 9. Pemetaan Server Actions & Pencegahan Sukses Palsu (F2)
+
 | Nama Server Action | File Target | Peran Pemanggil | RPC Database yang Dipanggil |
 |---|---|---|---|
 | `saveGradeDraftAction` | `src/modules/academic/grade-actions.ts` | `LECTURER`, `TEACHING_ASSISTANT` (dengan izin `assignment.grade`) | `public.save_grade_draft` |
 | `finalizeGradeAction` | `src/modules/academic/grade-actions.ts` | `LECTURER` | `public.finalize_grade` |
 | `calculateFinalGradesAction`| `src/modules/academic/grade-actions.ts` | `LECTURER` | `public.calculate_final_grades` |
-| `lockGradebookAction` | `src/modules/academic/grade-actions.ts` | `LECTURER`, `PROGRAM_COORDINATOR` | `public.lock_gradebook` |
 | `publishFinalGradesAction` | `src/modules/academic/grade-actions.ts` | `LECTURER` | `public.publish_final_grades` |
+| `lockGradebookAction` | `src/modules/academic/grade-actions.ts` | `LECTURER`, `PROGRAM_COORDINATOR` | `public.lock_gradebook` |
+| `unlockGradebookAction` | `src/modules/academic/grade-actions.ts` | `ACADEMIC_STAFF` | `public.unlock_gradebook` |
 | `exportGradebookAction` | `src/modules/academic/grade-actions.ts` | `LECTURER`, `PROGRAM_COORDINATOR`, `ACADEMIC_STAFF` | `public.log_grade_export` |
 
-### B. Penegakan Feature Flag `FF_PERSISTENCE_GRADES` & Zero Sukses Palsu
-1. **Konfigurasi Lingkungan**:
-   - Nilai default: `FF_PERSISTENCE_GRADES="false"` di `.env.example` dan lingkungan produksi.
-2. **Perilaku Server Action**:
-   - Di lingkungan non-demo (`isDemoMode() === false`), jika `FF_PERSISTENCE_GRADES !== "true"`, server action langsung melempar pesan penolakan eksplisit: `"Fitur ini belum aktif"` dan **TIDAK MENULIS APAPUN KE MEMORI ATAU DATABASE**.
-3. **Perilaku Tombol Antarmuka (UI)**:
-   - Komponen antarmuka pada halaman `src/app/(portal)/classes/[id]/page.tsx` (tab Gradebook) dan `src/app/(portal)/grades/page.tsx`:
-     - Tombol "Simpan Nilai", "Finalisasi", "Hitung Nilai Akhir", dan "Kunci Gradebook" menampilkan status `disabled` dengan tooltip `"Fitur ini belum aktif"` selama feature flag bernilai `false`.
-     - Tidak ada simulasi toast "Berhasil disimpan" palsu pada lingkungan produksi non-demo.
+### Penegakan Feature Flag `FF_PERSISTENCE_GRADES`
+- Default environment: `FF_PERSISTENCE_GRADES="false"` di `.env.example` dan lingkungan produksi non-demo.
+- Di lingkungan non-demo (`isDemoMode() === false`), jika `FF_PERSISTENCE_GRADES !== "true"`, seluruh Server Action melempar error: `"Fitur ini belum aktif"` dan **0 baris ditulis ke memori maupun database**.
+- Seluruh tombol mutasi pada UI (`Simpan Nilai`, `Finalisasi`, `Hitung Nilai Akhir`, `Kunci Buku Nilai`) menampilkan status `disabled` dengan tooltip informasi yang jelas.
 
 ---
 
-## 8. Rencana Pengujian Komprehensif (PGlite & Supabase Staging)
+## 10. Rencana Pengujian Komprehensif (PGlite & Supabase Staging)
 
-### A. Rangkaian Uji PGlite Lokal (Pasangan Kontrol Positif / Negatif)
-Suite pengujian akan ditambahkan ke `scripts/test-phase3b-domain3.mjs`:
-
+### A. Rangkaian Uji PGlite Lokal (Pasangan Kontrol Positif & Negatif)
 1. **Uji Akses & Visibilitas Mahasiswa**:
-   - `[-] T1.1`: Mahasiswa mencoba membaca nilai berstatus `DRAFT` miliknya -> Ditolak / Mengembalikan 0 baris (RLS).
-   - `[+] T1.2`: Mahasiswa membaca nilai berstatus `FINAL` miliknya (`is_visible_to_student = true`) -> Berhasil terbaca.
-   - `[-] T1.3`: Mahasiswa mencoba membaca nilai mahasiswa lain yang sudah final -> Ditolak / Mengembalikan 0 baris (RLS).
+   - `[-] T1.1`: Mahasiswa membaca nilai berstatus `DRAFT` miliknya $\rightarrow$ Ditolak RLS / 0 baris kembali.
+   - `[+] T1.2`: Mahasiswa membaca nilai berstatus `FINAL` miliknya $\rightarrow$ Berhasil terbaca.
+   - `[-] T1.3`: Mahasiswa membaca nilai mahasiswa lain yang sudah final $\rightarrow$ Ditolak RLS / 0 baris kembali.
 2. **Uji Otoritas Dosen & Asisten**:
-   - `[-] T2.1`: Dosen mencoba menilai submission pada kelas dosen lain -> Ditolak `FORBIDDEN`.
-   - `[+] T2.2`: Dosen pengampu menilai submission kelasnya sendiri -> Berhasil tersimpan (`save_grade_draft`).
-   - `[-] T2.3`: Asisten dosen tanpa izin `assignment.grade` mencoba menyimpan draf -> Ditolak `FORBIDDEN`.
-   - `[+] T2.4`: Asisten dosen dengan izin `assignment.grade` menyimpan draf -> Berhasil tersimpan.
-   - `[-] T2.5`: Asisten dosen mencoba menilai tugas dirinya sendiri yang mengambil mata kuliah itu -> Ditolak `SELF_REVIEW`.
-   - `[-] T2.6`: Asisten dosen memanggil `finalize_grade` -> Ditolak `FORBIDDEN` (Hanya dosen pengampu).
-   - `[+] T2.7`: Dosen pengampu memanggil `finalize_grade` -> Berhasil (`FINAL`, submission `GRADED`).
+   - `[-] T2.1`: Dosen menilai kelas dosen lain $\rightarrow$ Ditolak `FORBIDDEN`.
+   - `[+] T2.2`: Dosen pengampu menilai kelasnya sendiri $\rightarrow$ Berhasil tersimpan (`save_grade_draft`).
+   - `[-] T2.3`: Asisten dosen tanpa izin `assignment.grade` menyimpan draf $\rightarrow$ Ditolak `FORBIDDEN`.
+   - `[+] T2.4`: Asisten dosen dengan izin `assignment.grade` menyimpan draf $\rightarrow$ Berhasil tersimpan.
+   - `[-] T2.5`: Asisten dosen menilai tugas dirinya sendiri $\rightarrow$ Ditolak `SELF_REVIEW`.
+   - `[-] T2.6`: Asisten dosen memanggil `finalize_grade` $\rightarrow$ Ditolak `FORBIDDEN`.
+   - `[+] T2.7`: Dosen pengampu memanggil `finalize_grade` $\rightarrow$ Berhasil (`FINAL`, submission `GRADED`).
 3. **Uji Proteksi Direct UPDATE & Rentang Nilai**:
-   - `[-] T3.1`: Klien/Staf mencoba direct `UPDATE public.grades SET score = 98` tanpa RPC context -> Ditolak trigger `DIRECT_UPDATE_RESTRICTED`.
-   - `[-] T3.2`: Menyimpan skor negatif (misal: `-5`) -> Ditolak `INVALID_SCORE` / `ck_grades_score`.
-   - `[-] T3.3`: Menyimpan skor melebihi max_score (misal: `105` dari `100`) -> Ditolak `INVALID_SCORE`.
+   - `[-] T3.1`: Klien/Staf mencoba direct `UPDATE public.grades SET score = 95` tanpa RPC $\rightarrow$ Ditolak trigger `DIRECT_UPDATE_RESTRICTED`.
+   - `[-] T3.2`: Menyimpan skor $< 0$ atau $> \text{max\_score}$ $\rightarrow$ Ditolak `INVALID_SCORE` / `ck_grades_score`.
 4. **Uji Penguncian Gradebook (`gradebook_locks`)**:
-   - `[+] T4.1`: Dosen mengunci gradebook kelas (`lock_gradebook`) -> Status kelas terkunci (`is_locked = true`).
-   - `[-] T4.2`: Dosen mencoba mengubah nilai draf pada kelas yang terkunci -> Ditolak `GRADEBOOK_LOCKED`.
-   - `[-] T4.3`: Dosen mencoba memfinalisasi nilai pada kelas yang terkunci -> Ditolak `GRADEBOOK_LOCKED`.
-   - `[+] T4.4`: Perubahan nilai pada kelas terkunci melalui alur resmi `grade_change_requests` (Dosen request -> Kaprodi approve -> Staf execute) -> Berhasil dieksekusi dengan audit trail lengkap.
-5. **Uji Komputasi Nilai Akhir & Konversi Huruf Mutu**:
-   - `[+] T5.1`: RPC `calculate_final_grades` menghitung akumulasi bobot dengan benar (misal: Tugas 80 x 20% + UTS 90 x 40% + UAS 85 x 40% = 86.00) -> Terbentuk huruf mutu `'A'`, IP `4.00`, `is_passed = true`.
-   - `[-] T5.2`: Menghitung nilai akhir dengan total bobot komponen $\neq 100\%$ -> Ditolak `INVALID_COMPONENT_WEIGHT_SUM`.
-6. **Uji Immutability Audit History**:
-   - `[-] T6.1`: Percobaan `DELETE FROM public.grade_history` -> Ditolak trigger `tr_grade_history_immutable`.
-   - `[-] T6.2`: Percobaan `UPDATE public.grade_history` -> Ditolak trigger `tr_grade_history_immutable`.
-7. **Uji Super Admin & Hak Eksekusi**:
-   - `[-] T7.1`: Super Admin memanggil `finalize_grade` atau `save_grade_draft` -> Ditolak `FORBIDDEN`.
-
-### B. Pengujian yang WAJIB Dilakukan di Supabase Staging Nyata
-Sebelum kode Domain 3 dapat dirilis ke produksi:
-1. **Verifikasi Token JWT Asli PostgREST**:
-   - Pengujian pemanggilan endpoint REST API `POST /rest/v1/grades` dengan token JWT masing-masing peran untuk membuktikan tidak ada kebocoran endpoint OpenAPI.
-2. **Uji Kinerja Konkurensi & Locking**:
-   - Pengujian beban konkurensi ketika 100 mahasiswa serentak mengumpulkan tugas dan dosen menjalankan finalisasi serta kalkulasi nilai akhir secara paralel.
-3. **Audit Log Forensik Terpusat**:
-   - Verifikasi bahwa log aktivitas penilaian terekam sempurna di `public.audit_logs` dan `public.grade_history` tanpa ada baris yang hilang saat *high traffic*.
+   - `[+] T4.1`: Dosen mengunci gradebook kelas $\rightarrow$ Baris `gradebook_locks` terbentuk (`is_locked = true`).
+   - `[-] T4.2`: Dosen mencoba mengubah draf pada kelas terkunci $\rightarrow$ Ditolak `GRADEBOOK_LOCKED`.
+   - `[-] T4.3`: Dosen mencoba memfinalisasi pada kelas terkunci $\rightarrow$ Ditolak `GRADEBOOK_LOCKED`.
+   - `[+] T4.4`: Staf Akademik mengeksekusi `unlock_gradebook` setelah disetujui Kaprodi $\rightarrow$ Berhasil dibuka kembali.
+   - `[-] T4.5`: Dosen atau Kaprodi mencoba mengeksekusi `unlock_gradebook` langsung $\rightarrow$ Ditolak `FORBIDDEN` (Pemisahan Tugas).
+5. **Uji Agregasi Komponen & Komputasi Nilai Akhir**:
+   - `[+] T5.1`: Agregasi Model A menghitung rasio akumulasi dengan benar dan menghasilkan skor kumulatif akurat.
+   - `[-] T5.2`: Menghitung nilai akhir saat total bobot komponen $\neq 100.00\%$ $\rightarrow$ Ditolak `INVALID_COMPONENT_WEIGHT_SUM`.
+   - `[-] T5.3`: Menghitung nilai akhir saat ada butir komponen yang belum final $\rightarrow$ Ditolak `UNFINALIZED_GRADES_EXIST`.
+   - `[-] T5.4`: Mengubah bobot komponen setelah ada nilai berstatus final $\rightarrow$ Ditolak `GRADE_COMPONENTS_LOCKED_AFTER_FINAL_GRADES`.
+6. **Uji Privasi Super Admin & System Admin (D7)**:
+   - `[-] T6.1`: Super Admin melakukan `SELECT * FROM public.grades` $\rightarrow$ Mengembalikan 0 baris (RLS memblokir akses ke baris individual).
+   - `[-] T6.2`: System Admin memanggil `finalize_grade` atau `save_grade_draft` $\rightarrow$ Ditolak `FORBIDDEN`.
+7. **Uji Regresi Pasca-Trigger (D3)**:
+   - `[+] T7.1`: Eksekusi perubahan nilai `execute_grade_change` oleh Staf Akademik tetap berjalan mulus dan memperbarui skor di tabel `grades` dengan riwayat di `grade_history`.
 
 ---
 
-## 9. Analisis Risiko & Keputusan yang Perlu Diambil Pengguna
+## 11. Pembaruan Matriks Keputusan Arsitektur (K6 s/d K10) (D8)
 
-Sebelum implementasi teknis Domain 3 dimulai, terdapat 3 keputusan arsitektural yang membutuhkan keputusan resmi dari Pengguna:
-
-| No | Topik Keputusan | Pilihan Opsi Solusi | Analisis & Rekomendasi Arsitektur |
+| No | Topik Keputusan | Status Keputusan | Ketetapan Resmi / Tindakan Lanjutan |
 |---|---|---|---|
-| **K6** | **Tingkat Kewenangan Konfigurasi Bobot Komponen (`grade_components`)** | **Opsi A**: Bebas ditentukan dosen pengampu per kelas perkuliahan.<br>**Opsi B**: Ditetapkan seragam per mata kuliah/program studi oleh Kaprodi.<br>**Opsi C (Hibrida)**: Kaprodi menetapkan rentang/template standar prodi, namun dosen pengampu dapat menyesuaikan bobot kelas spesifik sebelum perkuliahan dimulai. | **Rekomendasi: Opsi C (Hibrida)**.<br>Memberikan kepatuhan terhadap kurikulum program studi namun tetap memberikan fleksibilitas pedagogis bagi dosen pengampu kelas paralel. |
-| **K7** | **Metode Pembulatan Nilai Akhir & Penentuan Huruf Mutu** | **Opsi A**: Pembulatan 2 desimal (`ROUND(score, 2)`) (Standar PDDIKTI). Nilai 79.99 tetap berada di rentang B+ (tidak dibulatkan ke 80.00).<br>**Opsi B**: Pembulatan integer (`ROUND(score, 0)`), sehingga 79.50 ke atas dibulatkan menjadi 80 (A-). | **Rekomendasi: Opsi A (2 Desimal)**.<br>Mencegah inflasi nilai yang tidak adil dan selaras dengan standar pelaporan akademik nasional. |
-| **K8** | **Mekanisme Pemicu Penguncian Buku Nilai (`gradebook_locks`)** | **Opsi A**: Manual oleh Dosen Pengampu melalui tombol antarmuka "Kunci Buku Nilai".<br>**Opsi B**: Otomatis oleh *cron trigger* sistem pada $H+7$ setelah hari terakhir semester.<br>**Opsi C**: Kombinasi manual oleh Dosen, disertai tombol "Kunci Massal Semester" bagi Kaprodi saat batas waktu kalender akademik berakhir. | **Rekomendasi: Opsi C (Kombinasi Manual & Kaprodi)**.<br>Menghargai wewenang dosen untuk mengunci lebih awal, namun memberi jaminan kepastian bagi prodi untuk menutup masa penilaian tepat waktu. |
+| **K6** | **Kewenangan Konfigurasi Bobot Komponen (`grade_components`)** | **DITETAPKAN (OPSI A)** | Bobot komponen evaluasi fleksibel ditentukan dosen pengampu per kelas perkuliahan (dengan validasi jumlah total tepat 100.00% dan dikunci setelah ada nilai final). |
+| **K7** | **Metode Pembulatan Nilai Akhir & Penentuan Huruf Mutu** | **DITETAPKAN (OPSI A)** | Pembulatan nilai akhir menggunakan 2 desimal (`ROUND(score, 2)`). Nilai $79.99$ tetap berada pada rentang B+ (tidak dibulatkan ke 80.00), selaras dengan standar pelaporan PDDIKTI. |
+| **K8** | **Mekanisme Penguncian Buku Nilai (`gradebook_locks`)** | **DITETAPKAN (OPSI C + D4)** | Kombinasi penguncian manual oleh Dosen, serta penguncian massal semester oleh Kaprodi (pada tabel kunci `gradebook_locks`, bukan mutasi nilai), dengan alur pembukaan kunci via RPC `unlock_gradebook` (3-pihak: Dosen usul $\rightarrow$ Kaprodi setuju $\rightarrow$ Staf eksekusi). |
+| **K9** | **Konfigurasi Pita Skala Huruf Mutu & Ambang Kelulusan** | **MENUNGGU JAWABAN PENGGUNA** | Tabel `public.grade_scales` dan `grade_scale_bands` telah disiapkan secara dinamis. Nilai awal yang dicantumkan berstatus CONTOH REFERENSI dan menunggu skala resmi yang akan diberikan oleh Pengguna. |
+| **K10**| **Kebijakan Nilai Butir Kosong / Belum Final saat Kalkulasi Nilai Akhir** | **MENUNGGU JAWABAN PENGGUNA** | Rekomendasi teknis: `calculate_final_grades` menolak kalkulasi jika ada butir komponen yang belum `FINAL`, kecuali mahasiswa secara eksplisit ditandai "tidak dinilai" (*exempted*). Menunggu ketetapan Pengguna. |
 
 ---
 
-## 10. Kesimpulan & Status Kesiapan
+## 12. Penjaminan Integrasi CI & Siklus Regenerasi Snapshot
 
-Dokumen desain Domain 3 ini telah:
-1. Mematuhi 100% snapshot skema database yang ada di [`docs/schema-snapshot.md`](file:///c:/Users/ACER/Downloads/implementasi/docs/schema-snapshot.md).
-2. Mempertahankan konvensi keamanan GUC `app.rpc_context` yang telah ditetapkan pada Fase 3A.
-3. Merancang penegakan pemisahan peran (*Separation of Duties*) dan pencegahan sukses palsu (*Zero Fake Success*).
+Untuk memastikan `check:plan` selalu bekerja pada data skema terbaru:
+1. Skrip `npm run snapshot` (`node scripts/generate-schema-snapshot.mjs`) meregenerasi [docs/schema-snapshot.md](file:///c:/Users/ACER/Downloads/implementasi/docs/schema-snapshot.md) dari migrasi PGlite 1..N.
+2. Perintah `npm run check:snapshot` menjalankan regenerasi snapshot dan memverifikasi ketiadaan perubahan liar via `git diff --exit-code docs/schema-snapshot.md`.
+3. Perintah `npm run check:plan` memvalidasi keselarasan [docs/phase-3-plan.md](file:///c:/Users/ACER/Downloads/implementasi/docs/phase-3-plan.md) terhadap snapshot.
+4. Rangkaian ini terpasang pada pipeline verifikasi utama `npm run cek`.
 
-**Pekerjaan migrasi dan kode Domain 3 TIDAK AKAN DIMULAI sebelum desain teknis di atas disetujui oleh Pengguna.**
+---
+
+**Pekerjaan migrasi dan kode Domain 3 TIDAK AKAN DILAKUKAN sebelum revisi desain teknis di atas dan keputusan K9 serta K10 disetujui secara resmi oleh Pengguna.**
