@@ -10,7 +10,7 @@ import type { ActionResponse } from '@/modules/identity/types';
 import { SYNTHETIC_DEMO_USERS } from '@/modules/identity/demo-users';
 import { DELEGABLE_CODES } from './permissions';
 import { recordSystemAuditLog } from '@/lib/audit';
-import { isFeatureFlagActive } from '@/lib/config/features';
+import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 
 export interface ClassItem {
   id: string;
@@ -1752,7 +1752,7 @@ export async function logGradeExportAction(classId: string): Promise<boolean> {
 // ============================================================================
 
 /**
- * Pendaftaran Peserta Kelas Manual (Staf Akademik / Admin)
+ * Pendaftaran Peserta Kelas Manual (Hanya Staf Akademik)
  */
 export async function enrollStudentAction(input: {
   class_id: string;
@@ -1762,7 +1762,8 @@ export async function enrollStudentAction(input: {
   if (c?.isImpersonating) {
     return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang mendaftarkan peserta selama sesi impersonasi aktif.' };
   }
-  const me = await actor(['ACADEMIC_STAFF', 'SUPER_ADMIN']);
+  // F5: Hapus SUPER_ADMIN, hanya ACADEMIC_STAFF
+  const me = await actor('ACADEMIC_STAFF');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
 
   const parsed = z.object({
@@ -1772,8 +1773,17 @@ export async function enrollStudentAction(input: {
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
 
   const { class_id, student_id } = parsed.data;
+  const demo = isDemoMode();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC');
 
-  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+  // F2: Di non-demo, bila DB offline atau flag mati, tolak tegas tanpa menulis apa pun dan tanpa ok:true
+  if (!demo) {
+    if (!me.online || !flagActive) {
+      return { ok: false, error: 'Fitur ini belum aktif' };
+    }
+  }
+
+  if (me.online && flagActive) {
     const supabase = await createClient();
     const { data, error } = await supabase.rpc('enroll_student', {
       p_class_id: class_id,
@@ -1784,7 +1794,11 @@ export async function enrollStudentAction(input: {
     return { ok: true, data: data as any };
   }
 
-  // Fallback demo in-memory
+  if (!demo) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
+  // Fallback demo in-memory (HANYA jika isDemoMode())
   const cls = mem.classes.find((x) => x.id === class_id);
   if (!cls) return { ok: false, error: ERR.NOT_FOUND };
   if (mem.enrollments.some((e) => e.class_id === class_id && e.student_id === student_id)) {
@@ -1807,7 +1821,7 @@ export async function enrollStudentAction(input: {
 }
 
 /**
- * Mutasi Pindah Kelas Paralel Mahasiswa (Staf Akademik / Admin)
+ * Mutasi Pindah Kelas Paralel Mahasiswa (Hanya Staf Akademik)
  */
 export async function transferClassAction(input: {
   source_class_id: string;
@@ -1819,7 +1833,8 @@ export async function transferClassAction(input: {
   if (c?.isImpersonating) {
     return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang memindahkan kelas selama sesi impersonasi aktif.' };
   }
-  const me = await actor(['ACADEMIC_STAFF', 'SUPER_ADMIN']);
+  // F5: Hapus SUPER_ADMIN, hanya ACADEMIC_STAFF
+  const me = await actor('ACADEMIC_STAFF');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
 
   const parsed = z.object({
@@ -1836,7 +1851,17 @@ export async function transferClassAction(input: {
     return { ok: false, error: 'Kelas tujuan tidak boleh sama dengan kelas asal.' };
   }
 
-  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+  const demo = isDemoMode();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC');
+
+  // F2: Di non-demo, bila DB offline atau flag mati, tolak tegas tanpa menulis apa pun dan tanpa ok:true
+  if (!demo) {
+    if (!me.online || !flagActive) {
+      return { ok: false, error: 'Fitur ini belum aktif' };
+    }
+  }
+
+  if (me.online && flagActive) {
     const supabase = await createClient();
     const { error } = await supabase.rpc('transfer_class', {
       p_source_class_id: source_class_id,
@@ -1849,7 +1874,11 @@ export async function transferClassAction(input: {
     return { ok: true, data: true };
   }
 
-  // Fallback demo in-memory
+  if (!demo) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
+  // Fallback demo in-memory (HANYA jika isDemoMode())
   const existing = mem.enrollments.find((e) => e.class_id === source_class_id && e.student_id === student_id);
   if (!existing) return { ok: false, error: 'Mahasiswa tidak terdaftar pada kelas asal.' };
   const targetClass = mem.classes.find((x) => x.id === target_class_id);
@@ -1863,7 +1892,7 @@ export async function transferClassAction(input: {
 }
 
 /**
- * Batch Enroll Mahasiswa via CSV (Staf Akademik / Admin)
+ * Batch Enroll Mahasiswa via CSV (Hanya Staf Akademik)
  */
 export async function batchEnrollCsvAction(input: {
   rows: Array<{ student_id: string; class_id: string; nim?: string }>;
@@ -1872,14 +1901,30 @@ export async function batchEnrollCsvAction(input: {
   if (c?.isImpersonating) {
     return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang mengimpor data CSV selama sesi impersonasi aktif.' };
   }
-  const me = await actor(['ACADEMIC_STAFF', 'SUPER_ADMIN']);
+  // F5: Hapus SUPER_ADMIN, hanya ACADEMIC_STAFF
+  const me = await actor('ACADEMIC_STAFF');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
 
   if (!input.rows || !Array.isArray(input.rows) || input.rows.length === 0) {
     return { ok: false, error: 'Data baris CSV tidak boleh kosong.' };
   }
 
-  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+  // F7: Validasi batas baris per panggilan <= 1000
+  if (input.rows.length > 1000) {
+    return { ok: false, error: 'Batas maksimal batch enrollment adalah 1000 baris per panggilan.' };
+  }
+
+  const demo = isDemoMode();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC');
+
+  // F2: Di non-demo, bila DB offline atau flag mati, tolak tegas tanpa menulis apa pun dan tanpa ok:true
+  if (!demo) {
+    if (!me.online || !flagActive) {
+      return { ok: false, error: 'Fitur ini belum aktif' };
+    }
+  }
+
+  if (me.online && flagActive) {
     const supabase = await createClient();
     const { data, error } = await supabase.rpc('batch_enroll_students', {
       p_rows: input.rows,
@@ -1889,7 +1934,11 @@ export async function batchEnrollCsvAction(input: {
     return { ok: true, data: data as any };
   }
 
-  // Fallback demo in-memory
+  if (!demo) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
+  // Fallback demo in-memory (HANYA jika isDemoMode())
   let successCount = 0;
   for (const r of input.rows) {
     if (r.student_id && r.class_id && !mem.enrollments.some((e) => e.class_id === r.class_id && e.student_id === r.student_id)) {
@@ -1907,32 +1956,45 @@ export async function batchEnrollCsvAction(input: {
 }
 
 /**
- * Persetujuan Kelas Perkuliahan (Kaprodi / Admin)
+ * Persetujuan Kelas Perkuliahan (Hanya Kaprodi prodi terkait, BUKAN Staf & BUKAN Super Admin)
  */
 export async function approveClassAction(input: {
   class_id: string;
   status: 'OPEN' | 'ACTIVE' | 'CLOSED' | 'ARCHIVED';
+  reason?: string;
 }): Promise<ActionResponse<ClassItem>> {
   const c = await getCurrentUserWithRoles();
   if (c?.isImpersonating) {
     return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang menyetujui kelas selama sesi impersonasi aktif.' };
   }
-  const me = await actor(['PROGRAM_COORDINATOR', 'SUPER_ADMIN']);
+  // F5 & F6: Hapus SUPER_ADMIN & Staf, hanya PROGRAM_COORDINATOR
+  const me = await actor('PROGRAM_COORDINATOR');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
 
   const parsed = z.object({
     class_id: z.string().uuid('ID kelas tidak valid.'),
     status: z.enum(['OPEN', 'ACTIVE', 'CLOSED', 'ARCHIVED']),
+    reason: z.string().trim().max(500).optional(),
   }).safeParse(input);
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
 
-  const { class_id, status } = parsed.data;
+  const { class_id, status, reason } = parsed.data;
+  const demo = isDemoMode();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC');
 
-  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+  // F2: Di non-demo, bila DB offline atau flag mati, tolak tegas tanpa menulis apa pun dan tanpa ok:true
+  if (!demo) {
+    if (!me.online || !flagActive) {
+      return { ok: false, error: 'Fitur ini belum aktif' };
+    }
+  }
+
+  if (me.online && flagActive) {
     const supabase = await createClient();
     const { data, error } = await supabase.rpc('approve_class', {
       p_class_id: class_id,
       p_status: status,
+      p_reason: reason ?? null,
     });
     if (error) return { ok: false, error: error.message || pesan(error.message) };
     revalidatePath('/coordinator/approvals');
@@ -1940,7 +2002,11 @@ export async function approveClassAction(input: {
     return { ok: true, data: data as any };
   }
 
-  // Fallback demo in-memory
+  if (!demo) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
+  // Fallback demo in-memory (HANYA jika isDemoMode())
   const cls = mem.classes.find((x) => x.id === class_id);
   if (!cls) return { ok: false, error: ERR.NOT_FOUND };
   cls.status = status;
@@ -1950,7 +2016,7 @@ export async function approveClassAction(input: {
 }
 
 /**
- * Penugasan Dosen Pengampu Kelas (Kaprodi / Admin)
+ * Penugasan Dosen Pengampu Kelas (Hanya Kaprodi prodi terkait, BUKAN Super Admin)
  */
 export async function assignLecturerAction(input: {
   class_id: string;
@@ -1960,7 +2026,8 @@ export async function assignLecturerAction(input: {
   if (c?.isImpersonating) {
     return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang menugaskan dosen selama sesi impersonasi aktif.' };
   }
-  const me = await actor(['PROGRAM_COORDINATOR', 'SUPER_ADMIN']);
+  // F5: Hapus SUPER_ADMIN, hanya PROGRAM_COORDINATOR
+  const me = await actor('PROGRAM_COORDINATOR');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
 
   const parsed = z.object({
@@ -1970,8 +2037,17 @@ export async function assignLecturerAction(input: {
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
 
   const { class_id, lecturer_id } = parsed.data;
+  const demo = isDemoMode();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC');
 
-  if (me.online && isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC')) {
+  // F2: Di non-demo, bila DB offline atau flag mati, tolak tegas tanpa menulis apa pun dan tanpa ok:true
+  if (!demo) {
+    if (!me.online || !flagActive) {
+      return { ok: false, error: 'Fitur ini belum aktif' };
+    }
+  }
+
+  if (me.online && flagActive) {
     const supabase = await createClient();
     const { data, error } = await supabase.rpc('assign_lecturer', {
       p_class_id: class_id,
@@ -1983,7 +2059,11 @@ export async function assignLecturerAction(input: {
     return { ok: true, data: data as any };
   }
 
-  // Fallback demo in-memory
+  if (!demo) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
+  // Fallback demo in-memory (HANYA jika isDemoMode())
   const cls = mem.classes.find((x) => x.id === class_id);
   if (!cls) return { ok: false, error: ERR.NOT_FOUND };
   (cls as any).lecturer_id = lecturer_id;
@@ -1991,4 +2071,78 @@ export async function assignLecturerAction(input: {
   revalidatePath('/classes');
   return { ok: true, data: pub(cls) };
 }
+
+/**
+ * Jalur Pengajuan Kelas Baru (Staf Akademik / Dosen) -> Status DRAFT (F6)
+ */
+export async function proposeClassAction(input: {
+  title: string;
+  section?: string;
+  course_id?: string;
+  semester_id?: string;
+  capacity?: number;
+}): Promise<ActionResponse<ClassItem>> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isImpersonating) {
+    return { ok: false, error: 'IMPERSONATION_RESTRICTED: Dilarang mengajukan kelas selama sesi impersonasi aktif.' };
+  }
+  const me = await actor(['ACADEMIC_STAFF', 'LECTURER']);
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  const parsed = z.object({
+    title: z.string().trim().min(3).max(120),
+    section: z.string().trim().min(1).max(20).default('A'),
+    course_id: z.string().uuid().optional(),
+    semester_id: z.string().uuid().optional(),
+    capacity: z.number().int().positive().optional(),
+  }).safeParse(input);
+  if (!parsed.success) return { ok: false, error: parsed.error.issues[0].message };
+
+  const { title, section, course_id, semester_id, capacity } = parsed.data;
+  const demo = isDemoMode();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC');
+
+  if (!demo) {
+    if (!me.online || !flagActive) {
+      return { ok: false, error: 'Fitur ini belum aktif' };
+    }
+  }
+
+  if (me.online && flagActive) {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc('propose_class', {
+      p_title: title,
+      p_section: section,
+      p_course_id: course_id ?? null,
+      p_semester_id: semester_id ?? null,
+      p_capacity: capacity ?? null,
+    });
+    if (error) return { ok: false, error: error.message || pesan(error.message) };
+    revalidatePath('/classes');
+    revalidatePath('/staff/classes');
+    return { ok: true, data: data as any };
+  }
+
+  if (!demo) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
+  // Fallback demo in-memory
+  const join_code = Array.from({ length: 8 }, () => ALPHABET[randomInt(ALPHABET.length)]).join('');
+  const row: Row = {
+    id: randomUUID(),
+    title,
+    section,
+    join_code,
+    status: 'DRAFT',
+    created_by: me.id,
+    capacity,
+    meta: metaOf(course_id, semester_id),
+  };
+  mem.classes.push(row);
+  revalidatePath('/classes');
+  revalidatePath('/staff/classes');
+  return { ok: true, data: pub(row) };
+}
+
 

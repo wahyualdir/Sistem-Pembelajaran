@@ -17,7 +17,6 @@ import {
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
-import { isFeatureFlagActive } from '@/lib/config/features';
 import { batchEnrollCsvAction } from '@/modules/academic/actions';
 
 export const STAFF_CLASSES_TABS = [
@@ -30,6 +29,7 @@ export type StaffClassesTabId = (typeof STAFF_CLASSES_TABS)[number]['id'];
 
 interface StaffClassesHubViewProps {
   isDemo?: boolean;
+  isPersistenceActive?: boolean;
 }
 
 interface CsvRow {
@@ -42,7 +42,7 @@ interface CsvRow {
   error?: string;
 }
 
-export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps) {
+export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false }: StaffClassesHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -74,7 +74,6 @@ export function StaffClassesHubView({ isDemo = true }: StaffClassesHubViewProps)
   const [toastMessage, setToastMessage] = useState<{ type: 'success' | 'error' | 'info'; text: string } | null>(null);
   const [isSubmittingCsv, setIsSubmittingCsv] = useState(false);
 
-  const isPersistenceActive = isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC');
   const isActionAllowed = isDemo || isPersistenceActive;
 
   const sanitizeCsvCell = (val: string): string => {

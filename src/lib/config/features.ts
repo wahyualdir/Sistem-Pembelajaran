@@ -24,28 +24,30 @@ export function isDemoMode(): boolean {
 
 /**
  * Feature Flags Per-Domain Persistensi Basis Data (Fase 3A .. 3F)
+ * Server-only: Dibaca dari process.env tanpa prefix NEXT_PUBLIC_.
+ * Default MATI (=== 'true') sesuai aturan F3.
  */
 export const FEATURE_FLAGS = {
   // Domain 1: Identitas, Pengguna, Peran, Audit Log (Fase 2E / 3A)
-  FF_PERSISTENCE_IDENTITY: process.env.NEXT_PUBLIC_FF_PERSISTENCE_IDENTITY !== 'false',
+  FF_PERSISTENCE_IDENTITY: process.env.FF_PERSISTENCE_IDENTITY === 'true',
 
   // Domain 2: Master Kurikulum, Kelas Perkuliahan, Peserta & Asisten (Fase 3A)
-  FF_PERSISTENCE_ACADEMIC: process.env.NEXT_PUBLIC_FF_PERSISTENCE_ACADEMIC !== 'false',
+  FF_PERSISTENCE_ACADEMIC: process.env.FF_PERSISTENCE_ACADEMIC === 'true',
 
   // Domain 3: Evaluasi Akademik & Buku Nilai (Fase 3B)
-  FF_PERSISTENCE_GRADES: process.env.NEXT_PUBLIC_FF_PERSISTENCE_GRADES === 'true',
+  FF_PERSISTENCE_GRADES: process.env.FF_PERSISTENCE_GRADES === 'true',
 
   // Domain 4: Kehadiran Kuliah & Dispensasi (Fase 3C)
-  FF_PERSISTENCE_ATTENDANCE: process.env.NEXT_PUBLIC_FF_PERSISTENCE_ATTENDANCE === 'true',
+  FF_PERSISTENCE_ATTENDANCE: process.env.FF_PERSISTENCE_ATTENDANCE === 'true',
 
   // Domain 5: Kuis, Ujian CBT & Telemetri Proctoring (Fase 3D)
-  FF_PERSISTENCE_QUIZ: process.env.NEXT_PUBLIC_FF_PERSISTENCE_QUIZ === 'true',
+  FF_PERSISTENCE_QUIZ: process.env.FF_PERSISTENCE_QUIZ === 'true',
 
   // Domain 6: Sengketa Nilai Ujian & Putusan Perubahan Nilai Final (Fase 3E)
-  FF_PERSISTENCE_DISPUTES: process.env.NEXT_PUBLIC_FF_PERSISTENCE_DISPUTES === 'true',
+  FF_PERSISTENCE_DISPUTES: process.env.FF_PERSISTENCE_DISPUTES === 'true',
 
   // Domain 7: Konten Pembelajaran, Forum, Notifikasi & Layanan Kampus (Fase 3F)
-  FF_PERSISTENCE_CONTENT: process.env.NEXT_PUBLIC_FF_PERSISTENCE_CONTENT === 'true',
+  FF_PERSISTENCE_CONTENT: process.env.FF_PERSISTENCE_CONTENT === 'true',
 } as const;
 
 export type FeatureFlagKey = keyof typeof FEATURE_FLAGS;
@@ -53,3 +55,4 @@ export type FeatureFlagKey = keyof typeof FEATURE_FLAGS;
 export function isFeatureFlagActive(key: FeatureFlagKey): boolean {
   return Boolean(FEATURE_FLAGS[key]);
 }
+

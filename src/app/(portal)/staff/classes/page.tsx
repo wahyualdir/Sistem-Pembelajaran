@@ -2,7 +2,7 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 import { assertServerRole } from '@/lib/auth/server-guards';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
-import { isDemoMode } from '@/lib/config/features';
+import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 import { StaffClassesHubView } from '@/modules/academic/staff-classes-hub-view';
 
 export default async function StaffClassesPage() {
@@ -31,6 +31,8 @@ export default async function StaffClassesPage() {
   }
 
   const isDemo = isDemoMode();
+  const isPersistenceActive = isFeatureFlagActive('FF_PERSISTENCE_ACADEMIC');
 
-  return <StaffClassesHubView isDemo={isDemo} />;
+  return <StaffClassesHubView isDemo={isDemo} isPersistenceActive={isPersistenceActive} />;
 }
+

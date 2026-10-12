@@ -128,15 +128,66 @@ Sesuai instruksi ketat, **asisten AI dilarang menjalankan migrasi ke database re
 ### Berkas 3: Pengerasan Imutabilitas Audit Log, Anonimisasi Pengguna & Kolom Impersonasi (Fase 2E / C3-C4)
 - **Berkas**: `supabase/migrations/20261011000015_audit_logs_hardening.sql`
 - **Tujuan**: Menambahkan kolom `on_behalf_of` UUID untuk jejak impersonasi, memasang trigger anti-tamper `tr_audit_logs_immutable` yang mencegah `UPDATE` dan `DELETE`, mencabut eksekusi `log_audit()` dari `PUBLIC`, `anon`, dan `authenticated` (hanya `service_role`), menyediakan RPC `anonymize_user(p_user_id)` eksklusif `SUPER_ADMIN`/`service_role` sesuai UU PDP, serta fungsi pemeliharaan retensi sah `purge_expired_audit_logs(interval)` minimal 365 hari.
-- **Cara Eksekusi**:
-  ```bash
-  # Melalui SQL Editor di Supabase Dashboard:
-  # Salin isi berkas 20261011000015_audit_logs_hardening.sql dan jalankan "Run".
-  ```
+
+### Berkas 4: Persistensi & Hardening Domain 1 & 2 (Fase 3A)
+- **Berkas**: `supabase/migrations/20261011000016_phase3a_domain1_2_hardening.sql`
+- **Tujuan**: Membangun tabel `public.rooms` (Domain 2), isolasi RLS baris per kelas dan per enrollment, serta fungsi RPC `approve_class`, `assign_lecturer`, `enroll_student`, `transfer_class`, `batch_enroll_students`.
+
+### Berkas 5: Penguatan Keamanan & Penegakan Bisnis Fase 3A (F1..F7 Refinements)
+- **Berkas**: `supabase/migrations/20261011000017_phase3a_security_refinements.sql`
+- **Tujuan**:
+  1. **F1**: Memasang `BEFORE UPDATE` trigger pada `public.classes` dan `public.enrollments` untuk memblokir modifikasi kolom sensitif (`status`, `lecturer_id`, `course_id`, `semester_id`, `created_by`, `join_code`, `class_id`, `student_id`) dari PostgREST/client SQL langsung kecuali via konteks RPC resmi (`set_config('app.rpc_context', 'on', true)`).
+  2. **F4**: Mencabut `EXECUTE` seluruh RPC akademik dari `PUBLIC` dan `anon`, hanya mengizinkan `authenticated` dan `service_role`.
+  3. **F5**: Menghapus `SUPER_ADMIN` dari seluruh RPC akademik dan kebijakan tulis akademik. Pengecualian tertulis: tabel fasilitas fisik `public.rooms` tetap diizinkan untuk `SUPER_ADMIN` dan `ACADEMIC_STAFF` karena berstatus master data infrastruktur non-akademik.
+  4. **F6**: Mengunci `approve_class` hanya untuk Kaprodi dari program studi terkait (Staf & Super Admin dilarang), mewajibkan transisi sesuai tabel `public.class_status_transitions`, menolak self-approval bila pengaju adalah Kaprodi sendiri (`SELF_APPROVAL_FORBIDDEN`), mewajibkan alasan penolakan pada kolom `classes.rejection_reason`, serta menyediakan RPC `propose_class` berstatus `DRAFT` sebagai jalur pengajuan resmi Staf/Dosen.
+  5. **F7**: Validasi bisnis penolakan pendaftaran jika kelas tidak berstatus `OPEN`, penolakan mutasi jika bukan kelas paralel (`course_id`/`semester_id` berbeda) atau mahasiswa tidak berstatus aktif, serta pembatasan batch enrollment CSV maksimal 1000 baris dengan pelaporan status per baris.
 
 ---
 
-## 5. Prosedur Pengelolaan & Penghapusan Pengguna (UU PDP & RESTRICT Constraint)
+## 5. Urutan Pengaktifan Feature Flag Persistensi (F3)
+
+Sesuai aturan arsitektur F3:
+- Seluruh variabel flag adalah **server-only environment variables** (TANPA prefix `NEXT_PUBLIC_`) sehingga **tidak pernah tertanam di bundle klien**.
+- Default nilai flag di kode adalah **MATI** (`process.env.FF_... === 'true'`).
+- Di lingkungan non-demo (`NODE_ENV=production`), bila flag mati atau basis data offline, sistem menolak eksekusi mutasi dengan pesan `"Fitur ini belum aktif"` tanpa menulis ke memori dan tanpa status `ok: true` (F2).
+
+### Urutan Pengaktifan Bertahap di Lingkungan Server:
+1. **Prasyarat Wajib**: Seluruh migrasi basis data (1..18) telah diterapkan di staging dan lulus audit kepatuhan runbook.
+2. **Tahap 1 - Domain 1 (Identitas & Pengguna)**:
+   ```bash
+   FF_PERSISTENCE_IDENTITY="true"
+   ```
+   *Verifikasi*: Login OAuth/kredensial riil, pembacaan profil dari tabel `profiles` dan role dari `user_roles`.
+3. **Tahap 2 - Domain 2 (Master Kurikulum & Kelas Perkuliahan - Fase 3A)**:
+   ```bash
+   FF_PERSISTENCE_ACADEMIC="true"
+   ```
+   *Verifikasi*: Pengajuan kelas via `propose_class`, persetujuan oleh Kaprodi prodi terkait via `approve_class`, plotting dosen via `assign_lecturer`, pendaftaran peserta via `enroll_student`, mutasi via `transfer_class`, dan batch CSV via `batch_enroll_students`.
+4. **Tahap 3 - Domain 3 (Evaluasi Akademik & Buku Nilai - Fase 3B)**:
+   ```bash
+   FF_PERSISTENCE_GRADES="true"
+   ```
+5. **Tahap 4 - Domain 4 (Kehadiran Kuliah & Dispensasi - Fase 3C)**:
+   ```bash
+   FF_PERSISTENCE_ATTENDANCE="true"
+   ```
+6. **Tahap 5 - Domain 5 (Kuis, Ujian CBT & Telemetri Proctoring - Fase 3D)**:
+   ```bash
+   FF_PERSISTENCE_QUIZ="true"
+   ```
+7. **Tahap 6 - Domain 6 (Sengketa Nilai Ujian & Putusan Perubahan Nilai - Fase 3E)**:
+   ```bash
+   FF_PERSISTENCE_DISPUTES="true"
+   ```
+8. **Tahap 7 - Domain 7 (Konten Pembelajaran, Forum, Notifikasi & Layanan Kampus - Fase 3F)**:
+   ```bash
+   FF_PERSISTENCE_CONTENT="true"
+   ```
+
+---
+
+## 6. Prosedur Pengelolaan & Penghapusan Pengguna (UU PDP & RESTRICT Constraint)
+
 
 ### Larangan Hard Delete Langsung di Supabase Dashboard
 Tabel `public.profiles` dan `auth.users` memiliki integritas referensial foreign key (`ON DELETE RESTRICT`) terhadap beberapa tabel transaksional dan kepatuhan sistem, antara lain:
