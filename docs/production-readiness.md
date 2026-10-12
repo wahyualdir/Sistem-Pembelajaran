@@ -219,7 +219,7 @@ Untuk memenuhi hak penghapusan data pribadi (Right to be Forgotten) sesuai UU Pe
 
 ---
 
-## 6. Peringatan Keamanan Kritis: Pengujian Supabase Asli Wajib di Proyek Staging Terpisah
+## 7. Peringatan Keamanan Kritis: Pengujian Supabase Asli Wajib di Proyek Staging Terpisah
 
 > [!WARNING]
 > **PENGUJIAN DI SUPABASE ASLI (POSTGREST / JWT / HAK AKSES BAWAAN) BELUM DILAKUKAN**
@@ -233,8 +233,76 @@ Untuk memenuhi hak penghapusan data pribadi (Right to be Forgotten) sesuai UU Pe
 >
 > **Langkah Wajib Sebelum Produksi:**
 > Pengujian menyeluruh pada proyek **Supabase STAGING terpisah** (BUKAN database produksi) WAJIB dilakukan sebelum rilis:
-> 1. Terapkan migrasi 1..16 pada proyek Supabase Staging terpisah.
+> 1. Terapkan migrasi 1..19 pada proyek Supabase Staging terpisah.
 > 2. Lakukan pengujian PostgREST REST API dengan token JWT nyata per role (`STUDENT`, `LECTURER`, `PROGRAM_COORDINATOR`, `ACADEMIC_STAFF`, `SYSTEM_ADMIN`, `SUPER_ADMIN`).
 > 3. Verifikasi bahwa endpoint PostgREST memblokir akses ke fungsi/tabel yang dibatasi (misal `audit_logs` tidak bisa di-update/delete oleh authenticated, `log_audit()` tidak bisa dieksekusi oleh anon/authenticated).
 > 4. Verifikasi bahwa akun demo/seed HANYA disuntikkan ke proyek Staging dan **JANGAN PERNAH** di-seed ke lingkungan database produksi.
+
+---
+
+## 8. Konvensi Proteksi Kolom Terlindungi (GUC `app.rpc_context` & Audit Otomatis)
+
+### Arsitektur Perlindungan Kolom Terlindungi
+Untuk mencegah manipulasi langsung pada baris basis data melalui klien PostgREST (misalnya oleh Kaprodi, Dosen, atau Mahasiswa melalui endpoint REST API Supabase), sistem mengimplementasikan trigger `BEFORE UPDATE` pada dua tabel inti akademik:
+1. **`public.classes`** (`tr_classes_protect_sensitive`):
+   - Kolom terlindungi: `status`, `lecturer_id`, `course_id`, `semester_id`, `created_by`, `join_code`.
+2. **`public.enrollments`** (`tr_enrollments_protect_sensitive`):
+   - Kolom terlindungi: `status`, `class_id`, `student_id`.
+
+Kedua trigger ini memeriksa konfigurasi sesi lokal PostgreSQL (GUC):
+```sql
+current_setting('app.rpc_context', true) = 'on'
+```
+Jika nilai GUC ini **bukan** `'on'`, setiap operasi `UPDATE` (atau `INSERT ... ON CONFLICT ... DO UPDATE`) yang mencoba memodifikasi kolom-kolom terlindungi tersebut akan **DITOLAK SECARA OTOMATIS** dengan eksepsi keamanan:
+```text
+DIRECT_UPDATE_RESTRICTED: Perubahan kolom sensitif hanya diizinkan melalui fungsi RPC resmi.
+```
+
+### Kewajiban Pengembang (Developer Contract)
+Setiap fungsi SQL/RPC baru maupun perbaikan fungsi lama yang melakukan penulisan ke kolom-kolom terlindungi di atas **WAJIB MENGIKUTI ATURAN BERIKUT**:
+1. **Buka Konteks Sebelum Penulisan**:
+   Panggil `set_config('app.rpc_context', 'on', true)` tepat sebelum kueri mutasi dijalankan. Parameter ketiga (`is_local=true`) memastikan pengaturan bersifat lokal untuk transaksi saat ini.
+2. **Reset Konteks Tepat Setelah Penulisan Selesai**:
+   Segera kembalikan nilai GUC ke string kosong (`''`) menggunakan `set_config('app.rpc_context', '', true)` di akhir fungsi/setelah operasi penulisan selesai.
+   > [!IMPORTANT]
+   > Konteks **TIDAK BOLEH** dibiarkan bernilai `'on'` sampai akhir transaksi, melainkan wajib di-reset secara eksplisit untuk mencegah kebocoran konteks (*context leak*) ke operasi berikutnya dalam transaksi yang sama.
+
+Contoh implementasi standar (seperti pada `public.join_class_by_code`):
+```sql
+-- Buka konteks sebelum penulisan
+PERFORM set_config('app.rpc_context', 'on', true);
+
+-- Operasi penulisan kolom terlindungi
+INSERT INTO public.enrollments (class_id, student_id) VALUES (v_class.id, v_uid)
+ON CONFLICT (class_id, student_id) DO UPDATE
+    SET status = 'ACTIVE', dropped_at = NULL, enrolled_at = now()
+    WHERE public.enrollments.status = 'DROPPED'
+RETURNING id INTO v_id;
+
+-- Segera reset konteks setelah penulisan
+PERFORM set_config('app.rpc_context', '', true);
+```
+
+### Uji Otomatis Deteksi Fungsi Tanpa `set_config` (CI & Test Suite)
+Untuk menjamin tidak ada fungsi baru atau migrasi di masa depan yang menulis kolom terlindungi tanpa menyertakan `set_config`, suite pengujian `scripts/test-phase3a-domain1-2.mjs` dilengkapi dengan uji otomatis berbasis katalog sistem PostgreSQL (`pg_proc`).
+
+Pengujian ini memindai seluruh fungsi dalam skema `public`:
+```sql
+SELECT proname, prosrc
+FROM pg_proc p
+JOIN pg_namespace n ON n.oid = p.pronamespace
+WHERE n.nspname = 'public'
+  AND (
+    (
+      (prosrc ~* 'UPDATE\s+([a-zA-Z_]+\.)?classes' OR (prosrc ~* 'classes' AND prosrc ~* 'DO\s+UPDATE'))
+      AND prosrc ~* '(status|lecturer_id|course_id|semester_id|created_by|join_code)'
+    )
+    OR
+    (
+      (prosrc ~* 'UPDATE\s+([a-zA-Z_]+\.)?enrollments' OR (prosrc ~* 'enrollments' AND prosrc ~* 'DO\s+UPDATE'))
+      AND prosrc ~* '(status|class_id|student_id)'
+    )
+  );
+```
+Setiap fungsi yang terdeteksi memodifikasi kolom terlindungi diverifikasi harus memuat pemanggilan `set_config('app.rpc_context'`. Jika ditemukan fungsi yang melanggar aturan ini, suite pengujian akan gagal (*FAIL*) dengan exit code 1 dan memblokir pipeline rilis.
 

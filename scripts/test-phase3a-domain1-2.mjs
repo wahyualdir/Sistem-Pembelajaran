@@ -239,6 +239,7 @@ async function runPhase3aDatabaseTests() {
     { name: 'enroll_student', sig: 'public.enroll_student(uuid, uuid)' },
     { name: 'transfer_class', sig: 'public.transfer_class(uuid, uuid, uuid, text)' },
     { name: 'batch_enroll_students', sig: 'public.batch_enroll_students(jsonb)' },
+    { name: 'join_class_by_code', sig: 'public.join_class_by_code(text)' },
   ];
 
   for (const f of funcsToCheck) {
@@ -806,6 +807,124 @@ async function runPhase3aDatabaseTests() {
     '[+] F7: Batch enroll valid memproses dan melaporkan per baris (success & failed)',
     batchReportOk && batchReportRes?.total === 2 && batchReportRes?.results?.length === 2,
     `Total: ${batchReportRes?.total}, Success: ${batchReportRes?.success}, Failed: ${batchReportRes?.failed}`
+  );
+
+  // ===========================================================================
+  // G1, G3 & G4: UJI REGRESI JOIN_CLASS_BY_CODE & AUDIT KATALOG APP.RPC_CONTEXT
+  // ===========================================================================
+  console.log('--- 9. UJI REGRESI JOIN_CLASS_BY_CODE & AUDIT GUC APP.RPC_CONTEXT (G1, G3, G4) ---');
+
+  // G3.1: Mahasiswa berstatus DROPPED bergabung lagi lewat join_class_by_code -> BERHASIL
+  // STUDENT_1_ID saat ini berstatus 'DROPPED' di CLASS_A1_ID akibat transfer sebelumnya
+  const droppedCheck = await db.query(`SELECT status FROM public.enrollments WHERE class_id = '${CLASS_A1_ID}' AND student_id = '${STUDENT_1_ID}';`);
+  const initialStatus = droppedCheck.rows[0]?.status;
+  console.log(`[STATUS SEBELUM RE-JOIN] Mahasiswa 1 di Kelas A1: status = ${initialStatus}`);
+
+  await asUser(STUDENT_1_ID);
+  let rejoinDroppedOk = false;
+  let rejoinDroppedRes = null;
+  let rejoinDroppedErr = '';
+  try {
+    const res = await db.query(`SELECT * FROM public.join_class_by_code('WEB301A1');`);
+    rejoinDroppedOk = true;
+    rejoinDroppedRes = res.rows[0];
+  } catch (err) {
+    rejoinDroppedErr = err.message;
+  }
+
+  // Verifikasi status enrollment terbarui menjadi ACTIVE dan dropped_at NULL
+  const postRejoinCheck = await db.query(`SELECT status, dropped_at FROM public.enrollments WHERE class_id = '${CLASS_A1_ID}' AND student_id = '${STUDENT_1_ID}';`);
+  const updatedStatus = postRejoinCheck.rows[0]?.status;
+  const droppedAtVal = postRejoinCheck.rows[0]?.dropped_at;
+
+  recordTest(
+    '[+] G3: Mahasiswa DROPPED bergabung kembali lewat join_class_by_code -> BERHASIL (status kembali ACTIVE)',
+    rejoinDroppedOk && updatedStatus === 'ACTIVE' && droppedAtVal === null,
+    `Status baru: ${updatedStatus}, dropped_at: ${droppedAtVal}, RPC Output ID: ${rejoinDroppedRes?.id || 'none'}`
+  );
+
+  // G3.2: Mahasiswa berstatus ACTIVE bergabung lagi -> DITOLAK (ALREADY_ENROLLED)
+  let activeRejoinBlocked = false;
+  let activeRejoinErr = '';
+  try {
+    await db.query(`SELECT * FROM public.join_class_by_code('WEB301A1');`);
+  } catch (err) {
+    activeRejoinBlocked = true;
+    activeRejoinErr = err.message;
+  }
+  recordTest(
+    '[-] G3: Mahasiswa ACTIVE memanggil join_class_by_code lagi -> DITOLAK (ALREADY_ENROLLED)',
+    activeRejoinBlocked && activeRejoinErr.includes('ALREADY_ENROLLED'),
+    `Eksepsi: ${activeRejoinErr}`
+  );
+
+  // G3.3: Kelas CLOSED -> DITOLAK (CODE_INVALID)
+  // CLASS_B1_ID memiliki join_code 'SIE201A1' dan berstatus 'CLOSED'
+  let closedClassJoinBlocked = false;
+  let closedClassJoinErr = '';
+  try {
+    await db.query(`SELECT * FROM public.join_class_by_code('SIE201A1');`);
+  } catch (err) {
+    closedClassJoinBlocked = true;
+    closedClassJoinErr = err.message;
+  }
+  recordTest(
+    '[-] G3: Mahasiswa bergabung ke kelas CLOSED -> DITOLAK (CODE_INVALID)',
+    closedClassJoinBlocked && closedClassJoinErr.includes('CODE_INVALID'),
+    `Eksepsi: ${closedClassJoinErr}`
+  );
+
+  // G3.4: Direct UPDATE oleh klien pada kolom terlindungi enrollments tetap ditolak
+  // Klien dengan izin akses tabel (Staf) mencoba memodifikasi kolom terlindungi tanpa rpc_context
+  await asUser(STAFF_ID);
+  let directUpdateBlocked = false;
+  let directUpdateErr = '';
+  try {
+    await db.query(`UPDATE public.enrollments SET status = 'DROPPED' WHERE class_id = '${CLASS_A1_ID}' AND student_id = '${STUDENT_1_ID}';`);
+  } catch (err) {
+    directUpdateBlocked = true;
+    directUpdateErr = err.message;
+  }
+  recordTest(
+    '[-] G3: Direct UPDATE pada enrollments oleh klien tetap ditolak trigger',
+    directUpdateBlocked && directUpdateErr.includes('DIRECT_UPDATE_RESTRICTED'),
+    `Eksepsi: ${directUpdateErr}`
+  );
+
+  // G4: Uji otomatis katalog pg_proc mendeteksi fungsi yang menulis kolom terlindungi tanpa set_config
+  const auditProcs = await db.query(`
+    SELECT proname, prosrc
+    FROM pg_proc p
+    JOIN pg_namespace n ON n.oid = p.pronamespace
+    WHERE n.nspname = 'public'
+      AND (
+        (
+          (prosrc ~* 'UPDATE\\s+([a-zA-Z_]+\\.)?classes' OR (prosrc ~* 'classes' AND prosrc ~* 'DO\\s+UPDATE'))
+          AND prosrc ~* '(status|lecturer_id|course_id|semester_id|created_by|join_code)'
+        )
+        OR
+        (
+          (prosrc ~* 'UPDATE\\s+([a-zA-Z_]+\\.)?enrollments' OR (prosrc ~* 'enrollments' AND prosrc ~* 'DO\\s+UPDATE'))
+          AND prosrc ~* '(status|class_id|student_id)'
+        )
+      );
+  `);
+
+  const uncompliant = [];
+  const compliant = [];
+  for (const r of auditProcs.rows) {
+    const hasSet = r.prosrc.includes("set_config('app.rpc_context'");
+    if (hasSet) {
+      compliant.push(r.proname);
+    } else {
+      uncompliant.push(r.proname);
+    }
+  }
+
+  recordTest(
+    '[+] G4: Uji otomatis pg_proc mendeteksi 100% fungsi mutasi kolom terlindungi telah menerapkan app.rpc_context',
+    uncompliant.length === 0 && compliant.length > 0,
+    `Fungsi patuh (${compliant.length}): ${compliant.join(', ')}. Fungsi melanggar: ${uncompliant.length === 0 ? 'TIDAK ADA (0)' : uncompliant.join(', ')}`
   );
 
   console.log('========================================================================================');
