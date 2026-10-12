@@ -3,28 +3,28 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-none sm:rounded-[2px] text-xs font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black disabled:pointer-events-none disabled:opacity-50 min-h-[36px] px-4 py-2 border-2 border-black active:translate-x-0.5 active:translate-y-0.5 cursor-pointer",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-[2px] text-xs sm:text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black disabled:pointer-events-none disabled:opacity-50 border-2 border-black active:translate-x-0.5 active:translate-y-0.5 cursor-pointer select-none",
   {
     variants: {
       variant: {
         default:
-          "bg-white text-black shadow-[2.5px_2.5px_0px_#000000] hover:bg-black hover:text-white active:shadow-[1px_1px_0px_#000000]",
+          "bg-white text-black shadow-retro hover:bg-black hover:text-white active:shadow-retro-sm",
         destructive:
-          "bg-black text-white shadow-[2.5px_2.5px_0px_#000000] hover:bg-white hover:text-black active:shadow-[1px_1px_0px_#000000]",
+          "bg-black text-white shadow-retro hover:bg-white hover:text-black active:shadow-retro-sm",
         outline:
-          "bg-white text-black shadow-[2.5px_2.5px_0px_#000000] hover:bg-[#EAEAEA] active:shadow-[1px_1px_0px_#000000]",
+          "bg-white text-black shadow-retro hover:bg-retro-warm active:shadow-retro-sm",
         secondary:
-          "bg-[#EFEFEF] text-black shadow-[2.5px_2.5px_0px_#000000] hover:bg-white active:shadow-[1px_1px_0px_#000000]",
+          "bg-retro-surface text-black shadow-retro hover:bg-white active:shadow-retro-sm",
         ghost:
-          "border-transparent bg-transparent hover:bg-[#EAEAEA] text-black",
+          "border-transparent bg-transparent hover:bg-retro-warm text-black shadow-none",
         link:
-          "border-transparent bg-transparent text-black underline-offset-4 hover:underline p-0 min-h-0",
+          "border-transparent bg-transparent text-black underline-offset-4 hover:underline p-0 min-h-0 shadow-none",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 px-2.5 text-xs",
-        lg: "h-11 px-6 text-sm",
-        icon: "h-9 w-9 p-0",
+        default: "h-10 min-h-[2.5rem] [@media(pointer:coarse)]:min-h-[2.75rem] px-4 py-2",
+        sm: "h-8 min-h-[2rem] [@media(pointer:coarse)]:min-h-[2.75rem] px-3 py-1.5 text-xs",
+        lg: "h-11 min-h-[2.75rem] px-6 py-2.5 text-sm sm:text-base",
+        icon: "h-10 w-10 min-h-[2.5rem] min-w-[2.5rem] [@media(pointer:coarse)]:min-h-[2.75rem] [@media(pointer:coarse)]:min-w-[2.75rem] p-0",
       },
     },
     defaultVariants: {

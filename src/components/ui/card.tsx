@@ -8,7 +8,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-none sm:rounded-[3px] border-2 border-black bg-white text-black shadow-[5px_5px_0px_#000000] sm:shadow-[6px_6px_0px_#000000] transition-all",
+      "rounded-[3px] border-2 border-black bg-white text-black shadow-retro-md sm:shadow-retro-lg transition-all",
       className
     )}
     {...props}
@@ -22,7 +22,7 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col space-y-2 p-6 sm:p-7", className)}
+    className={cn("flex flex-col space-y-1.5 p-4 sm:p-6", className)}
     {...props}
   />
 ));
@@ -34,7 +34,7 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn("font-bold leading-tight tracking-tight text-xl sm:text-2xl text-foreground", className)}
+    className={cn("font-bold leading-tight tracking-tight text-lg sm:text-xl text-foreground font-heading", className)}
     {...props}
   />
 ));
@@ -46,7 +46,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-base text-muted-foreground leading-relaxed", className)}
+    className={cn("text-xs sm:text-sm text-muted-foreground leading-relaxed", className)}
     {...props}
   />
 ));
@@ -56,7 +56,7 @@ const CardContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 sm:p-7 pt-0 text-base leading-relaxed", className)} {...props} />
+  <div ref={ref} className={cn("p-4 sm:p-6 pt-0 text-xs sm:text-sm leading-relaxed", className)} {...props} />
 ));
 CardContent.displayName = "CardContent";
 
@@ -66,7 +66,7 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-6 sm:p-7 pt-0 text-base", className)}
+    className={cn("flex items-center p-4 sm:p-6 pt-0 text-xs sm:text-sm", className)}
     {...props}
   />
 ));
