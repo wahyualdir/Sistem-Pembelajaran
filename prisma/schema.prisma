@@ -170,6 +170,7 @@ model Mahasiswa {
   pengumpulan   PengumpulanTugas[]
   bimbingan     BimbinganWali[]
   pengajuanSurat PengajuanSurat[]
+  materiProgres  MateriProgres[]
 
   @@index([prodiId, angkatan])
   @@index([nim])
@@ -422,9 +423,28 @@ model Materi {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  kelas        Kelas    @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  kelas        Kelas           @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  progres      MateriProgres[]
 
   @@index([kelasId])
+}
+
+model MateriProgres {
+  id             String    @id @default(uuid())
+  materiId       String
+  mahasiswaId    String
+  selesai        Boolean   @default(false)
+  selesaiPada    DateTime?
+  terakhirDibuka DateTime  @default(now())
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  materi         Materi    @relation(fields: [materiId], references: [id], onDelete: Cascade)
+  mahasiswa      Mahasiswa @relation(fields: [mahasiswaId], references: [id], onDelete: Cascade)
+
+  @@unique([materiId, mahasiswaId])
+  @@index([materiId])
+  @@index([mahasiswaId])
 }
 
 model Tugas {

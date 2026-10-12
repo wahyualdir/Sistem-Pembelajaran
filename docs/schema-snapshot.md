@@ -1,7 +1,7 @@
 # Snapshot Skema Database SIAJAR (Single Source of Truth)
 
 > **Tanggal Dihasilkan**: 12 Oktober 2026  
-> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..19 dijalankan dari nol.  
+> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..20 dijalankan dari nol.  
 > **Tujuan**: Sumber kebenaran tunggal (*Single Source of Truth*) nama tabel, kolom, tipe data, foreign key, dan kebijakan RLS untuk perencanaan dan implementasi Fase 3.
 
 ---
@@ -473,6 +473,39 @@
 |---|---|---|---|
 | `login_events_insert` | `INSERT` | `authenticated` | PERMISSIVE |
 | `login_events_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.materi_progres`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 8
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `materi_id` | `uuid` | NO | - |
+| `mahasiswa_id` | `uuid` | NO | - |
+| `selesai` | `boolean` | NO | `false` |
+| `selesai_pada` | `timestamp with time zone` | YES | - |
+| `terakhir_dibuka` | `timestamp with time zone` | NO | `now()` |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `mahasiswa_id` -> `public.profiles(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `materi_id` -> `public.materials(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+- UNIQUE: `mahasiswa_id`
+- UNIQUE: `materi_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `materi_progres_delete` | `DELETE` | `authenticated` | PERMISSIVE |
+| `materi_progres_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `materi_progres_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `materi_progres_update` | `UPDATE` | `authenticated` | PERMISSIVE |
 
 ---
 

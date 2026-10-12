@@ -384,6 +384,7 @@ Semua DDL baru di Fase 3 **WAJIB** menggunakan klausa defensif `ALTER TABLE ... 
 - `public.discussions`: `id` uuid, `class_id` uuid (FK classes RESTRICT), `author_id` uuid (FK profiles RESTRICT), `author_name` text, `title` text, `body` text, `is_pinned` boolean, `is_locked` boolean, `created_at` timestamp with time zone.
 - `public.discussion_replies`: `id` uuid, `discussion_id` uuid (FK discussions RESTRICT), `class_id` uuid (FK classes RESTRICT), `author_id` uuid (FK profiles RESTRICT), `author_name` text, `body` text, `is_hidden` boolean, `hidden_by` uuid (FK profiles SET NULL), `created_at` timestamp with time zone.
 - `public.announcements`: `id` uuid, `class_id` uuid (FK classes RESTRICT), `author_id` uuid (FK profiles RESTRICT), `title` text, `body` text, `created_at` timestamp with time zone.
+- `public.materi_progres`: `id` uuid, `materi_id` uuid (FK materials CASCADE), `mahasiswa_id` uuid (FK profiles CASCADE), `selesai` boolean, `selesai_pada` timestamp with time zone, `terakhir_dibuka` timestamp with time zone, `created_at` timestamp with time zone, `updated_at` timestamp with time zone.
 
 #### B. TABEL BARU (Fase 3):
 - Layanan Ekstensi Kampus (Pustaka, Event, Portofolio):
