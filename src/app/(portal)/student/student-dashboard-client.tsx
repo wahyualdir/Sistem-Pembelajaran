@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   ChevronRight,
   X,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { UirLogo3D } from '@/components/retro/uir-logo-3d';
@@ -20,6 +21,7 @@ import { TodaySchedule } from '@/components/home/today-schedule';
 import { ActiveClassesGrid } from '@/components/home/active-classes-grid';
 import { RightPanelSwitcher } from '@/components/home/right-panel-switcher';
 import { usePortalLayout } from '@/app/(portal)/portal-shell';
+import { ambilMateriTerakhirDibukaAction } from '@/features/materi-tugas/progres-actions';
 import {
   type HomeBannerData,
   type HomeDeadlineItem,
@@ -219,6 +221,24 @@ export function StudentDashboardClient({
   const { isRightDrawerOpen, setIsRightDrawerOpen, setHasRightPanel } = usePortalLayout();
   const [selectedCourse, setSelectedCourse] = useState<ActiveClassItem>(courses[0]);
   const [rightPanelTab, setRightPanelTab] = useState<'hari-ini' | 'detail-kelas'>('hari-ini');
+  const [materiTerakhir, setMateriTerakhir] = useState<{
+    materi: { id: string; judul: string; pathFile: string; deskripsi?: string };
+    kelas: { kodeMataKuliah: string; namaMataKuliah: string; kode: string };
+    progres: { selesai: boolean; terakhirDibuka: string };
+  } | null>(null);
+
+  // Ambil materi terakhir dibuka untuk kartu Lanjutkan Belajar
+  useEffect(() => {
+    let isMounted = true;
+    ambilMateriTerakhirDibukaAction().then((res) => {
+      if (isMounted && res.success && res.data) {
+        setMateriTerakhir(res.data);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Beritahu layout shell bahwa halaman ini memiliki panel kanan
   useEffect(() => {
@@ -300,6 +320,91 @@ export function StudentDashboardClient({
             initialData={bannerData}
             onRefresh={async () => getHomeBannerAction()}
           />
+
+          {/* SECTION: KARTU LANJUTKAN BELAJAR (Tampil pada Semua, Kelas Saya, Tugas & Kuis) */}
+          {(showAll || showKelasSaya || showTugasKuis) && (
+            <section aria-label="Lanjutkan Belajar" className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h2 className="font-heading font-black text-xl sm:text-2xl tracking-tight text-foreground flex items-center gap-2">
+                  <Sparkles className="h-5 w-5 text-retro-orange inline-block" />
+                  Lanjutkan Belajar
+                </h2>
+                <Link
+                  href="/mahasiswa/tugas"
+                  className="text-xs sm:text-sm font-black text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Lihat Semua Materi &rarr;
+                </Link>
+              </div>
+
+              {materiTerakhir ? (
+                <div className="rounded-xl border-2 border-retro-border bg-retro-surface p-4 sm:p-5 shadow-retro flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                  <div className="space-y-1.5 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-retro-warm border border-retro-border text-foreground">
+                        {materiTerakhir.kelas.kode}
+                      </span>
+                      <span className="text-xs font-bold text-muted-foreground truncate">
+                        {materiTerakhir.kelas.namaMataKuliah}
+                      </span>
+                      {materiTerakhir.progres.selesai ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-success-soft text-success border border-success-border">
+                          <CheckCircle2 className="h-3 w-3" />
+                          Selesai
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-retro-yellow text-black border border-black">
+                          <Clock className="h-3 w-3" />
+                          Sedang Dipelajari
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="font-heading font-black text-lg sm:text-xl text-foreground line-clamp-1">
+                      {materiTerakhir.materi.judul}
+                    </h3>
+
+                    <p className="text-xs text-muted-foreground font-medium">
+                      Terakhir dibuka:{' '}
+                      {new Date(materiTerakhir.progres.terakhirDibuka).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })}
+                    </p>
+                  </div>
+
+                  <Link
+                    href="/mahasiswa/tugas"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-retro-border bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-bold shadow-retro transition-all shrink-0 min-h-[44px]"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    <span>Buka Materi</span>
+                    <ChevronRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              ) : (
+                <div className="rounded-xl border-2 border-dashed border-retro-border bg-retro-surface/50 p-6 text-center space-y-2">
+                  <BookOpen className="h-8 w-8 text-muted-foreground/60 mx-auto" />
+                  <p className="text-sm font-bold text-foreground">
+                    Belum Ada Materi yang Sedang Dipelajari
+                  </p>
+                  <p className="text-xs text-muted-foreground max-w-md mx-auto">
+                    Mulai eksplorasi bahan ajar dan modul perkuliahan aktif untuk melacak progres belajar Anda.
+                  </p>
+                  <div className="pt-2">
+                    <Link
+                      href="/mahasiswa/tugas"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-retro-border bg-retro-surface text-foreground hover:bg-retro-warm text-xs font-bold shadow-retro transition-all min-h-[44px]"
+                    >
+                      <span>Buka Daftar Materi Kuliah</span>
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </section>
+          )}
 
           {/* SECTION 2: TENGGAT TERDEKAT (Tampil pada Semua, Tugas & Kuis, Ujian) */}
           {(showAll || showTugasKuis || showUjian) && (

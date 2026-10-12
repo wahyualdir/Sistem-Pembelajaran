@@ -83,6 +83,7 @@ export interface ClassroomCardProps {
     title: string;
     due_at: string;
   } | null;
+  progressPercent?: number;
   index?: number;
 }
 
@@ -165,7 +166,7 @@ export function GoogleClassroomCard({
         <div className="p-4 sm:p-5 pt-8 space-y-3.5 bg-white">
           {/* Tenggat Waktu Mendatang */}
           <div className="p-3 rounded-xl border border-black/25 bg-retro-warm/30 space-y-1">
-            <span className="text-[11px] font-semibold text-black/60 block">
+            <span className="text-xs font-semibold text-black/60 block">
               Tenggat Terdekat
             </span>
             <div className="flex items-center gap-2 text-xs font-medium text-black">
@@ -192,10 +193,26 @@ export function GoogleClassroomCard({
               >
                 <Key className="h-3 w-3 text-retro-orange" />
                 <span>{item.join_code}</span>
-                {copied && <span className="text-[10px] text-retro-mint font-bold">✓</span>}
+                {copied && <span className="text-xs text-retro-mint font-bold">✓</span>}
               </button>
             )}
           </div>
+
+          {/* Progres Belajar Mahasiswa */}
+          {!isLecturer && (
+            <div className="pt-2.5 border-t border-black/15 space-y-1.5">
+              <div className="flex items-center justify-between text-xs font-semibold text-black">
+                <span className="text-black/70">Progres Belajar</span>
+                <span className="font-bold">{item.progressPercent ?? 65}%</span>
+              </div>
+              <div className="w-full h-2 rounded-full border border-black bg-retro-warm overflow-hidden">
+                <div
+                  className="bg-black h-full rounded-full transition-all duration-500"
+                  style={{ width: `${item.progressPercent ?? 65}%` }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

@@ -12,6 +12,10 @@ import {
   ExternalLink,
   Users,
   Award,
+  Trash2,
+  Download,
+  BarChart2,
+  FileSpreadsheet,
 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,6 +30,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { FileDropzone } from "@/components/ui/file-dropzone";
 import { JadwalStore } from "@/features/jadwal/jadwal-store";
 import {
   MateriTugasStore,
@@ -36,6 +41,8 @@ import {
   tambahMateriAction,
   tambahTugasAction,
   beriNilaiTugasAction,
+  hapusMateriAction,
+  dapatkanSignedUrlAction,
 } from "@/features/materi-tugas/actions";
 
 export default function DosenMateriTugasPage() {
@@ -47,17 +54,19 @@ export default function DosenMateriTugasPage() {
   );
   const kelas = JadwalStore.getKelasById(selectedKelasId);
 
-  const [activeTab, setActiveTab] = useState<"materi" | "tugas">("materi");
+  const [activeTab, setActiveTab] = useState<"materi" | "tugas" | "progres">("materi");
 
   const daftarMateri = MateriTugasStore.getMateriByKelas(selectedKelasId);
   const daftarTugas = MateriTugasStore.getTugasByKelas(selectedKelasId);
+  const rekapProgres = MateriTugasStore.getRekapProgresKelas(selectedKelasId);
 
   // State Modal Tambah Materi
   const [isMateriModalOpen, setIsMateriModalOpen] = useState(false);
   const [judulMateri, setJudulMateri] = useState("");
   const [deskripsiMateri, setDeskripsiMateri] = useState("");
   const [linkMateri, setLinkMateri] = useState("");
-  const [ukuranMateri, setUkuranMateri] = useState(2.5);
+  const [modeUnggahMateri, setModeUnggahMateri] = useState<"file" | "link">("file");
+  const [selectedFileMateri, setSelectedFileMateri] = useState<File | null>(null);
 
   // State Modal Tambah Tugas
   const [isTugasModalOpen, setIsTugasModalOpen] = useState(false);
@@ -74,23 +83,59 @@ export default function DosenMateriTugasPage() {
   const [pesanNotif, setPesanNotif] = useState<{ teks: string; tipe: "sukses" | "galat" } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Helper buka signed URL berkas
+  const handleBukaBerkas = async (pathFile: string) => {
+    if (!pathFile) return;
+    if (pathFile.startsWith("http://") || pathFile.startsWith("https://")) {
+      window.open(pathFile, "_blank");
+      return;
+    }
+
+    setIsLoading(true);
+    const res = await dapatkanSignedUrlAction({ pathFile });
+    setIsLoading(false);
+
+    if (res.success && res.signedUrl) {
+      window.open(res.signedUrl, "_blank");
+    } else {
+      setPesanNotif({ teks: res.message || "Gagal membuka berkas.", tipe: "galat" });
+    }
+  };
+
   // Tambah Materi
   const handleTambahMateri = async () => {
-    if (!judulMateri.trim() || !linkMateri.trim()) {
-      setPesanNotif({ teks: "Judul dan tautan berkas materi wajib diisi.", tipe: "galat" });
+    if (!judulMateri.trim()) {
+      setPesanNotif({ teks: "Judul materi wajib diisi.", tipe: "galat" });
+      return;
+    }
+
+    if (modeUnggahMateri === "file" && !selectedFileMateri) {
+      setPesanNotif({ teks: "Pilih berkas materi untuk diunggah.", tipe: "galat" });
+      return;
+    }
+
+    if (modeUnggahMateri === "link" && !linkMateri.trim()) {
+      setPesanNotif({ teks: "Tautan berkas materi wajib diisi.", tipe: "galat" });
       return;
     }
 
     setIsLoading(true);
     setPesanNotif(null);
 
-    const res = await tambahMateriAction({
-      kelasId: selectedKelasId,
-      judul: judulMateri.trim(),
-      deskripsi: deskripsiMateri.trim() || undefined,
-      pathFile: linkMateri.trim(),
-      ukuranMb: ukuranMateri,
-    });
+    const formData = new FormData();
+    formData.append("kelasId", selectedKelasId);
+    formData.append("judul", judulMateri.trim());
+    if (deskripsiMateri.trim()) {
+      formData.append("deskripsi", deskripsiMateri.trim());
+    }
+
+    if (modeUnggahMateri === "file" && selectedFileMateri) {
+      formData.append("file", selectedFileMateri);
+    } else {
+      formData.append("pathFile", linkMateri.trim());
+    }
+
+    const res = await tambahMateriAction(formData);
 
     setIsLoading(false);
     if (res.success) {
@@ -98,6 +143,24 @@ export default function DosenMateriTugasPage() {
       setJudulMateri("");
       setDeskripsiMateri("");
       setLinkMateri("");
+      setSelectedFileMateri(null);
+      setPesanNotif({ teks: res.message, tipe: "sukses" });
+    } else {
+      setPesanNotif({ teks: res.message, tipe: "galat" });
+    }
+  };
+
+  // Hapus Materi
+  const handleHapusMateri = async (materiId: string) => {
+    if (!window.confirm("Apakah Anda yakin ingin menghapus materi ini beserta berkasnya?")) {
+      return;
+    }
+
+    setIsLoading(true);
+    const res = await hapusMateriAction({ materiId, kelasId: selectedKelasId });
+    setIsLoading(false);
+
+    if (res.success) {
       setPesanNotif({ teks: res.message, tipe: "sukses" });
     } else {
       setPesanNotif({ teks: res.message, tipe: "galat" });
@@ -132,9 +195,19 @@ export default function DosenMateriTugasPage() {
     }
   };
 
-  // Simpan Nilai Tugas
+  // Simpan Penilaian Tugas Mahasiswa
   const handleSimpanNilai = async () => {
     if (!nilaiTarget) return;
+
+    if (inputNilai < 0 || inputNilai > 100) {
+      setPesanNotif({ teks: "Nilai harus berada dalam rentang 0 - 100.", tipe: "galat" });
+      return;
+    }
+
+    if (!inputCatatan.trim()) {
+      setPesanNotif({ teks: "Catatan evaluasi wajib diisi untuk mahasiswa.", tipe: "galat" });
+      return;
+    }
 
     setIsLoading(true);
     setPesanNotif(null);
@@ -148,113 +221,201 @@ export default function DosenMateriTugasPage() {
     setIsLoading(false);
     if (res.success) {
       setNilaiTarget(null);
+      setInputCatatan("");
       setPesanNotif({ teks: res.message, tipe: "sukses" });
     } else {
       setPesanNotif({ teks: res.message, tipe: "galat" });
     }
   };
 
-  const daftarPengumpulan = viewTugasTarget
+  // Ekspor Rekap Progres Mahasiswa ke CSV
+  const handleEksporCsvProgres = () => {
+    if (!rekapProgres || rekapProgres.daftarMahasiswa.length === 0) {
+      setPesanNotif({ teks: "Tidak ada data mahasiswa untuk diekspor.", tipe: "galat" });
+      return;
+    }
+
+    const headers = "NIM,Nama Mahasiswa,Total Materi,Materi Selesai,Persentase Progres,Tugas Terkumpul,Status Keaktifan";
+    const rows = rekapProgres.daftarMahasiswa.map((m) => {
+      const status = m.perluPerhatian ? "Perlu Perhatian (<50%)" : m.persenProgres === 100 ? "Tuntas (100%)" : "Aktif";
+      return `"${m.nim}","${m.nama}",${m.totalMateri},${m.materiSelesai},"${m.persenProgres}%",${m.tugasTerkumpul},"${status}"`;
+    });
+
+    const csvContent = [headers, ...rows].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", `rekap-progres-${kelas?.kodeMataKuliah || "kelas"}-${kelas?.kode || "A"}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    setPesanNotif({ teks: "Berkas rekap progres CSV berhasil diunduh.", tipe: "sukses" });
+  };
+
+  const pengumpulanList = viewTugasTarget
     ? MateriTugasStore.getPengumpulanByTugas(viewTugasTarget.id)
     : [];
 
   return (
     <div className="space-y-6">
-      {/* Header Halaman */}
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      {/* HEADER SECTION */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">
-            Materi & Tugas Perkuliahan
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+            <FolderArchive className="h-6 w-6 text-primary" />
+            Materi Perkuliahan & Pengumpulan Tugas
           </h1>
-          <p className="text-sm text-muted-foreground">
-            Distribusi bahan perkuliahan digital, pembuatan instruksi penugasan, dan penilaian hasil pekerjaan mahasiswa.
+          <p className="text-xs text-muted-foreground mt-1">
+            Kelola berkas materi Supabase Storage, pantau progres belajar, dan nilai tugas mahasiswa.
           </p>
         </div>
 
-        {/* Pilihan Kelas */}
+        {/* Pilihan Rombongan Kelas */}
         <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-muted-foreground whitespace-nowrap">
-            Pilih Kelas:
+          <label className="text-xs font-semibold text-muted-foreground whitespace-nowrap">
+            Kelas:
           </label>
           <select
             value={selectedKelasId}
-            onChange={(e) => {
-              setSelectedKelasId(e.target.value);
-              setPesanNotif(null);
-            }}
-            className="rounded-[8px] border border-border bg-surface px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+            onChange={(e) => setSelectedKelasId(e.target.value)}
+            className="rounded border-2 border-black bg-white px-3 py-1.5 text-xs font-bold text-foreground shadow-retro-sm focus:outline-none"
           >
             {daftarKelas.map((k) => (
               <option key={k.id} value={k.id}>
-                {k.kodeMataKuliah} - {k.namaMataKuliah} (Kelas {k.kode})
+                {k.kodeMataKuliah} - {k.namaMataKuliah} (Kls {k.kode})
               </option>
             ))}
           </select>
         </div>
       </div>
 
-      {/* Pesan Notifikasi */}
+      {/* NOTIFIKASI FEEDBACK */}
       {pesanNotif && (
         <div
-          className={`flex items-center gap-2 rounded-[8px] p-3 text-sm font-medium ${
+          className={`p-3 text-xs rounded border-2 border-black flex items-center gap-2 shadow-retro-sm ${
             pesanNotif.tipe === "sukses"
-              ? "bg-success-soft text-success border border-success-border"
-              : "bg-danger/10 text-danger border border-danger/20"
+              ? "bg-retro-warm text-black"
+              : "bg-retro-warm text-danger"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
             <CheckCircle className="h-4 w-4 shrink-0" />
           ) : (
-            <AlertTriangle className="h-4 w-4 shrink-0" />
+            <AlertTriangle className="h-4 w-4 shrink-0 text-danger" />
           )}
-          <span>{pesanNotif.teks}</span>
+          <span className="font-bold">{pesanNotif.teks}</span>
         </div>
       )}
 
-      {/* Tab Switcher & Action Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-border pb-3">
+      {/* KARTU RINGKASAN KELAS */}
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs text-muted-foreground">Materi Terbit</p>
+              <h3 className="text-lg font-bold text-foreground mt-0.5">{daftarMateri.length} Modul</h3>
+            </div>
+            <FileText className="h-7 w-7 text-primary/70" />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs text-muted-foreground">Tugas Aktif</p>
+              <h3 className="text-lg font-bold text-foreground mt-0.5">{daftarTugas.length} Tugas</h3>
+            </div>
+            <Clock className="h-7 w-7 text-retro-orange/70" />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs text-muted-foreground">Rata-Rata Progres</p>
+              <h3 className="text-lg font-bold text-foreground mt-0.5">{rekapProgres.rataRataProgres}%</h3>
+            </div>
+            <BarChart2 className="h-7 w-7 text-retro-green/70" />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-4 flex items-center justify-between">
+            <div>
+              <p className="text-xs text-muted-foreground">Perlu Perhatian</p>
+              <h3 className="text-lg font-bold text-foreground mt-0.5">
+                {rekapProgres.mahasiswaPerluPerhatian} Mahasiswa
+              </h3>
+            </div>
+            <AlertTriangle className="h-7 w-7 text-danger/70" />
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* TAB NAVIGASI */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b-2 border-black/20 pb-2 gap-3">
         <div className="flex items-center gap-2">
-          <button
+          <Button
+            size="sm"
+            variant={activeTab === "materi" ? "default" : "outline"}
             onClick={() => setActiveTab("materi")}
-            className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-[8px] transition-colors ${
-              activeTab === "materi"
-                ? "bg-primary text-white"
-                : "bg-surface text-muted-foreground border border-border hover:bg-muted"
-            }`}
+            className="text-xs font-bold"
           >
-            <FolderArchive className="h-4 w-4" />
-            Materi Perkuliahan ({daftarMateri.length})
-          </button>
-          <button
+            Modul & Materi ({daftarMateri.length})
+          </Button>
+          <Button
+            size="sm"
+            variant={activeTab === "tugas" ? "default" : "outline"}
             onClick={() => setActiveTab("tugas")}
-            className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-[8px] transition-colors ${
-              activeTab === "tugas"
-                ? "bg-primary text-white"
-                : "bg-surface text-muted-foreground border border-border hover:bg-muted"
-            }`}
+            className="text-xs font-bold"
           >
-            <FileText className="h-4 w-4" />
             Tugas & Evaluasi ({daftarTugas.length})
-          </button>
+          </Button>
+          <Button
+            size="sm"
+            variant={activeTab === "progres" ? "default" : "outline"}
+            onClick={() => setActiveTab("progres")}
+            className="text-xs font-bold gap-1.5"
+          >
+            <BarChart2 className="h-3.5 w-3.5" />
+            Rekap Progres ({rekapProgres.totalMahasiswa} Mhs)
+          </Button>
         </div>
 
-        {activeTab === "materi" ? (
+        {activeTab === "materi" && (
           <Button
             size="sm"
             onClick={() => setIsMateriModalOpen(true)}
-            className="gap-1.5 text-xs"
+            className="gap-1.5 text-xs font-bold shadow-retro-sm"
           >
             <Plus className="h-4 w-4" />
             Unggah Materi Baru
           </Button>
-        ) : (
+        )}
+
+        {activeTab === "tugas" && (
           <Button
             size="sm"
             onClick={() => setIsTugasModalOpen(true)}
-            className="gap-1.5 text-xs"
+            className="gap-1.5 text-xs font-bold shadow-retro-sm"
           >
             <Plus className="h-4 w-4" />
             Buat Tugas Baru
+          </Button>
+        )}
+
+        {activeTab === "progres" && (
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleEksporCsvProgres}
+            className="gap-1.5 text-xs font-bold shadow-retro-sm"
+          >
+            <FileSpreadsheet className="h-4 w-4 text-retro-green" />
+            Ekspor Rekap Progres (CSV)
           </Button>
         )}
       </div>
@@ -263,43 +424,70 @@ export default function DosenMateriTugasPage() {
       {activeTab === "materi" && (
         <div className="space-y-3">
           {daftarMateri.length > 0 ? (
-            daftarMateri.map((mat) => (
-              <Card key={mat.id} className="hover:border-primary/50 transition-colors">
-                <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <FolderArchive className="h-4 w-4 text-primary shrink-0" />
-                      <h3 className="font-semibold text-sm text-foreground">
-                        {mat.judul}
-                      </h3>
-                      <Badge variant="secondary" className="text-[10px]">
-                        {mat.ukuranMb} MB
-                      </Badge>
-                    </div>
-                    {mat.deskripsi && (
-                      <p className="text-xs text-muted-foreground pl-6">
-                        {mat.deskripsi}
-                      </p>
-                    )}
-                    <p className="text-[11px] text-muted-foreground pl-6">
-                      Diunggah oleh: {mat.diunggahOleh} • Tanggal: {mat.tanggalUpload}
-                    </p>
-                  </div>
+            daftarMateri.map((mat) => {
+              const progresMateri = MateriTugasStore.getProgresMateri(mat.id);
+              const isStorageFile = !mat.pathFile.startsWith("http://") && !mat.pathFile.startsWith("https://");
 
-                  <a
-                    href={mat.pathFile}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="shrink-0"
-                  >
-                    <Button variant="outline" size="sm" className="gap-1 text-xs">
-                      <ExternalLink className="h-3.5 w-3.5" />
-                      Buka Materi
-                    </Button>
-                  </a>
-                </CardContent>
-              </Card>
-            ))
+              return (
+                <Card key={mat.id} className="hover:border-primary/50 transition-colors">
+                  <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <div className="space-y-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <FolderArchive className="h-4 w-4 text-primary shrink-0" />
+                        <h3 className="font-semibold text-sm text-foreground truncate">
+                          {mat.judul}
+                        </h3>
+                        <Badge variant="secondary" className="text-2xs font-mono">
+                          {mat.ukuranMb} MB
+                        </Badge>
+                        {isStorageFile && (
+                          <Badge variant="outline" className="text-2xs font-mono bg-retro-warm">
+                            Cloud Storage
+                          </Badge>
+                        )}
+                        <Badge variant="outline" className="text-2xs font-mono">
+                          {progresMateri.selesaiCount}/{progresMateri.totalMahasiswa} Mahasiswa Selesai ({progresMateri.persen}%)
+                        </Badge>
+                      </div>
+
+                      {mat.deskripsi && (
+                        <p className="text-xs text-muted-foreground pl-6">
+                          {mat.deskripsi}
+                        </p>
+                      )}
+                      <p className="text-2xs text-muted-foreground pl-6">
+                        Diunggah oleh: {mat.diunggahOleh} • Tanggal: {mat.tanggalUpload}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2 shrink-0 justify-end">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleBukaBerkas(mat.pathFile)}
+                        disabled={isLoading}
+                        className="gap-1 text-xs"
+                      >
+                        {isStorageFile ? <Download className="h-3.5 w-3.5" /> : <ExternalLink className="h-3.5 w-3.5" />}
+                        {isStorageFile ? "Unduh / Pratinjau" : "Buka Tautan"}
+                      </Button>
+
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleHapusMateri(mat.id)}
+                        disabled={isLoading}
+                        className="gap-1 text-xs text-danger hover:bg-danger hover:text-white"
+                        title="Hapus materi"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        Hapus
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })
           ) : (
             <Card>
               <CardContent className="p-8 text-center text-xs text-muted-foreground">
@@ -316,29 +504,36 @@ export default function DosenMateriTugasPage() {
           {daftarTugas.length > 0 ? (
             daftarTugas.map((tug) => {
               const kumpulCount = MateriTugasStore.getPengumpulanByTugas(tug.id).length;
+
               return (
                 <Card key={tug.id} className="hover:border-primary/50 transition-colors">
                   <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-primary shrink-0" />
+                        <FileText className="h-4 w-4 text-retro-orange shrink-0" />
                         <h3 className="font-semibold text-sm text-foreground">
                           {tug.judul}
                         </h3>
-                        <Badge variant="outline" className="text-[10px] text-muted-foreground gap-1">
-                          <Clock className="h-3 w-3" />
-                          Tenggat: {tug.tenggat.replace("T", " ")}
-                        </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground pl-6 leading-relaxed">
                         {tug.deskripsi}
                       </p>
+                      <div className="flex items-center gap-3 pl-6 text-xs text-muted-foreground pt-1">
+                        <span className="flex items-center gap-1 font-medium text-danger">
+                          <Clock className="h-3.5 w-3.5" />
+                          Tenggat: {tug.tenggat.replace("T", " ")}
+                        </span>
+                        <span>•</span>
+                        <span className="flex items-center gap-1 font-semibold text-foreground">
+                          <Users className="h-3.5 w-3.5" />
+                          {kumpulCount} Mahasiswa Mengumpulkan
+                        </span>
+                      </div>
                     </div>
 
                     <div className="shrink-0 flex items-center gap-2">
                       <Button
                         size="sm"
-                        variant="secondary"
                         onClick={() => setViewTugasTarget(tug)}
                         className="gap-1.5 text-xs"
                       >
@@ -353,85 +548,187 @@ export default function DosenMateriTugasPage() {
           ) : (
             <Card>
               <CardContent className="p-8 text-center text-xs text-muted-foreground">
-                Belum ada tugas kuliah untuk kelas ini. Klik &quot;Buat Tugas Baru&quot; di atas.
+                Belum ada tugas dibuat untuk kelas ini. Klik &quot;Buat Tugas Baru&quot; di atas.
               </CardContent>
             </Card>
           )}
         </div>
       )}
 
+      {/* TAB 3: REKAP PROGRES MAHASISWA */}
+      {activeTab === "progres" && (
+        <Card>
+          <CardHeader className="p-4 border-b">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <CardTitle className="text-sm font-bold flex items-center gap-2">
+                <BarChart2 className="h-4 w-4 text-primary" />
+                Daftar Progres Belajar Mahasiswa
+              </CardTitle>
+              <span className="text-xs text-muted-foreground">
+                Total Mahasiswa: {rekapProgres.totalMahasiswa} • Rata-rata Progres: {rekapProgres.rataRataProgres}%
+              </span>
+            </div>
+          </CardHeader>
+          <CardContent className="p-0 overflow-x-auto">
+            {rekapProgres.daftarMahasiswa.length > 0 ? (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-xs">NIM</TableHead>
+                    <TableHead className="text-xs">Nama Mahasiswa</TableHead>
+                    <TableHead className="text-xs text-center">Materi Selesai</TableHead>
+                    <TableHead className="text-xs text-center">Persentase</TableHead>
+                    <TableHead className="text-xs text-center">Tugas Kumpul</TableHead>
+                    <TableHead className="text-xs">Status Keaktifan</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {rekapProgres.daftarMahasiswa.map((mhs) => (
+                    <TableRow key={mhs.mahasiswaId}>
+                      <TableCell className="text-xs font-mono font-bold">{mhs.nim}</TableCell>
+                      <TableCell className="text-xs font-medium">{mhs.nama}</TableCell>
+                      <TableCell className="text-xs text-center font-bold">
+                        {mhs.materiSelesai} / {mhs.totalMateri}
+                      </TableCell>
+                      <TableCell className="text-xs text-center">
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="w-16 h-2 rounded-full border border-black bg-retro-warm overflow-hidden inline-block">
+                            <div
+                              className="bg-black h-full rounded-full transition-all"
+                              style={{ width: `${mhs.persenProgres}%` }}
+                            />
+                          </div>
+                          <span className="font-bold text-xs">{mhs.persenProgres}%</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-xs text-center font-bold">
+                        {mhs.tugasTerkumpul} / {mhs.totalTugas}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {mhs.perluPerhatian ? (
+                          <Badge variant="danger" className="text-2xs font-bold gap-1">
+                            <AlertTriangle className="h-3 w-3" />
+                            Perlu Perhatian (&lt;50%)
+                          </Badge>
+                        ) : mhs.persenProgres === 100 ? (
+                          <Badge variant="success" className="text-2xs font-bold gap-1">
+                            <CheckCircle className="h-3 w-3" />
+                            Tuntas 100%
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-2xs font-bold">
+                            Aktif
+                          </Badge>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <div className="p-8 text-center text-xs text-muted-foreground">
+                Belum ada mahasiswa aktif terdaftar di kelas ini.
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
       {/* MODAL LIHAT PENGUMPULAN TUGAS */}
       <Dialog
-        open={!!viewTugasTarget}
+        open={viewTugasTarget !== null}
         onOpenChange={(open) => !open && setViewTugasTarget(null)}
       >
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-sm">
               <Users className="h-5 w-5 text-primary" />
-              Pengumpulan Tugas: {viewTugasTarget?.judul}
+              Daftar Pengumpulan Tugas: {viewTugasTarget?.judul}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-4 py-2">
-            <div className="overflow-x-auto max-h-72 overflow-y-auto border border-border rounded-[8px]">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-muted">
-                    <TableHead className="w-12 text-center text-xs">No</TableHead>
-                    <TableHead className="w-28 text-xs">NIM</TableHead>
-                    <TableHead className="text-xs">Nama Mahasiswa</TableHead>
-                    <TableHead className="w-32 text-xs">Waktu Kumpul</TableHead>
-                    <TableHead className="w-24 text-center text-xs">Status</TableHead>
-                    <TableHead className="w-20 text-center text-xs">Nilai</TableHead>
-                    <TableHead className="w-24 text-center text-xs">Aksi</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {daftarPengumpulan.length > 0 ? (
-                    daftarPengumpulan.map((item, idx) => (
-                      <TableRow key={item.id} className="text-xs">
-                        <TableCell className="text-center font-medium">{idx + 1}</TableCell>
-                        <TableCell className="font-mono">{item.nim}</TableCell>
-                        <TableCell className="font-medium">{item.namaMahasiswa}</TableCell>
-                        <TableCell className="text-[11px] text-muted-foreground">
-                          {item.waktuKumpul}
+            <div className="text-xs text-muted-foreground border-b pb-2">
+              <p>Tenggat Waktu: {viewTugasTarget?.tenggat.replace("T", " ")}</p>
+              <p>Total Pengumpulan Masuk: {pengumpulanList.length} berkas</p>
+            </div>
+
+            {pengumpulanList.length > 0 ? (
+              <div className="rounded border overflow-x-auto max-h-80">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-xs">NIM / Mahasiswa</TableHead>
+                      <TableHead className="text-xs">Waktu Kumpul</TableHead>
+                      <TableHead className="text-xs">Berkas</TableHead>
+                      <TableHead className="text-xs text-center">Nilai</TableHead>
+                      <TableHead className="text-xs text-right">Aksi</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {pengumpulanList.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="text-xs">
+                          <p className="font-bold text-foreground">{item.namaMahasiswa}</p>
+                          <p className="text-2xs text-muted-foreground font-mono">{item.nim}</p>
                         </TableCell>
-                        <TableCell className="text-center">
-                          <Badge variant={item.terlambat ? "danger" : "success"} className="text-[10px]">
-                            {item.terlambat ? "Terlambat" : "Tepat Waktu"}
-                          </Badge>
+                        <TableCell className="text-xs">
+                          <p>{item.waktuKumpul}</p>
+                          {item.terlambat ? (
+                            <Badge variant="danger" className="text-2xs mt-0.5">
+                              Terlambat
+                            </Badge>
+                          ) : (
+                            <Badge variant="success" className="text-2xs mt-0.5">
+                              Tepat Waktu
+                            </Badge>
+                          )}
                         </TableCell>
-                        <TableCell className="text-center font-bold text-primary">
-                          {item.nilai ?? "-"}
+                        <TableCell className="text-xs">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleBukaBerkas(item.pathFile)}
+                            className="text-2xs gap-1"
+                          >
+                            <Download className="h-3 w-3" />
+                            Unduh Berkas
+                          </Button>
                         </TableCell>
-                        <TableCell className="text-center">
+                        <TableCell className="text-xs text-center">
+                          {item.nilai !== null ? (
+                            <span className="font-bold text-success bg-success-soft px-2 py-0.5 rounded">
+                              {item.nilai}
+                            </span>
+                          ) : (
+                            <span className="text-muted-foreground italic text-2xs">Belum dinilai</span>
+                          )}
+                        </TableCell>
+                        <TableCell className="text-xs text-right">
                           <Button
                             size="sm"
-                            variant="outline"
+                            variant="secondary"
                             onClick={() => {
                               setNilaiTarget(item);
                               setInputNilai(item.nilai || 85);
                               setInputCatatan(item.catatanDosen || "");
                             }}
-                            className="h-7 text-[11px] gap-1"
+                            className="text-xs gap-1"
                           >
                             <Award className="h-3 w-3" />
-                            {item.nilai ? "Ubah" : "Nilai"}
+                            {item.nilai !== null ? "Ubah Nilai" : "Beri Nilai"}
                           </Button>
                         </TableCell>
                       </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell colSpan={7} className="py-6 text-center text-muted-foreground text-xs">
-                        Belum ada mahasiswa yang mengumpulkan tugas ini.
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            ) : (
+              <div className="p-8 text-center text-xs text-muted-foreground border rounded">
+                Belum ada mahasiswa yang mengumpulkan tugas ini.
+              </div>
+            )}
           </div>
 
           <DialogFooter>
@@ -442,41 +739,44 @@ export default function DosenMateriTugasPage() {
         </DialogContent>
       </Dialog>
 
-      {/* MODAL BERI NILAI TUGAS */}
-      <Dialog open={!!nilaiTarget} onOpenChange={(open) => !open && setNilaiTarget(null)}>
+      {/* MODAL BERI NILAI */}
+      <Dialog
+        open={nilaiTarget !== null}
+        onOpenChange={(open) => !open && setNilaiTarget(null)}
+      >
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-sm">
-              <Award className="h-5 w-5 text-primary" />
-              Penilaian Tugas Mahasiswa
+              <Award className="h-5 w-5 text-success" />
+              Evaluasi & Nilai Pengumpulan Tugas
             </DialogTitle>
           </DialogHeader>
 
           {nilaiTarget && (
-            <div className="space-y-4 py-2">
-              <div className="rounded-[8px] bg-muted p-3 text-xs border border-border space-y-1">
+            <div className="space-y-3 py-2 text-xs">
+              <div className="rounded bg-muted p-2.5 border space-y-1">
                 <p>
                   <strong>Mahasiswa:</strong> {nilaiTarget.namaMahasiswa} ({nilaiTarget.nim})
                 </p>
                 <p>
-                  <strong>Waktu Kumpul:</strong> {nilaiTarget.waktuKumpul}{" "}
-                  {nilaiTarget.terlambat && <span className="text-danger font-bold">(Terlambat)</span>}
+                  <strong>Status Waktu:</strong>{" "}
+                  {nilaiTarget.terlambat ? "Terlambat Mengumpulkan" : "Tepat Waktu"}
                 </p>
                 <p>
                   <strong>Berkas Jawaban:</strong>{" "}
-                  <a
-                    href={nilaiTarget.pathFile}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary underline font-medium"
+                  <button
+                    type="button"
+                    onClick={() => handleBukaBerkas(nilaiTarget.pathFile)}
+                    className="text-primary underline ml-1 font-bold inline-flex items-center gap-1 cursor-pointer"
                   >
-                    Unduh Berkas
-                  </a>
+                    <Download className="h-3 w-3" />
+                    Unduh Berkas Mahasiswa
+                  </button>
                 </p>
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-muted-foreground block mb-1">
+                <label className="font-semibold block mb-1">
                   Nilai Angka (0 - 100):
                 </label>
                 <Input
@@ -485,20 +785,20 @@ export default function DosenMateriTugasPage() {
                   max={100}
                   value={inputNilai}
                   onChange={(e) => setInputNilai(Number(e.target.value))}
-                  className="text-xs font-bold"
+                  className="text-xs"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                  Catatan Evaluasi / Feedback Dosen:
+                <label className="font-semibold block mb-1">
+                  Catatan Evaluasi / Umpan Balik Dosen:
                 </label>
                 <textarea
                   value={inputCatatan}
                   onChange={(e) => setInputCatatan(e.target.value)}
-                  placeholder="Beri catatan mengenai kelebihan atau perbaikan program mahasiswa..."
+                  placeholder="Berikan umpan balik terkait solusi yang diserahkan..."
                   rows={3}
-                  className="w-full rounded-[8px] border border-border p-2.5 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  className="w-full rounded border border-border p-2.5 text-xs text-foreground focus:outline-none"
                 />
               </div>
             </div>
@@ -520,11 +820,11 @@ export default function DosenMateriTugasPage() {
         </DialogContent>
       </Dialog>
 
-      {/* MODAL UNGGAH MATERI */}
+      {/* MODAL UNGGAH MATERI BARU (SUPABASE STORAGE & LINK) */}
       <Dialog open={isMateriModalOpen} onOpenChange={setIsMateriModalOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-sm">
+            <DialogTitle className="flex items-center gap-2 text-sm font-bold">
               <Upload className="h-5 w-5 text-primary" />
               Unggah Materi Perkuliahan
             </DialogTitle>
@@ -552,36 +852,61 @@ export default function DosenMateriTugasPage() {
                 onChange={(e) => setDeskripsiMateri(e.target.value)}
                 placeholder="Rangkuman topik bahasan materi..."
                 rows={2}
-                className="w-full rounded-[8px] border border-border p-2.5 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full rounded border border-border p-2.5 text-xs text-foreground focus:outline-none"
               />
             </div>
 
-            <div>
-              <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                Tautan / Path Berkas Materi (PDF/Slides):
+            {/* Pilihan Metode: Upload Berkas Nyata vs Tempel Link */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold text-muted-foreground block">
+                Metode Penyediaan Berkas:
               </label>
-              <Input
-                value={linkMateri}
-                onChange={(e) => setLinkMateri(e.target.value)}
-                placeholder="https://drive.google.com/..."
-                className="text-xs"
-              />
+              <div className="grid grid-cols-2 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setModeUnggahMateri("file")}
+                  className={`h-9 px-3 rounded border-2 border-black text-xs font-bold transition-all ${
+                    modeUnggahMateri === "file"
+                      ? "bg-retro-yellow text-black shadow-retro-sm"
+                      : "bg-white text-black hover:bg-retro-warm"
+                  }`}
+                >
+                  Unggah Berkas Baru
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModeUnggahMateri("link")}
+                  className={`h-9 px-3 rounded border-2 border-black text-xs font-bold transition-all ${
+                    modeUnggahMateri === "link"
+                      ? "bg-retro-yellow text-black shadow-retro-sm"
+                      : "bg-white text-black hover:bg-retro-warm"
+                  }`}
+                >
+                  Tautkan Link Eksternal
+                </button>
+              </div>
             </div>
 
-            <div>
-              <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                Perkiraan Ukuran File (MB):
-              </label>
-              <Input
-                type="number"
-                step={0.1}
-                min={0.1}
-                max={50}
-                value={ukuranMateri}
-                onChange={(e) => setUkuranMateri(Number(e.target.value))}
-                className="text-xs"
+            {modeUnggahMateri === "file" ? (
+              <FileDropzone
+                kategori="materi"
+                selectedFile={selectedFileMateri}
+                onFileSelect={setSelectedFileMateri}
+                disabled={isLoading}
               />
-            </div>
+            ) : (
+              <div>
+                <label className="text-xs font-semibold text-muted-foreground block mb-1">
+                  Tautan URL Eksternal (Google Drive/Slide):
+                </label>
+                <Input
+                  value={linkMateri}
+                  onChange={(e) => setLinkMateri(e.target.value)}
+                  placeholder="https://drive.google.com/..."
+                  className="text-xs"
+                />
+              </div>
+            )}
           </div>
 
           <DialogFooter className="gap-2 sm:gap-0">
@@ -591,10 +916,14 @@ export default function DosenMateriTugasPage() {
             <Button
               variant="default"
               onClick={handleTambahMateri}
-              disabled={isLoading || !judulMateri.trim() || !linkMateri.trim()}
-              className="text-xs"
+              disabled={
+                isLoading ||
+                !judulMateri.trim() ||
+                (modeUnggahMateri === "file" ? !selectedFileMateri : !linkMateri.trim())
+              }
+              className="text-xs font-bold shadow-retro-sm"
             >
-              Simpan Materi
+              {isLoading ? "Mengunggah..." : "Publikasikan Materi"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -604,8 +933,8 @@ export default function DosenMateriTugasPage() {
       <Dialog open={isTugasModalOpen} onOpenChange={setIsTugasModalOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-sm">
-              <FileText className="h-5 w-5 text-primary" />
+            <DialogTitle className="flex items-center gap-2 text-sm font-bold">
+              <Clock className="h-5 w-5 text-retro-orange" />
               Buat Tugas Perkuliahan Baru
             </DialogTitle>
           </DialogHeader>
@@ -618,27 +947,27 @@ export default function DosenMateriTugasPage() {
               <Input
                 value={judulTugas}
                 onChange={(e) => setJudulTugas(e.target.value)}
-                placeholder="Misal: Tugas 02 - Studi Kasus Normalisasi"
+                placeholder="Misal: Tugas 03 - Rancangan Skema Relasional"
                 className="text-xs"
               />
             </div>
 
             <div>
               <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                Petunjuk / Deskripsi Pengerjaan:
+                Instruksi & Deskripsi Soal:
               </label>
               <textarea
                 value={deskripsiTugas}
                 onChange={(e) => setDeskripsiTugas(e.target.value)}
-                placeholder="Jelaskan spesifikasi tugas, format berkas, dan ketentuan pengerjaan..."
-                rows={4}
-                className="w-full rounded-[8px] border border-border p-2.5 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                placeholder="Tuliskan petunjuk pengerjaan tugas secara rinci..."
+                rows={3}
+                className="w-full rounded border border-border p-2.5 text-xs text-foreground focus:outline-none"
               />
             </div>
 
             <div>
               <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                Batas Waktu Pengumpulan (Deadline):
+                Batas Waktu Tenggat (Deadline):
               </label>
               <Input
                 type="datetime-local"
@@ -656,10 +985,10 @@ export default function DosenMateriTugasPage() {
             <Button
               variant="default"
               onClick={handleTambahTugas}
-              disabled={isLoading || !judulTugas.trim() || !deskripsiTugas.trim()}
-              className="text-xs"
+              disabled={isLoading || !judulTugas.trim() || !deskripsiTugas.trim() || !tenggatTugas}
+              className="text-xs font-bold shadow-retro-sm"
             >
-              Terbitkan Tugas
+              Simpan Tugas
             </Button>
           </DialogFooter>
         </DialogContent>
