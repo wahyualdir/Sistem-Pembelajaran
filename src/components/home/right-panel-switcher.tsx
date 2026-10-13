@@ -311,8 +311,12 @@ export function RightPanelSwitcher({
           {/* METADATA INFO TABLE */}
           <div className="space-y-1.5 text-xs sm:text-sm">
             <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
-              <span className="text-black font-bold">Rating</span>
-              <span className="font-black text-black">★★★★★ ({selectedCourse.ratingCount})</span>
+              <span className="text-black font-bold">Kode MK</span>
+              <span className="font-mono font-black text-black">{selectedCourse.code}</span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
+              <span className="text-black font-bold">Progres Belajar</span>
+              <span className="font-black text-black">{selectedCourse.progressPercent}% Selesai</span>
             </div>
             <div className="flex justify-between items-center gap-2 py-1.5 border-b border-retro-border/60">
               <span className="text-black font-bold shrink-0">Jadwal Kuliah</span>
