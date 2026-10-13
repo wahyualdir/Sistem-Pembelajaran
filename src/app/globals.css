@@ -6,10 +6,10 @@
 
 :root {
   --font-sans: 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  /* Palet Tetris Kraft Sand Persis Sesuai Gambar (#D7C7A3 & #DACBA8) */
-  --bg-main: #D7C7A3;
-  --bg-surface: #DACBA8;
-  --bg-surface-raised: #CEBF9A;
+  /* Permukaan Monokrom & Retro Mac Berkontras Tinggi */
+  --bg-main: #FFFFFF;
+  --bg-surface: #FFFFFF;
+  --bg-surface-raised: #F8F7F4;
   --border-main: #000000;
   --border-strong: #000000;
 
@@ -21,7 +21,7 @@
   /* Aksen Utama */
   --primary: #000000;
   --primary-hover: #1A1A1A;
-  --primary-soft: #CEBF9A;
+  --primary-soft: #F4F1EA;
   --primary-foreground: #FFFFFF;
   --ring: rgb(0 0 0 / 0.5);
   --panel: #000000;
@@ -29,19 +29,19 @@
 
   /* Status Berkontras Jelas */
   --status-success: #057A55;
-  --status-success-soft: #C6DBCB;
+  --status-success-soft: #DEF7EC;
   --status-success-border: #000000;
   --status-success-foreground: #FFFFFF;
   --status-warning: #C27803;
-  --status-warning-soft: #E2CF97;
+  --status-warning-soft: #FEF08A;
   --status-warning-border: #000000;
   --status-warning-foreground: #000000;
   --status-danger: #E02424;
-  --status-danger-soft: #E8BFBF;
+  --status-danger-soft: #FDE8E8;
   --status-danger-border: #000000;
   --status-danger-foreground: #FFFFFF;
   --status-info: #1A56DB;
-  --status-info-soft: #B8D3F2;
+  --status-info-soft: #E1EFFE;
   --status-info-border: #000000;
   --status-info-foreground: #FFFFFF;
 
@@ -53,18 +53,18 @@
   --shadow-sm: 2px 2px 0px #000000;
   --shadow-md: 4px 4px 0px #000000;
 
-  /* Palet Retro Jelas & Berwarna Tajam (Tetris Kraft Sand Sesuai Gambar) */
-  --retro-bg: #D7C7A3;
-  --retro-surface: #DACBA8;
-  --retro-warm: #CBB992;
-  --retro-yellow: #A0C4FF;
+  /* Palet Retro Jelas & Berwarna Tajam */
+  --retro-bg: #FFFFFF;
+  --retro-surface: #FFFFFF;
+  --retro-warm: #F6F3EB;
+  --retro-yellow: #FFE500;
   --retro-orange: #FF5500;
   --retro-border: #000000;
   --retro-purple: #D4BBFF;
   --retro-mint: #00E599;
   --retro-pink: #FF85C0;
   --retro-blue: #70D6FF;
-  --retro-dither: #C5B48E;
+  --retro-dither: #E5E1D8;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -119,32 +119,32 @@
 }
 
 .dark {
-  --bg-main: #D7C7A3;
-  --bg-surface: #DACBA8;
-  --bg-surface-raised: #CEBF9A;
-  --border-main: #000000;
-  --border-strong: #000000;
-  --text-primary: #000000;
-  --text-secondary: #000000;
-  --text-subtle: #1C1917;
-  --primary: #000000;
-  --primary-hover: #1A1A1A;
-  --primary-soft: #CEBF9A;
-  --primary-foreground: #FFFFFF;
-  --ring: rgb(0 0 0 / 0.5);
-  --panel: #000000;
+  --bg-main: #0C0C0C;
+  --bg-surface: #141414;
+  --bg-surface-raised: #1E1E1E;
+  --border-main: #FFFFFF;
+  --border-strong: #FFFFFF;
+  --text-primary: #FFFFFF;
+  --text-secondary: #F3F4F6;
+  --text-subtle: #E5E7EB;
+  --primary: #FFFFFF;
+  --primary-hover: #E5E5E5;
+  --primary-soft: #252525;
+  --primary-foreground: #000000;
+  --ring: rgb(255 255 255 / 0.5);
+  --panel: #1A1A1A;
 
-  --retro-bg: #D7C7A3;
-  --retro-surface: #DACBA8;
-  --retro-warm: #CBB992;
-  --retro-yellow: #A0C4FF;
-  --retro-orange: #FF5500;
-  --retro-border: #000000;
-  --retro-purple: #D4BBFF;
-  --retro-mint: #00E599;
-  --retro-pink: #FF85C0;
-  --retro-blue: #70D6FF;
-  --retro-dither: #C5B48E;
+  --retro-bg: #0C0C0C;
+  --retro-surface: #141414;
+  --retro-warm: #1F1F1F;
+  --retro-yellow: #FACC15;
+  --retro-orange: #FB923C;
+  --retro-border: #FFFFFF;
+  --retro-purple: #C084FC;
+  --retro-mint: #4ADE80;
+  --retro-pink: #F472B6;
+  --retro-blue: #60A5FA;
+  --retro-dither: #262626;
 
   --retro-traffic-red: #FF5F56;
   --retro-traffic-yellow: #FFBD2E;
@@ -221,9 +221,6 @@
   }
   input, textarea, select, button {
     font-family: inherit;
-  }
-  .bg-white {
-    background-color: var(--retro-surface) !important;
   }
 }
 
