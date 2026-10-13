@@ -137,6 +137,7 @@ export const LECTURER_CLASSROOM_TABS = [
 export const STUDENT_CLASSROOM_TABS = [
   { id: 'forum', label: 'Forum', icon: MessagesSquare, badgeLabel: 'Stream' },
   { id: 'tugas', label: 'Tugas Kelas', icon: ClipboardList, badgeLabel: 'Classwork' },
+  { id: 'presensi', label: 'Presensi', icon: CalendarCheck2, badgeLabel: 'Presensi' },
   { id: 'anggota', label: 'Anggota', icon: Users, badgeLabel: 'People' },
   { id: 'nilai', label: 'Nilai', icon: GraduationCap, badgeLabel: 'Grades' },
 ] as const;
@@ -1083,11 +1084,13 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           <div className="p-4 bg-retro-warm border-2 border-black rounded-2xl flex items-center justify-between">
             <div>
               <h3 className="font-heading font-black text-lg text-black">
-                {ta ? 'Bantu Presensi Kelas & Sesi Kehadiran' : 'Presensi Perkuliahan Kelas'}
+                {ta ? 'Bantu Presensi Kelas & Sesi Kehadiran' : student ? 'Presensi Perkuliahan Saya' : 'Presensi Perkuliahan Kelas'}
               </h3>
               <p className="text-xs text-black/70 font-medium">
                 {ta
                   ? 'Bantu dosen memvalidasi kehadiran mahasiswa via kode sesi, QR token berputar, dan rekap partisipasi.'
+                  : student
+                  ? 'Pantau kehadiran Anda, lakukan presensi pertemuan perkuliahan, dan penuhi syarat minimal 75% kehadiran untuk mengikuti UAS.'
                   : 'Kelola sesi kehadiran pertemuan tatap muka, monitoring QR berputar, dan verifikasi izin dispensasi.'}
               </p>
             </div>

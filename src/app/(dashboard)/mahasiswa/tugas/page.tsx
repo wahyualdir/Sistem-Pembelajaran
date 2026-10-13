@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import NextLink from "next/link";
 import {
   FolderArchive,
   FileText,
@@ -223,6 +224,13 @@ export default function MahasiswaTugasPage() {
             <FolderArchive className="h-3.5 w-3.5" />
             Materi Kuliah ({daftarMateri.length})
           </button>
+          <NextLink
+            href="/attendance"
+            className="flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-[6px] text-muted-foreground hover:text-foreground hover:bg-surface/60 transition-colors min-h-[44px]"
+          >
+            <Clock className="h-3.5 w-3.5" />
+            Presensi Kuliah &rarr;
+          </NextLink>
         </div>
       </div>
 

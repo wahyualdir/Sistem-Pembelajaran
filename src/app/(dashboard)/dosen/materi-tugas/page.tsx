@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import NextLink from "next/link";
 import {
   FolderArchive,
   Plus,
@@ -445,6 +446,13 @@ export default function DosenMateriTugasPage() {
             <BarChart2 className="h-3.5 w-3.5" />
             Rekap Progres ({rekapProgres.totalMahasiswa} Mhs)
           </Button>
+          <NextLink
+            href="/attendance"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground text-xs font-bold transition-colors min-h-[36px]"
+          >
+            <Clock className="h-3.5 w-3.5" />
+            <span>Presensi Perkuliahan &rarr;</span>
+          </NextLink>
         </div>
 
         {activeTab === "materi" && (

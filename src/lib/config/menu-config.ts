@@ -108,6 +108,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       roles: ['STUDENT'],
       items: [
         { id: 'mhs-kelas', label: 'Kelas Saya', href: '/classes', icon: Layers, roles: ['STUDENT'] },
+        { id: 'mhs-presensi', label: 'Presensi', href: '/attendance', icon: Clock, roles: ['STUDENT'] },
         { id: 'mhs-ujian-aktif', label: 'Ujian Aktif', href: '/exams', icon: Award, roles: ['STUDENT'], isShortcut: true },
         { id: 'mhs-pustaka', label: 'Pustaka Digital', href: '/library', icon: BookOpen, roles: ['STUDENT'] },
         { id: 'mhs-ai', label: 'Tanya AI SIAJAR', href: '/ai-assistant', icon: HelpCircle, roles: ['STUDENT'] },
@@ -119,7 +120,6 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       roles: ['STUDENT'],
       items: [
         { id: 'mhs-nilai', label: 'Nilai & Progres', href: '/grades', icon: CheckSquare, roles: ['STUDENT'] },
-        { id: 'mhs-presensi', label: 'Presensi', href: '/attendance', icon: Clock, roles: ['STUDENT'] },
         { id: 'mhs-sertifikat', label: 'Sertifikat & Portofolio', href: '/certificates', icon: Award, roles: ['STUDENT'] },
       ],
     },
@@ -163,6 +163,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       roles: ['TEACHING_ASSISTANT'],
       items: [
         { id: 'ta-kelas-saya', label: 'Kelas Saya', href: '/classes', icon: Layers, roles: ['TEACHING_ASSISTANT'] },
+        { id: 'ta-presensi', label: 'Presensi', href: '/attendance', icon: Clock, roles: ['TEACHING_ASSISTANT'] },
         { id: 'ta-ujian-aktif', label: 'Ujian Aktif', href: '/exams', icon: Award, roles: ['TEACHING_ASSISTANT'], isShortcut: true },
         { id: 'ta-pustaka', label: 'Pustaka Digital', href: '/library', icon: BookOpen, roles: ['TEACHING_ASSISTANT'] },
         { id: 'ta-ai', label: 'Tanya AI SIAJAR', href: '/ai-assistant', icon: HelpCircle, roles: ['TEACHING_ASSISTANT'] },
@@ -174,7 +175,6 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
       roles: ['TEACHING_ASSISTANT'],
       items: [
         { id: 'ta-nilai', label: 'Nilai & Progres', href: '/grades', icon: CheckSquare, roles: ['TEACHING_ASSISTANT'] },
-        { id: 'ta-presensi', label: 'Presensi', href: '/attendance', icon: Clock, roles: ['TEACHING_ASSISTANT'] },
         { id: 'ta-sertifikat', label: 'Sertifikat & Portofolio', href: '/certificates', icon: Award, roles: ['TEACHING_ASSISTANT'] },
       ],
     },
@@ -202,10 +202,11 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
     },
     {
       id: 'dsn-pengajaran',
-      title: 'PENGAJARAN',
+      title: 'PENGAJARAN & PEMBELAJARAN',
       roles: ['LECTURER'],
       items: [
         { id: 'dsn-kelas', label: 'Kelas Diampu', href: '/classes', icon: Layers, roles: ['LECTURER'] },
+        { id: 'dsn-presensi', label: 'Presensi', href: '/attendance', icon: FileSpreadsheet, roles: ['LECTURER'] },
         { id: 'dsn-pustaka', label: 'Pustaka Digital', href: '/library', icon: BookOpen, roles: ['LECTURER'] },
       ],
     },
@@ -217,14 +218,6 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
         { id: 'dsn-ujian-kuis', label: 'Ujian & Kuis', href: '/exams', icon: PlusCircle, roles: ['LECTURER'] },
         { id: 'dsn-bank-soal', label: 'Bank Soal', href: '/exams/question-bank', icon: FolderArchive, roles: ['LECTURER'] },
         { id: 'dsn-review', label: 'Review Essay & Coding', href: '/exams/review', icon: CheckSquare, roles: ['LECTURER'] },
-      ],
-    },
-    {
-      id: 'dsn-presensi',
-      title: 'PRESENSI',
-      roles: ['LECTURER'],
-      items: [
-        { id: 'dsn-presensi', label: 'Presensi', href: '/attendance', icon: FileSpreadsheet, roles: ['LECTURER'] },
       ],
     },
     {

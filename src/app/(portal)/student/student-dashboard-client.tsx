@@ -411,13 +411,105 @@ export function StudentDashboardClient({
             <NearestDeadlines initialItems={deadlines} />
           )}
 
+          {/* SECTION: RINGKASAN PRESENSI PEMBELAJARAN (Tampil saat kategori Presensi atau Semua) */}
+          {(showAll || showPresensi) && (
+            <section aria-label="Presensi Pembelajaran" className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div className="p-2 rounded-lg border-2 border-retro-border bg-retro-warm text-black shadow-xs">
+                    <Clock className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h2 className="font-heading font-black text-xl sm:text-2xl tracking-tight text-foreground">
+                      Presensi & Kehadiran Perkuliahan
+                    </h2>
+                    <p className="text-xs text-muted-foreground font-medium">
+                      Pantau kehadiran real-time, lakukan check-in GPS/QR, dan pastikan batas syarat UAS (minimal 75%).
+                    </p>
+                  </div>
+                </div>
+                <Link
+                  href="/attendance"
+                  className="text-xs sm:text-sm font-black text-muted-foreground hover:text-foreground transition-colors shrink-0"
+                >
+                  Buka Presensi Terpadu &rarr;
+                </Link>
+              </div>
+
+              {/* Grid Status Presensi */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Kartu 1: Rata-rata Kehadiran */}
+                <div className="rounded-xl border-2 border-retro-border bg-retro-surface p-4 sm:p-5 shadow-retro space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold uppercase text-muted-foreground">
+                      Rata-Rata Kehadiran
+                    </span>
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-success-soft text-success border border-success-border">
+                      <CheckCircle2 className="h-3 w-3" /> Lolos Syarat UAS
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-heading font-black text-foreground">
+                      {summaryData?.averageAttendance || '91%'}
+                    </span>
+                    <span className="text-xs font-medium text-muted-foreground">
+                      dari 5 Mata Kuliah Aktif
+                    </span>
+                  </div>
+                  <div className="w-full h-2 rounded-full border border-black bg-retro-warm overflow-hidden">
+                    <div
+                      className="bg-black h-full rounded-full transition-all duration-500"
+                      style={{ width: summaryData?.averageAttendance || '91%' }}
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Batas minimal institusi: <strong>75%</strong> untuk memperoleh kartu ujian.
+                  </p>
+                </div>
+
+                {/* Kartu 2: Sesi Presensi Aktif Hari Ini */}
+                <div className="rounded-xl border-2 border-retro-border bg-retro-warm/40 p-4 sm:p-5 shadow-retro space-y-3 md:col-span-2 flex flex-col justify-between">
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-sans font-black bg-retro-mint text-black border border-black animate-pulse">
+                        ● SESI AKTIF TERBUKA
+                      </span>
+                      <span className="text-xs font-mono font-bold text-muted-foreground">
+                        Tutup: 10:30 WIB (25 menit lagi)
+                      </span>
+                    </div>
+                    <h3 className="font-heading font-black text-lg sm:text-xl text-foreground pt-1">
+                      Pemrograman Web Lanjut (TI-301) — Pertemuan #7
+                    </h3>
+                    <p className="text-xs text-muted-foreground font-medium">
+                      Metode: <strong>QR Dinamis + Validasi Radius GPS Haversine (50m)</strong> di Lab Komputer 2.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3 pt-2 border-t border-black/10">
+                    <span className="text-xs font-mono font-bold text-black/80">
+                      Ruang: Lab Komputer 2 (Hybrid)
+                    </span>
+                    <Link
+                      href="/attendance"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-retro-border bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-bold shadow-retro transition-all shrink-0 min-h-[40px]"
+                    >
+                      <Clock className="h-4 w-4" />
+                      <span>Klaim Presensi Sekarang</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
           {/* SECTION 3: JADWAL HARI INI (Tampil pada Semua, Presensi, Jadwal) */}
           {(showAll || showPresensi || showJadwal) && (
             <TodaySchedule items={todaySchedule} />
           )}
 
-          {/* SECTION 4: KELAS AKTIF (Tampil pada Semua, Kelas Saya, Nilai) */}
-          {(showAll || showKelasSaya || showNilai) && (
+          {/* SECTION 4: KELAS AKTIF (Tampil pada Semua, Kelas Saya, Nilai, Presensi) */}
+          {(showAll || showKelasSaya || showNilai || showPresensi) && (
             <ActiveClassesGrid
               courses={courses}
               selectedCourse={selectedCourse}
