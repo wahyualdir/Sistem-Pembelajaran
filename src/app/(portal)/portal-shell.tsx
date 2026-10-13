@@ -302,19 +302,19 @@ export function PortalShell({
                 </Link>
               </div>
             ) : (
-              <div className="flex flex-col justify-between h-header shrink-0 border-b-2 border-retro-border bg-retro-bg px-3 pt-2 pb-2.5 box-border">
+              <div className="flex flex-col justify-center gap-1.5 h-header shrink-0 border-b-2 border-retro-border bg-retro-bg px-3.5 py-2 box-border">
                 {/* Baris atas tipis: tiga titik jendela (merah, kuning, hijau), rata kiri */}
                 <div className="flex items-center gap-1.5 shrink-0">
                   <span
-                    className="h-3 w-3 rounded-full border border-black bg-traffic-red inline-block shadow-retro-sm"
+                    className="h-2.5 w-2.5 rounded-full border border-black bg-traffic-red inline-block shadow-retro-sm"
                     title="Tutup"
                   />
                   <span
-                    className="h-3 w-3 rounded-full border border-black bg-traffic-yellow inline-block shadow-retro-sm"
+                    className="h-2.5 w-2.5 rounded-full border border-black bg-traffic-yellow inline-block shadow-retro-sm"
                     title="Kecilkan"
                   />
                   <span
-                    className="h-3 w-3 rounded-full border border-black bg-traffic-green inline-block shadow-retro-sm"
+                    className="h-2.5 w-2.5 rounded-full border border-black bg-traffic-green inline-block shadow-retro-sm"
                     title="Perbesar"
                   />
                 </div>
@@ -325,14 +325,14 @@ export function PortalShell({
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0 w-full"
                   title={`SIAJAR & SIAKAD - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-black text-white shadow-retro-sm group-hover:scale-105 transition-transform shrink-0">
-                    <Flame className="h-5 w-5 fill-white text-white" />
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg border-2 border-retro-border bg-black text-white shadow-retro-sm group-hover:scale-105 transition-transform shrink-0">
+                    <Flame className="h-4.5 w-4.5 fill-white text-white" />
                   </div>
                   <div className="flex flex-col justify-center min-w-0 flex-1">
-                    <span className="font-heading font-black text-base sm:text-lg tracking-tight text-foreground leading-none whitespace-nowrap">
+                    <span className="font-heading font-black text-base tracking-tight text-foreground leading-none whitespace-nowrap">
                       SIAJAR
                     </span>
-                    <span className="text-xs text-muted-foreground font-semibold tracking-tight whitespace-nowrap leading-none mt-1">
+                    <span className="text-[11px] text-muted-foreground font-bold tracking-tight whitespace-nowrap leading-none mt-1">
                       Sistem Akademik
                     </span>
                   </div>
@@ -644,7 +644,7 @@ export function PortalShell({
               </div>
 
               {/* BANNER KUNING SEARCH BAR (Desktop & Mobile) */}
-              <div className="flex-1 bg-retro-yellow px-3.5 sm:px-6 py-2 sm:py-2.5 flex items-center justify-between md:border-r-2 border-retro-border">
+              <div className="flex-1 bg-retro-yellow px-3.5 sm:px-6 flex items-center justify-between md:border-r-2 border-retro-border">
                 <div className="flex items-center gap-2.5 sm:gap-3 w-full max-w-2xl">
                   {/* SATU-SATUNYA TOMBOL BURGER BUKA/TUTUP MENU */}
                   <button
@@ -681,7 +681,12 @@ export function PortalShell({
                 </div>
 
                 {/* Badge Semester (Desktop & Tablet Lebar) */}
-                <div className="hidden lg:flex items-center gap-2 ml-4 shrink-0">
+                <div
+                  className={cn(
+                    'hidden lg:flex items-center gap-2 ml-4 shrink-0',
+                    hasRightPanel && 'xl:hidden'
+                  )}
+                >
                   <span className="text-xs sm:text-sm font-mono font-black text-black uppercase tracking-wider bg-retro-yellow px-3 py-1 rounded-md border-2 border-black shadow-retro-sm">
                     2026/2027 Ganjil
                   </span>
@@ -689,32 +694,48 @@ export function PortalShell({
               </div>
 
               {/* KANAN ATAS: TOMBOL DRAWER PANEL KANAN & LONCENG NOTIFIKASI (Desktop & Tablet >= md) */}
-              <div className="hidden md:flex items-center justify-end gap-2.5 px-4 sm:px-6 py-2 bg-retro-bg shrink-0">
-                {/* Tombol Panel Kanan Geser (Tampil pada layar < 1280px / max-xl jika halaman memiliki panel kanan) */}
+              <div
+                className={cn(
+                  'hidden md:flex items-center justify-end gap-3 px-4 sm:px-6 bg-retro-bg shrink-0',
+                  hasRightPanel && 'xl:w-right-panel xl:justify-between'
+                )}
+              >
+                {/* Badge Semester ketika panel kanan aktif di desktop */}
                 {hasRightPanel && (
-                  <button
-                    type="button"
-                    onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                    className="xl:hidden relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none cursor-pointer"
-                    title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan & Detail'}
-                    aria-label="Panel Ringkasan & Detail"
-                  >
-                    <PanelRightOpen className="h-4.5 w-4.5 text-foreground" />
-                  </button>
+                  <div className="hidden xl:flex items-center gap-2 shrink-0">
+                    <span className="text-xs sm:text-sm font-mono font-black text-black uppercase tracking-wider bg-retro-yellow px-3 py-1 rounded-md border-2 border-black shadow-retro-sm">
+                      2026/2027 Ganjil
+                    </span>
+                  </div>
                 )}
 
-                <Link
-                  href="/notifications"
-                  className="relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none"
-                  title="Notifikasi Kuliah & Tugas"
-                >
-                  <Bell className="h-4.5 w-4.5 text-foreground" />
-                  {unread > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full border-2 border-retro-border bg-retro-orange text-xs font-black text-white shadow-xs">
-                      {unread}
-                    </span>
+                <div className="flex items-center gap-2.5">
+                  {/* Tombol Panel Kanan Geser (Tampil pada layar < 1280px / max-xl jika halaman memiliki panel kanan) */}
+                  {hasRightPanel && (
+                    <button
+                      type="button"
+                      onClick={() => setIsRightDrawerOpen((prev) => !prev)}
+                      className="xl:hidden relative flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none cursor-pointer"
+                      title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan & Detail'}
+                      aria-label="Panel Ringkasan & Detail"
+                    >
+                      <PanelRightOpen className="h-5 w-5 text-foreground" />
+                    </button>
                   )}
-                </Link>
+
+                  <Link
+                    href="/notifications"
+                    className="relative flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none"
+                    title="Notifikasi Kuliah & Tugas"
+                  >
+                    <Bell className="h-5 w-5 text-foreground" />
+                    {unread > 0 && (
+                      <span className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full border-2 border-retro-border bg-retro-orange text-xs font-black text-white shadow-xs">
+                        {unread}
+                      </span>
+                    )}
+                  </Link>
+                </div>
               </div>
             </header>
 

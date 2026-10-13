@@ -72,8 +72,8 @@
   --layout-sidebar-width: 15rem;
   --layout-rail-width: 4.5rem;
   --layout-right-panel-width: 20rem;
-  --layout-header-height: 3.5rem;
-  --layout-header-height-mobile: 3.25rem;
+  --layout-header-height: 4.5rem;
+  --layout-header-height-mobile: 3.5rem;
 
   /* Safe Area Variables */
   --sat: env(safe-area-inset-top, 0px);
