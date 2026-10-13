@@ -618,7 +618,7 @@ export function PortalShell({
                     <button
                       type="button"
                       onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                      className="2xl:hidden relative flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs cursor-pointer"
+                      className="xl:hidden relative flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs cursor-pointer"
                       title="Buka Ringkasan"
                       aria-label="Buka Ringkasan"
                     >
@@ -690,12 +690,12 @@ export function PortalShell({
 
               {/* KANAN ATAS: TOMBOL DRAWER PANEL KANAN & LONCENG NOTIFIKASI (Desktop & Tablet >= md) */}
               <div className="hidden md:flex items-center justify-end gap-2.5 px-4 sm:px-6 py-2 bg-retro-bg shrink-0">
-                {/* Tombol Panel Kanan Geser (Tampil pada layar < 1536px / max-2xl jika halaman memiliki panel kanan) */}
+                {/* Tombol Panel Kanan Geser (Tampil pada layar < 1280px / max-xl jika halaman memiliki panel kanan) */}
                 {hasRightPanel && (
                   <button
                     type="button"
                     onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                    className="2xl:hidden relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none cursor-pointer"
+                    className="xl:hidden relative flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm transition-all focus-visible:outline-none cursor-pointer"
                     title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan & Detail'}
                     aria-label="Panel Ringkasan & Detail"
                   >

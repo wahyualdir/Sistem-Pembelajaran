@@ -250,7 +250,7 @@ export function StudentDashboardClient({
   const handleSelectCourse = (course: ActiveClassItem) => {
     setSelectedCourse(course);
     setRightPanelTab('detail-kelas');
-    if (typeof window !== 'undefined' && window.innerWidth < 1536) {
+    if (typeof window !== 'undefined' && window.innerWidth < 1280) {
       setIsRightDrawerOpen(true);
     }
   };
@@ -485,10 +485,10 @@ export function StudentDashboardClient({
       {/* ========================================================= */}
       {/* 2. BAGIAN KANAN: DETAIL & ACTION PANEL (BASELINE 480px)   */}
       {/* ========================================================= */}
-      {/* Mode Desktop (>= 1536px / 2xl): Sticky dengan scroll internal sendiri */}
+      {/* Mode Desktop (>= 1280px / xl): Sticky dengan scroll internal sendiri */}
       <aside
         aria-label="Panel Ringkasan & Detail"
-        className="hidden 2xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 space-y-6 flex-col sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-48 sm:pb-52"
+        className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 space-y-6 flex-col sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-48 sm:pb-52"
       >
         {/* BAGIAN 2 ELEMEN BEKU: KARTU LOGO TEKNOLOGI (BASELINE IDENTIK 402x351) */}
         <div className="shrink-0 w-full">
@@ -505,13 +505,13 @@ export function StudentDashboardClient({
         />
       </aside>
 
-      {/* Mode Slide-over Drawer (< 1536px / max-2xl): Panel geser dari kanan */}
+      {/* Mode Slide-over Drawer (< 1280px / max-xl): Panel geser dari kanan */}
       {isRightDrawerOpen && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label="Panel Ringkasan & Detail"
-          className="fixed inset-0 z-50 flex justify-end 2xl:hidden"
+          className="fixed inset-0 z-50 flex justify-end xl:hidden"
         >
           {/* Backdrop Overlay */}
           <div
