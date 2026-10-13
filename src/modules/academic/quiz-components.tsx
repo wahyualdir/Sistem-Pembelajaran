@@ -330,35 +330,35 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                 <button
                   type="button"
                   onClick={() => addQuestion('MULTIPLE_CHOICE')}
-                  className="rounded-control border border-border px-2 py-1 text-[11px] hover:bg-muted font-medium"
+                  className="rounded-control border border-border px-2 py-1 text-xs hover:bg-muted font-medium"
                 >
                   + Pilgan
                 </button>
                 <button
                   type="button"
                   onClick={() => addQuestion('TRUE_FALSE')}
-                  className="rounded-control border border-border px-2 py-1 text-[11px] hover:bg-muted font-medium"
+                  className="rounded-control border border-border px-2 py-1 text-xs hover:bg-muted font-medium"
                 >
                   + B / S
                 </button>
                 <button
                   type="button"
                   onClick={() => addQuestion('SHORT_ANSWER')}
-                  className="rounded-control border border-border px-2 py-1 text-[11px] hover:bg-muted font-medium"
+                  className="rounded-control border border-border px-2 py-1 text-xs hover:bg-muted font-medium"
                 >
                   + Isian
                 </button>
                 <button
                   type="button"
                   onClick={() => addQuestion('ESSAY')}
-                  className="rounded-control border border-border px-2 py-1 text-[11px] hover:bg-muted font-medium"
+                  className="rounded-control border border-border px-2 py-1 text-xs hover:bg-muted font-medium"
                 >
                   + Esai
                 </button>
                 <button
                   type="button"
                   onClick={() => addQuestion('LIVE_CODING')}
-                  className="rounded-control border border-border px-2 py-1 text-[11px] hover:bg-muted font-medium"
+                  className="rounded-control border border-border px-2 py-1 text-xs hover:bg-muted font-medium"
                 >
                   + Live Coding
                 </button>
@@ -370,7 +370,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                 <div className="flex items-center justify-between gap-2 border-b border-border pb-2">
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-xs font-mono bg-muted px-2 py-0.5 rounded">Soal #{qIdx + 1}</span>
-                    <span className="text-[11px] font-semibold uppercase text-muted-foreground">{q.question_type}</span>
+                    <span className="text-xs font-semibold uppercase text-muted-foreground">{q.question_type}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
@@ -414,7 +414,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                 {/* Sub-form based on question type */}
                 {q.question_type === 'MULTIPLE_CHOICE' && (
                   <div className="space-y-2 pt-1">
-                    <span className="text-[11px] font-medium text-muted-foreground block">
+                    <span className="text-xs font-medium text-muted-foreground block">
                       Pilihan Jawaban (Pilih radio untuk jawaban yang benar):
                     </span>
                     {(q.options ?? ['', '', '', '']).map((opt, optIdx) => (
@@ -538,7 +538,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-[11px] font-mono text-muted-foreground">Starter Code Mahasiswa:</label>
+                      <label className="block text-xs font-mono text-muted-foreground">Starter Code Mahasiswa:</label>
                       <textarea
                         rows={3}
                         value={q.starter_code ?? ''}
@@ -866,7 +866,7 @@ export function TakeQuizForm({
               <div key={q.id} className="rounded-xl border-2 border-black bg-white p-4 sm:p-5 space-y-3 text-sm shadow-retro">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
                   <span className="font-bold font-mono text-xs text-black/70">
-                    Soal #{idx + 1} ({q.points} Poin) • <span className="font-mono text-[11px] font-bold">{q.question_type}</span>
+                    Soal #{idx + 1} ({q.points} Poin) • <span className="font-mono text-xs font-bold">{q.question_type}</span>
                   </span>
                   {q.question_type !== 'ESSAY' && (
                     <span
@@ -1508,23 +1508,23 @@ export function ExamLiveMonitorPanel({
       {/* Top Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div className="p-3 rounded-control border border-border bg-surface text-center">
-          <span className="text-[11px] text-muted-foreground block">Total Peserta</span>
+          <span className="text-xs text-muted-foreground block">Total Peserta</span>
           <span className="text-xl font-bold font-mono">{data.stats.total}</span>
         </div>
         <div className="p-3 rounded-control border border-border bg-surface text-center">
-          <span className="text-[11px] text-muted-foreground block">Mengerjakan</span>
+          <span className="text-xs text-muted-foreground block">Mengerjakan</span>
           <span className="text-xl font-bold font-mono text-primary">{data.stats.in_progress}</span>
         </div>
         <div className="p-3 rounded-control border border-border bg-surface text-center">
-          <span className="text-[11px] text-muted-foreground block">Selesai</span>
+          <span className="text-xs text-muted-foreground block">Selesai</span>
           <span className="text-xl font-bold font-mono text-success">{data.stats.submitted}</span>
         </div>
         <div className="p-3 rounded-control border border-border bg-surface text-center">
-          <span className="text-[11px] text-muted-foreground block">Dihentikan</span>
+          <span className="text-xs text-muted-foreground block">Dihentikan</span>
           <span className="text-xl font-bold font-mono text-danger">{data.stats.terminated}</span>
         </div>
         <div className="p-3 rounded-control border border-border bg-surface text-center">
-          <span className="text-[11px] text-muted-foreground block">Total Pelanggaran</span>
+          <span className="text-xs text-muted-foreground block">Total Pelanggaran</span>
           <span className="text-xl font-bold font-mono text-danger">{data.stats.total_violations}</span>
         </div>
       </div>
@@ -1551,10 +1551,10 @@ export function ExamLiveMonitorPanel({
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="font-bold text-xs block text-foreground">{st.student_name}</span>
-                    <span className="text-[10px] font-mono text-muted-foreground">{st.student_id}</span>
+                    <span className="text-xs font-mono text-muted-foreground">{st.student_id}</span>
                   </div>
                   <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-full uppercase font-mono ${
+                    className={`text-xs font-semibold px-2 py-0.5 rounded-full uppercase font-mono ${
                       st.status === 'IN_PROGRESS'
                         ? 'text-primary bg-primary-soft'
                         : st.status === 'SUBMITTED'
@@ -1572,7 +1572,7 @@ export function ExamLiveMonitorPanel({
                 </div>
 
                 {st.last_event && (
-                  <p className="text-[11px] text-danger bg-danger-soft/60 px-2 py-1 rounded truncate">
+                  <p className="text-xs text-danger bg-danger-soft/60 px-2 py-1 rounded truncate">
                     {st.last_event.event_type}: {st.last_event.details}
                   </p>
                 )}
@@ -1582,7 +1582,7 @@ export function ExamLiveMonitorPanel({
                   <button
                     type="button"
                     onClick={() => handleAction(st.student_id, 'ADD_TIME', 10)}
-                    className="rounded-control border border-border px-2 py-0.5 text-[10px] hover:bg-muted font-medium"
+                    className="rounded-control border border-border px-2 py-0.5 text-xs hover:bg-muted font-medium"
                     title="Tambah 10 menit waktu"
                   >
                     +10m
@@ -1590,7 +1590,7 @@ export function ExamLiveMonitorPanel({
                   <button
                     type="button"
                     onClick={() => handleAction(st.student_id, 'WARN', 'Perhatikan pandangan Anda dan jangan berpindah tab!')}
-                    className="rounded-control border border-border px-2 py-0.5 text-[10px] hover:bg-muted font-medium text-warning"
+                    className="rounded-control border border-border px-2 py-0.5 text-xs hover:bg-muted font-medium text-warning"
                     title="Kirim Peringatan"
                   >
                     Peringatkan
@@ -1598,7 +1598,7 @@ export function ExamLiveMonitorPanel({
                   <button
                     type="button"
                     onClick={() => handleAction(st.student_id, 'TERMINATE')}
-                    className="rounded-control border border-border px-2 py-0.5 text-[10px] hover:bg-muted font-medium text-danger"
+                    className="rounded-control border border-border px-2 py-0.5 text-xs hover:bg-muted font-medium text-danger"
                     title="Hentikan Ujian"
                   >
                     Hentikan
@@ -1617,7 +1617,7 @@ export function ExamLiveMonitorPanel({
         </h4>
         <div className="max-h-48 overflow-y-auto space-y-2 text-xs">
           {data.events.length === 0 ? (
-            <p className="text-muted-foreground text-[11px]">Belum ada aktivitas proctoring tercatat.</p>
+            <p className="text-muted-foreground text-xs">Belum ada aktivitas proctoring tercatat.</p>
           ) : (
             data.events.map((ev) => (
               <div key={ev.id} className="flex items-center justify-between p-2 rounded border border-border/60 bg-surface">
@@ -1626,7 +1626,7 @@ export function ExamLiveMonitorPanel({
                   <span className="text-danger font-mono font-medium">[{ev.event_type}]</span>{' '}
                   <span className="text-muted-foreground">{ev.details}</span>
                 </div>
-                <span className="text-[10px] font-mono text-muted-foreground">
+                <span className="text-xs font-mono text-muted-foreground">
                   {new Date(ev.created_at).toLocaleTimeString('id-ID')}
                 </span>
               </div>
@@ -1702,19 +1702,19 @@ export function ExamAnalyticsModal({ examId }: { examId: string }) {
             {/* Quick Metrics */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
               <div className="p-3 rounded-control border border-border bg-background">
-                <span className="text-[11px] text-muted-foreground block">Rata-Rata</span>
+                <span className="text-xs text-muted-foreground block">Rata-Rata</span>
                 <span className="text-xl font-bold font-mono">{analytics.average_score}</span>
               </div>
               <div className="p-3 rounded-control border border-border bg-background">
-                <span className="text-[11px] text-muted-foreground block">Tertinggi</span>
+                <span className="text-xs text-muted-foreground block">Tertinggi</span>
                 <span className="text-xl font-bold font-mono text-success">{analytics.highest_score}</span>
               </div>
               <div className="p-3 rounded-control border border-border bg-background">
-                <span className="text-[11px] text-muted-foreground block">Terendah</span>
+                <span className="text-xs text-muted-foreground block">Terendah</span>
                 <span className="text-xl font-bold font-mono text-danger">{analytics.lowest_score}</span>
               </div>
               <div className="p-3 rounded-control border border-border bg-background">
-                <span className="text-[11px] text-muted-foreground block">Lulus KKM</span>
+                <span className="text-xs text-muted-foreground block">Lulus KKM</span>
                 <span className="text-xl font-bold font-mono text-primary">{analytics.passing_rate_percentage}%</span>
               </div>
             </div>
@@ -1734,7 +1734,7 @@ export function ExamAnalyticsModal({ examId }: { examId: string }) {
 
               <div className="border border-border rounded-control overflow-hidden">
                 <table className="w-full text-xs text-left">
-                  <thead className="bg-muted text-muted-foreground uppercase text-[10px]">
+                  <thead className="bg-muted text-muted-foreground uppercase text-xs">
                     <tr>
                       <th className="p-2.5">Teks Soal</th>
                       <th className="p-2.5 text-center">Indeks Kesukaran</th>
@@ -1748,7 +1748,7 @@ export function ExamAnalyticsModal({ examId }: { examId: string }) {
                         <td className="p-2.5 text-center font-mono font-bold">{row.difficulty_index}</td>
                         <td className="p-2.5 text-center">
                           <span
-                            className={`px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                            className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
                               row.category === 'Mudah'
                                 ? 'bg-success-soft text-success'
                                 : row.category === 'Sukar'

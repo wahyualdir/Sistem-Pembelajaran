@@ -108,12 +108,12 @@ export default function MahasiswaPresensiPage() {
                     </TableCell>
                     <TableCell className="text-xs font-semibold text-foreground">
                       {item.namaMataKuliah}
-                      <span className="block text-[11px] text-muted-foreground font-normal">
+                      <span className="block text-xs text-muted-foreground font-normal">
                         {item.dosenPengampu} • {item.sks} SKS
                       </span>
                     </TableCell>
                     <TableCell className="text-center text-xs font-bold">
-                      <span className="inline-flex px-1.5 py-0.5 rounded border border-retro-border bg-retro-warm text-[10px]">
+                      <span className="inline-flex px-1.5 py-0.5 rounded border border-retro-border bg-retro-warm text-xs">
                         {item.kodeKelas}
                       </span>
                     </TableCell>
@@ -147,12 +147,12 @@ export default function MahasiswaPresensiPage() {
                     </TableCell>
                     <TableCell className="text-center">
                       {item.lolosUas ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-retro-border bg-retro-mint text-foreground text-[11px] font-bold shadow-xs">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-retro-border bg-retro-mint text-foreground text-xs font-bold shadow-xs">
                           <ShieldCheck className="h-3 w-3" />
                           Memenuhi Syarat
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-retro-border bg-danger/20 text-danger text-[11px] font-bold shadow-xs">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-retro-border bg-danger/20 text-danger text-xs font-bold shadow-xs">
                           <ShieldAlert className="h-3 w-3" />
                           Kurang dari 75%
                         </span>

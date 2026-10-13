@@ -185,7 +185,7 @@ export default async function DosenLaporanProdiPage() {
                       </td>
                       <td className="py-3 px-4 font-medium text-foreground">
                         {m.nama}
-                        <div className="text-[11px] text-muted-foreground">{m.email}</div>
+                        <div className="text-xs text-muted-foreground">{m.email}</div>
                       </td>
                       <td className="py-3 px-4 text-muted-foreground">{m.angkatan}</td>
                       <td className="py-3 px-4 text-muted-foreground text-xs">

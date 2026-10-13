@@ -289,7 +289,7 @@ export function CoordinatorMonitoringHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               cp.status === 'ON_TRACK'
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : 'border-amber-500 bg-amber-100 text-amber-950'
@@ -361,7 +361,7 @@ export function CoordinatorMonitoringHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               lp.status === 'SANGAT_BAIK'
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : 'border-amber-500 bg-amber-100 text-amber-950'
@@ -490,7 +490,7 @@ export function CoordinatorMonitoringHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               ex.proctoringStatus === 'AMAN'
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : 'border-amber-500 bg-amber-100 text-amber-950'

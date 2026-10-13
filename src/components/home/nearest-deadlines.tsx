@@ -85,7 +85,7 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
                         {item.classTitle}
                       </span>
                       {item.isUrgent && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-sans font-black bg-retro-orange text-white border border-black">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-sans font-black bg-retro-orange text-white border border-black">
                           MENDESAK
                         </span>
                       )}

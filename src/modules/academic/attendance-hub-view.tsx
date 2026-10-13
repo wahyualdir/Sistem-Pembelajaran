@@ -167,13 +167,13 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
       {/* 2. STATS RINGKASAN */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-[11px] font-mono font-bold uppercase text-black/60">Total Sesi Diikuti</div>
+          <div className="text-xs font-mono font-bold uppercase text-black/60">Total Sesi Diikuti</div>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{records.length} Sesi</div>
           <div className="text-xs text-black/70 font-medium">Semester Berjalan</div>
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-[11px] font-mono font-bold uppercase text-black/60">Tepat Waktu</div>
+          <div className="text-xs font-mono font-bold uppercase text-black/60">Tepat Waktu</div>
           <div className="text-2xl sm:text-3xl font-heading font-black text-emerald-800">
             {records.filter((r) => r.status === 'HADIR').length} Sesi
           </div>
@@ -181,7 +181,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-[11px] font-mono font-bold uppercase text-black/60">Terlambat / Izin</div>
+          <div className="text-xs font-mono font-bold uppercase text-black/60">Terlambat / Izin</div>
           <div className="text-2xl sm:text-3xl font-heading font-black text-amber-900">
             {records.filter((r) => r.status === 'TERLAMBAT' || r.status === 'IZIN' || r.status === 'SAKIT').length} Sesi
           </div>
@@ -189,7 +189,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-[11px] font-mono font-bold uppercase text-black/60">Syarat Ujian (&gt;75%)</div>
+          <div className="text-xs font-mono font-bold uppercase text-black/60">Syarat Ujian (&gt;75%)</div>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{attendanceRate}%</div>
           <div className="text-xs text-retro-orange font-bold">
             {attendanceRate >= 75 ? '✓ Memenuhi Syarat' : '⚠️ Terancam Tidak Ikut Ujian'}
@@ -344,7 +344,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                       <tr key={l.id} className="hover:bg-retro-warm/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div className="flex items-center gap-2">
-                            <span className="px-2 py-0.5 rounded border border-black bg-retro-warm text-[10px] font-mono">
+                            <span className="px-2 py-0.5 rounded border border-black bg-retro-warm text-xs font-mono">
                               {l.type}
                             </span>
                             <span>{l.courseTitle}</span>
@@ -520,7 +520,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                     >
                       {permitFile ? permitFile.name : 'Pilih File Dokumen Bukti'}
                     </label>
-                    <p className="text-[11px] text-black/60">
+                    <p className="text-xs text-black/60">
                       Maksimal ukuran file 5MB (Format PDF, PNG, JPG)
                     </p>
                   </div>

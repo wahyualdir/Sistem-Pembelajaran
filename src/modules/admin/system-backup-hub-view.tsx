@@ -94,7 +94,7 @@ export function SystemBackupHubView() {
                   <td className="p-3 font-bold">148 MB</td>
                   <td className="p-3">11 Okt 2026, 02:14 WIB</td>
                   <td className="p-3 text-center">
-                    <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">
+                    <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">
                       ✓ SHA-256 VALID
                     </span>
                   </td>
@@ -112,7 +112,7 @@ export function SystemBackupHubView() {
                   <td className="p-3 font-bold">146 MB</td>
                   <td className="p-3">10 Okt 2026, 02:15 WIB</td>
                   <td className="p-3 text-center">
-                    <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">
+                    <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">
                       ✓ SHA-256 VALID
                     </span>
                   </td>
@@ -130,7 +130,7 @@ export function SystemBackupHubView() {
                   <td className="p-3 font-bold">145 MB</td>
                   <td className="p-3">09 Okt 2026, 02:12 WIB</td>
                   <td className="p-3 text-center">
-                    <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">
+                    <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">
                       ✓ SHA-256 VALID
                     </span>
                   </td>

@@ -225,22 +225,22 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Total Rombel Aktif</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Total Rombel Aktif</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">94 Rombel</div>
           <span className="text-xs text-black/70">Semester Ganjil</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Peserta Terdaftar</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Peserta Terdaftar</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">2,840 Mhs</div>
           <span className="text-xs text-emerald-800 font-bold">100% Ter-enroll</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Mutasi Pindah Kelas</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Mutasi Pindah Kelas</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">12 Kasus</div>
           <span className="text-xs text-black/70">Diproses BAA</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Batch CSV Terakhir</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Batch CSV Terakhir</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">Batch #08</div>
           <span className="text-xs text-emerald-800 font-bold">Validasi Sukses</span>
         </div>
@@ -297,7 +297,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             >
               <Plus className="h-4 w-4" />
               <span>Enroll Manual</span>
-              {!isActionAllowed && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isActionAllowed && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -334,7 +334,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
                         </td>
                         <td className="p-3.5 sm:p-4 font-mono text-xs text-black/70">{s.enrolledAt}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                             TERDAFTAR
                           </span>
                         </td>
@@ -447,11 +447,11 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
                         <td className="p-3 sm:p-3.5 font-mono font-bold">{row.classCode}</td>
                         <td className="p-3 sm:p-3.5 text-center">
                           {row.isValid ? (
-                            <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                            <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                               ✓ VALID
                             </span>
                           ) : (
-                            <span className="px-2 py-0.5 rounded border border-rose-500 bg-rose-100 text-rose-950 font-mono text-[11px] font-bold">
+                            <span className="px-2 py-0.5 rounded border border-rose-500 bg-rose-100 text-rose-950 font-mono text-xs font-bold">
                               ✗ ERROR
                             </span>
                           )}
@@ -517,7 +517,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
               >
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Simpan & Daftarkan {csvRows.filter((r) => r.isValid).length} Baris Valid</span>
-                {!isActionAllowed && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+                {!isActionAllowed && <span className="text-xs bg-neutral-200 px-1.5 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
               </button>
             </div>
           </div>
@@ -550,7 +550,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             >
               <Plus className="h-4 w-4" />
               <span>Ajukan Mutasi Kelas</span>
-              {!isActionAllowed && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isActionAllowed && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -586,7 +586,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
                         <td className="p-3.5 sm:p-4 font-mono text-xs text-emerald-800 font-bold">{m.to}</td>
                         <td className="p-3.5 sm:p-4 text-xs text-black/80">{m.reason}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                             {m.status}
                           </span>
                         </td>

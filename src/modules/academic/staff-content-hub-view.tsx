@@ -98,22 +98,22 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Koleksi Buku Terdaftar</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Koleksi Buku Terdaftar</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{LIBRARY_BOOKS.length} Judul</div>
           <span className="text-xs text-black/70">Katalog Terindeks</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Total Eksemplar</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Total Eksemplar</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">57 Buku</div>
           <span className="text-xs text-emerald-800 font-bold">23 Tersedia Dipinjam</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Template Sertifikat</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Template Sertifikat</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{CERTIFICATES.length} Format</div>
           <span className="text-xs text-retro-orange font-bold">Resmi BAA</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Kredensial Diterbitkan</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Kredensial Diterbitkan</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">492 Badge</div>
           <span className="text-xs text-emerald-800 font-bold">Semester Berjalan</span>
         </div>
@@ -170,7 +170,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Judul Pustaka</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -203,7 +203,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{b.author}</td>
                         <td className="p-3.5 sm:p-4">
-                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-[10px] font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-xs font-bold">
                             {b.category}
                           </span>
                         </td>
@@ -246,7 +246,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
             >
               <Plus className="h-4 w-4" />
               <span>Desain Template Baru</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -277,7 +277,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
                           <div>{c.name}</div>
                         </td>
                         <td className="p-3.5 sm:p-4">
-                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-[10px] font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-xs font-bold">
                             {c.type}
                           </span>
                         </td>
@@ -285,7 +285,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
                         <td className="p-3.5 sm:p-4 text-xs text-black/70">{c.criteria}</td>
                         <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{c.issuedCount} Penerima</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                             TERVERIFIKASI
                           </span>
                         </td>

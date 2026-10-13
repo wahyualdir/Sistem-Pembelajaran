@@ -595,7 +595,7 @@ export function PortalShell({
                 >
                   <button
                     type="submit"
-                    className="bg-black text-white px-3 py-1.5 rounded text-[11px] font-mono hover:bg-neutral-800 border-2 border-white cursor-pointer font-bold shadow-xs flex items-center gap-1.5"
+                    className="bg-black text-white px-3 py-1.5 rounded text-xs font-mono hover:bg-neutral-800 border-2 border-white cursor-pointer font-bold shadow-xs flex items-center gap-1.5"
                   >
                     <span>Keluar dari Impersonasi</span>
                     <span>&rarr;</span>
@@ -618,24 +618,24 @@ export function PortalShell({
                     <button
                       type="button"
                       onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                      className="2xl:hidden relative flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs cursor-pointer"
+                      className="2xl:hidden relative flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs cursor-pointer"
                       title="Buka Ringkasan"
                       aria-label="Buka Ringkasan"
                     >
-                      <PanelRightOpen className="h-4 w-4 text-black" />
+                      <PanelRightOpen className="h-5 w-5 text-black" />
                     </button>
                   )}
-                  <span className="text-[11px] font-mono font-black text-black uppercase bg-white px-2 py-0.5 rounded border-2 border-black shadow-retro-sm">
+                  <span className="text-xs font-mono font-black text-black uppercase bg-white px-2 py-0.5 rounded border-2 border-black shadow-retro-sm">
                     2026/2027
                   </span>
                   <Link
                     href="/notifications"
-                    className="relative flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs"
+                    className="relative flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border-2 border-black bg-white shadow-xs"
                     title="Notifikasi"
                   >
-                    <Bell className="h-4 w-4 text-black" />
+                    <Bell className="h-5 w-5 text-black" />
                     {unread > 0 && (
-                      <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border border-black bg-retro-orange text-[10px] font-black text-white">
+                      <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full border border-black bg-retro-orange text-xs font-black text-white">
                         {unread}
                       </span>
                     )}
@@ -651,7 +651,7 @@ export function PortalShell({
                     ref={burgerButtonRef}
                     type="button"
                     onClick={handleBurgerClick}
-                    className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border-2 border-black bg-white text-black shadow-retro hover:bg-retro-warm active:translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black shrink-0 cursor-pointer"
+                    className="flex h-11 w-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-lg border-2 border-black bg-white text-black shadow-retro hover:bg-retro-warm active:translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black shrink-0 cursor-pointer"
                     title="Buka/Tutup menu"
                     aria-label="Buka/Tutup menu"
                   >

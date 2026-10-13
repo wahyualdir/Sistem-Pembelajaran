@@ -45,14 +45,17 @@ export async function middleware(request: NextRequest) {
   }
 
   // 0. Pengalihan Rute Legacy SIAKAD ke LMS (Aturan 4.4 Prompt)
-  if (LEGACY_ROUTE_REDIRECTS[pathname]) {
-    return NextResponse.redirect(new URL(LEGACY_ROUTE_REDIRECTS[pathname], request.url));
-  }
-  if (pathname.startsWith('/mahasiswa/')) {
-    return NextResponse.redirect(new URL('/student', request.url));
-  }
-  if (pathname.startsWith('/dosen/')) {
-    return NextResponse.redirect(new URL('/lecturer', request.url));
+  const isDirectLmsPage = pathname === '/dosen/materi-tugas' || pathname === '/mahasiswa/tugas';
+  if (!isDirectLmsPage) {
+    if (LEGACY_ROUTE_REDIRECTS[pathname]) {
+      return NextResponse.redirect(new URL(LEGACY_ROUTE_REDIRECTS[pathname], request.url));
+    }
+    if (pathname.startsWith('/mahasiswa/')) {
+      return NextResponse.redirect(new URL('/student', request.url));
+    }
+    if (pathname.startsWith('/dosen/')) {
+      return NextResponse.redirect(new URL('/lecturer', request.url));
+    }
   }
 
   // Dapatkan user dengan getUser() (Aturan Keras 4) bila Supabase aktif

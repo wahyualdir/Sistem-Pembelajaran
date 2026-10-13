@@ -83,7 +83,7 @@ export default async function CalendarPage() {
               <p className="font-heading font-black text-3xl sm:text-4xl lg:text-5xl text-black tracking-tight leading-none">
                 {totalTugas}
               </p>
-              <p className="text-[11px] sm:text-xs lg:text-sm font-bold text-black/75 pt-1">
+              <p className="text-xs sm:text-xs lg:text-sm font-bold text-black/75 pt-1">
                 Semua kegiatan semester
               </p>
             </div>
@@ -101,7 +101,7 @@ export default async function CalendarPage() {
               <p className="font-heading font-black text-3xl sm:text-4xl lg:text-5xl text-black tracking-tight leading-none">
                 {belumSelesai}
               </p>
-              <p className="text-[11px] sm:text-xs lg:text-sm font-bold text-retro-orange pt-1">
+              <p className="text-xs sm:text-xs lg:text-sm font-bold text-retro-orange pt-1">
                 Tenggat tugas aktif
               </p>
             </div>
@@ -119,7 +119,7 @@ export default async function CalendarPage() {
               <p className="font-heading font-black text-3xl sm:text-4xl lg:text-5xl text-black tracking-tight leading-none">
                 {sudahSelesai}
               </p>
-              <p className="text-[11px] sm:text-xs lg:text-sm font-bold text-black/75 pt-1">
+              <p className="text-xs sm:text-xs lg:text-sm font-bold text-black/75 pt-1">
                 Tuntas terverifikasi
               </p>
             </div>

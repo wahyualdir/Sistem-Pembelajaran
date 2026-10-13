@@ -117,7 +117,7 @@ export default function AdminAuditPage() {
                         <span className="font-semibold text-foreground block">
                           {log.penggunaNama}
                         </span>
-                        <span className="text-[10px] text-muted-foreground">{log.peran}</span>
+                        <span className="text-xs text-muted-foreground">{log.peran}</span>
                       </TableCell>
                       <TableCell>
                         <Badge
@@ -128,7 +128,7 @@ export default function AdminAuditPage() {
                               ? "success"
                               : "secondary"
                           }
-                          className="text-[10px]"
+                          className="text-xs"
                         >
                           {log.aksi}
                         </Badge>

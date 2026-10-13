@@ -168,7 +168,7 @@ export default async function StaffSubpage({ params }: PageProps) {
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold uppercase text-muted-foreground">{s.title}</span>
-                <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${s.badgeColor}`}>
+                <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${s.badgeColor}`}>
                   {s.badge}
                 </span>
               </div>

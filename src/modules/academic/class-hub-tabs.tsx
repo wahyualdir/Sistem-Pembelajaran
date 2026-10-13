@@ -265,9 +265,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               <Key className="h-3.5 w-3.5 text-retro-orange" />
               <span>{cls.join_code}</span>
               {copiedCode ? (
-                <span className="text-[10px] bg-black text-white px-1.5 py-0.5 rounded font-bold">Disalin!</span>
+                <span className="text-xs bg-black text-white px-1.5 py-0.5 rounded font-bold">Disalin!</span>
               ) : (
-                <span className="text-[10px] text-black/60 font-medium">Salin</span>
+                <span className="text-xs text-black/60 font-medium">Salin</span>
               )}
             </button>
           )}
@@ -351,7 +351,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   <div className="space-y-2.5">
                     {upcomingAssignments.slice(0, 3).map((a) => (
                       <div key={a.id} className="p-3 rounded-xl border border-black/20 bg-retro-warm/30 space-y-1">
-                        <span className="text-[11px] font-semibold text-black/60 block">
+                        <span className="text-xs font-semibold text-black/60 block">
                           Batas: {fmt(a.close_at)}
                         </span>
                         <p className="text-xs font-bold text-black truncate">{a.title}</p>
@@ -452,10 +452,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           <span className="text-xs sm:text-sm font-semibold text-black block">
                             Dosen Pengampu Kelas
                           </span>
-                          <span className="text-[11px] font-normal text-black/60">{fmt(a.created_at)}</span>
+                          <span className="text-xs font-normal text-black/60">{fmt(a.created_at)}</span>
                         </div>
                       </div>
-                      <span className="text-[10px] font-medium uppercase bg-retro-warm px-2 py-0.5 rounded border border-black">
+                      <span className="text-xs font-medium uppercase bg-retro-warm px-2 py-0.5 rounded border border-black">
                         Pengumuman
                       </span>
                     </div>
@@ -481,7 +481,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           Tugas Baru
                         </span>
                         <h4 className="font-semibold text-sm sm:text-base text-black">{asg.title}</h4>
-                        <span className="text-[11px] font-medium text-black/60">Batas: {fmt(asg.due_at)}</span>
+                        <span className="text-xs font-medium text-black/60">Batas: {fmt(asg.due_at)}</span>
                       </div>
                     </div>
                     <ArrowRight className="h-5 w-5 text-black shrink-0" />
@@ -729,7 +729,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                         <div>
                           <div className="flex items-center gap-2">
                             <h4 className="font-semibold text-sm sm:text-base text-black">{q.title}</h4>
-                            <span className="text-[10px] font-medium bg-retro-warm border border-black px-2 py-0.5 rounded">
+                            <span className="text-xs font-medium bg-retro-warm border border-black px-2 py-0.5 rounded">
                               {q.exam_type ?? 'KUIS'}
                             </span>
                           </div>
@@ -822,7 +822,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                             <h4 className="font-semibold text-sm sm:text-base text-black">{s.title}</h4>
                             <span
                               className={cn(
-                                'text-[10px] font-semibold px-2 py-0.5 rounded border border-black',
+                                'text-xs font-semibold px-2 py-0.5 rounded border border-black',
                                 s.is_open ? 'bg-retro-mint text-black' : 'bg-neutral-200 text-black/60'
                               )}
                             >
@@ -956,7 +956,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     </div>
                     <div className="min-w-0">
                       <p className="font-medium text-xs sm:text-sm text-black truncate">{m.name}</p>
-                      <span className="text-[11px] font-normal text-black/60">Peserta #{idx + 1}</span>
+                      <span className="text-xs font-normal text-black/60">Peserta #{idx + 1}</span>
                     </div>
                   </div>
                 ))}
@@ -1126,7 +1126,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     <div>
                       <div className="flex items-center gap-2">
                         <h4 className="font-semibold text-sm sm:text-base text-black">{s.title}</h4>
-                        <span className={cn('text-[10px] font-semibold px-2 py-0.5 rounded border border-black', s.is_open ? 'bg-retro-mint text-black' : 'bg-neutral-200 text-black/60')}>
+                        <span className={cn('text-xs font-semibold px-2 py-0.5 rounded border border-black', s.is_open ? 'bg-retro-mint text-black' : 'bg-neutral-200 text-black/60')}>
                           {s.is_open ? 'BUKA' : 'DITUTUP'}
                         </span>
                       </div>
@@ -1191,9 +1191,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 { label: 'Kehadiran Kuliah', bobot: '10%', score: '95.0' },
               ].map((it, i) => (
                 <div key={i} className="p-4 rounded-xl border-2 border-black bg-retro-warm/40 text-center space-y-1 shadow-xs">
-                  <span className="text-[11px] font-semibold text-black/60 uppercase">{it.label}</span>
+                  <span className="text-xs font-semibold text-black/60 uppercase">{it.label}</span>
                   <p className="text-2xl font-bold text-black">{it.score}</p>
-                  <span className="text-[10px] font-normal text-black/70">Bobot {it.bobot}</span>
+                  <span className="text-xs font-normal text-black/70">Bobot {it.bobot}</span>
                 </div>
               ))}
             </div>

@@ -74,13 +74,13 @@ export default function AssistantMaterialsPage() {
                 <div className="p-2 rounded-lg border-2 border-black bg-retro-warm">
                   <FileText className="h-5 w-5 text-foreground" />
                 </div>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-black bg-neutral-100">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded border border-black bg-neutral-100">
                   {m.code}
                 </span>
               </div>
 
               <div>
-                <span className="text-[11px] font-mono text-muted-foreground block truncate">
+                <span className="text-xs font-mono text-muted-foreground block truncate">
                   {m.course}
                 </span>
                 <h3 className="font-heading font-black text-base text-foreground mt-1 leading-snug">
@@ -94,7 +94,7 @@ export default function AssistantMaterialsPage() {
             </div>
 
             <div className="pt-3 flex items-center justify-between border-t-2 border-black/10">
-              <span className="text-[10px] text-muted-foreground font-mono">
+              <span className="text-xs text-muted-foreground font-mono">
                 {m.updatedAt}
               </span>
               <button

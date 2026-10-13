@@ -217,7 +217,7 @@ export default function PreferensiNotifikasiPage() {
                     disabled={loading || isPending}
                     required
                   />
-                  <span className="text-[11px] text-muted-foreground">
+                  <span className="text-xs text-muted-foreground">
                     Bawaan kampus: 22:00 WIB
                   </span>
                 </div>
@@ -233,7 +233,7 @@ export default function PreferensiNotifikasiPage() {
                     disabled={loading || isPending}
                     required
                   />
-                  <span className="text-[11px] text-muted-foreground">
+                  <span className="text-xs text-muted-foreground">
                     Bawaan kampus: 06:00 WIB
                   </span>
                 </div>
@@ -271,7 +271,7 @@ export default function PreferensiNotifikasiPage() {
                             {kat.label}
                           </span>
                           {kat.kunciKeamanan && (
-                            <span className="rounded-control bg-warning-soft border border-warning-border px-1.5 py-0.5 text-[10px] font-bold text-warning flex items-center gap-1">
+                            <span className="rounded-control bg-warning-soft border border-warning-border px-1.5 py-0.5 text-xs font-bold text-warning flex items-center gap-1">
                               <Lock className="h-3 w-3" />
                               Wajib In-App
                             </span>
@@ -354,7 +354,7 @@ export default function PreferensiNotifikasiPage() {
                   onChange={(e) => setEmailCadangan(e.target.value)}
                   disabled={loading || isPending}
                 />
-                <span className="text-[11px] text-muted-foreground block">
+                <span className="text-xs text-muted-foreground block">
                   Kosongkan jika hanya ingin menerima ke email resmi kampus (@student.uir.ac.id).
                 </span>
               </div>

@@ -292,7 +292,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
                     </td>
                     <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{c.gradePoint.toFixed(1)}</td>
                     <td className="p-3.5 sm:p-4 text-center">
-                      <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold border border-emerald-500 bg-emerald-100 text-emerald-950">
+                      <span className="px-2 py-0.5 rounded text-xs font-mono font-bold border border-emerald-500 bg-emerald-100 text-emerald-950">
                         {c.status}
                       </span>
                     </td>

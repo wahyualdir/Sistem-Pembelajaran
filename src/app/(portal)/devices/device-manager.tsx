@@ -214,7 +214,7 @@ export function DeviceManager({
                       <div className="flex items-center gap-2">
                         <span className="font-heading font-bold text-sm text-foreground">{dev.label}</span>
                         {dev.isCurrent && (
-                          <span className="text-[10px] font-mono font-bold bg-retro-mint text-black border border-retro-border px-2 py-0.5 rounded shadow-xs">
+                          <span className="text-xs font-mono font-bold bg-retro-mint text-black border border-retro-border px-2 py-0.5 rounded shadow-xs">
                             Perangkat Ini
                           </span>
                         )}
@@ -222,7 +222,7 @@ export function DeviceManager({
                       <p className="text-xs text-muted-foreground mt-0.5 font-mono">
                         {dev.last_city ? `${dev.last_city}, ${dev.last_country ?? ''}` : 'Lokasi Terdaftar'} &bull; IP: {dev.last_ip_masked ?? 'Internal'}
                       </p>
-                      <p className="text-[11px] text-muted-foreground font-mono mt-0.5">
+                      <p className="text-xs text-muted-foreground font-mono mt-0.5">
                         Terakhir aktif: {new Date(dev.last_seen_at).toLocaleString('id-ID')} WIB
                       </p>
                     </div>
@@ -246,14 +246,14 @@ export function DeviceManager({
                             type="button"
                             onClick={() => handleRevokeSingle(dev.id)}
                             disabled={isPending}
-                            className="px-2.5 py-1 rounded bg-danger text-white text-[11px] font-bold shadow-xs"
+                            className="px-2.5 py-1 rounded bg-danger text-white text-xs font-bold shadow-xs"
                           >
                             Ya, Cabut
                           </button>
                           <button
                             type="button"
                             onClick={() => setConfirmId(null)}
-                            className="px-2.5 py-1 rounded bg-retro-surface text-foreground text-[11px] font-bold"
+                            className="px-2.5 py-1 rounded bg-retro-surface text-foreground text-xs font-bold"
                           >
                             Batal
                           </button>
@@ -345,7 +345,7 @@ export function DeviceManager({
                   <span className="mx-2">&bull;</span>
                   <span>{dev.last_city || 'Lokasi Terdaftar'} ({dev.last_ip_masked})</span>
                 </div>
-                <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-danger">
+                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-danger">
                   Sesi Berakhir
                 </span>
               </div>

@@ -113,7 +113,7 @@ export default function MahasiswaNilaiPage() {
               <p className="text-2xl font-bold text-primary mt-1">
                 {transkripData.ipk.toFixed(2)}
               </p>
-              <span className="text-[10px] text-success font-medium">Predikat Sangat Memuaskan</span>
+              <span className="text-xs text-success font-medium">Predikat Sangat Memuaskan</span>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-primary-tint text-primary">
               <Award className="h-5 w-5" />
@@ -128,7 +128,7 @@ export default function MahasiswaNilaiPage() {
               <p className="text-2xl font-bold text-foreground mt-1">
                 {transkripData.totalSksLulus} <span className="text-xs font-normal text-muted-foreground">SKS</span>
               </p>
-              <span className="text-[10px] text-muted-foreground">Dari {transkripData.totalSksDitempuh} SKS ditempuh</span>
+              <span className="text-xs text-muted-foreground">Dari {transkripData.totalSksDitempuh} SKS ditempuh</span>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-success-soft text-success">
               <CheckCircle className="h-5 w-5" />
@@ -143,7 +143,7 @@ export default function MahasiswaNilaiPage() {
               <p className="text-2xl font-bold text-primary mt-1">
                 {khsData.ips.toFixed(2)}
               </p>
-              <span className="text-[10px] text-muted-foreground">{khsData.totalSks} SKS diambil</span>
+              <span className="text-xs text-muted-foreground">{khsData.totalSks} SKS diambil</span>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-primary-tint text-primary">
               <Layers className="h-5 w-5" />
@@ -156,7 +156,7 @@ export default function MahasiswaNilaiPage() {
             <div>
               <p className="text-xs text-muted-foreground">Status Akademik</p>
               <p className="text-base font-bold text-success mt-1">AKTIF</p>
-              <span className="text-[10px] text-muted-foreground">Dosen Wali: Dr. Ardiansyah</span>
+              <span className="text-xs text-muted-foreground">Dosen Wali: Dr. Ardiansyah</span>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-success-soft text-success">
               <BookOpen className="h-5 w-5" />
@@ -382,11 +382,11 @@ export default function MahasiswaNilaiPage() {
                       </TableCell>
                       <TableCell className="text-center">
                         {item.diulang ? (
-                          <span className="inline-flex items-center gap-1 rounded-full bg-primary-tint px-2.5 py-0.5 text-[10px] font-semibold text-primary">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-primary-tint px-2.5 py-0.5 text-xs font-semibold text-primary">
                             Diulang (Nilai Terbaik)
                           </span>
                         ) : (
-                          <span className="text-[11px] text-muted-foreground">Reguler</span>
+                          <span className="text-xs text-muted-foreground">Reguler</span>
                         )}
                       </TableCell>
                     </TableRow>

@@ -307,10 +307,10 @@ export default function AdminNilaiPage() {
                       <span className="font-semibold text-foreground block">
                         {log.penggunaNama}
                       </span>
-                      <span className="text-[10px] text-muted-foreground">{log.peran}</span>
+                      <span className="text-xs text-muted-foreground">{log.peran}</span>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="default" className="text-[10px]">
+                      <Badge variant="default" className="text-xs">
                         {log.aksi}
                       </Badge>
                     </TableCell>
@@ -367,7 +367,7 @@ export default function AdminNilaiPage() {
                 <div className="grid grid-cols-2 gap-2">
                   {kelas.komponen.map((komp) => (
                     <div key={komp.id}>
-                      <span className="text-[11px] text-muted-foreground block">
+                      <span className="text-xs text-muted-foreground block">
                         {komp.nama} ({komp.bobotPersen}%)
                       </span>
                       <Input
@@ -407,7 +407,7 @@ export default function AdminNilaiPage() {
                   rows={3}
                   className="w-full rounded-[8px] border border-border p-2.5 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                 />
-                <span className="text-[10px] text-muted-foreground">
+                <span className="text-xs text-muted-foreground">
                   Catatan ini akan tersimpan permanen pada Log Audit sistem.
                 </span>
               </div>

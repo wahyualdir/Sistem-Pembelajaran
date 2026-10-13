@@ -431,7 +431,7 @@ export default function DosenNilaiPage() {
                         {kelas.komponen.map((komp) => (
                           <TableHead key={komp.id} className="w-28 text-center">
                             {komp.nama}
-                            <span className="block text-[10px] font-normal text-muted-foreground">
+                            <span className="block text-xs font-normal text-muted-foreground">
                               ({komp.bobotPersen}%)
                             </span>
                           </TableHead>
@@ -742,7 +742,7 @@ export default function DosenNilaiPage() {
                       <TableRow key={idx}>
                         <TableCell className="font-mono text-xs">{row.nim}</TableCell>
                         <TableCell>
-                          <Badge variant={row.valid ? "success" : "danger"} className="text-[10px]">
+                          <Badge variant={row.valid ? "success" : "danger"} className="text-xs">
                             {row.valid ? "Valid" : "Galat"}
                           </Badge>
                         </TableCell>

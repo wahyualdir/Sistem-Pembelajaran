@@ -148,7 +148,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                       <div className="p-2.5 rounded-lg border-2 border-black bg-retro-warm text-black shadow-xs">
                         <Award className="h-6 w-6 text-retro-orange" />
                       </div>
-                      <span className="text-[11px] sm:text-xs font-mono font-black px-2.5 py-0.5 rounded border border-black bg-emerald-100 text-emerald-950 shadow-xs">
+                      <span className="text-xs sm:text-xs font-mono font-black px-2.5 py-0.5 rounded border border-black bg-emerald-100 text-emerald-950 shadow-xs">
                         ✓ Terverifikasi Resmi
                       </span>
                     </div>
@@ -175,7 +175,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                         <span>Tanggal Terbit:</span>
                         <span className="font-bold text-black">{cert.date}</span>
                       </div>
-                      <div className="pt-1 text-[11px] text-black/60 truncate font-mono">
+                      <div className="pt-1 text-xs text-black/60 truncate font-mono">
                         ID: {cert.credentialId}
                       </div>
                     </div>
@@ -226,10 +226,10 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                 >
                   <div className="space-y-3.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="font-mono text-[11px] sm:text-xs font-black px-2.5 py-0.5 rounded border border-black bg-retro-warm text-black shadow-xs">
+                      <span className="font-mono text-xs sm:text-xs font-black px-2.5 py-0.5 rounded border border-black bg-retro-warm text-black shadow-xs">
                         {proj.type}
                       </span>
-                      <span className="text-[11px] sm:text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-400">
+                      <span className="text-xs sm:text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-400">
                         ✓ {proj.status}
                       </span>
                     </div>
@@ -251,7 +251,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                       {proj.tech.map((t) => (
                         <span
                           key={t}
-                          className="px-2 py-0.5 rounded border border-black bg-white text-[11px] font-mono font-bold text-black"
+                          className="px-2 py-0.5 rounded border border-black bg-white text-xs font-mono font-bold text-black"
                         >
                           {t}
                         </span>

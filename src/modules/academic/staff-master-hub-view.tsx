@@ -123,22 +123,22 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Program Studi</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Program Studi</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">4 Prodi</div>
           <span className="text-xs text-black/70">Fakultas Terpadu</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Mata Kuliah Aktif</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Mata Kuliah Aktif</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">5 Mata Kuliah</div>
           <span className="text-xs text-emerald-800 font-bold">Terverifikasi BAA</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Tahun Ajaran Aktif</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Tahun Ajaran Aktif</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">2026/2027</div>
           <span className="text-xs text-retro-orange font-bold">Semester Ganjil</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Ruang & Lab Geofence</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Ruang & Lab Geofence</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">4 Titik GPS</div>
           <span className="text-xs text-emerald-800 font-bold">100% Terkalibrasi</span>
         </div>
@@ -195,7 +195,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Program Studi</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -300,7 +300,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                       <td className="p-3.5 sm:p-4 text-center">
                         <span
                           className={cn(
-                            'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                            'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                             c.status === 'VALIDATED'
                               ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                               : 'border-amber-500 bg-amber-100 text-amber-950'
@@ -325,7 +325,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                             )}
                           >
                             <span>Validasi MK</span>
-                            {!isDemo && <span className="ml-1 text-[10px] font-mono">(Belum Aktif)</span>}
+                            {!isDemo && <span className="ml-1 text-xs font-mono">(Belum Aktif)</span>}
                           </button>
                         )}
                       </td>
@@ -365,7 +365,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             >
               <Plus className="h-4 w-4" />
               <span>Buka Semester Baru</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -401,7 +401,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               y.isCurrent
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : 'border-neutral-400 bg-neutral-100 text-neutral-800'
@@ -446,7 +446,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Titik Ruang</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -485,7 +485,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                         <td className="p-3.5 sm:p-4 font-mono text-xs">{r.lat.toFixed(6)}, {r.lng.toFixed(6)}</td>
                         <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{r.radius} Meter</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                             TERKALIBRASI AKTIF
                           </span>
                         </td>

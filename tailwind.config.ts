@@ -120,8 +120,8 @@ const config: Config = {
         "header-mobile": "var(--layout-header-height-mobile)",
       },
       fontSize: {
-        '2xs': ['0.75rem', { lineHeight: '1rem' }],
-        'xs': ['0.8125rem', { lineHeight: '1.125rem' }],
+        '2xs': ['max(0.75rem, 12px)', { lineHeight: '1rem' }],
+        'xs': ['max(0.8125rem, 12px)', { lineHeight: '1.125rem' }],
         'sm': ['0.875rem', { lineHeight: '1.25rem' }],
         'base': ['1rem', { lineHeight: '1.5rem' }],
         'md': ['1.0625rem', { lineHeight: '1.625rem' }],

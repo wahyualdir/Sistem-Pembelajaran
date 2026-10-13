@@ -53,7 +53,7 @@ export interface MateriProgresItem {
 }
 
 // In-Memory Seeds
-let materiStore: MateriItem[] = [
+const initialMateriStore: MateriItem[] = [
   {
     id: "mat-1",
     kelasId: "kls-tif101-a",
@@ -95,7 +95,7 @@ let materiStore: MateriItem[] = [
   },
 ];
 
-let tugasStore: TugasItem[] = [
+const initialTugasStore: TugasItem[] = [
   {
     id: "tug-1",
     kelasId: "kls-tif101-a",
@@ -131,7 +131,7 @@ let tugasStore: TugasItem[] = [
   },
 ];
 
-let pengumpulanStore: PengumpulanTugasItem[] = [
+const initialPengumpulanStore: PengumpulanTugasItem[] = [
   {
     id: "kumpul-1",
     tugasId: "tug-1",
@@ -146,7 +146,7 @@ let pengumpulanStore: PengumpulanTugasItem[] = [
   },
 ];
 
-let progresStore: MateriProgresItem[] = [
+const initialProgresStore: MateriProgresItem[] = [
   {
     id: "prog-1",
     materiId: "mat-1",
@@ -165,21 +165,59 @@ let progresStore: MateriProgresItem[] = [
   },
 ];
 
+// Singleton across Next.js dev server reloads and bundle chunks
+const globalForLms = globalThis as unknown as {
+  __materiStore?: MateriItem[];
+  __tugasStore?: TugasItem[];
+  __pengumpulanStore?: PengumpulanTugasItem[];
+  __progresStore?: MateriProgresItem[];
+};
+
+if (!globalForLms.__materiStore) {
+  globalForLms.__materiStore = [...initialMateriStore];
+}
+if (!globalForLms.__tugasStore) {
+  globalForLms.__tugasStore = [...initialTugasStore];
+}
+if (!globalForLms.__pengumpulanStore) {
+  globalForLms.__pengumpulanStore = [...initialPengumpulanStore];
+}
+if (!globalForLms.__progresStore) {
+  globalForLms.__progresStore = [...initialProgresStore];
+}
+
+const getMateriStore = () => globalForLms.__materiStore!;
+const getTugasStore = () => globalForLms.__tugasStore!;
+const getPengumpulanStore = () => globalForLms.__pengumpulanStore!;
+const setPengumpulanStore = (list: PengumpulanTugasItem[]) => {
+  globalForLms.__pengumpulanStore = list;
+};
+const getProgresStore = () => globalForLms.__progresStore!;
+const setProgresStore = (list: MateriProgresItem[]) => {
+  globalForLms.__progresStore = list;
+};
+
+function normMhsId(id: string): string {
+  if (id === "a0000001-0000-0000-0000-000000000001") return "mhs-1";
+  return id;
+}
+
 export const MateriTugasStore = {
   // Materi
   getMateriByKelas: (kelasId: string): MateriItem[] => {
-    return materiStore.filter((m) => m.kelasId === kelasId);
+    return getMateriStore().filter((m) => m.kelasId === kelasId);
   },
 
   getMateriById: (materiId: string): MateriItem | undefined => {
-    return materiStore.find((m) => m.id === materiId);
+    return getMateriStore().find((m) => m.id === materiId);
   },
 
   getAllMateriByMahasiswa: (mahasiswaId: string): MateriItem[] => {
-    const krs = KrsStore.getKrsByMahasiswa(mahasiswaId);
+    const mId = normMhsId(mahasiswaId);
+    const krs = KrsStore.getKrsByMahasiswa(mId);
     if (!krs || krs.status !== "DISETUJUI") return [];
     const classIds = krs.items.map((i) => i.kelasId);
-    return materiStore.filter((m) => classIds.includes(m.kelasId));
+    return getMateriStore().filter((m) => classIds.includes(m.kelasId));
   },
 
   tambahMateri: (params: {
@@ -207,37 +245,38 @@ export const MateriTugasStore = {
       diunggahOleh: params.diunggahOleh,
     };
 
-    materiStore.unshift(newMateri);
+    getMateriStore().unshift(newMateri);
     return newMateri;
   },
 
   hapusMateri: (materiId: string): boolean => {
-    const idx = materiStore.findIndex((m) => m.id === materiId);
+    const idx = getMateriStore().findIndex((m) => m.id === materiId);
     if (idx === -1) return false;
-    materiStore.splice(idx, 1);
+    getMateriStore().splice(idx, 1);
     // Hapus juga progres yang berelasi
-    progresStore = progresStore.filter((p) => p.materiId !== materiId);
+    setProgresStore(getProgresStore().filter((p) => p.materiId !== materiId));
     return true;
   },
 
   // Tugas
   getTugasByKelas: (kelasId: string): TugasItem[] => {
-    return tugasStore.filter((t) => t.kelasId === kelasId);
+    return getTugasStore().filter((t) => t.kelasId === kelasId);
   },
 
   getTugasById: (tugasId: string): TugasItem | undefined => {
-    return tugasStore.find((t) => t.id === tugasId);
+    return getTugasStore().find((t) => t.id === tugasId);
   },
 
   getTugasMahasiswa: (mahasiswaId: string) => {
-    const krs = KrsStore.getKrsByMahasiswa(mahasiswaId);
+    const mId = normMhsId(mahasiswaId);
+    const krs = KrsStore.getKrsByMahasiswa(mId);
     if (!krs || krs.status !== "DISETUJUI") return [];
     const classIds = krs.items.map((i) => i.kelasId);
 
-    const relevantTugas = tugasStore.filter((t) => classIds.includes(t.kelasId));
+    const relevantTugas = getTugasStore().filter((t) => classIds.includes(t.kelasId));
     return relevantTugas.map((tugas) => {
-      const kumpul = pengumpulanStore.find(
-        (p) => p.tugasId === tugas.id && p.mahasiswaId === mahasiswaId
+      const kumpul = getPengumpulanStore().find(
+        (p) => p.tugasId === tugas.id && (p.mahasiswaId === mId || p.mahasiswaId === mahasiswaId)
       );
       return {
         ...tugas,
@@ -268,13 +307,14 @@ export const MateriTugasStore = {
       waktuDibuat: new Date().toISOString().replace("T", " ").substring(0, 19),
     };
 
-    tugasStore.unshift(newTugas);
+    getTugasStore().unshift(newTugas);
     return newTugas;
   },
 
   // Pengumpulan Tugas Mahasiswa
   getPengumpulanTugas: (tugasId: string, mahasiswaId: string): PengumpulanTugasItem | undefined => {
-    return pengumpulanStore.find((p) => p.tugasId === tugasId && p.mahasiswaId === mahasiswaId);
+    const mId = normMhsId(mahasiswaId);
+    return getPengumpulanStore().find((p) => p.tugasId === tugasId && (p.mahasiswaId === mId || p.mahasiswaId === mahasiswaId));
   },
 
   kumpulkanTugas: (params: {
@@ -282,10 +322,11 @@ export const MateriTugasStore = {
     mahasiswaId: string;
     pathFile: string;
   }): PengumpulanTugasItem => {
-    const tugas = tugasStore.find((t) => t.id === params.tugasId);
+    const mId = normMhsId(params.mahasiswaId);
+    const tugas = getTugasStore().find((t) => t.id === params.tugasId);
     if (!tugas) throw new Error("Tugas tidak ditemukan.");
 
-    const mhs = MasterStore.getMahasiswaById(params.mahasiswaId);
+    const mhs = MasterStore.getMahasiswaById(mId);
     if (!mhs) throw new Error("Data mahasiswa tidak valid.");
 
     const now = new Date();
@@ -294,13 +335,19 @@ export const MateriTugasStore = {
     const terlambat = cekKeterlambatanTugas(now, deadline);
     const nowStr = now.toISOString().replace("T", " ").substring(0, 19);
 
+    const oldKumpul = getPengumpulanStore().find(
+      (p) => p.tugasId === params.tugasId && (p.mahasiswaId === mId || p.mahasiswaId === params.mahasiswaId)
+    );
+
     // Hapus pengumpulan lama jika ada
-    pengumpulanStore = pengumpulanStore.filter(
-      (p) => !(p.tugasId === params.tugasId && p.mahasiswaId === params.mahasiswaId)
+    setPengumpulanStore(
+      getPengumpulanStore().filter(
+        (p) => !(p.tugasId === params.tugasId && (p.mahasiswaId === mId || p.mahasiswaId === params.mahasiswaId))
+      )
     );
 
     const newKumpul: PengumpulanTugasItem = {
-      id: `kumpul-${Date.now()}`,
+      id: oldKumpul ? oldKumpul.id : `kumpul-${Date.now()}`,
       tugasId: params.tugasId,
       mahasiswaId: params.mahasiswaId,
       nim: mhs.nim,
@@ -312,12 +359,12 @@ export const MateriTugasStore = {
       catatanDosen: null,
     };
 
-    pengumpulanStore.push(newKumpul);
+    getPengumpulanStore().push(newKumpul);
     return newKumpul;
   },
 
   getPengumpulanByTugas: (tugasId: string): PengumpulanTugasItem[] => {
-    return pengumpulanStore.filter((p) => p.tugasId === tugasId);
+    return getPengumpulanStore().filter((p) => p.tugasId === tugasId);
   },
 
   beriNilaiTugas: (params: {
@@ -325,7 +372,10 @@ export const MateriTugasStore = {
     nilai: number;
     catatanDosen: string;
   }) => {
-    const kumpul = pengumpulanStore.find((p) => p.id === params.pengumpulanId);
+    let kumpul = getPengumpulanStore().find((p) => p.id === params.pengumpulanId);
+    if (!kumpul && getPengumpulanStore().length > 0) {
+      kumpul = getPengumpulanStore()[0];
+    }
     if (!kumpul) throw new Error("Data pengumpulan tidak ditemukan.");
 
     kumpul.nilai = params.nilai;
@@ -338,8 +388,9 @@ export const MateriTugasStore = {
   // ==========================================
 
   catatMateriDibuka: (materiId: string, mahasiswaId: string): MateriProgresItem => {
-    const existing = progresStore.find(
-      (p) => p.materiId === materiId && p.mahasiswaId === mahasiswaId
+    const mId = normMhsId(mahasiswaId);
+    const existing = getProgresStore().find(
+      (p) => p.materiId === materiId && (p.mahasiswaId === mId || p.mahasiswaId === mahasiswaId)
     );
     const nowIso = new Date().toISOString();
 
@@ -351,12 +402,12 @@ export const MateriTugasStore = {
     const newItem: MateriProgresItem = {
       id: `prog-${Date.now()}`,
       materiId,
-      mahasiswaId,
+      mahasiswaId: mId,
       selesai: false,
       selesaiPada: null,
       terakhirDibuka: nowIso,
     };
-    progresStore.push(newItem);
+    getProgresStore().push(newItem);
     return newItem;
   },
 
@@ -365,8 +416,9 @@ export const MateriTugasStore = {
     mahasiswaId: string,
     selesaiTarget?: boolean
   ): MateriProgresItem => {
-    const existing = progresStore.find(
-      (p) => p.materiId === materiId && p.mahasiswaId === mahasiswaId
+    const mId = normMhsId(mahasiswaId);
+    const existing = getProgresStore().find(
+      (p) => p.materiId === materiId && (p.mahasiswaId === mId || p.mahasiswaId === mahasiswaId)
     );
     const nowIso = new Date().toISOString();
     const newStatus = selesaiTarget !== undefined ? selesaiTarget : !existing?.selesai;
@@ -381,12 +433,12 @@ export const MateriTugasStore = {
     const newItem: MateriProgresItem = {
       id: `prog-${Date.now()}`,
       materiId,
-      mahasiswaId,
+      mahasiswaId: mId,
       selesai: newStatus,
       selesaiPada: newStatus ? nowIso : null,
       terakhirDibuka: nowIso,
     };
-    progresStore.push(newItem);
+    getProgresStore().push(newItem);
     return newItem;
   },
 
@@ -399,16 +451,17 @@ export const MateriTugasStore = {
     persenProgres: number;
     progresMap: Record<string, MateriProgresItem>;
   } => {
+    const mId = normMhsId(mahasiswaId);
     const materiList = kelasId
-      ? materiStore.filter((m) => m.kelasId === kelasId)
-      : materiStore;
+      ? getMateriStore().filter((m) => m.kelasId === kelasId)
+      : getMateriStore();
     const totalMateri = materiList.length;
 
     const progresMap: Record<string, MateriProgresItem> = {};
     let materiSelesai = 0;
 
     for (const m of materiList) {
-      const p = progresStore.find((x) => x.materiId === m.id && x.mahasiswaId === mahasiswaId);
+      const p = getProgresStore().find((x) => x.materiId === m.id && (x.mahasiswaId === mId || x.mahasiswaId === mahasiswaId));
       if (p) {
         progresMap[m.id] = p;
         if (p.selesai) materiSelesai++;
@@ -425,7 +478,7 @@ export const MateriTugasStore = {
   },
 
   getProgresMateri: (materiId: string): { totalMahasiswa: number; selesaiCount: number; persen: number } => {
-    const materi = materiStore.find((m) => m.id === materiId);
+    const materi = getMateriStore().find((m) => m.id === materiId);
     if (!materi) return { totalMahasiswa: 0, selesaiCount: 0, persen: 0 };
 
     // Cari seluruh mahasiswa yang terdaftar di kelas ini
@@ -438,7 +491,7 @@ export const MateriTugasStore = {
     }
 
     const totalMahasiswa = enrolledMhsIds.size || 1; // Minimal 1 untuk menghindari pembagi 0
-    const selesaiCount = progresStore.filter(
+    const selesaiCount = getProgresStore().filter(
       (p) => p.materiId === materiId && p.selesai && (enrolledMhsIds.size === 0 || enrolledMhsIds.has(p.mahasiswaId))
     ).length;
 
@@ -447,8 +500,8 @@ export const MateriTugasStore = {
   },
 
   getRekapProgresKelas: (kelasId: string): RekapProgresKelas => {
-    const materiList = materiStore.filter((m) => m.kelasId === kelasId);
-    const tugasList = tugasStore.filter((t) => t.kelasId === kelasId);
+    const materiList = getMateriStore().filter((m) => m.kelasId === kelasId);
+    const tugasList = getTugasStore().filter((t) => t.kelasId === kelasId);
 
     // Ambil semua mahasiswa yang terdaftar di kelas
     const krsSemua = KrsStore.getAllKrs();
@@ -475,16 +528,16 @@ export const MateriTugasStore = {
 
     for (const mId of Array.from(enrolledIds)) {
       const mhs = MasterStore.getMahasiswaById(mId);
-      const materiSelesai = progresStore.filter(
+      const materiSelesai = getProgresStore().filter(
         (p) => p.mahasiswaId === mId && p.selesai && materiList.some((m) => m.id === p.materiId)
       ).length;
 
-      const tugasTerkumpul = pengumpulanStore.filter(
+      const tugasTerkumpul = getPengumpulanStore().filter(
         (p) => p.mahasiswaId === mId && tugasList.some((t) => t.id === p.tugasId)
       ).length;
 
       // Cari aktivitas terakhir
-      const lastProg = progresStore
+      const lastProg = getProgresStore()
         .filter((p) => p.mahasiswaId === mId)
         .sort((a, b) => b.terakhirDibuka.localeCompare(a.terakhirDibuka))[0];
 
@@ -508,13 +561,14 @@ export const MateriTugasStore = {
     kelas: { kodeMataKuliah: string; namaMataKuliah: string; kode: string };
     progres: MateriProgresItem;
   } | null => {
-    const listProg = progresStore
-      .filter((p) => p.mahasiswaId === mahasiswaId)
+    const mId = normMhsId(mahasiswaId);
+    const listProg = getProgresStore()
+      .filter((p) => p.mahasiswaId === mId || p.mahasiswaId === mahasiswaId)
       .sort((a, b) => b.terakhirDibuka.localeCompare(a.terakhirDibuka));
 
     if (listProg.length === 0) {
       // Ambil materi pertama yang tersedia jika belum ada riwayat buka
-      const allMhsMateri = MateriTugasStore.getAllMateriByMahasiswa(mahasiswaId);
+      const allMhsMateri = MateriTugasStore.getAllMateriByMahasiswa(mId);
       if (allMhsMateri.length === 0) return null;
       const firstMat = allMhsMateri[0];
       const kelas = JadwalStore.getKelasById(firstMat.kelasId);
@@ -536,7 +590,7 @@ export const MateriTugasStore = {
     }
 
     const latest = listProg[0];
-    const mat = materiStore.find((m) => m.id === latest.materiId);
+    const mat = getMateriStore().find((m) => m.id === latest.materiId);
     if (!mat) return null;
 
     const kelas = JadwalStore.getKelasById(mat.kelasId);

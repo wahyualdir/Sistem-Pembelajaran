@@ -34,9 +34,19 @@ const ToggleMateriSelesaiSchema = z.object({
   selesai: z.boolean().optional(),
 });
 
+const isDosenOrAdmin = (r: string) =>
+  r === "DOSEN" ||
+  r === "ADMIN" ||
+  r === "LECTURER" ||
+  r === "SYSTEM_ADMIN" ||
+  r === "SUPERADMIN" ||
+  r === "SUPER_ADMIN";
+
+const isMahasiswa = (r: string) => r === "MAHASISWA" || r === "STUDENT";
+
 export async function toggleMateriSelesaiAction(data: z.infer<typeof ToggleMateriSelesaiSchema>) {
   const session = await requireAuth();
-  if (session.role !== "MAHASISWA") {
+  if (!isMahasiswa(session.role)) {
     return { success: false, message: "Hanya mahasiswa yang dapat menandai progres belajar." };
   }
   const mahasiswaId = session.subId || session.userId;
@@ -81,7 +91,7 @@ export async function ambilProgresMahasiswaAction(kelasId?: string) {
 
 export async function ambilRekapProgresDosenAction(kelasId: string) {
   const session = await requireAuth();
-  if (session.role !== "DOSEN" && session.role !== "ADMIN") {
+  if (!isDosenOrAdmin(session.role)) {
     return { success: false, message: "Akses ditolak. Hanya dosen pengampu yang dapat melihat rekap progres." };
   }
 

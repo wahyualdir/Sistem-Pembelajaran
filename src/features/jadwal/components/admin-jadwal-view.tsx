@@ -223,7 +223,7 @@ export function AdminJadwalView({
 
               <div className="grid grid-cols-3 gap-2">
                 <div>
-                  <label className="text-[11px] font-medium text-muted-foreground block mb-1">
+                  <label className="text-xs font-medium text-muted-foreground block mb-1">
                     Hari
                   </label>
                   <select
@@ -241,14 +241,14 @@ export function AdminJadwalView({
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-medium text-muted-foreground block mb-1">
+                  <label className="text-xs font-medium text-muted-foreground block mb-1">
                     Jam Mulai (HH:mm)
                   </label>
                   <Input name="jamMulai" defaultValue="08:00" className="h-9 text-xs" required />
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-medium text-muted-foreground block mb-1">
+                  <label className="text-xs font-medium text-muted-foreground block mb-1">
                     Jam Selesai (HH:mm)
                   </label>
                   <Input name="jamSelesai" defaultValue="09:40" className="h-9 text-xs" required />
@@ -256,7 +256,7 @@ export function AdminJadwalView({
               </div>
 
               <div>
-                <label className="text-[11px] font-medium text-muted-foreground block mb-1">
+                <label className="text-xs font-medium text-muted-foreground block mb-1">
                   Ruang Perkuliahan
                 </label>
                 <select

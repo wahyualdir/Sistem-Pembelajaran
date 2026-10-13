@@ -104,7 +104,7 @@ export default function MahasiswaBimbinganPage() {
                 <span className="font-bold text-foreground text-base">
                   Dr. Ardiansyah, S.T., M.Kom.
                 </span>
-                <Badge variant="secondary" className="text-[10px]">
+                <Badge variant="secondary" className="text-xs">
                   Dosen Pembimbing Akademik
                 </Badge>
               </div>
@@ -153,7 +153,7 @@ export default function MahasiswaBimbinganPage() {
               <CardContent className="p-4 space-y-3">
                 {/* Catatan / Pertanyaan Mahasiswa */}
                 <div>
-                  <span className="text-[11px] font-semibold text-muted-foreground font-medium block mb-1">
+                  <span className="text-xs font-semibold text-muted-foreground font-medium block mb-1">
                     Pertanyaan / Keterangan Mahasiswa:
                   </span>
                   <p className="text-xs text-foreground bg-muted p-3 rounded-[8px] border border-border leading-relaxed">
@@ -164,7 +164,7 @@ export default function MahasiswaBimbinganPage() {
                 {/* Catatan / Rekomendasi Dosen Wali */}
                 {bim.catatanDosen ? (
                   <div className="pt-1">
-                    <span className="text-[11px] font-semibold text-primary font-medium block mb-1">
+                    <span className="text-xs font-semibold text-primary font-medium block mb-1">
                       Arahan & Catatan Dosen Wali:
                     </span>
                     <div className="text-xs text-foreground bg-primary-soft/70 p-3 rounded-[8px] border-l-4 border-primary leading-relaxed">

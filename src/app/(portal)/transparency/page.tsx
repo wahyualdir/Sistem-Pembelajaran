@@ -53,12 +53,12 @@ export default function TransparencyPage() {
             Sistem memantau perilaku antarmuka browser selama ujian:
           </p>
           <ul className="text-xs text-muted-foreground list-disc list-inside space-y-1">
-            <li>Perpindahan tab (<code className="font-mono text-[11px]">visibilitychange</code>)</li>
-            <li>Kehilangan fokus jendela browser (<code className="font-mono text-[11px]">blur</code>)</li>
+            <li>Perpindahan tab (<code className="font-mono text-xs">visibilitychange</code>)</li>
+            <li>Kehilangan fokus jendela browser (<code className="font-mono text-xs">blur</code>)</li>
             <li>Keluar dari mode layar penuh (fullscreen)</li>
             <li>Percobaan copy, paste, atau klik kanan</li>
           </ul>
-          <div className="p-2.5 rounded bg-muted/50 border border-border text-[11px] text-muted-foreground">
+          <div className="p-2.5 rounded bg-muted/50 border border-border text-xs text-muted-foreground">
             <strong>Catatan Penting:</strong> Browser <em>tidak dapat</em> mengakses isi tab lain atau mendeteksi perangkat fisik kedua. Semua data bersifat deteksi perilaku (heuristik).
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function TransparencyPage() {
             <li>Jarak terhitung (formula Haversine di server)</li>
             <li>Waktu verifikasi presensi (jam server)</li>
           </ul>
-          <div className="p-2.5 rounded bg-muted/50 border border-border text-[11px] text-muted-foreground">
+          <div className="p-2.5 rounded bg-muted/50 border border-border text-xs text-muted-foreground">
             <strong>Tanpa Pelacakan Berkelanjutan:</strong> Lokasi GPS hanya diminta <em>satu kali</em> pada saat menekan tombol presensi. Tidak ada pelacakan di latar belakang (background tracking).
           </div>
         </div>
@@ -96,7 +96,7 @@ export default function TransparencyPage() {
             <li>ID Kredensial Kunci Publik WebAuthn</li>
             <li>Riwayat pencabutan sesi perangkat aktif</li>
           </ul>
-          <div className="p-2.5 rounded bg-muted/50 border border-border text-[11px] text-muted-foreground">
+          <div className="p-2.5 rounded bg-muted/50 border border-border text-xs text-muted-foreground">
             <strong>Privasi Biometrik:</strong> Sistem <em>tidak pernah</em> menyimpan sidik jari atau rekaman wajah mentah. Verifikasi biometrik dilakukan secara lokal oleh modul Secure Enclave perangkat Anda.
           </div>
         </div>

@@ -145,27 +145,27 @@ export default async function ProfilePage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
               <div className="p-3 rounded-lg border border-retro-border bg-retro-warm shadow-retro">
-                <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">IPK Kumulatif</p>
+                <p className="text-xs font-mono font-bold text-muted-foreground uppercase">IPK Kumulatif</p>
                 <p className="font-heading font-black text-xl text-retro-orange mt-1">3.85</p>
-                <p className="text-[10px] text-muted-foreground">Skala 4.00</p>
+                <p className="text-xs text-muted-foreground">Skala 4.00</p>
               </div>
 
               <div className="p-3 rounded-lg border border-retro-border bg-retro-warm shadow-retro">
-                <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">SKS Lulus</p>
+                <p className="text-xs font-mono font-bold text-muted-foreground uppercase">SKS Lulus</p>
                 <p className="font-heading font-black text-xl text-foreground mt-1">72 SKS</p>
-                <p className="text-[10px] text-muted-foreground">Target: 144 SKS</p>
+                <p className="text-xs text-muted-foreground">Target: 144 SKS</p>
               </div>
 
               <div className="p-3 rounded-lg border border-retro-border bg-retro-warm shadow-retro">
-                <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">SKS Semester Ini</p>
+                <p className="text-xs font-mono font-bold text-muted-foreground uppercase">SKS Semester Ini</p>
                 <p className="font-heading font-black text-xl text-foreground mt-1">21 SKS</p>
-                <p className="text-[10px] text-muted-foreground">Maksimal: 24 SKS</p>
+                <p className="text-xs text-muted-foreground">Maksimal: 24 SKS</p>
               </div>
 
               <div className="p-3 rounded-lg border border-retro-border bg-retro-warm shadow-retro">
-                <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">Presensi Rata-Rata</p>
+                <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Presensi Rata-Rata</p>
                 <p className="font-heading font-black text-xl text-success mt-1">94%</p>
-                <p className="text-[10px] text-muted-foreground">Syarat UAS &ge;75%</p>
+                <p className="text-xs text-muted-foreground">Syarat UAS &ge;75%</p>
               </div>
             </div>
 
@@ -229,7 +229,7 @@ export default async function ProfilePage() {
                   <span className="text-xs font-bold text-foreground">KTM Digital</span>
                   <Award className="h-4 w-4 text-retro-orange" />
                 </div>
-                <p className="text-[11px] text-muted-foreground">Kartu Tanda Mahasiswa aktif ber-barcode resmi.</p>
+                <p className="text-xs text-muted-foreground">Kartu Tanda Mahasiswa aktif ber-barcode resmi.</p>
                 <button
                   type="button"
                   className="w-full py-1.5 rounded border border-retro-border bg-retro-warm text-xs font-bold hover:bg-retro-yellow transition-colors"
@@ -243,7 +243,7 @@ export default async function ProfilePage() {
                   <span className="text-xs font-bold text-foreground">Transkrip Nilai</span>
                   <BookOpen className="h-4 w-4 text-primary" />
                 </div>
-                <p className="text-[11px] text-muted-foreground">Rekap nilai kumulatif dan progres studi.</p>
+                <p className="text-xs text-muted-foreground">Rekap nilai kumulatif dan progres studi.</p>
                 <Link
                   href="/grades"
                   className="block text-center w-full py-1.5 rounded border border-retro-border bg-retro-warm text-xs font-bold hover:bg-retro-yellow transition-colors"
@@ -257,7 +257,7 @@ export default async function ProfilePage() {
                   <span className="text-xs font-bold text-foreground">Sertifikat & Prestasi</span>
                   <Award className="h-4 w-4 text-info" />
                 </div>
-                <p className="text-[11px] text-muted-foreground">Daftar sertifikat dan pencapaian akademik.</p>
+                <p className="text-xs text-muted-foreground">Daftar sertifikat dan pencapaian akademik.</p>
                 <Link
                   href="/certificates"
                   className="block text-center w-full py-1.5 rounded border border-retro-border bg-retro-warm text-xs font-bold hover:bg-retro-yellow transition-colors"
@@ -300,11 +300,11 @@ export default async function ProfilePage() {
                       <span className="font-bold text-foreground">{roleCode}</span>
                     </div>
                     {isCurrent ? (
-                      <span className="font-bold text-primary bg-primary/10 px-2 py-0.5 rounded text-[10px]">
+                      <span className="font-bold text-primary bg-primary/10 px-2 py-0.5 rounded text-xs">
                         Sedang Aktif
                       </span>
                     ) : (
-                      <span className="text-[10px] text-muted-foreground">Tersedia</span>
+                      <span className="text-xs text-muted-foreground">Tersedia</span>
                     )}
                   </div>
                 );

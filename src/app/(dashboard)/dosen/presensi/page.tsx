@@ -261,7 +261,7 @@ export default function DosenPresensiPage() {
                   }`}
                 >
                   <span>Ke-{ptm.nomor}</span>
-                  <span className={`text-[10px] ${selectedPertemuanId === ptm.id ? "text-white/80" : "text-muted-foreground"}`}>
+                  <span className={`text-xs ${selectedPertemuanId === ptm.id ? "text-white/80" : "text-muted-foreground"}`}>
                     {ptm.tanggal.substring(5)}
                   </span>
                 </button>
@@ -380,7 +380,7 @@ export default function DosenPresensiPage() {
                                     key={st}
                                     type="button"
                                     onClick={() => handleStatusChange(peserta.mahasiswaId, st)}
-                                    className={`px-2.5 py-1 text-[11px] rounded-[6px] transition-colors ${colorClass}`}
+                                    className={`px-2.5 py-1 text-xs rounded-[6px] transition-colors ${colorClass}`}
                                   >
                                     {st}
                                   </button>

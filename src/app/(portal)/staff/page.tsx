@@ -84,7 +84,7 @@ export default async function StaffPortalPage() {
               <GraduationCap className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">Program Studi</p>
+              <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Program Studi</p>
               <p className="font-heading font-black text-2xl text-foreground leading-tight">{programs.length}</p>
             </div>
           </div>
@@ -94,7 +94,7 @@ export default async function StaffPortalPage() {
               <CalendarDays className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[10px] font-mono font-bold text-foreground uppercase">Semester Akademik</p>
+              <p className="text-xs font-mono font-bold text-foreground uppercase">Semester Akademik</p>
               <p className="font-heading font-black text-2xl text-foreground leading-tight">{semesters.length}</p>
             </div>
           </div>
@@ -104,7 +104,7 @@ export default async function StaffPortalPage() {
               <BookOpen className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[10px] font-mono font-bold text-foreground uppercase">Katalog Mata Kuliah</p>
+              <p className="text-xs font-mono font-bold text-foreground uppercase">Katalog Mata Kuliah</p>
               <p className="font-heading font-black text-2xl text-foreground leading-tight">{courses.length}</p>
             </div>
           </div>
@@ -141,7 +141,7 @@ export default async function StaffPortalPage() {
           </div>
 
           <div className="space-y-2">
-            <p className="text-[11px] font-mono font-bold text-muted-foreground uppercase">Daftar Prodi Terdaftar:</p>
+            <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Daftar Prodi Terdaftar:</p>
             {programs.length === 0 ? (
               <p className="text-xs text-muted-foreground py-3 text-center border border-dashed border-retro-border rounded">
                 Belum ada program studi.
@@ -151,7 +151,7 @@ export default async function StaffPortalPage() {
                 {programs.map((p) => (
                   <div key={p.id} className="p-3 flex items-center justify-between text-xs hover:bg-retro-warm/30 transition-colors">
                     <span className="font-bold text-foreground">{p.name}</span>
-                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-[10px]">
+                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-xs">
                       {p.code}
                     </span>
                   </div>
@@ -188,7 +188,7 @@ export default async function StaffPortalPage() {
           </div>
 
           <div className="space-y-2">
-            <p className="text-[11px] font-mono font-bold text-muted-foreground uppercase">Daftar Semester Aktif & Arsip:</p>
+            <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Daftar Semester Aktif & Arsip:</p>
             {semesters.length === 0 ? (
               <p className="text-xs text-muted-foreground py-3 text-center border border-dashed border-retro-border rounded">
                 Belum ada semester.
@@ -198,7 +198,7 @@ export default async function StaffPortalPage() {
                 {semesters.map((s) => (
                   <div key={s.id} className="p-3 flex items-center justify-between text-xs hover:bg-retro-warm/30 transition-colors">
                     <span className="font-bold text-foreground">{s.label}</span>
-                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-retro-mint text-black border border-retro-border text-[10px] shadow-xs">
+                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-retro-mint text-black border border-retro-border text-xs shadow-xs">
                       AKTIF
                     </span>
                   </div>
@@ -252,7 +252,7 @@ export default async function StaffPortalPage() {
         )}
 
         <div className="space-y-2">
-          <p className="text-[11px] font-mono font-bold text-muted-foreground uppercase">Daftar Mata Kuliah Tersedia:</p>
+          <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Daftar Mata Kuliah Tersedia:</p>
           {courses.length === 0 ? (
             <p className="text-xs text-muted-foreground py-4 text-center border border-dashed border-retro-border rounded">
               Belum ada mata kuliah terdaftar.
@@ -276,7 +276,7 @@ export default async function StaffPortalPage() {
                     <h3 className="font-heading font-bold text-sm text-foreground leading-tight line-clamp-1">
                       {c.name}
                     </h3>
-                    <p className="text-[11px] text-muted-foreground font-mono mt-1">
+                    <p className="text-xs text-muted-foreground font-mono mt-1">
                       Prodi: {c.program_code}
                     </p>
                   </div>

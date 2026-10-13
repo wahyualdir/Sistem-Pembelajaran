@@ -75,7 +75,7 @@ export default function AssistantAttendancePage() {
                   {ses.code}
                 </span>
                 <span
-                  className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                  className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
                     ses.status === 'SESI DIBUKA'
                       ? 'bg-emerald-100 text-emerald-900 border-emerald-400'
                       : ses.status === 'TERJADWAL'

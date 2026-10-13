@@ -186,7 +186,7 @@ export default function AdminSuratPage() {
                         {item.namaMahasiswa}
                       </TableCell>
                       <TableCell>
-                        <Badge variant="secondary" className="text-[10px]">
+                        <Badge variant="secondary" className="text-xs">
                           {item.jenis.replace(/_/g, " ")}
                         </Badge>
                       </TableCell>
@@ -196,7 +196,7 @@ export default function AdminSuratPage() {
                       <TableCell className="text-center">
                         <StatusBadge status={item.status} size="sm" />
                       </TableCell>
-                      <TableCell className="font-mono text-[11px] font-semibold text-primary">
+                      <TableCell className="font-mono text-xs font-semibold text-primary">
                         {item.nomorSurat || "-"}
                       </TableCell>
                       <TableCell className="text-center">
@@ -207,7 +207,7 @@ export default function AdminSuratPage() {
                               variant="default"
                               onClick={() => handleSetujui(item.id)}
                               disabled={isLoading}
-                              className="h-7 text-[11px] bg-success hover:bg-success/90 gap-1 px-2"
+                              className="h-7 text-xs bg-success hover:bg-success/90 gap-1 px-2"
                             >
                               <CheckCircle className="h-3 w-3" />
                               Setujui
@@ -220,7 +220,7 @@ export default function AdminSuratPage() {
                                 setAlasanTolak("");
                               }}
                               disabled={isLoading}
-                              className="h-7 text-[11px] gap-1 px-2"
+                              className="h-7 text-xs gap-1 px-2"
                             >
                               <XCircle className="h-3 w-3" />
                               Tolak
@@ -234,7 +234,7 @@ export default function AdminSuratPage() {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Button size="sm" variant="outline" className="h-7 text-[11px] gap-1">
+                            <Button size="sm" variant="outline" className="h-7 text-xs gap-1">
                               <Download className="h-3 w-3" />
                               Unduh PDF
                             </Button>
@@ -243,7 +243,7 @@ export default function AdminSuratPage() {
 
                         {item.status === "DITOLAK" && (
                           <span
-                            className="text-[10px] text-danger cursor-help underline"
+                            className="text-xs text-danger cursor-help underline"
                             title={`Alasan tolak: ${item.alasanTolak || "Tidak memenuhi ketentuan"}`}
                           >
                             Ditolak

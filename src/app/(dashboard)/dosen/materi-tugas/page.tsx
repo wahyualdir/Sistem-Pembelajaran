@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FolderArchive,
   Plus,
@@ -34,16 +34,22 @@ import { FileDropzone } from "@/components/ui/file-dropzone";
 import { JadwalStore } from "@/features/jadwal/jadwal-store";
 import {
   MateriTugasStore,
+  MateriItem,
   TugasItem,
   PengumpulanTugasItem,
 } from "@/features/materi-tugas/materi-tugas-store";
+import type { RekapProgresKelas } from "@/lib/akademik/hitung-progres";
 import {
   tambahMateriAction,
   tambahTugasAction,
   beriNilaiTugasAction,
   hapusMateriAction,
   dapatkanSignedUrlAction,
+  ambilMateriByKelasAction,
+  ambilTugasByKelasAction,
+  ambilPengumpulanByTugasAction,
 } from "@/features/materi-tugas/actions";
+import { ambilRekapProgresDosenAction } from "@/features/materi-tugas/progres-actions";
 
 export default function DosenMateriTugasPage() {
   const dosenId = "dsn-1";
@@ -56,9 +62,31 @@ export default function DosenMateriTugasPage() {
 
   const [activeTab, setActiveTab] = useState<"materi" | "tugas" | "progres">("materi");
 
-  const daftarMateri = MateriTugasStore.getMateriByKelas(selectedKelasId);
-  const daftarTugas = MateriTugasStore.getTugasByKelas(selectedKelasId);
-  const rekapProgres = MateriTugasStore.getRekapProgresKelas(selectedKelasId);
+  const [daftarMateri, setDaftarMateri] = useState<MateriItem[]>(() =>
+    MateriTugasStore.getMateriByKelas(selectedKelasId)
+  );
+  const [daftarTugas, setDaftarTugas] = useState<TugasItem[]>(() =>
+    MateriTugasStore.getTugasByKelas(selectedKelasId)
+  );
+  const [rekapProgres, setRekapProgres] = useState<RekapProgresKelas>(() =>
+    MateriTugasStore.getRekapProgresKelas(selectedKelasId)
+  );
+
+  const refreshData = (kId = selectedKelasId) => {
+    ambilMateriByKelasAction(kId).then((res) => {
+      if (res.success && res.materi) setDaftarMateri(res.materi);
+    });
+    ambilTugasByKelasAction(kId).then((res) => {
+      if (res.success && res.tugas) setDaftarTugas(res.tugas);
+    });
+    ambilRekapProgresDosenAction(kId).then((res) => {
+      if (res.success && res.rekap) setRekapProgres(res.rekap);
+    });
+  };
+
+  useEffect(() => {
+    refreshData(selectedKelasId);
+  }, [selectedKelasId]);
 
   // State Modal Tambah Materi
   const [isMateriModalOpen, setIsMateriModalOpen] = useState(false);
@@ -76,9 +104,23 @@ export default function DosenMateriTugasPage() {
 
   // State Modal Pengumpulan & Penilaian Tugas
   const [viewTugasTarget, setViewTugasTarget] = useState<TugasItem | null>(null);
+  const [daftarPengumpulan, setDaftarPengumpulan] = useState<PengumpulanTugasItem[]>([]);
   const [nilaiTarget, setNilaiTarget] = useState<PengumpulanTugasItem | null>(null);
   const [inputNilai, setInputNilai] = useState<number>(85);
   const [inputCatatan, setInputCatatan] = useState("");
+
+  useEffect(() => {
+    if (viewTugasTarget) {
+      setDaftarPengumpulan(MateriTugasStore.getPengumpulanByTugas(viewTugasTarget.id));
+      ambilPengumpulanByTugasAction(viewTugasTarget.id).then((res) => {
+        if (res.success && res.pengumpulan) {
+          setDaftarPengumpulan(res.pengumpulan);
+        }
+      });
+    } else {
+      setDaftarPengumpulan([]);
+    }
+  }, [viewTugasTarget]);
 
   const [pesanNotif, setPesanNotif] = useState<{ teks: string; tipe: "sukses" | "galat" } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -145,6 +187,10 @@ export default function DosenMateriTugasPage() {
       setLinkMateri("");
       setSelectedFileMateri(null);
       setPesanNotif({ teks: res.message, tipe: "sukses" });
+      if (res.materi) {
+        setDaftarMateri((prev) => [res.materi, ...prev]);
+      }
+      refreshData(selectedKelasId);
     } else {
       setPesanNotif({ teks: res.message, tipe: "galat" });
     }
@@ -161,7 +207,9 @@ export default function DosenMateriTugasPage() {
     setIsLoading(false);
 
     if (res.success) {
+      setDaftarMateri((prev) => prev.filter((m) => m.id !== materiId));
       setPesanNotif({ teks: res.message, tipe: "sukses" });
+      refreshData(selectedKelasId);
     } else {
       setPesanNotif({ teks: res.message, tipe: "galat" });
     }
@@ -220,6 +268,22 @@ export default function DosenMateriTugasPage() {
 
     setIsLoading(false);
     if (res.success) {
+      try {
+        MateriTugasStore.beriNilaiTugas({
+          pengumpulanId: nilaiTarget.id,
+          nilai: Number(inputNilai),
+          catatanDosen: inputCatatan.trim(),
+        });
+      } catch {
+        // Fallback
+      }
+      setDaftarPengumpulan((prev) =>
+        prev.map((p) =>
+          p.id === nilaiTarget.id
+            ? { ...p, nilai: Number(inputNilai), catatanDosen: inputCatatan.trim() }
+            : p
+        )
+      );
       setNilaiTarget(null);
       setInputCatatan("");
       setPesanNotif({ teks: res.message, tipe: "sukses" });
@@ -236,7 +300,7 @@ export default function DosenMateriTugasPage() {
     }
 
     const headers = "NIM,Nama Mahasiswa,Total Materi,Materi Selesai,Persentase Progres,Tugas Terkumpul,Status Keaktifan";
-    const rows = rekapProgres.daftarMahasiswa.map((m) => {
+    const rows = rekapProgres.daftarMahasiswa.map((m: RekapProgresKelas['daftarMahasiswa'][number]) => {
       const status = m.perluPerhatian ? "Perlu Perhatian (<50%)" : m.persenProgres === 100 ? "Tuntas (100%)" : "Aktif";
       return `"${m.nim}","${m.nama}",${m.totalMateri},${m.materiSelesai},"${m.persenProgres}%",${m.tugasTerkumpul},"${status}"`;
     });
@@ -255,9 +319,7 @@ export default function DosenMateriTugasPage() {
     setPesanNotif({ teks: "Berkas rekap progres CSV berhasil diunduh.", tipe: "sukses" });
   };
 
-  const pengumpulanList = viewTugasTarget
-    ? MateriTugasStore.getPengumpulanByTugas(viewTugasTarget.id)
-    : [];
+  const pengumpulanList = daftarPengumpulan;
 
   return (
     <div className="space-y-6">
@@ -583,7 +645,7 @@ export default function DosenMateriTugasPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {rekapProgres.daftarMahasiswa.map((mhs) => (
+                  {rekapProgres.daftarMahasiswa.map((mhs: RekapProgresKelas['daftarMahasiswa'][number]) => (
                     <TableRow key={mhs.mahasiswaId}>
                       <TableCell className="text-xs font-mono font-bold">{mhs.nim}</TableCell>
                       <TableCell className="text-xs font-medium">{mhs.nama}</TableCell>
@@ -754,6 +816,11 @@ export default function DosenMateriTugasPage() {
 
           {nilaiTarget && (
             <div className="space-y-3 py-2 text-xs">
+              {pesanNotif && pesanNotif.tipe === "galat" && (
+                <div className="p-2.5 rounded border border-danger/30 bg-danger/10 text-danger text-xs font-semibold">
+                  {pesanNotif.teks}
+                </div>
+              )}
               <div className="rounded bg-muted p-2.5 border space-y-1">
                 <p>
                   <strong>Mahasiswa:</strong> {nilaiTarget.namaMahasiswa} ({nilaiTarget.nim})

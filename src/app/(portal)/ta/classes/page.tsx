@@ -74,7 +74,7 @@ export default function AssistantClassesPage() {
                 <span className="font-mono text-xs font-bold px-2.5 py-1 rounded border border-black bg-retro-warm">
                   {cls.code} · {cls.section}
                 </span>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-400">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-400">
                   {cls.status}
                 </span>
               </div>
@@ -101,14 +101,14 @@ export default function AssistantClassesPage() {
 
               {/* Izin Mandat Asdos */}
               <div className="pt-2">
-                <span className="text-[10px] font-mono font-bold uppercase text-muted-foreground block mb-1.5">
+                <span className="text-xs font-mono font-bold uppercase text-muted-foreground block mb-1.5">
                   Izin Mandat Dosen:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {cls.permissions.map((perm) => (
                     <span
                       key={perm}
-                      className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded border border-neutral-300 bg-neutral-100 text-neutral-800"
+                      className="text-xs font-mono font-semibold px-2 py-0.5 rounded border border-neutral-300 bg-neutral-100 text-neutral-800"
                     >
                       {perm}
                     </span>

@@ -607,7 +607,7 @@ export function LecturerExamsHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2 py-0.5 rounded border text-xs font-mono font-bold',
                               v.severity === 'CRITICAL'
                                 ? 'border-rose-500 bg-rose-100 text-rose-950'
                                 : 'border-amber-500 bg-amber-100 text-amber-950'
@@ -690,7 +690,7 @@ export function LecturerExamsHubView({
                           </div>
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-[10px] font-mono font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-mono font-bold">
                             RECORDED
                           </span>
                         </td>

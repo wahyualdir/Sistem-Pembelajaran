@@ -138,7 +138,7 @@ export function SimulasiIpkView({
                 {hasil.selisihIpk > 0 ? `+${hasil.selisihIpk.toFixed(2)}` : hasil.selisihIpk.toFixed(2)}
               </span>
             </div>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               IPK Saat Ini: <strong className="text-foreground">{hasil.ipkSaatIni.toFixed(2)}</strong>
             </p>
           </CardContent>
@@ -156,7 +156,7 @@ export function SimulasiIpkView({
             <div className="text-3xl font-extrabold text-primary font-heading tabular-nums">
               {hasil.ipsProyeksi.toFixed(2)}
             </div>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               Beban Semester: <strong className="text-foreground">{totalSksKrs} SKS</strong>
             </p>
           </CardContent>
@@ -177,7 +177,7 @@ export function SimulasiIpkView({
               </span>
               <span className="text-xs text-muted-foreground">/ 144 SKS</span>
             </div>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               Pertambahan: <strong className="text-success">+{hasil.sksBertambah} SKS</strong>
             </p>
           </CardContent>
@@ -269,7 +269,7 @@ export function SimulasiIpkView({
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-[10px] font-mono px-1.5 py-0">
+                            <Badge variant="outline" className="text-xs font-mono px-1.5 py-0">
                               {mk.kodeMataKuliah}
                             </Badge>
                             <span className="font-semibold text-foreground">

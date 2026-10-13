@@ -136,7 +136,7 @@ export default function AssistantExamMonitorPage() {
                       {p.name}
                     </span>
                   </div>
-                  <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${p.statusColor}`}>
+                  <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${p.statusColor}`}>
                     {p.status}
                   </span>
                 </div>
@@ -145,12 +145,12 @@ export default function AssistantExamMonitorPage() {
                   <p className="text-muted-foreground font-mono">
                     Posisi: <strong className="text-foreground">{p.question}</strong>
                   </p>
-                  <p className="text-foreground/90 bg-white p-2.5 rounded border border-neutral-200 font-mono text-[11px]">
+                  <p className="text-foreground/90 bg-white p-2.5 rounded border border-neutral-200 font-mono text-xs">
                     {p.activity}
                   </p>
                 </div>
 
-                <div className="text-[10px] text-muted-foreground font-mono text-right pt-1">
+                <div className="text-xs text-muted-foreground font-mono text-right pt-1">
                   Pembaruan: {p.time}
                 </div>
               </div>

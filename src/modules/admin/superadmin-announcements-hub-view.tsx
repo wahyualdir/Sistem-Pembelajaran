@@ -105,15 +105,15 @@ export function SuperadminAnnouncementsHubView() {
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-0.5 rounded border border-black bg-white font-bold text-[10px]">
+                  <span className="px-2 py-0.5 rounded border border-black bg-white font-bold text-xs">
                     {a.category}
                   </span>
-                  <span className="text-black/60 text-[11px]">{a.date} • {a.author}</span>
+                  <span className="text-black/60 text-xs">{a.date} • {a.author}</span>
                 </div>
                 <h4 className="font-sans font-bold text-black text-sm">{a.title}</h4>
               </div>
               <div className="flex items-center gap-2">
-                <span className="px-2 py-1 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-bold text-[11px]">
+                <span className="px-2 py-1 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-bold text-xs">
                   TAYANG GLOBAL
                 </span>
               </div>

@@ -29,10 +29,13 @@ import {
 import {
   kumpulkanTugasAction,
   dapatkanSignedUrlAction,
+  ambilMateriMahasiswaAction,
+  ambilTugasMahasiswaAction,
 } from "@/features/materi-tugas/actions";
 import {
   catatMateriDibukaAction,
   toggleMateriSelesaiAction,
+  ambilProgresMahasiswaAction,
 } from "@/features/materi-tugas/progres-actions";
 
 type TugasMahasiswaItem = ReturnType<typeof MateriTugasStore.getTugasMahasiswa>[number];
@@ -67,6 +70,20 @@ export default function MahasiswaTugasPage() {
     setProgresMap(prog.progresMap);
     setPersenProgresTotal(prog.persenProgres);
     setTotalMateriSelesai(prog.materiSelesai);
+
+    ambilMateriMahasiswaAction(mahasiswaId).then((res) => {
+      if (res.success && res.materi) setDaftarMateri(res.materi);
+    });
+    ambilTugasMahasiswaAction(mahasiswaId).then((res) => {
+      if (res.success && res.tugas) setDaftarTugas(res.tugas);
+    });
+    ambilProgresMahasiswaAction().then((res) => {
+      if (res.success && res.data) {
+        setProgresMap(res.data.progresMap);
+        setPersenProgresTotal(res.data.persenProgres);
+        setTotalMateriSelesai(res.data.materiSelesai);
+      }
+    });
   };
 
   useEffect(() => {

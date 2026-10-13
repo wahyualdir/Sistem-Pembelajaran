@@ -79,7 +79,7 @@ export function RightPanelSwitcher({
           {/* 1. Status Semester (Dipindah ke atas, aman dari tombol floating AI) */}
           <div className="p-3 sm:p-3.5 rounded-xl border-2 border-retro-border bg-retro-warm flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 shadow-retro">
             <div className="min-w-0">
-              <span className="text-[11px] font-sans font-black text-black uppercase tracking-wider block">
+              <span className="text-xs font-sans font-black text-black uppercase tracking-wider block">
                 Status Akademik
               </span>
               <p className="font-heading font-black text-sm sm:text-base text-black mt-0.5 whitespace-nowrap">
@@ -94,34 +94,34 @@ export function RightPanelSwitcher({
           {/* 2. Ringkasan Baris Metrik (3 kolom rapi, teks proporsional tanpa terpotong) */}
           <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl border-2 border-retro-border bg-white shadow-retro text-center">
             <div className="p-1 border-r border-black/10 min-w-0">
-              <span className="text-[10px] font-sans font-black text-black uppercase tracking-tight block truncate">
+              <span className="text-xs font-sans font-black text-black uppercase tracking-tight block truncate">
                 Kehadiran
               </span>
               <p className="font-heading font-black text-sm sm:text-base text-black my-0.5 tabular-nums">
                 {summary.averageAttendance}
               </p>
-              <span className="text-[9px] sm:text-[10px] font-bold text-emerald-700 block truncate">Syarat UAS ✓</span>
+              <span className="text-xs sm:text-xs font-bold text-emerald-700 block truncate">Syarat UAS ✓</span>
             </div>
 
             <div className="p-1 border-r border-black/10 min-w-0">
-              <span className="text-[10px] font-sans font-black text-black uppercase tracking-tight block truncate">
+              <span className="text-xs font-sans font-black text-black uppercase tracking-tight block truncate">
                 IPK Berjalan
               </span>
               <p className="font-heading font-black text-sm sm:text-base text-black my-0.5 tabular-nums">
                 {summary.ipk}
               </p>
-              <span className="text-[9px] sm:text-[10px] font-bold text-black/70 block truncate">Skala 4.0</span>
+              <span className="text-xs sm:text-xs font-bold text-black/70 block truncate">Skala 4.0</span>
             </div>
 
             <div className="p-1 min-w-0">
-              <span className="text-[10px] font-sans font-black text-black uppercase tracking-tight block truncate">
+              <span className="text-xs font-sans font-black text-black uppercase tracking-tight block truncate">
                 Streak Belajar
               </span>
               <p className="font-heading font-black text-sm sm:text-base text-black flex items-center justify-center gap-1 my-0.5 tabular-nums">
                 <Flame className="h-3.5 w-3.5 text-retro-orange fill-retro-orange shrink-0" />
                 <span>{summary.studyStreakDays}h</span>
               </p>
-              <span className="text-[9px] sm:text-[10px] font-bold text-retro-orange block truncate">Aktif Kuliah</span>
+              <span className="text-xs sm:text-xs font-bold text-retro-orange block truncate">Aktif Kuliah</span>
             </div>
           </div>
 
@@ -134,7 +134,7 @@ export function RightPanelSwitcher({
                   Oktober 2026
                 </span>
               </div>
-              <span className="text-[11px] font-sans font-bold bg-retro-warm px-1.5 py-0.5 rounded border border-black text-black">
+              <span className="text-xs font-sans font-bold bg-retro-warm px-1.5 py-0.5 rounded border border-black text-black">
                 WIB
               </span>
             </div>
@@ -142,7 +142,7 @@ export function RightPanelSwitcher({
             {/* Grid Hari Kalender Mini */}
             <div className="grid grid-cols-7 gap-1 text-center text-xs font-sans">
               {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((d) => (
-                <span key={d} className="font-black text-black py-0.5 text-[11px]">
+                <span key={d} className="font-black text-black py-0.5 text-xs">
                   {d}
                 </span>
               ))}
@@ -182,7 +182,7 @@ export function RightPanelSwitcher({
               })}
             </div>
 
-            <div className="flex items-center gap-2.5 pt-1.5 text-[11px] font-sans text-black border-t border-black/10">
+            <div className="flex items-center gap-2.5 pt-1.5 text-xs font-sans text-black border-t border-black/10">
               <span className="flex items-center gap-1 font-semibold">
                 <span className="w-1.5 h-1.5 rounded-full bg-black" /> Hari Ini
               </span>

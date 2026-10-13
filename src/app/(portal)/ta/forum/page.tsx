@@ -65,11 +65,11 @@ export default function AssistantForumPage() {
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-[11px] font-bold px-2 py-0.5 rounded border border-black bg-retro-warm truncate max-w-[200px]">
+                <span className="font-mono text-xs font-bold px-2 py-0.5 rounded border border-black bg-retro-warm truncate max-w-[200px]">
                   {d.course}
                 </span>
                 <span
-                  className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${
+                  className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
                     d.status.includes('MENUNGGU')
                       ? 'bg-amber-100 text-amber-900 border-amber-400'
                       : 'bg-emerald-100 text-emerald-900 border-emerald-400'
@@ -95,7 +95,7 @@ export default function AssistantForumPage() {
             </div>
 
             <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
-              <span className="text-[11px] font-mono text-amber-800 font-bold">
+              <span className="text-xs font-mono text-amber-800 font-bold">
                 {d.status}
               </span>
 

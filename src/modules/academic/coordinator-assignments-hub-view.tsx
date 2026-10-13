@@ -252,7 +252,7 @@ export function CoordinatorAssignmentsHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               lec.status === 'MEMENUHI_BKD'
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : 'border-amber-500 bg-amber-100 text-amber-950'
@@ -302,7 +302,7 @@ export function CoordinatorAssignmentsHubView({
               {ACADEMIC_ADVISORS.map((adv) => (
                 <div key={adv.id} className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-4">
                   <div className="space-y-1">
-                    <span className="px-2 py-0.5 rounded border border-black bg-retro-mint text-[11px] font-mono font-bold">
+                    <span className="px-2 py-0.5 rounded border border-black bg-retro-mint text-xs font-mono font-bold">
                       {adv.batch}
                     </span>
                     <h3 className="font-heading font-black text-base text-black mt-2">{adv.name}</h3>
@@ -310,11 +310,11 @@ export function CoordinatorAssignmentsHubView({
 
                   <div className="grid grid-cols-2 gap-2 p-3 bg-neutral-50 rounded-lg border border-black/10 font-mono text-xs">
                     <div>
-                      <span className="text-black/60 text-[10px] block">Total Mahasiswa:</span>
+                      <span className="text-black/60 text-xs block">Total Mahasiswa:</span>
                       <span className="font-bold text-sm">{adv.studentCount} Mhs</span>
                     </div>
                     <div>
-                      <span className="text-black/60 text-[10px] block">KRS Disetujui:</span>
+                      <span className="text-black/60 text-xs block">KRS Disetujui:</span>
                       <span className="font-bold text-sm text-emerald-700">{adv.approvedKrs} Mhs</span>
                     </div>
                   </div>

@@ -65,7 +65,7 @@ export default function MustChangePasswordPage() {
                 <span className="font-heading font-black text-sm tracking-tight text-foreground leading-tight">
                   SIAJAR
                 </span>
-                <span className="text-[10px] text-muted-foreground font-mono">
+                <span className="text-xs text-muted-foreground font-mono">
                   Keamanan Akun
                 </span>
               </div>
@@ -123,7 +123,7 @@ export default function MustChangePasswordPage() {
                   className="w-full rounded-lg border-[1.5px] border-retro-border bg-retro-surface px-3.5 py-2 text-sm font-semibold text-foreground shadow-xs placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-black transition-all"
                 />
                 {fieldErrors.newPassword && (
-                  <p className="text-[11px] font-bold text-danger">{fieldErrors.newPassword[0]}</p>
+                  <p className="text-xs font-bold text-danger">{fieldErrors.newPassword[0]}</p>
                 )}
               </div>
 
@@ -141,7 +141,7 @@ export default function MustChangePasswordPage() {
                   className="w-full rounded-lg border-[1.5px] border-retro-border bg-retro-surface px-3.5 py-2 text-sm font-semibold text-foreground shadow-xs placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-black transition-all"
                 />
                 {fieldErrors.confirmPassword && (
-                  <p className="text-[11px] font-bold text-danger">{fieldErrors.confirmPassword[0]}</p>
+                  <p className="text-xs font-bold text-danger">{fieldErrors.confirmPassword[0]}</p>
                 )}
               </div>
 

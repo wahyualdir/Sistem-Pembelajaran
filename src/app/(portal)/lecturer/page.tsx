@@ -60,7 +60,7 @@ export default async function LecturerPortalPage() {
               <Layers className="h-5 w-5 text-retro-orange" />
             </div>
             <div>
-              <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">Kelas Aktif</p>
+              <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Kelas Aktif</p>
               <p className="font-heading font-black text-2xl text-foreground leading-tight">{classes}</p>
             </div>
           </div>
@@ -70,7 +70,7 @@ export default async function LecturerPortalPage() {
               <Clock className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[10px] font-mono font-bold text-foreground uppercase">Tugas Menunggu Koreksi</p>
+              <p className="text-xs font-mono font-bold text-foreground uppercase">Tugas Menunggu Koreksi</p>
               <p className="font-heading font-black text-2xl text-foreground leading-tight">{items.length}</p>
             </div>
           </div>
@@ -80,7 +80,7 @@ export default async function LecturerPortalPage() {
               <GraduationCap className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[10px] font-mono font-bold text-foreground uppercase">Total Berkas Belum Final</p>
+              <p className="text-xs font-mono font-bold text-foreground uppercase">Total Berkas Belum Final</p>
               <p className="font-heading font-black text-2xl text-foreground leading-tight">{totalPending}</p>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default async function LecturerPortalPage() {
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-[10px] font-mono font-bold text-foreground">
+                    <span className="px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-xs font-mono font-bold text-foreground">
                       {t.class_title}
                     </span>
                     <h3 className="font-heading font-bold text-sm text-foreground group-hover:text-retro-orange transition-colors">

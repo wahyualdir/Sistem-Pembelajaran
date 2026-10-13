@@ -209,11 +209,11 @@ export function CreateAttendanceSessionModal({
                 <span className="text-xs font-semibold flex items-center gap-1.5 text-foreground">
                   <MapPin className="h-3.5 w-3.5 text-primary" /> Pengaturan Radius Lokasi Kelas (GPS Haversine)
                 </span>
-                <span className="text-[11px] font-mono text-muted-foreground">Radius Maks: {radiusMeters} meter</span>
+                <span className="text-xs font-mono text-muted-foreground">Radius Maks: {radiusMeters} meter</span>
               </div>
               <div className="grid gap-3 sm:grid-cols-3">
                 <div>
-                  <label className="block text-[11px] text-muted-foreground">Nama Ruang / Titik</label>
+                  <label className="block text-xs text-muted-foreground">Nama Ruang / Titik</label>
                   <input
                     type="text"
                     value={locationName}
@@ -222,7 +222,7 @@ export function CreateAttendanceSessionModal({
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] text-muted-foreground">Latitude Kelas</label>
+                  <label className="block text-xs text-muted-foreground">Latitude Kelas</label>
                   <input
                     type="number"
                     step="0.0001"
@@ -232,7 +232,7 @@ export function CreateAttendanceSessionModal({
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] text-muted-foreground">Longitude Kelas</label>
+                  <label className="block text-xs text-muted-foreground">Longitude Kelas</label>
                   <input
                     type="number"
                     step="0.0001"
@@ -407,9 +407,9 @@ export function StudentCheckInForm({
         <span className="text-xs font-semibold flex items-center gap-1.5 text-foreground">
           <KeyRound className="h-3.5 w-3.5 text-primary" /> Pengisian Presensi Mahasiswa
         </span>
-        <div className="flex items-center gap-1 text-[11px] font-mono">
+        <div className="flex items-center gap-1 text-xs font-mono">
           {(session.methods ?? ['CODE_PIN']).map((m) => (
-            <span key={m} className="px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-[10px]">
+            <span key={m} className="px-1.5 py-0.5 rounded bg-muted text-muted-foreground text-xs">
               {m.replace('_', ' ')}
             </span>
           ))}
@@ -424,7 +424,7 @@ export function StudentCheckInForm({
               key={m}
               type="button"
               onClick={() => setSelectedMethod(m)}
-              className={`px-2 py-1 rounded-control text-[11px] font-mono border ${
+              className={`px-2 py-1 rounded-control text-xs font-mono border ${
                 selectedMethod === m
                   ? 'border-primary bg-primary text-primary-foreground font-bold'
                   : 'border-border bg-surface hover:bg-muted text-muted-foreground'
@@ -439,7 +439,7 @@ export function StudentCheckInForm({
       {/* Field: QR Token */}
       {selectedMethod === 'QR_DYNAMIC' && (
         <div className="space-y-1.5">
-          <label className="block text-[11px] text-muted-foreground">Token QR Layar Dosen:</label>
+          <label className="block text-xs text-muted-foreground">Token QR Layar Dosen:</label>
           <div className="flex gap-2">
             <input
               type="text"
@@ -464,18 +464,18 @@ export function StudentCheckInForm({
               type="button"
               onClick={fetchGeolocation}
               disabled={isGettingLocation}
-              className="text-[11px] text-primary font-medium hover:underline flex items-center gap-1"
+              className="text-xs text-primary font-medium hover:underline flex items-center gap-1"
             >
               <RotateCw className={`h-3 w-3 ${isGettingLocation ? 'animate-spin' : ''}`} />
               {userCoords ? 'Perbarui Lokasi' : 'Deteksi Lokasi GPS'}
             </button>
           </div>
           {userCoords ? (
-            <p className="text-[11px] font-mono text-success flex items-center gap-1">
+            <p className="text-xs font-mono text-success flex items-center gap-1">
               <CheckCircle2 className="h-3 w-3" /> Terdeteksi (Akurasi: ±{Math.round(userCoords.accuracy)}m)
             </p>
           ) : (
-            <p className="text-[11px] text-muted-foreground">Klik deteksi lokasi untuk memverifikasi jarak Anda ke ruang kelas.</p>
+            <p className="text-xs text-muted-foreground">Klik deteksi lokasi untuk memverifikasi jarak Anda ke ruang kelas.</p>
           )}
         </div>
       )}
@@ -488,14 +488,14 @@ export function StudentCheckInForm({
               <Fingerprint className="h-3.5 w-3.5 text-primary" /> WebAuthn Passkey
             </span>
             {isWebAuthnDone ? (
-              <span className="text-[11px] text-success font-semibold flex items-center gap-1">
+              <span className="text-xs text-success font-semibold flex items-center gap-1">
                 <CheckCircle2 className="h-3 w-3" /> Terverifikasi
               </span>
             ) : (
               <button
                 type="button"
                 onClick={triggerPasskeyAuth}
-                className="btn-solid !w-auto text-[11px] px-2.5 py-0.5 !h-6"
+                className="btn-solid !w-auto text-xs px-2.5 py-0.5 !h-6"
               >
                 Sentuh Sensor
               </button>
@@ -507,7 +507,7 @@ export function StudentCheckInForm({
       {/* Fallback PIN code */}
       {selectedMethod === 'CODE_PIN' && (
         <div className="space-y-1">
-          <label className="block text-[11px] text-muted-foreground">6-Digit PIN Dosen:</label>
+          <label className="block text-xs text-muted-foreground">6-Digit PIN Dosen:</label>
           <input
             type="text"
             maxLength={6}
@@ -587,7 +587,7 @@ export function LecturerSessionToggle({
             {session.code}
           </span>
         </div>
-        <span className="text-[11px] text-muted-foreground font-mono">PIN Dosen</span>
+        <span className="text-xs text-muted-foreground font-mono">PIN Dosen</span>
       </div>
 
       <button
@@ -696,11 +696,11 @@ export function AttendanceSummaryCard({
         <div className="flex items-center gap-2">
           <h3 className="font-semibold text-sm">Persentase Kehadiran Pribadi</h3>
           {summary.can_take_uas ? (
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">
               <CheckCircle2 className="h-3 w-3" /> Memenuhi Syarat UAS (≥75%)
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-danger bg-danger-soft px-2 py-0.5 rounded-full">
+            <span className="inline-flex items-center gap-1 text-xs font-semibold text-danger bg-danger-soft px-2 py-0.5 rounded-full">
               <AlertCircle className="h-3 w-3" /> Di Bawah Syarat UAS (&lt;75%)
             </span>
           )}

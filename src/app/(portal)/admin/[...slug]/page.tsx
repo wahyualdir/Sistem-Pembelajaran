@@ -289,8 +289,8 @@ export default async function AdminSubpage({ params }: PageProps) {
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase">{srv.cluster}</span>
-                    <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${srv.statusColor}`}>
+                    <span className="text-xs font-mono font-bold text-muted-foreground uppercase">{srv.cluster}</span>
+                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${srv.statusColor}`}>
                       {srv.status}
                     </span>
                   </div>

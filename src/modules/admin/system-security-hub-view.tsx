@@ -187,7 +187,7 @@ export function SystemSecurityHubView() {
             <div className="p-4 border-2 border-black rounded-lg bg-retro-warm/20 space-y-2">
               <span className="font-bold text-black">Endpoint: /login</span>
               <p className="text-black/60">Batas: 5 Percobaan / 15 Menit</p>
-              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[10px] font-bold">
+              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">
                 AKTIF (IP BLOCKING)
               </span>
             </div>
@@ -195,7 +195,7 @@ export function SystemSecurityHubView() {
             <div className="p-4 border-2 border-black rounded-lg bg-retro-warm/20 space-y-2">
               <span className="font-bold text-black">Endpoint: /exams/submit</span>
               <p className="text-black/60">Batas: 60 Request / Menit</p>
-              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[10px] font-bold">
+              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">
                 AKTIF (BURST SAFE)
               </span>
             </div>
@@ -203,7 +203,7 @@ export function SystemSecurityHubView() {
             <div className="p-4 border-2 border-black rounded-lg bg-retro-warm/20 space-y-2">
               <span className="font-bold text-black">Endpoint: /attendance/check-in</span>
               <p className="text-black/60">Batas: 10 Request / Menit</p>
-              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[10px] font-bold">
+              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">
                 AKTIF (GEOFENCE VERIFIED)
               </span>
             </div>

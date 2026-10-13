@@ -79,7 +79,7 @@ export default async function MahasiswaUktPage() {
                   {tagihan.status === "LUNAS" && (
                     <div className="text-right text-xs text-muted-foreground">
                       <p>Tanggal: {tagihan.tanggalBayar || "-"}</p>
-                      <p className="font-mono text-[11px] text-foreground mt-0.5">
+                      <p className="font-mono text-xs text-foreground mt-0.5">
                         Ref: {tagihan.buktiPembayaran || "-"}
                       </p>
                     </div>

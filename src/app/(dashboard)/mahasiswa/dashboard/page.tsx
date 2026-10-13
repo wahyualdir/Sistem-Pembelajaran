@@ -111,11 +111,11 @@ export default async function MahasiswaDashboardPage() {
               <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-red shadow-retro-sm" />
               <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-yellow shadow-retro-sm" />
               <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-green shadow-retro-sm" />
-              <span className="text-[11px] font-mono font-bold text-muted-foreground ml-2">
+              <span className="text-xs font-mono font-bold text-muted-foreground ml-2">
                 siakad://dashboard.mahasiswa
               </span>
             </div>
-            <span className="text-[11px] font-mono font-bold text-retro-orange uppercase tracking-wider">
+            <span className="text-xs font-mono font-bold text-retro-orange uppercase tracking-wider">
               ONLINE
             </span>
           </div>
@@ -180,7 +180,7 @@ export default async function MahasiswaDashboardPage() {
                     </span>
                     <span className="text-xs text-muted-foreground">/ 4.00</span>
                   </div>
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     Beban Maksimal Semester Ini: <strong className="text-foreground">{krs.batasSks} SKS</strong>
                   </p>
                 </div>
@@ -200,7 +200,7 @@ export default async function MahasiswaDashboardPage() {
                       style={{ width: `${persenSksLulus}%` }}
                     />
                   </div>
-                  <p className="text-[11px] text-muted-foreground flex justify-between">
+                  <p className="text-xs text-muted-foreground flex justify-between">
                     <span>Sisa SKS menuju wisuda:</span>
                     <strong className="text-foreground">{Math.max(0, targetSksTotal - transkrip.totalSksLulus)} SKS</strong>
                   </p>
@@ -222,7 +222,7 @@ export default async function MahasiswaDashboardPage() {
                   <CheckCircle2 className="h-4 w-4 text-primary" />
                   Daftar Periksa Semester Ini
                 </CardTitle>
-                <Badge variant="outline" className="text-[10px] font-mono py-0">
+                <Badge variant="outline" className="text-xs font-mono py-0">
                   2026/2027 Ganjil
                 </Badge>
               </div>
@@ -234,14 +234,14 @@ export default async function MahasiswaDashboardPage() {
                   <FileCheck className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="text-xs font-semibold text-foreground">Kartu Rencana Studi (KRS)</h4>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       {krs.totalSks} SKS • Wali: {krs.namaDosenWali?.split(",")[0] || "Dosen Wali"}
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <StatusBadge status={krs.status} />
-                  <Link href="/mahasiswa/krs" className="text-[11px] text-primary hover:underline font-medium inline-flex items-center">
+                  <Link href="/mahasiswa/krs" className="text-xs text-primary hover:underline font-medium inline-flex items-center">
                     Detail <ChevronRight className="h-3 w-3" />
                   </Link>
                 </div>
@@ -253,14 +253,14 @@ export default async function MahasiswaDashboardPage() {
                   <CreditCard className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="text-xs font-semibold text-foreground">Status Keuangan UKT</h4>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       {tagihan?.status === "LUNAS" ? "Bebas administrasi keuangan" : "Harap periksa tagihan"}
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">
                   <StatusBadge status={tagihan?.status || "LUNAS"} />
-                  <Link href="/mahasiswa/ukt" className="text-[11px] text-primary hover:underline font-medium inline-flex items-center">
+                  <Link href="/mahasiswa/ukt" className="text-xs text-primary hover:underline font-medium inline-flex items-center">
                     Cek <ChevronRight className="h-3 w-3" />
                   </Link>
                 </div>
@@ -272,16 +272,16 @@ export default async function MahasiswaDashboardPage() {
                   <ShieldCheck className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="text-xs font-semibold text-foreground">Syarat Kehadiran UAS</h4>
-                    <p className="text-[11px] text-muted-foreground mt-0.5">
+                    <p className="text-xs text-muted-foreground mt-0.5">
                       Rata-rata: <strong className="text-foreground">{rataRataPresensi}%</strong> (Batas min. 75%)
                     </p>
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">
-                  <Badge variant="outline" className={`text-[11px] font-medium py-0.5 px-2 ${rataRataPresensi >= 75 ? "bg-success-soft text-success border-success/30" : "bg-danger-soft text-danger border-danger/30"}`}>
+                  <Badge variant="outline" className={`text-xs font-medium py-0.5 px-2 ${rataRataPresensi >= 75 ? "bg-success-soft text-success border-success/30" : "bg-danger-soft text-danger border-danger/30"}`}>
                     {rataRataPresensi >= 75 ? "Aman" : "Kritis"}
                   </Badge>
-                  <Link href="/mahasiswa/presensi" className="text-[11px] text-primary hover:underline font-medium inline-flex items-center">
+                  <Link href="/mahasiswa/presensi" className="text-xs text-primary hover:underline font-medium inline-flex items-center">
                     Rekap <ChevronRight className="h-3 w-3" />
                   </Link>
                 </div>
@@ -367,7 +367,7 @@ export default async function MahasiswaDashboardPage() {
                       <div>
                         <div className="flex items-center gap-2">
                           <span
-                            className={`text-[10px] font-semibold px-2 py-0.5 rounded-[6px] border ${
+                            className={`text-xs font-semibold px-2 py-0.5 rounded-[6px] border ${
                               j.sedangBerlangsung
                                 ? "bg-success text-white border-transparent"
                                 : j.adalahHariIni
@@ -426,11 +426,11 @@ export default async function MahasiswaDashboardPage() {
                     <span className="text-xs font-semibold text-foreground block">
                       Batas Perubahan / Revisi KRS
                     </span>
-                    <span className="text-[11px] text-muted-foreground">
+                    <span className="text-xs text-muted-foreground">
                       31 Oktober 2026
                     </span>
                   </div>
-                  <Badge variant="outline" className="text-[11px] bg-primary-soft text-primary font-medium">
+                  <Badge variant="outline" className="text-xs bg-primary-soft text-primary font-medium">
                     Sedang Berjalan
                   </Badge>
                 </div>
@@ -440,11 +440,11 @@ export default async function MahasiswaDashboardPage() {
                     <span className="text-xs font-semibold text-foreground block">
                       Pekan Ujian Tengah Semester (UTS)
                     </span>
-                    <span className="text-[11px] text-muted-foreground">
+                    <span className="text-xs text-muted-foreground">
                       1 - 15 November 2026
                     </span>
                   </div>
-                  <Badge variant="outline" className="text-[11px] bg-muted text-muted-foreground font-medium">
+                  <Badge variant="outline" className="text-xs bg-muted text-muted-foreground font-medium">
                     Mendatang
                   </Badge>
                 </div>
@@ -481,11 +481,11 @@ export default async function MahasiswaDashboardPage() {
                         <h4 className="font-semibold text-foreground text-xs line-clamp-1">
                           {item.judul}
                         </h4>
-                        <span className="text-[10px] text-muted-foreground flex-shrink-0">
+                        <span className="text-xs text-muted-foreground flex-shrink-0">
                           {item.terbitPada}
                         </span>
                       </div>
-                      <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
+                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
                         {item.isi}
                       </p>
                     </div>

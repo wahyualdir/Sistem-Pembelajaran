@@ -104,22 +104,22 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Laporan Menunggu</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Laporan Menunggu</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-retro-orange">1 Berkas</div>
           <span className="text-xs text-black/70">Perlu Tindakan</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Grup Belajar Aktif</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Grup Belajar Aktif</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{STUDY_GROUPS.length} Grup</div>
           <span className="text-xs text-emerald-800 font-bold">105 Anggota</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Program Mentoring</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Program Mentoring</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{MENTORING_PROGRAMS.length} Program</div>
           <span className="text-xs text-emerald-800 font-bold">216 Mahasiswa Binaan</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Status Kebijakan</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Status Kebijakan</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">Aman</div>
           <span className="text-xs text-emerald-800 font-bold">Integritas Terjaga</span>
         </div>
@@ -197,7 +197,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{r.reporter}</td>
                         <td className="p-3.5 sm:p-4">
-                          <span className="px-2 py-0.5 rounded border border-rose-500 bg-rose-100 text-rose-950 font-mono text-[10px] font-bold">
+                          <span className="px-2 py-0.5 rounded border border-rose-500 bg-rose-100 text-rose-950 font-mono text-xs font-bold">
                             {r.category}
                           </span>
                         </td>
@@ -205,7 +205,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               r.status === 'MENUNGGU_REVIEW'
                                 ? 'border-amber-500 bg-amber-100 text-amber-950'
                                 : 'border-neutral-400 bg-neutral-100 text-neutral-800'
@@ -243,7 +243,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                               >
                                 Abaikan
                               </button>
-                              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+                              {!isDemo && <span className="text-xs bg-neutral-200 px-1 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
                             </div>
                           ) : (
                             <span className="text-xs font-mono text-black/50">Telah Dihapus</span>
@@ -308,7 +308,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                         <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{g.members} Mhs</td>
                         <td className="p-3.5 sm:p-4 font-mono text-xs">{g.createdDate}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                             AKTIF
                           </span>
                         </td>
@@ -348,7 +348,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
             >
               <Plus className="h-4 w-4" />
               <span>Daftarkan Program Mentoring</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -383,7 +383,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                         <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-retro-orange">{m.menteesCount} Mhs</td>
                         <td className="p-3.5 sm:p-4 text-xs font-mono">{m.duration}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                             BERJALAN
                           </span>
                         </td>

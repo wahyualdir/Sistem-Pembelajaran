@@ -144,14 +144,14 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
   const renderTingkatBadge = (tingkat: TingkatNotifikasi) => {
     if (tingkat === "MENDESAK") {
       return (
-        <span className="rounded-control bg-danger-soft border border-danger-border px-1.5 py-0.5 text-[9px] font-bold text-danger">
+        <span className="rounded-control bg-danger-soft border border-danger-border px-1.5 py-0.5 text-xs font-bold text-danger">
           Mendesak
         </span>
       );
     }
     if (tingkat === "PENTING") {
       return (
-        <span className="rounded-control bg-warning-soft border border-warning-border px-1.5 py-0.5 text-[9px] font-bold text-warning">
+        <span className="rounded-control bg-warning-soft border border-warning-border px-1.5 py-0.5 text-xs font-bold text-warning">
           Penting
         </span>
       );
@@ -181,7 +181,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
       >
         <Bell className="h-4 w-4" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-danger text-[10px] font-bold text-danger-foreground animate-pulse">
+          <span className="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-danger text-xs font-bold text-danger-foreground animate-pulse">
             {unreadCount}
           </span>
         )}
@@ -197,7 +197,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
                 Notifikasi
               </span>
               {unreadCount > 0 && (
-                <span className="rounded-full bg-primary-soft text-primary px-2 py-0.5 text-[10px] font-bold">
+                <span className="rounded-full bg-primary-soft text-primary px-2 py-0.5 text-xs font-bold">
                   {unreadCount} Baru
                 </span>
               )}
@@ -207,7 +207,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
               <button
                 onClick={handleTandaiSemuaDibaca}
                 disabled={loading}
-                className="text-[11px] text-primary hover:underline font-medium flex items-center gap-1 disabled:opacity-50"
+                className="text-xs text-primary hover:underline font-medium flex items-center gap-1 disabled:opacity-50"
               >
                 <CheckCheck className="h-3 w-3" />
                 Tandai semua dibaca
@@ -257,11 +257,11 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
                           )}
                         </div>
 
-                        <p className="text-[11px] text-muted-foreground leading-relaxed line-clamp-2">
+                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
                           {item.isiAI || item.isiTemplate}
                         </p>
 
-                        <div className="flex items-center justify-between pt-1 text-[10px] text-muted-foreground">
+                        <div className="flex items-center justify-between pt-1 text-xs text-muted-foreground">
                           <span>{formatWaktu(item.dibuatPada)}</span>
 
                           <div className="flex items-center gap-2">
@@ -303,7 +303,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
 
                         {/* Opsi Waktu Tunda Popover Kecil */}
                         {isSnoozeOpen && (
-                          <div className="mt-2 flex items-center gap-1.5 rounded-control bg-muted/60 p-1.5 text-[10px]">
+                          <div className="mt-2 flex items-center gap-1.5 rounded-control bg-muted/60 p-1.5 text-xs">
                             <span className="text-muted-foreground">Tunda selama:</span>
                             <button
                               onClick={(e) => handleTunda(item.id, 60, e)}
@@ -328,14 +328,14 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
           </div>
 
           {/* Footer Popover dengan Tautan Pengaturan Preferensi */}
-          <div className="p-2.5 border-t border-border bg-muted/20 flex items-center justify-between text-[11px]">
-            <span className="text-muted-foreground text-[10px]">
+          <div className="p-2.5 border-t border-border bg-muted/20 flex items-center justify-between text-xs">
+            <span className="text-muted-foreground text-xs">
               SIAKAD Notifikasi Terpadu
             </span>
             <Link
               href="/mahasiswa/preferensi-notifikasi"
               onClick={() => setIsOpen(false)}
-              className="text-primary hover:underline font-medium flex items-center gap-1 text-[11px]"
+              className="text-primary hover:underline font-medium flex items-center gap-1 text-xs"
             >
               <Settings className="h-3 w-3" />
               Preferensi

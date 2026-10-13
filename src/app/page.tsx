@@ -436,7 +436,7 @@ export default function HomePage() {
                   <p>✓ Window frame: Dual circular controls (○ ○)</p>
                   <p>✓ Halftone Dither: Active on projects</p>
                   <p>✓ Academic Portal: Ready on /login</p>
-                  <p className="text-gray-500 text-[11px] pt-2">
+                  <p className="text-gray-500 text-xs pt-2">
                     System ready. Memory 128K OK.
                   </p>
                 </div>

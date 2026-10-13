@@ -130,7 +130,7 @@ export default function AdminPengumumanPage() {
                           ? "secondary"
                           : "outline"
                       }
-                      className="text-[10px]"
+                      className="text-xs"
                     >
                       Target: {item.targetNama || item.target}
                     </Badge>

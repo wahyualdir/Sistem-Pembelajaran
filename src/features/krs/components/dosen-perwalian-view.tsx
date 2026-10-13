@@ -223,7 +223,7 @@ export function DosenPerwalianView({
                         >
                           {krs.totalSks} SKS
                         </span>
-                        <span className="text-[11px] text-muted-foreground block">
+                        <span className="text-xs text-muted-foreground block">
                           Maks: {krs.batasSks} SKS
                         </span>
                       </TableCell>
@@ -309,7 +309,7 @@ export function DosenPerwalianView({
                         </span>
                         <Badge
                           variant={bim.status === "SELESAI" ? "success" : "warning"}
-                          className="text-[10px]"
+                          className="text-xs"
                         >
                           {bim.status === "SELESAI" ? "Sudah Ditanggapi" : "Menunggu Arahan"}
                         </Badge>
@@ -341,7 +341,7 @@ export function DosenPerwalianView({
 
                   {/* Pertanyaan Mahasiswa */}
                   <div>
-                    <span className="text-[11px] font-semibold text-muted-foreground font-medium block mb-1">
+                    <span className="text-xs font-semibold text-muted-foreground font-medium block mb-1">
                       Pertanyaan / Keterangan Mahasiswa:
                     </span>
                     <p className="text-xs text-foreground bg-muted p-3 rounded-[8px] border border-border leading-relaxed">
@@ -352,7 +352,7 @@ export function DosenPerwalianView({
                   {/* Arahan Dosen */}
                   {bim.catatanDosen && (
                     <div>
-                      <span className="text-[11px] font-semibold text-primary font-medium block mb-1">
+                      <span className="text-xs font-semibold text-primary font-medium block mb-1">
                         Arahan Dosen Wali:
                       </span>
                       <div className="text-xs text-foreground bg-primary-soft/70 p-3 rounded-[8px] border-l-4 border-primary leading-relaxed">
@@ -481,7 +481,7 @@ export function DosenPerwalianView({
                       <span className="font-semibold text-foreground block">
                         {item.kelas.namaMataKuliah} (Kelas {item.kelas.kode})
                       </span>
-                      <span className="text-[11px] text-muted-foreground">
+                      <span className="text-xs text-muted-foreground">
                         {item.kelas.jadwal[0]?.hari}{" "}
                         {item.kelas.jadwal[0]?.jamMulai}-{item.kelas.jadwal[0]?.jamSelesai} WIB •{" "}
                         {item.kelas.jadwal[0]?.namaRuang}

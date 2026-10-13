@@ -182,9 +182,7 @@ function LoginFormContent() {
   const [errorMessage, setErrorMessage] = useState(searchParams.get('error') || '');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorKey, setErrorKey] = useState(0);
-  const [ready, setReady] = useState(false);
 
-  useEffect(() => setReady(true), []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -354,7 +352,7 @@ function LoginFormContent() {
 
                   <button
                     type="submit"
-                    disabled={isPending || !ready}
+                    disabled={isPending}
                     data-pending={isPending}
                     className="w-full h-10 min-h-[2.5rem] sm:h-11 py-2 px-4 rounded border-2 border-black bg-black text-white hover:bg-retro-yellow hover:text-black font-heading font-black text-sm sm:text-base shadow-retro active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 cursor-pointer mt-1"
                   >

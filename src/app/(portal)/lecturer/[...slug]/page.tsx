@@ -156,7 +156,7 @@ export default function LecturerSubpage({ params }: PageProps) {
                   <span className="font-mono text-xs font-bold px-2.5 py-1 rounded border border-black bg-retro-warm">
                     {cls.code}
                   </span>
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-400">
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-400">
                     {cls.status}
                   </span>
                 </div>

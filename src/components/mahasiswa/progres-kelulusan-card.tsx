@@ -20,7 +20,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
           </CardTitle>
           <Badge
             variant="outline"
-            className="text-[11px] bg-primary-soft text-primary font-medium border-primary/20"
+            className="text-xs bg-primary-soft text-primary font-medium border-primary/20"
           >
             Target {progres.totalTargetSks} SKS
           </Badge>
@@ -45,7 +45,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
               style={{ width: `${progres.persenTotal}%` }}
             />
           </div>
-          <div className="flex justify-between items-center text-[11px] text-muted-foreground pt-0.5">
+          <div className="flex justify-between items-center text-xs text-muted-foreground pt-0.5">
             <span>Sisa SKS menuju kelulusan:</span>
             <strong className="text-foreground">{progres.sisaSksTotal} SKS</strong>
           </div>
@@ -70,7 +70,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
                 style={{ width: `${progres.persenWajib}%` }}
               />
             </div>
-            <span className="text-[10px] text-muted-foreground block">
+            <span className="text-xs text-muted-foreground block">
               Tersisa: {progres.sisaSksWajib} SKS ({progres.persenWajib}% tercapai)
             </span>
           </div>
@@ -92,7 +92,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
                 style={{ width: `${progres.persenPilihan}%` }}
               />
             </div>
-            <span className="text-[10px] text-muted-foreground block">
+            <span className="text-xs text-muted-foreground block">
               Tersisa: {progres.sisaSksPilihan} SKS ({progres.persenPilihan}% tercapai)
             </span>
           </div>
@@ -106,7 +106,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
               <span className="font-semibold text-foreground block">
                 Estimasi Waktu Kelulusan
               </span>
-              <span className="text-[11px] text-muted-foreground">
+              <span className="text-xs text-muted-foreground">
                 Berdasarkan 21 SKS semester berjalan:{" "}
                 <strong className="text-foreground">
                   ~{progres.perkiraanSemesterTersisa} semester lagi
@@ -121,7 +121,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
                 progres.statusKelayakanSkripsi ? "text-success" : "text-muted-foreground"
               }`}
             />
-            <span className="text-[11px] font-medium text-foreground">
+            <span className="text-xs font-medium text-foreground">
               {progres.statusKelayakanSkripsi
                 ? "Syarat SKS Tugas Akhir Terpenuhi"
                 : "Belum Memenuhi Syarat Tugas Akhir (Min. 100 SKS)"}

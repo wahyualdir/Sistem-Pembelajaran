@@ -142,22 +142,22 @@ export function StaffGradesHubView({
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Tingkat Kelulusan MK</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Tingkat Kelulusan MK</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">96.4%</div>
           <span className="text-xs text-emerald-800 font-bold">Seluruh Fakultas</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Rata-rata Kehadiran</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Rata-rata Kehadiran</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">91.8%</div>
           <span className="text-xs text-emerald-800 font-bold">Memenuhi Syarat Ujian</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Menunggu Eksekusi Staf</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Menunggu Eksekusi Staf</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-retro-orange">{pendingExecutions.length} Berkas</div>
           <span className="text-xs text-black/70 font-semibold">Telah Disetujui Kaprodi</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Total Nilai Dieksekusi</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Total Nilai Dieksekusi</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">
             {requestsList.filter((r) => r.status === 'EXECUTED').length} Nilai
           </div>
@@ -185,7 +185,7 @@ export function StaffGradesHubView({
               <Icon className="h-4 w-4" />
               <span>{tab.label}</span>
               {tab.id === 'perubahan-nilai' && pendingExecutions.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-black text-white text-[10px] font-mono font-bold">
+                <span className="px-1.5 py-0.2 rounded-full bg-black text-white text-xs font-mono font-bold">
                   {pendingExecutions.length}
                 </span>
               )}
@@ -255,7 +255,7 @@ export function StaffGradesHubView({
                         <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-retro-orange">{m.ips.toFixed(2)}</td>
                         <td className="p-3.5 sm:p-4 text-center font-mono font-black text-black">{m.ipk.toFixed(2)}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                             {m.status}
                           </span>
                         </td>
@@ -335,7 +335,7 @@ export function StaffGradesHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               p.eligible
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : 'border-rose-500 bg-rose-100 text-rose-950'
@@ -410,12 +410,12 @@ export function StaffGradesHubView({
                         <td className="p-3.5 sm:p-4 text-xs text-black/80 max-w-xs">
                           <div>{req.reason}</div>
                           {req.review_note && (
-                            <div className="mt-1 text-[11px] font-mono text-black/60 border-t border-black/10 pt-1">
+                            <div className="mt-1 text-xs font-mono text-black/60 border-t border-black/10 pt-1">
                               <strong>Catatan Kaprodi:</strong> {req.review_note}
                             </div>
                           )}
                           {req.execution_note && (
-                            <div className="mt-1 text-[11px] font-mono text-emerald-800 border-t border-black/10 pt-1">
+                            <div className="mt-1 text-xs font-mono text-emerald-800 border-t border-black/10 pt-1">
                               <strong>Eksekusi BAA:</strong> {req.execution_note}
                             </div>
                           )}
@@ -423,7 +423,7 @@ export function StaffGradesHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               req.status === 'APPROVED'
                                 ? 'border-amber-500 bg-amber-100 text-amber-950'
                                 : req.status === 'EXECUTED'
@@ -454,7 +454,7 @@ export function StaffGradesHubView({
                                 >
                                   Eksekusi Nilai
                                 </button>
-                                <span className="text-[10px] text-amber-900 font-mono font-bold bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                                <span className="text-xs text-amber-900 font-mono font-bold bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
                                   Menunggu Migrasi DB
                                 </span>
                               </div>

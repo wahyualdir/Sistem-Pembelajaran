@@ -41,29 +41,29 @@ export default async function GradebookPage({ params }: { params: { id: string }
             <span className="font-semibold text-foreground flex items-center gap-1.5">
               <Sliders className="h-3.5 w-3.5 text-primary" /> Bobot Komponen Penilaian (Total: 100%)
             </span>
-            <span className="text-[11px] text-success font-medium bg-success-soft px-2 py-0.5 rounded-full">
+            <span className="text-xs text-success font-medium bg-success-soft px-2 py-0.5 rounded-full">
               Terverifikasi 100%
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-muted-foreground pt-1">
             <div className="rounded bg-muted p-2 text-center">
-              <span className="block text-[11px]">Tugas</span>
+              <span className="block text-xs">Tugas</span>
               <strong className="text-foreground text-xs font-mono">30%</strong>
             </div>
             <div className="rounded bg-muted p-2 text-center">
-              <span className="block text-[11px]">Kuis</span>
+              <span className="block text-xs">Kuis</span>
               <strong className="text-foreground text-xs font-mono">20%</strong>
             </div>
             <div className="rounded bg-muted p-2 text-center">
-              <span className="block text-[11px]">Presensi</span>
+              <span className="block text-xs">Presensi</span>
               <strong className="text-foreground text-xs font-mono">10%</strong>
             </div>
             <div className="rounded bg-muted p-2 text-center">
-              <span className="block text-[11px]">UTS</span>
+              <span className="block text-xs">UTS</span>
               <strong className="text-foreground text-xs font-mono">20%</strong>
             </div>
             <div className="rounded bg-muted p-2 text-center">
-              <span className="block text-[11px]">UAS</span>
+              <span className="block text-xs">UAS</span>
               <strong className="text-foreground text-xs font-mono">20%</strong>
             </div>
           </div>

@@ -333,7 +333,7 @@ export function SystemIntegrationsHubView() {
             <div className="p-3 border-2 border-black rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-retro-warm/20">
               <div>
                 <p className="font-bold text-black text-sm">Sistem Keuangan & Pembayaran UKT</p>
-                <p className="text-black/60 text-[11px]">Dibuat: 01 Jan 2026 | Izin: read:student_bill, write:payment_status</p>
+                <p className="text-black/60 text-xs">Dibuat: 01 Jan 2026 | Izin: read:student_bill, write:payment_status</p>
               </div>
               <div className="font-bold text-black bg-white px-3 py-1 rounded border border-black">
                 {maskSecret('key-fin', 'sk_live_fin_8820491820481029_88a1')}
@@ -343,7 +343,7 @@ export function SystemIntegrationsHubView() {
             <div className="p-3 border-2 border-black rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-retro-warm/20">
               <div>
                 <p className="font-bold text-black text-sm">Sistem Pangkalan Data Kemendikbud Dikti (PDDIKTI)</p>
-                <p className="text-black/60 text-[11px]">Dibuat: 15 Feb 2026 | Izin: sync:feeder_academic_data</p>
+                <p className="text-black/60 text-xs">Dibuat: 15 Feb 2026 | Izin: sync:feeder_academic_data</p>
               </div>
               <div className="font-bold text-black bg-white px-3 py-1 rounded border border-black">
                 {maskSecret('key-dikti', 'sk_live_pddikti_9921820481920481_77b4')}

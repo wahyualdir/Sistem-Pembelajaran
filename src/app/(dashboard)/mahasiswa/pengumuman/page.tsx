@@ -84,7 +84,7 @@ export default function MahasiswaPengumumanPage() {
                             ? "secondary"
                             : "outline"
                         }
-                        className="text-[10px]"
+                        className="text-xs"
                       >
                         {item.targetNama || item.target}
                       </Badge>
@@ -93,7 +93,7 @@ export default function MahasiswaPengumumanPage() {
                         {item.terbitPada}
                       </span>
                       {!item.sudahDibaca && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-warning/20 text-warning">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-warning/20 text-warning">
                           Baru
                         </span>
                       )}
@@ -128,7 +128,7 @@ export default function MahasiswaPengumumanPage() {
                 <p className="text-xs text-foreground leading-relaxed whitespace-pre-line">
                   {item.isi}
                 </p>
-                <div className="pt-2 text-[11px] text-muted-foreground border-t border-border flex items-center justify-between">
+                <div className="pt-2 text-xs text-muted-foreground border-t border-border flex items-center justify-between">
                   <span>Diterbitkan oleh: <strong>{item.namaPenulis}</strong></span>
                 </div>
               </CardContent>

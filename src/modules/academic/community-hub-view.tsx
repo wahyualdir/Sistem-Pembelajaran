@@ -152,7 +152,7 @@ export function CommunityHubView({
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="px-2.5 py-0.5 rounded border border-black text-[11px] font-mono font-bold bg-retro-warm text-black">
+                      <span className="px-2.5 py-0.5 rounded border border-black text-xs font-mono font-bold bg-retro-warm text-black">
                         {ann.category}
                       </span>
                       {ann.isPinned && (
@@ -215,11 +215,11 @@ export function CommunityHubView({
                   <div className="space-y-1.5 max-w-2xl">
                     <div className="flex items-center gap-2">
                       {th.isPinned && (
-                        <span className="px-2 py-0.5 rounded border border-black bg-retro-yellow text-[10px] font-mono font-black">
+                        <span className="px-2 py-0.5 rounded border border-black bg-retro-yellow text-xs font-mono font-black">
                           PIN
                         </span>
                       )}
-                      <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-[10px] font-mono font-bold">
+                      <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-mono font-bold">
                         {th.category}
                       </span>
                       <span className="text-xs text-black/60 font-mono">
@@ -291,7 +291,7 @@ export function CommunityHubView({
                     </p>
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {g.tags?.map((t: string) => (
-                        <span key={t} className="px-2 py-0.5 rounded border border-black bg-white text-[11px] font-mono">
+                        <span key={t} className="px-2 py-0.5 rounded border border-black bg-white text-xs font-mono">
                           #{t}
                         </span>
                       ))}
@@ -345,7 +345,7 @@ export function CommunityHubView({
                           <p className="text-xs text-retro-orange font-bold">{m.role}</p>
                         </div>
                       </div>
-                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded border border-emerald-500 bg-emerald-50 text-emerald-950">
+                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded border border-emerald-500 bg-emerald-50 text-emerald-950">
                         {m.slots}
                       </span>
                     </div>
@@ -354,7 +354,7 @@ export function CommunityHubView({
                     </p>
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {m.topics?.map((top: string) => (
-                        <span key={top} className="px-2 py-0.5 rounded border border-black bg-white text-[11px] font-mono">
+                        <span key={top} className="px-2 py-0.5 rounded border border-black bg-white text-xs font-mono">
                           {top}
                         </span>
                       ))}

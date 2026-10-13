@@ -69,7 +69,7 @@ export default function AppearanceSettingsPage() {
                 </div>
                 <div>
                   <span className="font-heading font-black text-base text-foreground block">Mode Terang (Retro Monokrom)</span>
-                  <span className="text-[11px] font-mono text-muted-foreground block">Klasik Mac OS & Warm Sand</span>
+                  <span className="text-xs font-mono text-muted-foreground block">Klasik Mac OS & Warm Sand</span>
                 </div>
               </div>
               <input type="radio" name="theme" defaultChecked className="h-5 w-5 accent-black" />
@@ -87,7 +87,7 @@ export default function AppearanceSettingsPage() {
                 </div>
                 <div>
                   <span className="font-heading font-black text-base text-white block">Mode Gelap (OLED Black)</span>
-                  <span className="text-[11px] font-mono text-neutral-400 block">Sangat hemat daya & redup</span>
+                  <span className="text-xs font-mono text-neutral-400 block">Sangat hemat daya & redup</span>
                 </div>
               </div>
               <input type="radio" name="theme" className="h-5 w-5 accent-white" />

@@ -62,7 +62,7 @@ export default async function DosenDashboardPage() {
               <div className="text-2xl font-bold text-foreground">
                 {daftarKelas.length} Kelas
               </div>
-              <p className="text-[11px] text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Semester Ganjil 2026/2027
               </p>
             </CardContent>
@@ -79,7 +79,7 @@ export default async function DosenDashboardPage() {
               <div className={`text-2xl font-bold ${krsMenunggu > 0 ? "text-warning" : "text-success"}`}>
                 {krsMenunggu} Menunggu
               </div>
-              <p className="text-[11px] text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Dari {krsPerwalian.length} mahasiswa perwalian
               </p>
             </CardContent>
@@ -96,7 +96,7 @@ export default async function DosenDashboardPage() {
               <div className="text-2xl font-bold text-danger">
                 {nilaiBelumFinal} Kelas
               </div>
-              <p className="text-[11px] text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Perlu input & penguncian nilai
               </p>
             </CardContent>
@@ -113,7 +113,7 @@ export default async function DosenDashboardPage() {
               <div className="text-2xl font-bold text-foreground">
                 {bimbinganMenunggu} Pengajuan
               </div>
-              <p className="text-[11px] text-muted-foreground mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Menunggu arahan pembimbing
               </p>
             </CardContent>
@@ -145,20 +145,20 @@ export default async function DosenDashboardPage() {
                     <span className="text-xs font-medium text-foreground">
                       {k.namaMataKuliah} • {k.sks} SKS
                     </span>
-                    <span className="text-[11px] text-muted-foreground block mt-0.5">
+                    <span className="text-xs text-muted-foreground block mt-0.5">
                       Jadwal: {k.jadwal[0]?.hari}, {k.jadwal[0]?.jamMulai}-{k.jadwal[0]?.jamSelesai} ({k.jadwal[0]?.namaRuang})
                     </span>
                   </div>
 
                   <div className="flex items-center gap-1.5">
                     <Link href={`/dosen/presensi`}>
-                      <Button size="sm" variant="outline" className="h-7 text-[11px] gap-1">
+                      <Button size="sm" variant="outline" className="h-7 text-xs gap-1">
                         <CheckSquare className="h-3 w-3" />
                         Presensi
                       </Button>
                     </Link>
                     <Link href={`/dosen/nilai`}>
-                      <Button size="sm" variant="outline" className="h-7 text-[11px] gap-1">
+                      <Button size="sm" variant="outline" className="h-7 text-xs gap-1">
                         <GraduationCap className="h-3 w-3" />
                         Nilai
                       </Button>

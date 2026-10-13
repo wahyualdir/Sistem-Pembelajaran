@@ -267,7 +267,7 @@ export function MahasiswaKrsView({
                           ))}
                         </div>
 
-                        <div className="text-[11px] text-muted-foreground pt-1">
+                        <div className="text-xs text-muted-foreground pt-1">
                           Kuota:{" "}
                           <span
                             className={
@@ -345,7 +345,7 @@ export function MahasiswaKrsView({
                       <h4 className="font-semibold text-xs text-foreground">
                         {item.kelas.namaMataKuliah}
                       </h4>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-xs text-muted-foreground">
                         Kelas {item.kelas.kode} • {item.kelas.sks} SKS •{" "}
                         {item.kelas.jadwal[0]?.hari}{" "}
                         {item.kelas.jadwal[0]?.jamMulai}-{item.kelas.jadwal[0]?.jamSelesai}

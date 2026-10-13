@@ -23,12 +23,22 @@ export type TambahMateriInput =
       ukuranMb?: number;
     };
 
+const isDosenOrAdmin = (r: string) =>
+  r === "DOSEN" ||
+  r === "ADMIN" ||
+  r === "LECTURER" ||
+  r === "SYSTEM_ADMIN" ||
+  r === "SUPERADMIN" ||
+  r === "SUPER_ADMIN";
+
+const isMahasiswa = (r: string) => r === "MAHASISWA" || r === "STUDENT";
+
 /**
  * Server Action: Mengunggah materi baru (Mendukung berkas fisik via FormData atau tautan link)
  */
 export async function tambahMateriAction(input: TambahMateriInput) {
   const session = await requireAuth();
-  if (session.role !== "DOSEN" && session.role !== "ADMIN") {
+  if (!isDosenOrAdmin(session.role)) {
     return { success: false, message: "Akses ditolak. Hanya dosen pengampu yang dapat mengunggah materi." };
   }
 
@@ -123,7 +133,7 @@ export async function tambahMateriAction(input: TambahMateriInput) {
     revalidatePath("/dosen/materi-tugas");
     revalidatePath("/mahasiswa/tugas");
     revalidatePath("/student");
-    return { success: true, message: "Materi perkuliahan berhasil dipublikasikan." };
+    return { success: true, message: "Materi perkuliahan berhasil dipublikasikan.", materi: materiBaru };
   } catch (err) {
     // Rollback objek storage bila penyimpanan data gagal
     if (uploadedStoragePath) {
@@ -138,7 +148,7 @@ export async function tambahMateriAction(input: TambahMateriInput) {
  */
 export async function hapusMateriAction(data: { materiId: string; kelasId: string }) {
   const session = await requireAuth();
-  if (session.role !== "DOSEN" && session.role !== "ADMIN") {
+  if (!isDosenOrAdmin(session.role)) {
     return { success: false, message: "Akses ditolak. Hanya dosen pengampu yang dapat menghapus materi." };
   }
 
@@ -186,7 +196,7 @@ const TambahTugasSchema = z.object({
 
 export async function tambahTugasAction(data: z.infer<typeof TambahTugasSchema>) {
   const session = await requireAuth();
-  if (session.role !== "DOSEN" && session.role !== "ADMIN") {
+  if (!isDosenOrAdmin(session.role)) {
     return { success: false, message: "Akses ditolak. Hanya dosen pengampu yang dapat membuat tugas." };
   }
 
@@ -236,7 +246,7 @@ export type KumpulkanTugasInput =
  */
 export async function kumpulkanTugasAction(input: KumpulkanTugasInput) {
   const session = await requireAuth();
-  if (session.role !== "MAHASISWA") {
+  if (!isMahasiswa(session.role)) {
     return { success: false, message: "Akses ditolak. Hanya mahasiswa yang dapat mengumpulkan tugas." };
   }
 
@@ -346,7 +356,7 @@ const BeriNilaiTugasSchema = z.object({
 
 export async function beriNilaiTugasAction(data: z.infer<typeof BeriNilaiTugasSchema>) {
   const session = await requireAuth();
-  if (session.role !== "DOSEN" && session.role !== "ADMIN") {
+  if (!isDosenOrAdmin(session.role)) {
     return { success: false, message: "Akses ditolak. Hanya dosen pengampu yang dapat menilai tugas." };
   }
 
@@ -374,7 +384,7 @@ export async function beriNilaiTugasAction(data: z.infer<typeof BeriNilaiTugasSc
 
     revalidatePath("/dosen/materi-tugas");
     revalidatePath("/mahasiswa/tugas");
-    return { success: true, message: "Nilai dan catatan evaluasi berhasil disimpan." };
+    return { success: true, message: "Nilai dan catatan evaluasi berhasil disimpan.", pengumpulan: kumpul };
   } catch (err) {
     return { success: false, message: err instanceof Error ? err.message : "Gagal memberikan nilai" };
   }
@@ -397,3 +407,44 @@ export async function dapatkanSignedUrlAction(data: { pathFile: string }) {
 
   return { success: true, signedUrl: res.signedUrl };
 }
+
+export async function ambilMateriByKelasAction(kelasId: string) {
+  await requireAuth();
+  const materi = MateriTugasStore.getMateriByKelas(kelasId);
+  return { success: true, materi };
+}
+
+export async function ambilTugasByKelasAction(kelasId: string) {
+  await requireAuth();
+  const tugas = MateriTugasStore.getTugasByKelas(kelasId);
+  return { success: true, tugas };
+}
+
+export async function ambilMateriMahasiswaAction(mhsId?: string) {
+  const session = await requireAuth();
+  const mahasiswaId = mhsId || session.subId || session.userId || "mhs-1";
+  const materi = MateriTugasStore.getAllMateriByMahasiswa(mahasiswaId);
+  return { success: true, materi };
+}
+
+export async function ambilTugasMahasiswaAction(mhsId?: string) {
+  const session = await requireAuth();
+  const mahasiswaId = mhsId || session.subId || session.userId || "mhs-1";
+  const tugas = MateriTugasStore.getTugasMahasiswa(mahasiswaId);
+  return { success: true, tugas };
+}
+
+export async function ambilPengumpulanByTugasAction(tugasId: string) {
+  const session = await requireAuth();
+  const roleStr = session.role as string;
+  if (
+    !isDosenOrAdmin(session.role) &&
+    roleStr !== "TA" &&
+    roleStr !== "TEACHING_ASSISTANT"
+  ) {
+    return { success: false, message: "Akses ditolak" };
+  }
+  const pengumpulan = MateriTugasStore.getPengumpulanByTugas(tugasId);
+  return { success: true, pengumpulan };
+}
+

@@ -177,7 +177,7 @@ export default function AdminUjianPage() {
                       <TableCell className="text-center">
                         <Badge
                           variant={item.jenis === "UTS" ? "secondary" : "default"}
-                          className="text-[10px]"
+                          className="text-xs"
                         >
                           {item.jenis}
                         </Badge>

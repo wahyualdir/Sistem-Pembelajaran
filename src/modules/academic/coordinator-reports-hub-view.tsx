@@ -232,14 +232,14 @@ export function CoordinatorReportsHubView({
               {PRODI_REPORTS.map((rep) => (
                 <div key={rep.id} className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-3 flex flex-col justify-between">
                   <div className="space-y-2">
-                    <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-[10px] font-mono font-bold">
+                    <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-mono font-bold">
                       {rep.period}
                     </span>
                     <h3 className="font-heading font-black text-base text-black">{rep.title}</h3>
                     <p className="text-xs text-black/70">{rep.metrics}</p>
                   </div>
                   <div className="pt-3 border-t border-black/10 flex items-center justify-between">
-                    <span className="text-[11px] font-mono text-black/60">{rep.date}</span>
+                    <span className="text-xs font-mono text-black/60">{rep.date}</span>
                     <button
                       type="button"
                       onClick={() => alert(`Mengunduh dokumen: ${rep.title}`)}
@@ -312,7 +312,7 @@ export function CoordinatorReportsHubView({
                           {ev.scoreTotal}
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-mono font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-mono font-bold">
                             {ev.category}
                           </span>
                         </td>
@@ -365,7 +365,7 @@ export function CoordinatorReportsHubView({
                     </div>
                     <span
                       className={cn(
-                        'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold shrink-0 self-start sm:self-auto',
+                        'px-2.5 py-0.5 rounded border text-xs font-mono font-bold shrink-0 self-start sm:self-auto',
                         cpl.status === 'TERCAPAI'
                           ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                           : 'border-amber-500 bg-amber-100 text-amber-950'
@@ -377,11 +377,11 @@ export function CoordinatorReportsHubView({
 
                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-black/10 font-mono text-xs">
                     <div>
-                      <span className="text-black/60 text-[10px] block">Target Minimum:</span>
+                      <span className="text-black/60 text-xs block">Target Minimum:</span>
                       <span className="font-bold">{cpl.target}</span>
                     </div>
                     <div>
-                      <span className="text-black/60 text-[10px] block">Realisasi Capaian:</span>
+                      <span className="text-black/60 text-xs block">Realisasi Capaian:</span>
                       <span className="font-black text-emerald-800 text-sm">{cpl.achievement}</span>
                     </div>
                     <div className="sm:col-span-2 flex items-center">

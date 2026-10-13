@@ -359,10 +359,21 @@
   .field:disabled { opacity: 0.6; cursor: not-allowed; }
 
   @media (max-width: 767px) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    select,
+    textarea,
     .field {
       font-size: 16px !important; /* Mencegah auto-zoom iOS Safari */
       box-shadow: 2px 2px 0px 0px #000000;
     }
+  }
+
+  /* Perlindungan Ukuran Teks Minimum (Kriteria Lulus: Tidak ada teks di bawah 12px) */
+  .text-xs,
+  .text-2xs,
+  [class*="text-xs"],
+  [class*="text-2xs"] {
+    font-size: max(0.75rem, 12px) !important;
   }
 
   @media (pointer: coarse) {

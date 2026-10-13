@@ -261,7 +261,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold uppercase text-muted-foreground">{m.title}</span>
-                <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${m.badgeColor}`}>
+                <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${m.badgeColor}`}>
                   {m.badge}
                 </span>
               </div>

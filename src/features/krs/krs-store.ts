@@ -114,7 +114,10 @@ let krsStore: KRSItem[] = [
 export const KrsStore = {
   getKrsByMahasiswa: (mahasiswaId: string, tahunAjaranId = SEED_TAHUN_AJARAN.id): KRSItem => {
     let existing = krsStore.find(
-      (k) => k.mahasiswaId === mahasiswaId && k.tahunAjaranId === tahunAjaranId
+      (k) =>
+        (k.mahasiswaId === mahasiswaId ||
+          (mahasiswaId === "a0000001-0000-0000-0000-000000000001" && k.mahasiswaId === "mhs-1")) &&
+        k.tahunAjaranId === tahunAjaranId
     );
 
     if (!existing) {

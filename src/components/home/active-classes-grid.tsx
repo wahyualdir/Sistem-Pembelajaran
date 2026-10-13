@@ -80,13 +80,13 @@ export function ActiveClassesGrid({
 
                     {/* Penanda kecil jika ada tugas atau ujian yang belum selesai */}
                     {course.hasOpenExam && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-sans font-black bg-retro-orange text-white border border-black shadow-xs">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-black bg-retro-orange text-white border border-black shadow-xs">
                         <Award className="h-3 w-3" />
                         <span>UJIAN</span>
                       </span>
                     )}
                     {!course.hasOpenExam && course.pendingTasksCount > 0 && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-sans font-black bg-retro-yellow text-black border border-black shadow-xs">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-black bg-retro-yellow text-black border border-black shadow-xs">
                         <FileText className="h-3 w-3" />
                         <span>{course.pendingTasksCount} Tugas</span>
                       </span>

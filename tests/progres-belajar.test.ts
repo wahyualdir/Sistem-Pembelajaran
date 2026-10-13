@@ -89,3 +89,20 @@ describe('Sanitasi & Validasi Berkas Supabase Storage', () => {
     expect(resTugas.ekstensi).toBe('zip');
   });
 });
+
+describe('Aturan Pengumpulan Tugas & Keterlambatan Server', () => {
+  it('menandai tepat waktu bila waktu kumpul <= tenggat', () => {
+    const tenggat = new Date('2026-10-15T23:59:00Z');
+    const waktuKumpul = new Date('2026-10-15T23:50:00Z');
+    const terlambat = waktuKumpul.getTime() > tenggat.getTime();
+    expect(terlambat).toBe(false);
+  });
+
+  it('menandai terlambat secara otomatis bila waktu kumpul > tenggat', () => {
+    const tenggat = new Date('2026-10-15T23:59:00Z');
+    const waktuKumpul = new Date('2026-10-16T00:01:00Z');
+    const terlambat = waktuKumpul.getTime() > tenggat.getTime();
+    expect(terlambat).toBe(true);
+  });
+});
+

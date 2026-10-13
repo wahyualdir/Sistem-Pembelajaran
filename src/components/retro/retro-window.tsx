@@ -56,13 +56,13 @@ export function RetroWindow({
                 {title}
               </span>
               {displayBadge && (
-                <span className="rounded-sm border border-black sm:border-2 bg-white px-2 py-0.5 sm:px-3 text-[11px] sm:text-xs lg:text-sm font-black font-mono text-black shadow-retro-sm shrink-0 hidden xs:inline-block">
+                <span className="rounded-sm border border-black sm:border-2 bg-white px-2 py-0.5 sm:px-3 text-xs sm:text-xs lg:text-sm font-black font-mono text-black shadow-retro-sm shrink-0 hidden xs:inline-block">
                   {displayBadge}
                 </span>
               )}
             </div>
             {subtitle && (
-              <span className="text-[11px] font-medium text-black/70 truncate hidden sm:block">
+              <span className="text-xs font-medium text-black/70 truncate hidden sm:block">
                 {subtitle}
               </span>
             )}

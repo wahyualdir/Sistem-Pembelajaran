@@ -138,7 +138,7 @@ export function SystemSettingsHubView() {
                 value={configuredAiModel}
                 className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 font-mono font-bold"
               />
-              <span className="text-[11px] text-black/60 mt-1 block">
+              <span className="text-xs text-black/60 mt-1 block">
                 Dapat disesuaikan melalui variabel <code className="bg-black/5 px-1 py-0.5 rounded font-bold">NEXT_PUBLIC_AI_MODEL</code> di lingkungan deployment.
               </span>
             </div>

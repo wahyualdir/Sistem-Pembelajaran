@@ -142,7 +142,7 @@ export function CsvImportModal({ type, isOpen, onClose, onSuccess }: CsvImportMo
                     {validCount} Baris Valid
                   </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Siap disimpan ke basis data secara aman
                 </p>
               </div>
@@ -154,7 +154,7 @@ export function CsvImportModal({ type, isOpen, onClose, onSuccess }: CsvImportMo
                     {invalidRows.length} Baris Bermasalah
                   </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Ditolak karena format tidak sesuai atau data ganda
                 </p>
               </div>
@@ -180,7 +180,7 @@ export function CsvImportModal({ type, isOpen, onClose, onSuccess }: CsvImportMo
                           {inv.data.nim || inv.data.nidn || "-"} - {inv.data.nama || "-"}
                         </span>
                       </div>
-                      <Badge variant="danger" className="text-[10px]">
+                      <Badge variant="danger" className="text-xs">
                         {inv.reason}
                       </Badge>
                     </div>

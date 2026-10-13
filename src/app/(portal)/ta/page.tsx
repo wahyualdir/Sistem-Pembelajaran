@@ -55,7 +55,7 @@ export default async function AssistantPortalPage() {
               <Layers className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">Kelas Terdaftar</p>
+              <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Kelas Terdaftar</p>
               <p className="font-heading font-black text-2xl text-foreground leading-tight">{classes}</p>
             </div>
           </div>
@@ -65,7 +65,7 @@ export default async function AssistantPortalPage() {
               <Clock className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[10px] font-mono font-bold text-foreground uppercase">Tugas Perlu Review</p>
+              <p className="text-xs font-mono font-bold text-foreground uppercase">Tugas Perlu Review</p>
               <p className="font-heading font-black text-2xl text-foreground leading-tight">{items.length}</p>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default async function AssistantPortalPage() {
               <FileCheck className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-[10px] font-mono font-bold text-foreground uppercase">Total Submisi Pending</p>
+              <p className="text-xs font-mono font-bold text-foreground uppercase">Total Submisi Pending</p>
               <p className="font-heading font-black text-2xl text-foreground leading-tight">{totalPending}</p>
             </div>
           </div>
@@ -126,7 +126,7 @@ export default async function AssistantPortalPage() {
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-[10px] font-mono font-bold text-foreground">
+                    <span className="px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-xs font-mono font-bold text-foreground">
                       {t.class_title}
                     </span>
                     <h3 className="font-heading font-bold text-sm text-foreground group-hover:text-retro-orange transition-colors">

@@ -83,7 +83,7 @@ export function AdminDashboardClient({
             <div className="font-heading text-2xl font-bold text-foreground tabular-nums">
               {stats.totalMahasiswa}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Tersebar di {stats.totalProdi} Program Studi
             </p>
           </CardContent>
@@ -100,7 +100,7 @@ export function AdminDashboardClient({
             <div className="font-heading text-2xl font-bold text-foreground tabular-nums">
               {stats.totalDosen}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Termasuk Dosen Pembimbing Wali & Kaprodi
             </p>
           </CardContent>
@@ -117,7 +117,7 @@ export function AdminDashboardClient({
             <div className="font-heading text-2xl font-bold text-foreground tabular-nums">
               {stats.totalKelas}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Jadwal kuliah semester ganjil 2026/2027
             </p>
           </CardContent>
@@ -134,7 +134,7 @@ export function AdminDashboardClient({
             <div className="font-heading text-2xl font-bold text-success tabular-nums">
               {stats.totalUktLunas} / {stats.totalMahasiswa}
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {stats.totalKrsDiajukan} KRS diajukan/diproses
             </p>
           </CardContent>

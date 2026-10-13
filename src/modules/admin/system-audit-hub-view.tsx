@@ -151,10 +151,10 @@ export function SystemAuditHubView() {
                   <td className="p-3 font-mono text-black/80">{log.created_at}</td>
                   <td className="p-3">
                     <div className="font-bold text-black">{log.actor_name}</div>
-                    <span className="text-[10px] font-mono text-black/60">{log.actor_role}</span>
+                    <span className="text-xs font-mono text-black/60">{log.actor_role}</span>
                   </td>
                   <td className="p-3">
-                    <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 font-bold text-[11px]">
+                    <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 font-bold text-xs">
                       {log.action}
                     </span>
                   </td>
@@ -163,7 +163,7 @@ export function SystemAuditHubView() {
                   </td>
                   <td className="p-3 text-center">
                     {log.on_behalf_of_name ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-amber-500 bg-amber-100 text-amber-950 font-bold text-[11px]">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-amber-500 bg-amber-100 text-amber-950 font-bold text-xs">
                         <ShieldAlert className="h-3 w-3" />
                         {log.on_behalf_of_name}
                       </span>

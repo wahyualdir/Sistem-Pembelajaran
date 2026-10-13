@@ -137,22 +137,22 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Pengumuman Aktif</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Pengumuman Aktif</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{ANNOUNCEMENTS.length} Siaran</div>
           <span className="text-xs text-emerald-800 font-bold">Terpublikasi</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Event & Webinar</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Event & Webinar</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{EVENTS.length} Kegiatan</div>
           <span className="text-xs text-retro-orange font-bold">Semester Berjalan</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Pendaftar Webinar</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Pendaftar Webinar</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">472 Peserta</div>
           <span className="text-xs text-black/70">Total Registran</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Status Kanal</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Status Kanal</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-emerald-800">Online</div>
           <span className="text-xs text-emerald-800 font-bold">Siaran Terhubung</span>
         </div>
@@ -209,7 +209,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
             >
               <Plus className="h-4 w-4" />
               <span>Buat Pengumuman Baru</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -239,7 +239,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
                           <div>{a.title}</div>
                         </td>
                         <td className="p-3.5 sm:p-4">
-                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm text-[10px] font-mono font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm text-xs font-mono font-bold">
                             {a.category}
                           </span>
                           <div className="text-xs text-black/60 mt-0.5">{a.target}</div>
@@ -247,7 +247,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
                         <td className="p-3.5 sm:p-4 text-black/80">{a.author}</td>
                         <td className="p-3.5 sm:p-4 font-mono text-xs">{a.date}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                             PUBLIK
                           </span>
                         </td>
@@ -287,7 +287,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
             >
               <Plus className="h-4 w-4" />
               <span>Daftarkan Event Baru</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -326,7 +326,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               e.status === 'REGISTRASI_DIBUKA'
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : 'border-amber-500 bg-amber-100 text-amber-950'

@@ -67,7 +67,7 @@ export function SystemDashboardHubView() {
             <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
               {isDemo ? '100% ONLINE' : (dbConfigured ? 'TERHUBUNG' : 'Belum terhubung')}
             </div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">
+            <div className="text-xs font-mono text-black/60 mt-1">
               {isDemo ? 'Uptime 18 Hari' : 'Tidak tersedia'}
             </div>
           </div>
@@ -80,7 +80,7 @@ export function SystemDashboardHubView() {
             <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
               {isDemo ? '42 / 200 Pool' : (dbConfigured ? 'Aktif' : 'Tidak tersedia')}
             </div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">
+            <div className="text-xs font-mono text-black/60 mt-1">
               {isDemo ? 'Latensi 12ms' : 'Tidak tersedia'}
             </div>
           </div>
@@ -93,7 +93,7 @@ export function SystemDashboardHubView() {
             <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
               {isDemo ? '142 Conn' : 'Tidak tersedia'}
             </div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">
+            <div className="text-xs font-mono text-black/60 mt-1">
               {isDemo ? '1.2k msg/s' : 'Tidak tersedia'}
             </div>
           </div>
@@ -106,7 +106,7 @@ export function SystemDashboardHubView() {
             <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
               {isDemo ? 'IMMUTABLE' : (dbConfigured ? 'Trigger Aktif' : 'Belum dikonfigurasi')}
             </div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">
+            <div className="text-xs font-mono text-black/60 mt-1">
               {isDemo ? 'Trigger Aktif' : 'Menunggu migrasi'}
             </div>
           </div>

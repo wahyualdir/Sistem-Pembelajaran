@@ -186,7 +186,7 @@ export default function AdminKalenderPage() {
                               ? "secondary"
                               : "outline"
                           }
-                          className="text-[10px]"
+                          className="text-xs"
                         >
                           {item.jenis}
                         </Badge>
@@ -201,7 +201,7 @@ export default function AdminKalenderPage() {
                         {item.selesai}
                       </TableCell>
                       <TableCell className="text-center">
-                        <Badge variant={isActive ? "success" : "outline"} className="text-[10px]">
+                        <Badge variant={isActive ? "success" : "outline"} className="text-xs">
                           {isActive ? "Sedang Berlangsung" : "Tidak Aktif"}
                         </Badge>
                       </TableCell>

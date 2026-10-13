@@ -208,7 +208,7 @@ export function CoordinatorApprovalsHubView({
               <Icon className="h-4 w-4" />
               <span>{tab.label}</span>
               {count > 0 && (
-                <span className="px-1.5 py-0.2 bg-black text-white text-[10px] rounded-full font-mono">
+                <span className="px-1.5 py-0.2 bg-black text-white text-xs rounded-full font-mono">
                   {count}
                 </span>
               )}
@@ -329,7 +329,7 @@ export function CoordinatorApprovalsHubView({
                         <td className="p-3.5 sm:p-4 text-black/80 max-w-sm">
                           <div>{r.reason}</div>
                           {r.review_note && (
-                            <div className="text-[11px] font-mono text-emerald-950 mt-1 bg-emerald-50 p-1.5 rounded border border-emerald-300">
+                            <div className="text-xs font-mono text-emerald-950 mt-1 bg-emerald-50 p-1.5 rounded border border-emerald-300">
                               Catatan Kaprodi: {r.review_note}
                             </div>
                           )}
@@ -337,7 +337,7 @@ export function CoordinatorApprovalsHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold inline-block text-center',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold inline-block text-center',
                               r.status === 'APPROVED'
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : r.status === 'REJECTED'
@@ -374,7 +374,7 @@ export function CoordinatorApprovalsHubView({
                                     Tolak
                                   </button>
                                 </div>
-                                <span className="text-[10px] text-amber-900 font-mono font-bold bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                                <span className="text-xs text-amber-900 font-mono font-bold bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
                                   Menunggu Migrasi DB
                                 </span>
                               </div>
@@ -493,7 +493,7 @@ export function CoordinatorApprovalsHubView({
                     <span>&rarr;</span>
                     <span className="text-emerald-700 font-black text-sm">{modalState.request.proposed_score}</span>
                   </div>
-                  <div className="text-[11px] text-black/70 italic border-t border-black/20 pt-1">
+                  <div className="text-xs text-black/70 italic border-t border-black/20 pt-1">
                     Alasan Dosen: &ldquo;{modalState.request.reason}&rdquo;
                   </div>
                 </div>
@@ -504,7 +504,7 @@ export function CoordinatorApprovalsHubView({
                     <div>
                       <div>{modalState.error}</div>
                       {modalState.error.includes('sendiri') && (
-                        <div className="text-[11px] font-normal text-rose-800 mt-1">
+                        <div className="text-xs font-normal text-rose-800 mt-1">
                           Catatan Eskalasi: Berkas pengajuan yang diajukan oleh dosen yang merangkap Kaprodi harus dialihkan persetujuannya ke Dekan / Wakil Dekan Akademik.
                         </div>
                       )}
@@ -518,7 +518,7 @@ export function CoordinatorApprovalsHubView({
                       {modalState.approve ? 'Catatan Persetujuan Kaprodi' : 'Alasan Penolakan Kaprodi (Wajib)'}
                     </label>
                     <span className={cn(
-                      'text-[10px] font-mono font-bold',
+                      'text-xs font-mono font-bold',
                       modalState.note.trim().length >= 10 ? 'text-emerald-700' : 'text-rose-600'
                     )}>
                       {modalState.note.trim().length}/10 Karakter

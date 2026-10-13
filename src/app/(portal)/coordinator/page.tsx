@@ -82,19 +82,19 @@ export default async function CoordinatorPortalPage() {
         {/* 4 Kartu Metrik Ringkasan Kaprodi */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-5 border-t border-retro-border/40 mt-5">
           <div className="p-3 rounded-lg border border-retro-border bg-retro-warm/70 shadow-xs text-center">
-            <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">Total Pengajuan</p>
+            <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Total Pengajuan</p>
             <p className="font-heading font-black text-2xl text-foreground mt-0.5">{all.length}</p>
           </div>
           <div className="p-3 rounded-lg border border-retro-border bg-retro-yellow/40 shadow-xs text-center">
-            <p className="text-[10px] font-mono font-bold text-foreground uppercase">Menunggu Review</p>
+            <p className="text-xs font-mono font-bold text-foreground uppercase">Menunggu Review</p>
             <p className="font-heading font-black text-2xl text-foreground mt-0.5">{pending.length}</p>
           </div>
           <div className="p-3 rounded-lg border border-retro-border bg-retro-mint/40 shadow-xs text-center">
-            <p className="text-[10px] font-mono font-bold text-foreground uppercase">Disetujui</p>
+            <p className="text-xs font-mono font-bold text-foreground uppercase">Disetujui</p>
             <p className="font-heading font-black text-2xl text-foreground mt-0.5">{approved.length}</p>
           </div>
           <div className="p-3 rounded-lg border border-retro-border bg-retro-pink/40 shadow-xs text-center">
-            <p className="text-[10px] font-mono font-bold text-foreground uppercase">Ditolak</p>
+            <p className="text-xs font-mono font-bold text-foreground uppercase">Ditolak</p>
             <p className="font-heading font-black text-2xl text-foreground mt-0.5">{rejected.length}</p>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default async function CoordinatorPortalPage() {
               >
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-retro-border/40 pb-2">
                   <div className="flex items-center gap-2">
-                    <span className="p-1 rounded bg-retro-yellow text-black border border-retro-border text-[10px] font-mono font-bold">
+                    <span className="p-1 rounded bg-retro-yellow text-black border border-retro-border text-xs font-mono font-bold">
                       PERMINTAAN NILAI
                     </span>
                     <h3 className="font-heading font-bold text-sm text-foreground">
@@ -169,7 +169,7 @@ export default async function CoordinatorPortalPage() {
                 </div>
 
                 <div className="rounded border border-retro-border/60 bg-retro-warm/50 p-2.5 text-xs">
-                  <p className="font-mono text-[10px] font-bold text-muted-foreground uppercase mb-0.5">
+                  <p className="font-mono text-xs font-bold text-muted-foreground uppercase mb-0.5">
                     Alasan Perubahan oleh Dosen:
                   </p>
                   <p className="text-foreground italic whitespace-pre-wrap">{r.reason}</p>
@@ -207,22 +207,22 @@ export default async function CoordinatorPortalPage() {
                   <p className="font-bold text-foreground">
                     {r.assignment_title} &bull; <span className="font-normal text-muted-foreground">{r.student_name}</span>
                   </p>
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     Perubahan: {r.old_score} &rarr; {r.proposed_score}
                   </p>
                   {r.review_note && (
-                    <p className="text-[11px] text-muted-foreground italic">Catatan: {r.review_note}</p>
+                    <p className="text-xs text-muted-foreground italic">Catatan: {r.review_note}</p>
                   )}
                 </div>
 
                 <div>
                   {r.status === 'APPROVED' ? (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-retro-border bg-retro-mint text-black font-bold text-[11px] shadow-xs">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-retro-border bg-retro-mint text-black font-bold text-xs shadow-xs">
                       <CheckCircle2 className="h-3 w-3" />
                       Disetujui
                     </span>
                   ) : (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-retro-border bg-danger text-white font-bold text-[11px] shadow-xs">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-retro-border bg-danger text-white font-bold text-xs shadow-xs">
                       <XCircle className="h-3 w-3" />
                       Ditolak
                     </span>

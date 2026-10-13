@@ -113,7 +113,7 @@ export function MarkdownViewer({ content, className }: MarkdownViewerProps) {
         elements.push(
           <div key={`code-${i}`} className="my-3 overflow-x-auto rounded-control bg-slate-900 p-3 text-slate-100">
             {codeLanguage && (
-              <div className="mb-2 text-[11px] font-mono uppercase tracking-wider text-slate-400">
+              <div className="mb-2 text-xs font-mono uppercase tracking-wider text-slate-400">
                 {codeLanguage}
               </div>
             )}

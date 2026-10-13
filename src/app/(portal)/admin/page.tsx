@@ -72,19 +72,19 @@ export default async function AdminPortalPage() {
         {/* 4 Kartu Metrik Keamanan */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-5 border-t border-retro-border/40 mt-5">
           <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/70 shadow-xs text-center">
-            <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">Audit Events</p>
+            <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Audit Events</p>
             <p className="font-heading font-black text-2xl text-foreground mt-0.5">{totalLogs}</p>
           </div>
           <div className="p-3.5 rounded-lg border border-retro-border bg-retro-yellow/40 shadow-xs text-center">
-            <p className="text-[10px] font-mono font-bold text-foreground uppercase">Sesi Login Aktif</p>
+            <p className="text-xs font-mono font-bold text-foreground uppercase">Sesi Login Aktif</p>
             <p className="font-heading font-black text-2xl text-foreground mt-0.5">{totalLogins}</p>
           </div>
           <div className="p-3.5 rounded-lg border border-retro-border bg-retro-mint/40 shadow-xs text-center">
-            <p className="text-[10px] font-mono font-bold text-foreground uppercase">Status Keamanan</p>
+            <p className="text-xs font-mono font-bold text-foreground uppercase">Status Keamanan</p>
             <p className="font-heading font-black text-lg text-foreground mt-1">100% AMAN</p>
           </div>
           <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/70 shadow-xs text-center">
-            <p className="text-[10px] font-mono font-bold text-muted-foreground uppercase">Tingkat Integritas</p>
+            <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Tingkat Integritas</p>
             <p className="font-heading font-black text-lg text-foreground mt-1">IMMUTABLE</p>
           </div>
         </div>
@@ -104,7 +104,7 @@ export default async function AdminPortalPage() {
               <FileText className="h-4 w-4 text-retro-orange" />
               <span>Catatan Audit Sistem Sensitif</span>
             </h2>
-            <span className="text-[10px] font-mono text-muted-foreground">10 Peristiwa Terakhir</span>
+            <span className="text-xs font-mono text-muted-foreground">10 Peristiwa Terakhir</span>
           </div>
 
           {!auditLogs || auditLogs.length === 0 ? (
@@ -119,10 +119,10 @@ export default async function AdminPortalPage() {
                   className="p-3 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-xs space-y-1 hover:bg-retro-warm/30 transition-colors"
                 >
                   <div className="flex items-center justify-between font-mono text-xs">
-                    <span className="font-bold text-foreground bg-retro-warm px-2 py-0.5 rounded border border-retro-border text-[11px]">
+                    <span className="font-bold text-foreground bg-retro-warm px-2 py-0.5 rounded border border-retro-border text-xs">
                       {log.action}
                     </span>
-                    <span className="text-muted-foreground text-[10px]">
+                    <span className="text-muted-foreground text-xs">
                       {new Date(log.created_at).toLocaleTimeString('id-ID')} WIB
                     </span>
                   </div>
@@ -147,7 +147,7 @@ export default async function AdminPortalPage() {
               <Lock className="h-4 w-4 text-retro-orange" />
               <span>Aktivitas Login & Sesi Terkini</span>
             </h2>
-            <span className="text-[10px] font-mono text-muted-foreground">Deteksi Risiko Otomatis</span>
+            <span className="text-xs font-mono text-muted-foreground">Deteksi Risiko Otomatis</span>
           </div>
 
           {!loginEvents || loginEvents.length === 0 ? (
@@ -177,17 +177,17 @@ export default async function AdminPortalPage() {
                           {evt.event_type}
                         </span>
                         {evt.is_new_device && (
-                          <span className="text-[10px] font-mono font-bold bg-retro-mint text-black border border-retro-border px-1.5 py-0.2 rounded shadow-xs">
+                          <span className="text-xs font-mono font-bold bg-retro-mint text-black border border-retro-border px-1.5 py-0.2 rounded shadow-xs">
                             Perangkat Baru
                           </span>
                         )}
                         {evt.risk_level === 'HIGH' && (
-                          <span className="text-[10px] font-mono font-bold bg-danger text-white border border-retro-border px-1.5 py-0.2 rounded shadow-xs">
+                          <span className="text-xs font-mono font-bold bg-danger text-white border border-retro-border px-1.5 py-0.2 rounded shadow-xs">
                             Risiko Tinggi
                           </span>
                         )}
                       </div>
-                      <span className="text-[10px] text-muted-foreground font-mono">
+                      <span className="text-xs text-muted-foreground font-mono">
                         {new Date(evt.created_at).toLocaleTimeString('id-ID')} WIB
                       </span>
                     </div>

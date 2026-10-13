@@ -295,7 +295,7 @@ export function Sidebar({
               <div className="absolute bottom-full left-0 right-0 mb-2 rounded-lg border-[1.5px] border-retro-border bg-retro-surface p-2 shadow-retro-md z-50 space-y-1 animate-fade-up">
                 <div className="px-2 py-1.5 border-b border-retro-border/40 mb-1">
                   <p className="text-xs font-bold text-foreground truncate">{displayName}</p>
-                  <p className="text-[10px] text-muted-foreground font-mono">{roleLabel}</p>
+                  <p className="text-xs text-muted-foreground font-mono">{roleLabel}</p>
                 </div>
 
                 <Link

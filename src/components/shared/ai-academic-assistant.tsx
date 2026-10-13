@@ -102,7 +102,7 @@ export function AiAcademicAssistant() {
                   SIAJAR AI Assistant
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-success" />
                 </h3>
-                <p className="text-[10px] text-muted-foreground">Konsultasi & Panduan Akademik</p>
+                <p className="text-xs text-muted-foreground">Konsultasi & Panduan Akademik</p>
               </div>
             </div>
             <button
@@ -134,7 +134,7 @@ export function AiAcademicAssistant() {
                     <MarkdownViewer content={m.text} className="text-xs leading-relaxed" />
                   )}
                 </div>
-                <span className="mt-1 text-[9px] text-muted-foreground px-1">{m.time}</span>
+                <span className="mt-1 text-xs text-muted-foreground px-1">{m.time}</span>
               </div>
             ))}
 
@@ -155,7 +155,7 @@ export function AiAcademicAssistant() {
                 type="button"
                 onClick={() => handleSend(s)}
                 disabled={pending}
-                className="shrink-0 rounded-full border border-border bg-surface px-2.5 py-1 text-[11px] font-medium text-muted-foreground hover:border-primary hover:text-primary transition-colors"
+                className="shrink-0 rounded-full border border-border bg-surface px-2.5 py-1 text-xs font-medium text-muted-foreground hover:border-primary hover:text-primary transition-colors"
               >
                 {s}
               </button>

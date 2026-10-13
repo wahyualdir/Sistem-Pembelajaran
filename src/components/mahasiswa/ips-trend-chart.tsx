@@ -59,7 +59,7 @@ export function IpsTrendChart({ data }: IpsTrendChartProps) {
     <div className="w-full">
       <div className="flex items-center justify-between text-xs mb-1.5">
         <span className="font-medium text-muted-foreground">Tren IPS Semester</span>
-        <span className="text-[11px] font-semibold text-primary">
+        <span className="text-xs font-semibold text-primary">
           Terakhir: {data[data.length - 1].ips.toFixed(2)}
         </span>
       </div>
@@ -137,7 +137,7 @@ export function IpsTrendChart({ data }: IpsTrendChartProps) {
         </svg>
 
         {/* Baris label semester di bawah grafik */}
-        <div className="flex justify-between items-center px-2 mt-1 text-[10px] text-muted-foreground font-medium">
+        <div className="flex justify-between items-center px-2 mt-1 text-xs text-muted-foreground font-medium">
           {data.map((d, i) => (
             <span
               key={d.semester}
@@ -152,7 +152,7 @@ export function IpsTrendChart({ data }: IpsTrendChartProps) {
 
         {/* Tooltip interaktif saat titik di-hover */}
         {hoveredIdx !== null && data[hoveredIdx] && (
-          <div className="absolute top-1 right-2 bg-popover text-popover-foreground border border-border rounded-[6px] px-2 py-0.5 text-[11px] shadow-sm animate-fade-up pointer-events-none">
+          <div className="absolute top-1 right-2 bg-popover text-popover-foreground border border-border rounded-[6px] px-2 py-0.5 text-xs shadow-sm animate-fade-up pointer-events-none">
             <span className="font-semibold">Semester {data[hoveredIdx].semester}:</span>{" "}
             IPS <strong className="text-primary">{data[hoveredIdx].ips.toFixed(2)}</strong> ({data[hoveredIdx].sks} SKS)
           </div>

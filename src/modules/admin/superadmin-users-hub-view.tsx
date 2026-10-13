@@ -271,16 +271,16 @@ export function SuperadminUsersHubView() {
                   <tr key={u.id} className="hover:bg-retro-warm/30 transition-colors">
                     <td className="p-3 font-sans">
                       <div className="font-bold text-black">{u.name}</div>
-                      <span className="text-[11px] font-mono text-black/60">{u.identifier}</span>
+                      <span className="text-xs font-mono text-black/60">{u.identifier}</span>
                     </td>
                     <td className="p-3 text-black/80">{u.email}</td>
                     <td className="p-3">
-                      <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 font-bold text-[11px]">
+                      <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 font-bold text-xs">
                         {u.role}
                       </span>
                     </td>
                     <td className="p-3 text-center">
-                      <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-bold text-[11px]">
+                      <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-bold text-xs">
                         {u.status}
                       </span>
                     </td>
@@ -346,7 +346,7 @@ export function SuperadminUsersHubView() {
             <div className="p-3 bg-amber-50 border-2 border-amber-500 rounded text-xs text-amber-950 space-y-1">
               <div className="font-bold">Target Pengguna: {impersonateTarget.name} ({impersonateTarget.role})</div>
               <div>ID: <code>{impersonateTarget.id}</code></div>
-              <div className="text-[11px] text-amber-900 mt-1">
+              <div className="text-xs text-amber-900 mt-1">
                 Sesi berlangsung maksimal 30 menit. Seluruh aksi dicatat pada log audit sistem.
               </div>
             </div>
@@ -362,7 +362,7 @@ export function SuperadminUsersHubView() {
                 placeholder="Contoh: Investigasi kendala sinkronisasi presensi mahasiswa bersangkutan..."
                 className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 text-xs font-sans"
               />
-              <span className="text-[11px] text-black/60">
+              <span className="text-xs text-black/60">
                 Panjang karakter: {impersonateReason.trim().length} / minimal 10
               </span>
             </div>

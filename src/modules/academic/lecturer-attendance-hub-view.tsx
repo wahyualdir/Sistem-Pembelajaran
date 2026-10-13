@@ -311,7 +311,7 @@ export function LecturerAttendanceHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2 py-0.5 rounded border text-xs font-mono font-bold',
                               st.can_take_uas
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : 'border-rose-500 bg-rose-100 text-rose-950'
@@ -378,7 +378,7 @@ export function LecturerAttendanceHubView({
                         <td className="p-3.5 sm:p-4">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2 py-0.5 rounded border text-xs font-mono font-bold',
                               l.type === 'SAKIT'
                                 ? 'border-rose-400 bg-rose-50 text-rose-900'
                                 : 'border-blue-400 bg-blue-50 text-blue-900'
@@ -407,7 +407,7 @@ export function LecturerAttendanceHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2 py-0.5 rounded border text-xs font-mono font-bold',
                               l.status === 'DISETUJUI'
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : l.status === 'DITOLAK'

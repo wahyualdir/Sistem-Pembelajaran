@@ -93,11 +93,11 @@ export default async function ClassAttendancePage({ params }: { params: { id: st
                         Pertemuan {s.meeting_number}: {s.title}
                       </span>
                       {s.is_open ? (
-                        <span className="text-[10px] font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">
                           Sesi Dibuka
                         </span>
                       ) : (
-                        <span className="text-[10px] font-semibold text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-semibold text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
                           Sesi Ditutup
                         </span>
                       )}
@@ -160,11 +160,11 @@ export default async function ClassAttendancePage({ params }: { params: { id: st
                     </td>
                     <td className="py-2.5 px-3 text-center">
                       {st.can_take_uas ? (
-                        <span className="text-[10px] font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">
                           Lolos
                         </span>
                       ) : (
-                        <span className="text-[10px] font-semibold text-danger bg-danger-soft px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-semibold text-danger bg-danger-soft px-2 py-0.5 rounded-full">
                           Ditolak (&lt;75%)
                         </span>
                       )}

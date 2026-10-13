@@ -437,7 +437,7 @@ export function LecturerAnalyticsHubView({
                         {row.d}
                       </td>
                       <td className="p-3.5 sm:p-4 text-center">
-                        <span className={cn('px-2.5 py-0.5 rounded border border-black font-mono text-[11px] font-bold', row.color)}>
+                        <span className={cn('px-2.5 py-0.5 rounded border border-black font-mono text-xs font-bold', row.color)}>
                           {row.status}
                         </span>
                       </td>
@@ -579,7 +579,7 @@ export function LecturerAnalyticsHubView({
                         <td className="p-3.5 sm:p-4 text-black/80 max-w-sm">
                           <div>{d.reason}</div>
                           {d.lecturer_note && (
-                            <div className="text-[11px] font-mono text-emerald-900 mt-1 bg-emerald-50 p-1.5 rounded border border-emerald-300">
+                            <div className="text-xs font-mono text-emerald-900 mt-1 bg-emerald-50 p-1.5 rounded border border-emerald-300">
                               Tanggapan Dosen: {d.lecturer_note}
                             </div>
                           )}
@@ -587,7 +587,7 @@ export function LecturerAnalyticsHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-[11px] font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
                               d.status === 'APPROVED'
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : d.status === 'REJECTED'
@@ -697,7 +697,7 @@ export function LecturerAnalyticsHubView({
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-black uppercase text-black font-mono">Nilai Lama</label>
-                    <span className="text-[10px] font-mono font-bold text-neutral-600 bg-neutral-200 px-1.5 py-0.5 rounded border border-black/20">Server Read-Only</span>
+                    <span className="text-xs font-mono font-bold text-neutral-600 bg-neutral-200 px-1.5 py-0.5 rounded border border-black/20">Server Read-Only</span>
                   </div>
                   <input
                     type="text"
@@ -767,7 +767,7 @@ export function LecturerAnalyticsHubView({
                       <tr key={r.id} className="hover:bg-retro-warm/20">
                         <td className="p-3 font-bold text-black">
                           <div>{r.student_name}</div>
-                          <div className="text-[11px] font-normal text-black/60 font-mono">{r.assignment_title}</div>
+                          <div className="text-xs font-normal text-black/60 font-mono">{r.assignment_title}</div>
                         </td>
                         <td className="p-3 text-center font-mono font-bold">
                           <span className="line-through text-black/50">{r.old_score}</span>
@@ -778,7 +778,7 @@ export function LecturerAnalyticsHubView({
                         <td className="p-3 text-center">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border text-[10px] font-mono font-bold',
+                              'px-2 py-0.5 rounded border text-xs font-mono font-bold',
                               r.status === 'APPROVED'
                                 ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
                                 : r.status === 'REJECTED'
@@ -928,7 +928,7 @@ export function LecturerAnalyticsHubView({
                     <span className="font-bold text-black">{disputeModalState.dispute.student_name}</span>
                     <span className="font-mono text-black/60">{disputeModalState.dispute.exam_title}</span>
                   </div>
-                  <div className="text-[11px] text-black/80 italic border-t border-black/20 pt-1">
+                  <div className="text-xs text-black/80 italic border-t border-black/20 pt-1">
                     Keluhan Mahasiswa: &ldquo;{disputeModalState.dispute.reason}&rdquo;
                   </div>
                 </div>
@@ -962,7 +962,7 @@ export function LecturerAnalyticsHubView({
                       {disputeModalState.status === 'APPROVED' ? 'Catatan Persetujuan Dosen' : 'Alasan Penolakan Dosen (Wajib)'}
                     </label>
                     <span className={cn(
-                      'text-[10px] font-mono font-bold',
+                      'text-xs font-mono font-bold',
                       disputeModalState.note.trim().length >= 10 ? 'text-emerald-700' : 'text-rose-600'
                     )}>
                       {disputeModalState.note.trim().length}/10 Karakter

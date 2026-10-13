@@ -178,3 +178,73 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 
 ### 3. Aturan Akademik Dinamis
 - Nilai konfigurasi batas SKS, persentase kehadiran UAS (75%), skala huruf mutu nilai (A sampai E), dan batas kelulusan prasyarat disimpan dalam tabel `KonfigurasiAkademik` dengan nilai bawaan yang dapat disesuaikan tanpa redeploy kode.
+
+---
+
+### Keputusan 19: Standarisasi Skala Responsif & Kepadatan UI Terpadu (Fase 1 - 5)
+- **Tanggal**: 12 Oktober 2026
+- **Konteks & Masalah**:
+  Audit antarmuka menemukan layout token berbasis pixel tetap (`--layout-sidebar-width` 218-315px, `--layout-right-panel-width` 305-480px) menyebabkan sidebar + panel kanan mengonsumsi >40% lebar viewport pada laptop resolusi standar 1280–1535px (termasuk Windows scaling 125%/150%), sehingga kolom konten tengah terjepit. Ditemukan juga ~493 kelas pixel arbitrer (`text-[Npx]`, `h-[Npx]`) dan kontrol masukan berukuran besar (3.1rem) yang tidak responsif terhadap skala viewport.
+- **Keputusan Arsitektur & Teknis**:
+  1. **Skala Berbasis Root REM Adaptif**:
+     - `<1024px`: `html { font-size: 15px; }` (kenyamanan sentuh tablet & ponsel).
+     - `1024px – 1535px`: `html { font-size: 14px; }` (proporsi optimal laptop 1366x768 & 1440x900 dengan zoom 100%, ekuivalen tampilan zoom 85–90%).
+     - `1536px – 1919px`: `html { font-size: 15px; }` (layar desktop menengah).
+     - `≥1920px`: `html { font-size: 16px; }` (layar FHD/4K lebar).
+  2. **Token Tata Letak REM Fleksibel**:
+     - `--layout-sidebar-width: 15rem` (~210px pada 14px root).
+     - `--layout-rail-width: 4.5rem` (~63px).
+     - `--layout-right-panel-width: 20rem` (~280px).
+     - `--layout-header-height: 3.5rem` (desktop) dan `--layout-header-height-mobile: 3.25rem` (ponsel).
+  3. **Panel Kanan Adaptif (Breakpoint 2XL / 1536px)**:
+     - Panel kanan hanya tampil *inline statis* pada viewport `≥1536px` (`2xl`).
+     - Pada viewport `<1536px` (termasuk laptop 1280–1535px), panel kanan otomatis bertransisi menjadi drawer/off-canvas yang dipicu melalui tombol toggle header, menjamin lebar kolom tengah konsisten **≥60%** viewport width.
+  4. **Pencegahan Auto-Zoom iOS & Touch Target Aksesibilitas**:
+     - Semua elemen masukan formulir (`input`, `select`, `textarea`, `.field`) diproteksi dengan aturan `font-size: 16px !important` pada viewport `<768px`.
+     - Seluruh tombol kontrol dan touch target interaktif berukuran minimal `44x44px` pada perangkat coarse pointer.
+     - Batas minimum teks `12px` di seluruh aplikasi melalui `.text-xs { font-size: max(0.75rem, 12px) !important; }`.
+  5. **Viewport Safe Area Insets**:
+     - Metadata viewport diekspor dengan `viewportFit: "cover"` dan variabel CSS `--sat`, `--sab`, `--sal`, `--sar` disematkan pada topbar, sidebar drawer, dan tombol mengambang AI.
+  6. **Verifikasi E2E Playwright**:
+     - Suite pengujian `tests/e2e/responsive.spec.ts` memvalidasi 26 skenario di 11 viewport (360x640 hingga 1920x1080) dengan tangkapan layar otomatis di `docs/responsive-verification/`. Seluruh pengujian lulus 100%.
+
+---
+
+### Keputusan 20: Fitur LMS Inti — Upload Berkas Supabase Storage & Progres Belajar Mahasiswa (Fase 1 - 5)
+- **Tanggal**: 13 Oktober 2026
+- **Konteks & Masalah**:
+  Materi perkuliahan dan pengumpulan tugas sebelumnya hanya menyimpan string tautan atau nama berkas yang diketik tanpa penyimpanan biner nyata, bucket privat, sanitasi nama berkas, atau signed URL berumur pendek. Selain itu, belum ada entitas pelacakan progres belajar materi per mahasiswa dan per kelas untuk memantau ketuntasan pembelajaran dan kebutuhan bimbingan akademik.
+- **Keputusan Arsitektur & Teknis**:
+  1. **Supabase Storage Privat & RLS**:
+     - Dua bucket privat didaftarkan via migrasi SQL `20261012000019_storage_and_material_progress.sql`: `materi` dan `tugas`.
+     - Kebijakan RLS pada `storage.objects` memastikan dosen/TA pemilik kelas & admin berhak mengunggah/menghapus materi; mahasiswa terdaftar di kelas (KRS aktif) berhak membaca. Untuk tugas: mahasiswa hanya mengunggah/membaca berkas miliknya; dosen/TA kelas dapat membaca seluruh berkas tugas kelas.
+  2. **Konvensi Path & Sanitasi Berkas**:
+     - Konvensi path: `materi/{kelasId}/{uuid}-{namaAman}` dan `tugas/{tugasId}/{mahasiswaId}/{uuid}-{namaAman}`.
+     - Sanitasi nama berkas di `src/lib/akademik/konfigurasi-storage.ts` membuang path traversal, spasi, dan karakter berbahaya, serta membatasi panjang nama dasar ke 60 karakter.
+  3. **Otorisasi Server-Side & Rollback Obyek Yatim**:
+     - Validasi izin peran dan status enrollment dieksekusi di server actions (`src/features/materi-tugas/actions.ts`). Service role key hanya digunakan pada helper storage server (`src/lib/supabase/storage.ts`).
+     - Jika baris database gagal disimpan setelah pengunggahan, pembersihan objek storage (rollback) otomatis dijalankan untuk mencegah berkas yatim.
+     - Setiap mutasi dicatat ke tabel `audit_logs`.
+  4. **Konfigurasi Batas Upload Terpusat**:
+     - Batas materi: 50 MB (pdf, docx, pptx, xlsx, zip, png, jpg, jpeg, mp4).
+     - Batas tugas: 10 MB (pdf, docx, pptx, xlsx, zip, png, jpg, jpeg).
+     - Dikonfigurasi terpusat pada konstanta `KONFIGURASI_STORAGE` dengan pesan galat bahasa Indonesia.
+  5. **Signed URL Berumur Pendek**:
+     - Unduhan berkas storage menghasilkan signed URL privat berumur pendek (60 menit) via server action setelah verifikasi otorisasi. Tidak ada URL publik permanen.
+  6. **Aturan Keterlambatan Pengumpulan Tugas**:
+     - Keterlambatan dihitung otomatis di server (`waktuKumpul > tenggat`). Kumpul ulang sebelum tenggat menggantikan berkas lama (berkas lama dihapus dari storage).
+  7. **Model & RLS Progres Belajar (`MateriProgres`)**:
+     - Model Prisma `MateriProgres` dan tabel PostgreSQL `public.materi_progres` dengan RLS aktif.
+     - Server Actions: `catatMateriDibukaAction`, `tandaiMateriSelesaiAction`, dan `batalkanMateriSelesaiAction` dengan otorisasi khusus mahasiswa terdaftar.
+  8. **Kalkulasi Progres & Rekap Dosen**:
+     - Fungsi murni `hitungProgresMateri(total, selesai)` menghitung persentase progres (total 0 → 0%).
+     - Mahasiswa melihat badge tuntas, kartu kelas, dan 'Lanjutkan Belajar' di Beranda.
+     - Dosen melihat rekap per materi dan per mahasiswa lengkap dengan ekspor CSV.
+  9. **Kompatibilitas Mundur & Komponen UI Reusable**:
+     - Komponen `FileDropzone` mendukung drag-and-drop dan tombol pilih berkas native dengan touch target minimal 44px.
+     - Data materi/tugas lama berbasis URL eksternal tetap didukung penuh dengan opsi 'Tautkan Link Eksternal'.
+  10. **Verifikasi & Pengujian Otomatis**:
+      - 11 unit test di `tests/progres-belajar.test.ts` lulus 100%.
+      - RLS testing di `supabase/tests/database/06_storage_and_progress_rls.sql` dan `npm run check:rls` (29 tabel lulus).
+      - E2E Playwright di `tests/e2e/lms-materi-tugas-progres.spec.ts` memvalidasi alur terpadu.
+

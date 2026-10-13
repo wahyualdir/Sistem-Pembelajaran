@@ -79,7 +79,7 @@ export function ImpersonateUserCard() {
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold uppercase bg-retro-warm px-2 py-0.5 rounded border border-retro-border">
+                <span className="text-xs font-mono font-bold uppercase bg-retro-warm px-2 py-0.5 rounded border border-retro-border">
                   {u.identifier}
                 </span>
                 <Users className="h-3.5 w-3.5 text-muted-foreground" />

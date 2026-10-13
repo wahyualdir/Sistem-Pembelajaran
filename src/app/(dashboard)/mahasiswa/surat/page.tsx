@@ -134,7 +134,7 @@ export default function MahasiswaSuratPage() {
                         {item.tanggalPengajuan}
                       </TableCell>
                       <TableCell>
-                        <Badge variant="secondary" className="text-[10px]">
+                        <Badge variant="secondary" className="text-xs">
                           {item.jenis.replace(/_/g, " ")}
                         </Badge>
                       </TableCell>
@@ -149,7 +149,7 @@ export default function MahasiswaSuratPage() {
                       <TableCell className="text-center">
                         <StatusBadge status={item.status} size="sm" />
                       </TableCell>
-                      <TableCell className="font-mono text-[11px] font-semibold text-primary">
+                      <TableCell className="font-mono text-xs font-semibold text-primary">
                         {item.nomorSurat || "-"}
                       </TableCell>
                       <TableCell className="text-center">
@@ -223,7 +223,7 @@ export default function MahasiswaSuratPage() {
                 required
                 className="w-full rounded-[8px] border border-border p-2.5 text-xs text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               />
-              <span className="text-[10px] text-muted-foreground block mt-1">
+              <span className="text-xs text-muted-foreground block mt-1">
                 Admin akan memverifikasi berkas dan menerbitkan surat resmi dengan nomor registrasi dalam 1-2 hari kerja.
               </span>
             </div>

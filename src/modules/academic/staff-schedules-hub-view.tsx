@@ -111,22 +111,22 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Sesi Kuliah Mingguan</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Sesi Kuliah Mingguan</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{CLASS_SCHEDULES.length} Sesi</div>
           <span className="text-xs text-black/70">Terjadwal Aktif</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Jadwal Ujian Terpadu</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Jadwal Ujian Terpadu</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{EXAM_SCHEDULES.length} Sesi</div>
           <span className="text-xs text-retro-orange font-bold">UTS Semester</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Ruang & Lab Dipakai</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Ruang & Lab Dipakai</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">4 Ruang</div>
           <span className="text-xs text-emerald-800 font-bold">Terjadwal Optimal</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-[11px] font-mono font-bold uppercase text-black/60">Konflik / Bentrok</span>
+          <span className="text-xs font-mono font-bold uppercase text-black/60">Konflik / Bentrok</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-emerald-800">0 Konflik</div>
           <span className="text-xs text-emerald-800 font-bold">Jadwal Bersih</span>
         </div>
@@ -211,7 +211,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                           {s.enrolled} / {s.capacity}
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-[11px] font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
                             AKTIF BERJALAN
                           </span>
                         </td>
@@ -251,7 +251,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
             >
               <Plus className="h-4 w-4" />
               <span>Jadwalkan Ujian Baru</span>
-              {!isDemo && <span className="text-[10px] bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
@@ -283,7 +283,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                         </td>
                         <td className="p-3.5 sm:p-4">
                           <div className="font-bold text-black">{e.course}</div>
-                          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-retro-warm border border-black/30 font-bold">
+                          <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-retro-warm border border-black/30 font-bold">
                             {e.type}
                           </span>
                         </td>
@@ -354,7 +354,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border text-[10px] font-mono font-bold',
+                              'px-2 py-0.5 rounded border text-xs font-mono font-bold',
                               r.status === 'OKUPANSI_TINGGI'
                                 ? 'border-amber-500 bg-amber-100 text-amber-950'
                                 : 'border-emerald-500 bg-emerald-100 text-emerald-950'

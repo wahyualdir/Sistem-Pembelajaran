@@ -172,7 +172,7 @@ export default function NotificationPreferencesPage() {
                 <span className="text-xs sm:text-sm font-bold text-foreground block">
                   {item.label}
                 </span>
-                <span className="text-[11px] text-muted-foreground block font-mono">
+                <span className="text-xs text-muted-foreground block font-mono">
                   {item.desc}
                 </span>
               </div>

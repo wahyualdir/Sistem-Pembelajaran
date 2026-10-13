@@ -83,7 +83,7 @@ export function SystemMonitoringHubView() {
             <div className="text-2xl sm:text-3xl font-black font-mono text-black mt-1">
               {isDemo ? '18.4%' : 'Tidak tersedia'}
             </div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">
+            <div className="text-xs font-mono text-black/60 mt-1">
               {isDemo ? '✓ Beban Normal (8 Core)' : 'OS metrics offline'}
             </div>
           </div>
@@ -96,7 +96,7 @@ export function SystemMonitoringHubView() {
             <div className="text-2xl sm:text-3xl font-black font-mono text-black mt-1">
               {isDemo ? '4.2 / 16 GB' : 'Tidak tersedia'}
             </div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">
+            <div className="text-xs font-mono text-black/60 mt-1">
               {isDemo ? '✓ Swap 0% Terpakai' : 'OS metrics offline'}
             </div>
           </div>
@@ -109,7 +109,7 @@ export function SystemMonitoringHubView() {
             <div className="text-2xl sm:text-3xl font-black font-mono text-black mt-1">
               {isDemo ? '142 Conn' : 'Tidak tersedia'}
             </div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">
+            <div className="text-xs font-mono text-black/60 mt-1">
               {isDemo ? '✓ Throughput 1.2k req/s' : 'WebSocket metrics offline'}
             </div>
           </div>
@@ -122,7 +122,7 @@ export function SystemMonitoringHubView() {
             <div className="text-2xl sm:text-3xl font-black font-mono text-black mt-1">
               {isDemo ? '0 Antrean' : 'Belum dikonfigurasi'}
             </div>
-            <div className="text-[11px] font-mono text-black/60 mt-1">
+            <div className="text-xs font-mono text-black/60 mt-1">
               {isDemo ? '✓ Latensi Uji 210ms' : 'Judge0 belum terhubung'}
             </div>
           </div>
@@ -265,21 +265,21 @@ export function SystemMonitoringHubView() {
                     <td className="p-3 text-black/80 font-sans">Kuis Rekayasa Perangkat Lunak</td>
                     <td className="p-3 text-center font-bold">42</td>
                     <td className="p-3 text-center text-emerald-800">18.5</td>
-                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">AKTIF</span></td>
+                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">AKTIF</span></td>
                   </tr>
                   <tr>
                     <td className="p-3 font-bold text-black">attendance-live:sess-102</td>
                     <td className="p-3 text-black/80 font-sans">Presensi Dinamis QR Kelas IF-3A</td>
                     <td className="p-3 text-center font-bold">38</td>
                     <td className="p-3 text-center text-emerald-800">4.2</td>
-                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">AKTIF</span></td>
+                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">AKTIF</span></td>
                   </tr>
                   <tr>
                     <td className="p-3 font-bold text-black">notifications:broadcast</td>
                     <td className="p-3 text-black/80 font-sans">Pemberitahuan Sistem & Maklumat Kampus</td>
                     <td className="p-3 text-center font-bold">142</td>
                     <td className="p-3 text-center text-emerald-800">0.8</td>
-                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-[11px] font-bold">AKTIF</span></td>
+                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">AKTIF</span></td>
                   </tr>
                 </tbody>
               </table>
