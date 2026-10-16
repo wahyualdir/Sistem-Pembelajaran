@@ -59,7 +59,7 @@ export default function MentoringPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <UserCheck className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -126,7 +126,7 @@ export default function MentoringPage() {
 
               {/* Schedule Info */}
               <div className="pt-3 border-t-2 border-black/10 flex items-center gap-2 text-sm font-mono font-bold text-black">
-                <Clock className="h-4 w-4 text-retro-orange shrink-0" />
+                <Clock className="h-4 w-4 text-primary shrink-0" />
                 <span>{m.schedule}</span>
               </div>
             </div>

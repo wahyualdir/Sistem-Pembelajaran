@@ -107,7 +107,7 @@ function RetroLoginVideoPlayer() {
   };
 
   return (
-    <div className="h-full rounded border-2 border-black bg-retro-surface shadow-retro-md sm:shadow-retro-lg flex flex-col overflow-hidden">
+    <div className="h-full min-h-0 rounded border-2 border-black bg-retro-video shadow-retro-md sm:shadow-retro-lg flex flex-col overflow-hidden">
       {/* Header Jendela Retro Bersih & Minimalis */}
       <div className="h-11 flex items-center justify-between border-b-2 border-black bg-retro-warm px-4 sm:px-6 shrink-0 select-none">
         <div className="flex items-center gap-2.5">
@@ -122,7 +122,7 @@ function RetroLoginVideoPlayer() {
           onClick={toggleMute}
           className={`px-3 py-1 rounded border-2 border-black text-xs font-mono font-black shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer select-none ${
             !isMuted
-              ? 'bg-retro-yellow text-black hover:bg-black hover:text-white'
+              ? 'bg-black text-white hover:bg-neutral-800'
               : 'bg-white text-black hover:bg-retro-warm'
           }`}
           title={!isMuted ? 'Suara Aktif (Klik untuk Matikan)' : 'Suara Mati (Klik untuk Nyalakan)'}
@@ -141,8 +141,8 @@ function RetroLoginVideoPlayer() {
         </button>
       </div>
 
-      {/* Konten Animasi: Nempel Menyatu ke Background Card Tanpa Badge Apapun */}
-      <div className="flex-1 w-full h-full relative flex items-center justify-center overflow-hidden bg-retro-surface select-none">
+      {/* Konten Animasi: Nempel Menyatu 100% ke Background Video Tanpa Garis Belang */}
+      <div className="flex-1 min-h-0 w-full relative flex items-center justify-center overflow-hidden bg-retro-video select-none p-3 sm:p-4">
         <video
           ref={videoRef}
           src="/login-video.mp4"
@@ -210,10 +210,10 @@ function LoginFormContent() {
   return (
     <div
       style={{ fontFamily: "'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif" }}
-      className="min-h-[100dvh] w-full bg-background text-black font-sans selection:bg-retro-yellow selection:text-black flex flex-col overflow-x-hidden antialiased"
+      className="min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-background text-black font-sans selection:bg-retro-yellow selection:text-black flex flex-col overflow-x-hidden lg:overflow-hidden antialiased"
     >
       {/* Top Bar Navigasi Sistem Retro Konsisten dengan Dashboard */}
-      <header className="h-header-mobile md:h-header flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 sm:border-b-3 border-black bg-retro-yellow shrink-0 select-none shadow-retro-sm pt-[env(safe-area-inset-top,0px)]">
+      <header className="h-14 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 sm:border-b-3 border-black bg-retro-warm shrink-0 select-none shadow-retro-sm pt-[env(safe-area-inset-top,0px)]">
         <div className="flex items-center gap-3">
           {/* Mac Traffic Light Buttons */}
           <div className="flex items-center gap-1.5 shrink-0">
@@ -224,7 +224,7 @@ function LoginFormContent() {
 
           <div className="flex items-center gap-2.5 ml-1">
             <div className="flex h-8 w-8 items-center justify-center rounded border-2 border-black bg-black text-white shadow-retro-sm">
-              <Flame className="h-4.5 w-4.5 fill-retro-orange text-retro-orange" />
+              <Flame className="h-4.5 w-4.5 fill-white text-white" />
             </div>
             <span className="font-heading font-black text-lg sm:text-xl tracking-tight text-black">
               SIAJAR
@@ -233,26 +233,26 @@ function LoginFormContent() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <span className="hidden sm:inline-flex items-center px-3 py-1 border-2 border-black bg-white text-xs font-mono font-bold text-black shadow-retro-sm">
+          <span className="hidden sm:inline-flex items-center px-3 py-1 border-2 border-black bg-black text-xs font-mono font-bold text-white shadow-retro-sm">
             TA 2026/2027 GANJIL
           </span>
         </div>
       </header>
 
-      {/* Main Body: Full Screen Grid 2 Kartu Retro Tanpa Scroll */}
-      <main className="flex-1 min-h-[calc(100dvh-3.5rem)] p-3 sm:p-4 lg:p-5 overflow-y-auto lg:overflow-hidden flex items-stretch">
-        <div className="w-full h-full grid lg:grid-cols-12 gap-4 lg:gap-5 items-stretch">
+      {/* Main Body: Full Screen Grid 2 Kartu Retro Tanpa Scroll di Layar Desktop */}
+      <main className="flex-1 min-h-0 p-3 sm:p-4 lg:p-5 overflow-y-auto lg:overflow-hidden flex items-stretch">
+        <div className="w-full h-full min-h-0 grid lg:grid-cols-12 gap-4 lg:gap-5 items-stretch">
           
           {/* Kolom Kiri: Pemutar Video Profil SIAJAR Lengkap Audio Asli & Rasio 1:1 (7 Kolom Full Height) */}
-          <section className="lg:col-span-7 h-full flex flex-col overflow-hidden min-h-[280px]">
+          <section className="lg:col-span-7 h-full min-h-0 flex flex-col overflow-hidden min-h-[280px] lg:min-h-0">
             <RetroLoginVideoPlayer />
           </section>
 
           {/* Kolom Kanan: Formulir Masuk SIAJAR (5 Kolom Full Height) */}
-          <section className="lg:col-span-5 h-full flex flex-col overflow-hidden">
-            <div className="h-full rounded border-2 border-black bg-white shadow-retro-md sm:shadow-retro-lg flex flex-col overflow-hidden">
+          <section className="lg:col-span-5 h-full min-h-0 flex flex-col overflow-hidden">
+            <div className="h-full min-h-0 rounded border-2 border-black bg-white shadow-retro-md sm:shadow-retro-lg flex flex-col overflow-hidden">
               {/* Header Jendela Login */}
-              <div className="h-11 flex items-center justify-between border-b-2 border-black bg-retro-yellow px-4 sm:px-6 shrink-0">
+              <div className="h-11 flex items-center justify-between border-b-2 border-black bg-retro-warm px-4 sm:px-6 shrink-0">
                 <div className="flex items-center gap-2.5">
                   <span className="text-sm sm:text-base font-black font-heading text-black tracking-tight">
                     autentikasi_portal.app
@@ -264,42 +264,43 @@ function LoginFormContent() {
               </div>
 
               {/* Konten Form Full Height */}
-              <div className="p-5 sm:p-6 lg:p-8 flex-1 flex flex-col justify-between overflow-y-auto">
-                {/* Header Judul Form */}
-                <div className="space-y-1 shrink-0">
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-black tracking-tight text-black leading-tight">
-                    Masuk ke SIAJAR
-                  </h1>
-                  <p className="text-xs sm:text-sm text-black/80 font-medium">
-                    Gunakan NIM, NIDN, NIP, username, atau email kampus Anda.
-                  </p>
-                </div>
-
-                {/* Notifikasi Error & Sukses */}
-                {errorMessage && (
-                  <div
-                    key={errorKey}
-                    id="login-error-alert"
-                    data-testid="login-error-alert"
-                    role="alert"
-                    className="shake border-2 border-black bg-danger-soft text-danger p-2.5 sm:p-3 my-1 text-xs sm:text-sm font-bold shadow-retro-sm flex items-center gap-2 rounded shrink-0"
-                  >
-                    <AlertCircle className="h-4.5 w-4.5 text-danger shrink-0" />
-                    <span>{errorMessage}</span>
+              <div className="p-5 sm:p-6 lg:p-7 flex-1 min-h-0 flex flex-col justify-between overflow-y-auto">
+                <div className="my-auto space-y-5 shrink-0">
+                  {/* Header Judul Form */}
+                  <div className="space-y-1.5">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-black tracking-tight text-black leading-tight">
+                      Masuk ke SIAJAR
+                    </h1>
+                    <p className="text-xs sm:text-sm text-black/80 font-medium">
+                      Gunakan NIM, NIDN, NIP, username, atau email kampus Anda.
+                    </p>
                   </div>
-                )}
-                {successMessage && (
-                  <div
-                    role="status"
-                    className="border-2 border-black bg-success-soft text-success p-2.5 sm:p-3 my-1 text-xs sm:text-sm font-bold shadow-retro-sm flex items-center gap-2 rounded shrink-0"
-                  >
-                    <CheckCircle2 className="h-4.5 w-4.5 shrink-0 text-success" />
-                    <span>{successMessage}</span>
-                  </div>
-                )}
 
-                {/* Form Input Masuk */}
-                <form onSubmit={handleSubmit} method="post" className="space-y-3 sm:space-y-4 my-auto shrink-0">
+                  {/* Notifikasi Error & Sukses */}
+                  {errorMessage && (
+                    <div
+                      key={errorKey}
+                      id="login-error-alert"
+                      data-testid="login-error-alert"
+                      role="alert"
+                      className="shake border-2 border-black bg-danger-soft text-danger p-2.5 sm:p-3 text-xs sm:text-sm font-bold shadow-retro-sm flex items-center gap-2 rounded"
+                    >
+                      <AlertCircle className="h-4.5 w-4.5 text-danger shrink-0" />
+                      <span>{errorMessage}</span>
+                    </div>
+                  )}
+                  {successMessage && (
+                    <div
+                      role="status"
+                      className="border-2 border-black bg-success-soft text-success p-2.5 sm:p-3 text-xs sm:text-sm font-bold shadow-retro-sm flex items-center gap-2 rounded"
+                    >
+                      <CheckCircle2 className="h-4.5 w-4.5 shrink-0 text-success" />
+                      <span>{successMessage}</span>
+                    </div>
+                  )}
+
+                  {/* Form Input Masuk */}
+                  <form onSubmit={handleSubmit} method="post" className="space-y-4">
                   <div className="space-y-1">
                     <label
                       htmlFor="identifier"
@@ -331,7 +332,7 @@ function LoginFormContent() {
                       </label>
                       <Link
                         href="/reset-password"
-                        className="text-xs sm:text-sm font-bold text-black hover:text-retro-orange underline underline-offset-2 transition-colors focus-visible:outline-none"
+                        className="text-xs sm:text-sm font-bold text-black hover:text-primary-dark underline underline-offset-2 transition-colors focus-visible:outline-none"
                       >
                         Lupa password?
                       </Link>
@@ -359,7 +360,18 @@ function LoginFormContent() {
                     <LogIn className="h-5 w-5" />
                     <span>{isPending ? 'Memverifikasi kredensial...' : 'Masuk ke SIAJAR'}</span>
                   </button>
+
+                  <div className="pt-1.5 text-center text-xs sm:text-sm font-medium text-black select-none">
+                    <span>Belum punya akun? </span>
+                    <Link
+                      href="/register"
+                      className="font-bold underline underline-offset-2 text-black hover:text-primary-dark transition-colors"
+                    >
+                      Daftar sekarang
+                    </Link>
+                  </div>
                 </form>
+                </div>
 
                 {/* Accordion Akun Demo Cepat */}
                 <details className="mt-2 pt-2 border-t-2 border-black/15 group shrink-0">

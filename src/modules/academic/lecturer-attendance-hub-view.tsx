@@ -110,7 +110,7 @@ export function LecturerAttendanceHubView({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <CalendarCheck2 className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -156,7 +156,7 @@ export function LecturerAttendanceHubView({
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -398,7 +398,7 @@ export function LecturerAttendanceHubView({
                           <button
                             type="button"
                             onClick={() => alert(`Membuka lampiran surat: ${l.attachment_name}`)}
-                            className="inline-flex items-center gap-1.5 text-xs text-black hover:text-retro-orange font-bold underline cursor-pointer"
+                            className="inline-flex items-center gap-1.5 text-xs text-black hover:text-primary-dark font-bold underline cursor-pointer"
                           >
                             <FileText className="h-3.5 w-3.5" />
                             <span>{l.attachment_name}</span>
@@ -459,7 +459,7 @@ export function LecturerAttendanceHubView({
         <div className="max-w-3xl space-y-6">
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl">
             <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-retro-orange" />
+              <MapPin className="h-5 w-5 text-primary" />
               <span>Konfigurasi Geofencing & Toleransi Presensi</span>
             </h2>
             <p className="text-xs text-black/70 mt-1">

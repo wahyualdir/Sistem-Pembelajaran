@@ -107,7 +107,7 @@ export default async function WorkspacePage() {
 
           <div className="flex items-center gap-2.5 ml-1">
             <div className="flex h-8 w-8 items-center justify-center rounded border-2 border-black bg-black text-white shadow-retro-sm">
-              <Flame className="h-4.5 w-4.5 fill-retro-orange text-retro-orange" />
+              <Flame className="h-4.5 w-4.5 fill-primary text-primary" />
             </div>
             <span className="font-heading font-bold text-lg sm:text-xl tracking-tight text-black">
               SIAJAR
@@ -173,7 +173,7 @@ export default async function WorkspacePage() {
                       }`}
                     >
                       <div className="flex items-start gap-3.5 min-w-0">
-                        <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl border-2 border-black bg-white flex items-center justify-center text-retro-orange shadow-retro-sm shrink-0 mt-0.5">
+                        <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-xl border-2 border-black bg-white flex items-center justify-center text-primary shadow-retro-sm shrink-0 mt-0.5">
                           <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                         </div>
                         <div className="min-w-0">
@@ -197,7 +197,7 @@ export default async function WorkspacePage() {
                         <input type="hidden" name="roleCode" value={roleCode} />
                         <button
                           type="submit"
-                          className="h-10 px-4 sm:px-5 rounded-lg border-2 border-black bg-retro-orange text-white hover:bg-black font-bold text-xs sm:text-sm shadow-retro hover:shadow-retro-md active:translate-x-0.5 active:translate-y-0.5 transition-all inline-flex items-center gap-2 cursor-pointer"
+                          className="h-10 px-4 sm:px-5 rounded-lg border-2 border-black bg-primary text-white hover:bg-black font-bold text-xs sm:text-sm shadow-retro hover:shadow-retro-md active:translate-x-0.5 active:translate-y-0.5 transition-all inline-flex items-center gap-2 cursor-pointer"
                         >
                           <span>Masuk</span>
                           <ArrowRight className="h-4 w-4" />

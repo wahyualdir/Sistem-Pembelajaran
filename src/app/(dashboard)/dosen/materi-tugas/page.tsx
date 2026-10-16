@@ -391,7 +391,7 @@ export default function DosenMateriTugasPage() {
               <p className="text-xs text-muted-foreground">Tugas Aktif</p>
               <h3 className="text-lg font-bold text-foreground mt-0.5">{daftarTugas.length} Tugas</h3>
             </div>
-            <Clock className="h-7 w-7 text-retro-orange/70" />
+            <Clock className="h-7 w-7 text-primary-dark" />
           </CardContent>
         </Card>
 
@@ -580,7 +580,7 @@ export default function DosenMateriTugasPage() {
                   <CardContent className="p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-retro-orange shrink-0" />
+                        <FileText className="h-4 w-4 text-primary shrink-0" />
                         <h3 className="font-semibold text-sm text-foreground">
                           {tug.judul}
                         </h3>
@@ -1009,7 +1009,7 @@ export default function DosenMateriTugasPage() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-sm font-bold">
-              <Clock className="h-5 w-5 text-retro-orange" />
+              <Clock className="h-5 w-5 text-primary" />
               Buat Tugas Perkuliahan Baru
             </DialogTitle>
           </DialogHeader>

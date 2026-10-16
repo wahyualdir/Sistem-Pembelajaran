@@ -46,20 +46,19 @@ export default async function ClassesPage({
         title="Kelas Perkuliahan"
         badge={lecturer ? 'Dosen' : student ? 'Mahasiswa' : 'Asisten'}
         headerClassName="bg-retro-yellow"
-        subtitle="Ruang kerja pembelajaran dan aktivitas perkuliahan terpadu"
         bodyClassName="p-5 sm:p-7 bg-white space-y-6"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-xl border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-xl border-2 border-black bg-primary text-white shadow-xs">
                 <Layers className="h-6 w-6" />
               </div>
-              <h1 className="font-bold text-2xl sm:text-3xl tracking-tight text-black">
+              <h1 className="font-black text-2xl sm:text-3xl tracking-tight text-black">
                 Kelas Saya
               </h1>
             </div>
-            <p className="text-sm sm:text-base text-black/75 font-normal max-w-2xl mt-1 leading-relaxed">
+            <p className="text-sm sm:text-base text-black font-bold max-w-2xl mt-1 leading-relaxed">
               {lecturer
                 ? 'Kelola rombongan belajar Anda, publikasikan materi & tugas, serta bagikan kode pendaftaran kelas kepada mahasiswa.'
                 : student
@@ -69,7 +68,7 @@ export default async function ClassesPage({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-xl border-2 border-black bg-retro-warm px-4 py-2 text-xs sm:text-sm font-semibold text-black shadow-retro">
+            <span className="rounded-xl border-2 border-black bg-retro-warm px-4 py-2 text-xs sm:text-sm font-black text-black shadow-retro">
               {classes.length} Kelas Aktif
             </span>
           </div>
@@ -86,21 +85,21 @@ export default async function ClassesPage({
 
       {/* 2. GRID KARTU KELAS */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between border-b-2 border-black/15 pb-3">
-          <h2 className="font-bold text-lg sm:text-xl text-black flex items-center gap-2.5">
-            <BookOpen className="h-5 w-5 text-retro-orange" />
+        <div className="flex items-center justify-between border-b-2 border-black/25 pb-3">
+          <h2 className="font-black text-lg sm:text-xl text-black flex items-center gap-2.5">
+            <BookOpen className="h-5 w-5 text-primary" />
             <span>Daftar Kelas Perkuliahan</span>
           </h2>
-          <span className="text-xs sm:text-sm font-semibold text-black/70">
+          <span className="text-xs sm:text-sm font-bold text-black">
             Semester Ganjil 2026/2027
           </span>
         </div>
 
         {classes.length === 0 ? (
           <div className="p-10 sm:p-14 text-center rounded-2xl border-2 border-dashed border-black bg-white shadow-retro space-y-3">
-            <FolderArchive className="h-10 w-10 sm:h-12 sm:w-12 text-black/40 mx-auto" />
-            <h3 className="text-lg font-bold text-black">Belum Ada Kelas Terdaftar</h3>
-            <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto leading-relaxed font-normal">
+            <FolderArchive className="h-10 w-10 sm:h-12 sm:w-12 text-black/60 mx-auto" />
+            <h3 className="text-lg font-black text-black">Belum Ada Kelas Terdaftar</h3>
+            <p className="text-xs sm:text-sm text-black font-bold max-w-md mx-auto leading-relaxed">
               {lecturer
                 ? 'Gunakan tombol Buat Kelas Baru di atas untuk membuka kelas pertama Anda.'
                 : 'Gunakan tombol Gabung Kelas dengan Kode untuk mendaftar ke kelas perkuliahan dosen Anda.'}

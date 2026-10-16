@@ -10,9 +10,11 @@ import {
   changePasswordSchema,
   switchWorkspaceSchema,
   resetPasswordRequestSchema,
+  registerSchema,
   type LoginInput,
   type ChangePasswordInput,
   type SwitchWorkspaceInput,
+  type RegisterInput,
 } from './schemas';
 import {
   checkIpRateLimit,
@@ -24,7 +26,7 @@ import { parseUserAgent, maskIpAddress, hashDeviceId } from './device';
 import type { UserStatus } from '@/lib/supabase/types';
 
 import type { ActionResponse } from './types';
-import { SYNTHETIC_DEMO_USERS } from './demo-users';
+import { SYNTHETIC_DEMO_USERS, type SyntheticDemoUser } from './demo-users';
 import { recordSystemAuditLog } from '@/lib/audit';
 import { isDemoMode } from '@/lib/config/features';
 
@@ -335,12 +337,18 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   if (activeRolesList.length === 1) {
     const singleRoleCode = activeRolesList[0];
     cookieStore.set('active_role', singleRoleCode, { path: '/' });
+    if (demoUser?.isNewAccount) {
+      cookieStore.set('is_new_account', 'true', { path: '/' });
+    } else {
+      cookieStore.set('is_new_account', 'false', { path: '/' });
+    }
     const mappedRole = singleRoleCode === 'STUDENT' ? 'MAHASISWA' : (singleRoleCode === 'LECTURER' || singleRoleCode === 'TEACHING_ASSISTANT' ? 'DOSEN' : 'ADMIN');
     const sessionPayload = Buffer.from(JSON.stringify({
       userId: currentUserId,
       email: targetEmail,
       name: demoUser?.name || 'Wahyu Aldiriyanto',
       role: mappedRole,
+      isNewAccount: !!demoUser?.isNewAccount,
       subId: mappedRole === 'MAHASISWA' ? 'mhs-1' : mappedRole === 'DOSEN' ? 'dsn-1' : undefined,
     })).toString('base64');
     cookieStore.set('siakad_session', sessionPayload, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
@@ -356,6 +364,148 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   return {
     ok: true,
     redirectTo: '/workspace',
+  };
+}
+
+/**
+ * Server Action: register
+ * Mendaftarkan akun baru ke sistem (Mahasiswa, Dosen, Asisten, Staf, dsb.)
+ */
+export async function registerAction(formData: unknown): Promise<ActionResponse> {
+  const parseResult = registerSchema.safeParse(formData);
+  if (!parseResult.success) {
+    return {
+      ok: false,
+      error: 'Data pendaftaran tidak valid.',
+      fieldErrors: parseResult.error.flatten().fieldErrors,
+    };
+  }
+
+  const { name, identifier, email, role, password } = parseResult.data;
+  const normalizedId = identifier.trim();
+  const normalizedEmail = email.toLowerCase().trim();
+
+  // Cek apakah identifier atau email sudah terdaftar di SYNTHETIC_DEMO_USERS
+  if (
+    SYNTHETIC_DEMO_USERS[normalizedId] ||
+    SYNTHETIC_DEMO_USERS[normalizedId.toLowerCase()] ||
+    SYNTHETIC_DEMO_USERS[normalizedEmail]
+  ) {
+    return {
+      ok: false,
+      error: 'Identifier atau email tersebut sudah terdaftar di sistem.',
+    };
+  }
+
+  const newId = randomUUID();
+  const isOnline = await checkSupabaseOnline();
+
+  // Jika online, coba periksa dan daftarkan ke database Supabase
+  if (isOnline) {
+    try {
+      const { data: existingIdent } = await supabaseAdmin
+        .from('user_identifiers')
+        .select('id')
+        .or(`value.ilike.${normalizedId},value.ilike.${normalizedEmail}`)
+        .limit(1)
+        .maybeSingle();
+
+      if (existingIdent) {
+        return {
+          ok: false,
+          error: 'Identifier atau email sudah terdaftar di database.',
+        };
+      }
+
+      // Buat user auth di Supabase
+      const { data: authCreated, error: createAuthErr } = await supabaseAdmin.auth.admin.createUser({
+        email: normalizedEmail,
+        password,
+        email_confirm: true,
+        user_metadata: { name, identifier: normalizedId, role },
+      });
+
+      if (!createAuthErr && authCreated?.user) {
+        const createdUserId = authCreated.user.id;
+        // Simpan profiles
+        await supabaseAdmin.from('profiles').insert({
+          id: createdUserId,
+          email: normalizedEmail,
+          full_name: name,
+          status: 'ACTIVE',
+        });
+        // Simpan user_identifiers
+        await supabaseAdmin.from('user_identifiers').insert([
+          { user_id: createdUserId, type: role === 'STUDENT' ? 'NIM' : role === 'LECTURER' ? 'NIDN' : 'USERNAME', value: normalizedId },
+          { user_id: createdUserId, type: 'EMAIL', value: normalizedEmail },
+        ]);
+        // Simpan user_roles
+        const { data: roleRow } = await supabaseAdmin.from('roles').select('id').eq('code', role).maybeSingle();
+        if (roleRow) {
+          await supabaseAdmin.from('user_roles').insert({
+            user_id: createdUserId,
+            role_id: roleRow.id,
+            status: 'ACTIVE',
+          });
+        }
+      }
+    } catch {
+      // Supabase offline fallback
+    }
+  }
+
+  // Daftarkan ke in-memory identity store (agar langsung bisa dipakai di sesi lokal / offline)
+  const newUser: SyntheticDemoUser = {
+    id: newId,
+    email: normalizedEmail,
+    name: name.trim(),
+    roles: [role],
+    status: 'ACTIVE',
+    password,
+    isNewAccount: true,
+  };
+
+  SYNTHETIC_DEMO_USERS[normalizedId] = newUser;
+  SYNTHETIC_DEMO_USERS[normalizedId.toLowerCase()] = newUser;
+  SYNTHETIC_DEMO_USERS[normalizedEmail] = newUser;
+  SYNTHETIC_DEMO_USERS[newId] = newUser;
+
+  // Set sesi login aktif seketika
+  const cookieStore = cookies();
+  cookieStore.set('active_role', role, { path: '/' });
+  cookieStore.set('is_new_account', 'true', { path: '/' });
+  const mappedRole =
+    role === 'STUDENT'
+      ? 'MAHASISWA'
+      : role === 'LECTURER' || role === 'TEACHING_ASSISTANT'
+      ? 'DOSEN'
+      : 'ADMIN';
+  const sessionPayload = Buffer.from(
+    JSON.stringify({
+      userId: newId,
+      email: normalizedEmail,
+      name: name.trim(),
+      role: mappedRole,
+      isNewAccount: true,
+      subId: mappedRole === 'MAHASISWA' ? 'mhs-new' : mappedRole === 'DOSEN' ? 'dsn-new' : undefined,
+    })
+  ).toString('base64');
+
+  cookieStore.set('siakad_session', sessionPayload, {
+    path: '/',
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 7,
+  });
+  cookieStore.set('demo_session', newId, {
+    path: '/',
+    httpOnly: true,
+    maxAge: 60 * 60 * 24 * 7,
+  });
+
+  const targetPortal = ROLE_PORTAL_MAP[role] || '/workspace';
+  return {
+    ok: true,
+    redirectTo: targetPortal,
   };
 }
 
@@ -872,6 +1022,36 @@ export async function getCurrentUserWithRoles() {
     }));
   }
 
+  if (!profile) {
+    const sessionCookie = cookieStore.get('siakad_session')?.value;
+    if (sessionCookie) {
+      try {
+        const decoded = JSON.parse(Buffer.from(sessionCookie, 'base64').toString('utf-8'));
+        if (decoded && decoded.name) {
+          profile = {
+            id: decoded.userId || userId,
+            full_name: decoded.name,
+            email: decoded.email || userEmail,
+            status: 'ACTIVE',
+            must_change_password: false,
+          };
+          if (rolesList.length === 0 && decoded.role) {
+            const roleCode = decoded.role === 'MAHASISWA' ? 'STUDENT' : decoded.role === 'DOSEN' ? 'LECTURER' : 'ADMIN';
+            rolesList = [{
+              id: `${userId}-${roleCode}`,
+              role_id: roleCode,
+              scope_type: 'GLOBAL',
+              scope_id: null,
+              roles: { code: roleCode, name: roleCode, description: `${roleCode} role` },
+            }];
+          }
+        }
+      } catch {
+        // ignore parse error
+      }
+    }
+  }
+
   const activeRoleCode = cookieStore.get('active_role')?.value;
   // Validasi peran aktif di sisi server dari daftar peran resmi pengguna (rolesList)
   const allowedRoleCodes = rolesList.map((r) => (r.roles as any)?.code || r.role_id);
@@ -880,6 +1060,20 @@ export async function getCurrentUserWithRoles() {
       ? activeRoleCode
       : allowedRoleCodes[0] || 'STUDENT';
 
+  const isNewAccount =
+    !!matchedDemo?.isNewAccount ||
+    cookieStore.get('is_new_account')?.value === 'true' ||
+    (() => {
+      try {
+        const s = cookieStore.get('siakad_session')?.value;
+        if (!s) return false;
+        const dec = JSON.parse(Buffer.from(s, 'base64').toString('utf-8'));
+        return !!dec.isNewAccount;
+      } catch {
+        return false;
+      }
+    })();
+
   return {
     user: { id: userId, email: userEmail || profile?.email || '' },
     profile,
@@ -887,6 +1081,7 @@ export async function getCurrentUserWithRoles() {
     activeRole: validatedActiveRole,
     isImpersonating,
     impersonatingFrom,
+    isNewAccount,
   };
 }
 

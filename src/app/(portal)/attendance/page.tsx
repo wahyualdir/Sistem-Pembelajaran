@@ -135,8 +135,11 @@ export default async function AttendancePage() {
     );
   }
 
-  const records = isDemo ? DEMO_ATTENDANCE_RECORDS : [];
-  const leaves = realLeaves.length > 0
+  const isNew = user?.isNewAccount ?? false;
+  const records = isDemo && !isNew ? DEMO_ATTENDANCE_RECORDS : [];
+  const leaves = isNew
+    ? []
+    : realLeaves.length > 0
     ? realLeaves.map((l) => ({
         id: l.id,
         type: l.type,
@@ -157,7 +160,7 @@ export default async function AttendancePage() {
     <AttendanceHubView
       records={records}
       leaves={leaves}
-      isDemo={isDemo}
+      isDemo={isDemo && !isNew}
     />
   );
 }

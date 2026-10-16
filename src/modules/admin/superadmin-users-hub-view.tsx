@@ -157,7 +157,7 @@ export function SuperadminUsersHubView() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-retro-sm">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <Users className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
@@ -329,7 +329,7 @@ export function SuperadminUsersHubView() {
           <div className="w-full max-w-lg bg-white rounded-xl border-4 border-black shadow-retro-lg p-6 space-y-4 animate-scale-in font-mono">
             <div className="flex items-center justify-between border-b-2 border-black pb-3">
               <div className="flex items-center gap-2">
-                <UserCheck className="h-5 w-5 text-retro-orange" />
+                <UserCheck className="h-5 w-5 text-primary" />
                 <h3 className="font-heading font-black text-lg text-black">
                   Konfirmasi Impersonasi Pengguna
                 </h3>

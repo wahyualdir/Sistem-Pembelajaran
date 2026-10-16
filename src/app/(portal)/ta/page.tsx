@@ -28,7 +28,7 @@ export default async function AssistantPortalPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-xs">
                 <Users className="h-5 w-5" />
               </div>
               <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
@@ -91,7 +91,7 @@ export default async function AssistantPortalPage() {
       >
         <div className="flex items-center justify-between">
           <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-            <ClipboardList className="h-4 w-4 text-retro-orange" />
+            <ClipboardList className="h-4 w-4 text-primary" />
             <span>Daftar Pengumpulan Menunggu Penilaian</span>
           </h2>
           <span className="text-xs font-mono text-muted-foreground">
@@ -129,7 +129,7 @@ export default async function AssistantPortalPage() {
                     <span className="px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-xs font-mono font-bold text-foreground">
                       {t.class_title}
                     </span>
-                    <h3 className="font-heading font-bold text-sm text-foreground group-hover:text-retro-orange transition-colors">
+                    <h3 className="font-heading font-bold text-sm text-foreground group-hover:text-primary-dark transition-colors">
                       {t.title}
                     </h3>
                   </div>
@@ -142,7 +142,7 @@ export default async function AssistantPortalPage() {
                   <span className="px-2.5 py-1 rounded border border-retro-border bg-retro-yellow text-black font-mono font-bold text-xs shadow-xs">
                     {t.pending} dari {t.total} belum dinilai
                   </span>
-                  <div className="flex items-center gap-1 text-xs font-bold text-retro-orange group-hover:translate-x-1 transition-transform">
+                  <div className="flex items-center gap-1 text-xs font-bold text-primary group-hover:translate-x-1 transition-transform">
                     <span>Buka</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </div>

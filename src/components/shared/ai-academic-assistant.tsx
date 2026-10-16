@@ -77,32 +77,32 @@ export function AiAcademicAssistant() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full bg-primary px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-xl hover:bg-primary/90 transition-all hover:scale-105 active:scale-95 group cursor-pointer"
+          className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full border-2 border-ink bg-primary px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-retro hover:bg-primary-dark transition-all hover:scale-105 active:scale-95 group cursor-pointer"
           aria-label="Buka Asisten AI SIAJAR"
         >
           <div className="relative">
             <Bot className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
-            <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-success ring-2 ring-white" />
+            <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-success ring-2 ring-surface" />
           </div>
-          <span className="text-xs font-semibold tracking-wide">Tanya AI SIAJAR</span>
+          <span className="text-xs font-black tracking-wide text-white">Tanya AI SIAJAR</span>
         </button>
       )}
 
       {/* Floating Chat Modal */}
       {isOpen && (
-        <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-50 flex h-[min(78dvh,32rem)] w-[calc(100vw-2rem)] sm:w-96 max-w-sm flex-col rounded-2xl border-2 border-black bg-surface shadow-2xl overflow-hidden animate-fade-up">
+        <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-50 flex h-[min(78dvh,32rem)] w-[calc(100vw-2rem)] sm:w-96 max-w-sm flex-col rounded-2xl border-2 border-ink bg-surface shadow-retro-window overflow-hidden animate-fade-up">
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-border bg-muted/60 px-4 py-3">
+          <div className="flex items-center justify-between border-b-2 border-ink bg-gray-soft px-4 py-3">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full border border-ink bg-primary text-white">
                 <Bot className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                <h3 className="text-xs font-black text-ink flex items-center gap-1.5">
                   SIAJAR AI Assistant
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-success" />
                 </h3>
-                <p className="text-xs text-muted-foreground">Konsultasi & Panduan Akademik</p>
+                <p className="text-xs text-gray-dark">Konsultasi & Panduan Akademik</p>
               </div>
             </div>
             <button

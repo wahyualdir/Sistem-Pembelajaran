@@ -821,7 +821,7 @@ export function TakeQuizForm({
           <div className="p-4 rounded-xl border-2 border-black bg-retro-warm/50 text-xs sm:text-sm space-y-1.5 shadow-retro">
             <div className="flex items-center justify-between font-bold">
               <span className="flex items-center gap-1.5 text-black">
-                <MessageSquare className="h-4 w-4 text-retro-orange" /> Status Sengketa Nilai:
+                <MessageSquare className="h-4 w-4 text-primary" /> Status Sengketa Nilai:
               </span>
               <span className="font-mono uppercase font-bold px-2 py-0.5 rounded border border-black bg-white text-black">
                 {existingAttempt.dispute.status}
@@ -846,7 +846,7 @@ export function TakeQuizForm({
               <button
                 type="button"
                 onClick={() => setIsDisputeOpen(true)}
-                className="text-xs font-bold text-black hover:text-retro-orange flex items-center gap-1.5 border-2 border-black px-2.5 py-1 rounded bg-white shadow-retro hover:bg-retro-warm transition-all"
+                className="text-xs font-bold text-black hover:text-primary-dark flex items-center gap-1.5 border-2 border-black px-2.5 py-1 rounded bg-white shadow-retro hover:bg-retro-warm transition-all"
               >
                 <HelpCircle className="h-3.5 w-3.5" /> Ajukan Sengketa Nilai
               </button>
@@ -945,7 +945,7 @@ export function TakeQuizForm({
                       {String(myAns ?? '')}
                     </div>
                     {aiDraft && (
-                      <p className="text-xs text-black/80 italic border-l-4 border-retro-orange pl-3 py-1 bg-retro-warm/20 rounded-r">
+                      <p className="text-xs text-black/80 italic border-l-4 border-primary pl-3 py-1 bg-retro-warm/20 rounded-r">
                         Feedback AI: {aiDraft.feedback}
                       </p>
                     )}
@@ -966,7 +966,7 @@ export function TakeQuizForm({
         {isDisputeOpen && (
           <form onSubmit={handleDisputeSubmit} className="p-4 sm:p-5 rounded-xl border-2 border-black bg-white space-y-3 shadow-retro">
             <h5 className="font-heading font-bold text-sm flex items-center gap-2 text-black">
-              <HelpCircle className="h-4 w-4 text-retro-orange" /> Pengajuan Sengketa / Klarifikasi Nilai
+              <HelpCircle className="h-4 w-4 text-primary" /> Pengajuan Sengketa / Klarifikasi Nilai
             </h5>
             <textarea
               rows={3}
@@ -1056,7 +1056,7 @@ export function TakeQuizForm({
               </span>
             )}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-xs font-bold bg-retro-orange text-white px-2.5 py-1 rounded border-2 border-black shadow-retro-sm">
+              <span className="font-mono text-xs font-bold bg-primary text-white px-2.5 py-1 rounded border-2 border-black shadow-retro-sm">
                 {quiz.exam_type ?? 'UJIAN RESMI'}
               </span>
               <span className="text-xs sm:text-sm font-bold text-black bg-retro-warm border-2 border-black/30 px-2.5 py-0.5 rounded font-mono">
@@ -1087,12 +1087,12 @@ export function TakeQuizForm({
         {/* Clean 4-Card Proctoring Rules Grid */}
         <div className="space-y-3">
           <h3 className="font-heading font-bold text-sm sm:text-base text-black flex items-center gap-2">
-            <ShieldAlert className="h-5 w-5 text-retro-orange shrink-0" />
+            <ShieldAlert className="h-5 w-5 text-primary shrink-0" />
             <span>Tata Tertib & Ketentuan Pengawasan (Proctoring)</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-retro-warm/60 shadow-retro">
-              <Eye className="h-5 w-5 text-retro-orange shrink-0 mt-0.5" />
+              <Eye className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <span className="text-xs sm:text-sm font-bold text-black block">Fokus Jendela & Layar Penuh</span>
                 <span className="text-xs text-black/75 font-medium leading-relaxed block">
@@ -1101,7 +1101,7 @@ export function TakeQuizForm({
               </div>
             </div>
             <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-retro-warm/60 shadow-retro">
-              <Lock className="h-5 w-5 text-retro-orange shrink-0 mt-0.5" />
+              <Lock className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <span className="text-xs sm:text-sm font-bold text-black block">Proteksi Integritas</span>
                 <span className="text-xs text-black/75 font-medium leading-relaxed block">
@@ -1110,7 +1110,7 @@ export function TakeQuizForm({
               </div>
             </div>
             <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-retro-warm/60 shadow-retro">
-              <Clock className="h-5 w-5 text-retro-orange shrink-0 mt-0.5" />
+              <Clock className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <span className="text-xs sm:text-sm font-bold text-black block">Sinkronisasi Waktu Server</span>
                 <span className="text-xs text-black/75 font-medium leading-relaxed block">
@@ -1119,7 +1119,7 @@ export function TakeQuizForm({
               </div>
             </div>
             <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-retro-warm/60 shadow-retro">
-              <ShieldCheck className="h-5 w-5 text-retro-orange shrink-0 mt-0.5" />
+              <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <span className="text-xs sm:text-sm font-bold text-black block">Penyimpanan Otomatis</span>
                 <span className="text-xs text-black/75 font-medium leading-relaxed block">
@@ -1255,7 +1255,7 @@ export function TakeQuizForm({
       <div className="sticky top-2 z-20 rounded-xl border-2 border-black bg-retro-warm/95 backdrop-blur px-5 py-3 flex flex-wrap items-center justify-between gap-3 shadow-retro">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <Clock className={`h-5 w-5 ${timeLeft <= 300 ? 'text-danger animate-pulse' : 'text-retro-orange'}`} />
+            <Clock className={`h-5 w-5 ${timeLeft <= 300 ? 'text-danger animate-pulse' : 'text-primary'}`} />
             <span className="text-xs sm:text-sm text-black font-bold">Sisa Waktu:</span>
             <span className={`font-mono text-base sm:text-lg font-bold ${timeLeft <= 300 ? 'text-danger' : 'text-black'}`}>
               {formatTimer(timeLeft)}

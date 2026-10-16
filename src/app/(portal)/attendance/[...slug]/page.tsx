@@ -136,17 +136,16 @@ export default async function AttendanceSubpage({ params }: PageProps) {
       <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
         <RetroWindow
           title="Sesi Presensi Terpadu"
-          subtitle="Pembuatan Sesi Presensi Terpadu Multi-Metode"
           headerBadge="Presensi"
           headerBadgeVariant="warning"
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-black flex items-center gap-3">
-              <Key className="h-7 w-7 text-retro-orange" />
+            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+              <Key className="h-7 w-7 text-primary" />
               <span>Buka Sesi Presensi Terpadu</span>
             </h1>
-            <p className="text-base sm:text-lg text-black font-medium max-w-3xl leading-relaxed">
+            <p className="text-base sm:text-lg text-black font-bold max-w-3xl leading-relaxed">
               Buka sesi presensi dengan pilihan metode: QR Dinamis (berganti tiap 20-30 detik), Biometrik WebAuthn/Passkey, atau Validasi Radius Geolokasi GPS (maksimal 50 meter).
             </p>
           </div>
@@ -191,11 +190,11 @@ export default async function AttendanceSubpage({ params }: PageProps) {
 
                   <div className="space-y-2 pt-2 border-t-2 border-black/10 text-sm font-mono font-bold">
                     <p className="text-black flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-retro-orange" />
+                      <Clock className="h-4 w-4 text-primary" />
                       <span>{ses.time || '08:00 - 10:30 WIB'}</span>
                     </p>
                     <p className="text-black flex items-center gap-2">
-                      <MapPin className="h-4 w-4 text-retro-orange" />
+                      <MapPin className="h-4 w-4 text-primary" />
                       <span className="truncate">{ses.location_name || 'Lab Komputer'}</span>
                     </p>
                   </div>
@@ -228,17 +227,16 @@ export default async function AttendanceSubpage({ params }: PageProps) {
       <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
         <RetroWindow
           title="Rekapitulasi Kehadiran Mahasiswa"
-          subtitle="Rekapitulasi Kehadiran Mahasiswa & Syarat Ujian"
           headerBadge="Rekap Presensi"
           headerBadgeVariant="warning"
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-black flex items-center gap-3">
-              <FileSpreadsheet className="h-7 w-7 text-retro-orange" />
+            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+              <FileSpreadsheet className="h-7 w-7 text-primary" />
               <span>Rekapitulasi Kehadiran Mahasiswa</span>
             </h1>
-            <p className="text-base sm:text-lg text-black font-medium max-w-3xl leading-relaxed">
+            <p className="text-base sm:text-lg text-black font-bold max-w-3xl leading-relaxed">
               Persentase kehadiran minimum mahasiswa adalah <strong>75%</strong> untuk memenuhi syarat mengikuti Ujian Akhir Semester (UAS). Sistem mengunci kartu ujian otomatis jika kehadiran di bawah ambang batas.
             </p>
           </div>
@@ -338,17 +336,16 @@ export default async function AttendanceSubpage({ params }: PageProps) {
       <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
         <RetroWindow
           title="Master Titik Lokasi Kampus"
-          subtitle="Konfigurasi Titik Koordinat GPS & Geofencing Kampus"
           headerBadge="Master Lokasi"
           headerBadgeVariant="warning"
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-black flex items-center gap-3">
-              <MapPin className="h-7 w-7 text-retro-orange" />
+            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+              <MapPin className="h-7 w-7 text-primary" />
               <span>Pengaturan Titik Lokasi Presensi</span>
             </h1>
-            <p className="text-base sm:text-lg text-black font-medium max-w-3xl leading-relaxed">
+            <p className="text-base sm:text-lg text-black font-bold max-w-3xl leading-relaxed">
               Tentukan koordinat lintang/bujur dan radius toleransi (default 50 meter). Server memvalidasi jarak menggunakan rumus Haversine dan menolak presensi jika pengguna berada di luar radius yang ditentukan.
             </p>
           </div>
@@ -396,17 +393,16 @@ export default async function AttendanceSubpage({ params }: PageProps) {
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       <RetroWindow
         title="Verifikasi Izin & Sakit"
-        subtitle="Verifikasi Surat Dokter & Pengajuan Dispensasi Presensi"
         headerBadge="Izin & Sakit"
         headerBadgeVariant="warning"
         bodyClassName="p-4 sm:p-6 lg:p-8"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-black flex items-center gap-3">
-            <FileText className="h-7 w-7 text-retro-orange" />
+          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+            <FileText className="h-7 w-7 text-primary" />
             <span>Pengajuan Izin & Sakit Mahasiswa</span>
           </h1>
-          <p className="text-base sm:text-lg text-black font-medium max-w-3xl leading-relaxed">
+          <p className="text-base sm:text-lg text-black font-bold max-w-3xl leading-relaxed">
             Dosen dapat meninjau unggahan bukti surat sakit dokter atau surat dispensasi kegiatan mahasiswa. Setiap perubahan status kehadiran tercatat lengkap dengan riwayat pengubah dan alasannya.
           </p>
         </div>
@@ -435,7 +431,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                 <h3 className="font-heading font-bold text-lg sm:text-xl text-black leading-snug">
                   {req.student}
                 </h3>
-                <p className="text-sm text-retro-orange font-bold mt-1">
+                <p className="text-sm text-primary font-bold mt-1">
                   {req.course} ({req.meeting})
                 </p>
               </div>

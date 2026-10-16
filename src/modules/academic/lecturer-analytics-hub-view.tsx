@@ -264,7 +264,7 @@ export function LecturerAnalyticsHubView({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <BarChart3 className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -310,7 +310,7 @@ export function LecturerAnalyticsHubView({
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -356,7 +356,7 @@ export function LecturerAnalyticsHubView({
               <p className="font-heading font-black text-3xl sm:text-4xl text-black">
                 88.0%
               </p>
-              <span className="text-xs text-retro-orange font-bold flex items-center gap-1">
+              <span className="text-xs text-primary font-bold flex items-center gap-1">
                 <Activity className="h-3.5 w-3.5" /> Sesuai Standar Akreditasi OBE
               </span>
             </div>
@@ -520,7 +520,7 @@ export function LecturerAnalyticsHubView({
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-retro-orange" />
+                <AlertCircle className="h-5 w-5 text-primary" />
                 <span>Kotak Masuk Keberatan Nilai Mahasiswa ({localDisputes.length})</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -649,7 +649,7 @@ export function LecturerAnalyticsHubView({
         <div className="space-y-6">
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl">
             <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-              <Clock className="h-5 w-5 text-retro-orange" />
+              <Clock className="h-5 w-5 text-primary" />
               <span>Pengajuan Perubahan Nilai Final (Grade Change Request)</span>
             </h2>
             <p className="text-xs text-black/70 mt-1">
@@ -804,7 +804,7 @@ export function LecturerAnalyticsHubView({
         <div className="space-y-6">
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl">
             <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-              <Download className="h-5 w-5 text-retro-orange" />
+              <Download className="h-5 w-5 text-primary" />
               <span>Pusat Unduh Dokumen Akademik & Berita Acara</span>
             </h2>
             <p className="text-xs text-black/70 mt-1">

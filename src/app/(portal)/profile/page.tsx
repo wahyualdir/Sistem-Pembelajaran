@@ -65,7 +65,7 @@ export default async function ProfilePage() {
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           {/* Avatar Kotak Retro dengan Border & Shadow */}
           <div className="relative group shrink-0">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl border-[2px] border-retro-border bg-retro-warm shadow-retro-md flex items-center justify-center text-4xl font-mono font-black text-retro-orange overflow-hidden">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl border-[2px] border-retro-border bg-retro-warm shadow-retro-md flex items-center justify-center text-4xl font-mono font-black text-primary overflow-hidden">
               {initials}
             </div>
             <div className="absolute -bottom-2 -right-2 p-1.5 rounded-full border border-retro-border bg-retro-mint shadow-retro text-retro-border" title="Status Akun Aktif">
@@ -88,7 +88,7 @@ export default async function ProfilePage() {
                     key={r.id}
                     className={`rounded-full border border-retro-border px-3 py-0.5 text-xs font-bold shadow-xs ${
                       isCurrentActive
-                        ? 'bg-retro-orange text-white'
+                        ? 'bg-primary text-white'
                         : 'bg-retro-mint text-black'
                     }`}
                   >
@@ -99,7 +99,7 @@ export default async function ProfilePage() {
             </div>
 
             <p className="text-sm font-medium text-muted-foreground flex items-center justify-center sm:justify-start gap-1.5">
-              <Mail className="h-4 w-4 text-retro-orange" />
+              <Mail className="h-4 w-4 text-primary" />
               <span>{email}</span>
               <span className="text-xs text-muted-foreground">&bull; NIM: 2024001</span>
             </p>
@@ -139,14 +139,14 @@ export default async function ProfilePage() {
             bodyClassName="p-5 space-y-4"
           >
             <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-              <GraduationCap className="h-5 w-5 text-retro-orange" />
+              <GraduationCap className="h-5 w-5 text-primary" />
               <span>Data Riwayat Akademik Terpadu</span>
             </h2>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
               <div className="p-3 rounded-lg border border-retro-border bg-retro-warm shadow-retro">
                 <p className="text-xs font-mono font-bold text-muted-foreground uppercase">IPK Kumulatif</p>
-                <p className="font-heading font-black text-xl text-retro-orange mt-1">3.85</p>
+                <p className="font-heading font-black text-xl text-primary mt-1">3.85</p>
                 <p className="text-xs text-muted-foreground">Skala 4.00</p>
               </div>
 
@@ -219,7 +219,7 @@ export default async function ProfilePage() {
             bodyClassName="p-5 space-y-3"
           >
             <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-              <Download className="h-5 w-5 text-retro-orange" />
+              <Download className="h-5 w-5 text-primary" />
               <span>Dokumen Akademik Resmi</span>
             </h2>
 
@@ -227,7 +227,7 @@ export default async function ProfilePage() {
               <div className="p-3.5 rounded-lg border border-retro-border bg-retro-surface shadow-retro space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-foreground">KTM Digital</span>
-                  <Award className="h-4 w-4 text-retro-orange" />
+                  <Award className="h-4 w-4 text-primary" />
                 </div>
                 <p className="text-xs text-muted-foreground">Kartu Tanda Mahasiswa aktif ber-barcode resmi.</p>
                 <button
@@ -278,7 +278,7 @@ export default async function ProfilePage() {
             bodyClassName="p-5 space-y-3.5"
           >
             <h2 className="font-heading font-black text-sm text-foreground flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-retro-orange" />
+              <ShieldCheck className="h-4 w-4 text-primary" />
               <span>Hak Akses Peran Aktif ({roles.length})</span>
             </h2>
 
@@ -296,7 +296,7 @@ export default async function ProfilePage() {
                     className="flex items-center justify-between p-2.5 rounded-lg border border-retro-border bg-retro-surface shadow-xs text-xs"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-retro-orange" />
+                      <span className="h-2 w-2 rounded-full bg-primary" />
                       <span className="font-bold text-foreground">{roleCode}</span>
                     </div>
                     {isCurrent ? (
@@ -313,7 +313,7 @@ export default async function ProfilePage() {
 
             <Link
               href="/workspace"
-              className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-md border-[1.5px] border-retro-border bg-retro-orange text-white font-bold text-xs shadow-retro hover:bg-retro-orange/90 transition-all text-center mt-3"
+              className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-md border-[1.5px] border-retro-border bg-primary text-white font-bold text-xs shadow-retro hover:bg-primary-dark transition-all text-center mt-3"
             >
               <Layers className="h-3.5 w-3.5" />
               <span>Buka Menu Ganti Workspace</span>
@@ -327,7 +327,7 @@ export default async function ProfilePage() {
             bodyClassName="p-5 space-y-3 text-xs"
           >
             <h2 className="font-heading font-black text-sm text-foreground flex items-center gap-2">
-              <KeyRound className="h-4 w-4 text-retro-orange" />
+              <KeyRound className="h-4 w-4 text-primary" />
               <span>Keamanan & Sesi</span>
             </h2>
 

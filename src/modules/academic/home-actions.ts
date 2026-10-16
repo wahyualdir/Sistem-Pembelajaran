@@ -32,6 +32,25 @@ export async function getHomeBannerAction(): Promise<HomeBannerData> {
   const userContext = await getCurrentUserWithRoles();
   const now = new Date();
 
+  // Akun Baru: Tampilkan banner ucapan selamat datang bersih tanpa data dummy
+  if (userContext?.isNewAccount) {
+    return {
+      primary: {
+        id: 'banner-welcome',
+        priority: 5,
+        category: 'IDLE',
+        title: 'Selamat Datang di SIAJAR',
+        subtitle: `Halo, ${userContext.profile?.full_name || 'Mahasiswa'}! Akun baru Anda siap digunakan. Buka menu Kelas Saya untuk mulai mendaftar ke kelas perkuliahan dosen Anda.`,
+        buttonLabel: 'Buka Kelas Saya',
+        buttonHref: '/classes',
+        badge: 'AKUN BARU',
+      },
+      others: [],
+      totalActive: 0,
+      serverTime: now.toISOString(),
+    };
+  }
+
   // 1. Cek Ujian Aktif
   const openExams: Array<{ id: string; title: string; classTitle: string; dueAt?: string; hasAttempt?: boolean }> = [
     {
@@ -95,6 +114,11 @@ export async function getHomeBannerAction(): Promise<HomeBannerData> {
 // 2. SERVER ACTION: getHomeDeadlinesAction
 // ---------------------------------------------------------------------------
 export async function getHomeDeadlinesAction(): Promise<HomeDeadlineItem[]> {
+  const userContext = await getCurrentUserWithRoles();
+  if (userContext?.isNewAccount) {
+    return [];
+  }
+
   const now = new Date();
 
   const rawItems = [
@@ -162,6 +186,11 @@ export async function getHomeDeadlinesAction(): Promise<HomeDeadlineItem[]> {
 // 3. SERVER ACTION: getHomeTodayScheduleAction
 // ---------------------------------------------------------------------------
 export async function getHomeTodayScheduleAction(): Promise<TodayScheduleItem[]> {
+  const userContext = await getCurrentUserWithRoles();
+  if (userContext?.isNewAccount) {
+    return [];
+  }
+
   return [
     {
       id: 'sch-1',
@@ -204,6 +233,11 @@ export async function getHomeTodayScheduleAction(): Promise<TodayScheduleItem[]>
 // 4. SERVER ACTION: getHomeActiveClassesAction
 // ---------------------------------------------------------------------------
 export async function getHomeActiveClassesAction(): Promise<ActiveClassItem[]> {
+  const userContext = await getCurrentUserWithRoles();
+  if (userContext?.isNewAccount) {
+    return [];
+  }
+
   return [
     {
       id: 'course-1',
@@ -302,6 +336,18 @@ export async function getHomeActiveClassesAction(): Promise<ActiveClassItem[]> {
 // 5. SERVER ACTION: getHomeSummaryAction
 // ---------------------------------------------------------------------------
 export async function getHomeSummaryAction(): Promise<HomeSummaryData> {
+  const userContext = await getCurrentUserWithRoles();
+  if (userContext?.isNewAccount) {
+    return {
+      semesterStatus: 'Mahasiswa Baru',
+      semesterLabel: 'Semester Ganjil 2026/2027',
+      averageAttendance: '0%',
+      attendanceQualified: false,
+      ipk: '0.00',
+      studyStreakDays: 0,
+    };
+  }
+
   return {
     semesterStatus: 'Aktif Berjalan',
     semesterLabel: 'Semester Ganjil 2026/2027',
@@ -316,6 +362,11 @@ export async function getHomeSummaryAction(): Promise<HomeSummaryData> {
 // 6. SERVER ACTION: getHomeAgendaAction
 // ---------------------------------------------------------------------------
 export async function getHomeAgendaAction(): Promise<AgendaItem[]> {
+  const userContext = await getCurrentUserWithRoles();
+  if (userContext?.isNewAccount) {
+    return [];
+  }
+
   const now = new Date();
 
   return [

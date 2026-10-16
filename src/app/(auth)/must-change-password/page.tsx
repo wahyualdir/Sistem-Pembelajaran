@@ -58,7 +58,7 @@ export default function MustChangePasswordPage() {
 
           <div className="p-6 sm:p-8 space-y-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white shadow-retro">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-retro">
                 <Flame className="h-5 w-5 fill-white" />
               </div>
               <div className="flex flex-col text-left">
@@ -73,7 +73,7 @@ export default function MustChangePasswordPage() {
 
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <KeyRound className="h-4 w-4 text-retro-orange" />
+                <KeyRound className="h-4 w-4 text-primary" />
                 <h1 className="text-xl font-heading font-black text-foreground">
                   Perbarui Kata Sandi Anda
                 </h1>
@@ -149,7 +149,7 @@ export default function MustChangePasswordPage() {
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="w-full py-2.5 px-4 rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white font-heading font-black text-sm shadow-retro-md hover:brightness-105 active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-4 rounded-lg border-[1.5px] border-retro-border bg-primary text-white font-heading font-black text-sm shadow-retro-md hover:brightness-105 active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isPending ? (
                     'Menyimpan...'

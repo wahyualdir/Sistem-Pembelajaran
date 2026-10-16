@@ -49,7 +49,7 @@ export function SuperadminRolesHubView() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-retro-sm">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <ShieldAlert className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">

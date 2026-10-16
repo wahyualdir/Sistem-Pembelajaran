@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronDown, Layers, LogOut } from 'lucide-react';
 import { getCurrentUserWithRoles, logoutAction } from '@/modules/identity/actions';
-import { countUnreadAction } from '@/modules/academic/actions';
+import { getDynamicMenuBadgesAction } from '@/modules/academic/actions';
 import { AiAcademicAssistant } from '@/components/shared/ai-academic-assistant';
 import { PortalShell } from './portal-shell';
 
@@ -27,7 +27,8 @@ export default async function PortalLayout({ children }: { children: React.React
   const { profile, roles, activeRole } = userContext;
   const role = activeRole || 'STUDENT';
   const roleName = ROLE_DISPLAY_NAMES[role] || role;
-  const unread = await countUnreadAction();
+  const badges = await getDynamicMenuBadgesAction();
+  const unread = badges.unreadCount;
 
   const roleBlock =
     roles.length > 1 ? (
@@ -70,6 +71,7 @@ export default async function PortalLayout({ children }: { children: React.React
       roleName={roleName}
       roleBlock={roleBlock}
       unread={unread}
+      badges={badges}
       profile={profile}
       account={account}
       isImpersonating={userContext.isImpersonating}

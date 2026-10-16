@@ -106,7 +106,7 @@ export function DeviceManager({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-xs">
                 <Laptop className="h-5 w-5" />
               </div>
               <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
@@ -208,7 +208,7 @@ export function DeviceManager({
                 >
                   <div className="flex items-start gap-3">
                     <div className="p-2.5 rounded-lg border border-retro-border bg-retro-warm text-foreground shrink-0 mt-0.5">
-                      <Icon className="h-5 w-5 text-retro-orange" />
+                      <Icon className="h-5 w-5 text-primary" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2">

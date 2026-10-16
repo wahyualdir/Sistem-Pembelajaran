@@ -100,7 +100,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Compass className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -135,7 +135,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
           <span className="text-xs font-mono font-bold uppercase text-black/60">Tahun Ajaran Aktif</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">2026/2027</div>
-          <span className="text-xs text-retro-orange font-bold">Semester Ganjil</span>
+          <span className="text-xs text-primary font-bold">Semester Ganjil</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
           <span className="text-xs font-mono font-bold uppercase text-black/60">Ruang & Lab Geofence</span>
@@ -157,7 +157,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -175,7 +175,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <Compass className="h-5 w-5 text-retro-orange" />
+                <Compass className="h-5 w-5 text-primary" />
                 <span>Direktori Program Studi & Pimpinan Akademik</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -251,7 +251,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-retro-orange" />
+                <BookOpen className="h-5 w-5 text-primary" />
                 <span>Katalog Mata Kuliah & Validasi Usulan Prodi</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -320,7 +320,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                             className={cn(
                               'px-3 py-1 rounded-lg border-2 border-black text-xs font-bold transition-all',
                               isDemo
-                                ? 'bg-retro-orange text-white hover:bg-black cursor-pointer'
+                                ? 'bg-primary text-white hover:bg-black cursor-pointer'
                                 : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
                             )}
                           >
@@ -345,7 +345,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-retro-orange" />
+                <Calendar className="h-5 w-5 text-primary" />
                 <span>Periode Tahun Ajaran & Batas Administrasi Nilai</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -396,7 +396,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                           <span className="text-xs font-mono text-black/60">{y.code}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 font-mono text-xs">{y.startDate} - {y.endDate}</td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs text-retro-orange font-bold">{y.krsLock}</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs text-primary font-bold">{y.krsLock}</td>
                         <td className="p-3.5 sm:p-4 font-mono text-xs font-bold">{y.gradeLock}</td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
@@ -426,7 +426,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-retro-orange" />
+                <MapPin className="h-5 w-5 text-primary" />
                 <span>Master Ruang Kuliah & Geofence GPS Presensi</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">

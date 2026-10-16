@@ -12,9 +12,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        bg: "var(--bg)",
         background: "var(--bg-main)",
         surface: {
-          DEFAULT: "var(--bg-surface)",
+          DEFAULT: "var(--surface)",
           raised: "var(--bg-surface-raised)",
         },
         border: {
@@ -33,18 +34,29 @@ const config: Config = {
         primary: {
           DEFAULT: "var(--primary)",
           hover: "var(--primary-hover)",
+          dark: "var(--primary-dark)",
           tint: "var(--primary-soft)",
           soft: "var(--primary-soft)",
           foreground: "var(--primary-foreground)",
         },
+        "primary-dark": "var(--primary-dark)",
+        ink: "var(--ink)",
+        gray: {
+          DEFAULT: "var(--gray)",
+          dark: "var(--gray-dark)",
+          soft: "var(--gray-soft)",
+        },
+        "gray-dark": "var(--gray-dark)",
+        "gray-soft": "var(--gray-soft)",
+        urgent: "var(--urgent)",
         success: {
-          DEFAULT: "var(--status-success)",
+          DEFAULT: "var(--success)",
           soft: "var(--status-success-soft)",
           border: "var(--status-success-border)",
           foreground: "var(--status-success-foreground)",
         },
         warning: {
-          DEFAULT: "var(--status-warning)",
+          DEFAULT: "var(--warning)",
           soft: "var(--status-warning-soft)",
           border: "var(--status-warning-border)",
           foreground: "var(--status-warning-foreground)",
@@ -56,7 +68,7 @@ const config: Config = {
           foreground: "var(--status-danger-foreground)",
         },
         info: {
-          DEFAULT: "var(--status-info)",
+          DEFAULT: "var(--info)",
           soft: "var(--status-info-soft)",
           border: "var(--status-info-border)",
           foreground: "var(--status-info-foreground)",
@@ -72,6 +84,8 @@ const config: Config = {
           mint: "var(--retro-mint)",
           pink: "var(--retro-pink)",
           blue: "var(--retro-blue)",
+          dither: "var(--retro-dither)",
+          video: "var(--retro-video-bg)",
         },
         traffic: {
           red: "var(--retro-traffic-red, #FF5F56)",
@@ -104,6 +118,8 @@ const config: Config = {
         "2xl": "16px",
       },
       boxShadow: {
+        DEFAULT: "var(--shadow)",
+        brutal: "var(--shadow)",
         sm: "var(--shadow-sm)",
         md: "var(--shadow-md)",
         "retro-sm": "1.5px 1.5px 0px var(--retro-border)",
@@ -137,9 +153,9 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
-          "'SF Pro'",
-          "'SF Pro Text'",
           "'SF Pro Display'",
+          "'SF Pro Text'",
+          "'SF Pro'",
           "-apple-system",
           "BlinkMacSystemFont",
           "'Segoe UI'",
@@ -150,8 +166,8 @@ const config: Config = {
         ],
         heading: [
           "'SF Pro Display'",
-          "'SF Pro'",
           "'SF Pro Text'",
+          "'SF Pro'",
           "-apple-system",
           "BlinkMacSystemFont",
           "'Segoe UI'",

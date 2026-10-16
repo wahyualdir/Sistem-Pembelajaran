@@ -92,7 +92,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
 
   // Metrik kehadiran
   const totalHadir = records.filter((a) => a.status === 'HADIR' || a.status === 'TERLAMBAT').length;
-  const attendanceRate = records.length > 0 ? Math.round((totalHadir / records.length) * 100) : 100;
+  const attendanceRate = records.length > 0 ? Math.round((totalHadir / records.length) * 100) : 0;
 
   const handlePermitSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -124,7 +124,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. HEADER WINDOW RETRO */}
       <RetroWindow
-        title="riwayat_dan_perizinan_presensi.app"
+        title="Presensi & Perizinan Kuliah"
         badge={`Kehadiran ${attendanceRate}%`}
         headerClassName="bg-retro-yellow"
         bodyClassName="p-4 sm:p-6 bg-retro-surface"
@@ -132,14 +132,14 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 sm:p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2 sm:p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <CalendarCheck2 className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">
                 Presensi & Perizinan Kuliah
               </h1>
             </div>
-            <p className="text-xs sm:text-sm text-black/80 max-w-xl font-medium">
+            <p className="text-xs sm:text-sm text-black max-w-xl font-bold">
               Log kehadiran mahasiswa berbasis multi-faktor (QR Dinamis, Geolokasi GPS Haversine, Biometrik WebAuthn, dan Kode PIN).
             </p>
           </div>
@@ -148,7 +148,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
             <button
               type="button"
               onClick={() => setIsPermitModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-retro-orange text-white font-black text-xs sm:text-sm shadow-retro hover:bg-black transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-primary text-white font-black text-xs sm:text-sm shadow-retro hover:bg-black transition-all cursor-pointer"
             >
               <FileText className="h-4 w-4" />
               <span>Ajukan Izin/Sakit</span>
@@ -167,32 +167,36 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
       {/* 2. STATS RINGKASAN */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-mono font-bold uppercase text-black/60">Total Sesi Diikuti</div>
+          <div className="text-xs font-mono font-black uppercase text-black">Total Sesi Diikuti</div>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{records.length} Sesi</div>
-          <div className="text-xs text-black/70 font-medium">Semester Berjalan</div>
+          <div className="text-xs text-black font-bold">Semester Berjalan</div>
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-mono font-bold uppercase text-black/60">Tepat Waktu</div>
+          <div className="text-xs font-mono font-black uppercase text-black">Tepat Waktu</div>
           <div className="text-2xl sm:text-3xl font-heading font-black text-emerald-800">
             {records.filter((r) => r.status === 'HADIR').length} Sesi
           </div>
-          <div className="text-xs text-emerald-800 font-bold">Presensi Valid</div>
+          <div className="text-xs text-emerald-800 font-black">Presensi Valid</div>
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-mono font-bold uppercase text-black/60">Terlambat / Izin</div>
+          <div className="text-xs font-mono font-black uppercase text-black">Terlambat / Izin</div>
           <div className="text-2xl sm:text-3xl font-heading font-black text-amber-900">
             {records.filter((r) => r.status === 'TERLAMBAT' || r.status === 'IZIN' || r.status === 'SAKIT').length} Sesi
           </div>
-          <div className="text-xs text-amber-900 font-bold">Dispensasi Diterima</div>
+          <div className="text-xs text-amber-900 font-black">Dispensasi Diterima</div>
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-mono font-bold uppercase text-black/60">Syarat Ujian (&gt;75%)</div>
+          <div className="text-xs font-mono font-black uppercase text-black">Syarat Ujian (&gt;75%)</div>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{attendanceRate}%</div>
-          <div className="text-xs text-retro-orange font-bold">
-            {attendanceRate >= 75 ? '✓ Memenuhi Syarat' : '⚠️ Terancam Tidak Ikut Ujian'}
+          <div className="text-xs text-primary font-black">
+            {records.length === 0
+              ? 'Belum Ada Presensi'
+              : attendanceRate >= 75
+              ? '✓ Memenuhi Syarat'
+              : '⚠️ Terancam Tidak Ikut Ujian'}
           </div>
         </div>
       </div>
@@ -210,7 +214,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -229,25 +233,25 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
             <h2 className="font-heading font-black text-sm sm:text-base text-black">
               Riwayat Presensi Masuk ({records.length})
             </h2>
-            <span className="text-xs font-mono font-bold text-black/70">
+            <span className="text-xs font-mono font-black text-black">
               Validasi Geofence & Dynamic QR
             </span>
           </div>
 
           {records.length === 0 ? (
             <div className="p-10 text-center space-y-3">
-              <Clock className="h-10 w-10 text-black/40 mx-auto" />
+              <Clock className="h-10 w-10 text-black mx-auto" />
               <h3 className="font-heading font-black text-base sm:text-lg text-black">
                 Belum Ada Catatan Presensi
               </h3>
-              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+              <p className="text-xs sm:text-sm text-black font-bold max-w-md mx-auto">
                 Anda belum memiliki log presensi masuk perkuliahan pada semester berjalan.
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-black uppercase text-black">
                   <tr>
                   <th className="p-3.5 sm:p-4">Pertemuan & Mata Kuliah</th>
                   <th className="p-3.5 sm:p-4">Waktu Presensi</th>
@@ -256,36 +260,36 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                   <th className="p-3.5 sm:p-4 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y-2 divide-black/10 font-medium">
+              <tbody className="divide-y-2 divide-black/10 font-bold">
                 {records.map((r) => (
                   <tr key={r.id} className="hover:bg-retro-warm/30 transition-colors">
-                    <td className="p-3.5 sm:p-4 font-bold text-black">
+                    <td className="p-3.5 sm:p-4 font-black text-black">
                       <div>Pertemuan #{r.meetingNumber} — {r.courseTitle}</div>
-                      <div className="text-xs font-mono text-black/60">{r.date}</div>
+                      <div className="text-xs font-mono font-bold text-black">{r.date}</div>
                     </td>
-                    <td className="p-3.5 sm:p-4 text-xs font-mono font-bold text-black/80">
+                    <td className="p-3.5 sm:p-4 text-xs font-mono font-black text-black">
                       {r.time}
                     </td>
                     <td className="p-3.5 sm:p-4 text-center">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-black bg-retro-warm text-black font-mono text-xs font-bold shadow-xs">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-black bg-retro-warm text-black font-mono text-xs font-black shadow-xs">
                         {r.method === 'QR' && <QrCode className="h-3.5 w-3.5" />}
                         {r.method === 'LOKASI' && <MapPin className="h-3.5 w-3.5" />}
                         {r.method === 'BIOMETRIK' && <Fingerprint className="h-3.5 w-3.5" />}
                         <span>{r.method}</span>
                       </span>
                     </td>
-                    <td className="p-3.5 sm:p-4 text-xs font-medium text-black">
+                    <td className="p-3.5 sm:p-4 text-xs font-black text-black">
                       {r.room}
                     </td>
                     <td className="p-3.5 sm:p-4 text-center">
                       <span
                         className={cn(
-                          'px-2.5 py-1 rounded border text-xs font-bold font-mono',
+                          'px-2.5 py-1 rounded border-2 border-black text-xs font-black font-mono',
                           r.status === 'HADIR'
-                            ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                            ? 'bg-emerald-200 text-emerald-950'
                             : r.status === 'TERLAMBAT'
-                            ? 'border-amber-500 bg-amber-100 text-amber-950'
-                            : 'border-blue-500 bg-blue-100 text-blue-950'
+                            ? 'bg-amber-200 text-amber-950'
+                            : 'bg-blue-200 text-blue-950'
                         )}
                       >
                         {r.status}
@@ -395,7 +399,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
           <div className="w-full max-w-lg rounded-2xl border-2 border-black bg-white p-6 sm:p-7 shadow-retro space-y-5">
             <div className="flex items-center justify-between border-b-2 border-black pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg border-2 border-black bg-retro-orange text-white">
+                <div className="p-2 rounded-lg border-2 border-black bg-primary text-white">
                   <FileText className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading font-black text-lg sm:text-xl text-black">
@@ -429,7 +433,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                     <select
                       value={permitType}
                       onChange={(e) => setPermitType(e.target.value as any)}
-                      className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
+                      className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                       <option value="SAKIT">Sakit (Surat Dokter)</option>
                       <option value="IZIN">Izin / Dispensasi Resmi</option>
@@ -445,7 +449,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                       required
                       value={permitDate}
                       onChange={(e) => setPermitDate(e.target.value)}
-                      className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
+                      className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                     </input>
                   </div>
@@ -459,7 +463,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                     <select
                       value={permitCourse}
                       onChange={(e) => setPermitCourse(e.target.value)}
-                      className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
+                      className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-primary"
                     >
                       <option value="Pemrograman Web Lanjut">Pemrograman Web Lanjut</option>
                       <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
@@ -480,7 +484,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                       required
                       value={permitMeeting}
                       onChange={(e) => setPermitMeeting(e.target.value)}
-                      className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
+                      className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
                 </div>
@@ -495,7 +499,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                     value={permitReason}
                     onChange={(e) => setPermitReason(e.target.value)}
                     placeholder="Sebutkan diagnosis dokter / kegiatan dispensasi resmi kampus..."
-                    className="w-full rounded-lg border-2 border-black p-3 text-xs sm:text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
+                    className="w-full rounded-lg border-2 border-black p-3 text-xs sm:text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
 

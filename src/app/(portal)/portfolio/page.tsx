@@ -67,7 +67,7 @@ export default function PortfolioPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <FolderArchive className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -108,7 +108,7 @@ export default function PortfolioPage() {
                 <h2 className="font-heading font-black text-xl sm:text-2xl text-black leading-snug">
                   {proj.title}
                 </h2>
-                <p className="text-xs sm:text-sm text-retro-orange font-bold mt-1">
+                <p className="text-xs sm:text-sm text-primary font-bold mt-1">
                   Mata Kuliah: {proj.course}
                 </p>
               </div>

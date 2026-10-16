@@ -92,7 +92,7 @@ export default function AttendanceHistoryPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 sm:p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2 sm:p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <CalendarCheck2 className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">

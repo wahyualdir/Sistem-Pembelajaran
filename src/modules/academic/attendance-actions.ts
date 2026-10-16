@@ -6,6 +6,9 @@ import { z } from 'zod';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import type { ActionResponse } from '@/modules/identity/types';
 import { createNotification } from '@/modules/academic/actions';
+import { createClient } from '@/lib/supabase/server';
+import { checkSupabaseOnline } from '@/lib/supabase/status';
+import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 
 function safeRevalidate(path: string, type?: 'page' | 'layout') {
   try {
@@ -238,6 +241,34 @@ export async function createAttendanceSessionAction(input: unknown): Promise<Act
     qr_token_expires_at: new Date(Date.now() + 30000).toISOString(),
   };
 
+  if (isFeatureFlagActive('FF_PERSISTENCE_ATTENDANCE') && (await checkSupabaseOnline())) {
+    const supabase = await createClient();
+    const { error } = await supabase.from('attendance_sessions').insert({
+      id: session.id,
+      class_id: session.class_id,
+      session_number: session.meeting_number,
+      title: session.title,
+      session_date: session.date,
+      start_time: session.start_time,
+      end_time: session.end_time,
+      code: session.code,
+      is_open: session.is_open,
+      methods: session.methods,
+      preset: session.preset,
+      location_lat: session.location_lat,
+      location_lng: session.location_lng,
+      radius_meters: session.location_radius,
+      location_name: session.location_name,
+      late_threshold_minutes: session.late_threshold_minutes,
+      qr_token_secret: session.qr_dynamic_token,
+      qr_refreshed_at: new Date().toISOString(),
+      created_by: user.user.id,
+    });
+    if (error) return { ok: false, error: error.message };
+  } else if (!isDemoMode()) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
   presensiStore.sessions.push(session);
 
   // Send notification to class students
@@ -448,6 +479,29 @@ export async function submitMultiFactorAttendanceAction(input: {
     recorded_at: new Date().toISOString(),
   };
 
+  if (isFeatureFlagActive('FF_PERSISTENCE_ATTENDANCE') && (await checkSupabaseOnline())) {
+    const supabase = await createClient();
+    const { error } = await supabase.from('attendance_records').insert({
+      id: record.id,
+      session_id: record.session_id,
+      student_id: record.student_id,
+      student_name: record.student_name,
+      check_in_at: record.recorded_at,
+      method: record.method,
+      status: record.status,
+      latitude: record.user_lat ?? null,
+      longitude: record.user_lng ?? null,
+      distance_meters: record.distance_meters ?? null,
+      device_id: record.device_id ?? null,
+      is_late: record.is_late ?? false,
+      is_flagged_anomaly: record.is_flagged_anomaly ?? false,
+      anomaly_reason: record.anomaly_reason ?? null,
+    });
+    if (error) return { ok: false, error: error.message };
+  } else if (!isDemoMode()) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
   presensiStore.records.push(record);
   safeRevalidate('/classes/[id]', 'page');
   return { ok: true, data: record };
@@ -604,7 +658,7 @@ export async function submitLeavePermitAction(payload: {
   }
 
   const record: LeavePermitRecord = {
-    id: 'leave-' + randomUUID().slice(0, 8),
+    id: randomUUID(),
     student_id: user.user.id,
     student_name: user.profile?.full_name ?? 'Mahasiswa',
     course_title: payload.course_title,
@@ -617,6 +671,25 @@ export async function submitLeavePermitAction(payload: {
     submitted_at: new Date().toISOString(),
   };
 
+  if (isFeatureFlagActive('FF_PERSISTENCE_ATTENDANCE') && (await checkSupabaseOnline())) {
+    const supabase = await createClient();
+    const { error } = await supabase.from('leave_permits').insert({
+      id: record.id,
+      student_id: record.student_id,
+      student_name: record.student_name,
+      course_title: record.course_title,
+      session_number: record.meeting_number,
+      permit_type: record.type,
+      permit_date: record.date,
+      reason: record.reason,
+      attachment_url: record.attachment_name,
+      status: record.status,
+    });
+    if (error) return { ok: false, error: error.message };
+  } else if (!isDemoMode()) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
   presensiStore.leaves.unshift(record);
   safeRevalidate('/attendance', 'page');
   return { ok: true, data: record };
@@ -625,6 +698,32 @@ export async function submitLeavePermitAction(payload: {
 export async function listLeavePermitsAction(): Promise<LeavePermitRecord[]> {
   const user = await getCurrentUserWithRoles();
   if (!user) return [];
+
+  if (isFeatureFlagActive('FF_PERSISTENCE_ATTENDANCE') && (await checkSupabaseOnline())) {
+    const supabase = await createClient();
+    let query = supabase.from('leave_permits').select('*').order('created_at', { ascending: false });
+    if (user.activeRole === 'STUDENT') {
+      query = query.eq('student_id', user.user.id);
+    }
+    const { data } = await query;
+    if (data && data.length > 0) {
+      return data.map((row: any) => ({
+        id: row.id,
+        student_id: row.student_id,
+        student_name: row.student_name ?? 'Mahasiswa',
+        course_title: row.course_title,
+        meeting_number: row.session_number,
+        type: row.permit_type,
+        date: row.permit_date,
+        reason: row.reason,
+        attachment_name: row.attachment_url ?? 'surat_keterangan.pdf',
+        status: row.status,
+        submitted_at: row.created_at,
+        feedback: row.review_note ?? undefined,
+      }));
+    }
+  }
+
   if (user.activeRole === 'STUDENT') {
     return presensiStore.leaves.filter((l) => l.student_id === user.user.id);
   }
@@ -640,10 +739,30 @@ export async function reviewLeavePermitAction(input: {
   if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'TEACHING_ASSISTANT')) {
     return { ok: false, error: 'Hanya dosen pengampu atau asisten yang berwenang memverifikasi izin presensi.' };
   }
+
+  if (isFeatureFlagActive('FF_PERSISTENCE_ATTENDANCE') && (await checkSupabaseOnline())) {
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from('leave_permits')
+      .update({
+        status: input.status,
+        reviewed_by: user.user.id,
+        reviewed_at: new Date().toISOString(),
+        review_note: input.feedback ?? null,
+      })
+      .eq('id', input.permit_id);
+    if (error) return { ok: false, error: error.message };
+  } else if (!isDemoMode()) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
   const item = presensiStore.leaves.find((l) => l.id === input.permit_id);
-  if (!item) return { ok: false, error: 'Pengajuan izin tidak ditemukan.' };
-  item.status = input.status;
-  item.feedback = input.feedback;
+  if (!item && isDemoMode()) return { ok: false, error: 'Pengajuan izin tidak ditemukan.' };
+  if (item) {
+    item.status = input.status;
+    item.feedback = input.feedback;
+  }
   safeRevalidate('/attendance', 'page');
   return { ok: true };
 }
+

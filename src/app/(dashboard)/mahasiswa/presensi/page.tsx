@@ -34,7 +34,7 @@ export default function MahasiswaPresensiPage() {
         title="siakad://presensi.kehadiran"
         badge="Batas UAS 75%"
         actions={
-          <span className="text-xs font-mono font-bold text-retro-orange">
+          <span className="text-xs font-mono font-bold text-primary">
             {daftarRekap.length} Mata Kuliah
           </span>
         }
@@ -42,7 +42,7 @@ export default function MahasiswaPresensiPage() {
         <div className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <CheckSquare className="h-5 w-5 text-retro-orange" />
+              <CheckSquare className="h-5 w-5 text-primary" />
               <h1 className="text-xl sm:text-2xl font-black text-foreground font-heading tracking-tight">
                 Rekap Kehadiran Kuliah
               </h1>
@@ -62,7 +62,7 @@ export default function MahasiswaPresensiPage() {
       {/* Banner Peringatan jika ada yang mendekati batas / tidak lolos */}
       {adaPeringatan && (
         <div className="flex items-start gap-3 rounded-lg p-4 bg-retro-yellow/30 border-[1.5px] border-retro-border shadow-retro text-xs text-foreground">
-          <AlertTriangle className="h-5 w-5 text-retro-orange shrink-0 mt-0.5" />
+          <AlertTriangle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
           <div>
             <p className="font-bold text-foreground text-sm mb-1 font-heading">
               Peringatan Ambang Batas Kehadiran UAS
@@ -89,7 +89,7 @@ export default function MahasiswaPresensiPage() {
                 <TableHead className="w-20 text-center font-bold">Kelas</TableHead>
                 <TableHead className="w-20 text-center font-bold">Pertemuan</TableHead>
                 <TableHead className="w-16 text-center text-success font-bold">Hadir</TableHead>
-                <TableHead className="w-16 text-center text-retro-orange font-bold">Izin</TableHead>
+                <TableHead className="w-16 text-center text-primary font-bold">Izin</TableHead>
                 <TableHead className="w-16 text-center text-warning font-bold">Sakit</TableHead>
                 <TableHead className="w-16 text-center text-danger font-bold">Alpa</TableHead>
                 <TableHead className="w-28 text-center font-bold">Persentase</TableHead>
@@ -123,7 +123,7 @@ export default function MahasiswaPresensiPage() {
                     <TableCell className="text-center font-mono font-bold text-xs text-success">
                       {item.hadir}
                     </TableCell>
-                    <TableCell className="text-center font-mono text-xs text-retro-orange font-bold">
+                    <TableCell className="text-center font-mono text-xs text-primary font-bold">
                       {item.izin}
                     </TableCell>
                     <TableCell className="text-center font-mono text-xs text-warning font-bold">

@@ -46,17 +46,16 @@ export default function AssistantMaterialsPage() {
   return (
     <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
       <RetroWindow
-        title="materi_asisten_praktikum.app"
-        subtitle="Panduan Praktikum, Kunci Pembahasan & Modul Pembimbing"
+        title="Materi & Panduan Asistensi"
         headerBadge="Mode Asisten"
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
           <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-            <BookOpen className="h-7 w-7 text-retro-orange" />
+            <BookOpen className="h-7 w-7 text-primary" />
             <span>Materi & Panduan Asistensi</span>
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
             Akses modul panduan praktikum, kisi-kisi solusi, dan rubrik evaluasi yang dibagikan oleh dosen pengampu khusus untuk asisten kelas.
           </p>
         </div>

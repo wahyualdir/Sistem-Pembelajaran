@@ -57,7 +57,7 @@ export default async function StaffPortalPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-xs">
                 <Database className="h-5 w-5" />
               </div>
               <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
@@ -80,7 +80,7 @@ export default async function StaffPortalPage() {
         {/* 3 Kartu Metrik Ringkasan Data Master */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-5 border-t border-retro-border/40 mt-5">
           <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/70 shadow-xs flex items-center gap-3">
-            <div className="p-2 rounded border border-retro-border bg-retro-surface text-retro-orange">
+            <div className="p-2 rounded border border-retro-border bg-retro-surface text-primary">
               <GraduationCap className="h-5 w-5" />
             </div>
             <div>
@@ -122,7 +122,7 @@ export default async function StaffPortalPage() {
         >
           <div className="space-y-1">
             <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-              <GraduationCap className="h-4 w-4 text-retro-orange" />
+              <GraduationCap className="h-4 w-4 text-primary" />
               <span>Program Studi</span>
             </h2>
             <p className="text-xs text-muted-foreground">Tambah kode dan nama program studi baru.</p>
@@ -170,7 +170,7 @@ export default async function StaffPortalPage() {
         >
           <div className="space-y-1">
             <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-              <CalendarDays className="h-4 w-4 text-retro-orange" />
+              <CalendarDays className="h-4 w-4 text-primary" />
               <span>Semester Akademik</span>
             </h2>
             <p className="text-xs text-muted-foreground">Tambah tahun dan periode semester perkuliahan.</p>
@@ -218,7 +218,7 @@ export default async function StaffPortalPage() {
       >
         <div className="space-y-1">
           <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-            <BookOpen className="h-4 w-4 text-retro-orange" />
+            <BookOpen className="h-4 w-4 text-primary" />
             <span>Katalog Mata Kuliah</span>
           </h2>
           <p className="text-xs text-muted-foreground">

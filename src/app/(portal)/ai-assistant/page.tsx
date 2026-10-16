@@ -50,7 +50,7 @@ export default function AiAssistantPage() {
     <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
       {/* 1. HEADER WINDOW AI */}
       <RetroWindow
-        title="tanya_ai_siajar.app"
+        title="Tanya AI Akademik SIAJAR"
         badge="AI MODEL: ACTIVE (LLM-RAG)"
         headerClassName="bg-retro-yellow"
         bodyClassName="p-6 sm:p-8 bg-retro-surface"
@@ -58,14 +58,14 @@ export default function AiAssistantPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-retro-border bg-primary text-white shadow-xs">
                 <Bot className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">
                 Tanya AI Akademik SIAJAR
               </h1>
             </div>
-            <p className="text-base sm:text-lg text-black font-medium max-w-2xl mt-1 leading-relaxed">
+            <p className="text-base sm:text-lg text-black font-bold max-w-2xl mt-1 leading-relaxed">
               Asisten kecerdasan buatan cerdas yang memahami konteks seluruh mata kuliah, materi perkuliahan, dan modul praktikum Anda untuk memfasilitasi pembelajaran mandiri.
             </p>
           </div>
@@ -89,14 +89,14 @@ export default function AiAssistantPage() {
             >
               <div className="flex items-center justify-between">
                 <div className="p-2.5 rounded-lg border-2 border-black bg-white">
-                  <Icon className="h-6 w-6 text-retro-orange" />
+                  <Icon className="h-6 w-6 text-primary" />
                 </div>
                 <span className="px-3 py-1 rounded border-2 border-black bg-white text-xs font-mono font-black text-black shadow-xs">
                   {cap.badge}
                 </span>
               </div>
               <h3 className="font-heading font-black text-lg sm:text-xl text-black">{cap.title}</h3>
-              <p className="text-sm sm:text-base text-black font-medium leading-relaxed">{cap.desc}</p>
+              <p className="text-sm sm:text-base text-black font-bold leading-relaxed">{cap.desc}</p>
             </div>
           );
         })}
@@ -104,13 +104,13 @@ export default function AiAssistantPage() {
 
       {/* 3. INTERACTIVE CHAT CARD WINDOW FULL */}
       <RetroWindow
-        title="sesi_tanya_jawab_interaktif.terminal"
+        title="Sesi Tanya Jawab Interaktif"
         headerClassName="bg-retro-warm"
         bodyClassName="p-6 sm:p-8 space-y-6"
       >
         <div className="space-y-3">
           <h2 className="font-heading font-black text-base uppercase tracking-wider text-black flex items-center gap-2">
-            <Lightbulb className="h-5 w-5 text-retro-orange" />
+            <Lightbulb className="h-5 w-5 text-primary" />
             <span>Pertanyaan Rekomendasi Cepat:</span>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -134,7 +134,7 @@ export default function AiAssistantPage() {
             <h3 className="font-heading font-black text-xl sm:text-2xl text-black">
               Halo! Saya Asisten AI Akademik SIAJAR.
             </h3>
-            <p className="text-base sm:text-lg text-black font-medium max-w-lg leading-relaxed">
+            <p className="text-base sm:text-lg text-black font-bold max-w-lg leading-relaxed">
               Ketik pertanyaan seputar silabus, tugas, modul praktikum, atau konsultasi materi perkuliahan apa pun. Saya siap memberikan penjelasan terstruktur.
             </p>
           </div>
@@ -144,7 +144,7 @@ export default function AiAssistantPage() {
           <input
             type="text"
             placeholder="Ketik pertanyaan materi perkuliahan Anda di sini..."
-            className="flex-1 px-5 py-3.5 rounded-lg border-2 border-black bg-white text-base font-bold text-black shadow-retro focus:outline-none focus:ring-2 focus:ring-black placeholder:text-black/60"
+            className="flex-1 px-5 py-3.5 rounded-lg border-2 border-black bg-white text-base font-bold text-black shadow-retro focus:outline-none focus:ring-2 focus:ring-black placeholder:text-black/80 placeholder:font-bold"
           />
           <button
             type="button"

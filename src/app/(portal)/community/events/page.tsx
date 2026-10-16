@@ -28,7 +28,7 @@ const EVENTS = [
     type: 'Workshop Praktis',
     seats: '42/50 Kursi',
     status: 'Sisa 8 Kursi',
-    badgeVariant: 'bg-retro-orange text-white',
+    badgeVariant: 'bg-primary text-white',
   },
   {
     id: 'ev-3',
@@ -71,7 +71,7 @@ export default function EventsPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Calendar className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -99,7 +99,7 @@ export default function EventsPage() {
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <h2 className="font-heading font-black text-xl sm:text-2xl text-black flex items-center gap-2.5">
-            <Award className="h-6 w-6 text-retro-orange" />
+            <Award className="h-6 w-6 text-primary" />
             <span>Daftar Kegiatan Ilmiah & Workshop Tersedia</span>
           </h2>
           <span className="text-xs sm:text-sm font-mono font-bold text-neutral-800">
@@ -130,15 +130,15 @@ export default function EventsPage() {
 
                 <div className="space-y-2 pt-3 text-sm font-mono text-neutral-900 border-t-2 border-black/10">
                   <div className="flex items-center gap-2 text-black font-bold">
-                    <span className="text-retro-orange">🗓</span>
+                    <span className="text-primary">🗓</span>
                     <span>{ev.date} · {ev.time}</span>
                   </div>
                   <div className="flex items-center gap-2 font-medium">
-                    <span className="text-retro-orange">🎙</span>
+                    <span className="text-primary">🎙</span>
                     <span>{ev.speaker} — <strong className="font-bold">{ev.role}</strong></span>
                   </div>
                   <div className="flex items-center gap-2 font-medium">
-                    <span className="text-retro-orange">📍</span>
+                    <span className="text-primary">📍</span>
                     <span>{ev.location}</span>
                   </div>
                 </div>

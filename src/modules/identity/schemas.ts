@@ -49,3 +49,27 @@ export const switchWorkspaceSchema = z.object({
 });
 
 export type SwitchWorkspaceInput = z.infer<typeof switchWorkspaceSchema>;
+
+export const registerSchema = z
+  .object({
+    name: z.string().min(2, 'Nama lengkap minimal 2 karakter').trim(),
+    identifier: z.string().min(3, 'NIM/NIDN/NIP/Username minimal 3 karakter').trim(),
+    email: z.string().email('Format email tidak valid').trim(),
+    role: z.enum([
+      'STUDENT',
+      'LECTURER',
+      'TEACHING_ASSISTANT',
+      'PROGRAM_COORDINATOR',
+      'ACADEMIC_STAFF',
+      'SYSTEM_ADMIN',
+    ]),
+    password: z.string().min(6, 'Password minimal 6 karakter'),
+    confirmPassword: z.string().min(6, 'Konfirmasi password wajib diisi'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Konfirmasi kata sandi tidak cocok',
+    path: ['confirmPassword'],
+  });
+
+export type RegisterInput = z.infer<typeof registerSchema>;
+

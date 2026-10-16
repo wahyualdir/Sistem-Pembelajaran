@@ -9,6 +9,7 @@ export interface SyntheticDemoUser {
   password?: string;
   mustChangePassword?: boolean;
   lockedUntil?: string;
+  isNewAccount?: boolean;
 }
 
 export const SYNTHETIC_DEMO_USERS: Record<string, SyntheticDemoUser> = {

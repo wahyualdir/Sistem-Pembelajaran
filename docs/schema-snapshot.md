@@ -1,7 +1,7 @@
 # Snapshot Skema Database SIAJAR (Single Source of Truth)
 
 > **Tanggal Dihasilkan**: 12 Oktober 2026  
-> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..20 dijalankan dari nol.  
+> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..21 dijalankan dari nol.  
 > **Tujuan**: Sumber kebenaran tunggal (*Single Source of Truth*) nama tabel, kolom, tipe data, foreign key, dan kebijakan RLS untuk perencanaan dan implementasi Fase 3.
 
 ---
@@ -85,6 +85,92 @@
 
 ---
 
+### Tabel: `public.attendance_records`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 16
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `session_id` | `uuid` | NO | - |
+| `student_id` | `uuid` | NO | - |
+| `student_name` | `character varying` | YES | - |
+| `check_in_at` | `timestamp with time zone` | NO | `now()` |
+| `method` | `character varying` | NO | `'QR_DYNAMIC'` |
+| `status` | `character varying` | NO | `'HADIR'` |
+| `latitude` | `numeric` | YES | - |
+| `longitude` | `numeric` | YES | - |
+| `distance_meters` | `integer` | YES | - |
+| `device_id` | `character varying` | YES | - |
+| `is_late` | `boolean` | NO | `false` |
+| `is_flagged_anomaly` | `boolean` | NO | `false` |
+| `anomaly_reason` | `text` | YES | - |
+| `verified_by` | `uuid` | YES | - |
+| `notes` | `text` | YES | - |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `session_id` -> `public.attendance_sessions(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `verified_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+- UNIQUE: `session_id`
+- UNIQUE: `student_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `attendance_records_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `attendance_records_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `attendance_records_update` | `UPDATE` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.attendance_sessions`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 21
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `class_id` | `uuid` | NO | - |
+| `session_number` | `integer` | NO | - |
+| `title` | `character varying` | NO | - |
+| `session_date` | `date` | NO | `CURRENT_DATE` |
+| `start_time` | `character varying` | NO | `'08:00'` |
+| `end_time` | `character varying` | NO | `'10:30'` |
+| `code` | `character varying` | NO | - |
+| `is_open` | `boolean` | NO | `true` |
+| `methods` | `jsonb` | NO | `'["QR_DYNAMIC", "LOCATION_GPS"]'` |
+| `preset` | `character varying` | NO | `'TATAP_MUKA'` |
+| `location_lat` | `numeric` | YES | - |
+| `location_lng` | `numeric` | YES | - |
+| `radius_meters` | `integer` | NO | `50` |
+| `location_name` | `character varying` | YES | - |
+| `late_threshold_minutes` | `integer` | NO | `15` |
+| `qr_token_secret` | `character varying` | YES | - |
+| `qr_refreshed_at` | `timestamp with time zone` | YES | - |
+| `room_id` | `uuid` | YES | - |
+| `created_by` | `uuid` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `created_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `room_id` -> `public.rooms(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+- UNIQUE: `class_id`
+- UNIQUE: `session_number`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `attendance_sessions_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `attendance_sessions_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
 ### Tabel: `public.audit_logs`
 
 - **Status Row Level Security (RLS)**: AKTIF (Enabled)
@@ -122,6 +208,70 @@
 
 ---
 
+### Tabel: `public.campus_events`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 11
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `title` | `character varying` | NO | - |
+| `description` | `text` | YES | - |
+| `category` | `character varying` | NO | `'Seminar Akademik'` |
+| `event_date` | `timestamp with time zone` | NO | `now()` |
+| `location` | `character varying` | NO | `'Auditorium Utama / Daring'` |
+| `organizer` | `character varying` | NO | `'Fakultas Teknik'` |
+| `max_participants` | `integer` | YES | `200` |
+| `badge` | `character varying` | YES | `'Terbuka'` |
+| `created_by` | `uuid` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `created_by` -> `public.profiles(id)` (ON DELETE SET NULL)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `campus_events_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `campus_events_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.certificates`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 11
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `student_id` | `uuid` | NO | - |
+| `class_id` | `uuid` | YES | - |
+| `title` | `character varying` | NO | - |
+| `issuer` | `character varying` | NO | `'Laboratorium & Fakultas Teknik UIR'` |
+| `issue_date` | `character varying` | NO | - |
+| `credential_id` | `character varying` | NO | - |
+| `grade` | `character varying` | NO | `'Sangat Memuaskan (A)'` |
+| `hours` | `character varying` | NO | `'48 Jam Pelatihan'` |
+| `file_url` | `text` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE SET NULL)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+- UNIQUE: `credential_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `certificates_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `certificates_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
 ### Tabel: `public.class_assistants`
 
 - **Status Row Level Security (RLS)**: AKTIF (Enabled)
@@ -149,6 +299,40 @@
 | Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
 |---|---|---|---|
 | `class_assistants_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.class_final_grades`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 10
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `class_id` | `uuid` | NO | - |
+| `student_id` | `uuid` | NO | - |
+| `numeric_score` | `numeric` | NO | `0.00` |
+| `letter_grade` | `character varying` | NO | `'E'` |
+| `grade_point` | `numeric` | NO | `0.00` |
+| `status` | `character varying` | NO | `'DRAFT'` |
+| `published_at` | `timestamp with time zone` | YES | - |
+| `calculated_by` | `uuid` | YES | - |
+| `calculated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `calculated_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+- UNIQUE: `class_id`
+- UNIQUE: `student_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `class_final_grades_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `class_final_grades_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 
@@ -331,6 +515,213 @@
 
 ---
 
+### Tabel: `public.event_registrations`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 5
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `event_id` | `uuid` | NO | - |
+| `user_id` | `uuid` | NO | - |
+| `registered_at` | `timestamp with time zone` | NO | `now()` |
+| `status` | `character varying` | NO | `'REGISTERED'` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `event_id` -> `public.campus_events(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `user_id` -> `public.profiles(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+- UNIQUE: `event_id`
+- UNIQUE: `user_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `event_registrations_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `event_registrations_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.exam_answers`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 11
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `attempt_id` | `uuid` | NO | - |
+| `question_id` | `uuid` | NO | - |
+| `selected_option_id` | `uuid` | YES | - |
+| `essay_text` | `text` | YES | - |
+| `answer_data` | `jsonb` | NO | `'{}'` |
+| `is_draft` | `boolean` | NO | `true` |
+| `last_saved_at` | `timestamp with time zone` | NO | `now()` |
+| `score_earned` | `numeric` | NO | `0.00` |
+| `graded_by` | `uuid` | YES | - |
+| `graded_at` | `timestamp with time zone` | YES | - |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `attempt_id` -> `public.exam_attempts(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `graded_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `question_id` -> `public.quiz_questions(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `selected_option_id` -> `public.quiz_options(id)` (ON DELETE SET NULL)
+- PRIMARY KEY: `id`
+- UNIQUE: `attempt_id`
+- UNIQUE: `question_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `exam_answers_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `exam_answers_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.exam_attempts`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 16
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `quiz_id` | `uuid` | NO | - |
+| `student_id` | `uuid` | NO | - |
+| `student_name` | `character varying` | YES | - |
+| `started_at` | `timestamp with time zone` | NO | `now()` |
+| `deadline_at` | `timestamp with time zone` | NO | `(now() + '01:00:00')` |
+| `finished_at` | `timestamp with time zone` | YES | - |
+| `total_score` | `numeric` | NO | `0.00` |
+| `max_score` | `numeric` | NO | `100.00` |
+| `is_graded` | `boolean` | NO | `true` |
+| `violations_count` | `integer` | NO | `0` |
+| `is_terminated` | `boolean` | NO | `false` |
+| `status` | `character varying` | NO | `'IN_PROGRESS'` |
+| `answers_json` | `jsonb` | NO | `'{}'` |
+| `ai_grading_drafts` | `jsonb` | NO | `'{}'` |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `quiz_id` -> `public.quizzes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `exam_attempts_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `exam_attempts_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `exam_attempts_update` | `UPDATE` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.exam_disputes`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 13
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `attempt_id` | `uuid` | NO | - |
+| `exam_id` | `uuid` | NO | - |
+| `question_id` | `uuid` | YES | - |
+| `student_id` | `uuid` | NO | - |
+| `student_name` | `character varying` | YES | - |
+| `reason` | `text` | NO | - |
+| `status` | `character varying` | NO | `'PENDING'` |
+| `lecturer_feedback` | `text` | YES | - |
+| `adjusted_points` | `numeric` | YES | - |
+| `submitted_at` | `timestamp with time zone` | NO | `now()` |
+| `resolved_at` | `timestamp with time zone` | YES | - |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `attempt_id` -> `public.exam_attempts(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `exam_id` -> `public.quizzes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `question_id` -> `public.quiz_questions(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `exam_disputes_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `exam_disputes_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `exam_disputes_update` | `UPDATE` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.exam_proctor_interventions`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 12
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `attempt_id` | `uuid` | YES | - |
+| `exam_id` | `uuid` | NO | - |
+| `student_id` | `uuid` | NO | - |
+| `student_name` | `character varying` | YES | - |
+| `proctor_user_id` | `uuid` | NO | - |
+| `actor_name` | `character varying` | YES | - |
+| `action_type` | `character varying` | NO | - |
+| `reason` | `text` | NO | - |
+| `value_before` | `text` | YES | - |
+| `value_after` | `text` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `attempt_id` -> `public.exam_attempts(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `exam_id` -> `public.quizzes(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `proctor_user_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `exam_proctor_interventions_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `exam_proctor_interventions_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.exam_telemetry_events`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 11
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `attempt_id` | `uuid` | YES | - |
+| `exam_id` | `uuid` | NO | - |
+| `student_id` | `uuid` | NO | - |
+| `student_name` | `character varying` | YES | - |
+| `event_type` | `character varying` | NO | - |
+| `duration_seconds` | `integer` | YES | `0` |
+| `details` | `text` | YES | - |
+| `client_timestamp` | `timestamp with time zone` | NO | `now()` |
+| `metadata` | `jsonb` | NO | `'{}'` |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `attempt_id` -> `public.exam_attempts(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `exam_id` -> `public.quizzes(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `exam_telemetry_events_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `exam_telemetry_events_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
 ### Tabel: `public.grade_change_requests`
 
 - **Status Row Level Security (RLS)**: AKTIF (Enabled)
@@ -373,6 +764,74 @@
 
 ---
 
+### Tabel: `public.grade_components`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 7
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `class_id` | `uuid` | NO | - |
+| `name` | `character varying` | NO | - |
+| `weight_percent` | `numeric` | NO | - |
+| `created_by` | `uuid` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `created_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+- UNIQUE: `class_id`
+- UNIQUE: `name`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `grade_components_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `grade_components_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.grade_exemptions`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 13
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `class_id` | `uuid` | NO | - |
+| `student_id` | `uuid` | NO | - |
+| `item_id` | `uuid` | YES | - |
+| `component_id` | `uuid` | YES | - |
+| `reason` | `text` | NO | - |
+| `status` | `character varying` | NO | `'PENDING'` |
+| `requested_by` | `uuid` | NO | - |
+| `approved_by` | `uuid` | YES | - |
+| `approved_at` | `timestamp with time zone` | YES | - |
+| `rejection_reason` | `text` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `approved_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `component_id` -> `public.grade_components(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `requested_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `grade_exemptions_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `grade_exemptions_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `grade_exemptions_update` | `UPDATE` | `authenticated` | PERMISSIVE |
+
+---
+
 ### Tabel: `public.grade_history`
 
 - **Status Row Level Security (RLS)**: AKTIF (Enabled)
@@ -401,6 +860,152 @@
 | Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
 |---|---|---|---|
 | `grade_history_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.grade_items`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 9
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `class_id` | `uuid` | NO | - |
+| `component_id` | `uuid` | YES | - |
+| `title` | `character varying` | NO | - |
+| `max_score` | `numeric` | NO | `100.00` |
+| `status` | `character varying` | NO | `'ACTIVE'` |
+| `created_by` | `uuid` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `component_id` -> `public.grade_components(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `created_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `grade_items_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `grade_items_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.grade_scale_bands`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 6
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `scale_id` | `uuid` | NO | - |
+| `letter` | `character varying` | NO | - |
+| `grade_point` | `numeric` | NO | - |
+| `min_score` | `numeric` | NO | - |
+| `max_score` | `numeric` | NO | - |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `scale_id` -> `public.grade_scales(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+- UNIQUE: `letter`
+- UNIQUE: `scale_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `grade_scale_bands_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `grade_scale_bands_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.grade_scales`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 4
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `name` | `character varying` | NO | - |
+| `is_default` | `boolean` | NO | `false` |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- PRIMARY KEY: `id`
+- UNIQUE: `name`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `grade_scales_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `grade_scales_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.gradebook_locks`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 7
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `class_id` | `uuid` | NO | - |
+| `is_locked` | `boolean` | NO | `true` |
+| `locked_by` | `uuid` | YES | - |
+| `locked_at` | `timestamp with time zone` | NO | `now()` |
+| `expires_at` | `timestamp with time zone` | YES | - |
+| `reason` | `text` | YES | - |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `locked_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+- UNIQUE: `class_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `gradebook_locks_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `gradebook_locks_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.gradebook_unlock_requests`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 11
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `class_id` | `uuid` | NO | - |
+| `requested_by` | `uuid` | NO | - |
+| `reason` | `text` | NO | - |
+| `status` | `character varying` | NO | `'PENDING'` |
+| `approved_by` | `uuid` | YES | - |
+| `approved_at` | `timestamp with time zone` | YES | - |
+| `executed_by` | `uuid` | YES | - |
+| `executed_at` | `timestamp with time zone` | YES | - |
+| `expires_at` | `timestamp with time zone` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `approved_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `executed_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `requested_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `gradebook_unlock_requests_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `gradebook_unlock_requests_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 
@@ -441,6 +1046,106 @@
 | Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
 |---|---|---|---|
 | `grades_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.leave_permits`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 15
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `student_id` | `uuid` | NO | - |
+| `student_name` | `character varying` | YES | - |
+| `class_id` | `uuid` | YES | - |
+| `course_title` | `character varying` | NO | - |
+| `session_number` | `integer` | NO | `1` |
+| `permit_type` | `character varying` | NO | `'SAKIT'` |
+| `permit_date` | `date` | NO | `CURRENT_DATE` |
+| `reason` | `text` | NO | - |
+| `attachment_url` | `text` | YES | - |
+| `status` | `character varying` | NO | `'MENUNGGU VERIFIKASI'` |
+| `reviewed_by` | `uuid` | YES | - |
+| `reviewed_at` | `timestamp with time zone` | YES | - |
+| `review_note` | `text` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `reviewed_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `leave_permits_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `leave_permits_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `leave_permits_update` | `UPDATE` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.library_items`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 14
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `isbn` | `character varying` | YES | - |
+| `title` | `character varying` | NO | - |
+| `author` | `character varying` | NO | - |
+| `category` | `character varying` | NO | `'Modul Kuliah'` |
+| `year` | `character varying` | NO | `'2026'` |
+| `pages` | `integer` | NO | `100` |
+| `badge` | `character varying` | NO | `'Modul Internal'` |
+| `file_url` | `text` | YES | - |
+| `file_size` | `character varying` | YES | - |
+| `total_copies` | `integer` | NO | `1` |
+| `available_copies` | `integer` | NO | `1` |
+| `created_by` | `uuid` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `created_by` -> `public.profiles(id)` (ON DELETE SET NULL)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `library_items_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `library_items_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.library_loans`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 7
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `item_id` | `uuid` | NO | - |
+| `user_id` | `uuid` | NO | - |
+| `borrowed_at` | `timestamp with time zone` | NO | `now()` |
+| `due_at` | `timestamp with time zone` | NO | `(now() + '14 days')` |
+| `returned_at` | `timestamp with time zone` | YES | - |
+| `status` | `character varying` | NO | `'BORROWED'` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `item_id` -> `public.library_items(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `user_id` -> `public.profiles(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `library_loans_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `library_loans_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 
@@ -593,6 +1298,64 @@
 
 ---
 
+### Tabel: `public.portfolio_items`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 6
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `portfolio_id` | `uuid` | NO | - |
+| `title` | `character varying` | NO | - |
+| `artifact_url` | `text` | NO | - |
+| `description` | `text` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `portfolio_id` -> `public.portfolios(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `portfolio_items_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `portfolio_items_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.portfolios`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 12
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `student_id` | `uuid` | NO | - |
+| `title` | `character varying` | NO | - |
+| `course_name` | `character varying` | NO | - |
+| `project_type` | `character varying` | NO | `'Capstone Project'` |
+| `description` | `text` | NO | - |
+| `tech_stack` | `jsonb` | NO | `'[]'` |
+| `status` | `character varying` | NO | `'Terverifikasi Dosen'` |
+| `repo_url` | `text` | YES | - |
+| `demo_url` | `text` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `portfolios_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `portfolios_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
 ### Tabel: `public.profiles`
 
 - **Status Row Level Security (RLS)**: AKTIF (Enabled)
@@ -649,6 +1412,139 @@
 | `programs_insert` | `INSERT` | `authenticated` | PERMISSIVE |
 | `programs_select` | `SELECT` | `authenticated` | PERMISSIVE |
 | `programs_update` | `UPDATE` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.quiz_options`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 4
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `question_id` | `uuid` | NO | - |
+| `option_text` | `text` | NO | - |
+| `order_index` | `integer` | NO | `0` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `question_id` -> `public.quiz_questions(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `quiz_options_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `quiz_options_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.quiz_question_keys`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 6
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `question_id` | `uuid` | NO | - |
+| `correct_option_id` | `uuid` | YES | - |
+| `correct_data` | `jsonb` | NO | `'{}'` |
+| `explanation` | `text` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `correct_option_id` -> `public.quiz_options(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `question_id` -> `public.quiz_questions(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+- UNIQUE: `question_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `quiz_question_keys_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `quiz_question_keys_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.quiz_questions`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 15
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `quiz_id` | `uuid` | YES | - |
+| `question_text` | `text` | NO | - |
+| `question_type` | `character varying` | NO | `'MULTIPLE_CHOICE'` |
+| `points` | `numeric` | NO | `10.00` |
+| `order_index` | `integer` | NO | `0` |
+| `topic_tag` | `character varying` | YES | - |
+| `cpl_tag` | `character varying` | YES | - |
+| `difficulty` | `character varying` | YES | `'MEDIUM'` |
+| `rubric` | `text` | YES | - |
+| `starter_code` | `text` | YES | - |
+| `programming_language` | `character varying` | YES | - |
+| `explanation` | `text` | YES | - |
+| `metadata` | `jsonb` | NO | `'{}'` |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `quiz_id` -> `public.quizzes(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `quiz_questions_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `quiz_questions_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.quizzes`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 25
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `class_id` | `uuid` | NO | - |
+| `title` | `character varying` | NO | - |
+| `description` | `text` | NO | `''` |
+| `exam_type` | `character varying` | NO | `'KUIS'` |
+| `duration_minutes` | `integer` | NO | `60` |
+| `start_time` | `timestamp with time zone` | NO | `now()` |
+| `end_time` | `timestamp with time zone` | NO | `(now() + '7 days')` |
+| `max_attempts` | `integer` | NO | `1` |
+| `shuffle_questions` | `boolean` | NO | `true` |
+| `shuffle_options` | `boolean` | NO | `true` |
+| `is_published` | `boolean` | NO | `false` |
+| `strict_proctoring` | `boolean` | NO | `false` |
+| `proctoring_level` | `character varying` | NO | `'STANDARD'` |
+| `max_violations` | `integer` | NO | `5` |
+| `require_fullscreen` | `boolean` | NO | `true` |
+| `block_copy_paste` | `boolean` | NO | `true` |
+| `require_attendance` | `boolean` | NO | `false` |
+| `passcode` | `character varying` | YES | - |
+| `kkm` | `integer` | NO | `70` |
+| `result_display` | `character varying` | NO | `'IMMEDIATE'` |
+| `status` | `character varying` | NO | `'PUBLISHED'` |
+| `total_points` | `numeric` | NO | `100.00` |
+| `created_by` | `uuid` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `created_by` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `quizzes_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `quizzes_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 
@@ -753,6 +1649,34 @@
 | `semesters_insert` | `INSERT` | `authenticated` | PERMISSIVE |
 | `semesters_select` | `SELECT` | `authenticated` | PERMISSIVE |
 | `semesters_update` | `UPDATE` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.student_badges`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 6
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `student_id` | `uuid` | NO | - |
+| `badge_code` | `character varying` | NO | - |
+| `badge_name` | `character varying` | NO | - |
+| `description` | `text` | YES | - |
+| `awarded_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+- UNIQUE: `badge_code`
+- UNIQUE: `student_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `student_badges_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `student_badges_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 

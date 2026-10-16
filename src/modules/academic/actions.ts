@@ -239,11 +239,11 @@ export async function listMyClassesAction(): Promise<ClassItem[]> {
 
   if (lecturer) {
     return mem.classes
-      .filter((x) => x.created_by === c.user.id || demoPerms(x.id, c.user.id) !== null || x.id.startsWith('c0000000-0000-0000-0000-'))
+      .filter((x) => x.created_by === c.user.id || demoPerms(x.id, c.user.id) !== null || (!c.isNewAccount && x.id.startsWith('c0000000-0000-0000-0000-')))
       .map((x) => ({ ...pub(x), members: mem.enrollments.filter((e) => e.class_id === x.id).length }));
   }
   return mem.classes
-    .filter((x) => mem.enrollments.some((e) => e.class_id === x.id && e.student_id === c.user.id) || x.id.startsWith('c0000000-0000-0000-0000-'))
+    .filter((x) => mem.enrollments.some((e) => e.class_id === x.id && e.student_id === c.user.id) || (!c.isNewAccount && x.id.startsWith('c0000000-0000-0000-0000-')))
     .map((x) => ({ ...pub(x), members: mem.enrollments.filter((e) => e.class_id === x.id).length }));
 }
 
@@ -2144,5 +2144,346 @@ export async function proposeClassAction(input: {
   revalidatePath('/staff/classes');
   return { ok: true, data: pub(row) };
 }
+
+// =========================================================================
+// DYNAMIC SIDEBAR MENU BADGES (Notifikasi, Antrean Koreksi TA, Review Dosen, Persetujuan Prodi)
+// =========================================================================
+export interface DynamicMenuBadgesResult {
+  unreadCount: number;
+  taGradingCount: number;
+  lecturerReviewCount: number;
+  coordinatorApprovalsCount: number;
+}
+
+export async function getDynamicMenuBadgesAction(): Promise<DynamicMenuBadgesResult> {
+  const c = await getCurrentUserWithRoles();
+  if (!c) {
+    return { unreadCount: 0, taGradingCount: 0, lecturerReviewCount: 0, coordinatorApprovalsCount: 0 };
+  }
+
+  const unreadCount = await countUnreadAction();
+  const role = c.activeRole || 'STUDENT';
+  let taGradingCount = 0;
+  let lecturerReviewCount = 0;
+  let coordinatorApprovalsCount = 0;
+
+  const online = await checkSupabaseOnline();
+
+  if (online) {
+    const supabase = await createClient();
+    if (role === 'TEACHING_ASSISTANT') {
+      const { data: subs } = await supabase
+        .from('submissions')
+        .select('id,assignment_id,student_id')
+        .limit(100);
+      const { data: graded } = await supabase
+        .from('grades')
+        .select('assignment_id,student_id')
+        .limit(100);
+      const gradedSet = new Set((graded ?? []).map((g: any) => `${g.assignment_id}:${g.student_id}`));
+      taGradingCount = (subs ?? []).filter((s: any) => !gradedSet.has(`${s.assignment_id}:${s.student_id}`)).length;
+    }
+
+    if (role === 'LECTURER' || role === 'PROGRAM_COORDINATOR') {
+      const [{ count: disputeCount }, { count: permitCount }] = await Promise.all([
+        supabase.from('exam_disputes').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
+        supabase.from('leave_permits').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
+      ]);
+      lecturerReviewCount = (disputeCount ?? 0) + (permitCount ?? 0);
+    }
+
+    if (role === 'PROGRAM_COORDINATOR') {
+      const [{ count: crCount }, { count: draftClassCount }] = await Promise.all([
+        supabase.from('grade_change_requests').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
+        supabase.from('classes').select('id', { count: 'exact', head: true }).eq('status', 'DRAFT'),
+      ]);
+      coordinatorApprovalsCount = (crCount ?? 0) + (draftClassCount ?? 0);
+    }
+  } else {
+    // In-memory badge calculation
+    if (role === 'TEACHING_ASSISTANT') {
+      const taClassIds = asisten
+        .filter((a) => a.user_id === c.user.id && a.perms.includes('ASSIGNMENT_GRADE'))
+        .map((a) => a.class_id);
+      const taAssignIds = tugas.assignments
+        .filter((a) => taClassIds.includes(a.class_id))
+        .map((a) => a.id);
+      taGradingCount = tugas.submissions.filter(
+        (s) => taAssignIds.includes(s.assignment_id) && !demoGrade(s.assignment_id, s.student_id)
+      ).length;
+    }
+
+    if (role === 'LECTURER' || role === 'PROGRAM_COORDINATOR') {
+      const myClassIds = mem.classes.filter((cls) => cls.created_by === c.user.id).map((cls) => cls.id);
+      const myAssignIds = tugas.assignments.filter((a) => myClassIds.includes(a.class_id)).map((a) => a.id);
+      const ungradedSubs = tugas.submissions.filter(
+        (s) => myAssignIds.includes(s.assignment_id) && !demoGrade(s.assignment_id, s.student_id)
+      ).length;
+      const pendingDisputes = ((globalThis as any).__siajarDisputes ?? []).filter(
+        (d: any) => d.status === 'PENDING'
+      ).length;
+      lecturerReviewCount = ungradedSubs + pendingDisputes;
+    }
+
+    if (role === 'PROGRAM_COORDINATOR') {
+      const pendingCr = perubahan.filter((p) => p.status === 'PENDING').length;
+      const draftCls = mem.classes.filter((cls) => cls.status === 'DRAFT').length;
+      coordinatorApprovalsCount = pendingCr + draftCls;
+    }
+  }
+
+  return {
+    unreadCount,
+    taGradingCount,
+    lecturerReviewCount,
+    coordinatorApprovalsCount,
+  };
+}
+
+// =========================================================================
+// DOMAIN 7: LIBRARY CATALOG & DIGITAL REPOSITORY (FF_PERSISTENCE_CONTENT)
+// =========================================================================
+export interface LibraryBookItem {
+  id: string;
+  title: string;
+  author: string;
+  category: string;
+  year: string;
+  pages: number;
+  badge: string;
+  fileSize?: string;
+}
+
+const DEFAULT_LIBRARY_BOOKS: LibraryBookItem[] = [
+  {
+    id: 'lib-1',
+    title: 'Clean Architecture: A Craftsman’s Guide to Software Structure',
+    author: 'Robert C. Martin',
+    category: 'Rekayasa Perangkat Lunak',
+    year: '2023',
+    pages: 432,
+    badge: 'Buku Utama',
+  },
+  {
+    id: 'lib-2',
+    title: 'Designing Data-Intensive Applications',
+    author: 'Martin Kleppmann',
+    category: 'Basis Data Terdistribusi',
+    year: '2022',
+    pages: 616,
+    badge: 'Buku Rujukan',
+  },
+  {
+    id: 'lib-3',
+    title: 'Artificial Intelligence: A Modern Approach (4th Ed)',
+    author: 'Stuart Russell & Peter Norvig',
+    category: 'Kecerdasan Buatan',
+    year: '2024',
+    pages: 1152,
+    badge: 'Referensi Standar',
+  },
+  {
+    id: 'lib-4',
+    title: 'Fullstack Next.js 14 & Supabase Architecture',
+    author: 'Tim Dosen Pemrograman Web',
+    category: 'Modul Kuliah',
+    year: '2026',
+    pages: 198,
+    badge: 'Modul Internal',
+  },
+  {
+    id: 'lib-5',
+    title: 'Computer Networking: A Top-Down Approach (8th Ed)',
+    author: 'James Kurose & Keith Ross',
+    category: 'Jaringan Komputer',
+    year: '2023',
+    pages: 864,
+    badge: 'Buku Utama',
+  },
+  {
+    id: 'lib-6',
+    title: 'Introduction to Algorithms (CLRS 4th Ed)',
+    author: 'Thomas H. Cormen et al.',
+    category: 'Struktur Data & Algoritma',
+    year: '2022',
+    pages: 1312,
+    badge: 'Referensi Standar',
+  },
+];
+
+const libraryCatalogStore: LibraryBookItem[] = ((globalThis as any).__siajarLibraryCatalog ??= [
+  ...DEFAULT_LIBRARY_BOOKS,
+]);
+
+export async function listLibraryCatalogAction(): Promise<LibraryBookItem[]> {
+  const online = await checkSupabaseOnline();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_CONTENT');
+
+  if (online && flagActive) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('library_items')
+      .select('id, title, author, category, published_year, total_copies, file_size_bytes')
+      .order('created_at', { ascending: false });
+
+    if (!error && data && data.length > 0) {
+      return data.map((row: any) => ({
+        id: row.id,
+        title: row.title,
+        author: row.author,
+        category: row.category,
+        year: String(row.published_year ?? 2026),
+        pages: (row.total_copies ?? 1) * 120,
+        badge: row.category === 'Modul Kuliah' ? 'Modul Internal' : 'Buku Rujukan',
+        fileSize: row.file_size_bytes ? `${(Number(row.file_size_bytes) / (1024 * 1024)).toFixed(1)} MB` : undefined,
+      }));
+    }
+  }
+
+  return libraryCatalogStore;
+}
+
+export async function createLibraryItemAction(input: {
+  title: string;
+  author: string;
+  category: string;
+  year: string;
+  pages: number;
+  badge: string;
+  fileSize?: string;
+}): Promise<ActionResponse<LibraryBookItem>> {
+  const me = await actor(['LECTURER', 'ACADEMIC_STAFF', 'PROGRAM_COORDINATOR']);
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  const title = input.title.trim();
+  const author = input.author.trim();
+  if (!title || !author) {
+    return { ok: false, error: 'Judul dan penulis pustaka wajib diisi.' };
+  }
+
+  const demo = isDemoMode();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_CONTENT');
+
+  if (!demo && (!me.online || !flagActive)) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
+  const newBook: LibraryBookItem = {
+    id: randomUUID(),
+    title,
+    author,
+    category: input.category || 'Modul Kuliah',
+    year: input.year || '2026',
+    pages: Number(input.pages) || 120,
+    badge: input.badge || 'Modul Internal',
+    fileSize: input.fileSize,
+  };
+
+  if (me.online && flagActive) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('library_items')
+      .insert({
+        title: newBook.title,
+        author: newBook.author,
+        category: newBook.category,
+        published_year: parseInt(newBook.year, 10) || 2026,
+        uploaded_by: me.id,
+      })
+      .select('id')
+      .single();
+
+    if (error) {
+      return { ok: false, error: error.message || 'Gagal mengunggah pustaka ke database.' };
+    }
+    if (data?.id) {
+      newBook.id = data.id;
+    }
+  }
+
+  libraryCatalogStore.unshift(newBook);
+  revalidatePath('/library');
+  return { ok: true, data: newBook };
+}
+
+// =========================================================================
+// DOMAIN 3: GRADEBOOK COMPONENTS, LOCKS & FINAL GRADES (FF_PERSISTENCE_GRADES)
+// =========================================================================
+export async function saveGradeComponentsAction(input: {
+  classId: string;
+  components: { name: string; weightPct: number; sortOrder?: number }[];
+}): Promise<ActionResponse> {
+  const me = await actor(['LECTURER', 'PROGRAM_COORDINATOR']);
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  const totalWeight = input.components.reduce((acc, c) => acc + c.weightPct, 0);
+  if (Math.abs(totalWeight - 100) > 0.01) {
+    return { ok: false, error: 'Total bobot komponen penilaian wajib tepat 100%.' };
+  }
+
+  const demo = isDemoMode();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_GRADES');
+
+  if (!demo && (!me.online || !flagActive)) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
+  if (me.online && flagActive) {
+    const supabase = await createClient();
+    const rows = input.components.map((comp, idx) => ({
+      class_id: input.classId,
+      name: comp.name.trim(),
+      weight_pct: comp.weightPct,
+      sort_order: comp.sortOrder ?? idx + 1,
+    }));
+    const { error } = await supabase
+      .from('grade_components')
+      .upsert(rows, { onConflict: 'class_id,name' });
+
+    if (error) {
+      return { ok: false, error: error.message || 'Gagal menyimpan komponen nilai.' };
+    }
+  }
+
+  revalidatePath('/grades');
+  revalidatePath('/lecturer/gradebook');
+  return { ok: true };
+}
+
+export async function lockClassGradebookAction(input: {
+  classId: string;
+  locked: boolean;
+  reason?: string;
+}): Promise<ActionResponse> {
+  const me = await actor(['LECTURER', 'ACADEMIC_STAFF', 'PROGRAM_COORDINATOR']);
+  if (!me) return { ok: false, error: ERR.FORBIDDEN };
+
+  const demo = isDemoMode();
+  const flagActive = isFeatureFlagActive('FF_PERSISTENCE_GRADES');
+
+  if (!demo && (!me.online || !flagActive)) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
+  if (me.online && flagActive) {
+    const supabase = await createClient();
+    const { error } = await supabase.from('gradebook_locks').upsert({
+      class_id: input.classId,
+      is_locked: input.locked,
+      locked_by: me.id,
+      locked_at: new Date().toISOString(),
+      lock_reason: input.reason ?? 'Finalisasi nilai akhir semester',
+    });
+    if (error) {
+      return { ok: false, error: error.message || 'Gagal mengubah status kunci buku nilai.' };
+    }
+  }
+
+  revalidatePath('/grades');
+  revalidatePath('/lecturer/gradebook');
+  revalidatePath('/staff/grades/locks');
+  return { ok: true };
+}
+
 
 

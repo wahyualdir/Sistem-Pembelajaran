@@ -48,7 +48,7 @@ export default async function AdminPortalPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-xs">
                 <ShieldAlert className="h-5 w-5" />
               </div>
               <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
@@ -101,7 +101,7 @@ export default async function AdminPortalPage() {
         >
           <div className="flex items-center justify-between">
             <h2 className="font-heading font-black text-sm text-foreground flex items-center gap-2">
-              <FileText className="h-4 w-4 text-retro-orange" />
+              <FileText className="h-4 w-4 text-primary" />
               <span>Catatan Audit Sistem Sensitif</span>
             </h2>
             <span className="text-xs font-mono text-muted-foreground">10 Peristiwa Terakhir</span>
@@ -144,7 +144,7 @@ export default async function AdminPortalPage() {
         >
           <div className="flex items-center justify-between">
             <h2 className="font-heading font-black text-sm text-foreground flex items-center gap-2">
-              <Lock className="h-4 w-4 text-retro-orange" />
+              <Lock className="h-4 w-4 text-primary" />
               <span>Aktivitas Login & Sesi Terkini</span>
             </h2>
             <span className="text-xs font-mono text-muted-foreground">Deteksi Risiko Otomatis</span>
@@ -213,7 +213,7 @@ export default async function AdminPortalPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-retro-border/40 pb-3">
           <div>
             <h3 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-              <Users className="h-5 w-5 text-retro-orange" />
+              <Users className="h-5 w-5 text-primary" />
               Kelola Pengguna & Impersonate Sesi
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5">

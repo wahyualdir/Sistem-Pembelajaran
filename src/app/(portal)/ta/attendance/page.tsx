@@ -46,17 +46,16 @@ export default function AssistantAttendancePage() {
   return (
     <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
       <RetroWindow
-        title="bantu_presensi_asisten.app"
-        subtitle="Manajemen Verifikasi Kehadiran Mahasiswa Sesuai Izin Dosen"
+        title="Bantu Presensi Kelas Praktikum"
         headerBadge="Mode Asisten"
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
           <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-            <CalendarCheck2 className="h-7 w-7 text-retro-orange" />
+            <CalendarCheck2 className="h-7 w-7 text-primary" />
             <span>Bantu Presensi Kelas Praktikum</span>
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
             Membantu dosen memverifikasi kehadiran mahasiswa di lab praktikum, mengawasi pemindaian QR dinamis, dan mencatat status izin atau sakit dengan audit terdata.
           </p>
         </div>
@@ -91,7 +90,7 @@ export default function AssistantAttendancePage() {
                 <h2 className="font-heading font-black text-lg text-foreground leading-snug">
                   {ses.title}
                 </h2>
-                <p className="text-xs font-semibold text-retro-orange mt-1">
+                <p className="text-xs font-semibold text-primary mt-1">
                   {ses.meeting}
                 </p>
               </div>

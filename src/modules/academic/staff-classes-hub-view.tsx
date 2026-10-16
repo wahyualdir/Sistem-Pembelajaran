@@ -202,7 +202,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Layers className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -259,7 +259,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -277,7 +277,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <Users className="h-5 w-5 text-retro-orange" />
+                <Users className="h-5 w-5 text-primary" />
                 <span>Pendaftaran Peserta ke Rombongan Belajar (Enrollment)</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -353,7 +353,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
         <div className="space-y-6">
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl">
             <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-              <Download className="h-5 w-5 text-retro-orange" />
+              <Download className="h-5 w-5 text-primary" />
               <span>Impor Data Peserta & Kelas via CSV (Batch Synchronization)</span>
             </h2>
             <p className="text-xs text-black/70 mt-1">
@@ -376,7 +376,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             </div>
 
             <div className="flex items-center justify-center gap-3">
-              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-retro-orange text-white text-xs sm:text-sm font-black shadow-retro hover:bg-black transition-all">
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-primary text-white text-xs sm:text-sm font-black shadow-retro hover:bg-black transition-all">
                 <Upload className="h-4 w-4" />
                 <span>Pilih Berkas CSV</span>
                 <input
@@ -530,7 +530,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <ArrowRight className="h-5 w-5 text-retro-orange" />
+                <ArrowRight className="h-5 w-5 text-primary" />
                 <span>Mutasi Pindah Kelas Paralel Mahasiswa</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">

@@ -29,7 +29,7 @@ export function SystemBackupHubView() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-retro-sm">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <FolderArchive className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
@@ -151,7 +151,7 @@ export function SystemBackupHubView() {
       {/* 3. INFORMASI TITIK PEMULIHAN */}
       <div className="p-5 rounded-xl border-2 border-black bg-retro-warm/40 shadow-retro space-y-3">
         <h4 className="font-heading font-black text-sm text-black flex items-center gap-2">
-          <Database className="h-4 w-4 text-retro-orange" />
+          <Database className="h-4 w-4 text-primary" />
           <span>Panduan Pemulihan Bencana (Disaster Recovery Runbook)</span>
         </h4>
         <p className="text-xs text-black/80 leading-relaxed font-mono">

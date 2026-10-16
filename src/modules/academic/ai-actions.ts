@@ -25,7 +25,52 @@ export async function askAiAcademicAssistantAction(
   const roleName = user.activeRole ?? 'Pengguna';
   const userName = user.profile?.full_name ?? 'Teman Belajar';
 
-  // Academic knowledge base pattern matcher & reasoning
+  // Integrasi LLM Eksternal (Google Gemini API) bila GEMINI_API_KEY tersedia
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+  if (geminiApiKey) {
+    try {
+      const systemInstruction =
+        `Anda adalah SIAJAR AI Academic Assistant resmi untuk portal akademik kampus SIAJAR.\n` +
+        `Pengguna saat ini: ${userName} (Peran: ${roleName}). ` +
+        `${contextClassTitle ? `Konteks kelas aktif: ${contextClassTitle}.` : ''}\n` +
+        `Jawab dalam Bahasa Indonesia yang sopan, terstruktur (gunakan markdown ringkas), akurat, dan mengacu pada aturan akademik standar ` +
+        `(batas minimal kehadiran UAS 75%, skala nilai A=4.00 s/d E=0.00, batas SKS berdasarkan IPS).`;
+
+      const contents = [
+        ...history.slice(-6).map((msg) => ({
+          role: msg.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: msg.content }],
+        })),
+        { role: 'user', parts: [{ text: cleanPrompt }] },
+      ];
+
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(geminiApiKey)}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: systemInstruction }] },
+            contents,
+            generationConfig: { temperature: 0.3, maxOutputTokens: 800 },
+          }),
+          signal: AbortSignal.timeout(8000),
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        const textOut = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (typeof textOut === 'string' && textOut.trim().length > 0) {
+          return { ok: true, response: textOut.trim() };
+        }
+      }
+    } catch {
+      // Fallback otomatis ke knowledge base lokal jika API timeout/error
+    }
+  }
+
+  // Academic knowledge base pattern matcher & reasoning (Fallback Deterministik)
   const lower = cleanPrompt.toLowerCase();
 
   let answer = '';

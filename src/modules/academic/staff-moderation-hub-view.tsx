@@ -81,7 +81,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <ShieldAlert className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -105,7 +105,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
           <span className="text-xs font-mono font-bold uppercase text-black/60">Laporan Menunggu</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-retro-orange">1 Berkas</div>
+          <div className="text-2xl sm:text-3xl font-heading font-black text-primary">1 Berkas</div>
           <span className="text-xs text-black/70">Perlu Tindakan</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
@@ -138,7 +138,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -156,7 +156,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <ShieldAlert className="h-5 w-5 text-retro-orange" />
+                <ShieldAlert className="h-5 w-5 text-primary" />
                 <span>Kotak Masuk Laporan Konten & Pelanggaran Etika</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -265,7 +265,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <Users className="h-5 w-5 text-retro-orange" />
+                <Users className="h-5 w-5 text-primary" />
                 <span>Supervisi Grup Belajar Mandiri Mahasiswa</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -328,7 +328,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 text-retro-orange" />
+                <GraduationCap className="h-5 w-5 text-primary" />
                 <span>Program Pendampingan Akademik & Mentoring Mahasiswa</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -380,7 +380,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{m.coordinator}</td>
                         <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{m.mentorsCount} Orang</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-retro-orange">{m.menteesCount} Mhs</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-primary">{m.menteesCount} Mhs</td>
                         <td className="p-3.5 sm:p-4 text-xs font-mono">{m.duration}</td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">

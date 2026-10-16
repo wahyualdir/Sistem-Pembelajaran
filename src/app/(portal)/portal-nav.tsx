@@ -63,7 +63,7 @@ export function PortalNav({
     <nav aria-label="Navigasi utama" className="flex-1 space-y-4 overflow-y-auto p-3">
       {groups.map((group) => (
         <div key={group.id} className="space-y-1.5">
-          <p className="px-3 text-xs font-black uppercase tracking-wider text-black font-mono">
+          <p className="px-3 text-xs font-black uppercase tracking-wider text-gray-dark font-mono">
             {group.title}
           </p>
           <div className="space-y-1">
@@ -79,15 +79,15 @@ export function PortalNav({
                   className={cn(
                     'group flex items-center justify-between rounded-control px-3 py-2 min-h-[42px] text-sm sm:text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                     isActive
-                      ? 'bg-black text-white font-black shadow-retro-sm'
-                      : 'text-black hover:bg-retro-warm hover:text-black'
+                      ? 'border-2 border-ink border-l-4 border-l-primary bg-ink text-white font-black shadow-retro-sm'
+                      : 'text-ink hover:bg-gray-soft hover:text-ink'
                   )}
                 >
                   <span className="flex items-center gap-3 truncate">
                     <Icon
                       className={cn(
                         'h-5 w-5 shrink-0 transition-transform group-hover:scale-105',
-                        isActive ? 'text-white' : 'text-black'
+                        isActive ? 'text-white' : 'text-ink'
                       )}
                     />
                     <span className="truncate">{item.label}</span>
@@ -96,7 +96,7 @@ export function PortalNav({
                     <span
                       className={cn(
                         'inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-black font-mono',
-                        isActive ? 'bg-white text-black' : 'bg-retro-orange text-white'
+                        isActive ? 'bg-surface text-ink' : 'bg-primary text-white'
                       )}
                     >
                       {item.badge}

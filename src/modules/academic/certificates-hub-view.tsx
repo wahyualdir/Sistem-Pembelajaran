@@ -73,7 +73,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. HEADER WINDOW RETRO */}
       <RetroWindow
-        title="sertifikat_dan_portofolio_prestasi.app"
+        title="Sertifikat & Portofolio Mahasiswa"
         badge="Terverifikasi Resmi"
         headerClassName="bg-retro-yellow"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
@@ -81,14 +81,14 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Award className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Sertifikat & Portofolio Mahasiswa
               </h1>
             </div>
-            <p className="text-sm sm:text-base text-black font-medium max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
               Pusat kredensial capaian akademik: sertifikat kompetensi resmi dengan hash verifikasi blockchain/enkripsi, lencana pencapaian, dan portofolio artefak belajar profesional.
             </p>
           </div>
@@ -114,7 +114,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -130,9 +130,9 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
         <div className="space-y-6">
           {certificates.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
-              <Award className="h-10 w-10 text-black/40 mx-auto" />
+              <Award className="h-10 w-10 text-black mx-auto" />
               <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Kredensial</h3>
-              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+              <p className="text-xs sm:text-sm text-black font-bold max-w-md mx-auto">
                 Anda belum memiliki sertifikat kompetensi atau badge digital yang diterbitkan oleh laboratorium atau fakultas.
               </p>
             </div>
@@ -146,9 +146,9 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                   <div className="space-y-3.5">
                     <div className="flex items-center justify-between">
                       <div className="p-2.5 rounded-lg border-2 border-black bg-retro-warm text-black shadow-xs">
-                        <Award className="h-6 w-6 text-retro-orange" />
+                        <Award className="h-6 w-6 text-primary" />
                       </div>
-                      <span className="text-xs sm:text-xs font-mono font-black px-2.5 py-0.5 rounded border border-black bg-emerald-100 text-emerald-950 shadow-xs">
+                      <span className="text-xs sm:text-xs font-mono font-black px-2.5 py-0.5 rounded border-2 border-black bg-emerald-100 text-emerald-950 shadow-xs">
                         ✓ Terverifikasi Resmi
                       </span>
                     </div>
@@ -157,25 +157,25 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                       <h3 className="font-heading font-black text-base sm:text-lg text-black leading-snug line-clamp-2">
                         {cert.title}
                       </h3>
-                      <p className="text-xs text-black/70 font-semibold mt-1">
+                      <p className="text-xs text-black font-bold mt-1">
                         Penerbit: {cert.issuer}
                       </p>
                     </div>
 
                     <div className="space-y-1.5 pt-2 border-t-2 border-black/10 text-xs font-mono">
-                      <div className="flex justify-between text-black/80">
+                      <div className="flex justify-between text-black font-bold">
                         <span>Predikat:</span>
-                        <span className="font-bold text-black">{cert.grade}</span>
+                        <span className="font-black text-black">{cert.grade}</span>
                       </div>
-                      <div className="flex justify-between text-black/80">
+                      <div className="flex justify-between text-black font-bold">
                         <span>Beban Jam:</span>
-                        <span className="font-bold text-black">{cert.hours}</span>
+                        <span className="font-black text-black">{cert.hours}</span>
                       </div>
-                      <div className="flex justify-between text-black/80">
+                      <div className="flex justify-between text-black font-bold">
                         <span>Tanggal Terbit:</span>
-                        <span className="font-bold text-black">{cert.date}</span>
+                        <span className="font-black text-black">{cert.date}</span>
                       </div>
-                      <div className="pt-1 text-xs text-black/60 truncate font-mono">
+                      <div className="pt-1 text-xs text-black font-bold truncate font-mono">
                         ID: {cert.credentialId}
                       </div>
                     </div>
@@ -238,7 +238,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                       <h3 className="font-heading font-black text-lg sm:text-xl text-black leading-tight">
                         {proj.title}
                       </h3>
-                      <p className="text-xs text-retro-orange font-black mt-1">
+                      <p className="text-xs text-primary font-black mt-1">
                         {proj.course}
                       </p>
                     </div>

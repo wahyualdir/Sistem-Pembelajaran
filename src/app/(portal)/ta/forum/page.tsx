@@ -40,17 +40,16 @@ export default function AssistantForumPage() {
   return (
     <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
       <RetroWindow
-        title="moderasi_forum_asisten.app"
-        subtitle="Jawab Pertanyaan & Moderasi Diskusi Kelas Praktikum"
+        title="Moderasi Forum Praktikum"
         headerBadge="Mode Asisten"
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
           <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-            <MessageSquare className="h-7 w-7 text-retro-orange" />
+            <MessageSquare className="h-7 w-7 text-primary" />
             <span>Jawab Forum Diskusi Praktikum</span>
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
             Menjawab kendala teknis mahasiswa terkait instalasi tools praktikum, debugging kode eror, dan klarifikasi ketentuan tugas mingguan.
           </p>
         </div>

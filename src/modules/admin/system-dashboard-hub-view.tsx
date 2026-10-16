@@ -35,7 +35,7 @@ export function SystemDashboardHubView() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-retro-sm">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <Server className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
@@ -118,7 +118,7 @@ export function SystemDashboardHubView() {
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Activity className="h-5 w-5 text-retro-orange" />
+              <Activity className="h-5 w-5 text-primary" />
               <h3 className="font-heading font-black text-lg text-black">Monitoring Sistem</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
@@ -137,7 +137,7 @@ export function SystemDashboardHubView() {
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Globe className="h-5 w-5 text-retro-orange" />
+              <Globe className="h-5 w-5 text-primary" />
               <h3 className="font-heading font-black text-lg text-black">Integrasi Layanan</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
@@ -156,7 +156,7 @@ export function SystemDashboardHubView() {
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Laptop className="h-5 w-5 text-retro-orange" />
+              <Laptop className="h-5 w-5 text-primary" />
               <h3 className="font-heading font-black text-lg text-black">Keamanan & Sesi</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
@@ -175,7 +175,7 @@ export function SystemDashboardHubView() {
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <FolderArchive className="h-5 w-5 text-retro-orange" />
+              <FolderArchive className="h-5 w-5 text-primary" />
               <h3 className="font-heading font-black text-lg text-black">Backup & Restore</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
@@ -194,7 +194,7 @@ export function SystemDashboardHubView() {
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Sliders className="h-5 w-5 text-retro-orange" />
+              <Sliders className="h-5 w-5 text-primary" />
               <h3 className="font-heading font-black text-lg text-black">Pengaturan Platform</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
@@ -213,7 +213,7 @@ export function SystemDashboardHubView() {
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro flex flex-col justify-between space-y-4">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-retro-orange" />
+              <ShieldCheck className="h-5 w-5 text-primary" />
               <h3 className="font-heading font-black text-lg text-black">Log Audit Sistem</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">

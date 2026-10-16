@@ -218,21 +218,21 @@ export function Sidebar({
             return (
               <div key={group.id || group.title} className="space-y-1.5">
                 <div className="flex items-center justify-between px-2.5 mb-1.5">
-                  <p className="text-xs font-bold uppercase tracking-wider text-gray-600">
+                  <p className="text-xs font-black uppercase tracking-wider text-gray-dark">
                     {group.title}
                   </p>
                   {group.collapsible && (
                     <button
                       type="button"
                       onClick={() => toggleGroupCollapse(group.id)}
-                      className="p-1 rounded hover:bg-neutral-200 text-black transition-transform cursor-pointer"
+                      className="p-1 rounded hover:bg-gray-soft text-gray-dark transition-transform cursor-pointer"
                       title={`Buka/Tutup grup ${group.title}`}
                       aria-label={`Toggle grup ${group.title}`}
                     >
                       <ChevronDown
                         className={cn(
                           "h-3.5 w-3.5 transition-transform duration-200",
-                          isGroupCollapsed ? "-rotate-90 text-gray-500" : "rotate-0 text-black"
+                          isGroupCollapsed ? "-rotate-90 text-gray" : "rotate-0 text-gray-dark"
                         )}
                       />
                     </button>
@@ -250,17 +250,17 @@ export function Sidebar({
                           aria-current={isActive ? "page" : undefined}
                           onClick={handleClose}
                           className={cn(
-                            "flex items-center justify-between rounded-none sm:rounded-[2px] px-3.5 py-2.5 text-sm sm:text-base font-semibold transition-all focus-visible:outline-none",
+                            "flex items-center justify-between rounded-none sm:rounded-[2px] px-3.5 py-2.5 text-sm sm:text-base font-black transition-all focus-visible:outline-none",
                             isActive
-                              ? "border-2 border-black bg-retro-orange text-white shadow-retro font-bold hover:bg-retro-orange"
-                              : "text-black hover:bg-retro-warm hover:text-black"
+                              ? "border-2 border-ink border-l-4 border-l-primary bg-ink text-white shadow-retro font-black hover:bg-ink/90"
+                              : "text-ink hover:bg-gray-soft hover:text-ink font-extrabold"
                           )}
                         >
                           <span className="flex items-center gap-3 truncate">
                             <Icon
                               className={cn(
                                 "h-5 w-5 shrink-0 transition-transform",
-                                isActive ? "text-white" : "text-black"
+                                isActive ? "text-white" : "text-ink"
                               )}
                             />
                             <span className="truncate">{item.label}</span>
@@ -269,7 +269,7 @@ export function Sidebar({
                             <span
                               className={cn(
                                 "inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-black font-mono shrink-0",
-                                isActive ? "bg-white text-black" : "bg-retro-orange text-white"
+                                isActive ? "bg-surface text-ink" : "bg-primary text-white"
                               )}
                             >
                               {item.badge}
@@ -288,14 +288,14 @@ export function Sidebar({
         {/* ======================================================== */}
         {/* DI BAWAH MENU BAGIAN BAWAH: WIDGET PROFIL INTERAKTIF     */}
         {/* ======================================================== */}
-        <div className="p-3 border-t-[1.5px] border-retro-border bg-retro-warm/50 space-y-2 shrink-0">
+        <div className="p-3 border-t-[1.5px] border-ink bg-gray-soft/50 space-y-2 shrink-0">
           <div ref={profileMenuRef} className="relative">
             {/* Menu Popover Profil saat Ditekan */}
             {isProfileMenuOpen && (
-              <div className="absolute bottom-full left-0 right-0 mb-2 rounded-lg border-[1.5px] border-retro-border bg-retro-surface p-2 shadow-retro-md z-50 space-y-1 animate-fade-up">
-                <div className="px-2 py-1.5 border-b border-retro-border/40 mb-1">
-                  <p className="text-xs font-bold text-foreground truncate">{displayName}</p>
-                  <p className="text-xs text-muted-foreground font-mono">{roleLabel}</p>
+              <div className="absolute bottom-full left-0 right-0 mb-2 rounded-lg border-[1.5px] border-ink bg-surface p-2 shadow-retro-md z-50 space-y-1 animate-fade-up">
+                <div className="px-2 py-1.5 border-b border-ink/40 mb-1">
+                  <p className="text-xs font-bold text-ink truncate">{displayName}</p>
+                  <p className="text-xs text-gray-dark font-mono">{roleLabel}</p>
                 </div>
 
                 <Link
@@ -304,9 +304,9 @@ export function Sidebar({
                     setIsProfileMenuOpen(false);
                     handleClose();
                   }}
-                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-retro-warm text-xs font-semibold text-foreground transition-colors group"
+                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-gray-soft text-xs font-semibold text-ink transition-colors group"
                 >
-                  <User className="h-3.5 w-3.5 text-retro-orange group-hover:scale-110 transition-transform" />
+                  <User className="h-3.5 w-3.5 text-primary group-hover:scale-110 transition-transform" />
                   <span>Buka Profil Lengkap</span>
                 </Link>
 
@@ -316,9 +316,9 @@ export function Sidebar({
                     setIsProfileMenuOpen(false);
                     handleClose();
                   }}
-                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-retro-warm text-xs font-semibold text-foreground transition-colors group"
+                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-gray-soft text-xs font-semibold text-ink transition-colors group"
                 >
-                  <Settings className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                  <Settings className="h-3.5 w-3.5 text-gray-dark group-hover:text-ink transition-colors" />
                   <span>Pengaturan Akun</span>
                 </Link>
 
@@ -328,14 +328,14 @@ export function Sidebar({
                     setIsProfileMenuOpen(false);
                     handleClose();
                   }}
-                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-retro-warm text-xs font-semibold text-foreground transition-colors group"
+                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-gray-soft text-xs font-semibold text-ink transition-colors group"
                 >
-                  <Laptop className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                  <Laptop className="h-3.5 w-3.5 text-gray-dark group-hover:text-ink transition-colors" />
                   <span>Perangkat & Sesi</span>
                 </Link>
 
                 {onLogout && (
-                  <div className="pt-1 border-t border-retro-border/40">
+                  <div className="pt-1 border-t border-ink/40">
                     <button
                       type="button"
                       onClick={() => {
@@ -356,21 +356,21 @@ export function Sidebar({
             <button
               type="button"
               onClick={() => setIsProfileMenuOpen((prev) => !prev)}
-              className="flex items-center justify-between rounded-lg border-[1.5px] border-retro-border bg-retro-surface p-2 shadow-retro hover:bg-retro-warm transition-all group focus-visible:outline-none w-full text-left"
+              className="flex items-center justify-between rounded-lg border-[1.5px] border-ink bg-surface p-2 shadow-retro hover:bg-gray-soft transition-all group focus-visible:outline-none w-full text-left"
               title="Buka Menu Profil Pengguna"
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 {/* Box Kotak Inisial Avatar */}
-                <div className="relative h-10 w-10 rounded-md border-[1.5px] border-retro-border bg-retro-surface overflow-hidden flex items-center justify-center text-sm font-black text-retro-orange shrink-0 shadow-xs">
+                <div className="relative h-10 w-10 rounded-md border-[1.5px] border-ink bg-ink overflow-hidden flex items-center justify-center text-sm font-black text-white shrink-0 shadow-xs">
                   {initials}
                 </div>
 
                 {/* Nama & Subtitle Role */}
                 <div className="text-left min-w-0 flex-1">
-                  <p className="text-sm font-bold text-foreground leading-tight truncate group-hover:text-retro-orange transition-colors">
+                  <p className="text-sm font-bold text-ink leading-tight truncate group-hover:text-primary-dark transition-colors">
                     {displayName}
                   </p>
-                  <p className="text-xs text-muted-foreground font-medium leading-tight truncate mt-0.5">
+                  <p className="text-xs text-gray-dark font-medium leading-tight truncate mt-0.5">
                     {roleLabel}
                   </p>
                 </div>
@@ -379,8 +379,8 @@ export function Sidebar({
               {/* Chevron Panah Bawah yang berotasi saat menu terbuka */}
               <ChevronDown
                 className={cn(
-                  "h-4 w-4 text-muted-foreground group-hover:text-foreground shrink-0 transition-transform ml-1",
-                  isProfileMenuOpen && "rotate-180 text-foreground"
+                  "h-4 w-4 text-gray-dark group-hover:text-ink shrink-0 transition-transform ml-1",
+                  isProfileMenuOpen && "rotate-180 text-ink"
                 )}
               />
             </button>

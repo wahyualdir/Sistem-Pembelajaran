@@ -85,7 +85,7 @@ export function CommunityHubView({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <MessageSquare className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -118,7 +118,7 @@ export function CommunityHubView({
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -226,7 +226,7 @@ export function CommunityHubView({
                         {th.lastActive}
                       </span>
                     </div>
-                    <h3 className="font-heading font-black text-base sm:text-lg text-black hover:text-retro-orange transition-colors">
+                    <h3 className="font-heading font-black text-base sm:text-lg text-black hover:text-primary-dark transition-colors">
                       {th.title}
                     </h3>
                     <p className="text-xs text-black/70 font-medium line-clamp-2">
@@ -342,7 +342,7 @@ export function CommunityHubView({
                           <h3 className="font-heading font-black text-base text-black leading-tight">
                             {m.name}
                           </h3>
-                          <p className="text-xs text-retro-orange font-bold">{m.role}</p>
+                          <p className="text-xs text-primary font-bold">{m.role}</p>
                         </div>
                       </div>
                       <span className="text-xs font-mono font-bold px-2 py-0.5 rounded border border-emerald-500 bg-emerald-50 text-emerald-950">
@@ -365,7 +365,7 @@ export function CommunityHubView({
                     <button
                       type="button"
                       onClick={() => alert(`Reservasi sesi mentoring bersama ${m.name}`)}
-                      className="px-3 py-1.5 rounded-lg border-2 border-black bg-retro-orange text-white font-bold hover:bg-black transition-all cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg border-2 border-black bg-primary text-white font-bold hover:bg-black transition-all cursor-pointer"
                     >
                       Booking Sesi
                     </button>

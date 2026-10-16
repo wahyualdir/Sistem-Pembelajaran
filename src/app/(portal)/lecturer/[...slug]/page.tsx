@@ -114,17 +114,16 @@ export default function LecturerSubpage({ params }: PageProps) {
   return (
     <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
       <RetroWindow
-        title={`pengajaran_${subroute}.app`}
-        subtitle={current.subtitle}
+        title={current.title}
         headerBadge="Mode Dosen"
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
           <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-            <Icon className="h-7 w-7 text-retro-orange" />
+            <Icon className="h-7 w-7 text-primary" />
             <span>{current.title}</span>
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
             {current.desc}
           </p>
         </div>
@@ -135,11 +134,11 @@ export default function LecturerSubpage({ params }: PageProps) {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h2 className="font-heading font-black text-xl text-foreground">Daftar Kelas Perkuliahan Diampu</h2>
-            <p className="text-xs text-muted-foreground">Pilih kelas kuliah untuk mengelola {current.title.toLowerCase()}.</p>
+            <p className="text-xs text-black font-bold">Pilih kelas kuliah untuk mengelola {current.title.toLowerCase()}.</p>
           </div>
           <Link
             href="/classes"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-bold text-xs shadow-retro hover:bg-neutral-800 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-black text-xs shadow-retro hover:bg-neutral-800 transition-all"
           >
             <span>Buka Hub Kelas &rarr;</span>
           </Link>

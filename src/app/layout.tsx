@@ -19,7 +19,30 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="id">
-      <body className="min-h-[100dvh] overflow-x-hidden bg-background font-sans text-foreground antialiased">
+      <head>
+        <link
+          rel="preload"
+          href="/fonts/SFProDisplay-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/SFProDisplay-Semibold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/SFProDisplay-Regular.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body className="min-h-[100dvh] overflow-x-hidden bg-background font-sans font-bold text-foreground antialiased">
         {children}
       </body>
     </html>

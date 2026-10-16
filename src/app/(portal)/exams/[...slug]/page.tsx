@@ -122,18 +122,17 @@ export default async function ExamSubpage({ params }: PageProps) {
     return (
       <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
         <RetroWindow
-          title="panel_live_pengawasan_ujian.app"
-          subtitle="Real-time Proctoring & Monitoring Mahasiswa"
+          title="Panel Live Pengawasan Ujian"
           headerBadge="Live Proctor"
           headerBadgeVariant="warning"
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
             <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-              <ShieldAlert className="h-7 w-7 text-retro-orange" />
+              <ShieldAlert className="h-7 w-7 text-primary" />
               <span>Panel Live Pengawasan Ujian</span>
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
               Memantau status pengerjaan peserta ujian secara langsung. Deteksi perpindahan tab (<code>visibilitychange</code>), jendela blur, dan keluar mode fullscreen dicatat otomatis dan dapat diintervensi oleh dosen.
             </p>
           </div>
@@ -162,8 +161,7 @@ export default async function ExamSubpage({ params }: PageProps) {
     return (
       <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
         <RetroWindow
-          title="bank_soal_terpusat.app"
-          subtitle="Repositori Bank Soal Terstandarisasi CPL & Topik"
+          title="Bank Soal Perkuliahan"
           headerBadge="Bank Soal"
           headerBadgeVariant="warning"
           bodyClassName="p-4 sm:p-6 lg:p-8"
@@ -171,7 +169,7 @@ export default async function ExamSubpage({ params }: PageProps) {
           <div className="p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="space-y-2">
               <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-                <FolderArchive className="h-7 w-7 text-retro-orange" />
+                <FolderArchive className="h-7 w-7 text-primary" />
                 <span>Bank Soal Perkuliahan</span>
               </h1>
               <p className="text-sm text-muted-foreground font-medium max-w-2xl leading-relaxed">
@@ -245,18 +243,17 @@ export default async function ExamSubpage({ params }: PageProps) {
     return (
       <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
         <RetroWindow
-          title="log_pelanggaran_ujian.log"
-          subtitle="Audit Trail Append-Only Pemantauan Integritas Ujian"
+          title="Log Pelanggaran & Integritas Ujian"
           headerBadge="Audit Log"
           headerBadgeVariant="warning"
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
             <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-              <AlertCircle className="h-7 w-7 text-retro-orange" />
+              <AlertCircle className="h-7 w-7 text-primary" />
               <span>Log Pelanggaran & Integritas Ujian</span>
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
               Catatan perilaku peserta ujian (tab switch, window blur, keluar fullscreen, copy-paste) yang tercatat secara kronologis. Dosen dapat meninjau durasi dan frekuensi anomali sebelum memvalidasi nilai akhir.
             </p>
           </div>
@@ -335,18 +332,17 @@ export default async function ExamSubpage({ params }: PageProps) {
     return (
       <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
         <RetroWindow
-          title="sengketa_nilai_ujian.app"
-          subtitle="Alur Sanggahan & Klarifikasi Nilai Ujian Mahasiswa"
+          title="Sengketa & Sanggahan Nilai Ujian"
           headerBadge="Sengketa Nilai"
           headerBadgeVariant="warning"
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
             <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-              <Clock className="h-7 w-7 text-retro-orange" />
+              <Clock className="h-7 w-7 text-primary" />
               <span>Sengketa & Sanggahan Nilai Ujian</span>
             </h1>
-            <p className="text-base sm:text-lg text-black font-semibold max-w-3xl leading-relaxed">
+            <p className="text-base sm:text-lg text-black font-bold max-w-3xl leading-relaxed">
               Mahasiswa berhak mengajukan sanggahan nilai secara berkeadilan jika terdapat ambiguitas soal atau kendala teknis saat ujian. Dosen dapat meninjau rekaman jawaban dan menyesuaikan nilai secara transparan.
             </p>
           </div>
@@ -413,18 +409,17 @@ export default async function ExamSubpage({ params }: PageProps) {
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       <RetroWindow
-        title={`manajemen_ujian_${subroute || 'pengajar'}.app`}
-        subtitle="Manajemen dan Evaluasi Pembelajaran LMS SIAJAR"
+        title={subroute.replace('-', ' ') || 'Manajemen Ujian'}
         headerBadge="Ujian & Kuis"
         headerBadgeVariant="warning"
         bodyClassName="p-4 sm:p-6 lg:p-8"
       >
         <div className="p-6 sm:p-8 space-y-2">
           <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-            <Award className="h-7 w-7 text-retro-orange" />
+            <Award className="h-7 w-7 text-primary" />
             <span className="capitalize">{subroute.replace('-', ' ') || 'Manajemen Ujian'}</span>
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
             Kelola pembuatan ujian, tinjau jawaban essay/coding berbantuan AI, dan verifikasi integritas hasil belajar mahasiswa.
           </p>
         </div>
@@ -437,7 +432,7 @@ export default async function ExamSubpage({ params }: PageProps) {
           className="rounded-xl border-2 border-black bg-white p-6 shadow-retro hover:-translate-y-1 hover:shadow-retro-md transition-all space-y-3 block"
         >
           <div className="p-3 w-fit rounded-lg border-2 border-black bg-retro-warm">
-            <ShieldAlert className="h-6 w-6 text-retro-orange" />
+            <ShieldAlert className="h-6 w-6 text-primary" />
           </div>
           <h3 className="font-heading font-black text-lg text-foreground">Panel Live Pengawasan</h3>
           <p className="text-xs text-muted-foreground leading-relaxed">
@@ -450,7 +445,7 @@ export default async function ExamSubpage({ params }: PageProps) {
           className="rounded-xl border-2 border-black bg-white p-6 shadow-retro hover:-translate-y-1 hover:shadow-retro-md transition-all space-y-3 block"
         >
           <div className="p-3 w-fit rounded-lg border-2 border-black bg-retro-warm">
-            <FolderArchive className="h-6 w-6 text-retro-orange" />
+            <FolderArchive className="h-6 w-6 text-primary" />
           </div>
           <h3 className="font-heading font-black text-lg text-foreground">Bank Soal Perkuliahan</h3>
           <p className="text-xs text-muted-foreground leading-relaxed">
@@ -463,7 +458,7 @@ export default async function ExamSubpage({ params }: PageProps) {
           className="rounded-xl border-2 border-black bg-white p-6 shadow-retro hover:-translate-y-1 hover:shadow-retro-md transition-all space-y-3 block"
         >
           <div className="p-3 w-fit rounded-lg border-2 border-black bg-retro-warm">
-            <Clock className="h-6 w-6 text-retro-orange" />
+            <Clock className="h-6 w-6 text-primary" />
           </div>
           <h3 className="font-heading font-black text-lg text-foreground">Sengketa Nilai Mahasiswa</h3>
           <p className="text-xs text-muted-foreground leading-relaxed">

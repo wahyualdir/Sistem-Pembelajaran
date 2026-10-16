@@ -124,8 +124,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. RETRO WINDOW HEADER */}
       <RetroWindow
-        title="nilai_dan_evaluasi_studi.app"
-        subtitle="Evaluasi Kinerja Akademik & Capaian Pembelajaran"
+        title="Nilai & Progres Pembelajaran"
         headerBadge="Semester Ganjil 2026/2027"
         headerBadgeVariant="info"
         bodyClassName="p-4 sm:p-6 lg:p-8"
@@ -133,10 +132,10 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6">
           <div className="space-y-1.5 sm:space-y-2">
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-2.5 sm:gap-3">
-              <CheckSquare className="h-6 w-6 sm:h-7 sm:w-7 text-retro-orange shrink-0" />
+              <CheckSquare className="h-6 w-6 sm:h-7 sm:w-7 text-primary shrink-0" />
               <span>Nilai & Progres Pembelajaran</span>
             </h1>
-            <p className="text-sm sm:text-base lg:text-lg text-black font-medium max-w-2xl leading-relaxed">
+            <p className="text-sm sm:text-base lg:text-lg text-black font-bold max-w-2xl leading-relaxed">
               Pantau bobot nilai per komponen (tugas, kuis, ujian, presensi), riwayat evaluasi, dan proyeksi capaian indeks prestasi kumulatif semester ini secara transparan.
             </p>
           </div>
@@ -145,7 +144,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
             <button
               type="button"
               onClick={() => setIsDisputeModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-retro-orange text-white font-black text-xs sm:text-sm shadow-retro hover:bg-black transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-primary text-white font-black text-xs sm:text-sm shadow-retro hover:bg-black transition-all cursor-pointer"
             >
               <AlertCircle className="h-4 w-4" />
               <span>Ajukan Keberatan Nilai</span>
@@ -166,20 +165,27 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
         <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
           <div className="text-xs font-mono font-black uppercase text-black">Indeks Prestasi Semester (IPS)</div>
           <div className="text-3xl font-heading font-black text-black">
-            {ipk} <span className="text-xs font-bold text-black/70">/ 4.00</span>
+            {ipk} <span className="text-xs font-black text-black">/ 4.00</span>
           </div>
-          <div className="text-xs font-black text-retro-orange flex items-center gap-1.5 pt-1">
-            <TrendingUp className="h-3.5 w-3.5" />
-            <span>Predikat Sangat Memuaskan</span>
-          </div>
+          {grades.length === 0 ? (
+            <div className="text-xs font-bold text-black flex items-center gap-1.5 pt-1">
+              <AlertCircle className="h-3.5 w-3.5" />
+              <span>Belum Ada Data Nilai</span>
+            </div>
+          ) : (
+            <div className="text-xs font-black text-primary flex items-center gap-1.5 pt-1">
+              <TrendingUp className="h-3.5 w-3.5" />
+              <span>Predikat Sangat Memuaskan</span>
+            </div>
+          )}
         </div>
 
         <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
           <div className="text-xs font-mono font-black uppercase text-black">Total SKS Semester</div>
           <div className="text-3xl font-heading font-black text-black">
-            {totalSks} <span className="text-xs font-bold text-black/70">SKS</span>
+            {totalSks} <span className="text-xs font-black text-black">SKS</span>
           </div>
-          <div className="text-xs font-bold text-black/70 flex items-center gap-1.5 pt-1">
+          <div className="text-xs font-bold text-black flex items-center gap-1.5 pt-1">
             <BookOpen className="h-3.5 w-3.5" />
             <span>{grades.length} Mata Kuliah Terdaftar</span>
           </div>
@@ -188,22 +194,22 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
         <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
           <div className="text-xs font-mono font-black uppercase text-black">Ujian Diselesaikan</div>
           <div className="text-3xl font-heading font-black text-black">
-            {attempts.length} <span className="text-xs font-bold text-black/70">Sesi</span>
+            {attempts.length} <span className="text-xs font-black text-black">Sesi</span>
           </div>
           <div className="text-xs font-bold text-emerald-800 flex items-center gap-1.5 pt-1">
             <CheckCircle2 className="h-3.5 w-3.5" />
-            <span>Evaluasi Terverifikasi</span>
+            <span>{attempts.length === 0 ? 'Belum Ada Ujian' : 'Evaluasi Terverifikasi'}</span>
           </div>
         </div>
 
         <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
           <div className="text-xs font-mono font-black uppercase text-black">Tingkat Kelulusan</div>
           <div className="text-3xl font-heading font-black text-black">
-            100% <span className="text-xs font-bold text-black/70">Lulus</span>
+            {grades.length === 0 ? '0%' : '100%'} <span className="text-xs font-black text-black">Lulus</span>
           </div>
           <div className="text-xs font-bold text-black/70 flex items-center gap-1.5 pt-1">
             <Award className="h-3.5 w-3.5" />
-            <span>0 Mata Kuliah Remedial</span>
+            <span>{grades.length === 0 ? 'Belum Ada Evaluasi' : '0 Mata Kuliah Remedial'}</span>
           </div>
         </div>
       </div>
@@ -221,7 +227,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -235,139 +241,146 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
       {/* 4. TAB CONTENTS */}
       {/* TAB 1: NILAI PERKULIAHAN */}
       {activeTab === 'nilai' && (
-        <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
-          <div className="p-4 bg-retro-warm border-b-2 border-black flex items-center justify-between">
-            <h2 className="font-heading font-black text-sm sm:text-base text-black">
+        <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden font-sans">
+          <div className="p-4 sm:p-5 bg-retro-warm border-b-2 border-black flex items-center justify-between">
+            <h2 className="font-sans font-black text-base sm:text-lg lg:text-xl text-black">
               Rincian Komponen Nilai & Huruf Mutu
             </h2>
-            <span className="text-xs font-mono font-bold text-black/70">
+            <span className="text-xs sm:text-sm font-sans font-black text-black bg-white px-3 py-1 rounded border-2 border-black shadow-retro-sm">
               Skala Bobot Standar Institusi
             </span>
           </div>
 
           {grades.length === 0 ? (
-            <div className="p-10 text-center space-y-3">
-              <CheckSquare className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Nilai Terbit</h3>
-              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+            <div className="p-10 text-center space-y-3 font-sans">
+              <CheckSquare className="h-12 w-12 text-black mx-auto" />
+              <h3 className="font-sans font-black text-lg sm:text-xl text-black">Belum Ada Nilai Terbit</h3>
+              <p className="text-sm sm:text-base text-black font-bold max-w-md mx-auto">
                 Nilai semester Anda belum dipublikasikan oleh bagian akademik atau dosen pengampu.
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+              <table className="w-full text-left text-base font-sans">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-black uppercase text-black text-sm sm:text-base tracking-wider">
                   <tr>
-                  <th className="p-3.5 sm:p-4">Kode & Mata Kuliah</th>
-                  <th className="p-3.5 sm:p-4 text-center">SKS</th>
-                  <th className="p-3.5 sm:p-4 text-center">Hadir</th>
-                  <th className="p-3.5 sm:p-4 text-center">Tugas</th>
-                  <th className="p-3.5 sm:p-4 text-center">Kuis</th>
-                  <th className="p-3.5 sm:p-4 text-center">UTS</th>
-                  <th className="p-3.5 sm:p-4 text-center">UAS</th>
-                  <th className="p-3.5 sm:p-4 text-center">Angka</th>
-                  <th className="p-3.5 sm:p-4 text-center">Huruf</th>
-                  <th className="p-3.5 sm:p-4 text-center">Bobot</th>
-                  <th className="p-3.5 sm:p-4 text-center">Status</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y-2 divide-black/10 font-medium">
-                {grades.map((c) => (
-                  <tr key={c.code} className="hover:bg-retro-warm/30 transition-colors">
-                    <td className="p-3.5 sm:p-4 font-bold">
-                      <div className="text-black">{c.name}</div>
-                      <div className="text-xs font-mono text-black/60">{c.code}</div>
-                    </td>
-                    <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{c.sks}</td>
-                    <td className="p-3.5 sm:p-4 text-center font-mono">{c.attendancePercent}%</td>
-                    <td className="p-3.5 sm:p-4 text-center font-mono">{c.assignmentsScore}</td>
-                    <td className="p-3.5 sm:p-4 text-center font-mono">{c.quizScore}</td>
-                    <td className="p-3.5 sm:p-4 text-center font-mono">{c.midtermScore}</td>
-                    <td className="p-3.5 sm:p-4 text-center font-mono">{c.finalScore}</td>
-                    <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{c.scoreNumber}</td>
-                    <td className="p-3.5 sm:p-4 text-center">
-                      <span className="inline-block px-2.5 py-0.5 rounded border border-black font-mono font-black text-xs bg-retro-warm text-black">
-                        {c.gradeLetter}
-                      </span>
-                    </td>
-                    <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{c.gradePoint.toFixed(1)}</td>
-                    <td className="p-3.5 sm:p-4 text-center">
-                      <span className="px-2 py-0.5 rounded text-xs font-mono font-bold border border-emerald-500 bg-emerald-100 text-emerald-950">
-                        {c.status}
-                      </span>
-                    </td>
+                    <th className="py-4 px-4 sm:px-5">KODE & MATA KULIAH</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">SKS</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">HADIR</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">TUGAS</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">KUIS</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">UTS</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">UAS</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">ANGKA</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">HURUF</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">BOBOT</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">STATUS</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y-2 divide-black/15 font-sans">
+                  {grades.map((c) => (
+                    <tr key={c.code} className="hover:bg-retro-warm/30 transition-colors">
+                      <td className="py-4 px-4 sm:px-5">
+                        <div className="font-sans font-black text-lg sm:text-xl text-black leading-snug">{c.name}</div>
+                        <div className="text-sm sm:text-base font-sans font-black text-neutral-700 mt-1 tracking-wider uppercase">{c.code}</div>
+                      </td>
+                      <td className="py-4 px-3 sm:px-4 text-center font-sans font-black text-base sm:text-lg text-black">{c.sks}</td>
+                      <td className="py-4 px-3 sm:px-4 text-center font-sans font-extrabold text-base sm:text-lg text-black">{c.attendancePercent}%</td>
+                      <td className="py-4 px-3 sm:px-4 text-center font-sans font-extrabold text-base sm:text-lg text-black">{c.assignmentsScore}</td>
+                      <td className="py-4 px-3 sm:px-4 text-center font-sans font-extrabold text-base sm:text-lg text-black">{c.quizScore}</td>
+                      <td className="py-4 px-3 sm:px-4 text-center font-sans font-extrabold text-base sm:text-lg text-black">{c.midtermScore}</td>
+                      <td className="py-4 px-3 sm:px-4 text-center font-sans font-extrabold text-base sm:text-lg text-black">{c.finalScore}</td>
+                      <td className="py-4 px-3 sm:px-4 text-center font-sans font-black text-xl sm:text-2xl text-black">{c.scoreNumber}</td>
+                      <td className="py-4 px-3 sm:px-4 text-center">
+                        <span className="inline-flex items-center justify-center min-w-[44px] h-10 px-3 rounded-md border-2 border-black font-sans font-black text-lg sm:text-xl bg-white text-black shadow-retro-sm">
+                          {c.gradeLetter}
+                        </span>
+                      </td>
+                      <td className="py-4 px-3 sm:px-4 text-center font-sans font-black text-xl sm:text-2xl text-black">{c.gradePoint.toFixed(1)}</td>
+                      <td className="py-4 px-3 sm:px-4 text-center">
+                        <span className="inline-flex items-center px-4 py-1.5 rounded-md text-sm font-sans font-black tracking-wider border-2 border-emerald-800 bg-emerald-100 text-emerald-950 shadow-retro-sm uppercase">
+                          {c.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       )}
 
       {/* TAB 2: RIWAYAT UJIAN & KUIS */}
       {activeTab === 'riwayat' && (
-        <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
-          <div className="p-4 bg-retro-warm border-b-2 border-black flex items-center justify-between">
-            <h2 className="font-heading font-black text-sm sm:text-base text-black">
+        <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden font-sans">
+          <div className="p-4 sm:p-5 bg-retro-warm border-b-2 border-black flex items-center justify-between">
+            <h2 className="font-sans font-black text-base sm:text-lg lg:text-xl text-black">
               Riwayat Pengerjaan Ujian & Kuis ({attempts.length})
             </h2>
             <Link
               href="/exams"
-              className="text-xs font-bold text-black hover:underline"
+              className="text-xs sm:text-sm font-sans font-black text-black hover:underline flex items-center gap-1"
             >
-              Lihat Ujian Aktif &rarr;
+              <span>Lihat Ujian Aktif</span>
+              <span>&rarr;</span>
             </Link>
           </div>
 
           {attempts.length === 0 ? (
-            <div className="p-10 text-center space-y-3">
-              <Award className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Riwayat Ujian</h3>
-              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+            <div className="p-10 text-center space-y-3 font-sans">
+              <Award className="h-12 w-12 text-black mx-auto" />
+              <h3 className="font-sans font-black text-lg sm:text-xl text-black">Belum Ada Riwayat Ujian</h3>
+              <p className="text-sm sm:text-base text-black font-bold max-w-md mx-auto">
                 Anda belum memiliki riwayat pengerjaan ujian atau kuis. Silakan mulai pengerjaan dari menu Ujian Aktif.
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+              <table className="w-full text-left text-sm sm:text-base font-sans">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-black uppercase text-black text-xs sm:text-sm tracking-wide">
                   <tr>
-                    <th className="p-3.5 sm:p-4">Ujian / Kuis</th>
-                    <th className="p-3.5 sm:p-4">Waktu Selesai</th>
-                    <th className="p-3.5 sm:p-4 text-center">Skor Perolehan</th>
-                    <th className="p-3.5 sm:p-4 text-center">Pelanggaran</th>
-                    <th className="p-3.5 sm:p-4 text-center">Status</th>
+                    <th className="py-4 px-4 sm:px-5">UJIAN / KUIS</th>
+                    <th className="py-4 px-4 sm:px-5">WAKTU SELESAI</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">SKOR PEROLEHAN</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">PELANGGARAN</th>
+                    <th className="py-4 px-3 sm:px-4 text-center">STATUS</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y-2 divide-black/10 font-medium">
+                <tbody className="divide-y-2 divide-black/15 font-sans">
                   {attempts.map((att: any, idx: number) => {
                     const quiz = quizzes.find((q: any) => q.id === att.quiz_id);
                     return (
                       <tr key={att.id || idx} className="hover:bg-retro-warm/30 transition-colors">
-                        <td className="p-3.5 sm:p-4 font-bold text-black">
-                          <div>{quiz?.title || att.quiz_title || `Sesi Ujian #${idx + 1}`}</div>
-                          <div className="text-xs font-mono text-black/60">{quiz?.exam_type || 'KUIS'}</div>
+                        <td className="py-4 px-4 sm:px-5">
+                          <div className="font-sans font-black text-base sm:text-lg text-black leading-snug">
+                            {quiz?.title || att.quiz_title || `Sesi Ujian #${idx + 1}`}
+                          </div>
+                          <div className="text-xs sm:text-sm font-sans font-extrabold text-neutral-800 mt-1 tracking-wider uppercase">
+                            {quiz?.exam_type || 'KUIS'}
+                          </div>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-xs font-mono text-black/80">
+                        <td className="py-4 px-4 sm:px-5 text-sm sm:text-base font-sans font-bold text-black">
                           {att.submitted_at
                             ? new Date(att.submitted_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })
                             : 'Selesai'}
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-base text-black">
-                          {att.score ?? 0} <span className="text-xs text-black/60">/ {att.max_score ?? 100}</span>
+                        <td className="py-4 px-3 sm:px-4 text-center font-sans font-black text-lg sm:text-xl text-black">
+                          {att.score ?? 0} <span className="text-xs sm:text-sm font-bold text-black/70">/ {att.max_score ?? 100}</span>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center">
+                        <td className="py-4 px-3 sm:px-4 text-center">
                           {att.violations_count > 0 ? (
-                            <span className="px-2 py-0.5 rounded border border-amber-500 bg-amber-100 text-amber-900 text-xs font-bold font-mono">
+                            <span className="inline-flex items-center px-2.5 py-1 rounded border-2 border-amber-600 bg-amber-100 text-amber-950 text-xs sm:text-sm font-black font-sans shadow-xs">
                               {att.violations_count} Peringatan
                             </span>
                           ) : (
-                            <span className="text-xs text-emerald-800 font-bold font-mono">Bersih (0)</span>
+                            <span className="inline-flex items-center px-2.5 py-1 rounded border-2 border-emerald-600 bg-emerald-100 text-emerald-950 text-xs sm:text-sm font-black font-sans shadow-xs">
+                              Bersih (0)
+                            </span>
                           )}
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-black font-mono text-xs font-bold bg-retro-warm text-black">
+                        <td className="py-4 px-3 sm:px-4 text-center">
+                          <span className="inline-flex items-center px-3 py-1 rounded-md border-2 border-black font-sans text-xs sm:text-sm font-black bg-retro-warm text-black shadow-retro-sm">
                             {att.status || 'SUBMITTED'}
                           </span>
                         </td>
@@ -387,7 +400,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4">
               <h2 className="font-heading font-black text-lg text-black flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-retro-orange" />
+                <TrendingUp className="h-5 w-5 text-primary" />
                 <span>Target Capaian SKS Kelulusan</span>
               </h2>
               <p className="text-xs sm:text-sm text-black/80 leading-relaxed font-medium">
@@ -400,7 +413,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
                 </div>
                 <div className="w-full h-4 rounded-full border-2 border-black bg-neutral-100 overflow-hidden">
                   <div
-                    className="h-full bg-retro-orange transition-all duration-500"
+                    className="h-full bg-primary transition-all duration-500"
                     style={{ width: `${Math.min(100, Math.round((totalSks / 144) * 100))}%` }}
                   />
                 </div>
@@ -412,7 +425,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
 
             <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4">
               <h2 className="font-heading font-black text-lg text-black flex items-center gap-2">
-                <Award className="h-5 w-5 text-retro-orange" />
+                <Award className="h-5 w-5 text-primary" />
                 <span>Capaian Pembelajaran Lulusan (CPL)</span>
               </h2>
               <div className="space-y-3">
@@ -444,7 +457,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
           <div className="w-full max-w-lg rounded-2xl border-2 border-black bg-white p-6 sm:p-7 shadow-retro space-y-5">
             <div className="flex items-center justify-between border-b-2 border-black pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg border-2 border-black bg-retro-orange text-white">
+                <div className="p-2 rounded-lg border-2 border-black bg-primary text-white">
                   <AlertCircle className="h-5 w-5" />
                 </div>
                 <h3 className="font-heading font-black text-lg sm:text-xl text-black">
@@ -481,7 +494,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
                       className={cn(
                         'p-2.5 rounded-lg border-2 border-black text-xs font-bold transition-all cursor-pointer',
                         disputeType === 'EXAM'
-                          ? 'bg-retro-orange text-white shadow-retro'
+                          ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                           : 'bg-white text-black hover:bg-neutral-100'
                       )}
                     >
@@ -493,7 +506,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
                       className={cn(
                         'p-2.5 rounded-lg border-2 border-black text-xs font-bold transition-all cursor-pointer',
                         disputeType === 'COURSE'
-                          ? 'bg-retro-orange text-white shadow-retro'
+                          ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                           : 'bg-white text-black hover:bg-neutral-100'
                       )}
                     >
@@ -515,7 +528,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
                       <select
                         value={selectedAttemptId}
                         onChange={(e) => setSelectedAttemptId(e.target.value)}
-                        className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
+                        className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-bold bg-white focus:outline-none focus:ring-2 focus:ring-primary"
                       >
                         {attempts.map((att: any, idx: number) => {
                           const quiz = quizzes.find((q: any) => q.id === att.quiz_id);
@@ -570,7 +583,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
                     value={disputeReason}
                     onChange={(e) => setDisputeReason(e.target.value)}
                     placeholder="Jelaskan alasan keberatan secara rinci, cantumkan bukti pengerjaan atau klarifikasi penilaian..."
-                    className="w-full rounded-lg border-2 border-black p-3 text-xs sm:text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
+                    className="w-full rounded-lg border-2 border-black p-3 text-xs sm:text-sm font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
 

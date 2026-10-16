@@ -6,8 +6,10 @@ import { z } from 'zod';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import type { ActionResponse } from '@/modules/identity/types';
 import { createNotification } from '@/modules/academic/actions';
-import { isDemoMode } from '@/lib/config/features';
+import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 import { recordSystemAuditLog } from '@/lib/audit';
+import { createClient } from '@/lib/supabase/server';
+import { checkSupabaseOnline } from '@/lib/supabase/status';
 
 export type QuestionType =
   | 'MULTIPLE_CHOICE'
@@ -433,6 +435,36 @@ export async function createQuizAction(input: unknown): Promise<ActionResponse<Q
     attempts_allowed: 1,
   };
 
+  if (isFeatureFlagActive('FF_PERSISTENCE_QUIZ') && (await checkSupabaseOnline())) {
+    const supabase = await createClient();
+    const { error } = await supabase.from('quizzes').insert({
+      id: quiz.id,
+      class_id: quiz.class_id,
+      title: quiz.title,
+      description: quiz.description ?? '',
+      exam_type: quiz.exam_type ?? 'KUIS',
+      duration_minutes: quiz.duration_minutes,
+      end_time: quiz.due_at,
+      is_published: quiz.is_published,
+      proctoring_level: quiz.proctoring_level ?? 'STANDARD',
+      max_violations: quiz.max_violations ?? 5,
+      shuffle_questions: quiz.shuffle_questions ?? false,
+      shuffle_options: quiz.shuffle_options ?? false,
+      require_fullscreen: quiz.require_fullscreen ?? true,
+      block_copy_paste: quiz.block_copy_paste ?? true,
+      require_attendance: quiz.require_attendance ?? false,
+      passcode: quiz.passcode ?? null,
+      kkm: quiz.kkm ?? 70,
+      result_display: quiz.result_display ?? 'IMMEDIATE',
+      status: quiz.status ?? 'ACTIVE',
+      total_points: quiz.total_points,
+      created_by: user.user.id,
+    });
+    if (error) return { ok: false, error: error.message };
+  } else if (!isDemoMode()) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
   quizStore.quizzes.push(quiz);
 
   // Send in-app notification to students
@@ -474,7 +506,7 @@ export async function listQuizAttemptsAction(quizId: string): Promise<QuizAttemp
     .sort((a, b) => b.submitted_at.localeCompare(a.submitted_at));
 }
 
-// Mock Sandbox Runner for Live Coding
+// Sandbox Runner for Live Coding (Piston API with deterministic safe local fallback)
 export async function executeLiveCodeAction(
   programming_language: string,
   code: string,
@@ -485,6 +517,52 @@ export async function executeLiveCodeAction(
   scoreRatio: number;
   results: { input: string; expected_output: string; actual_output: string; passed: boolean; is_hidden?: boolean; error?: string }[];
 }> {
+  const pistonUrl = process.env.PISTON_API_URL;
+  if (pistonUrl && (programming_language === 'javascript' || programming_language === 'python')) {
+    try {
+      const results = await Promise.all(
+        testCases.map(async (tc) => {
+          const runnerScript =
+            programming_language === 'python'
+              ? `${code}\nprint(${tc.input})`
+              : `${code}\nconsole.log(${tc.input});`;
+          const res = await fetch(`${pistonUrl.replace(/\/$/, '')}/execute`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              language: programming_language,
+              version: '*',
+              files: [{ content: runnerScript }],
+            }),
+          });
+          if (!res.ok) throw new Error('Piston API error');
+          const json = await res.json();
+          const actualOutput = String(json?.run?.stdout ?? '').trim();
+          const stderr = String(json?.run?.stderr ?? '').trim();
+          const passed = !stderr && actualOutput === tc.expected_output.trim();
+          return {
+            input: tc.input,
+            expected_output: tc.expected_output,
+            actual_output: actualOutput || stderr,
+            passed,
+            is_hidden: tc.is_hidden,
+            error: stderr || undefined,
+          };
+        })
+      );
+      const passedCount = results.filter((r) => r.passed).length;
+      const totalCount = results.length;
+      return {
+        passedCount,
+        totalCount,
+        scoreRatio: totalCount > 0 ? passedCount / totalCount : 0,
+        results,
+      };
+    } catch {
+      // Fall through to deterministic local evaluator when Piston is offline
+    }
+  }
+
   // Evaluates mock safely without arbitrary eval on main host
   const results = testCases.map((tc) => {
     let actualOutput = '';
@@ -544,7 +622,7 @@ export async function executeLiveCodeAction(
   };
 }
 
-// AI Draft Essay Evaluator
+// AI Draft Essay Evaluator (Gemini API with deterministic local fallback)
 export async function evaluateEssayWithAiAction(
   essayAnswer: string,
   rubric?: string
@@ -557,6 +635,46 @@ export async function evaluateEssayWithAiAction(
       ai_score_ratio: 0.25,
       feedback: 'Jawaban terlalu singkat dan belum memuat elaborasi konseptual sesuai rubrik penilaian.',
     };
+  }
+
+  const geminiKey = process.env.GEMINI_API_KEY;
+  if (geminiKey) {
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiKey}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  {
+                    text: `Evaluasi jawaban esai mahasiswa berikut berdasarkan rubrik: "${rubric || 'Ketepatan konsep dan kejelasan argumen'}". Jawaban mahasiswa: "${trimmed}". Berikan respons JSON murni dengan format {"ai_score_ratio": angka_0_sampai_1, "feedback": "ulasan singkat bahasa Indonesia"}.`,
+                  },
+                ],
+              },
+            ],
+          }),
+        }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+        const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          const parsed = JSON.parse(jsonMatch[0]);
+          if (typeof parsed.ai_score_ratio === 'number' && typeof parsed.feedback === 'string') {
+            return {
+              ai_score_ratio: Math.min(1, Math.max(0, parsed.ai_score_ratio)),
+              feedback: `${parsed.feedback} [Menunggu Konfirmasi Dosen]`,
+            };
+          }
+        }
+      }
+    } catch {
+      // Fall back to local rubric heuristic
+    }
   }
 
   // Keywords analysis based on typical technical topics
@@ -596,6 +714,21 @@ export async function recordExamEventAction(input: {
     details: input.details,
     created_at: new Date().toISOString(),
   };
+
+  if (isFeatureFlagActive('FF_PERSISTENCE_QUIZ') && (await checkSupabaseOnline())) {
+    const supabase = await createClient();
+    await supabase.from('exam_telemetry_events').insert({
+      id: event.id,
+      exam_id: event.exam_id,
+      attempt_id: event.attempt_id ?? null,
+      student_id: event.student_id,
+      student_name: event.student_name,
+      event_type: event.event_type,
+      duration_seconds: event.duration_seconds ?? 0,
+      details: event.details ?? null,
+      client_timestamp: event.created_at,
+    });
+  }
 
   quizStore.events.push(event);
 
@@ -715,6 +848,27 @@ export async function submitQuizAttemptAction(
     ai_grading_drafts: aiGradingDrafts,
   };
 
+  if (isFeatureFlagActive('FF_PERSISTENCE_QUIZ') && (await checkSupabaseOnline())) {
+    const supabase = await createClient();
+    const { error } = await supabase.from('exam_attempts').insert({
+      id: attempt.id,
+      quiz_id: attempt.quiz_id,
+      student_id: attempt.student_id,
+      student_name: attempt.student_name,
+      finished_at: attempt.submitted_at,
+      total_score: attempt.score,
+      max_score: attempt.max_score,
+      is_graded: attempt.is_graded,
+      violations_count: attempt.violations_count ?? 0,
+      status: 'SUBMITTED',
+      answers_json: attempt.answers,
+      ai_grading_drafts: attempt.ai_grading_drafts ?? {},
+    });
+    if (error) return { ok: false, error: error.message };
+  } else if (!isDemoMode()) {
+    return { ok: false, error: 'Fitur ini belum aktif' };
+  }
+
   quizStore.attempts.push(attempt);
 
   // Update Live Status to SUBMITTED
@@ -797,8 +951,10 @@ export async function lecturerInterventionAction(input: {
     return { ok: false, error: 'Alasan intervensi ujian wajib diisi (minimal 3 karakter).' };
   }
 
-  // Pengecekan server: di luar mode demo, tolak jika database telemetri belum ada
-  if (!isDemoMode()) {
+  const dbQuizReady = isFeatureFlagActive('FF_PERSISTENCE_QUIZ') && (await checkSupabaseOnline());
+
+  // Pengecekan server: di luar mode demo, tolak jika database telemetri belum aktif
+  if (!isDemoMode() && !dbQuizReady) {
     return { ok: false, error: 'Penyimpanan telemetri intervensi ujian ke database permanen sedang dalam penyiapan Fase 3.' };
   }
 
@@ -858,6 +1014,23 @@ export async function lecturerInterventionAction(input: {
     details: `Intervensi Dosen (${user.profile?.full_name ?? 'Dosen'}): ${input.action_type}. Alasan: ${reasonText}`,
     created_at: new Date().toISOString(),
   };
+
+  if (dbQuizReady) {
+    const supabase = await createClient();
+    await supabase.from('exam_proctor_interventions').insert({
+      id: interventionEvent.id,
+      exam_id: interventionEvent.exam_id,
+      student_id: interventionEvent.student_id,
+      student_name: interventionEvent.student_name,
+      proctor_user_id: user.user.id,
+      actor_name: interventionEvent.actor_name,
+      action_type: input.action_type,
+      reason: reasonText,
+      value_before: valBefore,
+      value_after: valAfter,
+    });
+  }
+
   quizStore.events.push(interventionEvent);
 
   // Catat ke Audit Log sistem (in-memory dan Supabase jika online)
@@ -887,17 +1060,18 @@ export async function submitExamDisputeAction(attemptId: string, reason: string)
   const user = await getCurrentUserWithRoles();
   if (!user) return { ok: false, error: 'Silakan login terlebih dahulu.' };
 
-  if (!isDemoMode()) {
+  const dbDisputesReady = isFeatureFlagActive('FF_PERSISTENCE_DISPUTES') && (await checkSupabaseOnline());
+  if (!isDemoMode() && !dbDisputesReady) {
     return { ok: false, error: 'Penyimpanan keberatan nilai ke database permanen sedang dalam penyiapan Fase 3.' };
   }
 
   const attempt = quizStore.attempts.find((a) => a.id === attemptId);
-  if (!attempt) return { ok: false, error: 'Pengerjaan tidak ditemukan.' };
+  if (!attempt && isDemoMode()) return { ok: false, error: 'Pengerjaan tidak ditemukan.' };
 
   const dispute: ExamDispute = {
     id: randomUUID(),
     attempt_id: attemptId,
-    exam_id: attempt.quiz_id,
+    exam_id: attempt?.quiz_id ?? '00000000-0000-0000-0000-000000000000',
     student_id: user.user.id,
     student_name: user.profile?.full_name ?? 'Mahasiswa',
     reason: reason.trim(),
@@ -905,8 +1079,23 @@ export async function submitExamDisputeAction(attemptId: string, reason: string)
     submitted_at: new Date().toISOString(),
   };
 
+  if (dbDisputesReady) {
+    const supabase = await createClient();
+    const { error } = await supabase.from('exam_disputes').insert({
+      id: dispute.id,
+      attempt_id: dispute.attempt_id,
+      exam_id: dispute.exam_id,
+      student_id: dispute.student_id,
+      student_name: dispute.student_name,
+      reason: dispute.reason,
+      status: dispute.status,
+      submitted_at: dispute.submitted_at,
+    });
+    if (error) return { ok: false, error: error.message };
+  }
+
   quizStore.disputes.push(dispute);
-  attempt.dispute = dispute;
+  if (attempt) attempt.dispute = dispute;
 
   revalidatePath('/classes/[id]', 'page');
   return { ok: true, data: dispute };
@@ -924,32 +1113,51 @@ export async function resolveExamDisputeAction(input: {
     return { ok: false, error: 'Hanya dosen pengampu yang berwenang menyelesaikan keberatan nilai.' };
   }
 
-  if (!isDemoMode()) {
+  const dbDisputesReady = isFeatureFlagActive('FF_PERSISTENCE_DISPUTES') && (await checkSupabaseOnline());
+  if (!isDemoMode() && !dbDisputesReady) {
     return { ok: false, error: 'Penyelesaian keberatan nilai ke database permanen sedang dalam penyiapan Fase 3.' };
   }
 
   const dispute = quizStore.disputes.find((d) => d.id === input.dispute_id);
-  if (!dispute) return { ok: false, error: 'Keberatan nilai tidak ditemukan.' };
+  if (!dispute && isDemoMode()) return { ok: false, error: 'Keberatan nilai tidak ditemukan.' };
 
   const note = (input.lecturer_note || '').trim();
   if (note.length < 3) {
     return { ok: false, error: 'Catatan/alasan tanggapan wajib diisi minimal 3 karakter.' };
   }
 
-  dispute.status = input.status;
-  dispute.lecturer_note = note;
-  dispute.score_adjustment = input.score_adjustment;
-  dispute.resolved_at = new Date().toISOString();
+  const resolvedAt = new Date().toISOString();
+  if (dbDisputesReady) {
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from('exam_disputes')
+      .update({
+        status: input.status,
+        lecturer_feedback: note,
+        adjusted_points: input.score_adjustment ?? null,
+        resolved_at: resolvedAt,
+        updated_at: resolvedAt,
+      })
+      .eq('id', input.dispute_id);
+    if (error) return { ok: false, error: error.message };
+  }
 
   let oldScore: number | undefined;
   let newScore: number | undefined;
 
-  if (input.status === 'APPROVED' && input.score_adjustment) {
-    const attempt = quizStore.attempts.find((a) => a.id === dispute.attempt_id);
-    if (attempt) {
-      oldScore = attempt.score;
-      attempt.score = Math.min(attempt.max_score, Math.max(0, attempt.score + input.score_adjustment));
-      newScore = attempt.score;
+  if (dispute) {
+    dispute.status = input.status;
+    dispute.lecturer_note = note;
+    dispute.score_adjustment = input.score_adjustment;
+    dispute.resolved_at = resolvedAt;
+
+    if (input.status === 'APPROVED' && input.score_adjustment) {
+      const attempt = quizStore.attempts.find((a) => a.id === dispute.attempt_id);
+      if (attempt) {
+        oldScore = attempt.score;
+        attempt.score = Math.min(attempt.max_score, Math.max(0, attempt.score + input.score_adjustment));
+        newScore = attempt.score;
+      }
     }
   }
 
@@ -960,12 +1168,12 @@ export async function resolveExamDisputeAction(input: {
     actorRole: 'LECTURER',
     action: `EXAM_DISPUTE_${input.status}`,
     entityType: 'ExamDispute',
-    entityId: dispute.id,
-    description: `Tanggapan Sengketa Nilai Mahasiswa (${input.status}): ${dispute.student_name}. Catatan: ${note}`,
+    entityId: dispute?.id ?? input.dispute_id,
+    description: `Tanggapan Sengketa Nilai Mahasiswa (${input.status}): ${dispute?.student_name ?? 'Mahasiswa'}. Catatan: ${note}`,
     valueBefore: oldScore !== undefined ? String(oldScore) : null,
     valueAfter: newScore !== undefined ? String(newScore) : null,
     metadata: {
-      attempt_id: dispute.attempt_id,
+      attempt_id: dispute?.attempt_id,
       score_adjustment: input.score_adjustment,
     },
   });
@@ -1075,10 +1283,17 @@ export async function getExamAnalyticsAction(examId: string): Promise<{
 }
 
 export async function getAllQuizzesAction(): Promise<QuizItem[]> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isNewAccount) return [];
   return quizStore.quizzes.sort((a, b) => b.created_at.localeCompare(a.created_at));
 }
 
 export async function getAllAttemptsAction(): Promise<QuizAttempt[]> {
+  const c = await getCurrentUserWithRoles();
+  if (c?.isNewAccount) return [];
+  if (c && c.activeRole === 'STUDENT') {
+    return quizStore.attempts.filter((a) => a.student_id === c.user.id);
+  }
   return quizStore.attempts;
 }
 

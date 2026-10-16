@@ -15,17 +15,16 @@ export default function GradesRecapSubpage() {
   return (
     <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
       <RetroWindow
-        title="rekapitulasi_nilai_perkuliahan.app"
-        subtitle="Rekap Nilai Kumulatif & Distribusi Huruf Mutu"
+        title="Rekap Nilai Perkuliahan"
         headerBadge="Rekap Nilai"
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
           <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-            <FileSpreadsheet className="h-7 w-7 text-retro-orange" />
+            <FileSpreadsheet className="h-7 w-7 text-primary" />
             <span>Rekap Nilai Perkuliahan</span>
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
             Ringkasan nilai seluruh komponen evaluasi (tugas, kuis, UTS, UAS, dan praktikum) beserta konversi otomatis ke huruf mutu (A, AB, B, BC, C, D, E) dan bobot IPK.
           </p>
         </div>
@@ -35,11 +34,11 @@ export default function GradesRecapSubpage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b-2 border-black pb-3">
           <div>
             <h2 className="font-heading font-black text-lg text-foreground">Pemrograman Web Lanjut (TI-301)</h2>
-            <p className="text-xs text-muted-foreground">36 Mahasiswa terdaftar · Semester Ganjil 2026/2027</p>
+            <p className="text-xs text-black font-bold">36 Mahasiswa terdaftar · Semester Ganjil 2026/2027</p>
           </div>
           <Link
             href="/analytics/export"
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-black bg-black text-white text-xs font-bold hover:bg-neutral-800 transition-all shadow-xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-black bg-black text-white text-xs font-black hover:bg-neutral-800 transition-all shadow-xs"
           >
             <Download className="h-3.5 w-3.5" />
             <span>Ekspor XLSX / PDF</span>
@@ -47,39 +46,47 @@ export default function GradesRecapSubpage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
-            <thead>
-              <tr className="border-b-2 border-black bg-neutral-100 font-bold">
-                <th className="p-3">NIM</th>
-                <th className="p-3">Nama Mahasiswa</th>
-                <th className="p-3">Tugas (25%)</th>
-                <th className="p-3">Kuis (15%)</th>
-                <th className="p-3">UTS (25%)</th>
-                <th className="p-3">UAS (35%)</th>
-                <th className="p-3">Nilai Akhir</th>
-                <th className="p-3">Huruf</th>
+          <table className="w-full text-left text-sm sm:text-base font-sans">
+            <thead className="border-b-2 border-black bg-neutral-100 font-sans font-black uppercase text-black text-xs sm:text-sm tracking-wide">
+              <tr>
+                <th className="py-3.5 px-4">NIM</th>
+                <th className="py-3.5 px-4">Nama Mahasiswa</th>
+                <th className="py-3.5 px-3 text-center">Tugas (25%)</th>
+                <th className="py-3.5 px-3 text-center">Kuis (15%)</th>
+                <th className="py-3.5 px-3 text-center">UTS (25%)</th>
+                <th className="py-3.5 px-3 text-center">UAS (35%)</th>
+                <th className="py-3.5 px-3 text-center">Nilai Akhir</th>
+                <th className="py-3.5 px-3 text-center">Huruf</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-neutral-200">
-              <tr className="hover:bg-neutral-50">
-                <td className="p-3 font-bold">2024001</td>
-                <td className="p-3">Ahmad Fauzi</td>
-                <td className="p-3">90</td>
-                <td className="p-3">85</td>
-                <td className="p-3">88</td>
-                <td className="p-3">92</td>
-                <td className="p-3 font-bold text-foreground">89.45</td>
-                <td className="p-3"><span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-400 font-bold">A</span></td>
+            <tbody className="divide-y-2 divide-black/15 font-sans">
+              <tr className="hover:bg-retro-warm/30 transition-colors">
+                <td className="py-3.5 px-4 font-mono font-black text-black">2024001</td>
+                <td className="py-3.5 px-4 font-black text-black text-base">Ahmad Fauzi</td>
+                <td className="py-3.5 px-3 text-center font-bold text-black">90</td>
+                <td className="py-3.5 px-3 text-center font-bold text-black">85</td>
+                <td className="py-3.5 px-3 text-center font-bold text-black">88</td>
+                <td className="py-3.5 px-3 text-center font-bold text-black">92</td>
+                <td className="py-3.5 px-3 text-center font-black text-base sm:text-lg text-black">89.45</td>
+                <td className="py-3.5 px-3 text-center">
+                  <span className="inline-flex items-center justify-center min-w-[36px] h-8 px-2 rounded border-2 border-black font-sans font-black text-sm bg-white text-black shadow-retro-sm">
+                    A
+                  </span>
+                </td>
               </tr>
-              <tr className="hover:bg-neutral-50">
-                <td className="p-3 font-bold">2024002</td>
-                <td className="p-3">Budi Santoso</td>
-                <td className="p-3">85</td>
-                <td className="p-3">80</td>
-                <td className="p-3">82</td>
-                <td className="p-3">86</td>
-                <td className="p-3 font-bold text-foreground">83.85</td>
-                <td className="p-3"><span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-400 font-bold">AB</span></td>
+              <tr className="hover:bg-retro-warm/30 transition-colors">
+                <td className="py-3.5 px-4 font-mono font-black text-black">2024002</td>
+                <td className="py-3.5 px-4 font-black text-black text-base">Budi Santoso</td>
+                <td className="py-3.5 px-3 text-center font-bold text-black">85</td>
+                <td className="py-3.5 px-3 text-center font-bold text-black">80</td>
+                <td className="py-3.5 px-3 text-center font-bold text-black">82</td>
+                <td className="py-3.5 px-3 text-center font-bold text-black">86</td>
+                <td className="py-3.5 px-3 text-center font-black text-base sm:text-lg text-black">83.85</td>
+                <td className="py-3.5 px-3 text-center">
+                  <span className="inline-flex items-center justify-center min-w-[36px] h-8 px-2 rounded border-2 border-black font-sans font-black text-sm bg-white text-black shadow-retro-sm">
+                    AB
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>

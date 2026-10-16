@@ -59,7 +59,7 @@ export default async function CoordinatorPortalPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-xs">
                 <Compass className="h-5 w-5" />
               </div>
               <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
@@ -109,7 +109,7 @@ export default async function CoordinatorPortalPage() {
       >
         <div className="flex items-center justify-between">
           <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-            <Clock className="h-4 w-4 text-retro-orange" />
+            <Clock className="h-4 w-4 text-primary" />
             <span>Pengajuan Menunggu Keputusan</span>
           </h2>
           <span className="text-xs font-mono text-muted-foreground">

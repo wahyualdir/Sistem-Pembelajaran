@@ -25,7 +25,7 @@ export default function ResetPasswordPage() {
         <div className="mb-4">
           <Link
             href="/login"
-            className="text-xs text-foreground hover:text-retro-orange flex items-center gap-1.5 font-bold px-2 py-1 rounded bg-retro-warm border border-retro-border/60 shadow-xs w-fit transition-colors"
+            className="text-xs text-foreground hover:text-primary-dark flex items-center gap-1.5 font-bold px-2 py-1 rounded bg-retro-warm border border-retro-border/60 shadow-xs w-fit transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Kembali ke Halaman Masuk
@@ -48,7 +48,7 @@ export default function ResetPasswordPage() {
 
           <div className="p-6 sm:p-8 space-y-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white shadow-retro">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-retro">
                 <Flame className="h-5 w-5 fill-white" />
               </div>
               <div className="flex flex-col text-left">
@@ -107,7 +107,7 @@ export default function ResetPasswordPage() {
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="w-full py-2.5 px-4 rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white font-heading font-black text-sm shadow-retro-md hover:brightness-105 active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-4 rounded-lg border-[1.5px] border-retro-border bg-primary text-white font-heading font-black text-sm shadow-retro-md hover:brightness-105 active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   <Mail className="h-4 w-4" />
                   <span>{isPending ? 'Mengirim...' : 'Kirim Tautan Pemulihan'}</span>

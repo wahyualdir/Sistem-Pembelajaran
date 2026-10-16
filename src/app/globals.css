@@ -6,43 +6,62 @@
 
 :root {
   --font-sans: 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  /* Permukaan Monokrom & Retro Mac Berkontras Tinggi */
-  --bg-main: #FFFFFF;
-  --bg-surface: #FFFFFF;
-  --bg-surface-raised: #F8F7F4;
-  --border-main: #000000;
-  --border-strong: #000000;
 
-  /* Teks Kontras Tinggi (Hitam Pekat Retro) */
-  --text-primary: #000000;
-  --text-secondary: #000000;
-  --text-subtle: #1C1917;
+  /* Dasar (tetap gaya sekarang) */
+  --bg: #F4EFE3;          /* krem */
+  --surface: #FFFFFF;
+  --ink: #111111;         /* teks, border, bayangan */
+
+  /* Identitas kampus */
+  --primary: #ED1C24;     /* tombol, ikon aktif, link */
+  --primary-dark: #A91117;/* hover, pressed, teks merah di atas putih */
+  --gray: #808285;        /* teks sekunder, border tipis */
+  --gray-dark: #58595B;   /* label, ikon nonaktif */
+  --gray-soft: #E6E3DA;   /* chip, background kartu sekunder */
+
+  /* Status */
+  --success: #2FD38A;     /* Aktif Berjalan, hadir */
+  --warning: #FFC53D;     /* Sedang Dipelajari, segera */
+  --urgent:  #FF7A1A;     /* Mendesak */
+  --info:    #5B8DEF;     /* info, pengumuman */
+  --shadow: 4px 4px 0 var(--ink);
+
+  /* Pemetaan Dasar ke Token Sistem */
+  --bg-main: var(--bg);
+  --bg-surface: var(--surface);
+  --bg-surface-raised: var(--gray-soft);
+  --border-main: var(--ink);
+  --border-strong: var(--ink);
+
+  /* Teks Kontras */
+  --text-primary: var(--ink);
+  --text-secondary: var(--gray-dark);
+  --text-subtle: var(--gray);
 
   /* Aksen Utama */
-  --primary: #000000;
-  --primary-hover: #1A1A1A;
-  --primary-soft: #F4F1EA;
+  --primary-hover: var(--primary-dark);
+  --primary-soft: #FDE8E9;
   --primary-foreground: #FFFFFF;
-  --ring: rgb(0 0 0 / 0.5);
-  --panel: #000000;
-  --panel-accent: #000000;
+  --ring: rgb(237 28 36 / 0.4);
+  --panel: var(--ink);
+  --panel-accent: var(--primary);
 
   /* Status Berkontras Jelas */
-  --status-success: #057A55;
-  --status-success-soft: #DEF7EC;
-  --status-success-border: #000000;
-  --status-success-foreground: #FFFFFF;
-  --status-warning: #C27803;
-  --status-warning-soft: #FEF08A;
-  --status-warning-border: #000000;
-  --status-warning-foreground: #000000;
-  --status-danger: #E02424;
-  --status-danger-soft: #FDE8E8;
-  --status-danger-border: #000000;
+  --status-success: var(--success);
+  --status-success-soft: #E6FBF2;
+  --status-success-border: var(--ink);
+  --status-success-foreground: var(--ink);
+  --status-warning: var(--warning);
+  --status-warning-soft: #FFF9E6;
+  --status-warning-border: var(--ink);
+  --status-warning-foreground: var(--ink);
+  --status-danger: var(--primary-dark);
+  --status-danger-soft: #FDE8E9;
+  --status-danger-border: var(--ink);
   --status-danger-foreground: #FFFFFF;
-  --status-info: #1A56DB;
-  --status-info-soft: #E1EFFE;
-  --status-info-border: #000000;
+  --status-info: var(--info);
+  --status-info-soft: #EEF4FD;
+  --status-info-border: var(--ink);
   --status-info-foreground: #FFFFFF;
 
   /* Bentuk: Sudut tajam / retro 2px, bayangan balok hitam pekat */
@@ -50,21 +69,22 @@
   --radius-control: 2px;
   --radius-container: 2px;
   --radius-lg: 2px;
-  --shadow-sm: 2px 2px 0px #000000;
-  --shadow-md: 4px 4px 0px #000000;
+  --shadow-sm: 2px 2px 0px var(--ink);
+  --shadow-md: var(--shadow);
 
-  /* Palet Retro Jelas & Berwarna Tajam */
-  --retro-bg: #FFFFFF;
-  --retro-surface: #FFFFFF;
-  --retro-warm: #F6F3EB;
-  --retro-yellow: #FFE500;
-  --retro-orange: #FF5500;
-  --retro-border: #000000;
+  /* Palet Retro yang Terhubung ke Identitas Kampus */
+  --retro-bg: var(--bg);
+  --retro-surface: var(--surface);
+  --retro-warm: var(--gray-soft);
+  --retro-yellow: var(--warning);
+  --retro-orange: var(--primary);
+  --retro-border: var(--ink);
   --retro-purple: #D4BBFF;
-  --retro-mint: #00E599;
+  --retro-mint: var(--success);
   --retro-pink: #FF85C0;
-  --retro-blue: #70D6FF;
-  --retro-dither: #E5E1D8;
+  --retro-blue: var(--info);
+  --retro-dither: #DCD8CE;
+  --retro-video-bg: #DFE5EF;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -206,21 +226,27 @@
     color: var(--text-primary);
     font-size: 0.9375rem;
     line-height: 1.5;
-    letter-spacing: normal;
+    letter-spacing: -0.01em;
     min-height: 100dvh;
     overflow-x: hidden;
+    font-weight: 600;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-sans);
-    font-weight: 700;
+    font-weight: 800;
     color: var(--text-primary);
     text-wrap: balance;
   }
+  p {
+    font-weight: 600;
+  }
   code, pre, kbd, samp {
     font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-weight: 600;
   }
   input, textarea, select, button {
     font-family: inherit;
+    font-weight: 600;
   }
 }
 
@@ -448,35 +474,35 @@
 /* Isi materi membuka halus saat <details> dibuka */
 details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
 
-/* Retro Mackenzie Child Monochrome Mac OS Aesthetics */
+/* Retro Aesthetics dengan Token --ink */
 .border-retro {
-  border: 2px solid #000000;
+  border: 2px solid var(--ink, #111111);
 }
 .border-retro-sm {
-  border: 1.5px solid #000000;
+  border: 1.5px solid var(--ink, #111111);
 }
 .shadow-retro {
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--ink, #111111);
 }
 .shadow-retro-md {
-  box-shadow: 5px 5px 0px #000000;
+  box-shadow: 5px 5px 0px var(--ink, #111111);
 }
 .shadow-retro-lg {
-  box-shadow: 7px 7px 0px #000000;
+  box-shadow: 7px 7px 0px var(--ink, #111111);
 }
 .shadow-retro-window {
-  box-shadow: 6px 6px 0px #000000;
+  box-shadow: 6px 6px 0px var(--ink, #111111);
 }
 .retro-window {
-  background: #FFFFFF;
-  border: 2px solid #000000;
-  box-shadow: 6px 6px 0px #000000;
+  background: var(--surface, #FFFFFF);
+  border: 2px solid var(--ink, #111111);
+  box-shadow: 6px 6px 0px var(--ink, #111111);
   border-radius: 2px;
   overflow: hidden;
 }
 .retro-window-header {
   background: var(--retro-warm);
-  border-bottom: 2px solid #000000;
+  border-bottom: 2px solid var(--ink, #111111);
   padding: 12px 18px;
   display: flex;
   align-items: center;

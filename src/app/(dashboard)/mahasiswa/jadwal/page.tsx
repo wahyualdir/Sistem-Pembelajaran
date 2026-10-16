@@ -61,7 +61,7 @@ export default async function MahasiswaJadwalPage() {
         title="siakad://jadwal.mingguan"
         badge="Semester 2026/2027 Ganjil"
         actions={
-          <span className="text-sm font-bold text-retro-orange">
+          <span className="text-sm font-bold text-primary">
             {totalClasses} Kelas Terjadwal
           </span>
         }
@@ -69,7 +69,7 @@ export default async function MahasiswaJadwalPage() {
         <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2.5">
-              <CalendarDays className="h-6 w-6 text-retro-orange" />
+              <CalendarDays className="h-6 w-6 text-primary" />
               <h1 className="text-2xl sm:text-3xl font-black text-foreground font-heading tracking-tight">
                 Jadwal Perkuliahan Mingguan
               </h1>
@@ -98,7 +98,7 @@ export default async function MahasiswaJadwalPage() {
               {/* Header Hari */}
               <div className="py-3 px-4 bg-retro-warm border-b-2 border-retro-border flex flex-row items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full border border-retro-border bg-retro-orange" />
+                  <span className="h-3 w-3 rounded-full border border-retro-border bg-primary" />
                   <span className="text-sm font-bold uppercase tracking-wider text-foreground">
                     {day}
                   </span>
@@ -130,7 +130,7 @@ export default async function MahasiswaJadwalPage() {
                       </div>
 
                       <div className="text-xs sm:text-sm text-muted-foreground flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-retro-orange shrink-0" />
+                        <Clock className="h-4 w-4 text-primary shrink-0" />
                         <span className="font-semibold text-foreground">
                           {item.jamMulai} - {item.jamSelesai} WIB
                         </span>

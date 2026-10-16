@@ -142,17 +142,16 @@ export default async function StaffSubpage({ params }: PageProps) {
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       <RetroWindow
-        title={`staf_akademik_${fullSlug.replace('/', '_')}.app`}
-        subtitle={current.subtitle}
+        title={current.title}
         headerBadge="Staf Akademik"
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
           <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-            <Icon className="h-7 w-7 text-retro-orange" />
+            <Icon className="h-7 w-7 text-primary" />
             <span>{current.title}</span>
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
             {current.desc}
           </p>
         </div>
@@ -186,7 +185,7 @@ export default async function StaffSubpage({ params }: PageProps) {
         <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Users className="h-5 w-5 text-retro-orange" />
+              <Users className="h-5 w-5 text-primary" />
               <h3 className="font-heading font-black text-base text-foreground">Kelas & Peserta Kuliah</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -205,7 +204,7 @@ export default async function StaffSubpage({ params }: PageProps) {
         <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <CalendarDays className="h-5 w-5 text-retro-orange" />
+              <CalendarDays className="h-5 w-5 text-primary" />
               <h3 className="font-heading font-black text-base text-foreground">Jadwal Kuliah & Ujian</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
@@ -224,7 +223,7 @@ export default async function StaffSubpage({ params }: PageProps) {
         <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <CheckSquare className="h-5 w-5 text-retro-orange" />
+              <CheckSquare className="h-5 w-5 text-primary" />
               <h3 className="font-heading font-black text-base text-foreground">Nilai & Presensi Institusi</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">

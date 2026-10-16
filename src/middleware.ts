@@ -108,8 +108,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 2. Pengguna sudah login membuka halaman login -> redirect ke portal/workspace
-  if (isAuthenticated && pathname === '/login') {
+  // 2. Pengguna sudah login membuka halaman login/register -> redirect ke portal/workspace
+  if (isAuthenticated && (pathname === '/login' || pathname === '/register')) {
     if (activeRole && ROLE_PORTAL_MAP[activeRole]) {
       return NextResponse.redirect(new URL(ROLE_PORTAL_MAP[activeRole], request.url));
     }

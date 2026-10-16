@@ -119,7 +119,7 @@ export function StaffGradesHubView({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <CheckSquare className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -153,7 +153,7 @@ export function StaffGradesHubView({
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
           <span className="text-xs font-mono font-bold uppercase text-black/60">Menunggu Eksekusi Staf</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-retro-orange">{pendingExecutions.length} Berkas</div>
+          <div className="text-2xl sm:text-3xl font-heading font-black text-primary">{pendingExecutions.length} Berkas</div>
           <span className="text-xs text-black/70 font-semibold">Telah Disetujui Kaprodi</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
@@ -178,7 +178,7 @@ export function StaffGradesHubView({
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -201,7 +201,7 @@ export function StaffGradesHubView({
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <CheckSquare className="h-5 w-5 text-retro-orange" />
+                <CheckSquare className="h-5 w-5 text-primary" />
                 <span>Rekapitulasi Nilai Akhir Mahasiswa (Read-Only Audit)</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -252,7 +252,7 @@ export function StaffGradesHubView({
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{m.prodi}</td>
                         <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{m.sks} SKS</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-retro-orange">{m.ips.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-primary">{m.ips.toFixed(2)}</td>
                         <td className="p-3.5 sm:p-4 text-center font-mono font-black text-black">{m.ipk.toFixed(2)}</td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
@@ -275,7 +275,7 @@ export function StaffGradesHubView({
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <Clock className="h-5 w-5 text-retro-orange" />
+                <Clock className="h-5 w-5 text-primary" />
                 <span>Rekapitulasi Presensi Kuliah & Kelayakan Ujian (Read-Only)</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -360,7 +360,7 @@ export function StaffGradesHubView({
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <FileText className="h-5 w-5 text-retro-orange" />
+                <FileText className="h-5 w-5 text-primary" />
                 <span>Eksekusi Perubahan Nilai Mahasiswa (Wewenang Staf BAA)</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -466,7 +466,7 @@ export function StaffGradesHubView({
                                   setModalError(null);
                                   setExecutionNote('');
                                 }}
-                                className="px-3 py-1.5 rounded-lg border-2 border-black bg-retro-orange text-white text-xs font-black shadow-xs hover:bg-black transition-all cursor-pointer"
+                                className="px-3 py-1.5 rounded-lg border-2 border-black bg-primary text-white text-xs font-black shadow-xs hover:bg-black transition-all cursor-pointer"
                               >
                                 Eksekusi Nilai
                               </button>
@@ -495,7 +495,7 @@ export function StaffGradesHubView({
         <div className="space-y-6">
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl">
             <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-              <FileSpreadsheet className="h-5 w-5 text-retro-orange" />
+              <FileSpreadsheet className="h-5 w-5 text-primary" />
               <span>Ekspor Laporan Transaksional Akademik & Feeder PDDIKTI</span>
             </h2>
             <p className="text-xs text-black/70 mt-1">
@@ -507,7 +507,7 @@ export function StaffGradesHubView({
             <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <FileSpreadsheet className="h-5 w-5 text-retro-orange" />
+                  <FileSpreadsheet className="h-5 w-5 text-primary" />
                   <h3 className="font-heading font-black text-base text-black">Format Feeder PDDIKTI</h3>
                 </div>
                 <p className="text-xs text-black/70 leading-relaxed">
@@ -527,7 +527,7 @@ export function StaffGradesHubView({
             <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <CheckSquare className="h-5 w-5 text-retro-orange" />
+                  <CheckSquare className="h-5 w-5 text-primary" />
                   <h3 className="font-heading font-black text-base text-black">Buku Nilai Universitas</h3>
                 </div>
                 <p className="text-xs text-black/70 leading-relaxed">
@@ -547,7 +547,7 @@ export function StaffGradesHubView({
             <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-retro-orange" />
+                  <Clock className="h-5 w-5 text-primary" />
                   <h3 className="font-heading font-black text-base text-black">Audit Presensi Kuliah</h3>
                 </div>
                 <p className="text-xs text-black/70 leading-relaxed">
@@ -573,7 +573,7 @@ export function StaffGradesHubView({
           <div className="w-full max-w-lg rounded-2xl border-2 border-black bg-white p-6 sm:p-7 shadow-retro space-y-5">
             <div className="flex items-center justify-between border-b-2 border-black pb-3">
               <div className="flex items-center gap-2.5">
-                <div className="p-2 rounded-lg border-2 border-black bg-retro-orange text-white">
+                <div className="p-2 rounded-lg border-2 border-black bg-primary text-white">
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
@@ -645,7 +645,7 @@ export function StaffGradesHubView({
                   value={executionNote}
                   onChange={(e) => setExecutionNote(e.target.value)}
                   placeholder="Nomor surat berita acara atau keterangan tambahan staf..."
-                  className="w-full rounded-lg border-2 border-black p-2.5 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-retro-orange"
+                  className="w-full rounded-lg border-2 border-black p-2.5 text-xs font-medium bg-white focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
 

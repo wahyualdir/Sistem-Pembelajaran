@@ -101,4 +101,57 @@ export function recordLoginFailure(identifier: string): { locked: boolean; retry
 export function resetLoginFailure(identifier: string): void {
   const norm = identifier.trim().toLowerCase();
   identifierAttempts.delete(norm);
+  void syncDistributedRateLimit(`lockout:${norm}`, 0, true);
 }
+
+/**
+ * Sinkronisasi non-blocking ke Upstash Redis REST API (multi-instance production)
+ * bila UPSTASH_REDIS_REST_URL & UPSTASH_REDIS_REST_TOKEN dikonfigurasi.
+ */
+export async function syncDistributedRateLimit(
+  key: string,
+  ttlSeconds: number = 900,
+  reset: boolean = false
+): Promise<number | null> {
+  const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!redisUrl || !redisToken) return null;
+
+  try {
+    const cleanUrl = redisUrl.replace(/\/$/, '');
+    const command = reset
+      ? ['DEL', `siajar:rl:${key}`]
+      : ['INCR', `siajar:rl:${key}`];
+
+    const res = await fetch(`${cleanUrl}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${redisToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(command),
+      signal: AbortSignal.timeout(2000),
+    });
+
+    if (!res.ok) return null;
+    const data = await res.json();
+    const count = typeof data?.result === 'number' ? data.result : null;
+
+    if (!reset && count === 1 && ttlSeconds > 0) {
+      await fetch(`${cleanUrl}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${redisToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(['EXPIRE', `siajar:rl:${key}`, String(ttlSeconds)]),
+        signal: AbortSignal.timeout(2000),
+      });
+    }
+
+    return count;
+  } catch {
+    return null;
+  }
+}
+

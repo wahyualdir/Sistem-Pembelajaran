@@ -46,23 +46,22 @@ export default function AssistantExamMonitorPage() {
   return (
     <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
       <RetroWindow
-        title="pantau_ujian_asisten.app"
-        subtitle="Monitoring Pengawasan Ujian Kelas Asistensi (Hanya Lihat)"
+        title="Pantau Ujian Kelas Asistensi"
         headerBadge="Mode Asisten"
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-1 rounded border border-black bg-amber-100 font-mono text-xs font-bold text-amber-900 flex items-center gap-1.5">
+            <span className="px-2.5 py-1 rounded border-2 border-black bg-amber-100 font-mono text-xs font-black text-amber-950 flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5" />
               Akses Pengawasan: Read-Only (Hanya Pantau)
             </span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-            <ShieldAlert className="h-7 w-7 text-retro-orange" />
+            <ShieldAlert className="h-7 w-7 text-primary" />
             <span>Pantau Ujian Kelas Asistensi</span>
           </h1>
-          <p className="text-sm sm:text-base text-muted-foreground font-medium max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
             Sebagai asisten, Anda dapat memantau jalannya kuis dan ujian secara langsung (read-only) untuk mendeteksi kendala koneksi atau anomali mahasiswa. Tindakan penalti tetap merupakan wewenang dosen pengampu.
           </p>
         </div>
@@ -117,7 +116,7 @@ export default function AssistantExamMonitorPage() {
         {/* Live Proctoring Read-Only Feed Cards */}
         <div className="space-y-3">
           <h3 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
-            <Activity className="h-4 w-4 text-retro-orange" />
+            <Activity className="h-4 w-4 text-primary" />
             <span>Feed Pemantauan Aktivitas Real-Time Peserta</span>
           </h3>
 

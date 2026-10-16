@@ -294,7 +294,7 @@ export function LecturerExamsHubView({
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Award className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -338,7 +338,7 @@ export function LecturerExamsHubView({
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -397,7 +397,7 @@ export function LecturerExamsHubView({
 
                   <div className="pt-2 border-t border-black/10 flex items-center justify-between text-xs font-mono">
                     <span>KKM: {q.kkm ?? 70}</span>
-                    <span className="font-bold text-retro-orange">
+                    <span className="font-bold text-primary">
                       Proctor: {q.proctoring_level ?? 'STANDARD'}
                     </span>
                   </div>
@@ -410,7 +410,7 @@ export function LecturerExamsHubView({
                       setSelectedExamId(q.id);
                       setTab('live');
                     }}
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-retro-orange text-white text-xs font-black shadow-xs hover:bg-black transition-all cursor-pointer"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-primary text-white text-xs font-black shadow-xs hover:bg-black transition-all cursor-pointer"
                   >
                     <Activity className="h-3.5 w-3.5" />
                     <span>Panel Live</span>
@@ -514,7 +514,7 @@ export function LecturerExamsHubView({
                   </div>
                   <div className="w-full h-3 rounded-full border-2 border-black bg-neutral-200 overflow-hidden">
                     <div
-                      className="h-full bg-retro-orange transition-all duration-300"
+                      className="h-full bg-primary transition-all duration-300"
                       style={{ width: `${st.progress_percent}%` }}
                     />
                   </div>
@@ -568,7 +568,7 @@ export function LecturerExamsHubView({
             <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                  <ShieldAlert className="h-5 w-5 text-retro-orange" />
+                  <ShieldAlert className="h-5 w-5 text-primary" />
                   <span>Log Pelanggaran Mahasiswa (Proctoring Telemetry) ({violationsLog.length})</span>
                 </h2>
                 <p className="text-xs text-black/70">
@@ -630,7 +630,7 @@ export function LecturerExamsHubView({
             <div className="p-4 bg-retro-yellow/40 border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
                 <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-retro-orange" />
+                  <Activity className="h-5 w-5 text-primary" />
                   <span>Log Intervensi Pengawas & Dosen ({interventionsLog.length})</span>
                 </h2>
                 <p className="text-xs text-black/70">
@@ -731,7 +731,7 @@ export function LecturerExamsHubView({
           <div className="w-full max-w-md rounded-2xl border-4 border-black bg-white p-6 shadow-retro space-y-4 animate-scale-in">
             <div className="flex items-center justify-between border-b-2 border-black pb-3">
               <h3 className="font-heading font-black text-lg text-black flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-retro-orange" />
+                <AlertTriangle className="h-5 w-5 text-primary" />
                 <span>Konfirmasi Tindakan Pengawas</span>
               </h3>
               <button
@@ -751,7 +751,7 @@ export function LecturerExamsHubView({
                 </p>
                 <p>
                   <span className="text-black/60 font-mono">Jenis Tindakan:</span>{' '}
-                  <span className="font-bold text-retro-orange uppercase">
+                  <span className="font-bold text-primary uppercase">
                     {modalData.action === 'WARN'
                       ? 'Peringatan Pelanggaran'
                       : modalData.action === 'ADD_TIME'
@@ -809,7 +809,7 @@ export function LecturerExamsHubView({
                 type="button"
                 disabled={isPending}
                 onClick={handleConfirmIntervention}
-                className="px-4 py-2 rounded-lg border-2 border-black bg-retro-orange text-white text-xs font-black shadow-retro hover:bg-orange-600 cursor-pointer disabled:opacity-50"
+                className="px-4 py-2 rounded-lg border-2 border-black bg-primary text-white text-xs font-black shadow-retro hover:bg-primary-dark cursor-pointer disabled:opacity-50"
               >
                 {isPending ? 'Menyimpan...' : 'Eksekusi & Catat Audit'}
               </button>

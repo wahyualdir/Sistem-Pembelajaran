@@ -115,7 +115,7 @@ export default async function MahasiswaDashboardPage() {
                 siakad://dashboard.mahasiswa
               </span>
             </div>
-            <span className="text-xs font-mono font-bold text-retro-orange uppercase tracking-wider">
+            <span className="text-xs font-mono font-bold text-primary uppercase tracking-wider">
               ONLINE
             </span>
           </div>
@@ -505,7 +505,7 @@ export default async function MahasiswaDashboardPage() {
             className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-retro-warm hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
           >
             <span className="flex items-center gap-2">
-              <FileCheck className="h-4 w-4 text-retro-orange" />
+              <FileCheck className="h-4 w-4 text-primary" />
               Kartu Rencana Studi
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -515,7 +515,7 @@ export default async function MahasiswaDashboardPage() {
             className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-retro-warm hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
           >
             <span className="flex items-center gap-2">
-              <GraduationCap className="h-4 w-4 text-retro-orange" />
+              <GraduationCap className="h-4 w-4 text-primary" />
               KHS & Transkrip
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -525,7 +525,7 @@ export default async function MahasiswaDashboardPage() {
             className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-retro-warm hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
           >
             <span className="flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-retro-orange" />
+              <ShieldCheck className="h-4 w-4 text-primary" />
               Rekap Kehadiran
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -535,7 +535,7 @@ export default async function MahasiswaDashboardPage() {
             className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-retro-warm hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
           >
             <span className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-retro-orange" />
+              <Calendar className="h-4 w-4 text-primary" />
               Jadwal & Kartu Ujian
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />

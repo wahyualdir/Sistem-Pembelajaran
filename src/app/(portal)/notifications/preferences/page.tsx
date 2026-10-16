@@ -25,7 +25,7 @@ export default function NotificationPreferencesPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-retro-border bg-primary text-white shadow-xs">
                 <Settings className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">
@@ -53,7 +53,7 @@ export default function NotificationPreferencesPage() {
       >
         <div className="flex items-center justify-between">
           <h2 className="font-heading font-black text-lg sm:text-xl text-foreground flex items-center gap-2">
-            <Bell className="h-5 w-5 text-retro-orange" />
+            <Bell className="h-5 w-5 text-primary" />
             <span>Kanal Distribusi Notifikasi</span>
           </h2>
           <span className="text-xs font-mono text-muted-foreground">Pilih saluran penerima</span>

@@ -29,7 +29,7 @@ export default async function LecturerPortalPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-xs">
                 <BookOpen className="h-5 w-5" />
               </div>
               <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
@@ -47,7 +47,7 @@ export default async function LecturerPortalPage() {
               href="/classes"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-[1.5px] border-retro-border bg-retro-warm hover:bg-retro-yellow text-xs font-bold text-foreground transition-all shadow-xs"
             >
-              <Layers className="h-4 w-4 text-retro-orange" />
+              <Layers className="h-4 w-4 text-primary" />
               <span>Kelola {classes} Kelas</span>
             </Link>
           </div>
@@ -57,7 +57,7 @@ export default async function LecturerPortalPage() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-5 border-t border-retro-border/40 mt-5">
           <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/70 shadow-xs flex items-center gap-3">
             <div className="p-2 rounded border border-retro-border bg-retro-surface text-foreground">
-              <Layers className="h-5 w-5 text-retro-orange" />
+              <Layers className="h-5 w-5 text-primary" />
             </div>
             <div>
               <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Kelas Aktif</p>
@@ -96,7 +96,7 @@ export default async function LecturerPortalPage() {
       >
         <div className="flex items-center justify-between">
           <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-            <ClipboardList className="h-4 w-4 text-retro-orange" />
+            <ClipboardList className="h-4 w-4 text-primary" />
             <span>Tugas Mahasiswa yang Perlu Direview</span>
           </h2>
           <span className="text-xs font-mono text-muted-foreground">
@@ -113,7 +113,7 @@ export default async function LecturerPortalPage() {
             </p>
             <Link
               href="/classes"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-[1.5px] border-retro-border bg-retro-orange text-white text-xs font-bold shadow-retro hover:brightness-105 transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white text-xs font-bold shadow-retro hover:brightness-105 transition-all"
             >
               <PlusCircle className="h-4 w-4" />
               <span>Buka Kelas Pertama Sekarang</span>
@@ -141,7 +141,7 @@ export default async function LecturerPortalPage() {
                     <span className="px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-xs font-mono font-bold text-foreground">
                       {t.class_title}
                     </span>
-                    <h3 className="font-heading font-bold text-sm text-foreground group-hover:text-retro-orange transition-colors">
+                    <h3 className="font-heading font-bold text-sm text-foreground group-hover:text-primary-dark transition-colors">
                       {t.title}
                     </h3>
                   </div>
@@ -154,7 +154,7 @@ export default async function LecturerPortalPage() {
                   <span className="px-2.5 py-1 rounded border border-retro-border bg-retro-yellow text-black font-mono font-bold text-xs shadow-xs">
                     {t.pending} dari {t.total} belum dinilai
                   </span>
-                  <div className="flex items-center gap-1 text-xs font-bold text-retro-orange group-hover:translate-x-1 transition-transform">
+                  <div className="flex items-center gap-1 text-xs font-bold text-primary group-hover:translate-x-1 transition-transform">
                     <span>Nilai Sekarang</span>
                     <ArrowRight className="h-3.5 w-3.5" />
                   </div>

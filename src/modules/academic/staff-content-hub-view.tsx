@@ -75,7 +75,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <BookOpen className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -110,7 +110,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
           <span className="text-xs font-mono font-bold uppercase text-black/60">Template Sertifikat</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{CERTIFICATES.length} Format</div>
-          <span className="text-xs text-retro-orange font-bold">Resmi BAA</span>
+          <span className="text-xs text-primary font-bold">Resmi BAA</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
           <span className="text-xs font-mono font-bold uppercase text-black/60">Kredensial Diterbitkan</span>
@@ -132,7 +132,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -150,7 +150,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-retro-orange" />
+                <BookOpen className="h-5 w-5 text-primary" />
                 <span>Katalog Pustaka Digital & Fisik Perpustakaan</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -226,7 +226,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <Award className="h-5 w-5 text-retro-orange" />
+                <Award className="h-5 w-5 text-primary" />
                 <span>Template Sertifikat Digital & Lencana Mikro (Micro-Credentials)</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">

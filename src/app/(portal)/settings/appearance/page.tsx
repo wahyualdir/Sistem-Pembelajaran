@@ -26,7 +26,7 @@ export default function AppearanceSettingsPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-retro-border bg-primary text-white shadow-xs">
                 <Sliders className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">
@@ -54,7 +54,7 @@ export default function AppearanceSettingsPage() {
       >
         <div className="flex items-center justify-between">
           <h2 className="font-heading font-black text-lg text-foreground flex items-center gap-2">
-            <Sun className="h-5 w-5 text-retro-orange" />
+            <Sun className="h-5 w-5 text-primary" />
             <span>Tema Visual Antarmuka</span>
           </h2>
           <span className="text-xs font-mono text-muted-foreground">Pilih gaya kanvas</span>
@@ -65,7 +65,7 @@ export default function AppearanceSettingsPage() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg border border-black bg-white">
-                  <Sun className="h-6 w-6 text-retro-orange" />
+                  <Sun className="h-6 w-6 text-primary" />
                 </div>
                 <div>
                   <span className="font-heading font-black text-base text-foreground block">Mode Terang (Retro Monokrom)</span>
@@ -109,7 +109,7 @@ export default function AppearanceSettingsPage() {
           {/* Bahasa */}
           <div className="space-y-4">
             <h3 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-              <Globe className="h-4 w-4 text-retro-orange" />
+              <Globe className="h-4 w-4 text-primary" />
               <span>Bahasa Antarmuka</span>
             </h3>
 
@@ -135,7 +135,7 @@ export default function AppearanceSettingsPage() {
           {/* Tipografi */}
           <div className="space-y-4">
             <h3 className="font-heading font-black text-base text-foreground flex items-center gap-2">
-              <Type className="h-4 w-4 text-retro-orange" />
+              <Type className="h-4 w-4 text-primary" />
               <span>Skala Huruf & Kontras</span>
             </h3>
 

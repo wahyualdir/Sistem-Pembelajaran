@@ -54,15 +54,14 @@ export default async function TakeQuizPage({
       {isLecturer ? (
         <div className="space-y-6">
           <RetroWindow
-            title={`pengawasan_ujian_${(quiz.exam_type ?? 'kuis').toLowerCase()}.app`}
+            title="Panel Pengawasan Ujian"
             headerBadge="MODE PENGAWAS DOSEN"
             headerBadgeVariant="warning"
-            subtitle="Pusat Pemantauan & Analisis Integritas Ujian SIAJAR"
             bodyClassName="p-5 sm:p-6"
           >
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded border-2 border-retro-border bg-retro-orange px-2.5 py-0.5 text-xs font-black font-mono text-white shadow-retro-sm">
+                <span className="rounded border-2 border-retro-border bg-primary px-2.5 py-0.5 text-xs font-black font-mono text-white shadow-retro-sm">
                   {quiz.exam_type ?? 'KUIS'}
                 </span>
                 <span className="rounded border-2 border-retro-border bg-retro-warm px-2.5 py-0.5 text-xs font-black font-mono text-black shadow-retro-sm">
@@ -80,7 +79,7 @@ export default async function TakeQuizPage({
               </div>
 
               <h1 className="text-xl sm:text-2xl font-heading font-black tracking-tight text-black flex items-center gap-2.5">
-                <Award className="h-6 w-6 text-retro-orange shrink-0" />
+                <Award className="h-6 w-6 text-primary shrink-0" />
                 <span>{quiz.title}</span>
               </h1>
 

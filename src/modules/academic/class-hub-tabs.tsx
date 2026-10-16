@@ -263,7 +263,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               className="text-xs font-bold bg-retro-yellow text-black border-2 border-black px-3 py-1.5 rounded-lg shadow-xs hover:bg-white transition-all flex items-center gap-1.5"
               title="Salin Kode Kelas"
             >
-              <Key className="h-3.5 w-3.5 text-retro-orange" />
+              <Key className="h-3.5 w-3.5 text-primary" />
               <span>{cls.join_code}</span>
               {copiedCode ? (
                 <span className="text-xs bg-black text-white px-1.5 py-0.5 rounded font-bold">Disalin!</span>
@@ -309,15 +309,15 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               </h1>
               <p className="text-xs sm:text-sm font-normal text-black/75 flex flex-wrap items-center gap-x-4 gap-y-1">
                 <span className="flex items-center gap-1.5">
-                  <Clock className="h-4 w-4 text-retro-orange" />
+                  <Clock className="h-4 w-4 text-primary" />
                   {cls.schedule || 'Senin, 08:00 - 10:30 WIB'}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="h-4 w-4 text-retro-orange" />
+                  <MapPin className="h-4 w-4 text-primary" />
                   {cls.room || 'Lab Komputer 2 (Hybrid)'}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Users className="h-4 w-4 text-retro-orange" />
+                  <Users className="h-4 w-4 text-primary" />
                   {members.length} Mahasiswa
                 </span>
               </p>
@@ -332,13 +332,13 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               <div className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3.5">
                 <div className="flex items-center justify-between border-b-2 border-black/15 pb-2.5">
                   <h3 className="font-bold text-sm text-black flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-retro-orange" />
+                    <Clock className="h-4 w-4 text-primary" />
                     <span>Mendatang</span>
                   </h3>
                   <button
                     type="button"
                     onClick={() => setActiveTab('tugas')}
-                    className="text-xs font-bold text-retro-orange hover:underline"
+                    className="text-xs font-bold text-primary hover:underline"
                   >
                     Lihat semua
                   </button>
@@ -365,7 +365,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               {/* Widget Presensi Hari Ini */}
               <div className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
                 <h3 className="font-bold text-sm text-black flex items-center gap-2 border-b-2 border-black/15 pb-2.5">
-                  <CalendarCheck2 className="h-4 w-4 text-retro-orange" />
+                  <CalendarCheck2 className="h-4 w-4 text-primary" />
                   <span>Presensi Perkuliahan</span>
                 </h3>
                 {attendanceSessions.length > 0 && attendanceSessions.some((s) => s.is_open) ? (
@@ -401,7 +401,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 </div>
                 <div className="flex justify-between py-1 font-medium">
                   <span className="text-black/70">Kehadiran Minimal</span>
-                  <span className="font-bold text-retro-orange">75% (Syarat UAS)</span>
+                  <span className="font-bold text-primary">75% (Syarat UAS)</span>
                 </div>
               </div>
             </div>
@@ -446,7 +446,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full border-2 border-black bg-retro-orange text-white flex items-center justify-center font-bold text-xs shrink-0">
+                        <div className="h-10 w-10 rounded-full border-2 border-black bg-primary text-white flex items-center justify-center font-bold text-xs shrink-0">
                           DS
                         </div>
                         <div>
@@ -571,21 +571,21 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           {lecturer && isClassworkCreateOpen && (
             <div className="p-6 rounded-2xl border-2 border-black bg-retro-warm/50 shadow-retro space-y-6 animate-fade-up">
               <h3 className="font-bold text-base text-black flex items-center gap-2">
-                <PlusCircle className="h-5 w-5 text-retro-orange" />
+                <PlusCircle className="h-5 w-5 text-primary" />
                 <span>Publikasikan Tugas atau Materi</span>
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="p-5 rounded-xl border-2 border-black bg-white space-y-3">
                   <h4 className="font-bold text-sm text-black flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-retro-orange" /> Terbitkan Tugas Baru
+                    <FileText className="h-4 w-4 text-primary" /> Terbitkan Tugas Baru
                   </h4>
                   <CreateAssignmentForm classId={cls.id} />
                 </div>
 
                 <div className="p-5 rounded-xl border-2 border-black bg-white space-y-3">
                   <h4 className="font-bold text-sm text-black flex items-center gap-2">
-                    <FolderArchive className="h-4 w-4 text-retro-orange" /> Unggah Modul / Materi
+                    <FolderArchive className="h-4 w-4 text-primary" /> Unggah Modul / Materi
                   </h4>
                   <CreateMaterialForm classId={cls.id} />
                 </div>
@@ -604,7 +604,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             {(classworkFilter === 'all' || classworkFilter === 'tugas') && (
               <div className="space-y-3">
                 <h3 className="font-bold text-base sm:text-lg text-black flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-retro-orange" />
+                  <FileText className="h-5 w-5 text-primary" />
                   <span>Tugas Perkuliahan</span>
                 </h3>
 
@@ -709,7 +709,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             {(classworkFilter === 'all' || classworkFilter === 'ujian') && (
               <div className="space-y-3">
                 <h3 className="font-bold text-base sm:text-lg text-black flex items-center gap-2">
-                  <Award className="h-5 w-5 text-retro-orange" />
+                  <Award className="h-5 w-5 text-primary" />
                   <span>Ujian & Kuis CBT</span>
                 </h3>
 
@@ -757,7 +757,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             {(classworkFilter === 'all' || classworkFilter === 'materi') && (
               <div className="space-y-3">
                 <h3 className="font-bold text-base sm:text-lg text-black flex items-center gap-2">
-                  <FolderArchive className="h-5 w-5 text-retro-orange" />
+                  <FolderArchive className="h-5 w-5 text-primary" />
                   <span>Materi Perkuliahan</span>
                 </h3>
 
@@ -800,7 +800,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             {(classworkFilter === 'all' || classworkFilter === 'presensi') && (
               <div className="space-y-3">
                 <h3 className="font-bold text-base sm:text-lg text-black flex items-center gap-2">
-                  <CalendarCheck2 className="h-5 w-5 text-retro-orange" />
+                  <CalendarCheck2 className="h-5 w-5 text-primary" />
                   <span>Presensi Perkuliahan</span>
                 </h3>
 
@@ -867,7 +867,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b-2 border-black/20 pb-3">
               <h3 className="font-bold text-lg sm:text-xl text-black flex items-center gap-2">
-                <UserCheck className="h-5 w-5 text-retro-orange" />
+                <UserCheck className="h-5 w-5 text-primary" />
                 <span>Dosen & Pengajar</span>
               </h3>
               <span className="text-xs font-medium bg-retro-warm border border-black px-2.5 py-1 rounded">
@@ -933,7 +933,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b-2 border-black/20 pb-3">
               <h3 className="font-bold text-lg sm:text-xl text-black flex items-center gap-2">
-                <Users className="h-5 w-5 text-retro-orange" />
+                <Users className="h-5 w-5 text-primary" />
                 <span>Daftar Mahasiswa</span>
               </h3>
               <span className="text-xs font-medium bg-retro-warm border border-black px-2.5 py-1 rounded">
@@ -1035,7 +1035,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           {(lecturer || ta) && (
             <div className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
               <h4 className="font-bold text-sm text-black flex items-center gap-2">
-                <FolderArchive className="h-4 w-4 text-retro-orange" /> Unggah Modul / Materi Baru
+                <FolderArchive className="h-4 w-4 text-primary" /> Unggah Modul / Materi Baru
               </h4>
               <CreateMaterialForm classId={cls.id} />
             </div>
@@ -1168,7 +1168,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/15 pb-4">
               <div>
                 <h3 className="font-bold text-lg sm:text-xl text-black flex items-center gap-2">
-                  <GraduationCap className="h-6 w-6 text-retro-orange" />
+                  <GraduationCap className="h-6 w-6 text-primary" />
                   <span>Buku Nilai & Transkrip</span>
                 </h3>
                 <p className="text-xs text-black/70 mt-0.5 font-normal">

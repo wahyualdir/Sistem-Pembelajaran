@@ -77,7 +77,7 @@ export default function ForumPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <MessageSquare className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -148,7 +148,7 @@ export default function ForumPage() {
             <div className="pt-3.5 border-t-2 border-black/10 flex items-center justify-between text-xs sm:text-sm font-mono font-bold">
               <div className="flex items-center gap-4 text-black">
                 <span className="flex items-center gap-1.5">
-                  <MessageCircle className="h-4 w-4 text-retro-orange" />
+                  <MessageCircle className="h-4 w-4 text-primary" />
                   <span>{th.replies} Balasan</span>
                 </span>
                 <span className="flex items-center gap-1.5 text-neutral-700">

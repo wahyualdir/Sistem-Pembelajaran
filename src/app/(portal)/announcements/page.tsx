@@ -68,7 +68,7 @@ export default function AnnouncementsPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Bell className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -120,11 +120,11 @@ export default function AnnouncementsPage() {
 
             <div className="pt-3.5 border-t-2 border-black/10 flex flex-wrap items-center justify-between text-xs sm:text-sm font-mono text-neutral-900 font-bold gap-2">
               <span className="truncate max-w-[260px] flex items-center gap-1.5">
-                <User className="h-3.5 w-3.5 text-retro-orange" />
+                <User className="h-3.5 w-3.5 text-primary" />
                 <span>{ann.author}</span>
               </span>
               <span className="flex items-center gap-1.5 shrink-0 text-black">
-                <Clock className="h-3.5 w-3.5 text-retro-orange" />
+                <Clock className="h-3.5 w-3.5 text-primary" />
                 <span>{ann.date}</span>
               </span>
             </div>

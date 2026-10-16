@@ -48,7 +48,7 @@ const FAQS = [
   {
     category: 'SENGKETA NILAI',
     icon: FileSpreadsheet,
-    badgeBg: 'bg-retro-orange text-white',
+    badgeBg: 'bg-primary text-white',
     q: 'Bagaimana jika terjadi error koneksi saat ujian yang mengurangi nilai?',
     a: 'Mahasiswa berhak mengajukan sanggahan resmi pada menu Sengketa Nilai (Disputes). Sertakan tangkapan layar bukti kendala jaringan; dosen pengampu akan meninjau ulang log audit teknis.',
   },
@@ -74,7 +74,7 @@ export default function HelpCenterPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-retro-border bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-retro-border bg-primary text-white shadow-xs">
                 <HelpCircle className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">
@@ -102,7 +102,7 @@ export default function HelpCenterPage() {
       >
         <div className="flex items-center justify-between">
           <h2 className="font-heading font-black text-xl sm:text-2xl text-black flex items-center gap-2.5">
-            <FileQuestion className="h-6 w-6 text-retro-orange" />
+            <FileQuestion className="h-6 w-6 text-primary" />
             <span>Pertanyaan yang Sering Diajukan (FAQ)</span>
           </h2>
           <span className="text-sm font-mono font-bold text-black">Kanal Informasi Resmi</span>
@@ -122,7 +122,7 @@ export default function HelpCenterPage() {
                     <span className={`px-3 py-1 rounded border-2 border-black text-xs font-mono font-black shadow-xs ${faq.badgeBg}`}>
                       {faq.category}
                     </span>
-                    <Icon className="h-5 w-5 text-retro-orange" />
+                    <Icon className="h-5 w-5 text-primary" />
                   </div>
 
                   <h3 className="font-heading font-black text-lg text-black leading-snug">
@@ -143,7 +143,7 @@ export default function HelpCenterPage() {
       <div className="rounded-xl border-2 border-black bg-retro-warm p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-retro">
         <div className="space-y-1.5 text-center sm:text-left">
           <h3 className="font-heading font-black text-xl text-black flex items-center justify-center sm:justify-start gap-2">
-            <ShieldCheck className="h-6 w-6 text-retro-orange" />
+            <ShieldCheck className="h-6 w-6 text-primary" />
             <span>Butuh Transparansi Privasi & Keamanan Data?</span>
           </h3>
           <p className="text-sm sm:text-base text-black font-medium max-w-2xl leading-relaxed">

@@ -114,7 +114,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-xs">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Bell className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
@@ -144,7 +144,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
           <span className="text-xs font-mono font-bold uppercase text-black/60">Event & Webinar</span>
           <div className="text-2xl sm:text-3xl font-heading font-black text-black">{EVENTS.length} Kegiatan</div>
-          <span className="text-xs text-retro-orange font-bold">Semester Berjalan</span>
+          <span className="text-xs text-primary font-bold">Semester Berjalan</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
           <span className="text-xs font-mono font-bold uppercase text-black/60">Pendaftar Webinar</span>
@@ -171,7 +171,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
               className={cn(
                 'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-retro-orange text-white shadow-retro'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
                   : 'bg-white text-black hover:bg-retro-warm shadow-xs'
               )}
             >
@@ -189,7 +189,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <Bell className="h-5 w-5 text-retro-orange" />
+                <Bell className="h-5 w-5 text-primary" />
                 <span>Siaran Berita & Pengumuman Resmi Kampus</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
@@ -267,7 +267,7 @@ export function StaffAnnouncementsHubView({ isDemo = true }: StaffAnnouncementsH
           <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-retro-orange" />
+                <Calendar className="h-5 w-5 text-primary" />
                 <span>Manajemen Agenda Event, Workshop & Webinar Institusi</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">

@@ -51,7 +51,7 @@ export function SystemMonitoringHubView() {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-retro-orange text-white shadow-retro-sm">
+              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <Activity className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
@@ -165,7 +165,7 @@ export function SystemMonitoringHubView() {
             <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
               <div className="flex items-center justify-between border-b-2 border-black pb-3">
                 <h3 className="font-heading font-black text-lg text-black flex items-center gap-2">
-                  <Database className="h-5 w-5 text-retro-orange" />
+                  <Database className="h-5 w-5 text-primary" />
                   <span>Klaster Basis Data PostgreSQL</span>
                 </h3>
                 <span className={`px-2 py-0.5 rounded border text-xs font-mono font-bold ${
@@ -197,7 +197,7 @@ export function SystemMonitoringHubView() {
             <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
               <div className="flex items-center justify-between border-b-2 border-black pb-3">
                 <h3 className="font-heading font-black text-lg text-black flex items-center gap-2">
-                  <Server className="h-5 w-5 text-retro-orange" />
+                  <Server className="h-5 w-5 text-primary" />
                   <span>Next.js App Server Instances</span>
                 </h3>
                 <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-mono font-bold">

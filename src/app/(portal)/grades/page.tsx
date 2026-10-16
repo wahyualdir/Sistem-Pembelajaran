@@ -102,10 +102,11 @@ export default async function GradesPage() {
     redirect('/ta/grading');
   }
 
-  const attempts = await getAllAttemptsAction().catch(() => []);
-  const quizzes = await getAllQuizzesAction().catch(() => []);
+  const isNew = user?.isNewAccount ?? false;
+  const attempts = isNew ? [] : await getAllAttemptsAction().catch(() => []);
+  const quizzes = isNew ? [] : await getAllQuizzesAction().catch(() => []);
   const isDemo = isDemoMode();
-  const grades = isDemo ? DEMO_GRADES : [];
+  const grades = isDemo && !isNew ? DEMO_GRADES : [];
 
-  return <GradesHubView grades={grades} attempts={attempts} quizzes={quizzes} isDemo={isDemo} />;
+  return <GradesHubView grades={grades} attempts={attempts} quizzes={quizzes} isDemo={isDemo && !isNew} />;
 }
