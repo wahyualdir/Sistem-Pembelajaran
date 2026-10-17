@@ -38,6 +38,9 @@ import {
   Sparkles,
   Info,
   Check,
+  Video,
+  Lock,
+  Play,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RetroWindow } from '@/components/retro/retro-window';
@@ -54,6 +57,8 @@ import type { StudentRiskEvaluation } from '@/modules/early-warning/types';
 import { ClassForumTabView } from './class-forum-tab-view';
 import type { ForumTopic } from './forum-actions';
 import { ClassGroupsTabView } from './class-groups-tab-view';
+import { StudentAbsenceModal, LecturerAbsenceTabView } from './absence-modal-and-view';
+import { toggleMaterialCompleteAction, remindUnreadStudentsAction } from './material-progress-actions';
 
 export interface ClassDetailData {
   cls: {
@@ -86,6 +91,8 @@ export interface ClassDetailData {
     title: string;
     created_at: string;
     body_md?: string | null;
+    unlock_after_material_id?: string | null;
+    require_completion?: boolean;
   }>;
   announcements: Array<{
     id: string;
@@ -173,6 +180,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
   const [isAnnounceOpen, setIsAnnounceOpen] = useState(false);
   const [isClassworkCreateOpen, setIsClassworkCreateOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const [isAbsenceModalOpen, setIsAbsenceModalOpen] = useState(false);
+  const [attendanceSubTab, setAttendanceSubTab] = useState<'sesi' | 'permohonan'>('sesi');
+  const [completedMaterials, setCompletedMaterials] = useState<Record<string, boolean>>({});
+  const [remindSuccess, setRemindSuccess] = useState<string | null>(null);
 
   const toggleExpand = (id: string) => {
     setExpandedItems((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -1073,6 +1084,31 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             )}
           </div>
 
+          {remindSuccess && (
+            <div className="p-3 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-300">
+              {remindSuccess}
+            </div>
+          )}
+
+          {/* Progres Belajar Mahasiswa (10.4) */}
+          {student && materials.length > 0 && (
+            <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <span className="text-xs font-bold text-foreground">
+                  Progres Belajar: {materials.filter((m) => completedMaterials[m.id]).length} dari {materials.length} materi selesai ({materials.length > 0 ? Math.round((materials.filter((m) => completedMaterials[m.id]).length / materials.length) * 100) : 0}%)
+                </span>
+              </div>
+              <div className="w-full sm:w-48 bg-muted rounded-full h-2.5 overflow-hidden border border-black/30">
+                <div
+                  className="bg-primary h-2.5 rounded-full transition-all"
+                  style={{
+                    width: `${materials.length > 0 ? Math.round((materials.filter((m) => completedMaterials[m.id]).length / materials.length) * 100) : 0}%`,
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           {(lecturer || ta) && (
             <div className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
               <h4 className="font-bold text-sm text-black flex items-center gap-2">
@@ -1089,29 +1125,101 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 Belum ada modul materi kuliah yang diunggah.
               </p>
             ) : (
-              materials.map((m, idx) => (
-                <div key={m.id} className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl border-2 border-black bg-surface text-black">
-                        <BookOpen className="h-4 w-4" />
+              materials.map((m, idx) => {
+                const prevMat = idx > 0 ? materials[idx - 1] : null;
+                const isLocked = Boolean(
+                  student &&
+                  m.unlock_after_material_id &&
+                  m.require_completion &&
+                  prevMat &&
+                  !completedMaterials[prevMat.id]
+                );
+
+                return (
+                  <div key={m.id} className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="p-2 rounded-xl border-2 border-black bg-surface text-black">
+                          <BookOpen className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-base text-black">{m.title}</h4>
+                          <span className="text-xs font-normal text-black/60">{fmt(m.created_at)}</span>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-semibold text-base text-black">{m.title}</h4>
-                        <span className="text-xs font-normal text-black/60">{fmt(m.created_at)}</span>
+                      <div className="flex items-center gap-2">
+                        {isLocked && (
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300 flex items-center gap-1">
+                            <Lock className="w-3 h-3" /> Terkunci
+                          </span>
+                        )}
+                        <span className="text-xs font-medium bg-gray-soft px-2.5 py-1 rounded border border-black">
+                          Modul #{idx + 1}
+                        </span>
                       </div>
                     </div>
-                    <span className="text-xs font-medium bg-gray-soft px-2.5 py-1 rounded border border-black">
-                      Modul #{idx + 1}
-                    </span>
+
+                    {/* Penguncian Berurutan (10.4) */}
+                    {isLocked ? (
+                      <div className="p-3.5 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 flex items-center gap-2 text-xs">
+                        <Lock className="w-4 h-4 text-amber-700 shrink-0" />
+                        <span>Selesaikan &apos;{prevMat?.title || 'materi sebelumnya'}&apos; dulu untuk membuka materi ini.</span>
+                      </div>
+                    ) : (
+                      <>
+                        {m.body_md && (
+                          <div className="p-4 rounded-xl border border-black/20 bg-gray-soft/20 text-xs sm:text-sm">
+                            <MarkdownViewer content={m.body_md} />
+                          </div>
+                        )}
+
+                        {student && (
+                          <div className="flex justify-end pt-2">
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                const next = !completedMaterials[m.id];
+                                await toggleMaterialCompleteAction(m.id, next);
+                                setCompletedMaterials((prev) => ({ ...prev, [m.id]: next }));
+                              }}
+                              className={cn(
+                                'btn-outline !w-auto text-xs px-3.5 py-1.5 flex items-center gap-1.5 font-bold',
+                                completedMaterials[m.id] && 'bg-emerald-50 text-emerald-700 border-emerald-500'
+                              )}
+                            >
+                              <Check className="w-3.5 h-3.5" />
+                              <span>{completedMaterials[m.id] ? 'Selesai Dipelajari' : 'Tandai Selesai'}</span>
+                            </button>
+                          </div>
+                        )}
+
+                        {lecturer && (
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-border/40 text-xs">
+                            <span className="text-muted-foreground font-medium">
+                              Tingkat pembacaan modul: 75% mahasiswa
+                            </span>
+                            <button
+                              type="button"
+                              onClick={async () => {
+                                const res = await remindUnreadStudentsAction(m.id, cls.id, m.title);
+                                if (res.ok) {
+                                  setRemindSuccess(`Pengingat membaca modul '${m.title}' berhasil dikirim.`);
+                                  setTimeout(() => setRemindSuccess(null), 4000);
+                                } else {
+                                  alert(res.error);
+                                }
+                              }}
+                              className="btn-outline !w-auto text-xs px-2.5 py-1"
+                            >
+                              Ingatkan Mahasiswa Belum Buka
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
-                  {m.body_md && (
-                    <div className="p-4 rounded-xl border border-black/20 bg-gray-soft/20 text-xs sm:text-sm">
-                      <MarkdownViewer content={m.body_md} />
-                    </div>
-                  )}
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>
@@ -1122,7 +1230,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {/* ======================================================== */}
       {(activeTab === 'presensi' || activeTab === 'bantu-presensi') && (
         <div className="space-y-6">
-          <div className="p-4 bg-gray-soft border-2 border-black rounded-2xl flex items-center justify-between">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h3 className="font-heading font-bold text-lg text-black">
                 {ta ? 'Bantu Presensi Kelas & Sesi Kehadiran' : student ? 'Presensi Perkuliahan Saya' : 'Presensi Perkuliahan Kelas'}
@@ -1135,67 +1243,154 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   : 'Kelola sesi kehadiran pertemuan tatap muka, monitoring QR berputar, dan verifikasi izin dispensasi.'}
               </p>
             </div>
-            {lecturer && (
-              <CreateAttendanceSessionModal classId={cls.id} nextMeetingNumber={attendanceSessions.length + 1} />
-            )}
+            <div className="flex items-center gap-2">
+              {student && (
+                <button
+                  type="button"
+                  onClick={() => setIsAbsenceModalOpen(true)}
+                  className="btn-solid !w-auto text-xs px-3.5 py-2 flex items-center gap-1.5 font-bold"
+                >
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span>Ajukan Izin / Sakit</span>
+                </button>
+              )}
+              {lecturer && (
+                <CreateAttendanceSessionModal classId={cls.id} nextMeetingNumber={attendanceSessions.length + 1} />
+              )}
+            </div>
           </div>
 
-          {attendanceSummary && (
-            <AttendanceSummaryCard
-              summary={{
-                total_sessions: attendanceSummary.total_sessions,
-                hadir_count:
-                  (attendanceSummary as any).hadir_count ??
-                  (attendanceSummary as any).attended_count ??
-                  0,
-                percentage: attendanceSummary.percentage,
-                can_take_uas: attendanceSummary.can_take_uas,
-              }}
-            />
+          {/* Dosen Sub-tab: Sesi vs Permohonan Izin (10.1) */}
+          {lecturer && (
+            <div className="flex items-center gap-2 border-b-2 border-black pb-2">
+              <button
+                type="button"
+                onClick={() => setAttendanceSubTab('sesi')}
+                className={cn(
+                  'px-3.5 py-1.5 text-xs font-bold rounded-xl border border-black transition-all',
+                  attendanceSubTab === 'sesi' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-soft'
+                )}
+              >
+                Sesi Perkuliahan
+              </button>
+              <button
+                type="button"
+                onClick={() => setAttendanceSubTab('permohonan')}
+                className={cn(
+                  'px-3.5 py-1.5 text-xs font-bold rounded-xl border border-black transition-all',
+                  attendanceSubTab === 'permohonan' ? 'bg-black text-white' : 'bg-white text-black hover:bg-gray-soft'
+                )}
+              >
+                Permohonan Izin &amp; Sakit
+              </button>
+            </div>
           )}
 
-          {/* Daftar Sesi Presensi */}
-          <div className="space-y-3">
-            {attendanceSessions.length === 0 ? (
-              <p className="text-xs text-black/60 italic p-6 bg-white rounded-xl border border-black/20 text-center">
-                Belum ada sesi presensi yang dibuat di kelas ini.
-              </p>
-            ) : (
-              attendanceSessions.map((s) => (
-                <div key={s.id} className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                  <div className="flex items-center gap-3.5">
-                    <div className="p-2.5 rounded-xl border-2 border-black bg-gray-soft text-black shrink-0">
-                      <CalendarCheck2 className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-semibold text-sm sm:text-base text-black">{s.title}</h4>
-                        <span className={cn('text-xs font-semibold px-2 py-0.5 rounded border border-black', s.is_open ? 'bg-retro-mint text-black' : 'bg-neutral-200 text-black/60')}>
-                          {s.is_open ? 'BUKA' : 'DITUTUP'}
-                        </span>
+          {lecturer && attendanceSubTab === 'permohonan' ? (
+            <LecturerAbsenceTabView classId={cls.id} />
+          ) : (
+            <>
+              {attendanceSummary && (
+                <AttendanceSummaryCard
+                  summary={{
+                    total_sessions: attendanceSummary.total_sessions,
+                    hadir_count:
+                      (attendanceSummary as any).hadir_count ??
+                      (attendanceSummary as any).attended_count ??
+                      0,
+                    percentage: attendanceSummary.percentage,
+                    can_take_uas: attendanceSummary.can_take_uas,
+                  }}
+                />
+              )}
+
+              {/* Daftar Sesi Presensi */}
+              <div className="space-y-3">
+                {attendanceSessions.length === 0 ? (
+                  <p className="text-xs text-black/60 italic p-6 bg-white rounded-xl border border-black/20 text-center">
+                    Belum ada sesi presensi yang dibuat di kelas ini.
+                  </p>
+                ) : (
+                  attendanceSessions.map((s) => (
+                    <div key={s.id} className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="flex items-center gap-3.5">
+                        <div className="p-2.5 rounded-xl border-2 border-black bg-gray-soft text-black shrink-0">
+                          <CalendarCheck2 className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-semibold text-sm sm:text-base text-black">{s.title}</h4>
+                            <span className={cn('text-xs font-semibold px-2 py-0.5 rounded border border-black', s.is_open ? 'bg-retro-mint text-black' : 'bg-neutral-200 text-black/60')}>
+                              {s.is_open ? 'BUKA' : 'DITUTUP'}
+                            </span>
+                            {s.delivery_mode && s.delivery_mode !== 'luring' && (
+                              <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-primary/10 text-primary border border-primary/20 uppercase">
+                                {s.delivery_mode}
+                              </span>
+                            )}
+                          </div>
+                          <span className="text-xs font-normal text-black/60">
+                            Pertemuan #{s.meeting_number} · {s.date} ({s.start_time} - {s.end_time} WIB)
+                          </span>
+                        </div>
                       </div>
-                      <span className="text-xs font-normal text-black/60">
-                        Pertemuan #{s.meeting_number} · {s.date} ({s.start_time} - {s.end_time} WIB)
-                      </span>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {/* Kuliah Daring Link (10.3) */}
+                        {s.meeting_url && (
+                          <a
+                            href={s.meeting_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1.5 rounded-xl border-2 border-emerald-700 bg-emerald-600 text-white hover:bg-emerald-700 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
+                          >
+                            <Video className="w-3.5 h-3.5" />
+                            <span>Gabung Kuliah Daring</span>
+                          </a>
+                        )}
+
+                        {/* Rekaman Perkuliahan (10.3) */}
+                        {s.recording_url && (
+                          <a
+                            href={s.recording_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="px-3 py-1.5 rounded-xl border-2 border-red-700 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
+                          >
+                            <Play className="w-3.5 h-3.5" />
+                            <span>Tonton Rekaman</span>
+                          </a>
+                        )}
+
+                        {(lecturer || ta) && (
+                          <span className="text-xs font-bold bg-gray-soft border border-black px-2.5 py-1 rounded">
+                            Kode: {s.code}
+                          </span>
+                        )}
+                        <Link
+                          href={`/classes/${cls.id}/attendance`}
+                          className="px-3.5 py-1.5 rounded-xl border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-bold shadow-xs"
+                        >
+                          Detail Sesi &rarr;
+                        </Link>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2.5">
-                    {(lecturer || ta) && (
-                      <span className="text-xs font-bold bg-gray-soft border border-black px-2.5 py-1 rounded">
-                        Kode: {s.code}
-                      </span>
-                    )}
-                    <Link
-                      href={`/classes/${cls.id}/attendance`}
-                      className="px-3.5 py-1.5 rounded-xl border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-bold shadow-xs"
-                    >
-                      Detail Sesi &rarr;
-                    </Link>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
+                  ))
+                )}
+              </div>
+            </>
+          )}
+
+          {/* Modal Permohonan Izin Mahasiswa (10.1) */}
+          <StudentAbsenceModal
+            isOpen={isAbsenceModalOpen}
+            onClose={() => setIsAbsenceModalOpen(false)}
+            availableSessions={attendanceSessions.map((s) => ({
+              id: s.id,
+              sessionNumber: s.meeting_number,
+              sessionDate: s.date,
+              className: cls.title,
+            }))}
+          />
         </div>
       )}
 

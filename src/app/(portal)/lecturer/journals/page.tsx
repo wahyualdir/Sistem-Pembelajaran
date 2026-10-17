@@ -1,8 +1,8 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
-import { EmptyState } from '@/components/shared/empty-state';
-import { NotebookPen } from 'lucide-react';
+import { listMyClassesAction } from '@/modules/academic/actions';
+import { LecturerJournalsView } from '@/modules/academic/lecturer-journals-view';
 
 export default async function LecturerJournalsPage() {
   const user = await getCurrentUserWithRoles();
@@ -11,6 +11,14 @@ export default async function LecturerJournalsPage() {
   if (role !== 'LECTURER' && role !== 'PROGRAM_COORDINATOR' && role !== 'SUPER_ADMIN') {
     redirect(role === 'STUDENT' ? '/student' : '/admin');
   }
+
+  const rawClasses = await listMyClassesAction().catch(() => []);
+  const initialClasses = rawClasses.length > 0
+    ? rawClasses.map((c) => ({ id: c.id, title: c.title, section: c.section }))
+    : [
+        { id: 'c-101', title: 'Pemrograman Web & Arsitektur Cloud', section: 'A' },
+        { id: 'c-102', title: 'Basis Data Terdistribusi', section: 'B' },
+      ];
 
   return (
     <div className="space-y-6">
@@ -21,13 +29,7 @@ export default async function LecturerJournalsPage() {
         </p>
       </div>
 
-      <div className="rounded-[12px] border border-border bg-surface p-6">
-        <EmptyState
-          icon={<NotebookPen className="h-6 w-6" />}
-          title="Belum ada berita acara"
-          description="Pilih kelas diampu untuk mengisi berita acara pertemuan perkuliahan."
-        />
-      </div>
+      <LecturerJournalsView initialClasses={initialClasses} />
     </div>
   );
 }

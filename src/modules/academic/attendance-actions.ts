@@ -46,6 +46,10 @@ export interface AttendanceSession {
   late_threshold_minutes?: number; // default 15 mins
   qr_dynamic_token?: string;
   qr_token_expires_at?: string;
+  delivery_mode?: 'luring' | 'daring' | 'hibrida';
+  meeting_url?: string | null;
+  recording_url?: string | null;
+  recording_visible_from?: string | null;
 }
 
 export interface AttendanceRecord {
@@ -56,6 +60,8 @@ export interface AttendanceRecord {
   status: AttendanceStatus;
   notes?: string;
   recorded_at: string;
+  source?: 'manual' | 'qr' | 'kode' | 'izin_sakit';
+  absence_item_id?: string | null;
 
   // Extended Details
   method?: AttendanceMethod;

@@ -140,14 +140,14 @@ const CACHE_TTL_MS = 60 * 1000;
 /**
  * Membaca kebijakan akademik terkonfigurasi dengan cache 60 detik dan fallback aman bawaan.
  */
-export async function getPolicy<T = any>(key: string): Promise<T> {
+export async function getPolicy<T = any>(key: string, fallbackValue?: T): Promise<T> {
   const now = Date.now();
   const cached = policyCache.get(key);
   if (cached && cached.expiresAt > now) {
     return cached.value as T;
   }
 
-  const defaultValue = DEFAULT_INSTITUTION_POLICIES[key]?.value;
+  const defaultValue = fallbackValue !== undefined ? fallbackValue : DEFAULT_INSTITUTION_POLICIES[key]?.value;
 
   try {
     const isOnline = await checkSupabaseOnline();

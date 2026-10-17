@@ -310,4 +310,41 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Keputusan**: Sanggah nilai (`grade_disputes`) dibatasi jendela pengajuan tepat 7 hari kalender sejak nilai diterbitkan, dengan kuota maksimal 3 sanggahan aktif per mahasiswa per kelas. Jika nilai kelas telah difinalisasi di buku nilai (`gradebook`), persetujuan sanggahan oleh dosen secara otomatis menghasilkan draf `grade_change_requests` untuk diverifikasi oleh Koordinator Program Studi sesuai regulasi akademik universitas.
 - **Alasan**: Memberikan ruang klarifikasi yang adil dan transparan bagi mahasiswa sekaligus menjaga integritas data nilai yang telah dikunci.
 
+### Keputusan 36: Izin dan Sakit Mahasiswa dengan RLS, Bukti Berkas Privat, dan Kebijakan Presensi (Fase 3)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Membuat tabel `absence_requests` dan `absence_request_items` (Migrasi 25) dengan relasi ke pertemuan kelas (`class_sessions`).
+  2. Mahasiswa mengunggah berkas bukti ke bucket privat `absence-proofs` dengan validasi MIME (PDF/JPG/PNG maks 5MB) dan signed URL berumur pendek 60 detik.
+  3. Formulir pengajuan mahasiswa mewajibkan keterangan izin/sakit namun secara eksplisit melarang pencantuman diagnosis medis detail demi privasi.
+  4. Pengesahan keputusan per butir pertemuan (`review_absence_item` RPC) otomatis memperbarui baris `attendance_records` dengan status `excused` atau `sick` dan menandai `source = 'absence_request'`.
+  5. Rumus SQL `attendance_percent(student_id, class_id)` dan helper TypeScript `calcAttendancePercent` menghitung persentase kehadiran dengan mendukung kebijakan `attendance_permission_policy` (`exclude`, `present`, `absent`).
+- **Alasan**: Menjamin transparansi dan validitas proses izin sakit mahasiswa tanpa melanggar privasi medis dan menjaga konsistensi kalkulasi persentase kehadiran untuk syarat kelayakan ujian.
+
+### Keputusan 37: Berita Acara Perkuliahan dengan Kunci Finalisasi dan Hitungan Keterlambatan Pengisian (Fase 3)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Membuat tabel `class_session_journals` dan `journal_materials` (Migrasi 25) dengan status draf dan final.
+  2. Draf berita acara dapat disunting bebas oleh Dosen Pengampu atau Asisten Kelas yang ditugaskan.
+  3. Finalisasi berita acara hanya dapat dilakukan oleh Dosen Pengampu dan mengunci data secara permanen. Bila ada koreksi pasca-finalisasi, setiap pembaruan mencatat nomor versi revisi (`revision_count`) dan alasan perubahan di `revision_reason` serta memicu pencatatan audit log sensitif.
+  4. Keterlambatan pengisian berita acara dihitung secara otomatis dengan batas waktu H+3 pukul 23.59 WIB dari tanggal pertemuan yang diadakan (`isJournalLate`).
+  5. Disediakan ekspor rekapitulasi berita acara kelas ke format Excel (.xlsx) dengan pustaka `exceljs`.
+- **Alasan**: Mematuhi standar penjaminan mutu perkuliahan universitas dan mencegah manipulasi riwayat pelaksanaan perkuliahan.
+
+### Keputusan 38: Kuliah Daring dengan Whitelist Domain Konferensi Video dan Tautan Rekaman Terjadwal (Fase 3)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Menambahkan kolom `delivery_mode` (`tatap_muka`, `daring_sinkron`, `daring_asinkron`, `hybrid`), `meeting_url`, `recording_url`, dan `recording_visible_from` pada `class_sessions` (Migrasi 25).
+  2. Tautan pertemuan online divalidasi ketat hanya dari domain konferensi video tepercaya: Google Meet (`meet.google.com`), Zoom (`zoom.us`), Microsoft Teams (`teams.microsoft.com`), Webex (`webex.com`), dan YouTube (`youtube.com`, `youtu.be`).
+  3. Tombol gabung kuliah daring hanya aktif bagi mahasiswa pada jendela 15 menit sebelum hingga 30 menit setelah waktu selesai sesi. Tautan rekaman hanya dapat diakses mahasiswa setelah waktu `recording_visible_from` tercapai.
+- **Alasan**: Menghindari phising dan tautan berbahaya serta memastikan ketertiban waktu perkuliahan sinkron.
+
+### Keputusan 39: Progres Ketuntasan Materi Berurutan dan Batas Laju Pengingat 24 Jam (Fase 3)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Menambahkan kolom `unlock_after_material_id` dan `require_completion` pada `materials`, serta tabel `material_progress` dengan RLS mahasiswa.
+  2. Materi yang memiliki prasyarat `unlock_after_material_id` terkunci otomatis untuk mahasiswa sampai materi prasyarat ditandai selesai (`completed_at is not null`).
+  3. Dosen dapat memantau daftar mahasiswa yang belum membuka materi dan mengirimkan pengingat ("Ingatkan Mahasiswa Belum Membuka") yang dibatasi laju maksimal 1 kali per 24 jam per materi.
+- **Alasan**: Mendukung alur pembelajaran mandiri yang terstruktur (sequential learning path) dan mencegah spam notifikasi ke mahasiswa.
+
+
 

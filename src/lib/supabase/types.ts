@@ -988,6 +988,172 @@ export interface Database {
           created_at?: string;
         };
       };
+      absence_requests: {
+        Row: {
+          id: string;
+          student_id: string;
+          type: 'izin' | 'sakit';
+          start_date: string;
+          end_date: string;
+          reason: string;
+          attachment_path: string | null;
+          cancelled_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          student_id: string;
+          type: 'izin' | 'sakit';
+          start_date: string;
+          end_date: string;
+          reason: string;
+          attachment_path?: string | null;
+          cancelled_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          student_id?: string;
+          type?: 'izin' | 'sakit';
+          start_date?: string;
+          end_date?: string;
+          reason?: string;
+          attachment_path?: string | null;
+          cancelled_at?: string | null;
+          created_at?: string;
+        };
+      };
+      absence_request_items: {
+        Row: {
+          id: string;
+          request_id: string;
+          class_id: string;
+          session_id: string;
+          status: 'menunggu' | 'disetujui' | 'ditolak';
+          reviewed_by: string | null;
+          reviewed_at: string | null;
+          review_note: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          request_id: string;
+          class_id: string;
+          session_id: string;
+          status?: 'menunggu' | 'disetujui' | 'ditolak';
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          review_note?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          request_id?: string;
+          class_id?: string;
+          session_id?: string;
+          status?: 'menunggu' | 'disetujui' | 'ditolak';
+          reviewed_by?: string | null;
+          reviewed_at?: string | null;
+          review_note?: string | null;
+          created_at?: string;
+        };
+      };
+      class_session_journals: {
+        Row: {
+          id: string;
+          class_id: string;
+          session_id: string;
+          held_on: string;
+          mode: 'luring' | 'daring' | 'hibrida';
+          topic: string;
+          summary: string | null;
+          method: string | null;
+          obstacles: string | null;
+          status: 'draf' | 'final';
+          is_late: boolean;
+          finalized_by: string | null;
+          finalized_at: string | null;
+          revision_count: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          class_id: string;
+          session_id: string;
+          held_on: string;
+          mode: 'luring' | 'daring' | 'hibrida';
+          topic: string;
+          summary?: string | null;
+          method?: string | null;
+          obstacles?: string | null;
+          status?: 'draf' | 'final';
+          is_late?: boolean;
+          finalized_by?: string | null;
+          finalized_at?: string | null;
+          revision_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          class_id?: string;
+          session_id?: string;
+          held_on?: string;
+          mode?: 'luring' | 'daring' | 'hibrida';
+          topic?: string;
+          summary?: string | null;
+          method?: string | null;
+          obstacles?: string | null;
+          status?: 'draf' | 'final';
+          is_late?: boolean;
+          finalized_by?: string | null;
+          finalized_at?: string | null;
+          revision_count?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      journal_materials: {
+        Row: {
+          journal_id: string;
+          material_id: string;
+          created_at: string;
+        };
+        Insert: {
+          journal_id: string;
+          material_id: string;
+          created_at?: string;
+        };
+        Update: {
+          journal_id?: string;
+          material_id?: string;
+          created_at?: string;
+        };
+      };
+      material_progress: {
+        Row: {
+          material_id: string;
+          student_id: string;
+          status: 'dibuka' | 'selesai';
+          first_opened_at: string;
+          completed_at: string | null;
+        };
+        Insert: {
+          material_id: string;
+          student_id: string;
+          status?: 'dibuka' | 'selesai';
+          first_opened_at?: string;
+          completed_at?: string | null;
+        };
+        Update: {
+          material_id?: string;
+          student_id?: string;
+          status?: 'dibuka' | 'selesai';
+          first_opened_at?: string;
+          completed_at?: string | null;
+        };
+      };
     };
     Views: {
       audit_logs_for_sysadmin: {
@@ -1063,6 +1229,21 @@ export interface Database {
           p_group_id: string;
         };
         Returns: boolean;
+      };
+      attendance_percent: {
+        Args: {
+          p_student_id: string;
+          p_class_id: string;
+        };
+        Returns: number;
+      };
+      review_absence_item: {
+        Args: {
+          p_item_id: string;
+          p_decision: string;
+          p_note?: string | null;
+        };
+        Returns: Json;
       };
     };
   };
