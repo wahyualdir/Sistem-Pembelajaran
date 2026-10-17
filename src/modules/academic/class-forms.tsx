@@ -7,13 +7,13 @@ import { createClassAction, joinClassAction, type CourseItem, type SemesterItem 
 export function Feedback({ error, success, tick }: { error: string; success: string; tick: number }) {
   if (error)
     return (
-      <p key={tick} role="alert" className="shake text-sm text-danger">
+      <p key={tick} role="alert" className="shake text-sm text-primary-dark">
         {error}
       </p>
     );
   if (success)
     return (
-      <p role="status" className="animate-fade-up text-sm text-success">
+      <p role="status" className="animate-fade-up text-sm text-ink">
         {success}
       </p>
     );
@@ -61,7 +61,7 @@ export function JoinClassForm() {
           placeholder="8 karakter"
           disabled={pending}
           required
-          className="field max-w-[11rem] font-mono uppercase tracking-[0.2em]"
+          className="field max-w-[11rem] font-sans uppercase tracking-[0.2em]"
         />
         <button type="submit" disabled={pending} data-pending={pending} className="btn-solid !w-auto px-5">
           {pending ? 'Memeriksa...' : 'Gabung'}

@@ -63,7 +63,7 @@ export function PortalNav({
     <nav aria-label="Navigasi utama" className="flex-1 space-y-4 overflow-y-auto p-3">
       {groups.map((group) => (
         <div key={group.id} className="space-y-1.5">
-          <p className="px-3 text-xs font-black uppercase tracking-wider text-gray-dark font-mono">
+          <p className="px-3 text-xs font-bold uppercase tracking-wider text-gray-dark font-sans">
             {group.title}
           </p>
           <div className="space-y-1">
@@ -79,7 +79,7 @@ export function PortalNav({
                   className={cn(
                     'group flex items-center justify-between rounded-control px-3 py-2 min-h-[42px] text-sm sm:text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
                     isActive
-                      ? 'border-2 border-ink border-l-4 border-l-primary bg-ink text-white font-black shadow-retro-sm'
+                      ? 'border-2 border-ink border-l-4 border-l-primary bg-ink text-white font-bold shadow-retro-sm'
                       : 'text-ink hover:bg-gray-soft hover:text-ink'
                   )}
                 >
@@ -95,7 +95,7 @@ export function PortalNav({
                   {item.badge !== undefined && (
                     <span
                       className={cn(
-                        'inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-black font-mono',
+                        'inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold font-sans',
                         isActive ? 'bg-surface text-ink' : 'bg-primary text-white'
                       )}
                     >

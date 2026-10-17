@@ -76,7 +76,7 @@ export function AdminUktView({ initialTagihan }: AdminUktViewProps) {
   return (
     <div className="space-y-4">
       {feedback && (
-        <div className="rounded-[8px] bg-success-soft border border-success-border p-3 text-xs text-success flex justify-between items-center">
+        <div className="rounded-[8px] bg-surface border border-ink p-3 text-xs text-ink flex justify-between items-center">
           <span>{feedback}</span>
           <button onClick={() => setFeedback(null)} className="font-semibold">
             Tutup
@@ -168,7 +168,7 @@ export function AdminUktView({ initialTagihan }: AdminUktViewProps) {
                           setDispensasiTarget(t);
                           setAlasanDispensasi("Permohonan cicilan pembayaran UKT");
                         }}
-                        className="h-8 px-2 text-xs text-warning hover:text-warning"
+                        className="h-8 px-2 text-xs text-ink hover:text-ink"
                       >
                         <Clock className="h-3.5 w-3.5 mr-1" />
                         Dispensasi
@@ -176,7 +176,7 @@ export function AdminUktView({ initialTagihan }: AdminUktViewProps) {
                     </>
                   )}
                   {t.status === "LUNAS" && (
-                    <span className="text-xs text-success flex items-center gap-1">
+                    <span className="text-xs text-ink flex items-center gap-1">
                       <ShieldCheck className="h-4 w-4" />
                       Terverifikasi
                     </span>

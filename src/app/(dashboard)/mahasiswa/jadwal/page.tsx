@@ -70,7 +70,7 @@ export default async function MahasiswaJadwalPage() {
           <div>
             <div className="flex items-center gap-2.5">
               <CalendarDays className="h-6 w-6 text-primary" />
-              <h1 className="text-2xl sm:text-3xl font-black text-foreground font-heading tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-foreground font-heading tracking-tight">
                 Jadwal Perkuliahan Mingguan
               </h1>
             </div>
@@ -79,7 +79,7 @@ export default async function MahasiswaJadwalPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center px-4 py-1.5 rounded-md border-2 border-retro-border bg-retro-warm text-foreground text-sm font-bold shadow-xs">
+            <span className="inline-flex items-center px-4 py-1.5 rounded-md border-2 border-retro-border bg-gray-soft text-foreground text-sm font-bold shadow-xs">
               Aktif: 6 Hari Kuliah
             </span>
           </div>
@@ -96,14 +96,14 @@ export default async function MahasiswaJadwalPage() {
               className="flex flex-col rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro overflow-hidden transition-all hover:-translate-y-0.5"
             >
               {/* Header Hari */}
-              <div className="py-3 px-4 bg-retro-warm border-b-2 border-retro-border flex flex-row items-center justify-between">
+              <div className="py-3 px-4 bg-gray-soft border-b-2 border-retro-border flex flex-row items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="h-3 w-3 rounded-full border border-retro-border bg-primary" />
                   <span className="text-sm font-bold uppercase tracking-wider text-foreground">
                     {day}
                   </span>
                 </div>
-                <span className="text-xs sm:text-sm font-bold text-foreground rounded-full border border-retro-border bg-retro-yellow px-3 py-1 shadow-xs">
+                <span className="text-xs sm:text-sm font-bold text-foreground rounded-full border border-retro-border bg-gray-soft px-3 py-1 shadow-xs">
                   {list.length} Kelas
                 </span>
               </div>
@@ -118,7 +118,7 @@ export default async function MahasiswaJadwalPage() {
                   list.map((item, idx) => (
                     <div
                       key={idx}
-                      className="rounded-lg border-2 border-retro-border p-3.5 space-y-2.5 bg-retro-bg hover:bg-retro-warm/40 transition-colors shadow-xs"
+                      className="rounded-lg border-2 border-retro-border p-3.5 space-y-2.5 bg-retro-bg hover:bg-gray-soft/40 transition-colors shadow-xs"
                     >
                       <div className="flex items-start justify-between gap-2.5">
                         <h4 className="font-bold text-sm sm:text-base text-foreground leading-snug">

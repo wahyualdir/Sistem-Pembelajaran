@@ -45,7 +45,7 @@ export function SystemMonitoringHubView() {
       <RetroWindow
         title="monitoring_sistem_infrastruktur.app"
         badge="SYSTEM_ADMIN :: TELEMETRY"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -54,7 +54,7 @@ export function SystemMonitoringHubView() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <Activity className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
                 Monitoring Sistem & Infrastruktur
               </h1>
             </div>
@@ -64,10 +64,10 @@ export function SystemMonitoringHubView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black font-mono text-xs font-bold shadow-retro-sm ${
-              isDemo ? 'bg-emerald-100 text-emerald-950' : 'bg-retro-warm text-black'
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black font-sans text-xs font-bold shadow-retro-sm ${
+              isDemo ? 'bg-surface text-ink' : 'bg-gray-soft text-black'
             }`}>
-              <span className={`h-2.5 w-2.5 rounded-full ${isDemo ? 'bg-emerald-600 animate-pulse' : 'bg-black/40'}`} />
+              <span className={`h-2.5 w-2.5 rounded-full ${isDemo ? 'bg-gray-dark animate-pulse' : 'bg-black/40'}`} />
               {isDemo ? 'NODES 4/4 SEHAT' : (dbConnected ? 'DATABASE TERKONEKSI' : 'TELEMETRI: OFFLINE')}
             </span>
           </div>
@@ -76,53 +76,53 @@ export function SystemMonitoringHubView() {
         {/* 4 KARTU METRIK UTAMA */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-6 pt-6 border-t-2 border-black/10">
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
-            <div className="flex items-center justify-between text-black/60 text-xs font-mono font-bold uppercase">
+            <div className="flex items-center justify-between text-black/60 text-xs font-sans font-bold uppercase">
               <span>CPU Load Avg</span>
               <Cpu className="h-4 w-4" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black font-mono text-black mt-1">
+            <div className="text-2xl sm:text-3xl font-bold font-sans text-black mt-1">
               {isDemo ? '18.4%' : 'Tidak tersedia'}
             </div>
-            <div className="text-xs font-mono text-black/60 mt-1">
+            <div className="text-xs font-sans text-black/60 mt-1">
               {isDemo ? '✓ Beban Normal (8 Core)' : 'OS metrics offline'}
             </div>
           </div>
 
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
-            <div className="flex items-center justify-between text-black/60 text-xs font-mono font-bold uppercase">
+            <div className="flex items-center justify-between text-black/60 text-xs font-sans font-bold uppercase">
               <span>Memory Usage</span>
               <HardDrive className="h-4 w-4" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black font-mono text-black mt-1">
+            <div className="text-2xl sm:text-3xl font-bold font-sans text-black mt-1">
               {isDemo ? '4.2 / 16 GB' : 'Tidak tersedia'}
             </div>
-            <div className="text-xs font-mono text-black/60 mt-1">
+            <div className="text-xs font-sans text-black/60 mt-1">
               {isDemo ? '✓ Swap 0% Terpakai' : 'OS metrics offline'}
             </div>
           </div>
 
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
-            <div className="flex items-center justify-between text-black/60 text-xs font-mono font-bold uppercase">
+            <div className="flex items-center justify-between text-black/60 text-xs font-sans font-bold uppercase">
               <span>WS Sesi Aktif</span>
               <Radio className="h-4 w-4" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black font-mono text-black mt-1">
+            <div className="text-2xl sm:text-3xl font-bold font-sans text-black mt-1">
               {isDemo ? '142 Conn' : 'Tidak tersedia'}
             </div>
-            <div className="text-xs font-mono text-black/60 mt-1">
+            <div className="text-xs font-sans text-black/60 mt-1">
               {isDemo ? '✓ Throughput 1.2k req/s' : 'WebSocket metrics offline'}
             </div>
           </div>
 
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
-            <div className="flex items-center justify-between text-black/60 text-xs font-mono font-bold uppercase">
+            <div className="flex items-center justify-between text-black/60 text-xs font-sans font-bold uppercase">
               <span>Antrean Sandbox</span>
               <Code className="h-4 w-4" />
             </div>
-            <div className="text-2xl sm:text-3xl font-black font-mono text-black mt-1">
+            <div className="text-2xl sm:text-3xl font-bold font-sans text-black mt-1">
               {isDemo ? '0 Antrean' : 'Belum dikonfigurasi'}
             </div>
-            <div className="text-xs font-mono text-black/60 mt-1">
+            <div className="text-xs font-sans text-black/60 mt-1">
               {isDemo ? '✓ Latensi Uji 210ms' : 'Judge0 belum terhubung'}
             </div>
           </div>
@@ -143,10 +143,10 @@ export function SystemMonitoringHubView() {
             <button
               key={t.id}
               onClick={() => setTab(t.id as MonitoringTab)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold font-mono transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold font-sans transition-all cursor-pointer ${
                 isActive
                   ? 'bg-black text-white shadow-retro'
-                  : 'bg-white hover:bg-retro-warm text-black shadow-retro-sm'
+                  : 'bg-white hover:bg-gray-soft text-black shadow-retro-sm'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -164,17 +164,17 @@ export function SystemMonitoringHubView() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
               <div className="flex items-center justify-between border-b-2 border-black pb-3">
-                <h3 className="font-heading font-black text-lg text-black flex items-center gap-2">
+                <h3 className="font-heading font-bold text-lg text-black flex items-center gap-2">
                   <Database className="h-5 w-5 text-primary" />
                   <span>Klaster Basis Data PostgreSQL</span>
                 </h3>
-                <span className={`px-2 py-0.5 rounded border text-xs font-mono font-bold ${
-                  isDemo || dbConnected ? 'border-emerald-500 bg-emerald-100 text-emerald-950' : 'border-black bg-retro-warm text-black'
+                <span className={`px-2 py-0.5 rounded border text-xs font-sans font-bold ${
+                  isDemo || dbConnected ? 'border-ink bg-surface text-ink' : 'border-black bg-gray-soft text-black'
                 }`}>
                   {isDemo || dbConnected ? 'HEALTHY' : 'BELUM TERHUBUNG'}
                 </span>
               </div>
-              <div className="space-y-2 text-xs font-mono">
+              <div className="space-y-2 text-xs font-sans">
                 <div className="flex justify-between py-1 border-b border-black/10">
                   <span className="text-black/60">Host Target</span>
                   <span className="font-bold text-black">{isDemo ? 'db.siajar.ac.id (Multi-AZ)' : (process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Supabase Managed Cluster' : 'Belum dikonfigurasi')}</span>
@@ -196,15 +196,15 @@ export function SystemMonitoringHubView() {
 
             <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
               <div className="flex items-center justify-between border-b-2 border-black pb-3">
-                <h3 className="font-heading font-black text-lg text-black flex items-center gap-2">
+                <h3 className="font-heading font-bold text-lg text-black flex items-center gap-2">
                   <Server className="h-5 w-5 text-primary" />
                   <span>Next.js App Server Instances</span>
                 </h3>
-                <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-mono font-bold">
+                <span className="px-2 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-sans font-bold">
                   RUNNING
                 </span>
               </div>
-              <div className="space-y-2 text-xs font-mono">
+              <div className="space-y-2 text-xs font-sans">
                 <div className="flex justify-between py-1 border-b border-black/10">
                   <span className="text-black/60">Versi Runtime</span>
                   <span className="font-bold text-black">Next.js 14.2 / Node.js 20 LTS</span>
@@ -231,19 +231,19 @@ export function SystemMonitoringHubView() {
       {activeTab === 'realtime-websocket' && (
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
-            <h3 className="font-heading font-black text-lg text-black">
+            <h3 className="font-heading font-bold text-lg text-black">
               Kanal Siaran Realtime Ujian & Presensi
             </h3>
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               {isDemo ? 'Pembaruan per 5 detik' : 'Status: Belum dikonfigurasi'}
             </span>
           </div>
 
           {!isDemo ? (
-            <div className="p-8 text-center border-2 border-dashed border-black/30 rounded-xl bg-retro-warm/20 space-y-2">
+            <div className="p-8 text-center border-2 border-dashed border-black/30 rounded-xl bg-gray-soft/20 space-y-2">
               <Radio className="h-10 w-10 text-black/40 mx-auto" />
-              <p className="text-sm font-mono font-bold text-black">Belum ada kanal siaran aktif</p>
-              <p className="text-xs font-mono text-black/60">
+              <p className="text-sm font-sans font-bold text-black">Belum ada kanal siaran aktif</p>
+              <p className="text-xs font-sans text-black/60">
                 Layanan WebSocket broadcast belum terhubung ke klaster telemetri eksternal.
               </p>
             </div>
@@ -251,7 +251,7 @@ export function SystemMonitoringHubView() {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm border-collapse">
                 <thead>
-                  <tr className="border-b-2 border-black bg-retro-warm font-mono font-black text-black">
+                  <tr className="border-b-2 border-black bg-gray-soft font-sans font-bold text-black">
                     <th className="p-3">Nama Kanal</th>
                     <th className="p-3">Penggunaan</th>
                     <th className="p-3 text-center">Koneksi Aktif</th>
@@ -259,27 +259,27 @@ export function SystemMonitoringHubView() {
                     <th className="p-3 text-center">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y border-b border-black font-mono">
+                <tbody className="divide-y border-b border-black font-sans">
                   <tr>
                     <td className="p-3 font-bold text-black">exam-telemetry:ex-301</td>
                     <td className="p-3 text-black/80 font-sans">Kuis Rekayasa Perangkat Lunak</td>
                     <td className="p-3 text-center font-bold">42</td>
-                    <td className="p-3 text-center text-emerald-800">18.5</td>
-                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">AKTIF</span></td>
+                    <td className="p-3 text-center text-ink">18.5</td>
+                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-bold">AKTIF</span></td>
                   </tr>
                   <tr>
                     <td className="p-3 font-bold text-black">attendance-live:sess-102</td>
                     <td className="p-3 text-black/80 font-sans">Presensi Dinamis QR Kelas IF-3A</td>
                     <td className="p-3 text-center font-bold">38</td>
-                    <td className="p-3 text-center text-emerald-800">4.2</td>
-                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">AKTIF</span></td>
+                    <td className="p-3 text-center text-ink">4.2</td>
+                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-bold">AKTIF</span></td>
                   </tr>
                   <tr>
                     <td className="p-3 font-bold text-black">notifications:broadcast</td>
                     <td className="p-3 text-black/80 font-sans">Pemberitahuan Sistem & Maklumat Kampus</td>
                     <td className="p-3 text-center font-bold">142</td>
-                    <td className="p-3 text-center text-emerald-800">0.8</td>
-                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">AKTIF</span></td>
+                    <td className="p-3 text-center text-ink">0.8</td>
+                    <td className="p-3 text-center"><span className="px-2 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-bold">AKTIF</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -292,14 +292,14 @@ export function SystemMonitoringHubView() {
       {activeTab === 'antrean-sandbox' && (
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
-            <h3 className="font-heading font-black text-lg text-black">
+            <h3 className="font-heading font-bold text-lg text-black">
               Pekerja Eksekusi Sandbox Kode Terisolasi
             </h3>
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               {isDemo ? 'Worker Idle: 4/4 Tersedia' : 'Status: Belum dikonfigurasi'}
             </span>
           </div>
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-lg text-xs font-mono space-y-2">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-lg text-xs font-sans space-y-2">
             <p><strong>Batas Sumber Daya Eksekusi (Sandbox Constraints):</strong></p>
             <ul className="list-disc pl-5 space-y-1 text-black/80">
               <li>Maksimal waktu CPU per run: 5.0 detik (Timeout otomatis)</li>
@@ -315,14 +315,14 @@ export function SystemMonitoringHubView() {
       {activeTab === 'log-error' && (
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
-            <h3 className="font-heading font-black text-lg text-black">
+            <h3 className="font-heading font-bold text-lg text-black">
               Log Pengecualian & Catatan Kesalahan Sistem
             </h3>
-            <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-mono font-bold">
+            <span className="px-2 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-sans font-bold">
               0 CRITICAL ERRORS
             </span>
           </div>
-          <div className="p-8 text-center text-black/60 font-mono text-xs border-2 border-dashed border-black/20 rounded-xl">
+          <div className="p-8 text-center text-black/60 font-sans text-xs border-2 border-dashed border-black/20 rounded-xl">
             Tidak ada error kritis level 500 yang tercatat dalam 24 jam terakhir. Sistem beroperasi stabil.
           </div>
         </div>

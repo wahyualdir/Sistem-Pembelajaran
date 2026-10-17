@@ -51,7 +51,7 @@ export default async function StaffPortalPage() {
       <RetroWindow
         title="staf_master_data_akademik.portal"
         badge="ROLE: STAF AKADEMIK"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-6 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -60,7 +60,7 @@ export default async function StaffPortalPage() {
               <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-xs">
                 <Database className="h-5 w-5" />
               </div>
-              <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
                 Master Data Akademik Kampus
               </h1>
             </div>
@@ -71,7 +71,7 @@ export default async function StaffPortalPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="rounded-full border border-retro-border bg-retro-warm px-3 py-1 text-xs font-mono font-bold text-foreground">
+            <span className="rounded-full border border-retro-border bg-gray-soft px-3 py-1 text-xs font-sans font-bold text-foreground">
               BAAK UIR
             </span>
           </div>
@@ -79,23 +79,23 @@ export default async function StaffPortalPage() {
 
         {/* 3 Kartu Metrik Ringkasan Data Master */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-5 border-t border-retro-border/40 mt-5">
-          <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/70 shadow-xs flex items-center gap-3">
+          <div className="p-3.5 rounded-lg border border-retro-border bg-gray-soft/70 shadow-xs flex items-center gap-3">
             <div className="p-2 rounded border border-retro-border bg-retro-surface text-primary">
               <GraduationCap className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Program Studi</p>
-              <p className="font-heading font-black text-2xl text-foreground leading-tight">{programs.length}</p>
+              <p className="text-xs font-sans font-bold text-muted-foreground uppercase">Program Studi</p>
+              <p className="font-heading font-bold text-2xl text-foreground leading-tight">{programs.length}</p>
             </div>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-retro-border bg-retro-yellow/40 shadow-xs flex items-center gap-3">
+          <div className="p-3.5 rounded-lg border border-retro-border bg-gray-soft/40 shadow-xs flex items-center gap-3">
             <div className="p-2 rounded border border-retro-border bg-retro-surface text-foreground">
               <CalendarDays className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-mono font-bold text-foreground uppercase">Semester Akademik</p>
-              <p className="font-heading font-black text-2xl text-foreground leading-tight">{semesters.length}</p>
+              <p className="text-xs font-sans font-bold text-foreground uppercase">Semester Akademik</p>
+              <p className="font-heading font-bold text-2xl text-foreground leading-tight">{semesters.length}</p>
             </div>
           </div>
 
@@ -104,8 +104,8 @@ export default async function StaffPortalPage() {
               <BookOpen className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-mono font-bold text-foreground uppercase">Katalog Mata Kuliah</p>
-              <p className="font-heading font-black text-2xl text-foreground leading-tight">{courses.length}</p>
+              <p className="text-xs font-sans font-bold text-foreground uppercase">Katalog Mata Kuliah</p>
+              <p className="font-heading font-bold text-2xl text-foreground leading-tight">{courses.length}</p>
             </div>
           </div>
         </div>
@@ -117,18 +117,18 @@ export default async function StaffPortalPage() {
         <RetroWindow
           title="master_program_studi.tbl"
           badge={`${programs.length} PRODI`}
-          headerClassName="bg-retro-warm"
+          headerClassName="bg-gray-soft"
           bodyClassName="p-5 space-y-4"
         >
           <div className="space-y-1">
-            <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
+            <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
               <GraduationCap className="h-4 w-4 text-primary" />
               <span>Program Studi</span>
             </h2>
             <p className="text-xs text-muted-foreground">Tambah kode dan nama program studi baru.</p>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/40">
+          <div className="p-3.5 rounded-lg border border-retro-border bg-gray-soft/40">
             <QuickAdd
               action={createProgramAction}
               submitLabel="Tambah Program Studi"
@@ -141,7 +141,7 @@ export default async function StaffPortalPage() {
           </div>
 
           <div className="space-y-2">
-            <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Daftar Prodi Terdaftar:</p>
+            <p className="text-xs font-sans font-bold text-muted-foreground uppercase">Daftar Prodi Terdaftar:</p>
             {programs.length === 0 ? (
               <p className="text-xs text-muted-foreground py-3 text-center border border-dashed border-retro-border rounded">
                 Belum ada program studi.
@@ -149,9 +149,9 @@ export default async function StaffPortalPage() {
             ) : (
               <div className="divide-y divide-retro-border/30 border border-retro-border rounded-lg bg-retro-surface overflow-hidden">
                 {programs.map((p) => (
-                  <div key={p.id} className="p-3 flex items-center justify-between text-xs hover:bg-retro-warm/30 transition-colors">
+                  <div key={p.id} className="p-3 flex items-center justify-between text-xs hover:bg-gray-soft/30 transition-colors">
                     <span className="font-bold text-foreground">{p.name}</span>
-                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-xs">
+                    <span className="font-sans font-bold px-2 py-0.5 rounded bg-gray-soft border border-retro-border text-xs">
                       {p.code}
                     </span>
                   </div>
@@ -165,18 +165,18 @@ export default async function StaffPortalPage() {
         <RetroWindow
           title="master_semester_akademik.tbl"
           badge={`${semesters.length} PERIODE`}
-          headerClassName="bg-retro-warm"
+          headerClassName="bg-gray-soft"
           bodyClassName="p-5 space-y-4"
         >
           <div className="space-y-1">
-            <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
+            <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
               <CalendarDays className="h-4 w-4 text-primary" />
               <span>Semester Akademik</span>
             </h2>
             <p className="text-xs text-muted-foreground">Tambah tahun dan periode semester perkuliahan.</p>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/40">
+          <div className="p-3.5 rounded-lg border border-retro-border bg-gray-soft/40">
             <QuickAdd
               action={createSemesterAction}
               submitLabel="Tambah Semester"
@@ -188,7 +188,7 @@ export default async function StaffPortalPage() {
           </div>
 
           <div className="space-y-2">
-            <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Daftar Semester Aktif & Arsip:</p>
+            <p className="text-xs font-sans font-bold text-muted-foreground uppercase">Daftar Semester Aktif & Arsip:</p>
             {semesters.length === 0 ? (
               <p className="text-xs text-muted-foreground py-3 text-center border border-dashed border-retro-border rounded">
                 Belum ada semester.
@@ -196,9 +196,9 @@ export default async function StaffPortalPage() {
             ) : (
               <div className="divide-y divide-retro-border/30 border border-retro-border rounded-lg bg-retro-surface overflow-hidden">
                 {semesters.map((s) => (
-                  <div key={s.id} className="p-3 flex items-center justify-between text-xs hover:bg-retro-warm/30 transition-colors">
+                  <div key={s.id} className="p-3 flex items-center justify-between text-xs hover:bg-gray-soft/30 transition-colors">
                     <span className="font-bold text-foreground">{s.label}</span>
-                    <span className="font-mono font-bold px-2 py-0.5 rounded bg-retro-mint text-black border border-retro-border text-xs shadow-xs">
+                    <span className="font-sans font-bold px-2 py-0.5 rounded bg-retro-mint text-black border border-retro-border text-xs shadow-xs">
                       AKTIF
                     </span>
                   </div>
@@ -213,11 +213,11 @@ export default async function StaffPortalPage() {
       <RetroWindow
         title={`master_katalog_mata_kuliah.tbl (${courses.length} MATA KULIAH)`}
         badge="KURIKULUM"
-        headerClassName="bg-retro-warm"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 space-y-4"
       >
         <div className="space-y-1">
-          <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
+          <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
             <BookOpen className="h-4 w-4 text-primary" />
             <span>Katalog Mata Kuliah</span>
           </h2>
@@ -231,7 +231,7 @@ export default async function StaffPortalPage() {
             Harap tambahkan program studi terlebih dahulu sebelum memasukkan mata kuliah.
           </p>
         ) : (
-          <div className="p-4 rounded-lg border border-retro-border bg-retro-warm/40">
+          <div className="p-4 rounded-lg border border-retro-border bg-gray-soft/40">
             <QuickAdd
               action={createCourseAction}
               submitLabel="Tambah Mata Kuliah"
@@ -252,7 +252,7 @@ export default async function StaffPortalPage() {
         )}
 
         <div className="space-y-2">
-          <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Daftar Mata Kuliah Tersedia:</p>
+          <p className="text-xs font-sans font-bold text-muted-foreground uppercase">Daftar Mata Kuliah Tersedia:</p>
           {courses.length === 0 ? (
             <p className="text-xs text-muted-foreground py-4 text-center border border-dashed border-retro-border rounded">
               Belum ada mata kuliah terdaftar.
@@ -262,13 +262,13 @@ export default async function StaffPortalPage() {
               {courses.map((c) => (
                 <div
                   key={c.id}
-                  className="p-3 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm/30 transition-all space-y-2"
+                  className="p-3 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-retro hover:bg-gray-soft/30 transition-all space-y-2"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-xs bg-retro-yellow text-black border border-retro-border px-2 py-0.5 rounded shadow-xs">
+                    <span className="font-sans font-bold text-xs bg-gray-soft text-black border border-retro-border px-2 py-0.5 rounded shadow-xs">
                       {c.code}
                     </span>
-                    <span className="font-bold text-xs bg-retro-warm border border-retro-border px-2 py-0.5 rounded text-foreground">
+                    <span className="font-bold text-xs bg-gray-soft border border-retro-border px-2 py-0.5 rounded text-foreground">
                       {c.credits} SKS
                     </span>
                   </div>
@@ -276,7 +276,7 @@ export default async function StaffPortalPage() {
                     <h3 className="font-heading font-bold text-sm text-foreground leading-tight line-clamp-1">
                       {c.name}
                     </h3>
-                    <p className="text-xs text-muted-foreground font-mono mt-1">
+                    <p className="text-xs text-muted-foreground font-sans mt-1">
                       Prodi: {c.program_code}
                     </p>
                   </div>

@@ -71,7 +71,7 @@ export default function ForumPage() {
       <RetroWindow
         title="forum_diskusi_komunitas.app"
         badge="Komunitas Aktif"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -80,7 +80,7 @@ export default function ForumPage() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <MessageSquare className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Forum Komunitas Umum
               </h1>
             </div>
@@ -92,7 +92,7 @@ export default function ForumPage() {
           <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-black text-white font-heading font-black text-sm sm:text-base shadow-retro hover:bg-neutral-800 transition-all shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-black text-white font-heading font-bold text-sm sm:text-base shadow-retro hover:bg-neutral-800 transition-all shrink-0"
             >
               <PlusCircle className="h-4 w-4" />
               <span>Buat Topik Diskusi</span>
@@ -111,12 +111,12 @@ export default function ForumPage() {
             <div className="space-y-3.5">
               {/* Header Badges */}
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-mono text-xs sm:text-sm font-black px-3 py-1 rounded border-2 border-black bg-retro-warm text-black shadow-xs">
+                <span className="font-sans text-xs sm:text-sm font-bold px-3 py-1 rounded border-2 border-black bg-gray-soft text-black shadow-xs">
                   {th.category}
                 </span>
 
                 {th.isPinned && (
-                  <span className="inline-flex items-center gap-1.5 font-mono text-xs sm:text-sm font-black text-black bg-retro-yellow px-2.5 py-1 rounded border-2 border-black shadow-xs">
+                  <span className="inline-flex items-center gap-1.5 font-sans text-xs sm:text-sm font-bold text-black bg-gray-soft px-2.5 py-1 rounded border-2 border-black shadow-xs">
                     <Pin className="h-3.5 w-3.5 fill-black text-black" />
                     <span>Disematkan</span>
                   </span>
@@ -125,7 +125,7 @@ export default function ForumPage() {
 
               {/* Title & Excerpt */}
               <div className="space-y-2">
-                <h2 className="font-heading font-black text-xl sm:text-2xl text-black leading-snug line-clamp-2">
+                <h2 className="font-heading font-bold text-xl sm:text-2xl text-black leading-snug line-clamp-2">
                   {th.title}
                 </h2>
                 <p className="text-sm sm:text-base text-neutral-800 font-medium leading-relaxed">
@@ -136,16 +136,16 @@ export default function ForumPage() {
               {/* Author Info */}
               <div className="pt-2 text-xs sm:text-sm text-neutral-900 font-medium flex items-center justify-between">
                 <span>
-                  Oleh <strong className="text-black font-black">{th.author}</strong> ({th.authorRole})
+                  Oleh <strong className="text-black font-bold">{th.author}</strong> ({th.authorRole})
                 </span>
-                <span className="text-neutral-700 font-mono">
+                <span className="text-neutral-700 font-sans">
                   Aktif: {th.lastActive}
                 </span>
               </div>
             </div>
 
             {/* Bottom Meta & Action */}
-            <div className="pt-3.5 border-t-2 border-black/10 flex items-center justify-between text-xs sm:text-sm font-mono font-bold">
+            <div className="pt-3.5 border-t-2 border-black/10 flex items-center justify-between text-xs sm:text-sm font-sans font-bold">
               <div className="flex items-center gap-4 text-black">
                 <span className="flex items-center gap-1.5">
                   <MessageCircle className="h-4 w-4 text-primary" />
@@ -159,7 +159,7 @@ export default function ForumPage() {
 
               <button
                 type="button"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-retro-yellow text-black font-heading font-black text-xs sm:text-sm hover:bg-black hover:text-white shadow-xs transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-gray-soft text-black font-heading font-bold text-xs sm:text-sm hover:bg-black hover:text-white shadow-xs transition-all"
               >
                 <span>Lihat Diskusi</span>
                 <ArrowRight className="h-4 w-4" />

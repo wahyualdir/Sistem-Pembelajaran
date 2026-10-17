@@ -100,7 +100,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                 {primary.badge && (
                   <span
                     className={cn(
-                      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-black border-2 border-ink uppercase tracking-wider',
+                      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-bold border-2 border-ink uppercase tracking-wider',
                       isUrgent
                         ? 'bg-primary-dark text-white'
                         : 'bg-gray-soft text-ink'
@@ -116,7 +116,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                     type="button"
                     onClick={() => setShowOthersModal(true)}
                     className={cn(
-                      'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-black border-2 border-ink transition-all hover:scale-105 focus-visible:outline-none cursor-pointer',
+                      'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-bold border-2 border-ink transition-all hover:scale-105 focus-visible:outline-none cursor-pointer',
                       isUrgent
                         ? 'bg-surface text-ink hover:bg-surface shadow-xs'
                         : 'bg-surface/20 text-white hover:bg-surface/30 shadow-xs'
@@ -131,7 +131,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
 
               <h2
                 className={cn(
-                  'font-heading font-black text-base sm:text-lg lg:text-xl tracking-tight leading-snug break-words line-clamp-2',
+                  'font-heading font-bold text-base sm:text-lg lg:text-xl tracking-tight leading-snug break-words line-clamp-2',
                   isUrgent ? 'text-ink' : 'text-white'
                 )}
               >
@@ -154,7 +154,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
             <Link
               href={primary.buttonHref}
               className={cn(
-                'inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl border-2 border-ink font-heading font-black text-sm sm:text-base transition-all focus-visible:outline-none active:translate-y-0.5 shadow-retro w-full md:w-auto text-center',
+                'inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl border-2 border-ink font-heading font-bold text-sm sm:text-base transition-all focus-visible:outline-none active:translate-y-0.5 shadow-retro w-full md:w-auto text-center',
                 isUrgent
                   ? 'bg-ink text-white hover:bg-ink/90 hover:scale-[1.02]'
                   : 'bg-gray-soft text-ink hover:bg-surface hover:scale-[1.02]'
@@ -180,7 +180,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                 <span className="inline-block p-1.5 rounded-lg bg-primary-dark text-white border border-ink">
                   <AlertCircle className="h-4 w-4" />
                 </span>
-                <h3 className="font-heading font-black text-lg sm:text-xl text-ink">
+                <h3 className="font-heading font-bold text-lg sm:text-xl text-ink">
                   Aksi Mendesak Lainnya ({others.length})
                 </h3>
               </div>
@@ -204,7 +204,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                     <span className="inline-block px-2 py-0.5 rounded text-xs font-sans font-bold bg-primary-dark text-white border border-ink">
                       {item.badge || `Prioritas ${item.priority}`}
                     </span>
-                    <h4 className="font-heading font-black text-base text-ink truncate">
+                    <h4 className="font-heading font-bold text-base text-ink truncate">
                       {item.title}
                     </h4>
                     <p className="text-xs text-gray-dark truncate">{item.subtitle}</p>

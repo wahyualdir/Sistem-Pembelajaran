@@ -94,8 +94,8 @@ export default function AdminKalenderPage() {
         <div
           className={`flex items-center gap-2 rounded-[8px] p-3 text-sm font-medium ${
             pesanNotif.tipe === "sukses"
-              ? "bg-success-soft text-success border border-success-border"
-              : "bg-danger/10 text-danger border border-danger/20"
+              ? "bg-surface text-ink border border-ink"
+              : "bg-primary/10 text-primary-dark border border-ink"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
@@ -114,8 +114,8 @@ export default function AdminKalenderPage() {
             <div
               className={`flex h-12 w-12 items-center justify-center rounded-[8px] ${
                 krsStatus.buka
-                  ? "bg-success-soft text-success"
-                  : "bg-danger/10 text-danger"
+                  ? "bg-surface text-ink"
+                  : "bg-primary/10 text-primary-dark"
               }`}
             >
               {krsStatus.buka ? (
@@ -194,10 +194,10 @@ export default function AdminKalenderPage() {
                       <TableCell className="text-xs font-semibold text-foreground">
                         {item.keterangan}
                       </TableCell>
-                      <TableCell className="text-center text-xs font-mono text-muted-foreground">
+                      <TableCell className="text-center text-xs font-sans text-muted-foreground">
                         {item.mulai}
                       </TableCell>
-                      <TableCell className="text-center text-xs font-mono text-muted-foreground">
+                      <TableCell className="text-center text-xs font-sans text-muted-foreground">
                         {item.selesai}
                       </TableCell>
                       <TableCell className="text-center">

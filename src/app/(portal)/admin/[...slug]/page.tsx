@@ -39,7 +39,7 @@ const SYSTEM_HEALTH_CARDS = [
     name: 'Basis Data PostgreSQL',
     cluster: 'Primary Multi-AZ',
     status: 'ONLINE 100%',
-    statusColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    statusColor: 'bg-surface text-ink border-ink',
     latency: '12ms Latency',
     connections: '42 / 200 Pool',
   },
@@ -47,7 +47,7 @@ const SYSTEM_HEALTH_CARDS = [
     name: 'Judge0 Sandbox Live Coding',
     cluster: 'Isolated Worker Nodes',
     status: 'READY (0 Antrean)',
-    statusColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    statusColor: 'bg-surface text-ink border-ink',
     latency: 'Memory Limit: 256MB',
     connections: 'Timeout: 5s Sandbox',
   },
@@ -55,7 +55,7 @@ const SYSTEM_HEALTH_CARDS = [
     name: 'WebSocket & Live Proctoring',
     cluster: 'Event Broadcast Channel',
     status: 'CONNECTED',
-    statusColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    statusColor: 'bg-surface text-ink border-ink',
     latency: 'Throughput: 1.2k req/s',
     connections: 'Heartbeat: Aktif',
   },
@@ -63,7 +63,7 @@ const SYSTEM_HEALTH_CARDS = [
     name: 'Object Storage & Bukti Presensi',
     cluster: 'S3-Compatible Storage',
     status: 'AMBILAN LANCAR',
-    statusColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    statusColor: 'bg-surface text-ink border-ink',
     latency: 'Kapasitas: 48GB / 500GB',
     connections: 'Enkripsi AES-256',
   },
@@ -257,7 +257,7 @@ export default async function AdminSubpage({ params }: PageProps) {
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
             <Icon className="h-7 w-7 text-primary" />
             <span>{current.title}</span>
           </h1>
@@ -270,7 +270,7 @@ export default async function AdminSubpage({ params }: PageProps) {
       {/* Tampilan Khusus Impersonate jika diakses */}
       {fullSlug === 'impersonate' ? (
         <div className="space-y-4">
-          <div className="rounded-xl border-2 border-black bg-amber-50 p-4 shadow-retro text-xs text-amber-900 font-mono">
+          <div className="rounded-xl border-2 border-black bg-gray-soft p-4 shadow-retro text-xs text-ink font-sans">
             <strong>PERINGATAN AUDIT:</strong> Fitur impersonasi hanya boleh digunakan untuk investigasi kendala teknis resmi. Setiap tindakan yang dilakukan selama impersonasi akan diberi label &quot;IMPERSONATED_BY_SUPERADMIN&quot; pada tabel audit log.
           </div>
           <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro">
@@ -288,15 +288,15 @@ export default async function AdminSubpage({ params }: PageProps) {
               >
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-muted-foreground uppercase">{srv.cluster}</span>
-                    <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${srv.statusColor}`}>
+                    <span className="text-xs font-sans font-bold text-muted-foreground uppercase">{srv.cluster}</span>
+                    <span className={`text-xs font-sans font-bold px-2 py-0.5 rounded border ${srv.statusColor}`}>
                       {srv.status}
                     </span>
                   </div>
-                  <h3 className="font-heading font-black text-base text-foreground mt-1">{srv.name}</h3>
+                  <h3 className="font-heading font-bold text-base text-foreground mt-1">{srv.name}</h3>
                 </div>
 
-                <div className="pt-2 border-t border-neutral-100 space-y-0.5 text-xs font-mono text-muted-foreground">
+                <div className="pt-2 border-t border-neutral-100 space-y-0.5 text-xs font-sans text-muted-foreground">
                   <p>{srv.latency}</p>
                   <p>{srv.connections}</p>
                 </div>
@@ -310,7 +310,7 @@ export default async function AdminSubpage({ params }: PageProps) {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <ShieldCheck className="h-5 w-5 text-primary" />
-                  <h3 className="font-heading font-black text-base text-foreground">Audit Log Immutable</h3>
+                  <h3 className="font-heading font-bold text-base text-foreground">Audit Log Immutable</h3>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Log append-only transaksi perubahan nilai ujian, presensi geofence, dan eskalasi izin hak akses.
@@ -318,7 +318,7 @@ export default async function AdminSubpage({ params }: PageProps) {
               </div>
               <Link
                 href="/admin/audit"
-                className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
+                className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
               >
                 <span>Periksa Audit Trail</span>
                 <ArrowRight className="h-4 w-4" />
@@ -329,7 +329,7 @@ export default async function AdminSubpage({ params }: PageProps) {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Lock className="h-5 w-5 text-primary" />
-                  <h3 className="font-heading font-black text-base text-foreground">Proteksi & Throttling</h3>
+                  <h3 className="font-heading font-bold text-base text-foreground">Proteksi & Throttling</h3>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Proteksi brute-force login, rate limit submission kuis, dan geofencing toleransi presensi GPS.
@@ -337,7 +337,7 @@ export default async function AdminSubpage({ params }: PageProps) {
               </div>
               <Link
                 href="/admin/security/rate-limits"
-                className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
+                className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
               >
                 <span>Kelola Keamanan</span>
                 <ArrowRight className="h-4 w-4" />
@@ -348,7 +348,7 @@ export default async function AdminSubpage({ params }: PageProps) {
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-primary" />
-                  <h3 className="font-heading font-black text-base text-foreground">Kelola Pengguna & Peran</h3>
+                  <h3 className="font-heading font-bold text-base text-foreground">Kelola Pengguna & Peran</h3>
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Matriks RBAC multi-role 7 peran pengguna dengan login identitas tunggal NIM, NIDN, dan NIP.
@@ -356,7 +356,7 @@ export default async function AdminSubpage({ params }: PageProps) {
               </div>
               <Link
                 href="/admin/master"
-                className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
+                className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
               >
                 <span>Kelola Akun & RBAC</span>
                 <ArrowRight className="h-4 w-4" />

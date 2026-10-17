@@ -62,7 +62,7 @@ export default function AnnouncementsPage() {
       <RetroWindow
         title="pengumuman_dan_warta_kampus.app"
         badge="Warta Kampus"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -71,7 +71,7 @@ export default function AnnouncementsPage() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Bell className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Pengumuman Kampus & Kelas
               </h1>
             </div>
@@ -81,7 +81,7 @@ export default function AnnouncementsPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-sans font-bold text-black shadow-retro">
               {ANNOUNCEMENTS.length} Edaran Aktif
             </span>
           </div>
@@ -97,19 +97,19 @@ export default function AnnouncementsPage() {
           >
             <div className="space-y-3.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-mono text-xs sm:text-sm font-black px-3 py-1 rounded border-2 border-black bg-retro-warm text-black shadow-xs">
+                <span className="font-sans text-xs sm:text-sm font-bold px-3 py-1 rounded border-2 border-black bg-gray-soft text-black shadow-xs">
                   {ann.category}
                 </span>
 
                 {ann.isPinned && (
-                  <span className="inline-flex items-center gap-1.5 font-mono text-xs sm:text-sm font-black text-black bg-retro-yellow px-2.5 py-1 rounded border-2 border-black shadow-xs">
+                  <span className="inline-flex items-center gap-1.5 font-sans text-xs sm:text-sm font-bold text-black bg-gray-soft px-2.5 py-1 rounded border-2 border-black shadow-xs">
                     <Pin className="h-3.5 w-3.5 fill-black text-black" />
                     <span>Disematkan</span>
                   </span>
                 )}
               </div>
 
-              <h2 className="font-heading font-black text-xl sm:text-2xl text-black leading-snug">
+              <h2 className="font-heading font-bold text-xl sm:text-2xl text-black leading-snug">
                 {ann.title}
               </h2>
 
@@ -118,7 +118,7 @@ export default function AnnouncementsPage() {
               </p>
             </div>
 
-            <div className="pt-3.5 border-t-2 border-black/10 flex flex-wrap items-center justify-between text-xs sm:text-sm font-mono text-neutral-900 font-bold gap-2">
+            <div className="pt-3.5 border-t-2 border-black/10 flex flex-wrap items-center justify-between text-xs sm:text-sm font-sans text-neutral-900 font-bold gap-2">
               <span className="truncate max-w-[260px] flex items-center gap-1.5">
                 <User className="h-3.5 w-3.5 text-primary" />
                 <span>{ann.author}</span>

@@ -27,13 +27,13 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
           <div className="p-2 rounded-lg border-2 border-ink bg-gray-soft text-primary shadow-xs">
             <CalendarDays className="h-5 w-5 text-primary" />
           </div>
-          <h2 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-ink">
+          <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
             Jadwal Hari Ini
           </h2>
         </div>
         <Link
           href="/calendar"
-          className="text-base sm:text-lg font-black text-primary hover:text-primary-dark transition-colors"
+          className="text-base sm:text-lg font-bold text-primary-dark hover:text-ink transition-colors"
         >
           more &rarr;
         </Link>
@@ -42,13 +42,13 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
       {items.length === 0 ? (
         <div className="p-6 sm:p-8 rounded-2xl border-2 border-ink bg-surface shadow-retro text-center space-y-3">
           <CalendarDays className="h-9 w-9 text-gray-dark mx-auto" />
-          <p className="font-heading font-black text-xl text-ink">Tidak Ada Kuliah Hari Ini</p>
+          <p className="font-heading font-bold text-xl text-ink">Tidak Ada Kuliah Hari Ini</p>
           <p className="text-sm text-gray-dark font-bold max-w-md mx-auto">
             Tidak ada jadwal perkuliahan aktif yang dijadwalkan untuk hari ini.
           </p>
           <Link
             href="/calendar"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-ink bg-gray-soft font-heading font-black text-xs hover:bg-ink hover:text-white transition-all shadow-xs"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-ink bg-gray-soft font-heading font-bold text-xs hover:bg-ink hover:text-white transition-all shadow-xs"
           >
             <span>Buka Kalender Akademik</span>
             <ArrowRight className="h-3.5 w-3.5" />
@@ -67,16 +67,16 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                   className={cn(
                     'absolute -left-6 sm:-left-8 top-4.5 w-5 h-5 rounded-full border-2 border-ink flex items-center justify-center transition-transform group-hover:scale-125 z-10',
                     isOngoing
-                      ? 'bg-success shadow-xs animate-pulse'
+                      ? 'bg-gray-dark shadow-xs'
                       : isFinished
-                      ? 'bg-gray-soft'
-                      : 'bg-surface'
+                      ? 'bg-surface'
+                      : 'bg-gray-soft'
                   )}
                 >
                   <div
                     className={cn(
                       'w-2 h-2 rounded-full',
-                      isOngoing ? 'bg-ink' : isFinished ? 'bg-gray' : 'bg-ink'
+                      isOngoing ? 'bg-white' : isFinished ? 'bg-ink' : 'bg-gray'
                     )}
                   />
                 </div>
@@ -90,23 +90,25 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                 >
                   <div className="space-y-2 min-w-0">
                     <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="text-xs sm:text-sm font-sans font-black text-ink">
+                      <span className="text-xs sm:text-sm font-sans font-semibold text-ink tabular-nums">
                         {item.time}
                       </span>
 
                       {/* Status Badge */}
                       {isOngoing && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-black bg-success text-ink border border-ink animate-pulse">
-                          ● BERLANGSUNG
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-dark text-white border-2 border-ink">
+                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                          BERLANGSUNG
                         </span>
                       )}
                       {isFinished && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft text-gray-dark border border-ink/30">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-surface text-ink border-2 border-ink">
+                          <CheckCircle2 className="h-3 w-3" />
                           SELESAI
                         </span>
                       )}
                       {!isOngoing && !isFinished && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-warning text-ink border border-ink">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft text-ink border border-ink">
                           AKAN DATANG
                         </span>
                       )}
@@ -116,7 +118,7 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                       </span>
                     </div>
 
-                    <h3 className="font-heading font-black text-lg sm:text-xl text-ink break-words leading-snug">
+                    <h3 className="font-heading font-bold text-lg sm:text-xl text-ink break-words leading-snug">
                       {item.title}
                     </h3>
 
@@ -135,7 +137,7 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                     {isOngoing && item.hasActiveAttendance ? (
                       <Link
                         href={`/classes`}
-                        className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-ink bg-warning text-ink font-heading font-black text-sm hover:bg-warning/90 active:translate-y-0.5 shadow-retro transition-all"
+                        className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-ink bg-primary text-white font-heading font-bold text-sm hover:bg-primary-dark active:translate-y-0.5 shadow-retro transition-all"
                       >
                         <Key className="h-4 w-4" />
                         <span>Absen Sekarang</span>

@@ -41,102 +41,104 @@ interface StatusConfig {
 }
 
 const STATUS_MAP: Record<string, StatusConfig> = {
-  // Sukses / Positif
+  // Sukses / Positif / Selesai (bg-surface text-ink border-2 border-ink)
   DISETUJUI: {
     label: "Disetujui",
-    badgeClass: "bg-success-soft text-success border border-success-border",
-    dotClass: "bg-success",
+    badgeClass: "bg-surface text-ink border-2 border-ink font-bold",
+    dotClass: "bg-ink",
   },
   LUNAS: {
     label: "Lunas",
-    badgeClass: "bg-success-soft text-success border border-success-border",
-    dotClass: "bg-success",
-  },
-  AKTIF: {
-    label: "Aktif",
-    badgeClass: "bg-success-soft text-success border border-success-border",
-    dotClass: "bg-success",
-  },
-  HADIR: {
-    label: "Hadir",
-    badgeClass: "bg-success-soft text-success border border-success-border",
-    dotClass: "bg-success",
+    badgeClass: "bg-surface text-ink border-2 border-ink font-bold",
+    dotClass: "bg-ink",
   },
   SELESAI: {
     label: "Selesai",
-    badgeClass: "bg-success-soft text-success border border-success-border",
-    dotClass: "bg-success",
+    badgeClass: "bg-surface text-ink border-2 border-ink font-bold",
+    dotClass: "bg-ink",
   },
   LULUS: {
     label: "Lulus",
-    badgeClass: "bg-success-soft text-success border border-success-border",
-    dotClass: "bg-success",
+    badgeClass: "bg-surface text-ink border-2 border-ink font-bold",
+    dotClass: "bg-ink",
   },
 
-  // Peringatan / Dalam Proses
+  // Aktif Berjalan / Berlangsung (bg-gray-dark text-white)
+  AKTIF: {
+    label: "Aktif",
+    badgeClass: "bg-gray-dark text-white border-2 border-ink font-bold",
+    dotClass: "bg-white",
+  },
+  HADIR: {
+    label: "Hadir",
+    badgeClass: "bg-gray-dark text-white border-2 border-ink font-bold",
+    dotClass: "bg-white",
+  },
+
+  // Peringatan / Dalam Proses / Sedang Dipelajari (bg-gray-soft text-ink)
   DIAJUKAN: {
     label: "Diajukan",
-    badgeClass: "bg-warning-soft text-warning border border-warning-border",
-    dotClass: "bg-warning",
+    badgeClass: "bg-gray-soft text-ink border border-ink font-bold",
+    dotClass: "bg-ink",
   },
   DIPROSES: {
     label: "Sedang Diproses",
-    badgeClass: "bg-warning-soft text-warning border border-warning-border",
-    dotClass: "bg-warning",
+    badgeClass: "bg-gray-soft text-ink border border-ink font-bold",
+    dotClass: "bg-ink",
   },
   MENUNGGU: {
     label: "Menunggu",
-    badgeClass: "bg-warning-soft text-warning border border-warning-border",
-    dotClass: "bg-warning",
+    badgeClass: "bg-gray-soft text-ink border border-ink font-bold",
+    dotClass: "bg-ink",
   },
   DISPENSASI: {
     label: "Dispensasi",
-    badgeClass: "bg-warning-soft text-warning border border-warning-border",
-    dotClass: "bg-warning",
+    badgeClass: "bg-gray-soft text-ink border border-ink font-bold",
+    dotClass: "bg-ink",
   },
   DRAF: {
     label: "Draf",
-    badgeClass: "bg-muted text-muted-foreground border border-border",
-    dotClass: "bg-subtle-foreground",
+    badgeClass: "bg-surface text-gray border border-ink",
+    dotClass: "bg-gray",
   },
 
-  // Bahaya / Ditolak / Tidak Hadir
+  // Bahaya / Mendesak / Ditolak / Belum (bg-primary text-white font-bold)
   DITOLAK: {
     label: "Ditolak",
-    badgeClass: "bg-danger-soft text-danger border border-danger-border",
-    dotClass: "bg-danger",
+    badgeClass: "bg-primary text-white font-bold border border-ink",
+    dotClass: "bg-white",
   },
   BELUM: {
     label: "Belum Bayar",
-    badgeClass: "bg-danger-soft text-danger border border-danger-border",
-    dotClass: "bg-danger",
+    badgeClass: "bg-primary text-white font-bold border border-ink",
+    dotClass: "bg-white",
   },
   ALPA: {
     label: "Alpa",
-    badgeClass: "bg-danger-soft text-danger border border-danger-border",
-    dotClass: "bg-danger",
+    badgeClass: "bg-primary text-white font-bold border border-ink",
+    dotClass: "bg-white",
   },
   KELUAR: {
     label: "Keluar",
-    badgeClass: "bg-danger-soft text-danger border border-danger-border",
-    dotClass: "bg-danger",
+    badgeClass: "bg-primary text-white font-bold border border-ink",
+    dotClass: "bg-white",
   },
 
-  // Info / Netral
+  // Info / Netral (bg-gray-soft text-ink)
   IZIN: {
     label: "Izin",
-    badgeClass: "bg-info-soft text-info border border-info-border",
-    dotClass: "bg-info",
+    badgeClass: "bg-gray-soft text-ink border border-ink",
+    dotClass: "bg-gray-dark",
   },
   SAKIT: {
     label: "Sakit",
-    badgeClass: "bg-info-soft text-info border border-info-border",
-    dotClass: "bg-info",
+    badgeClass: "bg-gray-soft text-ink border border-ink",
+    dotClass: "bg-gray-dark",
   },
   CUTI: {
     label: "Cuti",
-    badgeClass: "bg-info-soft text-info border border-info-border",
-    dotClass: "bg-info",
+    badgeClass: "bg-gray-soft text-ink border border-ink",
+    dotClass: "bg-gray-dark",
   },
 };
 
@@ -144,8 +146,8 @@ export function StatusBadge({ status, className, size = "md" }: StatusBadgeProps
   const normalizedKey = (status || "").toString().trim().toUpperCase();
   const config = STATUS_MAP[normalizedKey] || {
     label: status || "-",
-    badgeClass: "bg-muted text-muted-foreground border border-border",
-    dotClass: "bg-subtle-foreground",
+    badgeClass: "bg-gray-soft text-ink border border-ink",
+    dotClass: "bg-gray-dark",
   };
 
   return (

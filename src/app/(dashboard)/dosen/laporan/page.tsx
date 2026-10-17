@@ -121,10 +121,10 @@ export default async function DosenLaporanProdiPage() {
               <CardTitle className="text-xs font-semibold font-medium text-muted-foreground">
                 Mahasiswa IPK &ge; 3.50
               </CardTitle>
-              <GraduationCap className="h-4 w-4 text-success" />
+              <GraduationCap className="h-4 w-4 text-ink" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-success">{mhsCumlaude}</div>
+              <div className="text-3xl font-bold text-ink">{mhsCumlaude}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Kategori Prestasi Tinggi
               </p>
@@ -136,10 +136,10 @@ export default async function DosenLaporanProdiPage() {
               <CardTitle className="text-xs font-semibold font-medium text-muted-foreground">
                 Perlu Perhatian (IPK &lt; 2.5)
               </CardTitle>
-              <AlertCircle className="h-4 w-4 text-warning" />
+              <AlertCircle className="h-4 w-4 text-ink" />
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-warning">{mhsPerluPerhatian}</div>
+              <div className="text-3xl font-bold text-ink">{mhsPerluPerhatian}</div>
               <p className="text-xs text-muted-foreground mt-1">
                 Perlu Bimbingan Intensif Dosen Wali
               </p>
@@ -180,7 +180,7 @@ export default async function DosenLaporanProdiPage() {
                 <tbody className="divide-y divide-border">
                   {listWithIpk.map((m) => (
                     <tr key={m.id} className="hover:bg-muted/50 transition-colors">
-                      <td className="py-3 px-4 font-mono text-xs font-semibold text-foreground">
+                      <td className="py-3 px-4 font-sans text-xs font-semibold text-foreground">
                         {m.nim}
                       </td>
                       <td className="py-3 px-4 font-medium text-foreground">
@@ -196,14 +196,14 @@ export default async function DosenLaporanProdiPage() {
                       </td>
                       <td className="py-3 px-4 text-center">
                         <span
-                          className={`font-bold font-mono text-xs px-2 py-0.5 rounded-[6px] ${
+                          className={`font-bold font-sans text-xs px-2 py-0.5 rounded-[6px] ${
                             m.ipk >= 3.5
-                              ? "bg-success-soft text-success"
+                              ? "bg-surface text-ink"
                               : m.ipk >= 3.0
                               ? "bg-primary/10 text-primary"
                               : m.ipk >= 2.5
-                              ? "bg-warning/10 text-warning"
-                              : "bg-danger/10 text-danger"
+                              ? "bg-gray-soft/10 text-ink"
+                              : "bg-primary/10 text-primary-dark"
                           }`}
                         >
                           {m.ipk.toFixed(2)}

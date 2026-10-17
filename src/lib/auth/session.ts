@@ -32,8 +32,18 @@ export async function clearSessionCookie() {
 }
 
 export async function getSession(): Promise<AuthSession | null> {
-  const cookieStore = cookies();
-  const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
+  let cookieStore: ReturnType<typeof cookies>;
+  try {
+    cookieStore = cookies();
+  } catch {
+    return null;
+  }
+  let sessionCookie: { value: string } | undefined;
+  try {
+    sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
+  } catch {
+    return null;
+  }
 
   if (sessionCookie?.value) {
     try {
@@ -70,9 +80,9 @@ export async function getSession(): Promise<AuthSession | null> {
         : undefined;
 
     return {
-      userId: demoSessionId || "usr-wahyu",
-      email: "wahyualdiriyanto80@gmail.com",
-      name: "Wahyu Aldiriyanto",
+      userId: demoSessionId || "usr-superadmin",
+      email: "superadmin@siajar.test",
+      name: "Super Administrator",
       role,
       subId,
     };

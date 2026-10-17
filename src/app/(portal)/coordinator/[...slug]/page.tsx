@@ -32,28 +32,28 @@ const COORDINATOR_METRICS = [
     value: '96.2%',
     desc: '24 dari 24 kelas berjalan sesuai silabus',
     badge: 'Tercapai',
-    badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    badgeColor: 'bg-surface text-ink border-ink',
   },
   {
     title: 'Beban Mengajar Dosen (BKD)',
     value: '12 - 16 SKS',
     desc: 'Rata-rata 14.2 SKS per dosen tetap',
     badge: 'Optimal',
-    badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    badgeColor: 'bg-surface text-ink border-ink',
   },
   {
     title: 'Mahasiswa Perlu Perhatian',
     value: '8 Mahasiswa',
     desc: 'Kehadiran <75% atau indeks tugas tertunda',
     badge: 'Perlu Tindakan',
-    badgeColor: 'bg-amber-100 text-amber-900 border-amber-400',
+    badgeColor: 'bg-gray-soft text-ink border-ink',
   },
   {
     title: 'Pengajuan Menunggu Persetujuan',
     value: '3 Berkas',
     desc: 'Soal ujian, revisi nilai, dan kelas baru',
     badge: 'Pending Review',
-    badgeColor: 'bg-amber-100 text-amber-900 border-amber-400',
+    badgeColor: 'bg-gray-soft text-ink border-ink',
   },
 ];
 
@@ -240,7 +240,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
             <Icon className="h-7 w-7 text-primary" />
             <span>{current.title}</span>
           </h1>
@@ -259,14 +259,14 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold uppercase text-muted-foreground">{m.title}</span>
-                <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${m.badgeColor}`}>
+                <span className="text-xs font-sans font-bold uppercase text-muted-foreground">{m.title}</span>
+                <span className={`text-xs font-sans font-bold px-2 py-0.5 rounded border ${m.badgeColor}`}>
                   {m.badge}
                 </span>
               </div>
-              <p className="font-heading font-black text-2xl text-foreground mt-1">{m.value}</p>
+              <p className="font-heading font-bold text-2xl text-foreground mt-1">{m.value}</p>
             </div>
-            <p className="text-xs text-muted-foreground border-t border-neutral-100 pt-2 font-mono">
+            <p className="text-xs text-muted-foreground border-t border-neutral-100 pt-2 font-sans">
               {m.desc}
             </p>
           </div>
@@ -279,7 +279,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <BookOpen className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-base text-foreground">Pemetaan Kurikulum OBE</h3>
+              <h3 className="font-heading font-bold text-base text-foreground">Pemetaan Kurikulum OBE</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               12 Indikator Capaian Pembelajaran Lulusan (CPL) terhubung dengan 48 mata kuliah wajib program studi.
@@ -287,7 +287,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
           </div>
           <Link
             href="/coordinator/curriculum"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
+            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
           >
             <span>Buka Matriks CPL</span>
             <ArrowRight className="h-4 w-4" />
@@ -298,7 +298,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <ShieldAlert className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-base text-foreground">Supervisi Ujian Semester</h3>
+              <h3 className="font-heading font-bold text-base text-foreground">Supervisi Ujian Semester</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Seluruh sesi ujian UTS/UAS dipantau real-time dengan standar proctoring anti-kecurangan prodi.
@@ -306,7 +306,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
           </div>
           <Link
             href="/coordinator/monitoring/exams"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
+            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
           >
             <span>Pantau Ujian Prodi</span>
             <ArrowRight className="h-4 w-4" />
@@ -317,7 +317,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <CheckSquare className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-base text-foreground">Antrean Otorisasi Nilai</h3>
+              <h3 className="font-heading font-bold text-base text-foreground">Antrean Otorisasi Nilai</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Verifikasi berita acara perubahan nilai dari dosen pengampu sebelum disahkan ke Biro Akademik.
@@ -325,7 +325,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
           </div>
           <Link
             href="/coordinator/approvals/grades"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
+            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
           >
             <span>Tinjau Pengajuan</span>
             <ArrowRight className="h-4 w-4" />

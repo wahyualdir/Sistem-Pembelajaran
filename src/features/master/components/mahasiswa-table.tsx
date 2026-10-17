@@ -95,7 +95,7 @@ export function MahasiswaTable({
   return (
     <div className="space-y-4">
       {feedback && (
-        <div className="rounded-[8px] bg-success-soft border border-success-border p-3 text-xs text-success flex justify-between items-center">
+        <div className="rounded-[8px] bg-surface border border-ink p-3 text-xs text-ink flex justify-between items-center">
           <span>{feedback}</span>
           <button
             onClick={() => setFeedback(null)}
@@ -231,7 +231,7 @@ export function MahasiswaTable({
                         size="sm"
                         onClick={() => handleToggleStatus(mhs.id)}
                         className={`h-8 px-2 ${
-                          mhs.status === "AKTIF" ? "text-danger" : "text-success"
+                          mhs.status === "AKTIF" ? "text-primary-dark" : "text-ink"
                         }`}
                         title={mhs.status === "AKTIF" ? "Nonaktifkan" : "Aktifkan"}
                       >

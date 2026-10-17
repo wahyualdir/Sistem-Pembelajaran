@@ -9,7 +9,7 @@ const PROCTOR_TELEMETRY = [
     name: 'Ahmad Fauzi',
     question: 'Soal 4 (Live Coding)',
     status: 'Normal · Fullscreen Aktif',
-    statusColor: 'text-emerald-700 bg-emerald-50 border-emerald-300',
+    statusColor: 'text-ink bg-surface border-ink',
     activity: 'Mengetik fungsi solusi() di sandbox JavaScript',
     time: 'Baru saja',
   },
@@ -18,7 +18,7 @@ const PROCTOR_TELEMETRY = [
     name: 'Rian Hidayat',
     question: 'Soal 2 (Pilihan Ganda)',
     status: 'Peringatan Tercatat (1x)',
-    statusColor: 'text-amber-800 bg-amber-50 border-amber-300',
+    statusColor: 'text-ink bg-gray-soft border-ink',
     activity: 'Fokus jendela beralih (blur) selama 4 detik',
     time: '2 menit yang lalu',
   },
@@ -27,7 +27,7 @@ const PROCTOR_TELEMETRY = [
     name: 'Siti Rahma',
     question: 'Soal 3 (Essay Arsitektur)',
     status: 'Normal',
-    statusColor: 'text-emerald-700 bg-emerald-50 border-emerald-300',
+    statusColor: 'text-ink bg-surface border-ink',
     activity: 'Menyimpan draf jawaban otomatis di server',
     time: '3 menit yang lalu',
   },
@@ -36,7 +36,7 @@ const PROCTOR_TELEMETRY = [
     name: 'Dimas Aditya',
     question: 'Soal 4 (Live Coding)',
     status: 'Normal · Fullscreen Aktif',
-    statusColor: 'text-emerald-700 bg-emerald-50 border-emerald-300',
+    statusColor: 'text-ink bg-surface border-ink',
     activity: 'Menjalankan test case publik #1 dan #2 (Lolos 2/2)',
     time: '5 menit yang lalu',
   },
@@ -52,12 +52,12 @@ export default function AssistantExamMonitorPage() {
       >
         <div className="p-6 sm:p-8 space-y-2">
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-1 rounded border-2 border-black bg-amber-100 font-mono text-xs font-black text-amber-950 flex items-center gap-1.5">
+            <span className="px-2.5 py-1 rounded border-2 border-black bg-gray-soft font-sans text-xs font-bold text-ink flex items-center gap-1.5">
               <Shield className="h-3.5 w-3.5" />
               Akses Pengawasan: Read-Only (Hanya Pantau)
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
             <ShieldAlert className="h-7 w-7 text-primary" />
             <span>Pantau Ujian Kelas Asistensi</span>
           </h1>
@@ -70,25 +70,25 @@ export default function AssistantExamMonitorPage() {
       {/* 3 Metric Cards Full Width */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold text-muted-foreground uppercase">Peserta Mengerjakan</span>
-          <p className="font-heading font-black text-3xl text-foreground">34 <span className="text-xs font-mono text-muted-foreground font-normal">/ 36 Mahasiswa</span></p>
-          <span className="text-xs text-emerald-700 font-bold flex items-center gap-1 pt-1">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> 94.4% Hadir
+          <span className="text-xs font-sans font-bold text-muted-foreground uppercase">Peserta Mengerjakan</span>
+          <p className="font-heading font-bold text-3xl text-foreground">34 <span className="text-xs font-sans text-muted-foreground font-normal">/ 36 Mahasiswa</span></p>
+          <span className="text-xs text-ink font-bold flex items-center gap-1 pt-1">
+            <span className="w-2 h-2 rounded-full bg-gray-dark animate-pulse" /> 94.4% Hadir
           </span>
         </div>
 
         <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold text-muted-foreground uppercase">Sisa Waktu Ujian</span>
-          <p className="font-heading font-black text-3xl text-foreground font-mono">54:20</p>
-          <span className="text-xs text-neutral-600 font-mono pt-1 block">
+          <span className="text-xs font-sans font-bold text-muted-foreground uppercase">Sisa Waktu Ujian</span>
+          <p className="font-heading font-bold text-3xl text-foreground font-sans">54:20</p>
+          <span className="text-xs text-neutral-600 font-sans pt-1 block">
             Dari total durasi 90 menit
           </span>
         </div>
 
         <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold text-muted-foreground uppercase">Anomali Terdeteksi</span>
-          <p className="font-heading font-black text-3xl text-amber-700 font-mono">1 Event</p>
-          <span className="text-xs text-amber-800 font-mono pt-1 block">
+          <span className="text-xs font-sans font-bold text-muted-foreground uppercase">Anomali Terdeteksi</span>
+          <p className="font-heading font-bold text-3xl text-ink font-sans">1 Event</p>
+          <span className="text-xs text-ink font-sans pt-1 block">
             Tab Switch / Window Blur
           </span>
         </div>
@@ -99,10 +99,10 @@ export default function AssistantExamMonitorPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b-2 border-black pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-mono font-bold uppercase text-emerald-800">Sedang Berlangsung</span>
+              <span className="inline-block w-2.5 h-2.5 rounded-full bg-gray-dark animate-pulse" />
+              <span className="text-xs font-sans font-bold uppercase text-ink">Sedang Berlangsung</span>
             </div>
-            <h2 className="font-heading font-black text-xl text-foreground mt-1">UTS Praktikum: Arsitektur Backend & API (TI-301)</h2>
+            <h2 className="font-heading font-bold text-xl text-foreground mt-1">UTS Praktikum: Arsitektur Backend & API (TI-301)</h2>
             <p className="text-xs text-muted-foreground">Dosen Pengampu: Dr. Ardiansyah, S.T., M.Kom. · Pengawasan Standar</p>
           </div>
           <Link
@@ -128,28 +128,28 @@ export default function AssistantExamMonitorPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="font-mono font-bold text-xs text-neutral-900 bg-white px-2 py-0.5 rounded border border-neutral-300">
+                    <span className="font-sans font-bold text-xs text-neutral-900 bg-white px-2 py-0.5 rounded border border-neutral-300">
                       {p.nim}
                     </span>
-                    <span className="font-heading font-black text-sm text-foreground">
+                    <span className="font-heading font-bold text-sm text-foreground">
                       {p.name}
                     </span>
                   </div>
-                  <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${p.statusColor}`}>
+                  <span className={`text-xs font-sans font-bold px-2 py-0.5 rounded border ${p.statusColor}`}>
                     {p.status}
                   </span>
                 </div>
 
                 <div className="text-xs space-y-1">
-                  <p className="text-muted-foreground font-mono">
+                  <p className="text-muted-foreground font-sans">
                     Posisi: <strong className="text-foreground">{p.question}</strong>
                   </p>
-                  <p className="text-foreground/90 bg-white p-2.5 rounded border border-neutral-200 font-mono text-xs">
+                  <p className="text-foreground/90 bg-white p-2.5 rounded border border-neutral-200 font-sans text-xs">
                     {p.activity}
                   </p>
                 </div>
 
-                <div className="text-xs text-muted-foreground font-mono text-right pt-1">
+                <div className="text-xs text-muted-foreground font-sans text-right pt-1">
                   Pembaruan: {p.time}
                 </div>
               </div>

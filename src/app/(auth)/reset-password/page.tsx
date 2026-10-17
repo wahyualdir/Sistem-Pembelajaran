@@ -20,12 +20,12 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-retro-bg font-sans text-foreground selection:bg-retro-yellow selection:text-black flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 antialiased">
+    <div className="min-h-[100dvh] bg-retro-bg font-sans text-foreground selection:bg-ink selection:text-black flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 antialiased">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="mb-4">
           <Link
             href="/login"
-            className="text-xs text-foreground hover:text-primary-dark flex items-center gap-1.5 font-bold px-2 py-1 rounded bg-retro-warm border border-retro-border/60 shadow-xs w-fit transition-colors"
+            className="text-xs text-foreground hover:text-primary-dark flex items-center gap-1.5 font-bold px-2 py-1 rounded bg-gray-soft border border-retro-border/60 shadow-xs w-fit transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             Kembali ke Halaman Masuk
@@ -35,12 +35,12 @@ export default function ResetPasswordPage() {
         {/* Retro Window Card */}
         <div className="rounded-xl border-[1.5px] border-retro-border bg-retro-surface shadow-retro-lg overflow-hidden transition-all">
           {/* Header Bar Jendela Retro */}
-          <div className="flex items-center justify-between px-4 py-2.5 border-b-[1.5px] border-retro-border bg-retro-warm/80">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b-[1.5px] border-retro-border bg-gray-soft/80">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green shadow-retro-sm" />
-              <span className="text-xs font-mono font-bold text-muted-foreground ml-2">
+              <span className="h-3 w-3 rounded-full border border-black/80 bg-primary shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-black/80 bg-gray shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark shadow-retro-sm" />
+              <span className="text-xs font-sans font-bold text-muted-foreground ml-2">
                 siajar://reset-password
               </span>
             </div>
@@ -52,17 +52,17 @@ export default function ResetPasswordPage() {
                 <Flame className="h-5 w-5 fill-white" />
               </div>
               <div className="flex flex-col text-left">
-                <span className="font-heading font-black text-sm tracking-tight text-foreground leading-tight">
+                <span className="font-heading font-bold text-sm tracking-tight text-foreground leading-tight">
                   SIAJAR
                 </span>
-                <span className="text-xs text-muted-foreground font-mono">
+                <span className="text-xs text-muted-foreground font-sans">
                   Pemulihan Akun
                 </span>
               </div>
             </div>
 
             <div className="space-y-1">
-              <h1 className="text-xl font-heading font-black text-foreground">
+              <h1 className="text-xl font-heading font-bold text-foreground">
                 Pemulihan Kata Sandi
               </h1>
               <p className="text-xs text-muted-foreground leading-relaxed">
@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
             {isSubmitted ? (
               <div className="rounded-lg border-[1.5px] border-retro-border bg-retro-mint p-4 text-xs text-foreground space-y-2 shadow-retro">
                 <div className="flex items-center gap-2 font-bold text-black">
-                  <CheckCircle2 className="h-4 w-4 text-success" />
+                  <CheckCircle2 className="h-4 w-4 text-ink" />
                   Instruksi Pemulihan Dikirim
                 </div>
                 <p className="text-black/80">
@@ -81,7 +81,7 @@ export default function ResetPasswordPage() {
                 </p>
                 <div className="pt-2">
                   <Link href="/login" className="block">
-                    <Button variant="outline" size="sm" className="w-full text-xs font-bold border-retro-border bg-retro-surface hover:bg-retro-warm shadow-xs">
+                    <Button variant="outline" size="sm" className="w-full text-xs font-bold border-retro-border bg-retro-surface hover:bg-gray-soft shadow-xs">
                       Kembali ke Login
                     </Button>
                   </Link>
@@ -90,7 +90,7 @@ export default function ResetPasswordPage() {
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-bold font-mono uppercase tracking-wider text-foreground block">
+                  <label className="text-xs font-bold font-sans uppercase tracking-wider text-foreground block">
                     Email / NIM / NIDN
                   </label>
                   <input
@@ -107,7 +107,7 @@ export default function ResetPasswordPage() {
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="w-full py-2.5 px-4 rounded-lg border-[1.5px] border-retro-border bg-primary text-white font-heading font-black text-sm shadow-retro-md hover:brightness-105 active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full py-2.5 px-4 rounded-lg border-[1.5px] border-retro-border bg-primary text-white font-heading font-bold text-sm shadow-retro-md hover:brightness-105 active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   <Mail className="h-4 w-4" />
                   <span>{isPending ? 'Mengirim...' : 'Kirim Tautan Pemulihan'}</span>

@@ -49,7 +49,11 @@ export function AiAcademicAssistant() {
     setInput('');
 
     startTransition(async () => {
-      const res = await askAiAcademicAssistantAction(q);
+      const historyPayload = messages.slice(-4).map((m) => ({
+        role: (m.sender === 'user' ? 'user' : 'assistant') as 'user' | 'assistant',
+        content: m.text,
+      }));
+      const res = await askAiAcademicAssistantAction(q, historyPayload);
       const aiReply = res.ok && res.response ? res.response : 'Maaf, terjadi gangguan saat memproses jawaban. Silakan coba lagi.';
 
       const aiMsg: Message = {
@@ -77,14 +81,16 @@ export function AiAcademicAssistant() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full border-2 border-ink bg-primary px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-retro hover:bg-primary-dark transition-all hover:scale-105 active:scale-95 group cursor-pointer"
+          className="ai-assistant-btn fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center justify-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full border-2 border-ink bg-primary px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-retro hover:bg-primary-dark transition-all hover:scale-105 active:scale-95 group cursor-pointer"
           aria-label="Buka Asisten AI SIAJAR"
         >
-          <div className="relative">
+          <div className="relative shrink-0 flex items-center justify-center">
             <Bot className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
-            <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-success ring-2 ring-surface" />
+            <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-white ring-2 ring-primary" />
           </div>
-          <span className="text-xs font-black tracking-wide text-white">Tanya AI SIAJAR</span>
+          <span className="ai-assistant-btn-text text-xs font-bold tracking-wide text-white whitespace-nowrap">
+            Tanya AI SIAJAR
+          </span>
         </button>
       )}
 
@@ -98,9 +104,9 @@ export function AiAcademicAssistant() {
                 <Bot className="h-4 w-4" />
               </div>
               <div>
-                <h3 className="text-xs font-black text-ink flex items-center gap-1.5">
+                <h3 className="text-xs font-bold text-ink flex items-center gap-1.5">
                   SIAJAR AI Assistant
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-success" />
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
                 </h3>
                 <p className="text-xs text-gray-dark">Konsultasi & Panduan Akademik</p>
               </div>

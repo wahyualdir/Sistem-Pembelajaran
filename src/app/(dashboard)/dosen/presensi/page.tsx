@@ -200,8 +200,8 @@ export default function DosenPresensiPage() {
         <div
           className={`flex items-center gap-2 rounded-[8px] p-3 text-sm font-medium ${
             pesanNotif.tipe === "sukses"
-              ? "bg-success-soft text-success border border-success-border"
-              : "bg-danger/10 text-danger border border-danger/20"
+              ? "bg-surface text-ink border border-ink"
+              : "bg-primary/10 text-primary-dark border border-ink"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
@@ -299,7 +299,7 @@ export default function DosenPresensiPage() {
                 variant="outline"
                 size="sm"
                 onClick={handleTandaiSemuaHadir}
-                className="gap-1.5 text-xs text-success hover:bg-success-soft"
+                className="gap-1.5 text-xs text-ink hover:bg-surface"
               >
                 <CheckCircle className="h-3.5 w-3.5" />
                 Tandai Semua Hadir
@@ -321,10 +321,10 @@ export default function DosenPresensiPage() {
             {/* Rekap Angka */}
             <div className="flex flex-wrap items-center gap-4 px-6 py-3 bg-muted border-b border-border text-xs">
               <span className="text-muted-foreground">Ringkasan Kehadiran:</span>
-              <span className="font-semibold text-success">Hadir: {countHadir}</span>
+              <span className="font-semibold text-ink">Hadir: {countHadir}</span>
               <span className="font-semibold text-primary">Izin: {countIzin}</span>
-              <span className="font-semibold text-warning">Sakit: {countSakit}</span>
-              <span className="font-semibold text-danger">Alpa: {countAlpa}</span>
+              <span className="font-semibold text-ink">Sakit: {countSakit}</span>
+              <span className="font-semibold text-primary-dark">Alpa: {countAlpa}</span>
             </div>
 
             <div className="overflow-x-auto">
@@ -345,7 +345,7 @@ export default function DosenPresensiPage() {
                         <TableCell className="text-center font-medium text-xs text-muted-foreground">
                           {idx + 1}
                         </TableCell>
-                        <TableCell className="font-mono text-xs font-semibold text-foreground">
+                        <TableCell className="font-sans text-xs font-semibold text-foreground">
                           {peserta.nim}
                         </TableCell>
                         <TableCell className="text-xs font-medium text-foreground">
@@ -361,19 +361,19 @@ export default function DosenPresensiPage() {
                                 const colorClass =
                                   st === "HADIR"
                                     ? isCurrent
-                                      ? "bg-success text-white font-bold"
-                                      : "text-muted-foreground hover:text-success"
+                                      ? "bg-gray-dark text-white font-bold"
+                                      : "text-muted-foreground hover:text-ink"
                                     : st === "IZIN"
                                     ? isCurrent
                                       ? "bg-primary text-white font-bold"
                                       : "text-muted-foreground hover:text-primary"
                                     : st === "SAKIT"
                                     ? isCurrent
-                                      ? "bg-warning text-white font-bold"
-                                      : "text-muted-foreground hover:text-warning"
+                                      ? "bg-gray-soft text-white font-bold"
+                                      : "text-muted-foreground hover:text-ink"
                                     : isCurrent
-                                    ? "bg-danger text-white font-bold"
-                                    : "text-muted-foreground hover:text-danger";
+                                    ? "bg-primary text-white font-bold"
+                                    : "text-muted-foreground hover:text-primary-dark";
 
                                 return (
                                   <button

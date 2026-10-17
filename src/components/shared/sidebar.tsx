@@ -181,7 +181,7 @@ export function Sidebar({
         )}
       >
         {/* Sidebar Header dengan Logo Retro Mac */}
-        <div className="flex h-header shrink-0 items-center justify-between border-b-2 border-black bg-retro-warm px-4">
+        <div className="flex h-header shrink-0 items-center justify-between border-b-2 border-black bg-gray-soft px-4">
           <Link
             href={homeHref}
             className="flex items-center gap-2.5 group focus-visible:outline-none"
@@ -191,7 +191,7 @@ export function Sidebar({
               <Flame className="h-6 w-6 fill-current" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="font-heading font-black text-base tracking-tight text-black leading-tight">
+              <span className="font-heading font-bold text-base tracking-tight text-black leading-tight">
                 SIAJAR
               </span>
               <span className="text-xs text-gray-600 font-semibold leading-tight mt-0.5">
@@ -201,7 +201,7 @@ export function Sidebar({
           </Link>
           <button
             onClick={handleClose}
-            className="md:hidden flex h-8 w-8 items-center justify-center border-2 border-black bg-white text-black shadow-retro-sm hover:bg-retro-warm transition-colors cursor-pointer"
+            className="md:hidden flex h-8 w-8 items-center justify-center border-2 border-black bg-white text-black shadow-retro-sm hover:bg-gray-soft transition-colors cursor-pointer"
             title="Tutup Navigasi (Burger)"
             aria-label="Tutup navigasi"
           >
@@ -218,7 +218,7 @@ export function Sidebar({
             return (
               <div key={group.id || group.title} className="space-y-1.5">
                 <div className="flex items-center justify-between px-2.5 mb-1.5">
-                  <p className="text-xs font-black uppercase tracking-wider text-gray-dark">
+                  <p className="text-xs font-bold uppercase tracking-wider text-gray-dark">
                     {group.title}
                   </p>
                   {group.collapsible && (
@@ -250,10 +250,10 @@ export function Sidebar({
                           aria-current={isActive ? "page" : undefined}
                           onClick={handleClose}
                           className={cn(
-                            "flex items-center justify-between rounded-none sm:rounded-[2px] px-3.5 py-2.5 text-sm sm:text-base font-black transition-all focus-visible:outline-none",
+                            "flex items-center justify-between rounded-none sm:rounded-[2px] px-3.5 py-2.5 text-sm sm:text-base font-bold transition-all focus-visible:outline-none",
                             isActive
-                              ? "border-2 border-ink border-l-4 border-l-primary bg-ink text-white shadow-retro font-black hover:bg-ink/90"
-                              : "text-ink hover:bg-gray-soft hover:text-ink font-extrabold"
+                              ? "border-2 border-ink border-l-4 border-l-primary bg-ink text-white shadow-retro font-bold hover:bg-ink/90"
+                              : "text-ink hover:bg-gray-soft hover:text-ink font-bold"
                           )}
                         >
                           <span className="flex items-center gap-3 truncate">
@@ -268,7 +268,7 @@ export function Sidebar({
                           {item.badge !== undefined && (
                             <span
                               className={cn(
-                                "inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-black font-mono shrink-0",
+                                "inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold font-sans shrink-0",
                                 isActive ? "bg-surface text-ink" : "bg-primary text-white"
                               )}
                             >
@@ -295,7 +295,7 @@ export function Sidebar({
               <div className="absolute bottom-full left-0 right-0 mb-2 rounded-lg border-[1.5px] border-ink bg-surface p-2 shadow-retro-md z-50 space-y-1 animate-fade-up">
                 <div className="px-2 py-1.5 border-b border-ink/40 mb-1">
                   <p className="text-xs font-bold text-ink truncate">{displayName}</p>
-                  <p className="text-xs text-gray-dark font-mono">{roleLabel}</p>
+                  <p className="text-xs text-gray-dark font-sans">{roleLabel}</p>
                 </div>
 
                 <Link
@@ -342,7 +342,7 @@ export function Sidebar({
                         setIsProfileMenuOpen(false);
                         onLogout();
                       }}
-                      className="flex items-center gap-2 w-full px-2.5 py-1.5 rounded-md hover:bg-danger/10 text-danger text-xs font-bold transition-colors"
+                      className="flex items-center gap-2 w-full px-2.5 py-1.5 rounded-md hover:bg-primary/10 text-primary-dark text-xs font-bold transition-colors"
                     >
                       <LogOut className="h-3.5 w-3.5" />
                       <span>Keluar Akun</span>
@@ -361,7 +361,7 @@ export function Sidebar({
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 {/* Box Kotak Inisial Avatar */}
-                <div className="relative h-10 w-10 rounded-md border-[1.5px] border-ink bg-ink overflow-hidden flex items-center justify-center text-sm font-black text-white shrink-0 shadow-xs">
+                <div className="relative h-10 w-10 rounded-md border-[1.5px] border-ink bg-ink overflow-hidden flex items-center justify-center text-sm font-bold text-white shrink-0 shadow-xs">
                   {initials}
                 </div>
 
@@ -389,14 +389,14 @@ export function Sidebar({
           {/* Info Semester & Tombol Logout Langsung */}
           <div className="flex items-center justify-between gap-2 pt-1">
             <div className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-retro-border/60 bg-retro-surface text-xs text-muted-foreground font-medium">
-              <span className="h-2 w-2 rounded-full bg-success inline-block" />
+              <span className="h-2 w-2 rounded-full bg-gray-dark inline-block" />
               <span>2026/2027 Ganjil</span>
             </div>
             {onLogout && (
               <button
                 type="button"
                 onClick={onLogout}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-retro-border/60 bg-retro-surface hover:bg-danger/10 text-danger text-xs font-bold transition-colors focus-visible:outline-none"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-retro-border/60 bg-retro-surface hover:bg-gray-soft text-primary-dark text-xs font-bold transition-colors focus-visible:outline-none"
                 title="Keluar dari akun"
               >
                 <LogOut className="h-3.5 w-3.5" />

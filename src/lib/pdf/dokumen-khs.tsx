@@ -7,12 +7,12 @@ const styles = StyleSheet.create({
     padding: 36,
     fontSize: 9,
     fontFamily: "Helvetica",
-    color: "#101828",
+    color: "#111111",
     backgroundColor: "#FFFFFF",
   },
   header: {
     borderBottomWidth: 2,
-    borderBottomColor: "#2A4DB7",
+    borderBottomColor: "#ED1C24",
     paddingBottom: 10,
     marginBottom: 16,
     flexDirection: "row",
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   logoBox: {
     width: 44,
     height: 44,
-    backgroundColor: "#2A4DB7",
+    backgroundColor: "#ED1C24",
     borderRadius: 4,
     justifyContent: "center",
     alignItems: "center",
@@ -38,18 +38,18 @@ const styles = StyleSheet.create({
   instansiTitle: {
     fontSize: 13,
     fontWeight: "bold",
-    color: "#2A4DB7",
+    color: "#ED1C24",
     letterSpacing: 0.5,
   },
   instansiSub: {
     fontSize: 10,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
     marginTop: 2,
   },
   instansiAddress: {
     fontSize: 8,
-    color: "#667085",
+    color: "#58595B",
     marginTop: 2,
   },
   documentTitleContainer: {
@@ -59,13 +59,13 @@ const styles = StyleSheet.create({
   documentTitle: {
     fontSize: 12,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
     textTransform: "uppercase",
     letterSpacing: 0.8,
   },
   documentNo: {
     fontSize: 8,
-    color: "#667085",
+    color: "#58595B",
     marginTop: 3,
   },
   metaGrid: {
@@ -73,10 +73,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 14,
     padding: 10,
-    backgroundColor: "#F6F7F9",
+    backgroundColor: "#F3F3F4",
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#E4E7EC",
+    borderColor: "#E2E3E4",
   },
   metaCol: {
     width: "48%",
@@ -88,26 +88,26 @@ const styles = StyleSheet.create({
   metaLabel: {
     width: 80,
     fontSize: 8,
-    color: "#667085",
+    color: "#58595B",
   },
   metaValue: {
     flex: 1,
     fontSize: 8,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
   },
   table: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "#E4E7EC",
+    borderColor: "#E2E3E4",
     borderRadius: 4,
     marginBottom: 14,
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#EEF2FC",
+    backgroundColor: "#E2E3E4",
     borderBottomWidth: 1,
-    borderBottomColor: "#E4E7EC",
+    borderBottomColor: "#E2E3E4",
     paddingVertical: 6,
     paddingHorizontal: 6,
     fontWeight: "bold",
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: "#E4E7EC",
+    borderBottomColor: "#E2E3E4",
     paddingVertical: 5,
     paddingHorizontal: 6,
   },
   tableRowEven: {
-    backgroundColor: "#FAFAFA",
+    backgroundColor: "#FFFFFF",
   },
   colNo: { width: "6%", textAlign: "center" },
   colKode: { width: "16%" },
@@ -136,10 +136,10 @@ const styles = StyleSheet.create({
   summaryContent: {
     width: 200,
     padding: 8,
-    backgroundColor: "#EEF2FC",
+    backgroundColor: "#E2E3E4",
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#2A4DB7",
+    borderColor: "#ED1C24",
   },
   summaryRow: {
     flexDirection: "row",
@@ -148,12 +148,12 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 8,
-    color: "#101828",
+    color: "#111111",
   },
   summaryVal: {
     fontSize: 9,
     fontWeight: "bold",
-    color: "#2A4DB7",
+    color: "#ED1C24",
   },
   footer: {
     flexDirection: "row",
@@ -167,24 +167,24 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 8,
-    color: "#667085",
+    color: "#58595B",
     marginBottom: 4,
   },
   signTitle: {
     fontSize: 8,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
     marginBottom: 45,
   },
   signName: {
     fontSize: 8,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
     textDecoration: "underline",
   },
   signNip: {
     fontSize: 7,
-    color: "#667085",
+    color: "#58595B",
     marginTop: 2,
   },
 });

@@ -93,7 +93,7 @@ export default function MahasiswaPengumumanPage() {
                         {item.terbitPada}
                       </span>
                       {!item.sudahDibaca && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-warning/20 text-warning">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-gray-soft/20 text-ink">
                           Baru
                         </span>
                       )}
@@ -115,7 +115,7 @@ export default function MahasiswaPengumumanPage() {
                         Tandai Dibaca
                       </Button>
                     ) : (
-                      <span className="text-xs text-success flex items-center gap-1">
+                      <span className="text-xs text-ink flex items-center gap-1">
                         <CheckCircle className="h-3.5 w-3.5" />
                         Sudah Dibaca
                       </span>

@@ -128,10 +128,10 @@ export function AdminDashboardClient({
             <CardTitle className="text-xs font-semibold text-muted-foreground">
               Pelunasan UKT
             </CardTitle>
-            <CreditCard className="h-4 w-4 text-success" />
+            <CreditCard className="h-4 w-4 text-ink" />
           </CardHeader>
           <CardContent>
-            <div className="font-heading text-2xl font-bold text-success tabular-nums">
+            <div className="font-heading text-2xl font-bold text-ink tabular-nums">
               {stats.totalUktLunas} / {stats.totalMahasiswa}
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -184,7 +184,7 @@ export function AdminDashboardClient({
         <Card>
           <CardHeader className="border-b border-border pb-3">
             <CardTitle className="text-sm font-bold text-foreground flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-success" />
+              <TrendingUp className="h-4 w-4 text-ink" />
               Sebaran Rata-Rata IPK per Angkatan
             </CardTitle>
           </CardHeader>

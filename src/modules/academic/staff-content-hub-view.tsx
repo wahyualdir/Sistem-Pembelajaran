@@ -69,7 +69,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
       <RetroWindow
         title="manajemen_pustaka_dan_sertifikat_digital.app"
         badge="Biro Pustaka & Kredensial Akademik"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -78,7 +78,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <BookOpen className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Pustaka & Sertifikat Digital
               </h1>
             </div>
@@ -88,7 +88,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               Kredensial Digital Terverifikasi
             </span>
           </div>
@@ -98,24 +98,24 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Koleksi Buku Terdaftar</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">{LIBRARY_BOOKS.length} Judul</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Koleksi Buku Terdaftar</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{LIBRARY_BOOKS.length} Judul</div>
           <span className="text-xs text-black/70">Katalog Terindeks</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Total Eksemplar</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">57 Buku</div>
-          <span className="text-xs text-emerald-800 font-bold">23 Tersedia Dipinjam</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Total Eksemplar</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">57 Buku</div>
+          <span className="text-xs text-ink font-bold">23 Tersedia Dipinjam</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Template Sertifikat</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">{CERTIFICATES.length} Format</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Template Sertifikat</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{CERTIFICATES.length} Format</div>
           <span className="text-xs text-primary font-bold">Resmi BAA</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Kredensial Diterbitkan</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">492 Badge</div>
-          <span className="text-xs text-emerald-800 font-bold">Semester Berjalan</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Kredensial Diterbitkan</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">492 Badge</div>
+          <span className="text-xs text-ink font-bold">Semester Berjalan</span>
         </div>
       </div>
 
@@ -130,10 +130,10 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -147,9 +147,9 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
       {/* TAB 1: KOLEKSI PUSTAKA */}
       {activeTab === 'koleksi-pustaka' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-primary" />
                 <span>Katalog Pustaka Digital & Fisik Perpustakaan</span>
               </h2>
@@ -162,7 +162,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
               disabled={!isDemo}
               title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-bold shadow-xs transition-all shrink-0',
                 isDemo
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -170,14 +170,14 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Judul Pustaka</span>
-              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">ISBN & Judul Pustaka</th>
                     <th className="p-3.5 sm:p-4">Pengarang</th>
@@ -190,26 +190,26 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {books.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada koleksi buku pustaka tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     books.map((b) => (
-                      <tr key={b.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={b.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
                           <div>{b.title}</div>
-                          <span className="text-xs font-mono text-black/60">ISBN: {b.isbn}</span>
+                          <span className="text-xs font-sans text-black/60">ISBN: {b.isbn}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{b.author}</td>
                         <td className="p-3.5 sm:p-4">
-                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-xs font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-gray-soft font-sans text-xs font-bold">
                             {b.category}
                           </span>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{b.copies} Eks</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-black text-emerald-800">{b.available} Eks</td>
-                        <td className="p-3.5 sm:p-4 text-xs font-mono text-black/70">{b.location}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{b.copies} Eks</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-ink">{b.available} Eks</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-sans text-black/70">{b.location}</td>
                       </tr>
                     ))
                   )}
@@ -223,9 +223,9 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
       {/* TAB 2: TEMPLATE SERTIFIKAT & BADGE */}
       {activeTab === 'template-sertifikat-dan-badge' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Award className="h-5 w-5 text-primary" />
                 <span>Template Sertifikat Digital & Lencana Mikro (Micro-Credentials)</span>
               </h2>
@@ -238,7 +238,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
               disabled={!isDemo}
               title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-bold shadow-xs transition-all shrink-0',
                 isDemo
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -246,14 +246,14 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
             >
               <Plus className="h-4 w-4" />
               <span>Desain Template Baru</span>
-              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Nama Template Kredensial</th>
                     <th className="p-3.5 sm:p-4">Jenis Kredensial</th>
@@ -266,26 +266,26 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {certificates.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada template sertifikat tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     certificates.map((c) => (
-                      <tr key={c.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={c.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
                           <div>{c.name}</div>
                         </td>
                         <td className="p-3.5 sm:p-4">
-                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-xs font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-gray-soft font-sans text-xs font-bold">
                             {c.type}
                           </span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{c.issuer}</td>
                         <td className="p-3.5 sm:p-4 text-xs text-black/70">{c.criteria}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{c.issuedCount} Penerima</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-black">{c.issuedCount} Penerima</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink font-sans text-xs font-bold">
                             TERVERIFIKASI
                           </span>
                         </td>

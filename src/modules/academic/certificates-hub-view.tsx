@@ -75,7 +75,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
       <RetroWindow
         title="Sertifikat & Portofolio Mahasiswa"
         badge="Terverifikasi Resmi"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -84,7 +84,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Award className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Sertifikat & Portofolio Mahasiswa
               </h1>
             </div>
@@ -94,7 +94,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               {certificates.length} Sertifikat &bull; {projects.length} Proyek
             </span>
           </div>
@@ -112,10 +112,10 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -131,7 +131,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
           {certificates.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <Award className="h-10 w-10 text-black mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Kredensial</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Kredensial</h3>
               <p className="text-xs sm:text-sm text-black font-bold max-w-md mx-auto">
                 Anda belum memiliki sertifikat kompetensi atau badge digital yang diterbitkan oleh laboratorium atau fakultas.
               </p>
@@ -145,16 +145,16 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                 >
                   <div className="space-y-3.5">
                     <div className="flex items-center justify-between">
-                      <div className="p-2.5 rounded-lg border-2 border-black bg-retro-warm text-black shadow-xs">
+                      <div className="p-2.5 rounded-lg border-2 border-black bg-gray-soft text-black shadow-xs">
                         <Award className="h-6 w-6 text-primary" />
                       </div>
-                      <span className="text-xs sm:text-xs font-mono font-black px-2.5 py-0.5 rounded border-2 border-black bg-emerald-100 text-emerald-950 shadow-xs">
+                      <span className="text-xs sm:text-xs font-sans font-bold px-2.5 py-0.5 rounded border-2 border-black bg-surface text-ink shadow-xs">
                         ✓ Terverifikasi Resmi
                       </span>
                     </div>
 
                     <div>
-                      <h3 className="font-heading font-black text-base sm:text-lg text-black leading-snug line-clamp-2">
+                      <h3 className="font-heading font-bold text-base sm:text-lg text-black leading-snug line-clamp-2">
                         {cert.title}
                       </h3>
                       <p className="text-xs text-black font-bold mt-1">
@@ -162,39 +162,51 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                       </p>
                     </div>
 
-                    <div className="space-y-1.5 pt-2 border-t-2 border-black/10 text-xs font-mono">
+                    <div className="space-y-1.5 pt-2 border-t-2 border-black/10 text-xs font-sans">
                       <div className="flex justify-between text-black font-bold">
                         <span>Predikat:</span>
-                        <span className="font-black text-black">{cert.grade}</span>
+                        <span className="font-bold text-black">{cert.grade}</span>
                       </div>
                       <div className="flex justify-between text-black font-bold">
                         <span>Beban Jam:</span>
-                        <span className="font-black text-black">{cert.hours}</span>
+                        <span className="font-bold text-black">{cert.hours}</span>
                       </div>
                       <div className="flex justify-between text-black font-bold">
                         <span>Tanggal Terbit:</span>
-                        <span className="font-black text-black">{cert.date}</span>
+                        <span className="font-bold text-black">{cert.date}</span>
                       </div>
-                      <div className="pt-1 text-xs text-black font-bold truncate font-mono">
+                      <div className="pt-1 text-xs text-black font-bold truncate font-sans">
                         ID: {cert.credentialId}
                       </div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 pt-2 border-t-2 border-black">
-                    <button
-                      type="button"
-                      onClick={() => alert(`Mengunduh sertifikat resmi: ${cert.credentialId}.pdf`)}
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-black text-white text-xs font-black shadow-xs hover:bg-neutral-800 transition-all cursor-pointer"
+                    <Link
+                      href={`/verify/certificate/${encodeURIComponent(cert.credentialId)}`}
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-black text-white text-xs font-bold shadow-xs hover:bg-neutral-800 transition-all cursor-pointer text-center"
                     >
                       <Download className="h-3.5 w-3.5" />
-                      <span>Unduh PDF</span>
-                    </button>
+                      <span>Cetak & PDF</span>
+                    </Link>
+                    <Link
+                      href={`/verify/certificate/${encodeURIComponent(cert.credentialId)}`}
+                      className="inline-flex items-center justify-center p-2 rounded-lg border-2 border-black bg-surface text-ink hover:bg-gray-soft transition-all"
+                      title="Buka Halaman Verifikasi & QR Code"
+                    >
+                      <CheckCircle2 className="h-4 w-4" />
+                    </Link>
                     <button
                       type="button"
-                      onClick={() => alert(`Tautan verifikasi disalin ke clipboard!`)}
-                      className="p-2 rounded-lg border-2 border-black bg-retro-warm text-black hover:bg-neutral-200 transition-all cursor-pointer"
-                      title="Bagikan Kredensial"
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          const url = `${window.location.origin}/verify/certificate/${encodeURIComponent(cert.credentialId)}`;
+                          navigator.clipboard?.writeText(url);
+                          alert(`Tautan verifikasi disalin:\n${url}`);
+                        }
+                      }}
+                      className="p-2 rounded-lg border-2 border-black bg-gray-soft text-black hover:bg-neutral-200 transition-all cursor-pointer"
+                      title="Salin Tautan Verifikasi Publik"
                     >
                       <Share2 className="h-4 w-4" />
                     </button>
@@ -212,7 +224,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
           {projects.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <FolderArchive className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Portofolio Belum Ditambahkan</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Portofolio Belum Ditambahkan</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Belum ada artefak tugas besar atau proyek kuliah yang ditautkan ke portofolio belajar Anda.
               </p>
@@ -226,19 +238,19 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                 >
                   <div className="space-y-3.5">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="font-mono text-xs sm:text-xs font-black px-2.5 py-0.5 rounded border border-black bg-retro-warm text-black shadow-xs">
+                      <span className="font-sans text-xs sm:text-xs font-bold px-2.5 py-0.5 rounded border border-black bg-gray-soft text-black shadow-xs">
                         {proj.type}
                       </span>
-                      <span className="text-xs sm:text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-400">
+                      <span className="text-xs sm:text-xs font-sans font-bold text-ink bg-surface px-2 py-0.5 rounded border border-ink">
                         ✓ {proj.status}
                       </span>
                     </div>
 
                     <div>
-                      <h3 className="font-heading font-black text-lg sm:text-xl text-black leading-tight">
+                      <h3 className="font-heading font-bold text-lg sm:text-xl text-black leading-tight">
                         {proj.title}
                       </h3>
-                      <p className="text-xs text-primary font-black mt-1">
+                      <p className="text-xs text-primary font-bold mt-1">
                         {proj.course}
                       </p>
                     </div>
@@ -251,7 +263,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                       {proj.tech.map((t) => (
                         <span
                           key={t}
-                          className="px-2 py-0.5 rounded border border-black bg-white text-xs font-mono font-bold text-black"
+                          className="px-2 py-0.5 rounded border border-black bg-white text-xs font-sans font-bold text-black"
                         >
                           {t}
                         </span>
@@ -259,7 +271,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between pt-3 border-t-2 border-black text-xs font-mono">
+                  <div className="flex items-center justify-between pt-3 border-t-2 border-black text-xs font-sans">
                     <span className="text-black/60 truncate font-semibold">
                       {proj.repo}
                     </span>

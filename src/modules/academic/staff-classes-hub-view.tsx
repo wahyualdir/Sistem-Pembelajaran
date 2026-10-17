@@ -196,7 +196,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
       <RetroWindow
         title="manajemen_kelas_dan_peserta_akademik.app"
         badge="Biro Administrasi Rombongan Belajar"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -205,7 +205,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Layers className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Kelas & Peserta Kuliah
               </h1>
             </div>
@@ -215,7 +215,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               Semester Ganjil 2026/2027
             </span>
           </div>
@@ -225,24 +225,24 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Total Rombel Aktif</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">94 Rombel</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Total Rombel Aktif</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">94 Rombel</div>
           <span className="text-xs text-black/70">Semester Ganjil</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Peserta Terdaftar</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">2,840 Mhs</div>
-          <span className="text-xs text-emerald-800 font-bold">100% Ter-enroll</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Peserta Terdaftar</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">2,840 Mhs</div>
+          <span className="text-xs text-ink font-bold">100% Ter-enroll</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Mutasi Pindah Kelas</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">12 Kasus</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Mutasi Pindah Kelas</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">12 Kasus</div>
           <span className="text-xs text-black/70">Diproses BAA</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Batch CSV Terakhir</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">Batch #08</div>
-          <span className="text-xs text-emerald-800 font-bold">Validasi Sukses</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Batch CSV Terakhir</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">Batch #08</div>
+          <span className="text-xs text-ink font-bold">Validasi Sukses</span>
         </div>
       </div>
 
@@ -257,10 +257,10 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -274,9 +274,9 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
       {/* TAB 1: ENROLL PESERTA */}
       {activeTab === 'enroll-peserta' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Users className="h-5 w-5 text-primary" />
                 <span>Pendaftaran Peserta ke Rombongan Belajar (Enrollment)</span>
               </h2>
@@ -289,7 +289,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
               disabled={!isActionAllowed}
               title={!isActionAllowed ? 'Fitur ini belum aktif: Membutuhkan flag persistensi aktif' : undefined}
               className={cn(
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-bold shadow-xs transition-all shrink-0',
                 isActionAllowed
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -297,14 +297,14 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             >
               <Plus className="h-4 w-4" />
               <span>Enroll Manual</span>
-              {!isActionAllowed && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isActionAllowed && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">NIM & Mahasiswa</th>
                     <th className="p-3.5 sm:p-4">Program Studi</th>
@@ -316,25 +316,25 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {enrolledStudents.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={5} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada mahasiswa terdaftar di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     enrolledStudents.map((s) => (
-                      <tr key={s.nim} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={s.nim} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{s.name}</div>
-                          <span className="text-xs font-mono text-black/60">{s.nim}</span>
+                          <span className="text-xs font-sans text-black/60">{s.nim}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{s.prodi}</td>
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{s.course}</div>
-                          <span className="text-xs font-mono text-black/60">{s.classCode}</span>
+                          <span className="text-xs font-sans text-black/60">{s.classCode}</span>
                         </td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs text-black/70">{s.enrolledAt}</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs text-black/70">{s.enrolledAt}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink font-sans text-xs font-bold">
                             TERDAFTAR
                           </span>
                         </td>
@@ -351,8 +351,8 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
       {/* TAB 2: IMPOR CSV */}
       {activeTab === 'impor-csv' && (
         <div className="space-y-6">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl">
-            <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl">
+            <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
               <Download className="h-5 w-5 text-primary" />
               <span>Impor Data Peserta & Kelas via CSV (Batch Synchronization)</span>
             </h2>
@@ -363,11 +363,11 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
 
           {/* Area Upload File */}
           <div className="rounded-xl border-2 border-dashed border-black bg-white p-6 sm:p-8 text-center space-y-4">
-            <div className="p-3 rounded-full border-2 border-black bg-retro-yellow inline-block">
+            <div className="p-3 rounded-full border-2 border-black bg-gray-soft inline-block">
               <Upload className="h-8 w-8 text-black" />
             </div>
             <div className="space-y-1">
-              <h3 className="font-heading font-black text-base text-black">
+              <h3 className="font-heading font-bold text-base text-black">
                 {csvFileName ? `File Terpilih: ${csvFileName}` : 'Pilih Berkas CSV untuk Diunggah'}
               </h3>
               <p className="text-xs text-black/70 max-w-md mx-auto">
@@ -376,7 +376,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             </div>
 
             <div className="flex items-center justify-center gap-3">
-              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-primary text-white text-xs sm:text-sm font-black shadow-retro hover:bg-black transition-all">
+              <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-primary text-white text-xs sm:text-sm font-bold shadow-retro hover:bg-black transition-all">
                 <Upload className="h-4 w-4" />
                 <span>Pilih Berkas CSV</span>
                 <input
@@ -399,8 +399,8 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             </div>
 
             {csvError && (
-              <div className="p-3 bg-rose-50 border-2 border-rose-500 rounded-lg text-rose-950 text-xs font-bold flex items-center justify-center gap-2 max-w-md mx-auto">
-                <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
+              <div className="p-3 bg-surface border-2 border-ink rounded-lg text-primary-dark text-xs font-bold flex items-center justify-center gap-2 max-w-md mx-auto">
+                <AlertCircle className="h-4 w-4 text-primary-dark shrink-0" />
                 <span>{csvError}</span>
               </div>
             )}
@@ -409,10 +409,10 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
           {/* Pratinjau Baris + Error Per Baris Sebelum Simpan */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h3 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <span>Pratinjau Data CSV ({csvRows.length} Baris Ditemukan)</span>
               </h3>
-              <span className="text-xs font-mono font-bold text-black/70">
+              <span className="text-xs font-sans font-bold text-black/70">
                 Valid: {csvRows.filter((r) => r.isValid).length} | Error: {csvRows.filter((r) => !r.isValid).length}
               </span>
             </div>
@@ -420,7 +420,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3 sm:p-3.5 text-center">Baris</th>
                       <th className="p-3 sm:p-3.5">NIM Mahasiswa</th>
@@ -437,27 +437,27 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
                         key={row.row}
                         className={cn(
                           'transition-colors',
-                          row.isValid ? 'hover:bg-retro-warm/30' : 'bg-rose-50/60 hover:bg-rose-100/60'
+                          row.isValid ? 'hover:bg-gray-soft/30' : 'bg-surface/60 hover:bg-surface/60'
                         )}
                       >
-                        <td className="p-3 sm:p-3.5 text-center font-mono font-bold text-black">#{row.row}</td>
-                        <td className="p-3 sm:p-3.5 font-mono font-bold text-black">{row.nim}</td>
+                        <td className="p-3 sm:p-3.5 text-center font-sans font-bold text-black">#{row.row}</td>
+                        <td className="p-3 sm:p-3.5 font-sans font-bold text-black">{row.nim}</td>
                         <td className="p-3 sm:p-3.5 font-bold text-black">{row.name}</td>
-                        <td className="p-3 sm:p-3.5 text-black/70 font-mono text-xs">{row.email}</td>
-                        <td className="p-3 sm:p-3.5 font-mono font-bold">{row.classCode}</td>
+                        <td className="p-3 sm:p-3.5 text-black/70 font-sans text-xs">{row.email}</td>
+                        <td className="p-3 sm:p-3.5 font-sans font-bold">{row.classCode}</td>
                         <td className="p-3 sm:p-3.5 text-center">
                           {row.isValid ? (
-                            <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
+                            <span className="px-2 py-0.5 rounded border border-ink bg-surface text-ink font-sans text-xs font-bold">
                               ✓ VALID
                             </span>
                           ) : (
-                            <span className="px-2 py-0.5 rounded border border-rose-500 bg-rose-100 text-rose-950 font-mono text-xs font-bold">
+                            <span className="px-2 py-0.5 rounded border border-ink bg-surface text-primary-dark font-sans text-xs font-bold">
                               ✗ ERROR
                             </span>
                           )}
                         </td>
-                        <td className="p-3 sm:p-3.5 text-xs text-rose-900 font-medium">
-                          {row.error || <span className="text-black/40 font-mono">-</span>}
+                        <td className="p-3 sm:p-3.5 text-xs text-primary-dark font-medium">
+                          {row.error || <span className="text-black/40 font-sans">-</span>}
                         </td>
                       </tr>
                     ))}
@@ -509,7 +509,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
                   }
                 }}
                 className={cn(
-                  'w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all shrink-0',
+                  'w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all shrink-0',
                   isActionAllowed && csvRows.filter((r) => r.isValid).length > 0
                     ? 'bg-black text-white hover:bg-neutral-800 shadow-retro cursor-pointer'
                     : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -517,7 +517,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
               >
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Simpan & Daftarkan {csvRows.filter((r) => r.isValid).length} Baris Valid</span>
-                {!isActionAllowed && <span className="text-xs bg-neutral-200 px-1.5 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+                {!isActionAllowed && <span className="text-xs bg-neutral-200 px-1.5 py-0.5 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
               </button>
             </div>
           </div>
@@ -527,9 +527,9 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
       {/* TAB 3: PINDAH KELAS */}
       {activeTab === 'pindah-kelas' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <ArrowRight className="h-5 w-5 text-primary" />
                 <span>Mutasi Pindah Kelas Paralel Mahasiswa</span>
               </h2>
@@ -542,7 +542,7 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
               disabled={!isActionAllowed}
               title={!isActionAllowed ? 'Fitur ini belum aktif: Membutuhkan flag persistensi aktif' : undefined}
               className={cn(
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-bold shadow-xs transition-all shrink-0',
                 isActionAllowed
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -550,14 +550,14 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             >
               <Plus className="h-4 w-4" />
               <span>Ajukan Mutasi Kelas</span>
-              {!isActionAllowed && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isActionAllowed && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">NIM & Mahasiswa</th>
                     <th className="p-3.5 sm:p-4">Mata Kuliah</th>
@@ -570,23 +570,23 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {classMutations.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada permohonan mutasi pindah kelas di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     classMutations.map((m) => (
-                      <tr key={m.nim} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={m.nim} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{m.name}</div>
-                          <span className="text-xs font-mono text-black/60">{m.nim}</span>
+                          <span className="text-xs font-sans text-black/60">{m.nim}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 font-bold text-black">{m.course}</td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs text-rose-800">{m.from}</td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs text-emerald-800 font-bold">{m.to}</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs text-primary-dark">{m.from}</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs text-ink font-bold">{m.to}</td>
                         <td className="p-3.5 sm:p-4 text-xs text-black/80">{m.reason}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink font-sans text-xs font-bold">
                             {m.status}
                           </span>
                         </td>
@@ -607,16 +607,16 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             className={cn(
               'px-4 py-3 rounded-xl border-2 border-black font-bold text-xs sm:text-sm shadow-retro flex items-center gap-2.5',
               toastMessage.type === 'success'
-                ? 'bg-emerald-100 text-emerald-950'
+                ? 'bg-surface text-ink'
                 : 'bg-white text-black'
             )}
           >
-            <CheckCircle2 className="h-5 w-5 text-emerald-700" />
+            <CheckCircle2 className="h-5 w-5 text-ink" />
             <span>{toastMessage.text}</span>
             <button
               type="button"
               onClick={() => setToastMessage(null)}
-              className="ml-2 font-mono hover:underline cursor-pointer"
+              className="ml-2 font-sans hover:underline cursor-pointer"
             >
               [Tutup]
             </button>

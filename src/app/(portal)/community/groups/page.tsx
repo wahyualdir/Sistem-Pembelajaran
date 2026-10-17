@@ -49,7 +49,7 @@ export default function GroupsPage() {
       <RetroWindow
         title="grup_belajar_kolaboratif.app"
         badge="Grup Aktif"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -58,7 +58,7 @@ export default function GroupsPage() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Users className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Grup Belajar Bersama
               </h1>
             </div>
@@ -70,7 +70,7 @@ export default function GroupsPage() {
           <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-black text-white font-heading font-black text-sm sm:text-base shadow-retro hover:bg-neutral-800 transition-all shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-black text-white font-heading font-bold text-sm sm:text-base shadow-retro hover:bg-neutral-800 transition-all shrink-0"
             >
               <PlusCircle className="h-4 w-4" />
               <span>Buat Grup Belajar</span>
@@ -89,10 +89,10 @@ export default function GroupsPage() {
             <div className="space-y-4">
               {/* Badges Bar */}
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="px-3 py-1 rounded border-2 border-black bg-retro-warm text-xs sm:text-sm font-mono font-black text-black shadow-xs">
+                <span className="px-3 py-1 rounded border-2 border-black bg-gray-soft text-xs sm:text-sm font-sans font-bold text-black shadow-xs">
                   {g.topic}
                 </span>
-                <span className="px-3 py-1 rounded border-2 border-black bg-white text-xs sm:text-sm font-mono font-black text-black shadow-xs flex items-center gap-1.5">
+                <span className="px-3 py-1 rounded border-2 border-black bg-white text-xs sm:text-sm font-sans font-bold text-black shadow-xs flex items-center gap-1.5">
                   <Users className="h-3.5 w-3.5" />
                   <span>{g.members} Mahasiswa Aktif</span>
                 </span>
@@ -100,7 +100,7 @@ export default function GroupsPage() {
 
               {/* Title & Description */}
               <div className="space-y-1.5">
-                <h2 className="font-heading font-black text-xl sm:text-2xl text-black leading-snug">
+                <h2 className="font-heading font-bold text-xl sm:text-2xl text-black leading-snug">
                   {g.name}
                 </h2>
                 <p className="text-sm sm:text-base text-neutral-800 font-medium leading-relaxed">
@@ -113,7 +113,7 @@ export default function GroupsPage() {
                 {g.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2.5 py-0.5 rounded border-2 border-black bg-retro-surface text-xs font-mono font-bold text-black"
+                    className="px-2.5 py-0.5 rounded border-2 border-black bg-retro-surface text-xs font-sans font-bold text-black"
                   >
                     #{tag}
                   </span>
@@ -121,7 +121,7 @@ export default function GroupsPage() {
               </div>
 
               {/* Schedule */}
-              <div className="pt-3 border-t-2 border-black/10 flex items-center gap-2 text-sm font-mono font-bold text-black">
+              <div className="pt-3 border-t-2 border-black/10 flex items-center gap-2 text-sm font-sans font-bold text-black">
                 <Clock className="h-4 w-4 text-primary shrink-0" />
                 <span>{g.schedule}</span>
               </div>
@@ -130,7 +130,7 @@ export default function GroupsPage() {
             {/* Bottom Button */}
             <button
               type="button"
-              className="w-full py-3.5 px-4 rounded-lg border-2 border-black bg-retro-surface hover:bg-retro-yellow font-heading font-black text-sm sm:text-base shadow-retro hover:shadow-retro-md transition-all flex items-center justify-center gap-2 text-black"
+              className="w-full py-3.5 px-4 rounded-lg border-2 border-black bg-retro-surface hover:bg-gray-soft font-heading font-bold text-sm sm:text-base shadow-retro hover:shadow-retro-md transition-all flex items-center justify-center gap-2 text-black"
             >
               <span>Gabung Grup Belajar Ini</span>
               <ArrowRight className="h-4 w-4" />

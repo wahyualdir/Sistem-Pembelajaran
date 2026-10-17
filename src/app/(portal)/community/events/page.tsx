@@ -15,7 +15,7 @@ const EVENTS = [
     type: 'Webinar Nasional',
     seats: '350/500 Kursi',
     status: 'Pendaftaran Dibuka',
-    badgeVariant: 'bg-retro-yellow text-black',
+    badgeVariant: 'bg-gray-soft text-black',
   },
   {
     id: 'ev-2',
@@ -54,7 +54,7 @@ const EVENTS = [
     type: 'Mentoring Karir',
     seats: '120/150 Kursi',
     status: 'Pendaftaran Dibuka',
-    badgeVariant: 'bg-retro-purple/40 text-black',
+    badgeVariant: 'bg-gray-soft/40 text-black',
   },
 ];
 
@@ -65,7 +65,7 @@ export default function EventsPage() {
       <RetroWindow
         title="event_dan_webinar_akademik.app"
         badge={`${EVENTS.length} KEGIATAN AKTIF`}
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -74,7 +74,7 @@ export default function EventsPage() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Calendar className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Event & Webinar Akademik
               </h1>
             </div>
@@ -84,7 +84,7 @@ export default function EventsPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-sans font-bold text-black shadow-retro">
               Semester Ganjil 2026/2027
             </span>
           </div>
@@ -94,15 +94,15 @@ export default function EventsPage() {
       {/* 2. GRID CARDS FULL */}
       <RetroWindow
         title={`jadwal_agenda_kegiatan.list (${EVENTS.length})`}
-        headerClassName="bg-retro-warm"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 space-y-6"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-          <h2 className="font-heading font-black text-xl sm:text-2xl text-black flex items-center gap-2.5">
+          <h2 className="font-heading font-bold text-xl sm:text-2xl text-black flex items-center gap-2.5">
             <Award className="h-6 w-6 text-primary" />
             <span>Daftar Kegiatan Ilmiah & Workshop Tersedia</span>
           </h2>
-          <span className="text-xs sm:text-sm font-mono font-bold text-neutral-800">
+          <span className="text-xs sm:text-sm font-sans font-bold text-neutral-800">
             Status: Terverifikasi Fakultas
           </span>
         </div>
@@ -116,19 +116,19 @@ export default function EventsPage() {
             >
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <span className={`px-3 py-1 rounded border-2 border-black text-xs sm:text-sm font-mono font-black shadow-xs ${ev.badgeVariant}`}>
+                  <span className={`px-3 py-1 rounded border-2 border-black text-xs sm:text-sm font-sans font-bold shadow-xs ${ev.badgeVariant}`}>
                     {ev.type}
                   </span>
-                  <span className="px-3 py-1 rounded border-2 border-black bg-retro-warm text-xs sm:text-sm font-mono font-black text-black shadow-xs">
+                  <span className="px-3 py-1 rounded border-2 border-black bg-gray-soft text-xs sm:text-sm font-sans font-bold text-black shadow-xs">
                     {ev.seats}
                   </span>
                 </div>
 
-                <h3 className="font-heading font-black text-xl sm:text-2xl text-black line-clamp-2 leading-snug">
+                <h3 className="font-heading font-bold text-xl sm:text-2xl text-black line-clamp-2 leading-snug">
                   {ev.title}
                 </h3>
 
-                <div className="space-y-2 pt-3 text-sm font-mono text-neutral-900 border-t-2 border-black/10">
+                <div className="space-y-2 pt-3 text-sm font-sans text-neutral-900 border-t-2 border-black/10">
                   <div className="flex items-center gap-2 text-black font-bold">
                     <span className="text-primary">🗓</span>
                     <span>{ev.date} · {ev.time}</span>
@@ -145,14 +145,14 @@ export default function EventsPage() {
               </div>
 
               <div className="pt-3.5 border-t-2 border-black/10 flex flex-wrap items-center justify-between gap-3">
-                <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono font-black text-emerald-950 bg-emerald-100 px-3 py-1 rounded border-2 border-black shadow-xs">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-800" />
+                <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-sans font-bold text-ink bg-surface px-3 py-1 rounded border-2 border-black shadow-xs">
+                  <CheckCircle2 className="h-4 w-4 text-ink" />
                   <span>{ev.status}</span>
                 </span>
 
                 <button
                   type="button"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-retro-yellow text-black font-heading font-black text-xs sm:text-sm hover:bg-black hover:text-white shadow-retro hover:shadow-retro-md transition-all shrink-0"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-gray-soft text-black font-heading font-bold text-xs sm:text-sm hover:bg-black hover:text-white shadow-retro hover:shadow-retro-md transition-all shrink-0"
                 >
                   <span>Daftar Kegiatan Sekarang</span>
                   <ArrowRight className="h-4 w-4" />

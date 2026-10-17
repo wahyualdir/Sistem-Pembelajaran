@@ -126,7 +126,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
       <RetroWindow
         title="Presensi & Perizinan Kuliah"
         badge={`Kehadiran ${attendanceRate}%`}
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-4 sm:p-6 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -135,7 +135,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
               <div className="p-2 sm:p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <CalendarCheck2 className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-foreground">
                 Presensi & Perizinan Kuliah
               </h1>
             </div>
@@ -148,14 +148,14 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
             <button
               type="button"
               onClick={() => setIsPermitModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-primary text-white font-black text-xs sm:text-sm shadow-retro hover:bg-black transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-primary text-white font-bold text-xs sm:text-sm shadow-retro hover:bg-black transition-all cursor-pointer"
             >
               <FileText className="h-4 w-4" />
               <span>Ajukan Izin/Sakit</span>
             </button>
             <Link
               href="/classes"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-white font-black text-xs sm:text-sm text-black shadow-retro hover:bg-retro-warm transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-white font-bold text-xs sm:text-sm text-black shadow-retro hover:bg-gray-soft transition-all"
             >
               <span>Kelas Kuliah</span>
               <ArrowRight className="h-4 w-4" />
@@ -167,31 +167,31 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
       {/* 2. STATS RINGKASAN */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-mono font-black uppercase text-black">Total Sesi Diikuti</div>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">{records.length} Sesi</div>
+          <div className="text-xs font-sans font-bold uppercase text-black">Total Sesi Diikuti</div>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{records.length} Sesi</div>
           <div className="text-xs text-black font-bold">Semester Berjalan</div>
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-mono font-black uppercase text-black">Tepat Waktu</div>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-emerald-800">
+          <div className="text-xs font-sans font-bold uppercase text-black">Tepat Waktu</div>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
             {records.filter((r) => r.status === 'HADIR').length} Sesi
           </div>
-          <div className="text-xs text-emerald-800 font-black">Presensi Valid</div>
+          <div className="text-xs text-ink font-bold">Presensi Valid</div>
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-mono font-black uppercase text-black">Terlambat / Izin</div>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-amber-900">
+          <div className="text-xs font-sans font-bold uppercase text-black">Terlambat / Izin</div>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
             {records.filter((r) => r.status === 'TERLAMBAT' || r.status === 'IZIN' || r.status === 'SAKIT').length} Sesi
           </div>
-          <div className="text-xs text-amber-900 font-black">Dispensasi Diterima</div>
+          <div className="text-xs text-ink font-bold">Dispensasi Diterima</div>
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-mono font-black uppercase text-black">Syarat Ujian (&gt;75%)</div>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">{attendanceRate}%</div>
-          <div className="text-xs text-primary font-black">
+          <div className="text-xs font-sans font-bold uppercase text-black">Syarat Ujian (&gt;75%)</div>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{attendanceRate}%</div>
+          <div className="text-xs text-primary font-bold">
             {records.length === 0
               ? 'Belum Ada Presensi'
               : attendanceRate >= 75
@@ -212,10 +212,10 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -229,11 +229,11 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
       {/* TAB 1: RIWAYAT PRESENSI */}
       {activeTab === 'riwayat' && (
         <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
-          <div className="p-4 bg-retro-warm border-b-2 border-black flex items-center justify-between">
-            <h2 className="font-heading font-black text-sm sm:text-base text-black">
+          <div className="p-4 bg-gray-soft border-b-2 border-black flex items-center justify-between">
+            <h2 className="font-heading font-bold text-sm sm:text-base text-black">
               Riwayat Presensi Masuk ({records.length})
             </h2>
-            <span className="text-xs font-mono font-black text-black">
+            <span className="text-xs font-sans font-bold text-black">
               Validasi Geofence & Dynamic QR
             </span>
           </div>
@@ -241,7 +241,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
           {records.length === 0 ? (
             <div className="p-10 text-center space-y-3">
               <Clock className="h-10 w-10 text-black mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">
                 Belum Ada Catatan Presensi
               </h3>
               <p className="text-xs sm:text-sm text-black font-bold max-w-md mx-auto">
@@ -251,7 +251,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-black uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                   <th className="p-3.5 sm:p-4">Pertemuan & Mata Kuliah</th>
                   <th className="p-3.5 sm:p-4">Waktu Presensi</th>
@@ -262,34 +262,34 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
               </thead>
               <tbody className="divide-y-2 divide-black/10 font-bold">
                 {records.map((r) => (
-                  <tr key={r.id} className="hover:bg-retro-warm/30 transition-colors">
-                    <td className="p-3.5 sm:p-4 font-black text-black">
+                  <tr key={r.id} className="hover:bg-gray-soft/30 transition-colors">
+                    <td className="p-3.5 sm:p-4 font-bold text-black">
                       <div>Pertemuan #{r.meetingNumber} — {r.courseTitle}</div>
-                      <div className="text-xs font-mono font-bold text-black">{r.date}</div>
+                      <div className="text-xs font-sans font-bold text-black">{r.date}</div>
                     </td>
-                    <td className="p-3.5 sm:p-4 text-xs font-mono font-black text-black">
+                    <td className="p-3.5 sm:p-4 text-xs font-sans font-bold text-black">
                       {r.time}
                     </td>
                     <td className="p-3.5 sm:p-4 text-center">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-black bg-retro-warm text-black font-mono text-xs font-black shadow-xs">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border-2 border-black bg-gray-soft text-black font-sans text-xs font-bold shadow-xs">
                         {r.method === 'QR' && <QrCode className="h-3.5 w-3.5" />}
                         {r.method === 'LOKASI' && <MapPin className="h-3.5 w-3.5" />}
                         {r.method === 'BIOMETRIK' && <Fingerprint className="h-3.5 w-3.5" />}
                         <span>{r.method}</span>
                       </span>
                     </td>
-                    <td className="p-3.5 sm:p-4 text-xs font-black text-black">
+                    <td className="p-3.5 sm:p-4 text-xs font-bold text-black">
                       {r.room}
                     </td>
                     <td className="p-3.5 sm:p-4 text-center">
                       <span
                         className={cn(
-                          'px-2.5 py-1 rounded border-2 border-black text-xs font-black font-mono',
+                          'px-2.5 py-1 rounded border-2 border-black text-xs font-bold font-sans',
                           r.status === 'HADIR'
-                            ? 'bg-emerald-200 text-emerald-950'
+                            ? 'bg-surface text-ink'
                             : r.status === 'TERLAMBAT'
-                            ? 'bg-amber-200 text-amber-950'
-                            : 'bg-blue-200 text-blue-950'
+                            ? 'bg-gray-soft text-ink'
+                            : 'bg-gray-soft text-ink'
                         )}
                       >
                         {r.status}
@@ -308,8 +308,8 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
       {activeTab === 'izin' && (
         <div className="space-y-4">
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
-            <div className="p-4 bg-retro-warm border-b-2 border-black flex items-center justify-between">
-              <h2 className="font-heading font-black text-sm sm:text-base text-black">
+            <div className="p-4 bg-gray-soft border-b-2 border-black flex items-center justify-between">
+              <h2 className="font-heading font-bold text-sm sm:text-base text-black">
                 Daftar Permohonan Izin & Sakit ({leavesList.length})
               </h2>
               <button
@@ -324,7 +324,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
             {leavesList.length === 0 ? (
               <div className="p-10 text-center space-y-3">
                 <FileCheck className="h-10 w-10 text-black/40 mx-auto" />
-                <h3 className="font-heading font-black text-base sm:text-lg text-black">
+                <h3 className="font-heading font-bold text-base sm:text-lg text-black">
                   Tidak Ada Pengajuan Izin Aktif
                 </h3>
                 <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
@@ -334,7 +334,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Tipe & Mata Kuliah</th>
                       <th className="p-3.5 sm:p-4">Tanggal Izin</th>
@@ -345,26 +345,26 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {leavesList.map((l) => (
-                      <tr key={l.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={l.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div className="flex items-center gap-2">
-                            <span className="px-2 py-0.5 rounded border border-black bg-retro-warm text-xs font-mono">
+                            <span className="px-2 py-0.5 rounded border border-black bg-gray-soft text-xs font-sans">
                               {l.type}
                             </span>
                             <span>{l.courseTitle}</span>
                           </div>
-                          <div className="text-xs font-mono text-black/60 mt-0.5">
+                          <div className="text-xs font-sans text-black/60 mt-0.5">
                             Pertemuan #{l.meetingNumber}
                           </div>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-xs font-mono text-black/80">
+                        <td className="p-3.5 sm:p-4 text-xs font-sans text-black/80">
                           {l.date}
                         </td>
                         <td className="p-3.5 sm:p-4 text-xs text-black/80 max-w-xs">
                           {l.reason}
                         </td>
                         <td className="p-3.5 sm:p-4 text-xs">
-                          <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-black bg-white text-black font-mono">
+                          <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-black bg-white text-black font-sans">
                             <FileText className="h-3.5 w-3.5" />
                             <span>{l.attachmentName}</span>
                           </span>
@@ -372,12 +372,12 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-1 rounded border text-xs font-bold font-mono',
+                              'px-2.5 py-1 rounded border text-xs font-bold font-sans',
                               l.status === 'DISETUJUI'
-                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                                ? 'border-ink bg-surface text-ink'
                                 : l.status === 'DITOLAK'
                                 ? 'border-red-500 bg-red-100 text-red-950'
-                                : 'border-amber-500 bg-amber-100 text-amber-950'
+                                : 'border-ink bg-gray-soft text-ink'
                             )}
                           >
                             {l.status}
@@ -402,7 +402,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                 <div className="p-2 rounded-lg border-2 border-black bg-primary text-white">
                   <FileText className="h-5 w-5" />
                 </div>
-                <h3 className="font-heading font-black text-lg sm:text-xl text-black">
+                <h3 className="font-heading font-bold text-lg sm:text-xl text-black">
                   Ajukan Izin / Sakit
                 </h3>
               </div>
@@ -417,8 +417,8 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
 
             {isPermitSuccess ? (
               <div className="p-6 text-center space-y-3">
-                <CheckCircle2 className="h-12 w-12 text-emerald-600 mx-auto" />
-                <h4 className="font-heading font-black text-lg text-black">Permohonan Izin Terkirim!</h4>
+                <CheckCircle2 className="h-12 w-12 text-ink mx-auto" />
+                <h4 className="font-heading font-bold text-lg text-black">Permohonan Izin Terkirim!</h4>
                 <p className="text-xs sm:text-sm text-black/70">
                   Surat keterangan perizinan telah diteruskan ke dosen pengampu mata kuliah terkait.
                 </p>
@@ -427,7 +427,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
               <form onSubmit={handlePermitSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-xs font-black uppercase text-black font-mono">
+                    <label className="text-xs font-bold uppercase text-black font-sans">
                       Jenis Izin
                     </label>
                     <select
@@ -441,7 +441,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-black uppercase text-black font-mono">
+                    <label className="text-xs font-bold uppercase text-black font-sans">
                       Tanggal Tidak Hadir
                     </label>
                     <input
@@ -457,7 +457,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
 
                 <div className="grid grid-cols-3 gap-3">
                   <div className="col-span-2 space-y-1">
-                    <label className="text-xs font-black uppercase text-black font-mono">
+                    <label className="text-xs font-bold uppercase text-black font-sans">
                       Mata Kuliah
                     </label>
                     <select
@@ -474,7 +474,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-black uppercase text-black font-mono">
+                    <label className="text-xs font-bold uppercase text-black font-sans">
                       Pertemuan Ke-
                     </label>
                     <input
@@ -490,7 +490,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-black uppercase text-black font-mono">
+                  <label className="text-xs font-bold uppercase text-black font-sans">
                     Alasan / Keterangan Tidak Hadir
                   </label>
                   <textarea
@@ -504,10 +504,10 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-black uppercase text-black font-mono">
+                  <label className="text-xs font-bold uppercase text-black font-sans">
                     Upload Lampiran Surat Keterangan Dokter / Dispensasi (PDF/JPG)
                   </label>
-                  <div className="rounded-lg border-2 border-dashed border-black p-4 text-center bg-retro-warm/20 space-y-2">
+                  <div className="rounded-lg border-2 border-dashed border-black p-4 text-center bg-gray-soft/20 space-y-2">
                     <UploadCloud className="h-7 w-7 text-black/60 mx-auto" />
                     <input
                       type="file"
@@ -531,9 +531,9 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                 </div>
 
                 {!isDemo && (
-                  <div className="p-3 rounded-lg border-2 border-black bg-amber-50 text-xs text-amber-950 font-medium space-y-1">
+                  <div className="p-3 rounded-lg border-2 border-black bg-gray-soft text-xs text-ink font-medium space-y-1">
                     <p className="font-bold flex items-center gap-1.5">
-                      <AlertCircle className="h-4 w-4 text-amber-900" />
+                      <AlertCircle className="h-4 w-4 text-ink" />
                       <span>Pemberitahuan Persistensi Database (Fase 3)</span>
                     </p>
                     <p>
@@ -554,7 +554,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                     <button
                       type="button"
                       disabled
-                      className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-neutral-200 text-neutral-500 text-xs sm:text-sm font-black cursor-not-allowed"
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-neutral-200 text-neutral-500 text-xs sm:text-sm font-bold cursor-not-allowed"
                     >
                       <span>Fitur Segera Aktif (Belum Tersimpan ke Database)</span>
                     </button>
@@ -562,7 +562,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                     <button
                       type="submit"
                       disabled={isPending}
-                      className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-bold shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
                     >
                       <Send className="h-4 w-4" />
                       <span>{isPending ? 'Mengirim...' : 'Kirim Permohonan Izin'}</span>

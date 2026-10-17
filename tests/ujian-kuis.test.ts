@@ -1,6 +1,26 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+const mockCurrentUser = vi.hoisted(() => ({
+  value: {
+    user: { id: 'a0000002-0000-0000-0000-000000000002', email: 'dosen001@siajar.test' },
+    profile: { full_name: 'Dr. Budi Santoso, M.Kom.' },
+    activeRole: 'LECTURER',
+    roles: [{ code: 'LECTURER' }],
+    isImpersonating: false,
+  } as any,
+}));
+
+vi.mock('@/modules/identity/actions', () => ({
+  getCurrentUserWithRoles: vi.fn(async () => mockCurrentUser.value),
+}));
+
 import {
   createQuizAction,
+  listClassQuizzesAction,
+  getQuizDetailAction,
+  listQuizAttemptsAction,
+  getQuestionBankAction,
+  saveToQuestionBankAction,
   submitQuizAttemptAction,
   recordExamEventAction,
   executeLiveCodeAction,
@@ -17,6 +37,13 @@ import {
 
 describe('FASE 4: Modul Ujian & Kuis Terpadu Tests', () => {
   beforeEach(() => {
+    mockCurrentUser.value = {
+      user: { id: 'a0000002-0000-0000-0000-000000000002', email: 'dosen001@siajar.test' },
+      profile: { full_name: 'Dr. Budi Santoso, M.Kom.' },
+      activeRole: 'LECTURER',
+      roles: [{ code: 'LECTURER' }],
+      isImpersonating: false,
+    };
     // Reset or ensure quiz store in globalThis
     const store = ((globalThis as any).__siajarKuis ??= {
       quizzes: [],
@@ -237,6 +264,126 @@ describe('FASE 4: Modul Ujian & Kuis Terpadu Tests', () => {
 
       expect(dispute.status).toBe('APPROVED');
       expect(attempt.score).toBe(85);
+    });
+  });
+
+  describe('6. Keamanan Kunci Jawaban (A3) & Pembatasan Peran SYSTEM_ADMIN (A4)', () => {
+    it('menyembunyikan correct_answer_index, correct_text, correct_boolean, dan rubric saat diakses oleh STUDENT', async () => {
+      const store = (globalThis as any).__siajarKuis;
+      const quizId = 'quiz-sec-a3';
+      const classId = 'c0000000-0000-0000-0000-000000000001';
+
+      store.quizzes.push({
+        id: quizId,
+        class_id: classId,
+        title: 'Kuis Keamanan A3',
+        duration_minutes: 45,
+        due_at: new Date(Date.now() + 86400000).toISOString(),
+        total_points: 100,
+        is_published: true,
+        created_at: new Date().toISOString(),
+        questions: [
+          {
+            id: 'q-mc',
+            question_text: 'Soal PG',
+            question_type: 'MULTIPLE_CHOICE',
+            options: ['A', 'B'],
+            correct_answer_index: 1,
+            explanation: 'Penjelasan rahasia',
+            points: 25,
+          },
+          {
+            id: 'q-tf',
+            question_text: 'Soal B/S',
+            question_type: 'TRUE_FALSE',
+            correct_boolean: true,
+            points: 25,
+          },
+          {
+            id: 'q-sa',
+            question_text: 'Soal Isian',
+            question_type: 'SHORT_ANSWER',
+            correct_text: 'kunci-rahasia',
+            points: 25,
+          },
+          {
+            id: 'q-es',
+            question_text: 'Soal Esai',
+            question_type: 'ESSAY',
+            rubric: 'Rubrik rahasia esai',
+            points: 25,
+          },
+        ],
+      });
+
+      mockCurrentUser.value = {
+        user: { id: 'a0000001-0000-0000-0000-000000000001', email: 'mhs2024001@siajar.test' },
+        profile: { full_name: 'Ahmad Mahasiswa' },
+        activeRole: 'STUDENT',
+        roles: [{ code: 'STUDENT' }],
+        isImpersonating: false,
+      };
+
+      const detail = await getQuizDetailAction(quizId);
+      expect(detail).not.toBeNull();
+      for (const q of detail!.questions) {
+        expect(q.correct_answer_index).toBeUndefined();
+        expect(q.correct_boolean).toBeUndefined();
+        expect(q.correct_text).toBeUndefined();
+        expect(q.rubric).toBeUndefined();
+        expect(q.explanation).toBeUndefined();
+      }
+
+      const list = await listClassQuizzesAction(classId);
+      const found = list.find((x) => x.id === quizId);
+      expect(found).toBeDefined();
+      for (const q of found!.questions) {
+        expect(q.correct_answer_index).toBeUndefined();
+        expect(q.correct_boolean).toBeUndefined();
+        expect(q.correct_text).toBeUndefined();
+        expect(q.rubric).toBeUndefined();
+      }
+    });
+
+    it('menolak SYSTEM_ADMIN membuat kuis, menilai esai, atau menyimpan ke bank soal (Aturan A4)', async () => {
+      mockCurrentUser.value = {
+        user: { id: 'a0000006-0000-0000-0000-000000000006', email: 'sysadmin@siajar.test' },
+        profile: { full_name: 'System Administrator' },
+        activeRole: 'SYSTEM_ADMIN',
+        roles: [{ code: 'SYSTEM_ADMIN' }],
+        isImpersonating: false,
+      };
+
+      const createRes = await createQuizAction({
+        class_id: 'c0000000-0000-0000-0000-000000000001',
+        title: 'Kuis Ilegal System Admin',
+        duration_minutes: 30,
+        due_at: new Date(Date.now() + 86400000).toISOString(),
+        questions: [
+          {
+            question_text: 'Soal 1',
+            question_type: 'MULTIPLE_CHOICE',
+            options: ['A', 'B'],
+            correct_answer_index: 0,
+            points: 100,
+          },
+        ],
+      });
+      expect(createRes.ok).toBe(false);
+
+      const gradeRes = await gradeEssayQuestionAction('att-1', 10, 'Catatan');
+      expect(gradeRes.ok).toBe(false);
+
+      const bankRes = await saveToQuestionBankAction({
+        question_text: 'Soal Bank',
+        question_type: 'TRUE_FALSE',
+        correct_boolean: true,
+        points: 10,
+      });
+      expect(bankRes.ok).toBe(false);
+
+      expect(await getQuestionBankAction()).toEqual([]);
+      expect(await listQuizAttemptsAction('exam-stat-001')).toEqual([]);
     });
   });
 });

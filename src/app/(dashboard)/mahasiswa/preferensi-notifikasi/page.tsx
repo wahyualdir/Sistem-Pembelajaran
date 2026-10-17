@@ -163,7 +163,7 @@ export default function PreferensiNotifikasiPage() {
   };
 
   return (
-    <DashboardShell role="MAHASISWA" userName="Wahyu Aldi Riyanto">
+    <DashboardShell role="MAHASISWA" userName="Ahmad Mahasiswa">
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground font-heading">
@@ -176,14 +176,14 @@ export default function PreferensiNotifikasiPage() {
 
         {/* Notifikasi Pesan Sukses / Galat */}
         {pesanSukses && (
-          <div className="rounded-control border border-success-border bg-success-soft p-4 text-sm text-success flex items-center gap-3">
+          <div className="rounded-control border border-ink bg-surface p-4 text-sm text-ink flex items-center gap-3">
             <CheckCircle2 className="h-5 w-5 shrink-0" />
             <span className="font-medium">{pesanSukses}</span>
           </div>
         )}
 
         {pesanError && (
-          <div className="rounded-control border border-danger-border bg-danger-soft p-4 text-sm text-danger flex items-center gap-3">
+          <div className="rounded-control border border-ink bg-surface p-4 text-sm text-primary-dark flex items-center gap-3">
             <AlertTriangle className="h-5 w-5 shrink-0" />
             <span className="font-medium">{pesanError}</span>
           </div>
@@ -271,7 +271,7 @@ export default function PreferensiNotifikasiPage() {
                             {kat.label}
                           </span>
                           {kat.kunciKeamanan && (
-                            <span className="rounded-control bg-warning-soft border border-warning-border px-1.5 py-0.5 text-xs font-bold text-warning flex items-center gap-1">
+                            <span className="rounded-control bg-gray-soft border border-ink px-1.5 py-0.5 text-xs font-bold text-ink flex items-center gap-1">
                               <Lock className="h-3 w-3" />
                               Wajib In-App
                             </span>
@@ -333,13 +333,13 @@ export default function PreferensiNotifikasiPage() {
           <Card className="border-border bg-surface">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <ShieldAlert className="h-5 w-5 text-warning" />
+                <ShieldAlert className="h-5 w-5 text-ink" />
                 <CardTitle className="text-base font-semibold">
                   Email Cadangan Pemulihan & Keamanan
                 </CardTitle>
               </div>
               <CardDescription className="text-xs text-muted-foreground">
-                Opsional. Salinan peringatan keamanan (seperti login dari perangkat tidak dikenal) dapat dikirimkan ke alamat email pribadi cadangan di luar domain kampus.
+                Opsional. Salinan peringatan keamanan (seperti login dari perangkat tidak dikenal) dapat dikirimkan ke alamat email cadangan di luar domain utama.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -349,7 +349,7 @@ export default function PreferensiNotifikasiPage() {
                 </label>
                 <Input
                   type="email"
-                  placeholder="contoh.pribadi@gmail.com"
+                  placeholder="cadangan.mhs2024001@siajar.test"
                   value={emailCadangan}
                   onChange={(e) => setEmailCadangan(e.target.value)}
                   disabled={loading || isPending}

@@ -75,7 +75,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
       <RetroWindow
         title="moderasi_komunitas_dan_pembelajaran_mahasiswa.app"
         badge="Biro Moderasi & Kemahasiswaan"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -84,7 +84,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <ShieldAlert className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Moderasi Komunitas & Mentoring
               </h1>
             </div>
@@ -94,7 +94,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               Integritas Ekosistem Kampus
             </span>
           </div>
@@ -104,24 +104,24 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Laporan Menunggu</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-primary">1 Berkas</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Laporan Menunggu</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-primary">1 Berkas</div>
           <span className="text-xs text-black/70">Perlu Tindakan</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Grup Belajar Aktif</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">{STUDY_GROUPS.length} Grup</div>
-          <span className="text-xs text-emerald-800 font-bold">105 Anggota</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Grup Belajar Aktif</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{STUDY_GROUPS.length} Grup</div>
+          <span className="text-xs text-ink font-bold">105 Anggota</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Program Mentoring</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">{MENTORING_PROGRAMS.length} Program</div>
-          <span className="text-xs text-emerald-800 font-bold">216 Mahasiswa Binaan</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Program Mentoring</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{MENTORING_PROGRAMS.length} Program</div>
+          <span className="text-xs text-ink font-bold">216 Mahasiswa Binaan</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Status Kebijakan</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">Aman</div>
-          <span className="text-xs text-emerald-800 font-bold">Integritas Terjaga</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Status Kebijakan</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">Aman</div>
+          <span className="text-xs text-ink font-bold">Integritas Terjaga</span>
         </div>
       </div>
 
@@ -136,10 +136,10 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -153,9 +153,9 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
       {/* TAB 1: LAPORAN KONTEN */}
       {activeTab === 'laporan-konten' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <ShieldAlert className="h-5 w-5 text-primary" />
                 <span>Kotak Masuk Laporan Konten & Pelanggaran Etika</span>
               </h2>
@@ -163,7 +163,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                 Tinjau postingan forum diskusi yang dilaporkan pengguna karena memuat kecurangan kuis, spam, atau pelanggaran etika akademik.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
               Respons Moderasi Cepat (SLA 24 Jam)
             </span>
           </div>
@@ -171,7 +171,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Konten yang Dilaporkan</th>
                     <th className="p-3.5 sm:p-4">Pelapor</th>
@@ -184,30 +184,30 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {reportedContent.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Tidak ada laporan pelanggaran konten yang menunggu tinjauan.
                       </td>
                     </tr>
                   ) : (
                     reportedContent.map((r) => (
-                      <tr key={r.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={r.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
                           <div>{r.postTitle}</div>
-                          <span className="text-xs font-mono text-black/60">Pembuat: {r.author}</span>
+                          <span className="text-xs font-sans text-black/60">Pembuat: {r.author}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{r.reporter}</td>
                         <td className="p-3.5 sm:p-4">
-                          <span className="px-2 py-0.5 rounded border border-rose-500 bg-rose-100 text-rose-950 font-mono text-xs font-bold">
+                          <span className="px-2 py-0.5 rounded border border-ink bg-surface text-primary-dark font-sans text-xs font-bold">
                             {r.category}
                           </span>
                         </td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs">{r.date}</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs">{r.date}</td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-sans font-bold',
                               r.status === 'MENUNGGU_REVIEW'
-                                ? 'border-amber-500 bg-amber-100 text-amber-950'
+                                ? 'border-ink bg-gray-soft text-ink'
                                 : 'border-neutral-400 bg-neutral-100 text-neutral-800'
                             )}
                           >
@@ -224,7 +224,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                                 className={cn(
                                   'px-2.5 py-1 rounded border-2 border-black text-xs font-bold transition-all',
                                   isDemo
-                                    ? 'bg-rose-100 text-rose-950 hover:bg-rose-200 cursor-pointer'
+                                    ? 'bg-surface text-primary-dark hover:bg-surface cursor-pointer'
                                     : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
                                 )}
                               >
@@ -243,10 +243,10 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                               >
                                 Abaikan
                               </button>
-                              {!isDemo && <span className="text-xs bg-neutral-200 px-1 py-0.5 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+                              {!isDemo && <span className="text-xs bg-neutral-200 px-1 py-0.5 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
                             </div>
                           ) : (
-                            <span className="text-xs font-mono text-black/50">Telah Dihapus</span>
+                            <span className="text-xs font-sans text-black/50">Telah Dihapus</span>
                           )}
                         </td>
                       </tr>
@@ -262,9 +262,9 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
       {/* TAB 2: GRUP BELAJAR */}
       {activeTab === 'grup-belajar' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Users className="h-5 w-5 text-primary" />
                 <span>Supervisi Grup Belajar Mandiri Mahasiswa</span>
               </h2>
@@ -272,7 +272,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                 Pantau keaktifan komunitas belajar mandiri, topik pembahasan, dan fasilitator grup mahasiswa.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
               Total {STUDY_GROUPS.length} Komunitas Mahasiswa
             </span>
           </div>
@@ -280,7 +280,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Nama Grup Belajar</th>
                     <th className="p-3.5 sm:p-4">Fasilitator / Leader</th>
@@ -293,22 +293,22 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {studyGroups.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada grup belajar mahasiswa di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     studyGroups.map((g) => (
-                      <tr key={g.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={g.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
                           <div>{g.name}</div>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80 font-semibold">{g.leader}</td>
                         <td className="p-3.5 sm:p-4 text-black/70">{g.topic}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{g.members} Mhs</td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs">{g.createdDate}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{g.members} Mhs</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs">{g.createdDate}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink font-sans text-xs font-bold">
                             AKTIF
                           </span>
                         </td>
@@ -325,9 +325,9 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
       {/* TAB 3: PROGRAM MENTORING */}
       {activeTab === 'program-mentoring' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <GraduationCap className="h-5 w-5 text-primary" />
                 <span>Program Pendampingan Akademik & Mentoring Mahasiswa</span>
               </h2>
@@ -340,7 +340,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
               disabled={!isDemo}
               title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-bold shadow-xs transition-all shrink-0',
                 isDemo
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -348,14 +348,14 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
             >
               <Plus className="h-4 w-4" />
               <span>Daftarkan Program Mentoring</span>
-              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Nama Program Mentoring</th>
                     <th className="p-3.5 sm:p-4">Koordinator Program</th>
@@ -368,22 +368,22 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {mentoringPrograms.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada program mentoring tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     mentoringPrograms.map((m) => (
-                      <tr key={m.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={m.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black max-w-sm">
                           <div>{m.name}</div>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{m.coordinator}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{m.mentorsCount} Orang</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-primary">{m.menteesCount} Mhs</td>
-                        <td className="p-3.5 sm:p-4 text-xs font-mono">{m.duration}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{m.mentorsCount} Orang</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-primary">{m.menteesCount} Mhs</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-sans">{m.duration}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink font-sans text-xs font-bold">
                             BERJALAN
                           </span>
                         </td>

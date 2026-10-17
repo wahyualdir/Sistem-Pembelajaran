@@ -79,8 +79,8 @@ export default function MahasiswaBimbinganPage() {
         <div
           className={`flex items-center gap-2 rounded-[8px] p-3 text-sm font-medium ${
             pesanNotif.tipe === "sukses"
-              ? "bg-success-soft text-success border border-success-border"
-              : "bg-danger/10 text-danger border border-danger/20"
+              ? "bg-surface text-ink border border-ink"
+              : "bg-primary/10 text-primary-dark border border-ink"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
@@ -115,7 +115,7 @@ export default function MahasiswaBimbinganPage() {
           </div>
 
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <UserCheck className="h-4 w-4 text-success" />
+            <UserCheck className="h-4 w-4 text-ink" />
             <span>Status Perwalian: <strong>Aktif</strong></span>
           </div>
         </CardContent>

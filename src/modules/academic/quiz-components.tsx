@@ -282,7 +282,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
                   placeholder="Passcode"
-                  className="field text-sm font-mono"
+                  className="field text-sm font-sans"
                   title="Passcode Ujian (Opsional)"
                 />
               </div>
@@ -369,7 +369,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
               <div key={q.id || qIdx} className="rounded-control border border-border bg-background p-4 space-y-3">
                 <div className="flex items-center justify-between gap-2 border-b border-border pb-2">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-xs font-mono bg-muted px-2 py-0.5 rounded">Soal #{qIdx + 1}</span>
+                    <span className="font-bold text-xs font-sans bg-muted px-2 py-0.5 rounded">Soal #{qIdx + 1}</span>
                     <span className="text-xs font-semibold uppercase text-muted-foreground">{q.question_type}</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -384,13 +384,13 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                         setQuestions(updated);
                       }}
                       placeholder="Poin"
-                      className="field text-xs !h-7 w-20 text-center font-mono"
+                      className="field text-xs !h-7 w-20 text-center font-sans"
                       title="Bobot Nilai Soal"
                     />
                     <button
                       type="button"
                       onClick={() => removeQuestion(qIdx)}
-                      className="text-danger hover:opacity-80 p-1"
+                      className="text-primary-dark hover:opacity-80 p-1"
                       title="Hapus Soal"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -430,7 +430,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                           }}
                           className="h-4 w-4 text-primary"
                         />
-                        <span className="text-xs font-mono font-bold w-4">{String.fromCharCode(65 + optIdx)}.</span>
+                        <span className="text-xs font-sans font-bold w-4">{String.fromCharCode(65 + optIdx)}.</span>
                         <input
                           type="text"
                           value={opt}
@@ -495,7 +495,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                       }}
                       placeholder="Contoh: Hypertext Transfer Protocol"
                       required
-                      className="field text-xs !h-8 font-mono"
+                      className="field text-xs !h-8 font-sans"
                     />
                   </div>
                 )}
@@ -530,7 +530,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                           updated[qIdx].programming_language = e.target.value as any;
                           setQuestions(updated);
                         }}
-                        className="field text-xs !h-7 w-32 font-mono"
+                        className="field text-xs !h-7 w-32 font-sans"
                       >
                         <option value="javascript">JavaScript</option>
                         <option value="typescript">TypeScript</option>
@@ -538,7 +538,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs font-mono text-muted-foreground">Starter Code Mahasiswa:</label>
+                      <label className="block text-xs font-sans font-medium text-muted-foreground">Starter Code Mahasiswa:</label>
                       <textarea
                         rows={3}
                         value={q.starter_code ?? ''}
@@ -547,7 +547,7 @@ export function CreateQuizModal({ classId }: { classId: string }) {
                           updated[qIdx].starter_code = e.target.value;
                           setQuestions(updated);
                         }}
-                        className="field !h-auto text-xs font-mono py-1.5 bg-muted/40"
+                        className="field !h-auto text-xs font-sans py-1.5 bg-muted/40"
                       />
                     </div>
                   </div>
@@ -798,7 +798,7 @@ export function TakeQuizForm({
               <span className="text-xs font-bold text-black bg-retro-mint border-2 border-black px-3 py-1 rounded shadow-retro-sm flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" /> Ujian Selesai Dikerjakan
               </span>
-              <span className={`text-xs font-bold px-3 py-1 rounded border-2 border-black shadow-retro-sm ${isPassed ? 'text-black bg-retro-yellow' : 'text-white bg-danger'}`}>
+              <span className={`text-xs font-bold px-3 py-1 rounded border-2 border-black shadow-retro-sm ${isPassed ? 'text-black bg-gray-soft' : 'text-white bg-primary'}`}>
                 {isPassed ? 'Memenuhi KKM' : 'Di Bawah KKM'}
               </span>
             </div>
@@ -807,9 +807,9 @@ export function TakeQuizForm({
               {existingAttempt.violations_count ? ` • Catatan: ${existingAttempt.violations_count} anomali proctoring` : ''}
             </p>
           </div>
-          <div className="text-left sm:text-right bg-retro-warm border-2 border-black p-4 rounded-xl shadow-retro">
+          <div className="text-left sm:text-right bg-gray-soft border-2 border-black p-4 rounded-xl shadow-retro">
             <span className="text-xs text-black/70 font-bold block">Nilai Perolehan Akhir</span>
-            <div className="text-3xl sm:text-4xl font-bold font-mono text-black">
+            <div className="text-3xl sm:text-4xl font-bold font-sans text-black">
               {existingAttempt.score}
               <span className="text-sm sm:text-base font-normal text-black/60"> / {existingAttempt.max_score}</span>
             </div>
@@ -818,12 +818,12 @@ export function TakeQuizForm({
 
         {/* Dispute Status if submitted */}
         {existingAttempt.dispute && (
-          <div className="p-4 rounded-xl border-2 border-black bg-retro-warm/50 text-xs sm:text-sm space-y-1.5 shadow-retro">
+          <div className="p-4 rounded-xl border-2 border-black bg-gray-soft/50 text-xs sm:text-sm space-y-1.5 shadow-retro">
             <div className="flex items-center justify-between font-bold">
               <span className="flex items-center gap-1.5 text-black">
                 <MessageSquare className="h-4 w-4 text-primary" /> Status Sengketa Nilai:
               </span>
-              <span className="font-mono uppercase font-bold px-2 py-0.5 rounded border border-black bg-white text-black">
+              <span className="font-sans uppercase font-bold px-2 py-0.5 rounded border border-black bg-white text-black">
                 {existingAttempt.dispute.status}
               </span>
             </div>
@@ -846,7 +846,7 @@ export function TakeQuizForm({
               <button
                 type="button"
                 onClick={() => setIsDisputeOpen(true)}
-                className="text-xs font-bold text-black hover:text-primary-dark flex items-center gap-1.5 border-2 border-black px-2.5 py-1 rounded bg-white shadow-retro hover:bg-retro-warm transition-all"
+                className="text-xs font-bold text-black hover:text-primary-dark flex items-center gap-1.5 border-2 border-black px-2.5 py-1 rounded bg-white shadow-retro hover:bg-gray-soft transition-all"
               >
                 <HelpCircle className="h-3.5 w-3.5" /> Ajukan Sengketa Nilai
               </button>
@@ -865,20 +865,20 @@ export function TakeQuizForm({
             return (
               <div key={q.id} className="rounded-xl border-2 border-black bg-white p-4 sm:p-5 space-y-3 text-sm shadow-retro">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <span className="font-bold font-mono text-xs text-black/70">
-                    Soal #{idx + 1} ({q.points} Poin) • <span className="font-mono text-xs font-bold">{q.question_type}</span>
+                  <span className="font-bold font-sans text-xs text-black/70">
+                    Soal #{idx + 1} ({q.points} Poin) • <span className="font-sans text-xs font-bold">{q.question_type}</span>
                   </span>
                   {q.question_type !== 'ESSAY' && (
                     <span
                       className={`text-xs font-bold px-2.5 py-0.5 rounded border border-black shadow-retro-sm ${
-                        isCorrect ? 'text-black bg-retro-mint' : 'text-white bg-danger'
+                        isCorrect ? 'text-black bg-retro-mint' : 'text-white bg-primary'
                       }`}
                     >
                       {isCorrect ? `Benar (+${q.points})` : 'Salah (0)'}
                     </span>
                   )}
                   {q.question_type === 'ESSAY' && aiDraft && (
-                    <span className="text-xs font-bold text-black bg-retro-warm border border-black px-2.5 py-0.5 rounded">
+                    <span className="text-xs font-bold text-black bg-gray-soft border border-black px-2.5 py-0.5 rounded">
                       Draf AI: +{aiDraft.ai_score} Poin {aiDraft.verified_by_lecturer ? '(Disahkan)' : '(Menunggu Review)'}
                     </span>
                   )}
@@ -890,7 +890,7 @@ export function TakeQuizForm({
                   <div className="text-xs sm:text-sm text-black/80 space-y-1 pt-1">
                     <p>
                       Jawaban Anda:{' '}
-                      <strong className="text-black bg-retro-warm px-2 py-0.5 rounded border border-black/30 font-bold">
+                      <strong className="text-black bg-gray-soft px-2 py-0.5 rounded border border-black/30 font-bold">
                         {q.options?.[Number(myAns)] ?? '-'}
                       </strong>
                     </p>
@@ -908,7 +908,7 @@ export function TakeQuizForm({
                 {q.question_type === 'TRUE_FALSE' && (
                   <p className="text-xs sm:text-sm text-black/80">
                     Jawaban Anda:{' '}
-                    <strong className="text-black bg-retro-warm px-2 py-0.5 rounded border border-black/30 font-bold">
+                    <strong className="text-black bg-gray-soft px-2 py-0.5 rounded border border-black/30 font-bold">
                       {String(myAns) === 'true' ? 'Benar' : 'Salah'}
                     </strong>
                   </p>
@@ -918,14 +918,14 @@ export function TakeQuizForm({
                   <div className="text-xs sm:text-sm text-black/80 space-y-1">
                     <p>
                       Jawaban Anda:{' '}
-                      <strong className="text-black font-mono bg-retro-warm px-2 py-0.5 rounded border border-black/30">
+                      <strong className="text-black font-sans bg-gray-soft px-2 py-0.5 rounded border border-black/30">
                         {String(myAns ?? '-')}
                       </strong>
                     </p>
                     {q.correct_text && (
                       <p className="text-black font-bold">
                         Kunci:{' '}
-                        <span className="font-mono bg-retro-mint/60 px-2 py-0.5 rounded border border-black/30">
+                        <span className="font-sans bg-retro-mint/60 px-2 py-0.5 rounded border border-black/30">
                           {q.correct_text}
                         </span>
                       </p>
@@ -934,18 +934,18 @@ export function TakeQuizForm({
                 )}
 
                 {q.question_type === 'LIVE_CODING' && (
-                  <div className="rounded-lg border-2 border-black bg-black text-retro-mint p-3 text-xs font-mono whitespace-pre-wrap shadow-retro">
+                  <div className="rounded-lg border-2 border-black bg-black text-retro-mint p-3 text-xs font-sans whitespace-pre-wrap shadow-retro">
                     {String(myAns ?? '')}
                   </div>
                 )}
 
                 {q.question_type === 'ESSAY' && (
                   <div className="space-y-2 pt-1">
-                    <div className="rounded-lg border-2 border-black bg-retro-warm/30 p-3 text-xs sm:text-sm text-black">
+                    <div className="rounded-lg border-2 border-black bg-gray-soft/30 p-3 text-xs sm:text-sm text-black">
                       {String(myAns ?? '')}
                     </div>
                     {aiDraft && (
-                      <p className="text-xs text-black/80 italic border-l-4 border-primary pl-3 py-1 bg-retro-warm/20 rounded-r">
+                      <p className="text-xs text-black/80 italic border-l-4 border-primary pl-3 py-1 bg-gray-soft/20 rounded-r">
                         Feedback AI: {aiDraft.feedback}
                       </p>
                     )}
@@ -953,7 +953,7 @@ export function TakeQuizForm({
                 )}
 
                 {q.explanation && (
-                  <div className="mt-2 p-3 rounded-lg bg-retro-warm/40 text-xs sm:text-sm text-black border border-black/20">
+                  <div className="mt-2 p-3 rounded-lg bg-gray-soft/40 text-xs sm:text-sm text-black border border-black/20">
                     <strong className="text-black font-bold">Pembahasan:</strong> {q.explanation}
                   </div>
                 )}
@@ -987,7 +987,7 @@ export function TakeQuizForm({
               <button
                 type="button"
                 onClick={() => setIsDisputeOpen(false)}
-                className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-bold text-black hover:bg-retro-warm shadow-retro transition-all"
+                className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-bold text-black hover:bg-gray-soft shadow-retro transition-all"
               >
                 Batal
               </button>
@@ -1008,20 +1008,20 @@ export function TakeQuizForm({
     return (
       <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-retro-md overflow-hidden transition-all animate-fade-up font-sans">
         {/* Retro Window Header Bar */}
-        <div className="flex h-12 sm:h-14 items-center justify-between border-b-2 border-black bg-retro-warm px-4 sm:px-6 py-2.5">
+        <div className="flex h-12 sm:h-14 items-center justify-between border-b-2 border-black bg-gray-soft px-4 sm:px-6 py-2.5">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="flex items-center gap-1.5 shrink-0">
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-red inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-yellow inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-green inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-primary inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-gray inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-gray-dark inline-block shadow-retro-sm" />
             </div>
             <span className="text-sm sm:text-base font-bold text-black tracking-tight font-heading ml-1.5 truncate">
               Hasil Evaluasi: {quiz.title}
             </span>
           </div>
           <span
-            className={`rounded border-2 border-black px-2.5 py-0.5 text-xs font-bold font-mono shadow-retro-sm shrink-0 ${
-              isPassed ? 'bg-retro-mint text-black' : 'bg-danger text-white'
+            className={`rounded border-2 border-black px-2.5 py-0.5 text-xs font-bold font-sans shadow-retro-sm shrink-0 ${
+              isPassed ? 'bg-retro-mint text-black' : 'bg-primary text-white'
             }`}
           >
             {isPassed ? 'LULUS KKM' : 'DI BAWAH KKM'}
@@ -1044,7 +1044,7 @@ export function TakeQuizForm({
               <span className="h-2.5 w-2.5 rounded-full bg-retro-mint border border-black inline-block" />
               Lembar Pengerjaan Mahasiswa · Tata Tertib & Ketentuan Ujian
             </span>
-            <span className="text-xs font-mono font-bold text-black/60 bg-retro-warm px-2 py-0.5 rounded border border-black/20">
+            <span className="text-xs font-sans font-bold text-black/60 bg-gray-soft px-2 py-0.5 rounded border border-black/20">
               Durasi: {quiz.duration_minutes} Menit · Total: {quiz.total_points} Poin
             </span>
           </div>
@@ -1056,21 +1056,21 @@ export function TakeQuizForm({
               </span>
             )}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-xs font-bold bg-primary text-white px-2.5 py-1 rounded border-2 border-black shadow-retro-sm">
+              <span className="font-sans text-xs font-bold bg-primary text-white px-2.5 py-1 rounded border-2 border-black shadow-retro-sm">
                 {quiz.exam_type ?? 'UJIAN RESMI'}
               </span>
-              <span className="text-xs sm:text-sm font-bold text-black bg-retro-warm border-2 border-black/30 px-2.5 py-0.5 rounded font-mono">
+              <span className="text-xs sm:text-sm font-bold text-black bg-gray-soft border-2 border-black/30 px-2.5 py-0.5 rounded font-sans">
                 ⏱️ Durasi: {quiz.duration_minutes} Menit
               </span>
               {quiz.kkm && (
-                <span className="text-xs sm:text-sm font-bold text-black bg-white border-2 border-black/30 px-2.5 py-0.5 rounded font-mono">
+                <span className="text-xs sm:text-sm font-bold text-black bg-white border-2 border-black/30 px-2.5 py-0.5 rounded font-sans">
                   🎯 KKM: {quiz.kkm}
                 </span>
               )}
-              <span className="text-xs sm:text-sm font-bold text-black bg-white border-2 border-black/30 px-2.5 py-0.5 rounded font-mono">
+              <span className="text-xs sm:text-sm font-bold text-black bg-white border-2 border-black/30 px-2.5 py-0.5 rounded font-sans">
                 📊 Total: {quiz.total_points} Poin
               </span>
-              <span className="text-xs sm:text-sm font-bold text-black bg-retro-yellow border-2 border-black/30 px-2.5 py-0.5 rounded font-mono">
+              <span className="text-xs sm:text-sm font-bold text-black bg-gray-soft border-2 border-black/30 px-2.5 py-0.5 rounded font-sans">
                 🛡️ Pengawasan: {quiz.proctoring_level ?? 'STANDAR'}
               </span>
             </div>
@@ -1091,7 +1091,7 @@ export function TakeQuizForm({
             <span>Tata Tertib & Ketentuan Pengawasan (Proctoring)</span>
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-retro-warm/60 shadow-retro">
+            <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-gray-soft/60 shadow-retro">
               <Eye className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <span className="text-xs sm:text-sm font-bold text-black block">Fokus Jendela & Layar Penuh</span>
@@ -1100,7 +1100,7 @@ export function TakeQuizForm({
                 </span>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-retro-warm/60 shadow-retro">
+            <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-gray-soft/60 shadow-retro">
               <Lock className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <span className="text-xs sm:text-sm font-bold text-black block">Proteksi Integritas</span>
@@ -1109,7 +1109,7 @@ export function TakeQuizForm({
                 </span>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-retro-warm/60 shadow-retro">
+            <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-gray-soft/60 shadow-retro">
               <Clock className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <span className="text-xs sm:text-sm font-bold text-black block">Sinkronisasi Waktu Server</span>
@@ -1118,7 +1118,7 @@ export function TakeQuizForm({
                 </span>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-retro-warm/60 shadow-retro">
+            <div className="flex items-start gap-3 p-3.5 rounded-lg border-2 border-black bg-gray-soft/60 shadow-retro">
               <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div className="space-y-0.5">
                 <span className="text-xs sm:text-sm font-bold text-black block">Penyimpanan Otomatis</span>
@@ -1142,7 +1142,7 @@ export function TakeQuizForm({
                 value={passcodeEntered}
                 onChange={(e) => setPasscodeEntered(e.target.value)}
                 placeholder="Masukkan passcode dari dosen..."
-                className="w-full rounded-lg border-2 border-black bg-white px-3.5 py-2 font-mono text-sm text-black shadow-retro focus:outline-none focus:ring-2 focus:ring-black"
+                className="w-full rounded-lg border-2 border-black bg-white px-3.5 py-2 font-sans text-sm text-black shadow-retro focus:outline-none focus:ring-2 focus:ring-black"
               />
               <button
                 type="button"
@@ -1159,12 +1159,12 @@ export function TakeQuizForm({
                 Verifikasi Passcode
               </button>
             </div>
-            {error && <p className="text-xs text-danger font-bold">{error}</p>}
+            {error && <p className="text-xs text-primary-dark font-bold">{error}</p>}
           </div>
         )}
 
         {/* Consent Checkbox */}
-        <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-retro-warm/40">
+        <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-gray-soft/40">
           <label className="flex items-start gap-3 cursor-pointer text-xs sm:text-sm font-bold text-black select-none leading-relaxed">
             <input
               type="checkbox"
@@ -1179,7 +1179,7 @@ export function TakeQuizForm({
         </div>
 
         <div className="pt-3 border-t-2 border-black/15 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <span className="text-xs text-black/60 font-mono hidden sm:inline-block">
+          <span className="text-xs text-black/60 font-sans hidden sm:inline-block">
             SIAJAR CBT Engine · Mode Aman Aktif
           </span>
           <button
@@ -1210,18 +1210,18 @@ export function TakeQuizForm({
     return (
       <div className="w-full rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-retro-md overflow-hidden transition-all animate-fade-up font-sans">
         {/* Retro Window Header Bar */}
-        <div className="flex h-12 sm:h-14 items-center justify-between border-b-2 border-black bg-retro-warm px-4 sm:px-6 py-2.5">
+        <div className="flex h-12 sm:h-14 items-center justify-between border-b-2 border-black bg-gray-soft px-4 sm:px-6 py-2.5">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="flex items-center gap-1.5 shrink-0">
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-red inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-yellow inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-traffic-green inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-primary inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-gray inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-gray-dark inline-block shadow-retro-sm" />
             </div>
             <span className="text-sm sm:text-base font-bold text-black tracking-tight font-heading ml-1.5 truncate">
               Lembar Pengerjaan: {quiz.title}
             </span>
           </div>
-          <span className="rounded border-2 border-black bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-retro-sm shrink-0">
+          <span className="rounded border-2 border-black bg-white px-2.5 py-0.5 text-xs font-bold font-sans text-black shadow-retro-sm shrink-0">
             {quiz.exam_type ?? 'UJIAN'}
           </span>
         </div>
@@ -1237,7 +1237,7 @@ export function TakeQuizForm({
     <form onSubmit={handleSubmit} className="space-y-6 font-sans">
       {/* Warning Alert if triggered */}
       {warningAlert && (
-        <div className="rounded-xl border-2 border-danger bg-danger-soft p-4 text-xs sm:text-sm text-danger font-bold flex items-center justify-between shadow-retro">
+        <div className="rounded-xl border-2 border-ink bg-surface p-4 text-xs sm:text-sm text-primary-dark font-bold flex items-center justify-between shadow-retro">
           <span className="flex items-center gap-2">
             <AlertTriangle className="h-4 w-4 shrink-0" /> {warningAlert}
           </span>
@@ -1252,17 +1252,17 @@ export function TakeQuizForm({
       )}
 
       {/* Sticky Countdown & Status Bar */}
-      <div className="sticky top-2 z-20 rounded-xl border-2 border-black bg-retro-warm/95 backdrop-blur px-5 py-3 flex flex-wrap items-center justify-between gap-3 shadow-retro">
+      <div className="sticky top-2 z-20 rounded-xl border-2 border-black bg-gray-soft/95 backdrop-blur px-5 py-3 flex flex-wrap items-center justify-between gap-3 shadow-retro">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <Clock className={`h-5 w-5 ${timeLeft <= 300 ? 'text-danger animate-pulse' : 'text-primary'}`} />
+            <Clock className={`h-5 w-5 ${timeLeft <= 300 ? 'text-primary-dark animate-pulse' : 'text-primary'}`} />
             <span className="text-xs sm:text-sm text-black font-bold">Sisa Waktu:</span>
-            <span className={`font-mono text-base sm:text-lg font-bold ${timeLeft <= 300 ? 'text-danger' : 'text-black'}`}>
+            <span className={`font-sans text-base sm:text-lg font-bold ${timeLeft <= 300 ? 'text-primary-dark' : 'text-black'}`}>
               {formatTimer(timeLeft)}
             </span>
           </div>
           {violations > 0 && (
-            <span className="text-xs font-mono text-danger bg-danger-soft border border-danger px-2.5 py-0.5 rounded-full font-bold">
+            <span className="text-xs font-sans text-primary-dark bg-surface border border-ink px-2.5 py-0.5 rounded-full font-bold">
               {violations} Catatan Peringatan
             </span>
           )}
@@ -1273,7 +1273,7 @@ export function TakeQuizForm({
             <button
               type="button"
               onClick={requestFullscreenMode}
-              className="rounded-lg border-2 border-black bg-white px-3 py-1.5 text-xs sm:text-sm hover:bg-retro-warm font-bold flex items-center gap-1.5 text-black shadow-retro"
+              className="rounded-lg border-2 border-black bg-white px-3 py-1.5 text-xs sm:text-sm hover:bg-gray-soft font-bold flex items-center gap-1.5 text-black shadow-retro"
             >
               <Maximize2 className="h-3.5 w-3.5" /> Fullscreen
             </button>
@@ -1294,10 +1294,10 @@ export function TakeQuizForm({
           <div key={q.id} className="rounded-xl border-2 border-black bg-white p-5 sm:p-7 space-y-4 shadow-retro">
             <div className="flex items-center justify-between border-b-2 border-black/15 pb-3">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-xs sm:text-sm font-mono bg-retro-warm border border-black/30 px-2.5 py-0.5 rounded text-black">Soal #{idx + 1}</span>
-                <span className="text-xs text-black/70 uppercase font-mono font-bold">{q.question_type}</span>
+                <span className="font-bold text-xs sm:text-sm font-sans bg-gray-soft border border-black/30 px-2.5 py-0.5 rounded text-black">Soal #{idx + 1}</span>
+                <span className="text-xs text-black/70 uppercase font-sans font-bold">{q.question_type}</span>
               </div>
-              <span className="text-xs sm:text-sm font-mono bg-retro-warm border border-black/30 px-2.5 py-0.5 rounded text-black font-bold">
+              <span className="text-xs sm:text-sm font-sans bg-gray-soft border border-black/30 px-2.5 py-0.5 rounded text-black font-bold">
                 {q.points} Poin
               </span>
             </div>
@@ -1314,8 +1314,8 @@ export function TakeQuizForm({
                     key={optIdx}
                     className={`flex items-center gap-3.5 p-3.5 sm:p-4 rounded-lg border-2 border-black cursor-pointer text-sm font-bold transition-all shadow-retro ${
                       answers[q.id] === optIdx
-                        ? 'bg-retro-yellow text-black shadow-retro-md'
-                        : 'bg-white hover:bg-retro-warm text-black'
+                        ? 'bg-gray-soft text-black shadow-retro-md'
+                        : 'bg-white hover:bg-gray-soft text-black'
                     }`}
                   >
                     <input
@@ -1325,7 +1325,7 @@ export function TakeQuizForm({
                       onChange={() => setAnswers({ ...answers, [q.id]: optIdx })}
                       className="h-4 w-4 text-black accent-black"
                     />
-                    <span className="font-mono text-xs font-bold w-4">{String.fromCharCode(65 + optIdx)}.</span>
+                    <span className="font-sans text-xs font-bold w-4">{String.fromCharCode(65 + optIdx)}.</span>
                     <span className="text-xs sm:text-sm">{opt}</span>
                   </label>
                 ))}
@@ -1340,8 +1340,8 @@ export function TakeQuizForm({
                   onClick={() => setAnswers({ ...answers, [q.id]: true })}
                   className={`p-3.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold text-center shadow-retro transition-all ${
                     answers[q.id] === true
-                      ? 'bg-retro-yellow text-black shadow-retro-md'
-                      : 'bg-white hover:bg-retro-warm text-black'
+                      ? 'bg-gray-soft text-black shadow-retro-md'
+                      : 'bg-white hover:bg-gray-soft text-black'
                   }`}
                 >
                   BENAR (TRUE)
@@ -1351,8 +1351,8 @@ export function TakeQuizForm({
                   onClick={() => setAnswers({ ...answers, [q.id]: false })}
                   className={`p-3.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold text-center shadow-retro transition-all ${
                     answers[q.id] === false
-                      ? 'bg-retro-yellow text-black shadow-retro-md'
-                      : 'bg-white hover:bg-retro-warm text-black'
+                      ? 'bg-gray-soft text-black shadow-retro-md'
+                      : 'bg-white hover:bg-gray-soft text-black'
                   }`}
                 >
                   SALAH (FALSE)
@@ -1368,7 +1368,7 @@ export function TakeQuizForm({
                   value={String(answers[q.id] ?? '')}
                   onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
                   placeholder="Ketikkan jawaban singkat Anda di sini..."
-                  className="w-full rounded-lg border-2 border-black bg-white px-3.5 py-2 font-mono text-sm text-black shadow-retro focus:outline-none focus:ring-2 focus:ring-black"
+                  className="w-full rounded-lg border-2 border-black bg-white px-3.5 py-2 font-sans text-sm text-black shadow-retro focus:outline-none focus:ring-2 focus:ring-black"
                 />
               </div>
             )}
@@ -1385,7 +1385,7 @@ export function TakeQuizForm({
                 />
                 <div className="flex justify-between text-xs text-black/60 font-medium">
                   <span>Draf akan dianalisis oleh AI sebelum verifikasi dosen.</span>
-                  <span className="font-mono font-bold">{String(answers[q.id] ?? '').split(/\s+/).filter(Boolean).length} kata</span>
+                  <span className="font-sans font-bold">{String(answers[q.id] ?? '').split(/\s+/).filter(Boolean).length} kata</span>
                 </div>
               </div>
             )}
@@ -1393,7 +1393,7 @@ export function TakeQuizForm({
             {/* Live Coding */}
             {q.question_type === 'LIVE_CODING' && (
               <div className="space-y-3 pt-1">
-                <div className="flex items-center justify-between text-xs font-mono">
+                <div className="flex items-center justify-between text-xs font-sans">
                   <span className="flex items-center gap-1 font-semibold text-muted-foreground">
                     <Code2 className="h-3.5 w-3.5" /> Editor ({q.programming_language})
                   </span>
@@ -1401,7 +1401,7 @@ export function TakeQuizForm({
                     type="button"
                     onClick={() => handleRunPublicTests(q)}
                     disabled={isRunningCode === q.id}
-                    className="rounded-lg border-2 border-black bg-white px-3 py-1 text-xs hover:bg-retro-warm font-mono font-bold flex items-center gap-1.5 text-black shadow-retro"
+                    className="rounded-lg border-2 border-black bg-white px-3 py-1 text-xs hover:bg-gray-soft font-sans font-bold flex items-center gap-1.5 text-black shadow-retro"
                   >
                     <Play className="h-3 w-3" /> {isRunningCode === q.id ? 'Menguji...' : 'Uji Test Case Publik'}
                   </button>
@@ -1411,14 +1411,14 @@ export function TakeQuizForm({
                   rows={7}
                   value={String(answers[q.id] ?? q.starter_code ?? '')}
                   onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
-                  className="w-full rounded-lg border-2 border-black p-3.5 text-xs font-mono bg-neutral-900 text-neutral-100 shadow-retro leading-relaxed"
+                  className="w-full rounded-lg border-2 border-black p-3.5 text-xs font-sans bg-neutral-900 text-neutral-100 shadow-retro leading-relaxed"
                   spellCheck={false}
                 />
 
                 {/* Console Output Terminal */}
                 {codeRunOutput[q.id] && (
-                  <div className="rounded-lg border-2 border-black bg-retro-warm p-4 space-y-1.5 shadow-retro">
-                    <div className="flex items-center gap-1.5 text-xs font-mono text-black font-bold">
+                  <div className="rounded-lg border-2 border-black bg-gray-soft p-4 space-y-1.5 shadow-retro">
+                    <div className="flex items-center gap-1.5 text-xs font-sans text-black font-bold">
                       <Terminal className="h-3.5 w-3.5" /> Hasil Uji Sandbox:
                     </div>
                     <pre className="text-xs font-mono text-black whitespace-pre-wrap leading-relaxed">
@@ -1433,7 +1433,7 @@ export function TakeQuizForm({
       </div>
 
       <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-3 border-t-2 border-black/15">
-        <span className="text-xs text-black/70 font-mono font-bold">
+        <span className="text-xs text-black/70 font-sans font-bold">
           Status: Jawaban tersimpan otomatis ke server SIAJAR.
         </span>
         <button
@@ -1509,23 +1509,23 @@ export function ExamLiveMonitorPanel({
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div className="p-3 rounded-control border border-border bg-surface text-center">
           <span className="text-xs text-muted-foreground block">Total Peserta</span>
-          <span className="text-xl font-bold font-mono">{data.stats.total}</span>
+          <span className="text-xl font-bold font-sans">{data.stats.total}</span>
         </div>
         <div className="p-3 rounded-control border border-border bg-surface text-center">
           <span className="text-xs text-muted-foreground block">Mengerjakan</span>
-          <span className="text-xl font-bold font-mono text-primary">{data.stats.in_progress}</span>
+          <span className="text-xl font-bold font-sans text-primary">{data.stats.in_progress}</span>
         </div>
         <div className="p-3 rounded-control border border-border bg-surface text-center">
           <span className="text-xs text-muted-foreground block">Selesai</span>
-          <span className="text-xl font-bold font-mono text-success">{data.stats.submitted}</span>
+          <span className="text-xl font-bold font-sans text-ink">{data.stats.submitted}</span>
         </div>
         <div className="p-3 rounded-control border border-border bg-surface text-center">
           <span className="text-xs text-muted-foreground block">Dihentikan</span>
-          <span className="text-xl font-bold font-mono text-danger">{data.stats.terminated}</span>
+          <span className="text-xl font-bold font-sans text-primary-dark">{data.stats.terminated}</span>
         </div>
         <div className="p-3 rounded-control border border-border bg-surface text-center">
           <span className="text-xs text-muted-foreground block">Total Pelanggaran</span>
-          <span className="text-xl font-bold font-mono text-danger">{data.stats.total_violations}</span>
+          <span className="text-xl font-bold font-sans text-primary-dark">{data.stats.total_violations}</span>
         </div>
       </div>
 
@@ -1545,21 +1545,21 @@ export function ExamLiveMonitorPanel({
               <div
                 key={st.student_id}
                 className={`p-4 rounded-control border bg-surface space-y-2.5 transition-all ${
-                  st.violations_count > 0 ? 'border-danger/60' : 'border-border'
+                  st.violations_count > 0 ? 'border-ink/60' : 'border-border'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div>
                     <span className="font-bold text-xs block text-foreground">{st.student_name}</span>
-                    <span className="text-xs font-mono text-muted-foreground">{st.student_id}</span>
+                    <span className="text-xs font-sans text-muted-foreground">{st.student_id}</span>
                   </div>
                   <span
-                    className={`text-xs font-semibold px-2 py-0.5 rounded-full uppercase font-mono ${
+                    className={`text-xs font-semibold px-2 py-0.5 rounded-full uppercase font-sans ${
                       st.status === 'IN_PROGRESS'
                         ? 'text-primary bg-primary-soft'
                         : st.status === 'SUBMITTED'
-                        ? 'text-success bg-success-soft'
-                        : 'text-danger bg-danger-soft'
+                        ? 'text-ink bg-surface'
+                        : 'text-primary-dark bg-surface'
                     }`}
                   >
                     {st.status}
@@ -1567,12 +1567,12 @@ export function ExamLiveMonitorPanel({
                 </div>
 
                 <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>Pelanggaran: <strong className={st.violations_count > 0 ? 'text-danger font-mono' : ''}>{st.violations_count}x</strong></span>
+                  <span>Pelanggaran: <strong className={st.violations_count > 0 ? 'text-primary-dark font-sans' : ''}>{st.violations_count}x</strong></span>
                   {st.extra_minutes && <span>+{st.extra_minutes}m ekstra</span>}
                 </div>
 
                 {st.last_event && (
-                  <p className="text-xs text-danger bg-danger-soft/60 px-2 py-1 rounded truncate">
+                  <p className="text-xs text-primary-dark bg-surface/60 px-2 py-1 rounded truncate">
                     {st.last_event.event_type}: {st.last_event.details}
                   </p>
                 )}
@@ -1590,7 +1590,7 @@ export function ExamLiveMonitorPanel({
                   <button
                     type="button"
                     onClick={() => handleAction(st.student_id, 'WARN', 'Perhatikan pandangan Anda dan jangan berpindah tab!')}
-                    className="rounded-control border border-border px-2 py-0.5 text-xs hover:bg-muted font-medium text-warning"
+                    className="rounded-control border border-border px-2 py-0.5 text-xs hover:bg-muted font-medium text-ink"
                     title="Kirim Peringatan"
                   >
                     Peringatkan
@@ -1598,7 +1598,7 @@ export function ExamLiveMonitorPanel({
                   <button
                     type="button"
                     onClick={() => handleAction(st.student_id, 'TERMINATE')}
-                    className="rounded-control border border-border px-2 py-0.5 text-xs hover:bg-muted font-medium text-danger"
+                    className="rounded-control border border-border px-2 py-0.5 text-xs hover:bg-muted font-medium text-primary-dark"
                     title="Hentikan Ujian"
                   >
                     Hentikan
@@ -1623,10 +1623,10 @@ export function ExamLiveMonitorPanel({
               <div key={ev.id} className="flex items-center justify-between p-2 rounded border border-border/60 bg-surface">
                 <div>
                   <span className="font-semibold text-foreground">{ev.student_name}</span>{' '}
-                  <span className="text-danger font-mono font-medium">[{ev.event_type}]</span>{' '}
+                  <span className="text-primary-dark font-sans font-medium">[{ev.event_type}]</span>{' '}
                   <span className="text-muted-foreground">{ev.details}</span>
                 </div>
-                <span className="text-xs font-mono text-muted-foreground">
+                <span className="text-xs font-sans text-muted-foreground">
                   {new Date(ev.created_at).toLocaleTimeString('id-ID')}
                 </span>
               </div>
@@ -1693,7 +1693,7 @@ export function ExamAnalyticsModal({ examId }: { examId: string }) {
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="text-xs font-mono font-bold hover:opacity-70 px-2 py-1"
+                className="text-xs font-sans font-bold hover:opacity-70 px-2 py-1"
               >
                 [X]
               </button>
@@ -1703,19 +1703,19 @@ export function ExamAnalyticsModal({ examId }: { examId: string }) {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
               <div className="p-3 rounded-control border border-border bg-background">
                 <span className="text-xs text-muted-foreground block">Rata-Rata</span>
-                <span className="text-xl font-bold font-mono">{analytics.average_score}</span>
+                <span className="text-xl font-bold font-sans">{analytics.average_score}</span>
               </div>
               <div className="p-3 rounded-control border border-border bg-background">
                 <span className="text-xs text-muted-foreground block">Tertinggi</span>
-                <span className="text-xl font-bold font-mono text-success">{analytics.highest_score}</span>
+                <span className="text-xl font-bold font-sans text-ink">{analytics.highest_score}</span>
               </div>
               <div className="p-3 rounded-control border border-border bg-background">
                 <span className="text-xs text-muted-foreground block">Terendah</span>
-                <span className="text-xl font-bold font-mono text-danger">{analytics.lowest_score}</span>
+                <span className="text-xl font-bold font-sans text-primary-dark">{analytics.lowest_score}</span>
               </div>
               <div className="p-3 rounded-control border border-border bg-background">
                 <span className="text-xs text-muted-foreground block">Lulus KKM</span>
-                <span className="text-xl font-bold font-mono text-primary">{analytics.passing_rate_percentage}%</span>
+                <span className="text-xl font-bold font-sans text-primary">{analytics.passing_rate_percentage}%</span>
               </div>
             </div>
 
@@ -1745,14 +1745,14 @@ export function ExamAnalyticsModal({ examId }: { examId: string }) {
                     {analytics.difficulty_analysis.map((row: any) => (
                       <tr key={row.question_id} className="hover:bg-muted/40">
                         <td className="p-2.5">{row.question_text}</td>
-                        <td className="p-2.5 text-center font-mono font-bold">{row.difficulty_index}</td>
+                        <td className="p-2.5 text-center font-sans font-bold">{row.difficulty_index}</td>
                         <td className="p-2.5 text-center">
                           <span
                             className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
                               row.category === 'Mudah'
-                                ? 'bg-success-soft text-success'
+                                ? 'bg-surface text-ink'
                                 : row.category === 'Sukar'
-                                ? 'bg-danger-soft text-danger'
+                                ? 'bg-surface text-primary-dark'
                                 : 'bg-muted text-muted-foreground'
                             }`}
                           >
@@ -1794,7 +1794,7 @@ export function LecturerExamView({
           className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all shadow-retro ${
             activeTab === 'monitor'
               ? 'bg-black text-white shadow-retro'
-              : 'bg-white text-black hover:bg-retro-warm'
+              : 'bg-white text-black hover:bg-gray-soft'
           }`}
         >
           <Users className="h-4 w-4" />
@@ -1806,7 +1806,7 @@ export function LecturerExamView({
           className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all shadow-retro ${
             activeTab === 'preview'
               ? 'bg-black text-white shadow-retro'
-              : 'bg-white text-black hover:bg-retro-warm'
+              : 'bg-white text-black hover:bg-gray-soft'
           }`}
         >
           <FileText className="h-4 w-4" />
@@ -1818,7 +1818,7 @@ export function LecturerExamView({
         <ExamLiveMonitorPanel examId={quiz.id} />
       ) : (
         <div className="space-y-4">
-          <div className="p-3.5 rounded-lg border-2 border-black bg-retro-warm text-xs font-bold text-black flex items-center gap-2 shadow-retro">
+          <div className="p-3.5 rounded-lg border-2 border-black bg-gray-soft text-xs font-bold text-black flex items-center gap-2 shadow-retro">
             <span>ℹ️ Mode Pratinjau: Menampilkan simulasi lembar ujian yang akan dikerjakan oleh mahasiswa.</span>
           </div>
           <TakeQuizForm quiz={quiz} existingAttempt={null} courseTitle={courseTitle} hideHeaderWindow={true} />

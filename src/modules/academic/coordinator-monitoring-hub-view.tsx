@@ -172,7 +172,7 @@ export function CoordinatorMonitoringHubView({
       <RetroWindow
         title="monitoring_akademik_prodi.app"
         badge="Supervisi Pembelajaran"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -181,7 +181,7 @@ export function CoordinatorMonitoringHubView({
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Activity className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Monitoring Akademik Program Studi
               </h1>
             </div>
@@ -191,7 +191,7 @@ export function CoordinatorMonitoringHubView({
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               Semester Ganjil 2026/2027
             </span>
           </div>
@@ -209,10 +209,10 @@ export function CoordinatorMonitoringHubView({
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -225,9 +225,9 @@ export function CoordinatorMonitoringHubView({
       {/* 3. TAB 1: KELAS */}
       {activeTab === 'kelas' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Activity className="h-5 w-5 text-primary" />
                 <span>Keterlaksanaan Kelas (Target Minimal 16 Pertemuan)</span>
               </h2>
@@ -235,7 +235,7 @@ export function CoordinatorMonitoringHubView({
                 Monitoring kemajuan pertemuan tatap muka/daring seluruh kelas di lingkungan prodi.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               Total Rombel: {CLASS_PROGRESS.length}
             </span>
           </div>
@@ -243,7 +243,7 @@ export function CoordinatorMonitoringHubView({
           {CLASS_PROGRESS.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <Activity className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Kelas Dimonitor</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Kelas Dimonitor</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Data kemajuan pertemuan kelas belum tercatat di semester ini.
               </p>
@@ -252,7 +252,7 @@ export function CoordinatorMonitoringHubView({
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Kode & Nama Kelas</th>
                       <th className="p-3.5 sm:p-4">Dosen Pengampu</th>
@@ -263,13 +263,13 @@ export function CoordinatorMonitoringHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {CLASS_PROGRESS.map((cp) => (
-                      <tr key={cp.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={cp.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4">
-                          <span className="font-mono text-xs font-bold text-black/60 block">{cp.code}</span>
+                          <span className="font-sans text-xs font-bold text-black/60 block">{cp.code}</span>
                           <span className="font-bold text-black">{cp.name}</span>
                         </td>
                         <td className="p-3.5 sm:p-4">{cp.lecturer}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">
                           {cp.meetingsHeld} / {cp.totalMeetings} Sesi
                         </td>
                         <td className="p-3.5 sm:p-4 max-w-xs">
@@ -278,21 +278,21 @@ export function CoordinatorMonitoringHubView({
                               <div
                                 className={cn(
                                   'h-full rounded-full',
-                                  cp.percent >= 50 ? 'bg-emerald-500' : 'bg-amber-500'
+                                  cp.percent >= 50 ? 'bg-gray-dark' : 'bg-gray-dark'
                                 )}
                                 style={{ width: `${cp.percent}%` }}
                               />
                             </div>
-                            <span className="font-mono text-xs font-bold">{cp.percent.toFixed(0)}%</span>
+                            <span className="font-sans text-xs font-bold">{cp.percent.toFixed(0)}%</span>
                           </div>
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-sans font-bold',
                               cp.status === 'ON_TRACK'
-                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                                : 'border-amber-500 bg-amber-100 text-amber-950'
+                                ? 'border-ink bg-surface text-ink'
+                                : 'border-ink bg-gray-soft text-ink'
                             )}
                           >
                             {cp.status === 'ON_TRACK' ? 'Sesuai Jadwal' : 'Tertinggal'}
@@ -311,9 +311,9 @@ export function CoordinatorMonitoringHubView({
       {/* 4. TAB 2: DOSEN */}
       {activeTab === 'dosen' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <UserCheck className="h-5 w-5 text-primary" />
                 <span>Monitoring Kedisiplinan & Kinerja Mengajar Dosen</span>
               </h2>
@@ -321,7 +321,7 @@ export function CoordinatorMonitoringHubView({
                 Evaluasi tingkat kehadiran mengajar dosen pengampu dan ketuntasan pengisian materi ajar.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               Total Dosen: {LECTURER_PERFORMANCE.length}
             </span>
           </div>
@@ -329,7 +329,7 @@ export function CoordinatorMonitoringHubView({
           {LECTURER_PERFORMANCE.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <UserCheck className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Data Kinerja Dosen</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Data Kinerja Dosen</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Evaluasi presensi mengajar dosen belum tersedia untuk semester ini.
               </p>
@@ -338,7 +338,7 @@ export function CoordinatorMonitoringHubView({
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Dosen Pengampu</th>
                       <th className="p-3.5 sm:p-4">NIDN</th>
@@ -350,21 +350,21 @@ export function CoordinatorMonitoringHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {LECTURER_PERFORMANCE.map((lp) => (
-                      <tr key={lp.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={lp.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">{lp.name}</td>
-                        <td className="p-3.5 sm:p-4 font-mono">{lp.nidn}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{lp.attendanceRate}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{lp.syllabusCoverage}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-black text-emerald-800">
+                        <td className="p-3.5 sm:p-4 font-sans">{lp.nidn}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{lp.attendanceRate}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{lp.syllabusCoverage}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-ink">
                           {lp.studentEvaluation}
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-sans font-bold',
                               lp.status === 'SANGAT_BAIK'
-                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                                : 'border-amber-500 bg-amber-100 text-amber-950'
+                                ? 'border-ink bg-surface text-ink'
+                                : 'border-ink bg-gray-soft text-ink'
                             )}
                           >
                             {lp.status === 'SANGAT_BAIK' ? 'Sangat Baik' : 'Perlu Pendampingan'}
@@ -383,9 +383,9 @@ export function CoordinatorMonitoringHubView({
       {/* 5. TAB 3: PRESENSI PRODI */}
       {activeTab === 'presensi' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <FileSpreadsheet className="h-5 w-5 text-primary" />
                 <span>Statistik Agregasi Presensi Mahasiswa per Angkatan</span>
               </h2>
@@ -393,7 +393,7 @@ export function CoordinatorMonitoringHubView({
                 Kepatuhan ambang batas kehadiran minimal 75% sebagai prasyarat mengikuti Ujian Akhir Semester (UAS).
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               Syarat Ujian: &ge; 75%
             </span>
           </div>
@@ -401,7 +401,7 @@ export function CoordinatorMonitoringHubView({
           {ATTENDANCE_STATS.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <FileSpreadsheet className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Rekap Presensi</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Rekap Presensi</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Data kehadiran mahasiswa per angkatan belum dapat diagregasi.
               </p>
@@ -410,21 +410,21 @@ export function CoordinatorMonitoringHubView({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {ATTENDANCE_STATS.map((stat, idx) => (
                 <div key={idx} className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-4">
-                  <h3 className="font-heading font-black text-base text-black">{stat.batch}</h3>
-                  <div className="space-y-2 p-3 bg-neutral-50 rounded-lg border border-black/10 font-mono text-xs">
+                  <h3 className="font-heading font-bold text-base text-black">{stat.batch}</h3>
+                  <div className="space-y-2 p-3 bg-neutral-50 rounded-lg border border-black/10 font-sans text-xs">
                     <div className="flex justify-between">
                       <span className="text-black/60">Total Mahasiswa:</span>
                       <span className="font-bold">{stat.studentCount} Orang</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-black/60">Rata-rata Presensi:</span>
-                      <span className="font-bold text-emerald-800">{stat.avgAttendance}</span>
+                      <span className="font-bold text-ink">{stat.avgAttendance}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-black/60">Layak Mengikuti UAS:</span>
-                      <span className="font-bold text-emerald-700">{stat.eligibleForExams}</span>
+                      <span className="font-bold text-ink">{stat.eligibleForExams}</span>
                     </div>
-                    <div className="flex justify-between border-t border-black/10 pt-1.5 text-amber-900 font-bold">
+                    <div className="flex justify-between border-t border-black/10 pt-1.5 text-ink font-bold">
                       <span>Peringatan Kehadiran (&lt;75%):</span>
                       <span>{stat.warningStudents}</span>
                     </div>
@@ -439,9 +439,9 @@ export function CoordinatorMonitoringHubView({
       {/* 6. TAB 4: UJIAN BERLANGSUNG */}
       {activeTab === 'ujian' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <ShieldAlert className="h-5 w-5 text-primary" />
                 <span>Supervisi Ujian Semester Sedang Berlangsung</span>
               </h2>
@@ -449,7 +449,7 @@ export function CoordinatorMonitoringHubView({
                 Pengawasan langsung sesi ujian berbasis komputer (CBT) dan integritas telemetri proctoring prodi.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 bg-primary text-white rounded-lg">
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-primary text-white rounded-lg">
               Live Proctoring Aktif
             </span>
           </div>
@@ -457,7 +457,7 @@ export function CoordinatorMonitoringHubView({
           {ACTIVE_EXAMS.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <ShieldAlert className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Tidak Ada Ujian Aktif Saat Ini</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Tidak Ada Ujian Aktif Saat Ini</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Saat ini tidak ada sesi ujian CBT yang sedang diselenggarakan oleh program studi.
               </p>
@@ -466,7 +466,7 @@ export function CoordinatorMonitoringHubView({
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Kode & Judul Ujian</th>
                       <th className="p-3.5 sm:p-4">Dosen Pengawas</th>
@@ -477,23 +477,23 @@ export function CoordinatorMonitoringHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {ACTIVE_EXAMS.map((ex) => (
-                      <tr key={ex.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={ex.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4">
-                          <span className="font-mono text-xs font-bold text-black/60 block">{ex.code}</span>
+                          <span className="font-sans text-xs font-bold text-black/60 block">{ex.code}</span>
                           <span className="font-bold text-black">{ex.title}</span>
                         </td>
                         <td className="p-3.5 sm:p-4">{ex.lecturer}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">
                           {ex.activeNow} / {ex.totalStudents} Mahasiswa
                         </td>
                         <td className="p-3.5 sm:p-4 text-xs">{ex.schedule}</td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-sans font-bold',
                               ex.proctoringStatus === 'AMAN'
-                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                                : 'border-amber-500 bg-amber-100 text-amber-950'
+                                ? 'border-ink bg-surface text-ink'
+                                : 'border-ink bg-gray-soft text-ink'
                             )}
                           >
                             {ex.proctoringStatus === 'AMAN' ? 'Integritas Terjaga' : `${ex.violations} Insiden Terdeteksi`}

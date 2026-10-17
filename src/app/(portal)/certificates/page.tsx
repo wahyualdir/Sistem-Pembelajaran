@@ -94,8 +94,20 @@ const DEMO_PROJECTS: PortfolioProjectItem[] = [
 import { redirect } from 'next/navigation';
 import { isDemoMode } from '@/lib/config/features';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+import { getStudentCertificatesAction } from '@/modules/academic/badge-certificate-actions';
 
-export default async function CertificatesPage() {
+interface CertificatesPageProps {
+  searchParams?: Promise<{
+    code?: string;
+  }>;
+}
+
+export default async function CertificatesPage({ searchParams }: CertificatesPageProps) {
+  const resolvedParams = searchParams ? await searchParams : {};
+  if (resolvedParams.code) {
+    redirect(`/verify/certificate/${encodeURIComponent(resolvedParams.code)}`);
+  }
+
   const user = await getCurrentUserWithRoles();
   const role = user?.activeRole;
 
@@ -113,9 +125,24 @@ export default async function CertificatesPage() {
   }
 
   const isDemo = isDemoMode();
+  const realCerts = await getStudentCertificatesAction().catch(() => []);
+  const certificates: CertificateItem[] = realCerts.length > 0
+    ? realCerts.map((c) => ({
+        id: c.id,
+        title: c.title,
+        issuer: c.issuer,
+        date: c.issueDate,
+        credentialId: c.verificationCode,
+        grade: c.grade,
+        hours: c.creditHours,
+      }))
+    : isDemo
+    ? DEMO_CERTIFICATES
+    : [];
+
   return (
     <CertificatesHubView
-      certificates={isDemo ? DEMO_CERTIFICATES : []}
+      certificates={certificates}
       projects={isDemo ? DEMO_PROJECTS : []}
     />
   );

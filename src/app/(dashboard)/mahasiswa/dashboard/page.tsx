@@ -106,16 +106,16 @@ export default async function MahasiswaDashboardPage() {
         {/* ======================================================== */}
         <div className="rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-retro-md overflow-hidden transition-all">
           {/* Header Bar Jendela Retro dengan Titik Sticker */}
-          <div className="flex items-center justify-between px-4 py-2 border-b-[1.5px] border-retro-border bg-retro-warm/70">
+          <div className="flex items-center justify-between px-4 py-2 border-b-[1.5px] border-retro-border bg-gray-soft/70">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-red shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-yellow shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-green shadow-retro-sm" />
-              <span className="text-xs font-mono font-bold text-muted-foreground ml-2">
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-primary shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-gray shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-gray-dark shadow-retro-sm" />
+              <span className="text-xs font-sans font-bold text-muted-foreground ml-2">
                 siakad://dashboard.mahasiswa
               </span>
             </div>
-            <span className="text-xs font-mono font-bold text-primary uppercase tracking-wider">
+            <span className="text-xs font-sans font-bold text-primary uppercase tracking-wider">
               ONLINE
             </span>
           </div>
@@ -123,7 +123,7 @@ export default async function MahasiswaDashboardPage() {
           <div className="flex flex-col gap-4 p-5 md:flex-row md:items-center md:justify-between">
             <div className="space-y-1.5">
               <div className="flex items-center gap-2.5">
-                <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-foreground font-heading">
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground font-heading">
                   {infoJadwal.salamWaktu}, {namaDepan}!
                 </h1>
                 <span className="inline-flex items-center px-2.5 py-0.5 rounded-full border-[1.5px] border-retro-border bg-retro-mint text-foreground text-xs font-bold shadow-xs">
@@ -136,13 +136,13 @@ export default async function MahasiswaDashboardPage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-retro-border/40">
-              <span className="inline-flex items-center px-3 py-1 rounded-md border-[1.5px] border-retro-border bg-retro-warm text-foreground text-xs font-bold shadow-xs">
+              <span className="inline-flex items-center px-3 py-1 rounded-md border-[1.5px] border-retro-border bg-gray-soft text-foreground text-xs font-bold shadow-xs">
                 {prodiNama}
               </span>
-              <span className="inline-flex items-center px-3 py-1 rounded-md border-[1.5px] border-retro-border bg-retro-warm text-foreground text-xs font-bold shadow-xs">
+              <span className="inline-flex items-center px-3 py-1 rounded-md border-[1.5px] border-retro-border bg-gray-soft text-foreground text-xs font-bold shadow-xs">
                 NIM: {mahasiswa?.nim || "223510001"}
               </span>
-              <span className="inline-flex items-center px-3 py-1 rounded-md border-[1.5px] border-retro-border bg-retro-warm text-foreground text-xs font-bold shadow-xs">
+              <span className="inline-flex items-center px-3 py-1 rounded-md border-[1.5px] border-retro-border bg-gray-soft text-foreground text-xs font-bold shadow-xs">
                 Angkatan {mahasiswa?.angkatan || 2022}
               </span>
             </div>
@@ -161,7 +161,7 @@ export default async function MahasiswaDashboardPage() {
                   <GraduationCap className="h-4 w-4 text-primary" />
                   Pencapaian Akademik Kumulatif
                 </CardTitle>
-                <span className="text-xs font-medium text-success flex items-center gap-1">
+                <span className="text-xs font-medium text-ink flex items-center gap-1">
                   <Award className="h-3.5 w-3.5" />
                   Status: Mahasiswa Aktif
                 </span>
@@ -175,7 +175,7 @@ export default async function MahasiswaDashboardPage() {
                     Indeks Prestasi Kumulatif (IPK)
                   </span>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-extrabold text-primary font-heading tabular-nums tracking-tight">
+                    <span className="text-4xl font-bold text-primary font-heading tabular-nums tracking-tight">
                       {transkrip.ipk.toFixed(2)}
                     </span>
                     <span className="text-xs text-muted-foreground">/ 4.00</span>
@@ -222,7 +222,7 @@ export default async function MahasiswaDashboardPage() {
                   <CheckCircle2 className="h-4 w-4 text-primary" />
                   Daftar Periksa Semester Ini
                 </CardTitle>
-                <Badge variant="outline" className="text-xs font-mono py-0">
+                <Badge variant="outline" className="text-xs font-sans py-0">
                   2026/2027 Ganjil
                 </Badge>
               </div>
@@ -278,7 +278,7 @@ export default async function MahasiswaDashboardPage() {
                   </div>
                 </div>
                 <div className="flex flex-col items-end gap-1">
-                  <Badge variant="outline" className={`text-xs font-medium py-0.5 px-2 ${rataRataPresensi >= 75 ? "bg-success-soft text-success border-success/30" : "bg-danger-soft text-danger border-danger/30"}`}>
+                  <Badge variant="outline" className={`text-xs font-medium py-0.5 px-2 ${rataRataPresensi >= 75 ? "bg-surface text-ink border-ink" : "bg-surface text-primary-dark border-ink"}`}>
                     {rataRataPresensi >= 75 ? "Aman" : "Kritis"}
                   </Badge>
                   <Link href="/mahasiswa/presensi" className="text-xs text-primary hover:underline font-medium inline-flex items-center">
@@ -294,11 +294,11 @@ export default async function MahasiswaDashboardPage() {
         {/* PERINGATAN PRESENSI & JADWAL PENTING                      */}
         {/* ======================================================== */}
         {presensiPeringatan.length > 0 && (
-          <div className="rounded-[12px] border border-warning/30 bg-warning/10 p-4 transition-all">
+          <div className="rounded-[12px] border border-ink bg-gray-soft/10 p-4 transition-all">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="h-5 w-5 text-warning flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="h-5 w-5 text-ink flex-shrink-0 mt-0.5" />
               <div className="space-y-1 flex-1">
-                <h3 className="text-sm font-semibold text-warning">
+                <h3 className="text-sm font-semibold text-ink">
                   Peringatan Kehadiran Mendekati Batas Minimal UAS (75%)
                 </h3>
                 <p className="text-xs text-muted-foreground leading-relaxed">
@@ -308,10 +308,10 @@ export default async function MahasiswaDashboardPage() {
                   {presensiPeringatan.map((p) => (
                     <span
                       key={p.kelasId}
-                      className="inline-flex items-center gap-1.5 rounded-[8px] bg-surface px-2.5 py-1 text-xs font-medium text-warning border border-warning/20 shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-[8px] bg-surface px-2.5 py-1 text-xs font-medium text-ink border border-ink shadow-sm"
                     >
                       <span>{p.namaMataKuliah}</span>
-                      <strong className="text-danger font-bold">{p.persentase}%</strong>
+                      <strong className="text-primary-dark font-bold">{p.persentase}%</strong>
                     </span>
                   ))}
                 </div>
@@ -357,7 +357,7 @@ export default async function MahasiswaDashboardPage() {
                     key={idx}
                     className={`rounded-[10px] border p-3.5 transition-all hover:translate-y-[-2px] hover:shadow-sm ${
                       j.sedangBerlangsung
-                        ? "border-success/40 bg-success-soft/30"
+                        ? "border-ink bg-surface/30"
                         : j.adalahHariIni
                         ? "border-primary/30 bg-primary-soft/20"
                         : "border-border bg-surface hover:bg-muted/30"
@@ -369,7 +369,7 @@ export default async function MahasiswaDashboardPage() {
                           <span
                             className={`text-xs font-semibold px-2 py-0.5 rounded-[6px] border ${
                               j.sedangBerlangsung
-                                ? "bg-success text-white border-transparent"
+                                ? "bg-gray-dark text-white border-transparent"
                                 : j.adalahHariIni
                                 ? "bg-primary text-white border-transparent"
                                 : "bg-muted text-muted-foreground border-border"
@@ -377,7 +377,7 @@ export default async function MahasiswaDashboardPage() {
                           >
                             {j.labelRelatif}
                           </span>
-                          <span className="text-xs font-mono font-medium text-muted-foreground">
+                          <span className="text-xs font-sans font-medium text-muted-foreground">
                             {j.kodeMk} • Kls {j.kelas}
                           </span>
                         </div>
@@ -502,7 +502,7 @@ export default async function MahasiswaDashboardPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <Link
             href="/mahasiswa/krs"
-            className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-retro-warm hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
+            className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-gray-soft hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
           >
             <span className="flex items-center gap-2">
               <FileCheck className="h-4 w-4 text-primary" />
@@ -512,7 +512,7 @@ export default async function MahasiswaDashboardPage() {
           </Link>
           <Link
             href="/mahasiswa/nilai"
-            className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-retro-warm hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
+            className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-gray-soft hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
           >
             <span className="flex items-center gap-2">
               <GraduationCap className="h-4 w-4 text-primary" />
@@ -522,7 +522,7 @@ export default async function MahasiswaDashboardPage() {
           </Link>
           <Link
             href="/mahasiswa/presensi"
-            className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-retro-warm hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
+            className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-gray-soft hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
           >
             <span className="flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-primary" />
@@ -532,7 +532,7 @@ export default async function MahasiswaDashboardPage() {
           </Link>
           <Link
             href="/mahasiswa/ujian"
-            className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-retro-warm hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
+            className="flex items-center justify-between p-3.5 rounded-lg bg-retro-surface border-[1.5px] border-retro-border hover:bg-gray-soft hover:translate-y-[-2px] transition-all text-xs font-bold text-foreground shadow-retro"
           >
             <span className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-primary" />

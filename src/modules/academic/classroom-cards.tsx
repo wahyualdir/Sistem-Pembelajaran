@@ -24,49 +24,49 @@ import {
 import { CreateClassForm, JoinClassForm } from './class-forms';
 import type { CourseItem, SemesterItem } from './actions';
 
-// 6 Palet Warna Retro Khas Google Classroom Berbalut Macintosh
+// 6 Palet Warna Retro Khas Identitas Kampus Neo-Brutalisme (Merah, Abu-abu, Putih, Hitam)
 const RETRO_BANNER_THEMES = [
   {
-    bg: 'bg-pastel-peach',
-    text: 'text-black',
+    bg: 'bg-surface',
+    text: 'text-ink',
     accent: 'bg-primary',
-    border: 'border-black',
-    badge: 'bg-pastel-peach',
+    border: 'border-ink',
+    badge: 'bg-gray-soft',
   },
   {
-    bg: 'bg-pastel-mint',
-    text: 'text-black',
-    accent: 'bg-traffic-green',
-    border: 'border-black',
-    badge: 'bg-pastel-mint',
+    bg: 'bg-gray-soft',
+    text: 'text-ink',
+    accent: 'bg-ink',
+    border: 'border-ink',
+    badge: 'bg-surface',
   },
   {
-    bg: 'bg-pastel-sky',
-    text: 'text-black',
-    accent: 'bg-retro-blue',
-    border: 'border-black',
-    badge: 'bg-pastel-sky',
+    bg: 'bg-ink',
+    text: 'text-white',
+    accent: 'bg-primary',
+    border: 'border-ink',
+    badge: 'bg-surface text-ink',
   },
   {
-    bg: 'bg-pastel-lavender',
-    text: 'text-black',
-    accent: 'bg-retro-purple',
-    border: 'border-black',
-    badge: 'bg-pastel-lavender',
+    bg: 'bg-surface',
+    text: 'text-ink',
+    accent: 'bg-gray-dark',
+    border: 'border-ink',
+    badge: 'bg-gray-soft',
   },
   {
-    bg: 'bg-pastel-lemon',
-    text: 'text-black',
-    accent: 'bg-retro-yellow',
-    border: 'border-black',
-    badge: 'bg-pastel-lemon',
+    bg: 'bg-gray-soft',
+    text: 'text-ink',
+    accent: 'bg-primary-dark',
+    border: 'border-ink',
+    badge: 'bg-surface',
   },
   {
-    bg: 'bg-pastel-rose',
-    text: 'text-black',
-    accent: 'bg-retro-pink',
-    border: 'border-black',
-    badge: 'bg-pastel-rose',
+    bg: 'bg-surface',
+    text: 'text-ink',
+    accent: 'bg-gray',
+    border: 'border-ink',
+    badge: 'bg-gray-soft',
   },
 ];
 
@@ -128,15 +128,15 @@ export function GoogleClassroomCard({
           {/* Header Baris & Status */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-red inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-yellow inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-traffic-green inline-block shadow-retro-sm" />
-              <span className="text-xs font-black text-black ml-1.5 truncate">
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-primary inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-gray inline-block shadow-retro-sm" />
+              <span className="h-3 w-3 rounded-full border border-retro-border bg-gray-dark inline-block shadow-retro-sm" />
+              <span className="text-xs font-bold text-black ml-1.5 truncate">
                 Kelas {item.section}
               </span>
             </div>
 
-            <span className="text-xs font-black bg-white/95 border border-black px-2 py-0.5 rounded shadow-retro-sm text-black">
+            <span className="text-xs font-bold bg-white/95 border border-black px-2 py-0.5 rounded shadow-retro-sm text-black">
               Aktif
             </span>
           </div>
@@ -145,7 +145,7 @@ export function GoogleClassroomCard({
           <div className="pr-12">
             <Link
               href={`/classes/${item.id}`}
-              className="font-black text-lg text-black hover:underline line-clamp-2 leading-snug block"
+              className="font-bold text-lg text-black hover:underline line-clamp-2 leading-snug block"
             >
               {item.title}
             </Link>
@@ -155,7 +155,7 @@ export function GoogleClassroomCard({
           </div>
 
           {/* Dosen Avatar Bulat Tumpang-Tindih */}
-          <div className="absolute right-4 -bottom-6 h-12 w-12 rounded-full border-2 border-black bg-white shadow-retro flex items-center justify-center font-black text-sm text-black select-none z-10">
+          <div className="absolute right-4 -bottom-6 h-12 w-12 rounded-full border-2 border-black bg-white shadow-retro flex items-center justify-center font-bold text-sm text-black select-none z-10">
             {initials}
           </div>
         </div>
@@ -165,8 +165,8 @@ export function GoogleClassroomCard({
         {/* ======================================================== */}
         <div className="p-4 sm:p-5 pt-8 space-y-3.5 bg-white">
           {/* Tenggat Waktu Mendatang */}
-          <div className="p-3 rounded-xl border border-black/30 bg-retro-warm/40 space-y-1">
-            <span className="text-xs font-black text-black block">
+          <div className="p-3 rounded-xl border border-black/30 bg-gray-soft/40 space-y-1">
+            <span className="text-xs font-bold text-black block">
               Tenggat Terdekat
             </span>
             <div className="flex items-center gap-2 text-xs font-bold text-black">
@@ -188,12 +188,12 @@ export function GoogleClassroomCard({
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="text-xs font-black bg-white border border-black px-2 py-0.5 rounded shadow-retro-sm hover:bg-retro-warm transition-all flex items-center gap-1 text-black"
+                className="text-xs font-bold bg-white border border-black px-2 py-0.5 rounded shadow-retro-sm hover:bg-gray-soft transition-all flex items-center gap-1 text-black"
                 title="Salin Kode Kelas"
               >
                 <Key className="h-3 w-3 text-primary" />
                 <span>{item.join_code}</span>
-                {copied && <span className="text-xs text-retro-mint font-black">✓</span>}
+                {copied && <span className="text-xs text-retro-mint font-bold">✓</span>}
               </button>
             )}
           </div>
@@ -201,11 +201,11 @@ export function GoogleClassroomCard({
           {/* Progres Belajar Mahasiswa */}
           {!isLecturer && (
             <div className="pt-2.5 border-t border-black/20 space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-black text-black">
+              <div className="flex items-center justify-between text-xs font-bold text-black">
                 <span className="text-black font-bold">Progres Belajar</span>
-                <span className="font-black text-black">{item.progressPercent ?? 65}%</span>
+                <span className="font-bold text-black">{item.progressPercent ?? 65}%</span>
               </div>
-              <div className="w-full h-2 rounded-full border border-black bg-retro-warm overflow-hidden">
+              <div className="w-full h-2 rounded-full border border-black bg-gray-soft overflow-hidden">
                 <div
                   className="bg-black h-full rounded-full transition-all duration-500"
                   style={{ width: `${item.progressPercent ?? 65}%` }}
@@ -224,21 +224,21 @@ export function GoogleClassroomCard({
         <div className="flex items-center gap-1">
           <Link
             href={`/classes/${item.id}?tab=tugas`}
-            className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-retro-warm hover:border-black text-black transition-all shadow-xs"
+            className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-gray-soft hover:border-black text-black transition-all shadow-xs"
             title="Tugas Kelas"
           >
             <FileText className="h-4 w-4" />
           </Link>
           <Link
             href={`/classes/${item.id}?tab=tugas&filter=materi`}
-            className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-retro-warm hover:border-black text-black transition-all shadow-xs"
+            className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-gray-soft hover:border-black text-black transition-all shadow-xs"
             title="Materi & Modul"
           >
             <FolderArchive className="h-4 w-4" />
           </Link>
           <Link
             href={`/classes/${item.id}?tab=anggota`}
-            className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-retro-warm hover:border-black text-black transition-all shadow-xs"
+            className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-gray-soft hover:border-black text-black transition-all shadow-xs"
             title="Peserta Kelas"
           >
             <Users className="h-4 w-4" />
@@ -248,7 +248,7 @@ export function GoogleClassroomCard({
         {/* Tombol Utama Buka Kelas */}
         <Link
           href={`/classes/${item.id}`}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-black shadow-retro transition-all"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-bold shadow-retro transition-all"
         >
           <span>Buka Kelas</span>
           <ArrowRight className="h-3.5 w-3.5" />
@@ -278,10 +278,10 @@ export function ClassroomToolbar({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-2xl border-2 border-black shadow-retro">
         <div className="space-y-0.5">
           <div className="flex items-center gap-2">
-            <span className="font-black text-base sm:text-lg text-black">
+            <span className="font-bold text-base sm:text-lg text-black">
               Daftar Kelas Perkuliahan
             </span>
-            <span className="text-xs font-black bg-retro-warm border border-black px-2 py-0.5 rounded">
+            <span className="text-xs font-bold bg-gray-soft border border-black px-2 py-0.5 rounded">
               {totalClasses} Kelas Aktif
             </span>
           </div>
@@ -298,7 +298,7 @@ export function ClassroomToolbar({
                 setIsJoinOpen(!isJoinOpen);
                 setIsCreateOpen(false);
               }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-black bg-retro-yellow text-black font-black text-xs sm:text-sm shadow-retro hover:bg-white transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-black bg-gray-soft text-black font-bold text-xs sm:text-sm shadow-retro hover:bg-white transition-all cursor-pointer"
             >
               <Key className="h-4 w-4" />
               <span>{isJoinOpen ? 'Tutup Form' : 'Gabung Kelas dengan Kode'}</span>
@@ -312,7 +312,7 @@ export function ClassroomToolbar({
                 setIsCreateOpen(!isCreateOpen);
                 setIsJoinOpen(false);
               }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-black bg-black text-white font-black text-xs sm:text-sm shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-black bg-black text-white font-bold text-xs sm:text-sm shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
             >
               <PlusCircle className="h-4 w-4" />
               <span>{isCreateOpen ? 'Tutup Form' : 'Buat Kelas Baru'}</span>
@@ -323,8 +323,8 @@ export function ClassroomToolbar({
 
       {/* Expandable Join Form (Mahasiswa) */}
       {student && isJoinOpen && (
-        <div className="p-5 sm:p-6 rounded-2xl border-2 border-black bg-retro-warm/50 shadow-retro animate-fade-up">
-          <h3 className="font-black text-sm text-black mb-3 flex items-center gap-2">
+        <div className="p-5 sm:p-6 rounded-2xl border-2 border-black bg-gray-soft/50 shadow-retro animate-fade-up">
+          <h3 className="font-bold text-sm text-black mb-3 flex items-center gap-2">
             <Key className="h-4 w-4 text-primary" />
             <span>Gabung Kelas dengan Kode dari Dosen</span>
           </h3>
@@ -334,8 +334,8 @@ export function ClassroomToolbar({
 
       {/* Expandable Create Form (Dosen) */}
       {lecturer && isCreateOpen && (
-        <div className="p-5 sm:p-6 rounded-2xl border-2 border-black bg-retro-warm/50 shadow-retro animate-fade-up">
-          <h3 className="font-black text-sm text-black mb-3 flex items-center gap-2">
+        <div className="p-5 sm:p-6 rounded-2xl border-2 border-black bg-gray-soft/50 shadow-retro animate-fade-up">
+          <h3 className="font-bold text-sm text-black mb-3 flex items-center gap-2">
             <PlusCircle className="h-4 w-4 text-primary" />
             <span>Buat Kelas Perkuliahan Baru</span>
           </h3>

@@ -146,7 +146,7 @@ export function CoordinatorAssignmentsHubView({
       <RetroWindow
         title="penugasan_dan_kelas_prodi.app"
         badge="Manajemen Program Studi"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -155,7 +155,7 @@ export function CoordinatorAssignmentsHubView({
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Users className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Penugasan & Kelas Program Studi
               </h1>
             </div>
@@ -165,7 +165,7 @@ export function CoordinatorAssignmentsHubView({
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               Teknik Informatika (S1)
             </span>
           </div>
@@ -183,10 +183,10 @@ export function CoordinatorAssignmentsHubView({
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -199,9 +199,9 @@ export function CoordinatorAssignmentsHubView({
       {/* 3. TAB 1: DOSEN PENGAMPU */}
       {activeTab === 'dosen-pengampu' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Users className="h-5 w-5 text-primary" />
                 <span>Distribusi Beban Kerja Dosen (BKD Standar 12-16 SKS)</span>
               </h2>
@@ -210,7 +210,7 @@ export function CoordinatorAssignmentsHubView({
               </p>
             </div>
             {/* TODO(backend): Di Fase 3, form plotting dosen pengampu terhubung langsung ke mutasi master kelas */}
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               Total Dosen Aktif: {LECTURER_ASSIGNMENTS.length}
             </span>
           </div>
@@ -218,7 +218,7 @@ export function CoordinatorAssignmentsHubView({
           {LECTURER_ASSIGNMENTS.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <Users className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Penugasan Dosen</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Penugasan Dosen</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Data penugasan dosen pengampu untuk program studi ini belum tersedia di pangkalan data semester ini.
               </p>
@@ -227,7 +227,7 @@ export function CoordinatorAssignmentsHubView({
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Dosen Pengampu</th>
                       <th className="p-3.5 sm:p-4">NIDN</th>
@@ -238,10 +238,10 @@ export function CoordinatorAssignmentsHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {LECTURER_ASSIGNMENTS.map((lec) => (
-                      <tr key={lec.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={lec.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">{lec.name}</td>
-                        <td className="p-3.5 sm:p-4 font-mono">{lec.nidn}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-black">{lec.sksTotal} SKS</td>
+                        <td className="p-3.5 sm:p-4 font-sans">{lec.nidn}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{lec.sksTotal} SKS</td>
                         <td className="p-3.5 sm:p-4 text-black/80">
                           <ul className="list-disc list-inside space-y-0.5 text-xs">
                             {lec.classes.map((clsName, idx) => (
@@ -252,10 +252,10 @@ export function CoordinatorAssignmentsHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-sans font-bold',
                               lec.status === 'MEMENUHI_BKD'
-                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                                : 'border-amber-500 bg-amber-100 text-amber-950'
+                                ? 'border-ink bg-surface text-ink'
+                                : 'border-ink bg-gray-soft text-ink'
                             )}
                           >
                             {lec.status === 'MEMENUHI_BKD' ? 'Optimal (12-16 SKS)' : 'Kurang (< 12 SKS)'}
@@ -274,9 +274,9 @@ export function CoordinatorAssignmentsHubView({
       {/* 4. TAB 2: DOSEN WALI / PA */}
       {activeTab === 'dosen-wali' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <UserCheck className="h-5 w-5 text-primary" />
                 <span>Distribusi Dosen Wali / Pembimbing Akademik (PA)</span>
               </h2>
@@ -284,7 +284,7 @@ export function CoordinatorAssignmentsHubView({
                 Pantau progres bimbingan pengisian KRS dan konsultasi akademik per angkatan mahasiswa.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               Total Dosen Wali: {ACADEMIC_ADVISORS.length}
             </span>
           </div>
@@ -292,7 +292,7 @@ export function CoordinatorAssignmentsHubView({
           {ACADEMIC_ADVISORS.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <UserCheck className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Dosen Wali</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Dosen Wali</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Data pembimbing akademik mahasiswa belum diset untuk program studi ini.
               </p>
@@ -302,30 +302,30 @@ export function CoordinatorAssignmentsHubView({
               {ACADEMIC_ADVISORS.map((adv) => (
                 <div key={adv.id} className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-4">
                   <div className="space-y-1">
-                    <span className="px-2 py-0.5 rounded border border-black bg-retro-mint text-xs font-mono font-bold">
+                    <span className="px-2 py-0.5 rounded border border-black bg-retro-mint text-xs font-sans font-bold">
                       {adv.batch}
                     </span>
-                    <h3 className="font-heading font-black text-base text-black mt-2">{adv.name}</h3>
+                    <h3 className="font-heading font-bold text-base text-black mt-2">{adv.name}</h3>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 p-3 bg-neutral-50 rounded-lg border border-black/10 font-mono text-xs">
+                  <div className="grid grid-cols-2 gap-2 p-3 bg-neutral-50 rounded-lg border border-black/10 font-sans text-xs">
                     <div>
                       <span className="text-black/60 text-xs block">Total Mahasiswa:</span>
                       <span className="font-bold text-sm">{adv.studentCount} Mhs</span>
                     </div>
                     <div>
                       <span className="text-black/60 text-xs block">KRS Disetujui:</span>
-                      <span className="font-bold text-sm text-emerald-700">{adv.approvedKrs} Mhs</span>
+                      <span className="font-bold text-sm text-ink">{adv.approvedKrs} Mhs</span>
                     </div>
                   </div>
 
                   {adv.pendingKrs > 0 ? (
-                    <div className="flex items-center gap-1.5 text-xs text-amber-800 font-bold">
+                    <div className="flex items-center gap-1.5 text-xs text-ink font-bold">
                       <Clock className="h-4 w-4" />
                       <span>{adv.pendingKrs} KRS Menunggu Persetujuan</span>
                     </div>
                   ) : (
-                    <div className="flex items-center gap-1.5 text-xs text-emerald-800 font-bold">
+                    <div className="flex items-center gap-1.5 text-xs text-ink font-bold">
                       <CheckCircle2 className="h-4 w-4" />
                       <span>Semua KRS Angkatan Telah Disetujui</span>
                     </div>
@@ -340,9 +340,9 @@ export function CoordinatorAssignmentsHubView({
       {/* 5. TAB 3: KELAS PRODI */}
       {activeTab === 'kelas-prodi' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <FolderArchive className="h-5 w-5 text-primary" />
                 <span>Daftar Rombongan Belajar Kelas Aktif Program Studi</span>
               </h2>
@@ -350,7 +350,7 @@ export function CoordinatorAssignmentsHubView({
                 Daftar seluruh kelas paralel yang diselenggarakan prodi pada semester berjalan.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               Total Kelas: {STUDY_PROGRAM_CLASSES.length}
             </span>
           </div>
@@ -358,7 +358,7 @@ export function CoordinatorAssignmentsHubView({
           {STUDY_PROGRAM_CLASSES.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <FolderArchive className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Kelas Aktif</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Kelas Aktif</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Belum ada rombongan belajar kelas yang diterbitkan untuk semester aktif ini.
               </p>
@@ -367,7 +367,7 @@ export function CoordinatorAssignmentsHubView({
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Kode & Mata Kuliah</th>
                       <th className="p-3.5 sm:p-4">Kelas</th>
@@ -378,14 +378,14 @@ export function CoordinatorAssignmentsHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {STUDY_PROGRAM_CLASSES.map((cls) => (
-                      <tr key={cls.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={cls.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4">
-                          <span className="font-mono text-xs font-bold text-black/60 block">{cls.code}</span>
+                          <span className="font-sans text-xs font-bold text-black/60 block">{cls.code}</span>
                           <span className="font-bold text-black">{cls.name}</span>
                         </td>
-                        <td className="p-3.5 sm:p-4 font-mono font-bold">{cls.section}</td>
+                        <td className="p-3.5 sm:p-4 font-sans font-bold">{cls.section}</td>
                         <td className="p-3.5 sm:p-4">{cls.lecturer}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono">
+                        <td className="p-3.5 sm:p-4 text-center font-sans">
                           {cls.enrolled} / {cls.capacity}
                         </td>
                         <td className="p-3.5 sm:p-4 text-xs font-medium text-black/80">{cls.schedule}</td>

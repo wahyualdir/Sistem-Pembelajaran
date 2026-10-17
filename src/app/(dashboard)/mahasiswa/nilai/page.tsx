@@ -113,7 +113,7 @@ export default function MahasiswaNilaiPage() {
               <p className="text-2xl font-bold text-primary mt-1">
                 {transkripData.ipk.toFixed(2)}
               </p>
-              <span className="text-xs text-success font-medium">Predikat Sangat Memuaskan</span>
+              <span className="text-xs text-ink font-medium">Predikat Sangat Memuaskan</span>
             </div>
             <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-primary-tint text-primary">
               <Award className="h-5 w-5" />
@@ -130,7 +130,7 @@ export default function MahasiswaNilaiPage() {
               </p>
               <span className="text-xs text-muted-foreground">Dari {transkripData.totalSksDitempuh} SKS ditempuh</span>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-success-soft text-success">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-surface text-ink">
               <CheckCircle className="h-5 w-5" />
             </div>
           </CardContent>
@@ -155,10 +155,10 @@ export default function MahasiswaNilaiPage() {
           <CardContent className="p-4 flex items-center justify-between">
             <div>
               <p className="text-xs text-muted-foreground">Status Akademik</p>
-              <p className="text-base font-bold text-success mt-1">AKTIF</p>
+              <p className="text-base font-bold text-ink mt-1">AKTIF</p>
               <span className="text-xs text-muted-foreground">Dosen Wali: Dr. Ardiansyah</span>
             </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-success-soft text-success">
+            <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-surface text-ink">
               <BookOpen className="h-5 w-5" />
             </div>
           </CardContent>
@@ -246,7 +246,7 @@ export default function MahasiswaNilaiPage() {
                       <TableCell className="text-center font-medium text-xs text-muted-foreground">
                         {idx + 1}
                       </TableCell>
-                      <TableCell className="font-mono text-xs font-semibold text-foreground">
+                      <TableCell className="font-sans text-xs font-semibold text-foreground">
                         {item.kodeMataKuliah}
                       </TableCell>
                       <TableCell className="text-xs font-medium text-foreground">
@@ -255,7 +255,7 @@ export default function MahasiswaNilaiPage() {
                       <TableCell className="text-center text-xs font-semibold">
                         {item.sks}
                       </TableCell>
-                      <TableCell className="text-center font-mono text-xs text-muted-foreground">
+                      <TableCell className="text-center font-sans text-xs text-muted-foreground">
                         {item.nilaiAngka}
                       </TableCell>
                       <TableCell className="text-center">
@@ -354,7 +354,7 @@ export default function MahasiswaNilaiPage() {
                       <TableCell className="text-center font-medium text-xs text-muted-foreground">
                         {item.semesterPaket ?? "-"}
                       </TableCell>
-                      <TableCell className="font-mono text-xs font-semibold text-foreground">
+                      <TableCell className="font-sans text-xs font-semibold text-foreground">
                         {item.kodeMataKuliah}
                       </TableCell>
                       <TableCell className="text-xs font-medium text-foreground">
@@ -407,7 +407,7 @@ export default function MahasiswaNilaiPage() {
                 </div>
                 <div>
                   <span className="text-muted-foreground text-xs">Total SKS Lulus: </span>
-                  <span className="font-bold text-success">{transkripData.totalSksLulus} SKS</span>
+                  <span className="font-bold text-ink">{transkripData.totalSksLulus} SKS</span>
                 </div>
                 <div>
                   <span className="text-muted-foreground text-xs">IPK Kumulatif: </span>

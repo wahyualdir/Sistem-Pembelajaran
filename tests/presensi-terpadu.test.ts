@@ -1,4 +1,16 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+
+vi.mock('../src/modules/identity/actions', () => ({
+  getCurrentUserWithRoles: vi.fn(async () => ({
+    user: { id: 'std-test-user', email: 'mhs2024001@siajar.test' },
+    profile: { id: 'std-test-user', full_name: 'Mahasiswa Test', status: 'ACTIVE' },
+    roles: [{ role_id: 'STUDENT', status: 'ACTIVE', roles: { code: 'STUDENT' } }],
+    activeRole: 'STUDENT',
+    isImpersonating: false,
+    impersonatingFrom: null,
+  })),
+}));
+
 import {
   calculateHaversineDistanceMeters,
   generateDynamicQrTokenAction,

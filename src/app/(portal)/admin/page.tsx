@@ -42,7 +42,7 @@ export default async function AdminPortalPage() {
       <RetroWindow
         title="super_admin_security_audit.sys"
         badge="ROLE: SYSTEM ADMIN"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-6 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -51,7 +51,7 @@ export default async function AdminPortalPage() {
               <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-xs">
                 <ShieldAlert className="h-5 w-5" />
               </div>
-              <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
                 Audit & Keamanan Portal SIAJAR
               </h1>
             </div>
@@ -62,7 +62,7 @@ export default async function AdminPortalPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="rounded-full border border-retro-border bg-retro-mint text-black px-3 py-1 text-xs font-mono font-bold shadow-xs flex items-center gap-1.5">
+            <span className="rounded-full border border-retro-border bg-retro-mint text-black px-3 py-1 text-xs font-sans font-bold shadow-xs flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-black animate-pulse" />
               SYSTEM ONLINE
             </span>
@@ -71,21 +71,21 @@ export default async function AdminPortalPage() {
 
         {/* 4 Kartu Metrik Keamanan */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-5 border-t border-retro-border/40 mt-5">
-          <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/70 shadow-xs text-center">
-            <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Audit Events</p>
-            <p className="font-heading font-black text-2xl text-foreground mt-0.5">{totalLogs}</p>
+          <div className="p-3.5 rounded-lg border border-retro-border bg-gray-soft/70 shadow-xs text-center">
+            <p className="text-xs font-sans font-bold text-muted-foreground uppercase">Audit Events</p>
+            <p className="font-heading font-bold text-2xl text-foreground mt-0.5">{totalLogs}</p>
           </div>
-          <div className="p-3.5 rounded-lg border border-retro-border bg-retro-yellow/40 shadow-xs text-center">
-            <p className="text-xs font-mono font-bold text-foreground uppercase">Sesi Login Aktif</p>
-            <p className="font-heading font-black text-2xl text-foreground mt-0.5">{totalLogins}</p>
+          <div className="p-3.5 rounded-lg border border-retro-border bg-gray-soft/40 shadow-xs text-center">
+            <p className="text-xs font-sans font-bold text-foreground uppercase">Sesi Login Aktif</p>
+            <p className="font-heading font-bold text-2xl text-foreground mt-0.5">{totalLogins}</p>
           </div>
           <div className="p-3.5 rounded-lg border border-retro-border bg-retro-mint/40 shadow-xs text-center">
-            <p className="text-xs font-mono font-bold text-foreground uppercase">Status Keamanan</p>
-            <p className="font-heading font-black text-lg text-foreground mt-1">100% AMAN</p>
+            <p className="text-xs font-sans font-bold text-foreground uppercase">Status Keamanan</p>
+            <p className="font-heading font-bold text-lg text-foreground mt-1">100% AMAN</p>
           </div>
-          <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/70 shadow-xs text-center">
-            <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Tingkat Integritas</p>
-            <p className="font-heading font-black text-lg text-foreground mt-1">IMMUTABLE</p>
+          <div className="p-3.5 rounded-lg border border-retro-border bg-gray-soft/70 shadow-xs text-center">
+            <p className="text-xs font-sans font-bold text-muted-foreground uppercase">Tingkat Integritas</p>
+            <p className="font-heading font-bold text-lg text-foreground mt-1">IMMUTABLE</p>
           </div>
         </div>
       </RetroWindow>
@@ -96,15 +96,15 @@ export default async function AdminPortalPage() {
         <RetroWindow
           title="audit_logs_append_only.log"
           badge="IMMUTABLE"
-          headerClassName="bg-retro-warm"
+          headerClassName="bg-gray-soft"
           bodyClassName="p-5 space-y-4"
         >
           <div className="flex items-center justify-between">
-            <h2 className="font-heading font-black text-sm text-foreground flex items-center gap-2">
+            <h2 className="font-heading font-bold text-sm text-foreground flex items-center gap-2">
               <FileText className="h-4 w-4 text-primary" />
               <span>Catatan Audit Sistem Sensitif</span>
             </h2>
-            <span className="text-xs font-mono text-muted-foreground">10 Peristiwa Terakhir</span>
+            <span className="text-xs font-sans text-muted-foreground">10 Peristiwa Terakhir</span>
           </div>
 
           {!auditLogs || auditLogs.length === 0 ? (
@@ -116,17 +116,17 @@ export default async function AdminPortalPage() {
               {auditLogs.map((log) => (
                 <div
                   key={log.id}
-                  className="p-3 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-xs space-y-1 hover:bg-retro-warm/30 transition-colors"
+                  className="p-3 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-xs space-y-1 hover:bg-gray-soft/30 transition-colors"
                 >
-                  <div className="flex items-center justify-between font-mono text-xs">
-                    <span className="font-bold text-foreground bg-retro-warm px-2 py-0.5 rounded border border-retro-border text-xs">
+                  <div className="flex items-center justify-between font-sans text-xs">
+                    <span className="font-bold text-foreground bg-gray-soft px-2 py-0.5 rounded border border-retro-border text-xs">
                       {log.action}
                     </span>
                     <span className="text-muted-foreground text-xs">
                       {new Date(log.created_at).toLocaleTimeString('id-ID')} WIB
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground font-mono mt-1">
+                  <p className="text-xs text-muted-foreground font-sans mt-1">
                     Entitas: <strong className="text-foreground">{log.entity_type}</strong> &bull; IP: {log.ip_address || 'Internal/Proxy'}
                   </p>
                 </div>
@@ -139,15 +139,15 @@ export default async function AdminPortalPage() {
         <RetroWindow
           title="login_sessions_monitor.log"
           badge="REAL-TIME"
-          headerClassName="bg-retro-warm"
+          headerClassName="bg-gray-soft"
           bodyClassName="p-5 space-y-4"
         >
           <div className="flex items-center justify-between">
-            <h2 className="font-heading font-black text-sm text-foreground flex items-center gap-2">
+            <h2 className="font-heading font-bold text-sm text-foreground flex items-center gap-2">
               <Lock className="h-4 w-4 text-primary" />
               <span>Aktivitas Login & Sesi Terkini</span>
             </h2>
-            <span className="text-xs font-mono text-muted-foreground">Deteksi Risiko Otomatis</span>
+            <span className="text-xs font-sans text-muted-foreground">Deteksi Risiko Otomatis</span>
           </div>
 
           {!loginEvents || loginEvents.length === 0 ? (
@@ -163,11 +163,11 @@ export default async function AdminPortalPage() {
                 return (
                   <div
                     key={evt.id}
-                    className={`p-3 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-xs space-y-1.5 hover:bg-retro-warm/30 transition-colors ${
+                    className={`p-3 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-xs space-y-1.5 hover:bg-gray-soft/30 transition-colors ${
                       isReported
-                        ? 'border-danger bg-danger/5'
+                        ? 'border-ink bg-primary/5'
                         : isFailed
-                        ? 'border-retro-yellow bg-retro-yellow/10'
+                        ? 'border-ink bg-gray-soft/10'
                         : ''
                     }`}
                   >
@@ -177,22 +177,22 @@ export default async function AdminPortalPage() {
                           {evt.event_type}
                         </span>
                         {evt.is_new_device && (
-                          <span className="text-xs font-mono font-bold bg-retro-mint text-black border border-retro-border px-1.5 py-0.2 rounded shadow-xs">
+                          <span className="text-xs font-sans font-bold bg-retro-mint text-black border border-retro-border px-1.5 py-0.2 rounded shadow-xs">
                             Perangkat Baru
                           </span>
                         )}
                         {evt.risk_level === 'HIGH' && (
-                          <span className="text-xs font-mono font-bold bg-danger text-white border border-retro-border px-1.5 py-0.2 rounded shadow-xs">
+                          <span className="text-xs font-sans font-bold bg-primary text-white border border-retro-border px-1.5 py-0.2 rounded shadow-xs">
                             Risiko Tinggi
                           </span>
                         )}
                       </div>
-                      <span className="text-xs text-muted-foreground font-mono">
+                      <span className="text-xs text-muted-foreground font-sans">
                         {new Date(evt.created_at).toLocaleTimeString('id-ID')} WIB
                       </span>
                     </div>
 
-                    <p className="text-xs text-muted-foreground font-mono">
+                    <p className="text-xs text-muted-foreground font-sans">
                       {(evt.profiles as { email?: string } | null)?.email || evt.user_id} &bull; {evt.city || 'Pekanbaru'} ({evt.ip_masked || 'xxx'})
                     </p>
                   </div>
@@ -207,12 +207,12 @@ export default async function AdminPortalPage() {
       <RetroWindow
         title="super_admin_impersonate_manager.tool"
         badge="AKSES KHUSUS SUPER ADMIN"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-6 bg-retro-surface space-y-4"
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-retro-border/40 pb-3">
           <div>
-            <h3 className="font-heading font-black text-base text-foreground flex items-center gap-2">
+            <h3 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
               Kelola Pengguna & Impersonate Sesi
             </h3>
@@ -220,7 +220,7 @@ export default async function AdminPortalPage() {
               Super Admin dapat beralih peran ke akun aktor lain untuk verifikasi sistem secara langsung. Seluruh sesi tercatat di Audit Log.
             </p>
           </div>
-          <span className="text-xs font-mono font-bold bg-retro-warm border border-retro-border px-3 py-1 rounded">
+          <span className="text-xs font-sans font-bold bg-gray-soft border border-retro-border px-3 py-1 rounded">
             7 Aktor Aktif
           </span>
         </div>
@@ -233,28 +233,28 @@ export default async function AdminPortalPage() {
         <RetroWindow
           title="system_integrations_status.srv"
           badge="HEALTH CHECK"
-          headerClassName="bg-retro-warm"
+          headerClassName="bg-gray-soft"
           bodyClassName="p-5 space-y-3"
         >
-          <h4 className="font-heading font-black text-xs text-foreground uppercase tracking-wider">
+          <h4 className="font-heading font-bold text-xs text-foreground uppercase tracking-wider">
             Status Integrasi API & Microservices
           </h4>
-          <div className="space-y-2 text-xs font-mono">
+          <div className="space-y-2 text-xs font-sans">
             <div className="flex items-center justify-between p-2.5 rounded border border-retro-border bg-retro-surface">
               <span>Sandbox Live Coding (Judge0/Piston)</span>
-              <span className="text-success font-bold flex items-center gap-1">● OPERATIONAL</span>
+              <span className="text-ink font-bold flex items-center gap-1">● OPERATIONAL</span>
             </div>
             <div className="flex items-center justify-between p-2.5 rounded border border-retro-border bg-retro-surface">
               <span>Realtime WebSocket / Event Push</span>
-              <span className="text-success font-bold flex items-center gap-1">● CONNECTED</span>
+              <span className="text-ink font-bold flex items-center gap-1">● CONNECTED</span>
             </div>
             <div className="flex items-center justify-between p-2.5 rounded border border-retro-border bg-retro-surface">
               <span>Google Maps API / Leaflet Fallback</span>
-              <span className="text-success font-bold flex items-center gap-1">● READY</span>
+              <span className="text-ink font-bold flex items-center gap-1">● READY</span>
             </div>
             <div className="flex items-center justify-between p-2.5 rounded border border-retro-border bg-retro-surface">
               <span>AI Academic Assistant LLM Engine</span>
-              <span className="text-success font-bold flex items-center gap-1">● ACTIVE</span>
+              <span className="text-ink font-bold flex items-center gap-1">● ACTIVE</span>
             </div>
           </div>
         </RetroWindow>
@@ -262,28 +262,28 @@ export default async function AdminPortalPage() {
         <RetroWindow
           title="academic_policies_retention.cfg"
           badge="KEBIJAKAN PLATFORM"
-          headerClassName="bg-retro-warm"
+          headerClassName="bg-gray-soft"
           bodyClassName="p-5 space-y-3"
         >
-          <h4 className="font-heading font-black text-xs text-foreground uppercase tracking-wider">
+          <h4 className="font-heading font-bold text-xs text-foreground uppercase tracking-wider">
             Kebijakan Retensi & Proctoring Global
           </h4>
           <div className="space-y-2 text-xs leading-relaxed text-muted-foreground">
             <div className="p-2.5 rounded border border-retro-border bg-retro-surface flex justify-between items-center">
               <span>Ambang Toleransi Pelanggaran Proctoring:</span>
-              <span className="font-mono font-bold text-foreground">5 Kali (Strict)</span>
+              <span className="font-sans font-bold text-foreground">5 Kali (Strict)</span>
             </div>
             <div className="p-2.5 rounded border border-retro-border bg-retro-surface flex justify-between items-center">
               <span>Masa Simpan Data Log Ujian (exam_events):</span>
-              <span className="font-mono font-bold text-foreground">1 Semester (180 Hari)</span>
+              <span className="font-sans font-bold text-foreground">1 Semester (180 Hari)</span>
             </div>
             <div className="p-2.5 rounded border border-retro-border bg-retro-surface flex justify-between items-center">
               <span>Penyimpanan Biometrik Mentah:</span>
-              <span className="font-mono font-bold text-success">0 Hari (FIDO2/WebAuthn Only)</span>
+              <span className="font-sans font-bold text-ink">0 Hari (FIDO2/WebAuthn Only)</span>
             </div>
             <div className="p-2.5 rounded border border-retro-border bg-retro-surface flex justify-between items-center">
               <span>Radius Default Presensi Kelas (GPS):</span>
-              <span className="font-mono font-bold text-foreground">50 Meter</span>
+              <span className="font-sans font-bold text-foreground">50 Meter</span>
             </div>
           </div>
         </RetroWindow>

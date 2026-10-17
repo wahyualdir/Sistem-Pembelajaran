@@ -21,10 +21,10 @@ describe('SIAJAR Fase 1: Identity & Access Logic Tests', () => {
   describe('1. Validasi Skema Zod (Identity & Password)', () => {
     it('memvalidasi input login yang sah dengan berbagai tipe identifier', () => {
       const validCases = [
-        { identifier: '2024001', password: 'Password123!' },
-        { identifier: 'dosen@siajar.ac.id', password: 'SecretPassword99#' },
+        { identifier: '2024001', password: 'TestPassword123!' },
+        { identifier: 'dosen001@siajar.test', password: 'SecretPassword99#' },
         { identifier: 'sysadmin', password: 'SuperAdminPass!2' },
-        { identifier: 'wahyualdiriyanto80@gmail.com', password: 'Wahyu11' },
+        { identifier: 'superadmin@siajar.test', password: 'SuperAdminPass!2' },
       ];
 
       for (const c of validCases) {
@@ -33,11 +33,11 @@ describe('SIAJAR Fase 1: Identity & Access Logic Tests', () => {
       }
     });
 
-    it('memastikan akun Super Admin Wahyu terdaftar dengan role SYSTEM_ADMIN', () => {
-      const user = SYNTHETIC_DEMO_USERS['wahyualdiriyanto80@gmail.com'];
+    it('memastikan akun Super Admin fiktif terdaftar dengan role SYSTEM_ADMIN dan tanpa password di kode', () => {
+      const user = SYNTHETIC_DEMO_USERS['superadmin@siajar.test'];
       expect(user).toBeDefined();
       expect(user.roles).toContain('SYSTEM_ADMIN');
-      expect(user.password).toBe('Wahyu11');
+      expect((user as any).password).toBeUndefined();
       expect(user.status).toBe('ACTIVE');
     });
 

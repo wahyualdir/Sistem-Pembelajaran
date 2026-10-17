@@ -243,7 +243,7 @@ export default function MahasiswaTugasPage() {
                 Progres Materi Belajar
               </span>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-black text-foreground">
+                <span className="text-2xl font-bold text-foreground">
                   {persenProgresTotal}%
                 </span>
                 <span className="text-xs text-muted-foreground">
@@ -270,7 +270,7 @@ export default function MahasiswaTugasPage() {
                 Pengumpulan Tugas
               </span>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-black text-foreground">
+                <span className="text-2xl font-bold text-foreground">
                   {totalTugas > 0 ? Math.round((totalTugasTerkumpul / totalTugas) * 100) : 0}%
                 </span>
                 <span className="text-xs text-muted-foreground">
@@ -279,12 +279,12 @@ export default function MahasiswaTugasPage() {
               </div>
             </div>
             <div className="h-10 w-10 rounded-full border border-border bg-surface flex items-center justify-center">
-              <CheckCircle className="h-5 w-5 text-success" />
+              <CheckCircle className="h-5 w-5 text-ink" />
             </div>
           </div>
           <div className="w-full h-2 rounded-full border border-border bg-muted overflow-hidden mt-3">
             <div
-              className="bg-success h-full transition-all duration-500 rounded-full"
+              className="bg-gray-dark h-full transition-all duration-500 rounded-full"
               style={{ width: `${totalTugas > 0 ? (totalTugasTerkumpul / totalTugas) * 100 : 0}%` }}
             />
           </div>
@@ -296,8 +296,8 @@ export default function MahasiswaTugasPage() {
         <div
           className={`flex items-center gap-2 rounded-[8px] p-3 text-sm font-medium ${
             pesanNotif.tipe === "sukses"
-              ? "bg-success-soft text-success border border-success-border"
-              : "bg-danger/10 text-danger border border-danger/20"
+              ? "bg-surface text-ink border border-ink"
+              : "bg-primary/10 text-primary-dark border border-ink"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
@@ -393,7 +393,7 @@ export default function MahasiswaTugasPage() {
                                 &quot;{kumpul.catatanDosen || "Tugas telah diperiksa."}&quot;
                               </span>
                             </div>
-                            <div className="flex items-center gap-1.5 font-bold text-success bg-success-soft px-2.5 py-1 rounded-[6px]">
+                            <div className="flex items-center gap-1.5 font-bold text-ink bg-surface px-2.5 py-1 rounded-[6px]">
                               <Award className="h-4 w-4" />
                               <span>Nilai: {kumpul.nilai} / 100</span>
                             </div>
@@ -555,7 +555,7 @@ export default function MahasiswaTugasPage() {
                 <p>
                   <strong>Tugas:</strong> {targetTugas.judul}
                 </p>
-                <p className="text-danger font-semibold">
+                <p className="text-primary-dark font-semibold">
                   Tenggat Waktu: {targetTugas.tenggat.replace("T", " ")}
                 </p>
               </div>

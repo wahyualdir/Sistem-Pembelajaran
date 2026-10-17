@@ -5,6 +5,8 @@ import { listMasterDataAction, listMyClassesAction } from '@/modules/academic/ac
 import { CreateClassForm, JoinClassForm } from '@/modules/academic/class-forms';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { GoogleClassroomCard, ClassroomToolbar } from '@/modules/academic/classroom-cards';
+import { getStudentPendingEvaluationsAction } from '@/modules/academic/evaluation-actions';
+import { StudentEdomBanner } from '@/modules/academic/student-edom-banner';
 import {
   Layers,
   BookOpen,
@@ -38,6 +40,7 @@ export default async function ClassesPage({
       )
     : allClasses;
   const master = lecturer ? await listMasterDataAction() : null;
+  const evalData = student ? await getStudentPendingEvaluationsAction().catch(() => null) : null;
 
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up font-sans">
@@ -45,7 +48,7 @@ export default async function ClassesPage({
       <RetroWindow
         title="Kelas Perkuliahan"
         badge={lecturer ? 'Dosen' : student ? 'Mahasiswa' : 'Asisten'}
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-white space-y-6"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -54,7 +57,7 @@ export default async function ClassesPage({
               <div className="p-2.5 rounded-xl border-2 border-black bg-primary text-white shadow-xs">
                 <Layers className="h-6 w-6" />
               </div>
-              <h1 className="font-black text-2xl sm:text-3xl tracking-tight text-black">
+              <h1 className="font-bold text-2xl sm:text-3xl tracking-tight text-black">
                 Kelas Saya
               </h1>
             </div>
@@ -68,7 +71,7 @@ export default async function ClassesPage({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-xl border-2 border-black bg-retro-warm px-4 py-2 text-xs sm:text-sm font-black text-black shadow-retro">
+            <span className="rounded-xl border-2 border-black bg-gray-soft px-4 py-2 text-xs sm:text-sm font-bold text-black shadow-retro">
               {classes.length} Kelas Aktif
             </span>
           </div>
@@ -83,10 +86,18 @@ export default async function ClassesPage({
         />
       </RetroWindow>
 
+      {/* BANNER KUESIONER EDOM UNTUK MAHASISWA */}
+      {student && evalData?.period && evalData.pendingClasses.length > 0 && (
+        <StudentEdomBanner
+          period={evalData.period}
+          pendingClasses={evalData.pendingClasses}
+        />
+      )}
+
       {/* 2. GRID KARTU KELAS */}
       <div className="space-y-4">
         <div className="flex items-center justify-between border-b-2 border-black/25 pb-3">
-          <h2 className="font-black text-lg sm:text-xl text-black flex items-center gap-2.5">
+          <h2 className="font-bold text-lg sm:text-xl text-black flex items-center gap-2.5">
             <BookOpen className="h-5 w-5 text-primary" />
             <span>Daftar Kelas Perkuliahan</span>
           </h2>
@@ -98,7 +109,7 @@ export default async function ClassesPage({
         {classes.length === 0 ? (
           <div className="p-10 sm:p-14 text-center rounded-2xl border-2 border-dashed border-black bg-white shadow-retro space-y-3">
             <FolderArchive className="h-10 w-10 sm:h-12 sm:w-12 text-black/60 mx-auto" />
-            <h3 className="text-lg font-black text-black">Belum Ada Kelas Terdaftar</h3>
+            <h3 className="text-lg font-bold text-black">Belum Ada Kelas Terdaftar</h3>
             <p className="text-xs sm:text-sm text-black font-bold max-w-md mx-auto leading-relaxed">
               {lecturer
                 ? 'Gunakan tombol Buat Kelas Baru di atas untuk membuka kelas pertama Anda.'

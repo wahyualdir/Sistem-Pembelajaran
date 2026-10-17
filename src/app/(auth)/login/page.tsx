@@ -14,13 +14,13 @@ import {
 } from 'lucide-react';
 
 const DEMO = [
-  ['Super Admin', 'Wahyu (Super Admin)', 'wahyualdiriyanto80@gmail.com', 'Wahyu11'],
-  ['Mahasiswa', 'NIM 2024001', '2024001', 'Password123!'],
-  ['Dosen', 'NIDN 0012345678', '0012345678', 'Password123!'],
-  ['Mahasiswa + Asisten', 'NIM 2024002', '2024002', 'Password123!'],
-  ['Kaprodi', 'NIDN 0087654321', '0087654321', 'Password123!'],
-  ['Staf Akademik', 'NIP 19850101…', '198501012010121001', 'Password123!'],
-  ['System Admin', 'sysadmin', 'sysadmin', 'Password123!'],
+  ['Super Admin', 'superadmin@siajar.test', 'superadmin@siajar.test'],
+  ['Mahasiswa', 'NIM 2024001 (mhs2024001@siajar.test)', '2024001'],
+  ['Dosen', 'NIDN 0012345678', '0012345678'],
+  ['Mahasiswa + Asisten', 'NIM 2024002', '2024002'],
+  ['Kaprodi', 'NIDN 0087654321', '0087654321'],
+  ['Staf Akademik', 'NIP 19850101…', '198501012010121001'],
+  ['System Admin', 'sysadmin@siajar.test', 'sysadmin'],
 ] as const;
 
 function RetroLoginVideoPlayer() {
@@ -109,9 +109,9 @@ function RetroLoginVideoPlayer() {
   return (
     <div className="h-full min-h-0 rounded border-2 border-black bg-retro-video shadow-retro-md sm:shadow-retro-lg flex flex-col overflow-hidden">
       {/* Header Jendela Retro Bersih & Minimalis */}
-      <div className="h-11 flex items-center justify-between border-b-2 border-black bg-retro-warm px-4 sm:px-6 shrink-0 select-none">
+      <div className="h-11 flex items-center justify-between border-b-2 border-black bg-gray-soft px-4 sm:px-6 shrink-0 select-none">
         <div className="flex items-center gap-2.5">
-          <span className="text-sm sm:text-base font-black font-heading text-black tracking-tight">
+          <span className="text-sm sm:text-base font-bold font-heading text-black tracking-tight">
             siajar_interaktif.app
           </span>
         </div>
@@ -120,10 +120,10 @@ function RetroLoginVideoPlayer() {
         <button
           type="button"
           onClick={toggleMute}
-          className={`px-3 py-1 rounded border-2 border-black text-xs font-mono font-black shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer select-none ${
+          className={`px-3 py-1 rounded border-2 border-black text-xs font-sans font-bold shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer select-none ${
             !isMuted
               ? 'bg-black text-white hover:bg-neutral-800'
-              : 'bg-white text-black hover:bg-retro-warm'
+              : 'bg-white text-black hover:bg-gray-soft'
           }`}
           title={!isMuted ? 'Suara Aktif (Klik untuk Matikan)' : 'Suara Mati (Klik untuk Nyalakan)'}
         >
@@ -134,7 +134,7 @@ function RetroLoginVideoPlayer() {
             </>
           ) : (
             <>
-              <VolumeX className="h-3.5 w-3.5 text-danger" />
+              <VolumeX className="h-3.5 w-3.5 text-primary-dark" />
               <span>Suara: OFF</span>
             </>
           )}
@@ -201,39 +201,39 @@ function LoginFormContent() {
     });
   };
 
-  const handleDemoFill = (id: string, pass: string = 'Password123!') => {
+  const handleDemoFill = (id: string) => {
     setIdentifier(id);
-    setPassword(pass);
+    setPassword('');
     setErrorMessage('');
   };
 
   return (
     <div
       style={{ fontFamily: "'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif" }}
-      className="min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-background text-black font-sans selection:bg-retro-yellow selection:text-black flex flex-col overflow-x-hidden lg:overflow-hidden antialiased"
+      className="min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-black flex flex-col overflow-x-hidden lg:overflow-hidden antialiased"
     >
       {/* Top Bar Navigasi Sistem Retro Konsisten dengan Dashboard */}
-      <header className="h-14 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 sm:border-b-3 border-black bg-retro-warm shrink-0 select-none shadow-retro-sm pt-[env(safe-area-inset-top,0px)]">
+      <header className="h-14 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 sm:border-b-3 border-black bg-gray-soft shrink-0 select-none shadow-retro-sm pt-[env(safe-area-inset-top,0px)]">
         <div className="flex items-center gap-3">
           {/* Mac Traffic Light Buttons */}
           <div className="flex items-center gap-1.5 shrink-0">
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-traffic-red inline-block shadow-retro-sm" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-traffic-yellow inline-block shadow-retro-sm" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-traffic-green inline-block shadow-retro-sm" />
+            <span className="h-3.5 w-3.5 rounded-full border border-black bg-primary inline-block shadow-retro-sm" />
+            <span className="h-3.5 w-3.5 rounded-full border border-black bg-gray inline-block shadow-retro-sm" />
+            <span className="h-3.5 w-3.5 rounded-full border border-black bg-gray-dark inline-block shadow-retro-sm" />
           </div>
 
           <div className="flex items-center gap-2.5 ml-1">
             <div className="flex h-8 w-8 items-center justify-center rounded border-2 border-black bg-black text-white shadow-retro-sm">
               <Flame className="h-4.5 w-4.5 fill-white text-white" />
             </div>
-            <span className="font-heading font-black text-lg sm:text-xl tracking-tight text-black">
+            <span className="font-heading font-bold text-lg sm:text-xl tracking-tight text-black">
               SIAJAR
             </span>
           </div>
         </div>
 
         <div className="flex items-center gap-2.5">
-          <span className="hidden sm:inline-flex items-center px-3 py-1 border-2 border-black bg-black text-xs font-mono font-bold text-white shadow-retro-sm">
+          <span className="hidden sm:inline-flex items-center px-3 py-1 border-2 border-black bg-black text-xs font-sans font-bold text-white shadow-retro-sm">
             TA 2026/2027 GANJIL
           </span>
         </div>
@@ -252,13 +252,13 @@ function LoginFormContent() {
           <section className="lg:col-span-5 h-full min-h-0 flex flex-col overflow-hidden">
             <div className="h-full min-h-0 rounded border-2 border-black bg-white shadow-retro-md sm:shadow-retro-lg flex flex-col overflow-hidden">
               {/* Header Jendela Login */}
-              <div className="h-11 flex items-center justify-between border-b-2 border-black bg-retro-warm px-4 sm:px-6 shrink-0">
+              <div className="h-11 flex items-center justify-between border-b-2 border-black bg-gray-soft px-4 sm:px-6 shrink-0">
                 <div className="flex items-center gap-2.5">
-                  <span className="text-sm sm:text-base font-black font-heading text-black tracking-tight">
+                  <span className="text-sm sm:text-base font-bold font-heading text-black tracking-tight">
                     autentikasi_portal.app
                   </span>
                 </div>
-                <span className="px-2 py-0.5 rounded border border-black bg-white text-xs font-mono font-black text-black shadow-retro-sm">
+                <span className="px-2 py-0.5 rounded border border-black bg-white text-xs font-sans font-bold text-black shadow-retro-sm">
                   ROLE-BASED AUTH
                 </span>
               </div>
@@ -268,7 +268,7 @@ function LoginFormContent() {
                 <div className="my-auto space-y-5 shrink-0">
                   {/* Header Judul Form */}
                   <div className="space-y-1.5">
-                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-black tracking-tight text-black leading-tight">
+                    <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold tracking-tight text-black leading-tight">
                       Masuk ke SIAJAR
                     </h1>
                     <p className="text-xs sm:text-sm text-black/80 font-medium">
@@ -283,18 +283,18 @@ function LoginFormContent() {
                       id="login-error-alert"
                       data-testid="login-error-alert"
                       role="alert"
-                      className="shake border-2 border-black bg-danger-soft text-danger p-2.5 sm:p-3 text-xs sm:text-sm font-bold shadow-retro-sm flex items-center gap-2 rounded"
+                      className="shake border-2 border-black bg-primary text-white font-bold p-2.5 sm:p-3 text-xs sm:text-sm font-bold shadow-retro-sm flex items-center gap-2 rounded"
                     >
-                      <AlertCircle className="h-4.5 w-4.5 text-danger shrink-0" />
+                      <AlertCircle className="h-4.5 w-4.5 text-primary-dark shrink-0" />
                       <span>{errorMessage}</span>
                     </div>
                   )}
                   {successMessage && (
                     <div
                       role="status"
-                      className="border-2 border-black bg-success-soft text-success p-2.5 sm:p-3 text-xs sm:text-sm font-bold shadow-retro-sm flex items-center gap-2 rounded"
+                      className="border-2 border-black bg-surface text-ink border-2 border-ink p-2.5 sm:p-3 text-xs sm:text-sm font-bold shadow-retro-sm flex items-center gap-2 rounded"
                     >
-                      <CheckCircle2 className="h-4.5 w-4.5 shrink-0 text-success" />
+                      <CheckCircle2 className="h-4.5 w-4.5 shrink-0 text-ink" />
                       <span>{successMessage}</span>
                     </div>
                   )}
@@ -355,7 +355,7 @@ function LoginFormContent() {
                     type="submit"
                     disabled={isPending}
                     data-pending={isPending}
-                    className="w-full h-10 min-h-[2.5rem] sm:h-11 py-2 px-4 rounded border-2 border-black bg-black text-white hover:bg-retro-yellow hover:text-black font-heading font-black text-sm sm:text-base shadow-retro active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 cursor-pointer mt-1"
+                    className="w-full h-10 min-h-[2.5rem] sm:h-11 py-2 px-4 rounded border-2 border-black bg-black text-white hover:bg-gray-soft hover:text-black font-heading font-bold text-sm sm:text-base shadow-retro active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2.5 cursor-pointer mt-1"
                   >
                     <LogIn className="h-5 w-5" />
                     <span>{isPending ? 'Memverifikasi kredensial...' : 'Masuk ke SIAJAR'}</span>
@@ -373,33 +373,35 @@ function LoginFormContent() {
                 </form>
                 </div>
 
-                {/* Accordion Akun Demo Cepat */}
-                <details className="mt-2 pt-2 border-t-2 border-black/15 group shrink-0">
-                  <summary className="cursor-pointer text-xs sm:text-sm font-bold text-black inline-flex items-center gap-2 select-none">
-                    <span className="px-2.5 py-1 rounded border-2 border-black bg-retro-warm hover:bg-retro-yellow transition-colors shadow-retro-sm flex items-center gap-2 font-mono text-xs font-bold">
-                      <span>Akun demo untuk uji coba</span>
-                      <span className="text-2xs transition-transform group-open:rotate-180">▾</span>
-                    </span>
-                  </summary>
-                  <ul className="demo-list mt-2 grid grid-cols-2 gap-1.5 max-h-28 sm:max-h-32 overflow-y-auto pr-1">
-                    {DEMO.map(([peran, ket, id, pass]) => (
-                      <li key={id}>
-                        <button
-                          type="button"
-                          onClick={() => handleDemoFill(id, pass)}
-                          className="w-full rounded border-2 border-black bg-white p-1.5 sm:p-2 text-left shadow-retro-sm hover:bg-retro-yellow active:translate-x-0.5 transition-all focus-visible:outline-none cursor-pointer"
-                        >
-                          <span className="block font-black text-xs sm:text-sm text-black leading-tight truncate">
-                            {peran}
-                          </span>
-                          <span className="text-xs text-black/80 font-mono font-medium block mt-0.5 truncate">
-                            {ket}
-                          </span>
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
+                {/* Accordion Akun Demo Cepat (Hanya tampil saat NODE_ENV === 'development', tanpa password) */}
+                {process.env.NODE_ENV === 'development' && (
+                  <details className="mt-2 pt-2 border-t-2 border-black/15 group shrink-0">
+                    <summary className="cursor-pointer text-xs sm:text-sm font-bold text-black inline-flex items-center gap-2 select-none">
+                      <span className="px-2.5 py-1 rounded border-2 border-black bg-gray-soft hover:bg-gray-soft transition-colors shadow-retro-sm flex items-center gap-2 font-sans text-xs font-bold">
+                        <span>Akun demo untuk uji coba (Development)</span>
+                        <span className="text-2xs transition-transform group-open:rotate-180">▾</span>
+                      </span>
+                    </summary>
+                    <ul className="demo-list mt-2 grid grid-cols-2 gap-1.5 max-h-28 sm:max-h-32 overflow-y-auto pr-1">
+                      {DEMO.map(([peran, ket, id]) => (
+                        <li key={id}>
+                          <button
+                            type="button"
+                            onClick={() => handleDemoFill(id)}
+                            className="w-full rounded border-2 border-black bg-white p-1.5 sm:p-2 text-left shadow-retro-sm hover:bg-gray-soft active:translate-x-0.5 transition-all focus-visible:outline-none cursor-pointer"
+                          >
+                            <span className="block font-bold text-xs sm:text-sm text-black leading-tight truncate">
+                              {peran}
+                            </span>
+                            <span className="text-xs text-black/80 font-sans font-medium block mt-0.5 truncate">
+                              {ket}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
               </div>
             </div>
           </section>
@@ -414,7 +416,7 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center p-4 text-sm font-mono text-muted-foreground bg-retro-bg">
+        <div className="flex min-h-screen items-center justify-center p-4 text-sm font-sans text-muted-foreground bg-retro-bg">
           Memuat halaman masuk SIAJAR...
         </div>
       }

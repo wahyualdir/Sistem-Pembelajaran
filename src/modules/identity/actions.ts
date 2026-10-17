@@ -150,9 +150,9 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   }
 
   // Fallback pengujian / demo jika Supabase offline (Hanya diizinkan di non-production atau jika ALLOW_DEMO_AUTH='true')
-  if (!currentUserId && allowDemo) {
-    const expectedPassword = demoUser?.password || 'Password123!';
-    if (demoUser && (password === expectedPassword || password === 'Password123!')) {
+  const demoPassword = process.env.DEMO_PASSWORD;
+  if (!currentUserId && allowDemo && demoPassword) {
+    if (demoUser && password === demoPassword) {
       currentUserId = demoUser.id;
       isOfflineAuthSuccess = true;
     }
@@ -461,7 +461,6 @@ export async function registerAction(formData: unknown): Promise<ActionResponse>
     name: name.trim(),
     roles: [role],
     status: 'ACTIVE',
-    password,
     isNewAccount: true,
   };
 
@@ -549,7 +548,7 @@ export async function switchWorkspaceAction(formData: FormData | unknown): Promi
   const sessionPayload = Buffer.from(JSON.stringify({
     userId: userContext.user.id,
     email: userContext.user.email,
-    name: userContext.profile?.full_name || 'Wahyu Aldiriyanto',
+    name: userContext.profile?.full_name || 'Pengguna SIAJAR',
     role: mappedRole,
     subId: mappedRole === 'MAHASISWA' ? 'mhs-1' : mappedRole === 'DOSEN' ? 'dsn-1' : undefined,
   })).toString('base64');
@@ -867,8 +866,14 @@ export async function reportNotMeAction(userIdParam?: string): Promise<ActionRes
  * Helper: Ambil profil dan peran pengguna saat ini untuk Server Components
  */
 export async function getCurrentUserWithRoles() {
-  const cookieStore = cookies();
-  const demoSessionId = cookieStore.get('demo_session')?.value;
+  let cookieStore: ReturnType<typeof cookies>;
+  let demoSessionId: string | undefined;
+  try {
+    cookieStore = cookies();
+    demoSessionId = cookieStore.get('demo_session')?.value;
+  } catch {
+    return null;
+  }
   let realUserId: string | null = null;
   let userEmail: string = '';
 

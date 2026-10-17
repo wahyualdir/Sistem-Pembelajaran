@@ -7,6 +7,7 @@ import {
   getHomeSummaryAction,
   getHomeAgendaAction,
 } from '@/modules/academic/home-actions';
+import { getStudentAcademicStatusAction } from '@/modules/early-warning/actions';
 import { StudentDashboardClient } from './student-dashboard-client';
 
 export default async function StudentPortalPage() {
@@ -18,6 +19,7 @@ export default async function StudentPortalPage() {
     classesRes,
     summaryRes,
     agendaRes,
+    academicStatusRes,
   ] = await Promise.allSettled([
     getHomeBannerAction(),
     getHomeDeadlinesAction(),
@@ -25,6 +27,7 @@ export default async function StudentPortalPage() {
     getHomeActiveClassesAction(),
     getHomeSummaryAction(),
     getHomeAgendaAction(),
+    getStudentAcademicStatusAction(),
   ]);
 
   const bannerData = bannerRes.status === 'fulfilled' ? bannerRes.value : undefined;
@@ -33,6 +36,7 @@ export default async function StudentPortalPage() {
   const activeClasses = classesRes.status === 'fulfilled' ? classesRes.value : [];
   const summaryData = summaryRes.status === 'fulfilled' ? summaryRes.value : undefined;
   const agendaItems = agendaRes.status === 'fulfilled' ? agendaRes.value : [];
+  const academicStatus = academicStatusRes.status === 'fulfilled' ? academicStatusRes.value : [];
 
   return (
     <StudentDashboardClient
@@ -42,6 +46,7 @@ export default async function StudentPortalPage() {
       activeClasses={activeClasses}
       summaryData={summaryData}
       agendaItems={agendaItems}
+      academicStatus={academicStatus}
     />
   );
 }

@@ -108,11 +108,11 @@ export function FileDropzone({
           onClick={() => !disabled && inputRef.current?.click()}
           className={`border-2 border-dashed rounded p-4 sm:p-5 transition-all text-center flex flex-col items-center justify-center gap-2.5 cursor-pointer ${
             isDragging
-              ? "border-black bg-retro-yellow/40 shadow-retro-sm"
-              : "border-black/50 bg-white hover:border-black hover:bg-retro-warm/30"
+              ? "border-black bg-gray-soft/40 shadow-retro-sm"
+              : "border-black/50 bg-white hover:border-black hover:bg-gray-soft/30"
           } ${disabled ? "opacity-60 cursor-not-allowed" : ""}`}
         >
-          <div className="h-10 w-10 sm:h-11 sm:w-11 rounded border-2 border-black bg-retro-warm flex items-center justify-center shadow-retro-sm shrink-0">
+          <div className="h-10 w-10 sm:h-11 sm:w-11 rounded border-2 border-black bg-gray-soft flex items-center justify-center shadow-retro-sm shrink-0">
             <Upload className="h-5 w-5 text-black" />
           </div>
 
@@ -120,7 +120,7 @@ export function FileDropzone({
             <p className="text-xs sm:text-sm font-bold text-black">
               Tarik dan lepas berkas di sini, atau klik tombol di bawah
             </p>
-            <p className="text-2xs sm:text-xs text-black/70 font-mono">
+            <p className="text-2xs sm:text-xs text-black/70 font-sans">
               Batas ukuran maksimal: <span className="font-bold">{maxMb} MB</span> • Format:{" "}
               <span className="font-bold uppercase">{allowedExts}</span>
             </p>
@@ -133,14 +133,14 @@ export function FileDropzone({
               e.stopPropagation();
               inputRef.current?.click();
             }}
-            className="h-10 sm:h-11 min-h-[44px] px-4 py-2 rounded border-2 border-black bg-retro-yellow hover:bg-black hover:text-white text-black font-heading font-black text-xs sm:text-sm shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer mt-1"
+            className="h-10 sm:h-11 min-h-[44px] px-4 py-2 rounded border-2 border-black bg-gray-soft hover:bg-black hover:text-white text-black font-heading font-bold text-xs sm:text-sm shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer mt-1"
           >
             <Upload className="h-4 w-4 shrink-0" />
             <span>Pilih Berkas dari Perangkat</span>
           </button>
         </div>
       ) : (
-        <div className="rounded border-2 border-black bg-retro-warm p-3 sm:p-4 shadow-retro-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="rounded border-2 border-black bg-gray-soft p-3 sm:p-4 shadow-retro-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="h-10 w-10 sm:h-11 sm:w-11 rounded border-2 border-black bg-retro-green flex items-center justify-center shadow-retro-sm shrink-0">
               <FileText className="h-5 w-5 text-black" />
@@ -153,7 +153,7 @@ export function FileDropzone({
                   {selectedFile.name}
                 </p>
               </div>
-              <p className="text-2xs sm:text-xs text-black/70 font-mono mt-0.5">
+              <p className="text-2xs sm:text-xs text-black/70 font-sans mt-0.5">
                 Ukuran: <span className="font-bold">{formatFileSize(selectedFile.size)}</span>
               </p>
             </div>
@@ -164,7 +164,7 @@ export function FileDropzone({
               type="button"
               disabled={disabled}
               onClick={() => inputRef.current?.click()}
-              className="h-9 sm:h-10 min-h-[40px] px-3 py-1.5 rounded border-2 border-black bg-white hover:bg-retro-yellow text-black font-heading font-black text-xs shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="h-9 sm:h-10 min-h-[40px] px-3 py-1.5 rounded border-2 border-black bg-white hover:bg-gray-soft text-black font-heading font-bold text-xs shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
               title="Ganti berkas dengan yang lain"
             >
               <RefreshCw className="h-3.5 w-3.5" />
@@ -175,7 +175,7 @@ export function FileDropzone({
               type="button"
               disabled={disabled}
               onClick={handleRemoveFile}
-              className="h-9 sm:h-10 min-h-[40px] px-3 py-1.5 rounded border-2 border-black bg-white hover:bg-danger hover:text-white text-danger font-heading font-black text-xs shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="h-9 sm:h-10 min-h-[40px] px-3 py-1.5 rounded border-2 border-black bg-white hover:bg-primary hover:text-white text-primary-dark font-heading font-bold text-xs shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
               title="Batalkan berkas ini"
             >
               <X className="h-3.5 w-3.5" />
@@ -187,8 +187,8 @@ export function FileDropzone({
 
       {/* Notifikasi Galat Validasi Berkas */}
       {displayError && (
-        <div className="rounded border-2 border-black bg-retro-warm text-danger p-2 sm:p-2.5 text-xs font-bold flex items-center gap-2 shadow-retro-sm animate-in fade-in-50">
-          <AlertCircle className="h-4 w-4 shrink-0 text-danger" />
+        <div className="rounded border-2 border-black bg-gray-soft text-primary-dark p-2 sm:p-2.5 text-xs font-bold flex items-center gap-2 shadow-retro-sm animate-in fade-in-50">
+          <AlertCircle className="h-4 w-4 shrink-0 text-primary-dark" />
           <span>{displayError}</span>
         </div>
       )}

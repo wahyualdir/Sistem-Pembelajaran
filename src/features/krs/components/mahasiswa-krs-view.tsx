@@ -118,7 +118,7 @@ export function MahasiswaKrsView({
     <div className="space-y-6">
       {/* Banner Peringatan UKT Belum Lunas (Bab 2.3) */}
       {!isUktLunas && (
-        <div className="rounded-[8px] border border-danger-border bg-danger-soft p-4 text-danger flex items-start gap-3">
+        <div className="rounded-[8px] border border-ink bg-surface p-4 text-primary-dark flex items-start gap-3">
           <ShieldAlert className="h-5 w-5 shrink-0 mt-0.5" />
           <div>
             <h4 className="font-semibold text-sm">Pengisian KRS Terkunci</h4>
@@ -132,7 +132,7 @@ export function MahasiswaKrsView({
 
       {/* Banner Notifikasi Aksi */}
       {feedback && (
-        <div className="rounded-[8px] bg-success-soft border border-success-border p-3 text-xs text-success flex items-center justify-between">
+        <div className="rounded-[8px] bg-surface border border-ink p-3 text-xs text-ink flex items-center justify-between">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4" />
             <span>{feedback}</span>
@@ -144,7 +144,7 @@ export function MahasiswaKrsView({
       )}
 
       {errorFeedback && (
-        <div className="rounded-[8px] bg-danger-soft border border-danger-border p-3 text-xs text-danger flex items-center gap-2">
+        <div className="rounded-[8px] bg-surface border border-ink p-3 text-xs text-primary-dark flex items-center gap-2">
           <AlertTriangle className="h-4 w-4 shrink-0" />
           <span>{errorFeedback}</span>
         </div>
@@ -187,7 +187,7 @@ export function MahasiswaKrsView({
 
               <div>
                 <span className="text-xs text-muted-foreground block">Sisa Jatah</span>
-                <span className="text-2xl font-bold text-success">
+                <span className="text-2xl font-bold text-ink">
                   {krs.batasSks - krs.totalSks}
                 </span>
                 <span className="text-xs text-muted-foreground font-medium"> SKS</span>
@@ -271,12 +271,12 @@ export function MahasiswaKrsView({
                           Kuota:{" "}
                           <span
                             className={
-                              isFull ? "font-bold text-danger" : "font-semibold text-foreground"
+                              isFull ? "font-bold text-primary-dark" : "font-semibold text-foreground"
                             }
                           >
                             {kelas.terisi} / {kelas.kuota} Kursi
                           </span>
-                          {isFull && <span className="text-danger ml-1">(Penuh)</span>}
+                          {isFull && <span className="text-primary-dark ml-1">(Penuh)</span>}
                         </div>
                       </div>
 
@@ -358,7 +358,7 @@ export function MahasiswaKrsView({
                         size="sm"
                         onClick={() => handleHapus(item.kelasId)}
                         disabled={loading}
-                        className="h-7 w-7 p-0 text-danger hover:text-danger hover:bg-danger-soft"
+                        className="h-7 w-7 p-0 text-primary-dark hover:text-primary-dark hover:bg-surface"
                         title="Hapus"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -383,14 +383,14 @@ export function MahasiswaKrsView({
                 ) : null}
 
                 {krs.status === "DIAJUKAN" && (
-                  <div className="rounded-[8px] bg-warning-soft border border-warning-border p-3 text-center text-xs text-warning font-medium">
+                  <div className="rounded-[8px] bg-gray-soft border border-ink p-3 text-center text-xs text-ink font-medium">
                     KRS sedang menunggu tinjauan dan persetujuan Dosen Wali Anda.
                   </div>
                 )}
 
                 {krs.status === "DISETUJUI" && (
                   <div className="space-y-2">
-                    <div className="rounded-[8px] bg-success-soft border border-success-border p-3 text-center text-xs text-success font-medium">
+                    <div className="rounded-[8px] bg-surface border border-ink p-3 text-center text-xs text-ink font-medium">
                       KRS telah disetujui Dosen Wali resmi.
                     </div>
                     <Button
@@ -412,7 +412,7 @@ export function MahasiswaKrsView({
       {showConfirmAjukan && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
           <div className="w-full max-w-md bg-white border-2 border-black rounded-xl p-5 shadow-retro space-y-4">
-            <h3 className="font-heading font-black text-base text-black">Konfirmasi Pengajuan KRS</h3>
+            <h3 className="font-heading font-bold text-base text-black">Konfirmasi Pengajuan KRS</h3>
             <p className="text-xs text-black/80 leading-relaxed">
               Apakah Anda yakin ingin mengajukan rencana studi ini ke Dosen Pembimbing Akademik (Wali)? Setelah diajukan, perubahan mata kuliah memerlukan persetujuan dosen wali.
             </p>

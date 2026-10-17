@@ -288,7 +288,7 @@ export function LecturerExamsHubView({
       <RetroWindow
         title="manajemen_dan_monitoring_ujian_dosen.app"
         badge="Portal Dosen Pengampu"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -297,7 +297,7 @@ export function LecturerExamsHubView({
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Award className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Pusat Evaluasi & Proctoring Ujian
               </h1>
             </div>
@@ -336,10 +336,10 @@ export function LecturerExamsHubView({
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -354,7 +354,7 @@ export function LecturerExamsHubView({
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h2 className="font-heading font-black text-lg text-black">
+              <h2 className="font-heading font-bold text-lg text-black">
                 Daftar Sesi Ujian Aktif & Terjadwal ({quizzes.length})
               </h2>
               <p className="text-xs text-black/70">
@@ -378,16 +378,16 @@ export function LecturerExamsHubView({
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="px-2.5 py-0.5 rounded border border-black bg-retro-warm text-xs font-mono font-bold">
+                    <span className="px-2.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-sans font-bold">
                       {q.exam_type ?? 'KUIS'}
                     </span>
-                    <span className="text-xs font-mono font-bold flex items-center gap-1">
+                    <span className="text-xs font-sans font-bold flex items-center gap-1">
                       <Clock className="h-3.5 w-3.5" />
                       {q.duration_minutes} Menit
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-black text-base sm:text-lg text-black leading-snug line-clamp-2">
+                  <h3 className="font-heading font-bold text-base sm:text-lg text-black leading-snug line-clamp-2">
                     {q.title}
                   </h3>
 
@@ -395,7 +395,7 @@ export function LecturerExamsHubView({
                     {q.description || 'Tidak ada deskripsi tambahan.'}
                   </p>
 
-                  <div className="pt-2 border-t border-black/10 flex items-center justify-between text-xs font-mono">
+                  <div className="pt-2 border-t border-black/10 flex items-center justify-between text-xs font-sans">
                     <span>KKM: {q.kkm ?? 70}</span>
                     <span className="font-bold text-primary">
                       Proctor: {q.proctoring_level ?? 'STANDARD'}
@@ -410,14 +410,14 @@ export function LecturerExamsHubView({
                       setSelectedExamId(q.id);
                       setTab('live');
                     }}
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-primary text-white text-xs font-black shadow-xs hover:bg-black transition-all cursor-pointer"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-primary text-white text-xs font-bold shadow-xs hover:bg-black transition-all cursor-pointer"
                   >
                     <Activity className="h-3.5 w-3.5" />
                     <span>Panel Live</span>
                   </button>
                   <Link
                     href={`/classes/${q.class_id}/quizzes/${q.id}`}
-                    className="px-3 py-2 rounded-lg border-2 border-black bg-white text-black text-xs font-bold hover:bg-retro-warm shadow-xs"
+                    className="px-3 py-2 rounded-lg border-2 border-black bg-white text-black text-xs font-bold hover:bg-gray-soft shadow-xs"
                     title="Buka Lembar Soal"
                   >
                     <Eye className="h-4 w-4" />
@@ -436,11 +436,11 @@ export function LecturerExamsHubView({
           <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="relative flex h-3.5 w-3.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-600"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-dark opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-gray-dark"></span>
               </span>
               <div>
-                <h3 className="font-heading font-black text-base text-black">
+                <h3 className="font-heading font-bold text-base text-black">
                   Live Proctoring Monitor ({liveStudents.filter((s) => s.status === 'IN_PROGRESS').length} Sedang Mengerjakan)
                 </h3>
                 <p className="text-xs text-black/60 font-medium">
@@ -450,7 +450,7 @@ export function LecturerExamsHubView({
             </div>
 
             <div className="flex items-center gap-2">
-              <label className="text-xs font-bold font-mono">Pilih Ujian:</label>
+              <label className="text-xs font-bold font-sans">Pilih Ujian:</label>
               <select
                 value={selectedExamId}
                 onChange={(e) => setSelectedExamId(e.target.value)}
@@ -473,29 +473,29 @@ export function LecturerExamsHubView({
                 className={cn(
                   'rounded-xl border-2 border-black p-5 shadow-retro space-y-4 transition-all',
                   st.status === 'TERMINATED'
-                    ? 'bg-rose-50 border-rose-500'
+                    ? 'bg-surface border-ink'
                     : st.violations_count > 0
-                    ? 'bg-amber-50/70 border-black'
+                    ? 'bg-gray-soft/70 border-black'
                     : 'bg-white'
                 )}
               >
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <h4 className="font-heading font-black text-base text-black">
+                    <h4 className="font-heading font-bold text-base text-black">
                       {st.student_name}
                     </h4>
-                    <p className="text-xs text-black/60 font-mono mt-0.5">
+                    <p className="text-xs text-black/60 font-sans mt-0.5">
                       {st.last_event}
                     </p>
                   </div>
                   <span
                     className={cn(
-                      'text-xs font-mono font-bold px-2.5 py-0.5 rounded border border-black',
+                      'text-xs font-sans font-bold px-2.5 py-0.5 rounded border border-black',
                       st.status === 'IN_PROGRESS'
-                        ? 'bg-emerald-100 text-emerald-950'
+                        ? 'bg-surface text-ink'
                         : st.status === 'SUBMITTED'
-                        ? 'bg-blue-100 text-blue-950'
-                        : 'bg-rose-100 text-rose-950'
+                        ? 'bg-gray-soft text-ink'
+                        : 'bg-surface text-primary-dark'
                     )}
                   >
                     {st.status}
@@ -504,7 +504,7 @@ export function LecturerExamsHubView({
 
                 {/* Progress Bar & Sisa Waktu */}
                 <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-mono font-bold text-black/80">
+                  <div className="flex justify-between text-xs font-sans font-bold text-black/80">
                     <span>
                       Soal {st.answered_count}/{st.total_questions} ({st.progress_percent}%)
                     </span>
@@ -522,8 +522,8 @@ export function LecturerExamsHubView({
 
                 {/* Pelanggaran Badge */}
                 {st.violations_count > 0 && (
-                  <div className="p-2.5 rounded-lg border border-amber-500 bg-amber-100/70 flex items-center gap-2 text-xs font-bold text-amber-950 font-mono">
-                    <AlertTriangle className="h-4 w-4 text-amber-800 shrink-0" />
+                  <div className="p-2.5 rounded-lg border border-ink bg-gray-soft/70 flex items-center gap-2 text-xs font-bold text-ink font-sans">
+                    <AlertTriangle className="h-4 w-4 text-ink shrink-0" />
                     <span>Terdeteksi {st.violations_count} Pelanggaran Pengawasan</span>
                   </div>
                 )}
@@ -534,7 +534,7 @@ export function LecturerExamsHubView({
                     <button
                       type="button"
                       onClick={() => openInterventionModal(st.student_id, 'WARN')}
-                      className="px-3 py-1.5 rounded-lg border-2 border-black bg-retro-yellow text-black text-xs font-black hover:bg-amber-300 transition-all cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg border-2 border-black bg-gray-soft text-black text-xs font-bold hover:bg-gray-dark transition-all cursor-pointer"
                     >
                       Beri Peringatan
                     </button>
@@ -548,7 +548,7 @@ export function LecturerExamsHubView({
                     <button
                       type="button"
                       onClick={() => openInterventionModal(st.student_id, 'TERMINATE')}
-                      className="px-3 py-1.5 rounded-lg border-2 border-rose-600 bg-rose-100 text-rose-950 text-xs font-bold hover:bg-rose-200 transition-all cursor-pointer ml-auto"
+                      className="px-3 py-1.5 rounded-lg border-2 border-ink bg-surface text-primary-dark text-xs font-bold hover:bg-surface transition-all cursor-pointer ml-auto"
                     >
                       Diskualifikasi
                     </button>
@@ -565,9 +565,9 @@ export function LecturerExamsHubView({
         <div className="space-y-8">
           {/* BAGIAN 1: LOG PELANGGARAN MAHASISWA */}
           <div className="space-y-4">
-            <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+                <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                   <ShieldAlert className="h-5 w-5 text-primary" />
                   <span>Log Pelanggaran Mahasiswa (Proctoring Telemetry) ({violationsLog.length})</span>
                 </h2>
@@ -575,7 +575,7 @@ export function LecturerExamsHubView({
                   Data anomali integritas otomatis: fokus layar hilang (blur), perpindahan tab, atau keluar fullscreen.
                 </p>
               </div>
-              <span className="text-xs font-mono font-bold px-3 py-1 rounded border border-black bg-white shrink-0">
+              <span className="text-xs font-sans font-bold px-3 py-1 rounded border border-black bg-white shrink-0">
                 Immutable Telemetry Stream
               </span>
             </div>
@@ -583,7 +583,7 @@ export function LecturerExamsHubView({
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Mahasiswa</th>
                       <th className="p-3.5 sm:p-4">Sesi Ujian</th>
@@ -595,11 +595,11 @@ export function LecturerExamsHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {violationsLog.map((v) => (
-                      <tr key={v.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={v.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">{v.student_name}</td>
-                        <td className="p-3.5 sm:p-4 text-black/80 font-mono">{v.exam_title}</td>
+                        <td className="p-3.5 sm:p-4 text-black/80 font-sans">{v.exam_title}</td>
                         <td className="p-3.5 sm:p-4">
-                          <span className="px-2 py-0.5 rounded border border-black bg-retro-warm font-mono text-xs font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-gray-soft font-sans text-xs font-bold">
                             {v.event_type}
                           </span>
                         </td>
@@ -607,16 +607,16 @@ export function LecturerExamsHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2 py-0.5 rounded border text-xs font-sans font-bold',
                               v.severity === 'CRITICAL'
-                                ? 'border-rose-500 bg-rose-100 text-rose-950'
-                                : 'border-amber-500 bg-amber-100 text-amber-950'
+                                ? 'border-ink bg-surface text-primary-dark'
+                                : 'border-ink bg-gray-soft text-ink'
                             )}
                           >
                             {v.severity}
                           </span>
                         </td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs text-black/60">{v.time}</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs text-black/60">{v.time}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -627,9 +627,9 @@ export function LecturerExamsHubView({
 
           {/* BAGIAN 2: LOG INTERVENSI PENGAWAS / DOSEN (TERPISAH) */}
           <div className="space-y-4">
-            <div className="p-4 bg-retro-yellow/40 border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="p-4 bg-gray-soft/40 border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+                <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                   <Activity className="h-5 w-5 text-primary" />
                   <span>Log Intervensi Pengawas & Dosen ({interventionsLog.length})</span>
                 </h2>
@@ -637,7 +637,7 @@ export function LecturerExamsHubView({
                   Riwayat tindakan pengawas: penambahan waktu (+mnt), peringatan langsung, dan diskualifikasi sesi.
                 </p>
               </div>
-              <span className="text-xs font-mono font-bold px-3 py-1 rounded border border-black bg-white shrink-0">
+              <span className="text-xs font-sans font-bold px-3 py-1 rounded border border-black bg-white shrink-0">
                 Log Audit
               </span>
             </div>
@@ -645,7 +645,7 @@ export function LecturerExamsHubView({
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Waktu</th>
                       <th className="p-3.5 sm:p-4">Pengawas / Dosen</th>
@@ -658,19 +658,19 @@ export function LecturerExamsHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {interventionsLog.map((item) => (
-                      <tr key={item.id} className="hover:bg-retro-warm/30 transition-colors">
-                        <td className="p-3.5 sm:p-4 font-mono text-xs text-black/60">{item.time}</td>
+                      <tr key={item.id} className="hover:bg-gray-soft/30 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-sans text-xs text-black/60">{item.time}</td>
                         <td className="p-3.5 sm:p-4 font-bold text-black">{item.actor_name}</td>
                         <td className="p-3.5 sm:p-4 text-black font-medium">{item.student_name}</td>
                         <td className="p-3.5 sm:p-4">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border border-black font-mono text-xs font-bold',
+                              'px-2 py-0.5 rounded border border-black font-sans text-xs font-bold',
                               item.subtype === 'ADD_TIME'
                                 ? 'bg-retro-mint text-black'
                                 : item.subtype === 'WARN'
-                                ? 'bg-retro-yellow text-black'
-                                : 'bg-rose-100 text-rose-950'
+                                ? 'bg-gray-soft text-black'
+                                : 'bg-surface text-primary-dark'
                             )}
                           >
                             {item.subtype === 'ADD_TIME'
@@ -681,7 +681,7 @@ export function LecturerExamsHubView({
                           </span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80 max-w-xs">{item.reason}</td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs text-black/70">
+                        <td className="p-3.5 sm:p-4 font-sans text-xs text-black/70">
                           <div>
                             <span className="text-black/50">Sebelum:</span> {item.value_before}
                           </div>
@@ -690,7 +690,7 @@ export function LecturerExamsHubView({
                           </div>
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-mono font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-sans font-bold">
                             RECORDED
                           </span>
                         </td>
@@ -710,14 +710,14 @@ export function LecturerExamsHubView({
           <div
             className={cn(
               'p-4 rounded-xl border-2 border-black shadow-retro flex items-center justify-between gap-3',
-              toastNotification.type === 'success' ? 'bg-retro-mint text-black' : 'bg-rose-100 text-rose-950'
+              toastNotification.type === 'success' ? 'bg-retro-mint text-black' : 'bg-surface text-primary-dark'
             )}
           >
             <p className="text-xs sm:text-sm font-bold">{toastNotification.message}</p>
             <button
               type="button"
               onClick={() => setToastNotification(null)}
-              className="text-xs font-mono font-bold px-2 py-0.5 border border-black rounded bg-white hover:bg-neutral-100"
+              className="text-xs font-sans font-bold px-2 py-0.5 border border-black rounded bg-white hover:bg-neutral-100"
             >
               Tutup
             </button>
@@ -730,14 +730,14 @@ export function LecturerExamsHubView({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
           <div className="w-full max-w-md rounded-2xl border-4 border-black bg-white p-6 shadow-retro space-y-4 animate-scale-in">
             <div className="flex items-center justify-between border-b-2 border-black pb-3">
-              <h3 className="font-heading font-black text-lg text-black flex items-center gap-2">
+              <h3 className="font-heading font-bold text-lg text-black flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-primary" />
                 <span>Konfirmasi Tindakan Pengawas</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setModalData(null)}
-                className="text-xs font-mono font-bold px-2 py-1 border-2 border-black rounded bg-retro-warm hover:bg-neutral-200"
+                className="text-xs font-sans font-bold px-2 py-1 border-2 border-black rounded bg-gray-soft hover:bg-neutral-200"
               >
                 TUTUP
               </button>
@@ -746,11 +746,11 @@ export function LecturerExamsHubView({
             <div className="space-y-3 text-xs">
               <div className="p-3 bg-neutral-50 rounded-lg border border-black/20 space-y-1">
                 <p>
-                  <span className="text-black/60 font-mono">Mahasiswa Sasaran:</span>{' '}
+                  <span className="text-black/60 font-sans">Mahasiswa Sasaran:</span>{' '}
                   <strong className="text-black text-sm">{modalData.studentName}</strong>
                 </p>
                 <p>
-                  <span className="text-black/60 font-mono">Jenis Tindakan:</span>{' '}
+                  <span className="text-black/60 font-sans">Jenis Tindakan:</span>{' '}
                   <span className="font-bold text-primary uppercase">
                     {modalData.action === 'WARN'
                       ? 'Peringatan Pelanggaran'
@@ -772,7 +772,7 @@ export function LecturerExamsHubView({
                     onChange={(e) =>
                       setModalData((prev) => (prev ? { ...prev, value: Number(e.target.value) || 10 } : null))
                     }
-                    className="w-full px-3 py-2 rounded-lg border-2 border-black bg-white font-mono text-sm font-bold"
+                    className="w-full px-3 py-2 rounded-lg border-2 border-black bg-white font-sans text-sm font-bold"
                   />
                 </div>
               )}
@@ -793,7 +793,7 @@ export function LecturerExamsHubView({
               </div>
 
               {modalData.error && (
-                <p className="text-rose-600 font-bold font-mono text-xs">{modalData.error}</p>
+                <p className="text-primary-dark font-bold font-sans text-xs">{modalData.error}</p>
               )}
             </div>
 
@@ -809,7 +809,7 @@ export function LecturerExamsHubView({
                 type="button"
                 disabled={isPending}
                 onClick={handleConfirmIntervention}
-                className="px-4 py-2 rounded-lg border-2 border-black bg-primary text-white text-xs font-black shadow-retro hover:bg-primary-dark cursor-pointer disabled:opacity-50"
+                className="px-4 py-2 rounded-lg border-2 border-black bg-primary text-white text-xs font-bold shadow-retro hover:bg-primary-dark cursor-pointer disabled:opacity-50"
               >
                 {isPending ? 'Menyimpan...' : 'Eksekusi & Catat Audit'}
               </button>

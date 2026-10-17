@@ -87,7 +87,12 @@ const DEMO_LEAVE_REQUESTS: LeaveRequestRecord[] = [
 ];
 
 import { isDemoMode } from '@/lib/config/features';
-import { listLeavePermitsAction, listAttendanceSessionsAction, getClassAttendanceSummaryAction } from '@/modules/academic/attendance-actions';
+import {
+  listLeavePermitsAction,
+  listAttendanceSessionsAction,
+  getClassAttendanceSummaryAction,
+  listAttendanceAnomaliesAction,
+} from '@/modules/academic/attendance-actions';
 import { listMyClassesAction, getClassDetailAction } from '@/modules/academic/actions';
 import { LecturerAttendanceHubView } from '@/modules/academic/lecturer-attendance-hub-view';
 
@@ -112,10 +117,10 @@ export default async function AttendancePage() {
 
   const realLeaves = await listLeavePermitsAction();
   const isDemo = isDemoMode();
-  const isLecturer = role === 'LECTURER';
+  const isStaff = role === 'LECTURER' || role === 'TEACHING_ASSISTANT' || role === 'SUPER_ADMIN';
 
-  // Jika Dosen: Tampilkan Hub Bertab Dosen [Sesi Presensi | Rekap Kehadiran | Izin & Sakit | Pengaturan Lokasi]
-  if (isLecturer) {
+  // Jika Dosen / Asdos: Tampilkan Hub Bertab Dosen [Sesi Presensi | Rekap Kehadiran | Izin & Sakit | Verifikasi GPS & Anomali | Pengaturan Lokasi]
+  if (isStaff) {
     const classes = await listMyClassesAction().catch(() => []);
     const firstClass = classes[0];
     const detail = firstClass ? await getClassDetailAction(firstClass.id).catch(() => null) : null;
@@ -123,6 +128,7 @@ export default async function AttendancePage() {
     const classSummary = firstClass && detail?.members
       ? await getClassAttendanceSummaryAction(firstClass.id, detail.members).catch(() => [])
       : [];
+    const anomalies = await listAttendanceAnomaliesAction().catch(() => []);
 
     return (
       <LecturerAttendanceHubView
@@ -130,6 +136,7 @@ export default async function AttendancePage() {
         sessions={sessions}
         classSummary={classSummary}
         leaves={realLeaves}
+        anomalies={anomalies}
         isDemo={isDemo}
       />
     );

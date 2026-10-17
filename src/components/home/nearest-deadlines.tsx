@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FileText, Award, Clock, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { FileText, Award, Clock, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { calculateCountdown, type HomeDeadlineItem } from '@/modules/academic/home-utils';
 
@@ -38,13 +38,13 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
           <div className="p-2 rounded-lg border-2 border-ink bg-gray-soft text-primary shadow-xs">
             <Clock className="h-5 w-5 text-primary" />
           </div>
-          <h2 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-ink">
+          <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
             Tenggat Terdekat
           </h2>
         </div>
         <Link
           href="/calendar"
-          className="text-base sm:text-lg font-black text-primary hover:text-primary-dark transition-colors"
+          className="text-base sm:text-lg font-bold text-primary-dark hover:text-ink transition-colors"
         >
           more &rarr;
         </Link>
@@ -52,8 +52,8 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
 
       {items.length === 0 ? (
         <div className="p-6 rounded-2xl border-2 border-ink bg-surface text-center space-y-2 shadow-retro">
-          <CheckCircle2 className="h-8 w-8 text-success mx-auto" />
-          <p className="font-heading font-black text-lg text-ink">Semua Tugas Selesai</p>
+          <CheckCircle2 className="h-8 w-8 text-ink mx-auto" />
+          <p className="font-heading font-bold text-lg text-ink">Semua Tugas Selesai</p>
           <p className="text-sm text-gray-dark font-bold">Tidak ada tenggat tugas atau kuis yang menunggu pengumpulan.</p>
         </div>
       ) : (
@@ -73,38 +73,39 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
                   <div
                     className={cn(
                       'shrink-0 p-2 sm:p-2.5 rounded-lg border-2 border-ink flex items-center justify-center shadow-xs',
-                      isQuiz ? 'bg-warning text-ink' : 'bg-gray-soft text-ink'
+                      isQuiz ? 'bg-gray-soft text-ink' : 'bg-surface text-ink'
                     )}
                   >
-                    {isQuiz ? <Award className="h-4.5 w-4.5" /> : <FileText className="h-4.5 w-4.5" />}
+                    {isQuiz ? <Award className="h-4.5 w-4.5 text-ink" /> : <FileText className="h-4.5 w-4.5 text-ink" />}
                   </div>
 
                   <div className="space-y-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-sans font-black uppercase tracking-wider text-gray-dark">
+                      <span className="text-xs font-sans font-bold uppercase tracking-wider text-gray-dark">
                         {item.classTitle}
                       </span>
                       {item.isUrgent && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-sans font-black bg-urgent text-ink border border-ink">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-sans font-bold bg-primary text-white border border-ink">
+                          <AlertCircle className="h-3 w-3" />
                           MENDESAK
                         </span>
                       )}
                     </div>
-                    <h3 className="font-heading font-black text-base sm:text-lg text-ink break-words leading-snug line-clamp-2">
+                    <h3 className="font-heading font-bold text-base sm:text-lg text-ink break-words leading-snug line-clamp-2">
                       {item.title}
                     </h3>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-ink/10">
-                  <div className="flex items-center gap-1.5 text-xs sm:text-sm font-sans font-bold text-ink">
-                    <Clock className="h-4 w-4 text-urgent shrink-0" />
+                  <div className="flex items-center gap-1.5 text-xs sm:text-sm font-sans font-semibold text-ink tabular-nums">
+                    <Clock className="h-4 w-4 text-primary-dark shrink-0" />
                     <span>{item.dueCountdown}</span>
                   </div>
 
                   <Link
                     href={item.actionHref}
-                    className="px-4 py-2 rounded-xl border-2 border-ink bg-ink text-white font-heading font-black text-xs sm:text-sm hover:bg-ink/90 active:translate-y-0.5 transition-all shadow-xs shrink-0"
+                    className="px-4 py-2 rounded-xl border-2 border-ink bg-ink text-white font-heading font-bold text-xs sm:text-sm hover:bg-ink/90 active:translate-y-0.5 transition-all shadow-xs shrink-0"
                   >
                     {isQuiz ? 'Buka Kuis' : 'Kerjakan'}
                   </Link>

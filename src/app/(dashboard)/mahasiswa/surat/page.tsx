@@ -87,8 +87,8 @@ export default function MahasiswaSuratPage() {
         <div
           className={`flex items-center gap-2 rounded-[8px] p-3 text-sm font-medium ${
             pesanNotif.tipe === "sukses"
-              ? "bg-success-soft text-success border border-success-border"
-              : "bg-danger/10 text-danger border border-danger/20"
+              ? "bg-surface text-ink border border-ink"
+              : "bg-primary/10 text-primary-dark border border-ink"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
@@ -130,7 +130,7 @@ export default function MahasiswaSuratPage() {
                       <TableCell className="text-center font-medium text-xs text-muted-foreground">
                         {idx + 1}
                       </TableCell>
-                      <TableCell className="text-xs font-mono text-muted-foreground">
+                      <TableCell className="text-xs font-sans text-muted-foreground">
                         {item.tanggalPengajuan}
                       </TableCell>
                       <TableCell>
@@ -141,7 +141,7 @@ export default function MahasiswaSuratPage() {
                       <TableCell className="text-xs text-foreground">
                         {item.keterangan}
                         {item.status === "DITOLAK" && item.alasanTolak && (
-                          <span className="block text-danger font-medium mt-1">
+                          <span className="block text-primary-dark font-medium mt-1">
                             Alasan ditolak: {item.alasanTolak}
                           </span>
                         )}
@@ -149,7 +149,7 @@ export default function MahasiswaSuratPage() {
                       <TableCell className="text-center">
                         <StatusBadge status={item.status} size="sm" />
                       </TableCell>
-                      <TableCell className="font-mono text-xs font-semibold text-primary">
+                      <TableCell className="font-sans text-xs font-semibold text-primary">
                         {item.nomorSurat || "-"}
                       </TableCell>
                       <TableCell className="text-center">
@@ -213,7 +213,7 @@ export default function MahasiswaSuratPage() {
 
             <div>
               <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                Keperluan / Alasan Pengajuan <span className="text-danger">*</span>:
+                Keperluan / Alasan Pengajuan <span className="text-primary-dark">*</span>:
               </label>
               <textarea
                 value={keterangan}

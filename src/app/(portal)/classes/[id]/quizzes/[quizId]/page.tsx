@@ -33,7 +33,7 @@ export default async function TakeQuizPage({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <Link
           href={`/classes/${params.id}`}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black bg-white font-bold text-xs sm:text-sm text-black shadow-retro hover:bg-retro-warm transition-all w-fit"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black bg-white font-bold text-xs sm:text-sm text-black shadow-retro hover:bg-gray-soft transition-all w-fit"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Kembali ke {detail.cls.title}</span>
@@ -44,7 +44,7 @@ export default async function TakeQuizPage({
             <ExamAnalyticsModal examId={quiz.id} />
           </div>
         ) : (
-          <span className="text-xs font-mono font-bold text-black/60 hidden sm:inline-block">
+          <span className="text-xs font-sans font-bold text-black/60 hidden sm:inline-block">
             SIAJAR CBT Engine v2.4
           </span>
         )}
@@ -61,24 +61,24 @@ export default async function TakeQuizPage({
           >
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded border-2 border-retro-border bg-primary px-2.5 py-0.5 text-xs font-black font-mono text-white shadow-retro-sm">
+                <span className="rounded border-2 border-retro-border bg-primary px-2.5 py-0.5 text-xs font-bold font-sans text-white shadow-retro-sm">
                   {quiz.exam_type ?? 'KUIS'}
                 </span>
-                <span className="rounded border-2 border-retro-border bg-retro-warm px-2.5 py-0.5 text-xs font-black font-mono text-black shadow-retro-sm">
+                <span className="rounded border-2 border-retro-border bg-gray-soft px-2.5 py-0.5 text-xs font-bold font-sans text-black shadow-retro-sm">
                   Level Pengawasan: {quiz.proctoring_level ?? 'STANDAR'}
                 </span>
-                <span className="rounded border-2 border-retro-border bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-retro-sm">
+                <span className="rounded border-2 border-retro-border bg-white px-2.5 py-0.5 text-xs font-bold font-sans text-black shadow-retro-sm">
                   KKM: {quiz.kkm ?? 70}
                 </span>
-                <span className="rounded border-2 border-retro-border bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-retro-sm">
+                <span className="rounded border-2 border-retro-border bg-white px-2.5 py-0.5 text-xs font-bold font-sans text-black shadow-retro-sm">
                   Durasi: {quiz.duration_minutes} Menit
                 </span>
-                <span className="rounded border-2 border-retro-border bg-white px-2.5 py-0.5 text-xs font-bold font-mono text-black shadow-retro-sm">
+                <span className="rounded border-2 border-retro-border bg-white px-2.5 py-0.5 text-xs font-bold font-sans text-black shadow-retro-sm">
                   Total: {quiz.total_points} Poin
                 </span>
               </div>
 
-              <h1 className="text-xl sm:text-2xl font-heading font-black tracking-tight text-black flex items-center gap-2.5">
+              <h1 className="text-xl sm:text-2xl font-heading font-bold tracking-tight text-black flex items-center gap-2.5">
                 <Award className="h-6 w-6 text-primary shrink-0" />
                 <span>{quiz.title}</span>
               </h1>

@@ -20,7 +20,7 @@ const FAQS = [
   {
     category: 'UJIAN ONLINE',
     icon: Laptop,
-    badgeBg: 'bg-retro-yellow',
+    badgeBg: 'bg-gray-soft',
     q: 'Bagaimana cara mengikuti ujian dengan sistem pengawasan (proctoring)?',
     a: 'Masuk ke menu Ujian Aktif, klik Mulai Ujian, setujui aturan pengawasan, dan aktifkan mode layar penuh (fullscreen). Hindari berpindah tab atau meminimize jendela agar tidak memicu peringatan log pelanggaran.',
   },
@@ -34,14 +34,14 @@ const FAQS = [
   {
     category: 'PRIVASI MAHASISWA',
     icon: ShieldCheck,
-    badgeBg: 'bg-retro-warm',
+    badgeBg: 'bg-gray-soft',
     q: 'Apakah peramban merekam isi layar lain atau berkas pribadi saya?',
     a: 'Tidak. SIAJAR hanya mendeteksi event peramban bawaan seperti visibilitychange (tab aktif/non-aktif) dan blur jendela. Sistem tidak memiliki akses teknis untuk mengintip berkas di luar tab ujian.',
   },
   {
     category: 'KEAMANAN AKUN',
     icon: KeyRound,
-    badgeBg: 'bg-retro-purple/40',
+    badgeBg: 'bg-gray-soft/40',
     q: 'Bagaimana cara mendaftarkan biometrik (Passkey / WebAuthn)?',
     a: 'Buka menu Perangkat & Sesi, pilih Tambah Kredensial Biometrik, lalu verifikasi menggunakan sensor sidik jari atau Windows Hello/Touch ID bawaan perangkat laptop maupun smartphone Anda.',
   },
@@ -68,7 +68,7 @@ export default function HelpCenterPage() {
       <RetroWindow
         title="pusat_bantuan_dan_panduan.app"
         badge="PANDUAN OPERASIONAL v2.0"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-6 sm:p-8 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -77,7 +77,7 @@ export default function HelpCenterPage() {
               <div className="p-2.5 rounded-lg border-2 border-retro-border bg-primary text-white shadow-xs">
                 <HelpCircle className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-foreground">
                 Pusat Bantuan & Panduan LMS
               </h1>
             </div>
@@ -87,7 +87,7 @@ export default function HelpCenterPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="rounded-full border-2 border-black bg-white px-4 py-1.5 text-sm sm:text-base font-mono font-black text-black shadow-xs">
+            <span className="rounded-full border-2 border-black bg-white px-4 py-1.5 text-sm sm:text-base font-sans font-bold text-black shadow-xs">
               SOP Akademik Aktif
             </span>
           </div>
@@ -97,15 +97,15 @@ export default function HelpCenterPage() {
       {/* 2. DAFTAR FAQ 6 CARDS DALAM GRID 3 KOLOM */}
       <RetroWindow
         title={`tanya_jawab_populer.faq (${FAQS.length})`}
-        headerClassName="bg-retro-warm"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-6 sm:p-7 space-y-6"
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-heading font-black text-xl sm:text-2xl text-black flex items-center gap-2.5">
+          <h2 className="font-heading font-bold text-xl sm:text-2xl text-black flex items-center gap-2.5">
             <FileQuestion className="h-6 w-6 text-primary" />
             <span>Pertanyaan yang Sering Diajukan (FAQ)</span>
           </h2>
-          <span className="text-sm font-mono font-bold text-black">Kanal Informasi Resmi</span>
+          <span className="text-sm font-sans font-bold text-black">Kanal Informasi Resmi</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -119,13 +119,13 @@ export default function HelpCenterPage() {
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className={`px-3 py-1 rounded border-2 border-black text-xs font-mono font-black shadow-xs ${faq.badgeBg}`}>
+                    <span className={`px-3 py-1 rounded border-2 border-black text-xs font-sans font-bold shadow-xs ${faq.badgeBg}`}>
                       {faq.category}
                     </span>
                     <Icon className="h-5 w-5 text-primary" />
                   </div>
 
-                  <h3 className="font-heading font-black text-lg text-black leading-snug">
+                  <h3 className="font-heading font-bold text-lg text-black leading-snug">
                     {faq.q}
                   </h3>
 
@@ -140,9 +140,9 @@ export default function HelpCenterPage() {
       </RetroWindow>
 
       {/* 3. CALLOUT BANNER TRANSPARANSI FULL */}
-      <div className="rounded-xl border-2 border-black bg-retro-warm p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-retro">
+      <div className="rounded-xl border-2 border-black bg-gray-soft p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-retro">
         <div className="space-y-1.5 text-center sm:text-left">
-          <h3 className="font-heading font-black text-xl text-black flex items-center justify-center sm:justify-start gap-2">
+          <h3 className="font-heading font-bold text-xl text-black flex items-center justify-center sm:justify-start gap-2">
             <ShieldCheck className="h-6 w-6 text-primary" />
             <span>Butuh Transparansi Privasi & Keamanan Data?</span>
           </h3>
@@ -152,7 +152,7 @@ export default function HelpCenterPage() {
         </div>
         <Link
           href="/transparency"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border-2 border-black bg-retro-yellow text-black font-heading font-black text-sm sm:text-base shadow-retro hover:bg-black hover:text-white transition-all shrink-0"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border-2 border-black bg-gray-soft text-black font-heading font-bold text-sm sm:text-base shadow-retro hover:bg-black hover:text-white transition-all shrink-0"
         >
           <span>Buka Transparansi Data &rarr;</span>
         </Link>

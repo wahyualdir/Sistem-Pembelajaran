@@ -53,17 +53,17 @@ export const SEED_PRODI = [
 export const SEED_USERS = [
   // Admin
   {
-    id: "usr-admin-wahyu",
-    email: "wahyualdiriyanto80@gmail.com",
+    id: "usr-superadmin",
+    email: "superadmin@siajar.test",
     peran: "ADMIN" as const,
-    passwordHash: "$2a$10$3W9iE4YPVRgPJHbmsx2BsOwuuvOA0WxXKz5ozNWrDIGocxe4yBZOm", // Wahyu11
+    passwordHash: null,
     aktif: true,
   },
   {
     id: "usr-admin-1",
     email: "admin@siakad.uir.ac.id",
     peran: "ADMIN" as const,
-    passwordHash: "$2a$10$Wq31f3NqXhK2Gg4N2w6oTu7P6d5h8xK9f3Z8u5e7b2v1m0z9l8q2W", // password123
+    passwordHash: null,
     aktif: true,
   },
   // 8 Dosen
@@ -213,7 +213,7 @@ export const SEED_DOSEN = [
 
 export const SEED_MAHASISWA = [
   // 30 Mahasiswa Realistis
-  { id: "mhs-1", nim: "223510001", nama: "Wahyu Aldi Riyanto", email: "wahyualdi@student.uir.ac.id", angkatan: 2022, prodiId: "prodi-ti", dosenWaliId: "dsn-1" },
+  { id: "mhs-1", nim: "223510001", nama: "Ahmad Mahasiswa", email: "mhs2024001@student.uir.ac.id", angkatan: 2022, prodiId: "prodi-ti", dosenWaliId: "dsn-1" },
   { id: "mhs-2", nim: "223510002", nama: "Muhammad Rizky Pratama", email: "rizky.pratama@student.uir.ac.id", angkatan: 2022, prodiId: "prodi-ti", dosenWaliId: "dsn-1" },
   { id: "mhs-3", nim: "223510003", nama: "Annisa Rahmadani", email: "annisa.r@student.uir.ac.id", angkatan: 2022, prodiId: "prodi-ti", dosenWaliId: "dsn-1" },
   { id: "mhs-4", nim: "223510004", nama: "Dimas Anggara Putra", email: "dimas.ap@student.uir.ac.id", angkatan: 2022, prodiId: "prodi-ti", dosenWaliId: "dsn-1" },

@@ -56,7 +56,7 @@ export function AdminJadwalView({
   return (
     <div className="space-y-4">
       {feedback && (
-        <div className="rounded-[8px] bg-success-soft border border-success-border p-3 text-xs text-success flex justify-between items-center">
+        <div className="rounded-[8px] bg-surface border border-ink p-3 text-xs text-ink flex justify-between items-center">
           <span>{feedback}</span>
           <button onClick={() => setFeedback(null)} className="font-semibold">
             Tutup
@@ -65,7 +65,7 @@ export function AdminJadwalView({
       )}
 
       {errorFeedback && (
-        <div className="rounded-[8px] bg-danger-soft border border-danger-border p-3 text-xs text-danger flex items-center gap-2">
+        <div className="rounded-[8px] bg-surface border border-ink p-3 text-xs text-primary-dark flex items-center gap-2">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>{errorFeedback}</span>
         </div>

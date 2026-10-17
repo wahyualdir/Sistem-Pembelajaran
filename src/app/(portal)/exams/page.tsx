@@ -97,7 +97,7 @@ export default async function ExamsPage() {
       >
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6">
           <div className="space-y-1.5 sm:space-y-2">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-2.5 sm:gap-3">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2.5 sm:gap-3">
               <Award className="h-6 w-6 sm:h-7 sm:w-7 text-primary shrink-0" />
               <span>Ujian & Kuis Aktif</span>
             </h1>
@@ -109,7 +109,7 @@ export default async function ExamsPage() {
           <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
             <Link
               href="/exams/history"
-              className="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-lg border-2 border-black bg-retro-surface font-black text-xs sm:text-sm shadow-retro hover:bg-retro-warm transition-all"
+              className="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-lg border-2 border-black bg-retro-surface font-bold text-xs sm:text-sm shadow-retro hover:bg-gray-soft transition-all"
             >
               <FileText className="h-4 w-4" />
               <span>Riwayat Ujian & Kuis</span>
@@ -118,7 +118,7 @@ export default async function ExamsPage() {
             {isLecturer && (
               <Link
                 href="/classes"
-                className="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-lg border-2 border-black bg-black text-white font-black text-xs sm:text-sm shadow-retro-md hover:bg-neutral-800 transition-all"
+                className="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-lg border-2 border-black bg-black text-white font-bold text-xs sm:text-sm shadow-retro-md hover:bg-neutral-800 transition-all"
               >
                 <span>Buka Kelas untuk Buat Ujian &rarr;</span>
               </Link>
@@ -128,8 +128,8 @@ export default async function ExamsPage() {
       </RetroWindow>
 
       {/* 2. PANDUAN PENGAWASAN (PROCTORING BANNER) FULL WIDTH */}
-      <div className="rounded-xl border-2 border-black bg-retro-warm/50 p-4 sm:p-5 shadow-retro space-y-2 sm:space-y-3">
-        <div className="flex items-center gap-2 text-foreground font-heading font-black text-base">
+      <div className="rounded-xl border-2 border-black bg-gray-soft/50 p-4 sm:p-5 shadow-retro space-y-2 sm:space-y-3">
+        <div className="flex items-center gap-2 text-foreground font-heading font-bold text-base">
           <ShieldAlert className="h-5 w-5 text-primary shrink-0" />
           <span>Kebijakan Pengawasan Ujian Terpadu</span>
         </div>
@@ -141,10 +141,10 @@ export default async function ExamsPage() {
       {/* 3. DAFTAR SESI UJIAN AKTIF (GRID 3 KOLOM FULL WIDTH) */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="font-heading font-black text-lg sm:text-xl text-foreground">
+          <h2 className="font-heading font-bold text-lg sm:text-xl text-foreground">
             Sesi Ujian Tersedia ({quizzes.length})
           </h2>
-          <span className="text-xs font-mono font-black uppercase text-foreground">
+          <span className="text-xs font-sans font-bold uppercase text-foreground">
             Status: Real-time Terhubung
           </span>
         </div>
@@ -152,7 +152,7 @@ export default async function ExamsPage() {
         {quizzes.length === 0 ? (
           <div className="p-10 sm:p-14 text-center rounded-2xl border-2 border-dashed border-black bg-white shadow-retro space-y-3">
             <Award className="h-10 w-10 sm:h-12 sm:w-12 text-black/60 mx-auto" />
-            <h3 className="text-lg font-black text-black">Belum Ada Sesi Ujian Aktif</h3>
+            <h3 className="text-lg font-bold text-black">Belum Ada Sesi Ujian Aktif</h3>
             <p className="text-xs sm:text-sm text-black font-bold max-w-md mx-auto leading-relaxed">
               Saat ini belum ada jadwal kuis atau ujian aktif untuk kelas perkuliahan Anda.
             </p>
@@ -166,16 +166,16 @@ export default async function ExamsPage() {
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="px-3 py-1 rounded border-2 border-black bg-retro-yellow text-xs sm:text-sm font-mono font-black uppercase text-black shadow-retro-sm">
+                    <span className="px-3 py-1 rounded border-2 border-black bg-gray-soft text-xs sm:text-sm font-sans font-bold uppercase text-black shadow-retro-sm">
                       {quiz.exam_type ?? 'KUIS'}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 text-sm font-black text-black font-mono">
+                    <span className="inline-flex items-center gap-1.5 text-sm font-bold text-black font-sans">
                       <Clock className="h-4 w-4" />
                       {quiz.duration_minutes} Menit
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-black text-xl text-black leading-snug line-clamp-2">
+                  <h3 className="font-heading font-bold text-xl text-black leading-snug line-clamp-2">
                     {quiz.title}
                   </h3>
 
@@ -185,15 +185,15 @@ export default async function ExamsPage() {
                 </div>
 
                 <div className="pt-4 border-t-2 border-black/10 space-y-4">
-                  <div className="flex items-center justify-between text-sm font-mono font-black text-black">
+                  <div className="flex items-center justify-between text-sm font-sans font-bold text-black">
                     <span>Soal: {quiz.questions?.length ?? quiz.questionsCount ?? 10}</span>
                     <span>KKM: {quiz.kkm ?? 70}</span>
-                    <span className="text-primary font-black">Proctor: {quiz.proctoring_level ?? 'STANDARD'}</span>
+                    <span className="text-primary font-bold">Proctor: {quiz.proctoring_level ?? 'STANDARD'}</span>
                   </div>
 
                   <Link
                     href={`/classes/${quiz.class_id}/quizzes/${quiz.id}`}
-                    className="flex w-full items-center justify-center gap-2 py-3.5 rounded-lg border-2 border-black bg-black text-white font-heading font-black text-base shadow-retro hover:bg-neutral-800 transition-all text-center"
+                    className="flex w-full items-center justify-center gap-2 py-3.5 rounded-lg border-2 border-black bg-black text-white font-heading font-bold text-base shadow-retro hover:bg-neutral-800 transition-all text-center"
                   >
                     <Play className="h-5 w-5 fill-white" />
                     <span>{isLecturer ? 'Buka Panel Live Ujian' : 'Mulai Kerjakan Ujian'}</span>

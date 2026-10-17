@@ -51,7 +51,7 @@ export default function AssistantMaterialsPage() {
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
             <BookOpen className="h-7 w-7 text-primary" />
             <span>Materi & Panduan Asistensi</span>
           </h1>
@@ -70,19 +70,19 @@ export default function AssistantMaterialsPage() {
           >
             <div className="space-y-3">
               <div className="flex items-start justify-between">
-                <div className="p-2 rounded-lg border-2 border-black bg-retro-warm">
+                <div className="p-2 rounded-lg border-2 border-black bg-gray-soft">
                   <FileText className="h-5 w-5 text-foreground" />
                 </div>
-                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded border border-black bg-neutral-100">
+                <span className="text-xs font-sans font-bold px-2 py-0.5 rounded border border-black bg-neutral-100">
                   {m.code}
                 </span>
               </div>
 
               <div>
-                <span className="text-xs font-mono text-muted-foreground block truncate">
+                <span className="text-xs font-sans text-muted-foreground block truncate">
                   {m.course}
                 </span>
-                <h3 className="font-heading font-black text-base text-foreground mt-1 leading-snug">
+                <h3 className="font-heading font-bold text-base text-foreground mt-1 leading-snug">
                   {m.title}
                 </h3>
               </div>
@@ -93,7 +93,7 @@ export default function AssistantMaterialsPage() {
             </div>
 
             <div className="pt-3 flex items-center justify-between border-t-2 border-black/10">
-              <span className="text-xs text-muted-foreground font-mono">
+              <span className="text-xs text-muted-foreground font-sans">
                 {m.updatedAt}
               </span>
               <button

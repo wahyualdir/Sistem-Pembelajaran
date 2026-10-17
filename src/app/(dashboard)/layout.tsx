@@ -42,7 +42,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     roles.length > 1 ? (
       <Link
         href="/workspace"
-        className="flex items-center justify-between rounded-control bg-retro-warm px-3 py-2 text-sm font-medium transition-colors hover:bg-retro-yellow/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary border border-retro-border/40"
+        className="flex items-center justify-between rounded-control bg-gray-soft px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-soft/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary border border-retro-border/40"
       >
         <span className="flex items-center gap-2">
           <Layers className="h-4 w-4 text-muted-foreground" />
@@ -52,7 +52,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       </Link>
     ) : (
       <p className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span className="h-2 w-2 rounded-full bg-success" />
+        <span className="h-2 w-2 rounded-full bg-gray-dark" />
         {roleName}
       </p>
     );
@@ -64,13 +64,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
   };
 
   const account = (
-    <div className="border-t-[1.5px] border-retro-border bg-retro-warm/50 p-4">
+    <div className="border-t-[1.5px] border-retro-border bg-gray-soft/50 p-4">
       <p className="truncate text-sm font-bold text-foreground">{profile?.full_name}</p>
-      <p className="mb-3 truncate text-xs text-muted-foreground font-mono">{profile?.email}</p>
+      <p className="mb-3 truncate text-xs text-muted-foreground font-sans">{profile?.email}</p>
       <form action={logoutAction}>
         <button
           type="submit"
-          className="-mx-2.5 flex items-center gap-2 rounded-control px-2.5 py-1.5 text-sm font-semibold text-danger transition-colors hover:bg-danger/10 focus-visible:outline-none"
+          className="-mx-2.5 flex items-center gap-2 rounded-control px-2.5 py-1.5 text-sm font-semibold text-primary-dark transition-colors hover:bg-primary/10 focus-visible:outline-none"
         >
           <LogOut className="h-4 w-4" />
           Keluar

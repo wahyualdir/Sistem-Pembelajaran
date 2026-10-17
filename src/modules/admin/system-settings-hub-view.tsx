@@ -33,7 +33,7 @@ export function SystemSettingsHubView() {
       <RetroWindow
         title="pengaturan_platform_dan_branding.app"
         badge="SYSTEM_ADMIN :: CONFIGURATION"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -42,7 +42,7 @@ export function SystemSettingsHubView() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <Sliders className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
                 Pengaturan Platform & Branding
               </h1>
             </div>
@@ -66,10 +66,10 @@ export function SystemSettingsHubView() {
             <button
               key={t.id}
               onClick={() => setTab(t.id as SettingsTab)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold font-mono transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold font-sans transition-all cursor-pointer ${
                 isActive
                   ? 'bg-black text-white shadow-retro'
-                  : 'bg-white hover:bg-retro-warm text-black shadow-retro-sm'
+                  : 'bg-white hover:bg-gray-soft text-black shadow-retro-sm'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -85,18 +85,18 @@ export function SystemSettingsHubView() {
       {activeTab === 'platform-branding' && (
         <div className="p-5 sm:p-6 rounded-xl border-2 border-black bg-white shadow-retro space-y-6 max-w-2xl">
           <div className="border-b-2 border-black pb-3">
-            <h3 className="font-heading font-black text-lg text-black">Identitas Institusi Pendidikan Tinggi</h3>
-            <p className="text-xs text-black/60 font-mono">Tampil pada banner navigasi, kop surat transkrip, dan kartu ujian.</p>
+            <h3 className="font-heading font-bold text-lg text-black">Identitas Institusi Pendidikan Tinggi</h3>
+            <p className="text-xs text-black/60 font-sans">Tampil pada banner navigasi, kop surat transkrip, dan kartu ujian.</p>
           </div>
 
-          <div className="space-y-4 text-xs sm:text-sm font-mono">
+          <div className="space-y-4 text-xs sm:text-sm font-sans">
             <div>
               <label className="block font-bold text-black mb-1">Nama Perguruan Tinggi</label>
               <input
                 type="text"
                 disabled={!isDemo}
                 defaultValue={isDemo ? 'Universitas Teknologi & Sains Nusantara' : (process.env.NEXT_PUBLIC_INSTITUTION_NAME || 'Belum dikonfigurasi')}
-                className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 font-sans disabled:opacity-75 disabled:cursor-not-allowed"
+                className="w-full p-2.5 rounded border-2 border-black bg-gray-soft/20 font-sans disabled:opacity-75 disabled:cursor-not-allowed"
               />
             </div>
             <div>
@@ -105,7 +105,7 @@ export function SystemSettingsHubView() {
                 type="text"
                 disabled={!isDemo}
                 defaultValue={isDemo ? 'UTSN (001042)' : (process.env.NEXT_PUBLIC_INSTITUTION_CODE || 'Belum dikonfigurasi')}
-                className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 font-mono disabled:opacity-75 disabled:cursor-not-allowed"
+                className="w-full p-2.5 rounded border-2 border-black bg-gray-soft/20 font-sans disabled:opacity-75 disabled:cursor-not-allowed"
               />
             </div>
             <div>
@@ -114,7 +114,7 @@ export function SystemSettingsHubView() {
                 type="text"
                 disabled={!isDemo}
                 defaultValue={isDemo ? 'https://siajar.utsn.ac.id' : (process.env.NEXT_PUBLIC_APP_URL || 'Belum dikonfigurasi')}
-                className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 font-mono disabled:opacity-75 disabled:cursor-not-allowed"
+                className="w-full p-2.5 rounded border-2 border-black bg-gray-soft/20 font-sans disabled:opacity-75 disabled:cursor-not-allowed"
               />
             </div>
           </div>
@@ -125,18 +125,18 @@ export function SystemSettingsHubView() {
       {activeTab === 'pengaturan-ai' && (
         <div className="p-5 sm:p-6 rounded-xl border-2 border-black bg-white shadow-retro space-y-6 max-w-2xl">
           <div className="border-b-2 border-black pb-3">
-            <h3 className="font-heading font-black text-lg text-black">Parameter Model Asisten AI SIAJAR</h3>
-            <p className="text-xs text-black/60 font-mono">Digunakan untuk autograder esai, rekomendasi bank soal, dan ringkasan materi.</p>
+            <h3 className="font-heading font-bold text-lg text-black">Parameter Model Asisten AI SIAJAR</h3>
+            <p className="text-xs text-black/60 font-sans">Digunakan untuk autograder esai, rekomendasi bank soal, dan ringkasan materi.</p>
           </div>
 
-          <div className="space-y-4 text-xs sm:text-sm font-mono">
+          <div className="space-y-4 text-xs sm:text-sm font-sans">
             <div>
               <label className="block font-bold text-black mb-1">Default Model Evaluasi (Configurable via ENV)</label>
               <input
                 type="text"
                 disabled
                 value={configuredAiModel}
-                className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 font-mono font-bold"
+                className="w-full p-2.5 rounded border-2 border-black bg-gray-soft/20 font-sans font-bold"
               />
               <span className="text-xs text-black/60 mt-1 block">
                 Dapat disesuaikan melalui variabel <code className="bg-black/5 px-1 py-0.5 rounded font-bold">NEXT_PUBLIC_AI_MODEL</code> di lingkungan deployment.
@@ -148,10 +148,10 @@ export function SystemSettingsHubView() {
                 type="number"
                 disabled={!isDemo}
                 defaultValue={4096}
-                className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 font-mono disabled:opacity-75 disabled:cursor-not-allowed"
+                className="w-full p-2.5 rounded border-2 border-black bg-gray-soft/20 font-sans disabled:opacity-75 disabled:cursor-not-allowed"
               />
             </div>
-            <div className="p-3 bg-retro-warm border-2 border-black rounded text-xs">
+            <div className="p-3 bg-gray-soft border-2 border-black rounded text-xs">
               Suhu Kreativitas (Temperature): 0.2 (Konservatif & Akurat untuk Penilaian Akademik)
             </div>
           </div>
@@ -162,18 +162,18 @@ export function SystemSettingsHubView() {
       {activeTab === 'penyimpanan-file' && (
         <div className="p-5 sm:p-6 rounded-xl border-2 border-black bg-white shadow-retro space-y-6 max-w-2xl">
           <div className="border-b-2 border-black pb-3">
-            <h3 className="font-heading font-black text-lg text-black">Penyimpanan Berkas (Supabase Storage)</h3>
-            <p className="text-xs text-black/60 font-mono">Batas kuota unggahan materi kuliah, video rekaman, dan tugas.</p>
+            <h3 className="font-heading font-bold text-lg text-black">Penyimpanan Berkas (Supabase Storage)</h3>
+            <p className="text-xs text-black/60 font-sans">Batas kuota unggahan materi kuliah, video rekaman, dan tugas.</p>
           </div>
 
-          <div className="space-y-4 text-xs sm:text-sm font-mono">
+          <div className="space-y-4 text-xs sm:text-sm font-sans">
             <div>
               <label className="block font-bold text-black mb-1">Maksimal Ukuran Berkas Tugas</label>
               <input
                 type="text"
                 disabled={!isDemo}
                 defaultValue="25 MB per pengumpulan"
-                className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 font-mono disabled:opacity-75 disabled:cursor-not-allowed"
+                className="w-full p-2.5 rounded border-2 border-black bg-gray-soft/20 font-sans disabled:opacity-75 disabled:cursor-not-allowed"
               />
             </div>
             <div>
@@ -182,10 +182,10 @@ export function SystemSettingsHubView() {
                 type="text"
                 disabled={!isDemo}
                 defaultValue="100 MB per materi"
-                className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 font-mono disabled:opacity-75 disabled:cursor-not-allowed"
+                className="w-full p-2.5 rounded border-2 border-black bg-gray-soft/20 font-sans disabled:opacity-75 disabled:cursor-not-allowed"
               />
             </div>
-            <div className="p-3 bg-retro-warm border-2 border-black rounded text-xs font-mono">
+            <div className="p-3 bg-gray-soft border-2 border-black rounded text-xs font-sans">
               Status Provider: {isDemo ? 'Supabase Storage Bucket (Demo Sesi)' : (process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Supabase Storage Terhubung' : 'Belum terhubung')}
             </div>
           </div>

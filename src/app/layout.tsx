@@ -1,6 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import "./fonts-sf-pro.css";
+import { Inter } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  axes: ["opsz"],
+});
 
 export const metadata: Metadata = {
   title: "SIAJAR — Sistem Informasi Ajar Terpadu",
@@ -18,34 +25,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="id">
-      <head>
-        <link
-          rel="preload"
-          href="/fonts/SFProDisplay-Bold.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/SFProDisplay-Semibold.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/SFProDisplay-Regular.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body className="min-h-[100dvh] overflow-x-hidden bg-background font-sans font-bold text-foreground antialiased">
+    <html lang="id" className={inter.variable}>
+      <body className="min-h-[100dvh] overflow-x-hidden bg-background font-sans font-medium text-foreground antialiased">
         {children}
       </body>
     </html>
   );
 }
+
 

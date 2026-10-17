@@ -86,7 +86,7 @@ export default function AttendanceHistoryPage() {
       <RetroWindow
         title="riwayat_presensi_kehadiran.app"
         badge={`Kehadiran ${attendanceRate}%`}
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-4 sm:p-6 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -95,7 +95,7 @@ export default function AttendanceHistoryPage() {
               <div className="p-2 sm:p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <CalendarCheck2 className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-foreground">
                 Riwayat Presensi Kuliah
               </h1>
             </div>
@@ -119,32 +119,32 @@ export default function AttendanceHistoryPage() {
       {/* 2. STATS KEHADIRAN (PROPORTIONAL CARDS) */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
         <div className="rounded-xl border-2 border-black bg-white p-5 sm:p-6 shadow-retro space-y-2 hover:-translate-y-0.5 transition-all">
-          <div className="text-xs sm:text-sm font-mono font-black uppercase text-neutral-800 tracking-wider">
+          <div className="text-xs sm:text-sm font-sans font-bold uppercase text-neutral-800 tracking-wider">
             Total Sesi Diikuti
           </div>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">
-            {DEMO_ATTENDANCE.length} <span className="text-xs sm:text-sm font-mono font-bold text-neutral-700">Pertemuan</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">
+            {DEMO_ATTENDANCE.length} <span className="text-xs sm:text-sm font-sans font-bold text-neutral-700">Pertemuan</span>
           </div>
           <p className="text-xs sm:text-sm text-neutral-800 font-medium">Semester Ganjil 2026/2027</p>
         </div>
 
         <div className="rounded-xl border-2 border-black bg-white p-5 sm:p-6 shadow-retro space-y-2 hover:-translate-y-0.5 transition-all">
-          <div className="text-xs sm:text-sm font-mono font-black uppercase text-neutral-800 tracking-wider">
+          <div className="text-xs sm:text-sm font-sans font-bold uppercase text-neutral-800 tracking-wider">
             Persentase Hadir
           </div>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">
             {attendanceRate}%
           </div>
-          <div className="inline-flex items-center gap-1 text-xs font-mono font-black text-emerald-950 bg-emerald-100 border-2 border-black px-2.5 py-1 rounded shadow-xs">
+          <div className="inline-flex items-center gap-1 text-xs font-sans font-bold text-ink bg-surface border-2 border-black px-2.5 py-1 rounded shadow-xs">
             ✓ Lolos Ambang Batas Ujian (&ge;75%)
           </div>
         </div>
 
         <div className="rounded-xl border-2 border-black bg-white p-5 sm:p-6 shadow-retro space-y-2 hover:-translate-y-0.5 transition-all">
-          <div className="text-xs sm:text-sm font-mono font-black uppercase text-neutral-800 tracking-wider">
+          <div className="text-xs sm:text-sm font-sans font-bold uppercase text-neutral-800 tracking-wider">
             Metode Paling Sering
           </div>
-          <div className="text-xl sm:text-2xl font-heading font-black text-black truncate">
+          <div className="text-xl sm:text-2xl font-heading font-bold text-black truncate">
             QR Dinamis & Lokasi
           </div>
           <p className="text-xs sm:text-sm text-neutral-800 font-medium">Validasi Koordinat GPS Haversine</p>
@@ -153,18 +153,18 @@ export default function AttendanceHistoryPage() {
 
       {/* 3. TABEL RIWAYAT LOG PRESENSI */}
       <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
-        <div className="p-4 sm:p-5 bg-retro-warm border-b-2 border-black flex items-center justify-between">
-          <h2 className="font-heading font-black text-base sm:text-lg text-black">
+        <div className="p-4 sm:p-5 bg-gray-soft border-b-2 border-black flex items-center justify-between">
+          <h2 className="font-heading font-bold text-base sm:text-lg text-black">
             Log Presensi Terbaru ({DEMO_ATTENDANCE.length})
           </h2>
-          <span className="text-xs sm:text-sm font-mono font-bold text-neutral-800">
+          <span className="text-xs sm:text-sm font-sans font-bold text-neutral-800">
             Timestamp Server Terverifikasi
           </span>
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="border-b-2 border-black bg-retro-warm text-xs sm:text-sm font-mono font-black uppercase text-black">
+            <thead className="border-b-2 border-black bg-gray-soft text-xs sm:text-sm font-sans font-bold uppercase text-black">
               <tr>
                 <th className="p-4">Mata Kuliah & Pertemuan</th>
                 <th className="p-4">Tanggal & Jam</th>
@@ -175,18 +175,18 @@ export default function AttendanceHistoryPage() {
             </thead>
             <tbody className="divide-y-2 divide-black/10">
               {DEMO_ATTENDANCE.map((record) => (
-                <tr key={record.id} className="hover:bg-retro-warm/30 transition-colors font-medium">
+                <tr key={record.id} className="hover:bg-gray-soft/30 transition-colors font-medium">
                   <td className="p-4">
-                    <div className="font-heading font-black text-sm sm:text-base text-black">{record.courseTitle}</div>
-                    <div className="text-xs font-mono font-bold text-neutral-800 mt-0.5">Pertemuan ke-{record.meetingNumber}</div>
+                    <div className="font-heading font-bold text-sm sm:text-base text-black">{record.courseTitle}</div>
+                    <div className="text-xs font-sans font-bold text-neutral-800 mt-0.5">Pertemuan ke-{record.meetingNumber}</div>
                   </td>
-                  <td className="p-4 font-mono text-xs sm:text-sm font-bold text-neutral-900">
+                  <td className="p-4 font-sans text-xs sm:text-sm font-bold text-neutral-900">
                     <div>{record.date}</div>
                     <div className="text-neutral-700">{record.time}</div>
                   </td>
                   <td className="p-4 text-xs sm:text-sm font-bold text-black">{record.room}</td>
                   <td className="p-4 text-center">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded border-2 border-black bg-white text-xs font-mono font-black shadow-xs">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded border-2 border-black bg-white text-xs font-sans font-bold shadow-xs">
                       {record.method === 'QR' && <QrCode className="h-3.5 w-3.5 text-black" />}
                       {record.method === 'LOKASI' && <MapPin className="h-3.5 w-3.5 text-black" />}
                       {record.method === 'BIOMETRIK' && <Fingerprint className="h-3.5 w-3.5 text-black" />}
@@ -195,12 +195,12 @@ export default function AttendanceHistoryPage() {
                   </td>
                   <td className="p-4 text-right">
                     <span
-                      className={`inline-flex items-center px-3 py-1 rounded text-xs font-mono font-black border-2 border-black shadow-xs ${
+                      className={`inline-flex items-center px-3 py-1 rounded text-xs font-sans font-bold border-2 border-black shadow-xs ${
                         record.status === 'HADIR'
                           ? 'bg-retro-mint text-black'
                           : record.status === 'TERLAMBAT'
-                          ? 'bg-retro-yellow text-black'
-                          : 'bg-retro-warm text-black'
+                          ? 'bg-gray-soft text-black'
+                          : 'bg-gray-soft text-black'
                       }`}
                     >
                       {record.status}

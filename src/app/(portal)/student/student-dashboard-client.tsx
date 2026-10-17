@@ -31,6 +31,8 @@ import {
   type AgendaItem,
   getHomeBannerAction,
 } from '@/modules/academic/home-actions';
+import { StudentAcademicStatusCard } from '@/components/home/student-academic-status-card';
+import type { StudentRiskEvaluation } from '@/modules/early-warning/types';
 
 const RECOMMENDED_MATERIALS = [
   {
@@ -39,31 +41,31 @@ const RECOMMENDED_MATERIALS = [
     course: 'Pemrograman Web Lanjut',
     type: 'Modul Kuliah',
     badgeColor: 'bg-primary',
-    accent: 'terracotta',
+    accent: 'primary',
   },
   {
     id: 'mat-2',
     title: 'Kuis Evaluasi Algoritma Greedy',
     course: 'Struktur Data & Algoritma',
     type: 'Kuis Interaktif',
-    badgeColor: 'bg-info',
-    accent: 'navy',
+    badgeColor: 'bg-gray-dark',
+    accent: 'ink',
   },
   {
     id: 'mat-3',
     title: 'Software Architecture Patterns',
     course: 'Rekayasa Perangkat Lunak',
     type: 'Buku Referensi',
-    badgeColor: 'bg-success',
-    accent: 'emerald',
+    badgeColor: 'bg-ink',
+    accent: 'ink',
   },
   {
     id: 'mat-4',
     title: 'Praktikum: Deep Learning Pipeline',
     course: 'Kecerdasan Buatan',
     type: 'Tugas Praktikum',
-    badgeColor: 'bg-warning',
-    accent: 'yellow',
+    badgeColor: 'bg-gray-soft',
+    accent: 'gray',
   },
 ];
 
@@ -77,6 +79,7 @@ export interface StudentDashboardClientProps {
   summaryData?: HomeSummaryData;
   agendaItems?: AgendaItem[];
   deadlineItems?: Array<{ assignment_id: string; class_id: string; class_title: string; title: string; due_at: string }>;
+  academicStatus?: StudentRiskEvaluation[];
 }
 
 export function StudentDashboardClient({
@@ -86,6 +89,7 @@ export function StudentDashboardClient({
   activeClasses = [],
   summaryData,
   agendaItems = [],
+  academicStatus = [],
 }: StudentDashboardClientProps) {
   const currentBannerData: HomeBannerData = bannerData || {
     primary: {
@@ -166,12 +170,12 @@ export function StudentDashboardClient({
       {/* ========================================================= */}
       {/* 1. BAGIAN TENGAH: "HARI INI + KELAS SAYA" (LAPANG & BESAR)  */}
       {/* ========================================================= */}
-      <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-36 sm:pb-40 lg:pb-44 min-w-0">
+      <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
         <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
           {/* HEADER BERANDA: RUANG PEMBELAJARAN MAHASISWA */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
             <div className="space-y-0.5">
-              <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
                 <BookOpen className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
                 Ruang Pembelajaran Mahasiswa
               </h1>
@@ -180,7 +184,7 @@ export function StudentDashboardClient({
               </p>
             </div>
             <div className="hidden sm:flex items-center gap-2 shrink-0">
-              <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-mono font-black bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
                 SEMESTER AKTIF 2026/2027
               </span>
             </div>
@@ -188,7 +192,7 @@ export function StudentDashboardClient({
 
           {/* ROW 1: CATEGORIES PILLS (FILTER CHIP) */}
           <section aria-label="Kategori Perkuliahan" className="space-y-2.5 sm:space-y-3">
-            <h2 className="font-heading font-black text-xs sm:text-sm uppercase tracking-wider text-gray-dark">
+            <h2 className="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-gray-dark">
               Categories
             </h2>
             <div className="flex flex-wrap items-center gap-2 pb-1.5">
@@ -199,7 +203,7 @@ export function StudentDashboardClient({
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      'px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-black tracking-tight shrink-0 transition-all focus-visible:outline-none',
+                      'px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold tracking-tight shrink-0 transition-all focus-visible:outline-none',
                       isActive
                         ? 'border-2 border-ink bg-ink text-white shadow-retro scale-[1.02]'
                         : 'border-2 border-ink bg-surface text-ink shadow-retro hover:bg-gray-soft hover:-translate-y-0.5'
@@ -218,17 +222,22 @@ export function StudentDashboardClient({
             onRefresh={async () => getHomeBannerAction()}
           />
 
+          {/* SECTION STATUS AKADEMIK & PERINGATAN DINI */}
+          {(showAll || showKelasSaya) && (
+            <StudentAcademicStatusCard evaluations={academicStatus} />
+          )}
+
           {/* SECTION: KARTU LANJUTKAN BELAJAR (Tampil pada Semua, Kelas Saya, Tugas & Kuis) */}
           {(showAll || showKelasSaya || showTugasKuis) && (
             <section aria-label="Lanjutkan Belajar" className="space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="font-heading font-black text-xl sm:text-2xl tracking-tight text-ink flex items-center gap-2">
+                <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary inline-block" />
                   Lanjutkan Belajar
                 </h2>
                 <Link
                   href="/mahasiswa/tugas"
-                  className="text-xs sm:text-sm font-black text-primary hover:text-primary-dark transition-colors"
+                  className="text-xs sm:text-sm font-bold text-primary-dark hover:text-ink transition-colors"
                 >
                   Lihat Semua Materi &rarr;
                 </Link>
@@ -238,26 +247,26 @@ export function StudentDashboardClient({
                 <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                   <div className="space-y-1.5 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-black bg-gray-soft border border-ink text-ink">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft border border-ink text-ink">
                         {materiTerakhir.kelas.kode}
                       </span>
-                      <span className="text-xs font-black text-gray-dark truncate">
+                      <span className="text-xs font-bold text-gray-dark truncate">
                         {materiTerakhir.kelas.namaMataKuliah}
                       </span>
                       {materiTerakhir.progres.selesai ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-black bg-success text-ink border border-ink">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-surface text-ink border-2 border-ink">
                           <CheckCircle2 className="h-3 w-3" />
                           Selesai
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-black bg-warning text-ink border border-ink">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft text-ink border border-ink">
                           <Clock className="h-3 w-3" />
                           Sedang Dipelajari
                         </span>
                       )}
                     </div>
 
-                    <h3 className="font-heading font-black text-lg sm:text-xl text-ink line-clamp-1">
+                    <h3 className="font-heading font-bold text-lg sm:text-xl text-ink line-clamp-1">
                       {materiTerakhir.materi.judul}
                     </h3>
 
@@ -317,7 +326,7 @@ export function StudentDashboardClient({
                     <Clock className="h-5 w-5 text-primary" />
                   </div>
                   <div>
-                    <h2 className="font-heading font-black text-xl sm:text-2xl tracking-tight text-ink">
+                    <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink">
                       Presensi & Kehadiran Perkuliahan
                     </h2>
                     <p className="text-xs text-gray-dark font-medium">
@@ -327,7 +336,7 @@ export function StudentDashboardClient({
                 </div>
                 <Link
                   href="/attendance"
-                  className="text-xs sm:text-sm font-black text-primary hover:text-primary-dark transition-colors shrink-0"
+                  className="text-xs sm:text-sm font-bold text-primary-dark hover:text-ink transition-colors shrink-0"
                 >
                   Buka Presensi Terpadu &rarr;
                 </Link>
@@ -338,21 +347,21 @@ export function StudentDashboardClient({
                 {/* Kartu 1: Rata-rata Kehadiran */}
                 <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase text-gray-dark">
+                    <span className="text-xs font-sans font-medium uppercase tracking-[0.04em] text-gray-dark">
                       Rata-Rata Kehadiran
                     </span>
                     {currentSummary.attendanceQualified ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-success text-ink border border-ink">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-semibold bg-surface text-ink border-2 border-ink">
                         <CheckCircle2 className="h-3 w-3" /> Lolos Syarat UAS
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft text-ink border border-ink">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-semibold bg-gray-soft text-ink border border-ink">
                         {courses.length === 0 ? 'Belum Ada Kelas' : 'Belum Ada Presensi'}
                       </span>
                     )}
                   </div>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-3xl font-heading font-black text-ink">
+                    <span className="text-3xl font-heading font-bold text-ink tabular-nums">
                       {currentSummary.averageAttendance}
                     </span>
                     <span className="text-xs font-medium text-gray-dark">
@@ -374,7 +383,7 @@ export function StudentDashboardClient({
                 {courses.length === 0 ? (
                   <div className="rounded-xl border-2 border-dashed border-ink bg-surface/50 p-5 shadow-retro md:col-span-2 flex flex-col items-center justify-center text-center space-y-2">
                     <Clock className="h-7 w-7 text-gray-dark" />
-                    <h3 className="font-heading font-black text-base text-ink">
+                    <h3 className="font-heading font-bold text-base text-ink">
                       Belum Ada Sesi Presensi Aktif
                     </h3>
                     <p className="text-xs text-gray-dark max-w-md">
@@ -383,7 +392,7 @@ export function StudentDashboardClient({
                     <div className="pt-1">
                       <Link
                         href="/classes"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-warning text-xs font-bold text-ink transition-all shadow-xs"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold text-ink transition-all shadow-xs"
                       >
                         <span>Buka Kelas Saya</span>
                         <ChevronRight className="h-3.5 w-3.5" />
@@ -394,14 +403,15 @@ export function StudentDashboardClient({
                   <div className="rounded-xl border-2 border-ink bg-gray-soft/40 p-4 sm:p-5 shadow-retro space-y-3 md:col-span-2 flex flex-col justify-between">
                     <div className="space-y-1">
                       <div className="flex items-center justify-between flex-wrap gap-2">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-sans font-black bg-success text-ink border border-ink animate-pulse">
-                          ● SESI AKTIF TERBUKA
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-sans font-bold bg-gray-dark text-white border-2 border-ink">
+                          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                          SESI AKTIF TERBUKA
                         </span>
-                        <span className="text-xs font-mono font-bold text-gray-dark">
+                        <span className="text-xs font-sans font-bold text-gray-dark">
                           Tutup: 10:30 WIB (25 menit lagi)
                         </span>
                       </div>
-                      <h3 className="font-heading font-black text-lg sm:text-xl text-ink pt-1">
+                      <h3 className="font-heading font-bold text-lg sm:text-xl text-ink pt-1">
                         Pemrograman Web Lanjut (TI-301) — Pertemuan #7
                       </h3>
                       <p className="text-xs text-gray-dark font-medium">
@@ -410,7 +420,7 @@ export function StudentDashboardClient({
                     </div>
 
                     <div className="flex items-center justify-between gap-3 pt-2 border-t border-ink/10">
-                      <span className="text-xs font-mono font-bold text-gray-dark">
+                      <span className="text-xs font-sans font-bold text-gray-dark">
                         Ruang: Lab Komputer 2 (Hybrid)
                       </span>
                       <Link
@@ -445,12 +455,12 @@ export function StudentDashboardClient({
           {(showAll || showTugasKuis) && (
             <section aria-label="Materi dan Tugas Kuliah" className="space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-ink">
+                <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
                   Recommended / Materi & Tugas
                 </h2>
                 <Link
                   href="/classes"
-                  className="text-base sm:text-lg font-black text-primary hover:text-primary-dark transition-colors"
+                  className="text-base sm:text-lg font-bold text-primary-dark hover:text-ink transition-colors"
                 >
                   more &rarr;
                 </Link>
@@ -459,7 +469,7 @@ export function StudentDashboardClient({
               {courses.length === 0 ? (
                 <div className="rounded-2xl border-2 border-dashed border-ink bg-surface/50 p-6 sm:p-8 text-center space-y-2 shadow-retro">
                   <BookOpen className="h-8 w-8 text-gray-dark mx-auto" />
-                  <p className="font-heading font-black text-base text-ink">
+                  <p className="font-heading font-bold text-base text-ink">
                     Belum Ada Materi & Tugas Direkomendasikan
                   </p>
                   <p className="text-xs text-gray-dark max-w-md mx-auto">
@@ -468,7 +478,7 @@ export function StudentDashboardClient({
                   <div className="pt-2">
                     <Link
                       href="/classes"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 border-ink bg-gray-soft hover:bg-warning text-xs font-bold text-ink shadow-retro transition-all"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold text-ink shadow-retro transition-all"
                     >
                       <span>Mulai dari Kelas Saya</span>
                       <ChevronRight className="h-3.5 w-3.5" />
@@ -497,13 +507,13 @@ export function StudentDashboardClient({
                         >
                           <BookOpen className="h-9 w-9" />
                         </div>
-                        <span className="text-xs sm:text-sm font-sans font-black tracking-wider uppercase">
+                        <span className="text-xs sm:text-sm font-sans font-bold tracking-wider uppercase">
                           {mat.type}
                         </span>
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="font-heading font-black text-xl text-ink line-clamp-2 leading-snug group-hover:underline transition-colors">
+                        <h4 className="font-heading font-bold text-xl text-ink line-clamp-2 leading-snug group-hover:underline transition-colors">
                           {mat.title}
                         </h4>
                         <p className="text-base text-gray-dark truncate font-bold">
@@ -525,7 +535,7 @@ export function StudentDashboardClient({
       {/* Mode Desktop (>= 1280px / xl): Sticky dengan scroll internal sendiri */}
       <aside
         aria-label="Panel Ringkasan & Detail"
-        className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 space-y-6 flex-col sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-48 sm:pb-52"
+        className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
         {/* BAGIAN 2 ELEMEN BEKU: KARTU LOGO TEKNOLOGI (BASELINE IDENTIK 402x351) */}
         <div className="shrink-0 w-full">
@@ -560,16 +570,16 @@ export function StudentDashboardClient({
           {/* Drawer Container (Rem-based Responsive Scaling) */}
           <div className="relative w-full max-w-[22rem] sm:w-right-panel bg-retro-bg border-l-2 border-retro-border h-[100dvh] flex flex-col shadow-2xl z-10 animate-slide-in-right pr-[env(safe-area-inset-right,0px)] pb-[env(safe-area-inset-bottom,0px)]">
             {/* Header Drawer */}
-            <div className="flex h-header items-center justify-between px-6 border-b-2 border-retro-border bg-retro-warm shrink-0">
+            <div className="flex h-header items-center justify-between px-6 border-b-2 border-retro-border bg-gray-soft shrink-0">
               <div className="flex items-center gap-2">
-                <span className="font-heading font-black text-base text-foreground tracking-tight">
+                <span className="font-heading font-bold text-base text-foreground tracking-tight">
                   Ringkasan & Detail
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setIsRightDrawerOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-foreground hover:bg-retro-warm shadow-retro-sm active:translate-y-0.5 transition-all focus-visible:outline-none cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-foreground hover:bg-gray-soft shadow-retro-sm active:translate-y-0.5 transition-all focus-visible:outline-none cursor-pointer"
                 title="Tutup Panel (Esc)"
                 aria-label="Tutup Panel"
               >
@@ -578,7 +588,7 @@ export function StudentDashboardClient({
             </div>
 
             {/* Konten Scrollable Internal */}
-            <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6 pb-48 sm:pb-52">
+            <div className="flex-1 overflow-y-auto p-5 sm:p-6 flex flex-col gap-5 pb-24">
               <div className="shrink-0 w-full">
                 <UirLogo3D />
               </div>

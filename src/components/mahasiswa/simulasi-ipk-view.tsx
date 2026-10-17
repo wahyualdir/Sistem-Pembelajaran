@@ -123,16 +123,16 @@ export function SimulasiIpkView({
           </CardHeader>
           <CardContent className="space-y-1.5">
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-foreground font-heading tabular-nums">
+              <span className="text-3xl font-bold text-foreground font-heading tabular-nums">
                 {hasil.ipkProyeksi.toFixed(2)}
               </span>
               <span
                 className={`text-xs font-bold px-2 py-0.5 rounded-[6px] border ${
                   hasil.selisihIpk > 0
-                    ? "bg-success-soft text-success border-success/30"
+                    ? "bg-surface text-ink border-2 border-ink"
                     : hasil.selisihIpk < 0
-                    ? "bg-danger-soft text-danger border-danger/30"
-                    : "bg-muted text-muted-foreground border-border"
+                    ? "bg-primary text-white font-bold border border-ink"
+                    : "bg-gray-soft text-ink border border-ink"
                 }`}
               >
                 {hasil.selisihIpk > 0 ? `+${hasil.selisihIpk.toFixed(2)}` : hasil.selisihIpk.toFixed(2)}
@@ -153,7 +153,7 @@ export function SimulasiIpkView({
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-1.5">
-            <div className="text-3xl font-extrabold text-primary font-heading tabular-nums">
+            <div className="text-3xl font-bold text-primary font-heading tabular-nums">
               {hasil.ipsProyeksi.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -172,13 +172,13 @@ export function SimulasiIpkView({
           </CardHeader>
           <CardContent className="space-y-1.5">
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-extrabold text-foreground font-heading tabular-nums">
+              <span className="text-3xl font-bold text-foreground font-heading tabular-nums">
                 {hasil.totalSksLulusProyeksi}
               </span>
               <span className="text-xs text-muted-foreground">/ 144 SKS</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Pertambahan: <strong className="text-success">+{hasil.sksBertambah} SKS</strong>
+              Pertambahan: <strong className="text-foreground">+{hasil.sksBertambah} SKS</strong>
             </p>
           </CardContent>
         </Card>
@@ -269,7 +269,7 @@ export function SimulasiIpkView({
                         </td>
                         <td className="py-3 px-4">
                           <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xs font-mono px-1.5 py-0">
+                            <Badge variant="outline" className="text-xs font-sans px-1.5 py-0">
                               {mk.kodeMataKuliah}
                             </Badge>
                             <span className="font-semibold text-foreground">

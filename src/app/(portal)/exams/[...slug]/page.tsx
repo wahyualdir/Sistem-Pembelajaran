@@ -17,6 +17,7 @@ import {
   XCircle,
   HelpCircle,
   Terminal,
+  Sparkles,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import {
@@ -24,7 +25,10 @@ import {
   getQuestionBankAction,
   getExamLiveStatusAction,
 } from '@/modules/academic/quiz-actions';
+import { listMyClassesAction } from '@/modules/academic/actions';
 import { ExamLiveMonitorPanel, CreateQuizModal } from '@/modules/academic/quiz-components';
+import { AiQuizGeneratorModal } from '@/modules/academic/ai-quiz-generator-modal';
+import { cn } from '@/lib/utils';
 
 interface PageProps {
   params: {
@@ -113,8 +117,11 @@ export default async function ExamSubpage({ params }: PageProps) {
   }
 
   const subroute = params.slug?.[0] || '';
-  const quizzes = await getAllQuizzesAction().catch(() => []);
-  const rawBank = await getQuestionBankAction().catch(() => []);
+  const [quizzes, rawBank, myClasses] = await Promise.all([
+    getAllQuizzesAction().catch(() => []),
+    getQuestionBankAction().catch(() => []),
+    listMyClassesAction().catch(() => []),
+  ]);
   const questionBank = rawBank.length > 0 ? rawBank : DEFAULT_SAMPLE_QUESTIONS;
   const activeExam = quizzes[0] || null;
 
@@ -128,7 +135,7 @@ export default async function ExamSubpage({ params }: PageProps) {
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
               <ShieldAlert className="h-7 w-7 text-primary" />
               <span>Panel Live Pengawasan Ujian</span>
             </h1>
@@ -147,7 +154,7 @@ export default async function ExamSubpage({ params }: PageProps) {
         ) : (
           <div className="rounded-xl border-2 border-black bg-white p-8 shadow-retro text-center space-y-3">
             <ShieldAlert className="h-10 w-10 text-muted-foreground mx-auto" />
-            <h3 className="font-heading font-black text-lg text-foreground">Tidak Ada Ujian yang Sedang Berjalan</h3>
+            <h3 className="font-heading font-bold text-lg text-foreground">Tidak Ada Ujian yang Sedang Berjalan</h3>
             <p className="text-xs text-muted-foreground max-w-md mx-auto">
               Buka sesi ujian dari daftar kelas atau menu Buat Ujian/Kuis untuk mulai memantau peserta.
             </p>
@@ -168,7 +175,7 @@ export default async function ExamSubpage({ params }: PageProps) {
         >
           <div className="p-6 sm:p-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="space-y-2">
-              <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+              <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
                 <FolderArchive className="h-7 w-7 text-primary" />
                 <span>Bank Soal Perkuliahan</span>
               </h1>
@@ -176,21 +183,24 @@ export default async function ExamSubpage({ params }: PageProps) {
                 Koleksi butir soal pilihan ganda, benar/salah, essay, menjodohkan, dan live coding yang dapat digunakan ulang di seluruh kelas perkuliahan.
               </p>
             </div>
-            <Link
-              href="/classes"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-black text-white font-bold text-xs shadow-retro hover:bg-neutral-800 transition-all"
-            >
-              <PlusCircle className="h-4 w-4" />
-              <span>Tambah Soal Baru</span>
-            </Link>
+            <div className="flex flex-wrap items-center gap-2.5">
+              <AiQuizGeneratorModal classes={myClasses} />
+              <Link
+                href="/classes"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-ink text-white font-bold text-xs shadow-retro hover:bg-gray-dark transition-all"
+              >
+                <PlusCircle className="h-4 w-4" />
+                <span>Tambah Soal Manual</span>
+              </Link>
+            </div>
           </div>
         </RetroWindow>
 
         {/* Grid 3 Kolom Soal Full-Width */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-heading font-black text-xl text-foreground">Daftar Soal Tersedia ({questionBank.length})</h2>
-            <span className="text-xs font-mono font-bold bg-neutral-100 px-3 py-1 rounded border border-black">
+            <h2 className="font-heading font-bold text-xl text-foreground">Daftar Soal Tersedia ({questionBank.length})</h2>
+            <span className="text-xs font-sans font-bold bg-neutral-100 px-3 py-1 rounded border border-black">
               Standar Mutu SPMI & OBE
             </span>
           </div>
@@ -199,30 +209,58 @@ export default async function ExamSubpage({ params }: PageProps) {
             {questionBank.map((q: any, idx: number) => (
               <div
                 key={q.id || idx}
-                className="rounded-xl border-2 border-black bg-white p-6 shadow-retro flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-transform"
+                className={cn(
+                  'rounded-xl border-2 border-black bg-white p-6 shadow-retro flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-transform',
+                  q.needs_revision && 'border-primary ring-2 ring-primary/40'
+                )}
               >
                 <div className="space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="px-3 py-1 rounded-md border-2 border-black bg-white text-xs sm:text-sm font-black text-black">
+                    <span className="px-3 py-1 rounded-md border-2 border-black bg-white text-xs sm:text-sm font-bold text-black">
                       {q.question_type}
                     </span>
-                    <span className="px-3 py-1 rounded-md border-2 border-black bg-retro-yellow text-xs sm:text-sm font-black text-black">
+                    <span className="px-3 py-1 rounded-md border-2 border-black bg-gray-soft text-xs sm:text-sm font-bold text-black">
                       {q.difficulty || 'MEDIUM'}
                     </span>
-                    <span className="text-sm font-black text-black">
+                    <span className="text-sm font-bold text-black">
                       {q.points} Poin
                     </span>
                   </div>
 
+                  {q.is_ai_generated && (
+                    <div className="flex items-center gap-1.5">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded border border-black bg-surface text-ink text-xs font-bold shadow-xs">
+                        <Sparkles className="h-3 w-3 text-primary" />
+                        AI Terverifikasi Dosen ({q.approved_by || 'Dosen Pengampu'})
+                      </span>
+                    </div>
+                  )}
+
+                  {q.needs_revision && (
+                    <div className="p-2.5 rounded-lg border-2 border-primary bg-primary text-white text-xs font-bold flex items-start gap-2 shadow-xs">
+                      <ShieldAlert className="h-4 w-4 shrink-0 mt-0.5" />
+                      <div>
+                        <span className="block font-heading uppercase text-[11px] opacity-90">Peringatan Bank Soal</span>
+                        <span>Perlu Ditinjau: {q.revision_note || 'Daya pembeda rendah / dicurigai keliru'}</span>
+                      </div>
+                    </div>
+                  )}
+
                   <p className="text-base font-bold text-black leading-snug line-clamp-3">
                     {q.question_text}
                   </p>
+
+                  {q.explanation && (
+                    <p className="text-[11px] text-gray-dark bg-gray-soft/40 p-2 rounded border border-black/10 font-medium">
+                      <strong className="text-ink">Penjelasan:</strong> {q.explanation}
+                    </p>
+                  )}
                 </div>
 
                 <div className="pt-3 border-t-2 border-black/20 space-y-2">
-                  {q.cpl_tag && (
-                    <span className="text-xs font-bold text-black bg-retro-warm px-3 py-1 rounded-md border border-black block truncate">
-                      {q.cpl_tag}
+                  {(q.cpl_tag || q.cpmk) && (
+                    <span className="text-xs font-bold text-black bg-gray-soft px-3 py-1 rounded-md border border-black block truncate">
+                      {q.cpl_tag || q.cpmk}
                     </span>
                   )}
                   {q.topic_tag && (
@@ -249,7 +287,7 @@ export default async function ExamSubpage({ params }: PageProps) {
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
               <AlertCircle className="h-7 w-7 text-primary" />
               <span>Log Pelanggaran & Integritas Ujian</span>
             </h1>
@@ -262,19 +300,19 @@ export default async function ExamSubpage({ params }: PageProps) {
         {/* Kartu Grid Log Kejadian Full Width */}
         <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
-            <h2 className="font-heading font-black text-xl text-black">Log Kejadian Real-Time Integritas</h2>
-            <span className="text-xs sm:text-sm font-bold bg-retro-warm px-3 py-1 rounded-md border-2 border-black">
+            <h2 className="font-heading font-bold text-xl text-black">Log Kejadian Real-Time Integritas</h2>
+            <span className="text-xs sm:text-sm font-bold bg-gray-soft px-3 py-1 rounded-md border-2 border-black">
               Status: Append-Only Immutable
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div className="p-5 rounded-xl border-2 border-black bg-retro-warm/30 shadow-xs space-y-3">
+            <div className="p-5 rounded-xl border-2 border-black bg-gray-soft/30 shadow-xs space-y-3">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs sm:text-sm font-bold text-black bg-white px-2.5 py-1 rounded border-2 border-black">
                   2024001 - Ahmad Fauzi
                 </span>
-                <span className="text-xs font-black text-black bg-retro-yellow px-2.5 py-1 rounded border-2 border-black">
+                <span className="text-xs font-bold text-black bg-gray-soft px-2.5 py-1 rounded border-2 border-black">
                   TAB_SWITCH
                 </span>
               </div>
@@ -287,12 +325,12 @@ export default async function ExamSubpage({ params }: PageProps) {
               </div>
             </div>
 
-            <div className="p-5 rounded-xl border-2 border-black bg-retro-warm/30 shadow-xs space-y-3">
+            <div className="p-5 rounded-xl border-2 border-black bg-gray-soft/30 shadow-xs space-y-3">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs sm:text-sm font-bold text-black bg-white px-2.5 py-1 rounded border-2 border-black">
                   2024018 - Rian Hidayat
                 </span>
-                <span className="text-xs font-black text-white bg-danger px-2.5 py-1 rounded border-2 border-black">
+                <span className="text-xs font-bold text-white bg-primary px-2.5 py-1 rounded border-2 border-black">
                   EXIT_FULLSCREEN
                 </span>
               </div>
@@ -305,12 +343,12 @@ export default async function ExamSubpage({ params }: PageProps) {
               </div>
             </div>
 
-            <div className="p-5 rounded-xl border-2 border-black bg-retro-warm/30 shadow-xs space-y-3">
+            <div className="p-5 rounded-xl border-2 border-black bg-gray-soft/30 shadow-xs space-y-3">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-xs sm:text-sm font-bold text-black bg-white px-2.5 py-1 rounded border-2 border-black">
                   2024025 - Siti Rahma
                 </span>
-                <span className="text-xs font-black text-black bg-retro-yellow px-2.5 py-1 rounded border-2 border-black">
+                <span className="text-xs font-bold text-black bg-gray-soft px-2.5 py-1 rounded border-2 border-black">
                   WINDOW_BLUR
                 </span>
               </div>
@@ -338,7 +376,7 @@ export default async function ExamSubpage({ params }: PageProps) {
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
               <Clock className="h-7 w-7 text-primary" />
               <span>Sengketa & Sanggahan Nilai Ujian</span>
             </h1>
@@ -353,26 +391,26 @@ export default async function ExamSubpage({ params }: PageProps) {
           <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-black bg-retro-yellow text-black px-3 py-1 rounded border-2 border-black">
+                <span className="text-xs sm:text-sm font-bold bg-gray-soft text-black px-3 py-1 rounded border-2 border-black">
                   MENUNGGU REVIEW DOSEN
                 </span>
                 <span className="text-xs sm:text-sm font-bold text-black">Kemarin, 14:20 WIB</span>
               </div>
               <div>
-                <h3 className="font-heading font-black text-lg text-black leading-snug">
+                <h3 className="font-heading font-bold text-lg text-black leading-snug">
                   Sanggahan Soal Coding No. 4 (TI-301)
                 </h3>
                 <p className="text-sm font-bold text-black/80 mt-0.5">Diajukan oleh: 2024001 - Ahmad Fauzi</p>
               </div>
-              <p className="text-sm text-black bg-retro-warm/40 p-4 rounded-lg border-2 border-black/20 leading-relaxed font-medium">
+              <p className="text-sm text-black bg-gray-soft/40 p-4 rounded-lg border-2 border-black/20 leading-relaxed font-medium">
                 &quot;Pada test case 2 soal nomor 4, format JSON output sudah memenuhi requirement namun parser memberikan nilai parsial 50% karena perbedaan trailing whitespace di newline.&quot;
               </p>
             </div>
             <div className="flex items-center gap-3 pt-3 border-t-2 border-black/20">
-              <button className="flex-1 py-2.5 rounded-lg border-2 border-black bg-black text-white text-sm font-black hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 shadow-xs">
+              <button className="flex-1 py-2.5 rounded-lg border-2 border-black bg-black text-white text-sm font-bold hover:bg-neutral-800 transition-all flex items-center justify-center gap-2 shadow-xs">
                 <CheckCircle2 className="h-4 w-4" /> Setujui (+10 Poin)
               </button>
-              <button className="px-5 py-2.5 rounded-lg border-2 border-black bg-white text-sm font-black hover:bg-neutral-100 transition-all flex items-center gap-2 shadow-xs">
+              <button className="px-5 py-2.5 rounded-lg border-2 border-black bg-white text-sm font-bold hover:bg-neutral-100 transition-all flex items-center gap-2 shadow-xs">
                 <XCircle className="h-4 w-4" /> Tolak
               </button>
             </div>
@@ -381,22 +419,22 @@ export default async function ExamSubpage({ params }: PageProps) {
           <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs sm:text-sm font-black bg-retro-mint text-black px-3 py-1 rounded border-2 border-black">
+                <span className="text-xs sm:text-sm font-bold bg-retro-mint text-black px-3 py-1 rounded border-2 border-black">
                   DISETUJUI & DISAHKAN
                 </span>
                 <span className="text-xs sm:text-sm font-bold text-black">2 hari lalu</span>
               </div>
               <div>
-                <h3 className="font-heading font-black text-lg text-black leading-snug">
+                <h3 className="font-heading font-bold text-lg text-black leading-snug">
                   Sanggahan Pilihan Ganda No. 8 (TI-102)
                 </h3>
                 <p className="text-sm font-bold text-black/80 mt-0.5">Diajukan oleh: 2024018 - Rian Hidayat</p>
               </div>
-              <p className="text-sm text-black bg-retro-warm/40 p-4 rounded-lg border-2 border-black/20 leading-relaxed font-medium">
+              <p className="text-sm text-black bg-gray-soft/40 p-4 rounded-lg border-2 border-black/20 leading-relaxed font-medium">
                 &quot;Kunci jawaban soal no. 8 menunjuk opsi B, namun buku rujukan edisi terbaru menyatakan opsi C juga valid karena implementasi compiler C99.&quot;
               </p>
             </div>
-            <div className="pt-3 border-t-2 border-black/20 text-sm font-black text-black">
+            <div className="pt-3 border-t-2 border-black/20 text-sm font-bold text-black">
               ✓ Nilai telah disesuaikan (+5 Poin) oleh Dr. Ardiansyah
             </div>
           </div>
@@ -415,7 +453,7 @@ export default async function ExamSubpage({ params }: PageProps) {
         bodyClassName="p-4 sm:p-6 lg:p-8"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
             <Award className="h-7 w-7 text-primary" />
             <span className="capitalize">{subroute.replace('-', ' ') || 'Manajemen Ujian'}</span>
           </h1>
@@ -431,10 +469,10 @@ export default async function ExamSubpage({ params }: PageProps) {
           href="/exams/live"
           className="rounded-xl border-2 border-black bg-white p-6 shadow-retro hover:-translate-y-1 hover:shadow-retro-md transition-all space-y-3 block"
         >
-          <div className="p-3 w-fit rounded-lg border-2 border-black bg-retro-warm">
+          <div className="p-3 w-fit rounded-lg border-2 border-black bg-gray-soft">
             <ShieldAlert className="h-6 w-6 text-primary" />
           </div>
-          <h3 className="font-heading font-black text-lg text-foreground">Panel Live Pengawasan</h3>
+          <h3 className="font-heading font-bold text-lg text-foreground">Panel Live Pengawasan</h3>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Pantau aktivitas ujian, anomali tab switch, dan progres pengerjaan mahasiswa secara real-time.
           </p>
@@ -444,10 +482,10 @@ export default async function ExamSubpage({ params }: PageProps) {
           href="/exams/question-bank"
           className="rounded-xl border-2 border-black bg-white p-6 shadow-retro hover:-translate-y-1 hover:shadow-retro-md transition-all space-y-3 block"
         >
-          <div className="p-3 w-fit rounded-lg border-2 border-black bg-retro-warm">
+          <div className="p-3 w-fit rounded-lg border-2 border-black bg-gray-soft">
             <FolderArchive className="h-6 w-6 text-primary" />
           </div>
-          <h3 className="font-heading font-black text-lg text-foreground">Bank Soal Perkuliahan</h3>
+          <h3 className="font-heading font-bold text-lg text-foreground">Bank Soal Perkuliahan</h3>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Kelola butir soal terstandarisasi, tag CPL OBE, tingkat kesulitan, dan kunci rubrik terpusat.
           </p>
@@ -457,10 +495,10 @@ export default async function ExamSubpage({ params }: PageProps) {
           href="/exams/disputes"
           className="rounded-xl border-2 border-black bg-white p-6 shadow-retro hover:-translate-y-1 hover:shadow-retro-md transition-all space-y-3 block"
         >
-          <div className="p-3 w-fit rounded-lg border-2 border-black bg-retro-warm">
+          <div className="p-3 w-fit rounded-lg border-2 border-black bg-gray-soft">
             <Clock className="h-6 w-6 text-primary" />
           </div>
-          <h3 className="font-heading font-black text-lg text-foreground">Sengketa Nilai Mahasiswa</h3>
+          <h3 className="font-heading font-bold text-lg text-foreground">Sengketa Nilai Mahasiswa</h3>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Tinjau sanggahan nilai ujian dan perbaiki skor mahasiswa secara transparan dan berkeadilan.
           </p>

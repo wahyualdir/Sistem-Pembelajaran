@@ -27,7 +27,7 @@ export default async function ClassQuizzesPage({ params }: { params: { id: strin
         </p>
         <div className="flex flex-wrap items-center justify-between gap-4 mt-2">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-2.5">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2.5">
               <Award className="h-7 w-7 text-primary" />
               Kuis & Ujian Kelas
             </h1>
@@ -61,10 +61,10 @@ export default async function ClassQuizzesPage({ params }: { params: { id: strin
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between gap-2.5">
-                        <span className="text-sm font-mono font-bold bg-muted text-muted-foreground px-3 py-1 rounded border border-border">
+                        <span className="text-sm font-sans font-bold bg-muted text-muted-foreground px-3 py-1 rounded border border-border">
                           {q.questions.length} Soal · {q.total_points} Poin
                         </span>
-                        <div className="flex items-center gap-1.5 text-sm text-muted-foreground font-mono">
+                        <div className="flex items-center gap-1.5 text-sm text-muted-foreground font-sans">
                           <Clock className="h-4 w-4" />
                           <span>{q.duration_minutes} Menit</span>
                         </div>
@@ -77,19 +77,19 @@ export default async function ClassQuizzesPage({ params }: { params: { id: strin
                     </div>
 
                     <div className="pt-3.5 border-t-2 border-border flex items-center justify-between">
-                      <div className="text-sm text-muted-foreground font-mono">
+                      <div className="text-sm text-muted-foreground font-sans">
                         Tenggat: {new Date(q.due_at).toLocaleDateString('id-ID')}
                       </div>
 
                       {myAttempt ? (
                         <Link
                           href={`/classes/${params.id}/quizzes/${q.id}`}
-                          className="inline-flex items-center gap-1.5 text-sm font-bold text-success hover:underline"
+                          className="inline-flex items-center gap-1.5 text-sm font-bold text-ink hover:underline"
                         >
                           Nilai: {myAttempt.score}/{myAttempt.max_score} <ArrowRight className="h-3.5 w-3.5" />
                         </Link>
                       ) : isClosed ? (
-                        <span className="text-sm text-danger font-bold">Ditutup</span>
+                        <span className="text-sm text-primary-dark font-bold">Ditutup</span>
                       ) : (
                         <Link
                           href={`/classes/${params.id}/quizzes/${q.id}`}

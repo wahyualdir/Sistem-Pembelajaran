@@ -103,8 +103,8 @@ export default function AdminUjianPage() {
         <div
           className={`flex items-center gap-2 rounded-[8px] p-3 text-sm font-medium ${
             pesanNotif.tipe === "sukses"
-              ? "bg-success-soft text-success border border-success-border"
-              : "bg-danger/10 text-danger border border-danger/20"
+              ? "bg-surface text-ink border border-ink"
+              : "bg-primary/10 text-primary-dark border border-ink"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
@@ -182,7 +182,7 @@ export default function AdminUjianPage() {
                           {item.jenis}
                         </Badge>
                       </TableCell>
-                      <TableCell className="font-mono text-xs font-semibold text-foreground">
+                      <TableCell className="font-sans text-xs font-semibold text-foreground">
                         {item.kodeMataKuliah}
                       </TableCell>
                       <TableCell className="text-xs font-medium text-foreground">
@@ -197,7 +197,7 @@ export default function AdminUjianPage() {
                       <TableCell className="text-center text-xs font-medium">
                         {item.tanggal}
                       </TableCell>
-                      <TableCell className="text-center text-xs text-muted-foreground font-mono">
+                      <TableCell className="text-center text-xs text-muted-foreground font-sans">
                         {item.jamMulai} - {item.jamSelesai}
                       </TableCell>
                       <TableCell className="text-xs font-medium text-primary">

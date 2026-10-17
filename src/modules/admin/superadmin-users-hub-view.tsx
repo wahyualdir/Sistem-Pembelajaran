@@ -151,7 +151,7 @@ export function SuperadminUsersHubView() {
       <RetroWindow
         title="manajemen_pengguna_dan_identitas.app"
         badge="SUPER_ADMIN :: IDENTITY_MANAGEMENT"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -160,7 +160,7 @@ export function SuperadminUsersHubView() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <Users className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
                 Kelola Pengguna & Penyamaran Sesi (Impersonate)
               </h1>
             </div>
@@ -170,8 +170,8 @@ export function SuperadminUsersHubView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-amber-100 text-amber-950 font-mono text-xs font-bold shadow-retro-sm">
-              <Clock className="h-4 w-4 text-amber-800" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-gray-soft text-ink font-sans text-xs font-bold shadow-retro-sm">
+              <Clock className="h-4 w-4 text-ink" />
               MAKSIMAL IMPERSONASI 30 MENIT
             </span>
           </div>
@@ -180,9 +180,9 @@ export function SuperadminUsersHubView() {
 
       {/* FEEDBACK BANNER */}
       {errorMsg && (
-        <div className="p-4 rounded-xl border-2 border-rose-500 bg-rose-50 text-rose-950 text-xs font-mono font-bold flex items-center justify-between gap-3 shadow-retro">
+        <div className="p-4 rounded-xl border-2 border-ink bg-surface text-primary-dark text-xs font-sans font-bold flex items-center justify-between gap-3 shadow-retro">
           <div className="flex items-center gap-2">
-            <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
+            <AlertCircle className="h-4 w-4 text-primary-dark shrink-0" />
             <span>{errorMsg}</span>
           </div>
           <button type="button" onClick={() => setErrorMsg(null)} className="cursor-pointer">
@@ -192,9 +192,9 @@ export function SuperadminUsersHubView() {
       )}
 
       {successMsg && (
-        <div className="p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-950 text-xs font-mono font-bold flex items-center justify-between gap-3 shadow-retro">
+        <div className="p-4 rounded-xl border-2 border-ink bg-surface text-ink text-xs font-sans font-bold flex items-center justify-between gap-3 shadow-retro">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-ink shrink-0" />
             <span>{successMsg}</span>
           </div>
           <button type="button" onClick={() => setSuccessMsg(null)} className="cursor-pointer">
@@ -204,12 +204,12 @@ export function SuperadminUsersHubView() {
       )}
 
       {/* 2. BANNER KETENTUAN IMPERSONASI & RBAC */}
-      <div className="p-4 rounded-xl border-2 border-black bg-amber-50 shadow-retro space-y-2 text-xs font-mono text-amber-950">
+      <div className="p-4 rounded-xl border-2 border-black bg-gray-soft shadow-retro space-y-2 text-xs font-sans text-ink">
         <div className="flex items-center gap-2 font-bold text-sm">
-          <ShieldAlert className="h-4 w-4 text-amber-800" />
+          <ShieldAlert className="h-4 w-4 text-ink" />
           <span>Protokol Keamanan Penyamaran Sesi (Super Admin Impersonation)</span>
         </div>
-        <p className="text-amber-900 leading-relaxed font-sans">
+        <p className="text-ink leading-relaxed font-sans">
           Setiap sesi impersonate dibatasi waktu maksimal 30 menit, ditandatangani dengan HMAC-SHA256 pada cookie httpOnly, wajib menyertakan alasan investigasi (min 10 karakter), dan seluruh aktivitas dicatat pada tabel <code>audit_logs</code> dengan relasi <code>actor_id</code> (Super Admin) dan <code>on_behalf_of</code> (Pengguna Sasaran). Server secara ketat menolak: ubah password/email, hapus akun, putusan nilai, kirim jawaban ujian, dan chaining impersonasi.
         </p>
       </div>
@@ -225,13 +225,13 @@ export function SuperadminUsersHubView() {
                 placeholder="Cari nama, NIM, NIDN..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 pr-3 py-1.5 rounded border-2 border-black bg-retro-warm/20 text-xs font-mono w-56 sm:w-64"
+                className="pl-9 pr-3 py-1.5 rounded border-2 border-black bg-gray-soft/20 text-xs font-sans w-56 sm:w-64"
               />
             </div>
             <select
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
-              className="px-2.5 py-1.5 rounded border-2 border-black bg-retro-warm font-mono text-xs font-bold"
+              className="px-2.5 py-1.5 rounded border-2 border-black bg-gray-soft font-sans text-xs font-bold"
             >
               <option value="ALL">Semua Peran</option>
               <option value="STUDENT">Mahasiswa</option>
@@ -242,7 +242,7 @@ export function SuperadminUsersHubView() {
               <option value="SYSTEM_ADMIN">System Admin</option>
             </select>
           </div>
-          <span className="text-xs font-mono font-bold text-black/60">
+          <span className="text-xs font-sans font-bold text-black/60">
             Ditemukan: {filteredUsers.length} Pengguna
           </span>
         </div>
@@ -250,14 +250,14 @@ export function SuperadminUsersHubView() {
         {/* TABEL PENGGUNA DENGAN KONTROL RBAC & IMPERSONATE */}
         <div className="overflow-x-auto">
           {!isDemo && filteredUsers.length === 0 ? (
-            <div className="p-12 text-center text-black/60 font-mono text-xs border-2 border-dashed border-black/20 rounded-xl space-y-2">
+            <div className="p-12 text-center text-black/60 font-sans text-xs border-2 border-dashed border-black/20 rounded-xl space-y-2">
               <p className="font-bold text-black">Data Pengguna Belum Terhubung ke Database Production</p>
               <p>Menunggu koneksi live Supabase Auth dan tabel <code>profiles</code> dikonfigurasi.</p>
             </div>
           ) : (
             <table className="w-full text-left text-xs sm:text-sm border-collapse">
               <thead>
-                <tr className="border-b-2 border-black bg-retro-warm font-mono font-black text-black">
+                <tr className="border-b-2 border-black bg-gray-soft font-sans font-bold text-black">
                   <th className="p-3">Nama & Identitas</th>
                   <th className="p-3">Email Institusi</th>
                   <th className="p-3">Peran (Role)</th>
@@ -266,12 +266,12 @@ export function SuperadminUsersHubView() {
                   <th className="p-3 text-center">Aksi Impersonate</th>
                 </tr>
               </thead>
-              <tbody className="divide-y border-b border-black font-mono">
+              <tbody className="divide-y border-b border-black font-sans">
                 {filteredUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-retro-warm/30 transition-colors">
+                  <tr key={u.id} className="hover:bg-gray-soft/30 transition-colors">
                     <td className="p-3 font-sans">
                       <div className="font-bold text-black">{u.name}</div>
-                      <span className="text-xs font-mono text-black/60">{u.identifier}</span>
+                      <span className="text-xs font-sans text-black/60">{u.identifier}</span>
                     </td>
                     <td className="p-3 text-black/80">{u.email}</td>
                     <td className="p-3">
@@ -280,7 +280,7 @@ export function SuperadminUsersHubView() {
                       </span>
                     </td>
                     <td className="p-3 text-center">
-                      <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-bold text-xs">
+                      <span className="px-2 py-0.5 rounded border border-ink bg-surface text-ink font-bold text-xs">
                         {u.status}
                       </span>
                     </td>
@@ -289,7 +289,7 @@ export function SuperadminUsersHubView() {
                         disabled={pending}
                         value={u.role}
                         onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                        className="px-2 py-1 rounded border border-black bg-white font-mono text-xs font-bold cursor-pointer disabled:opacity-50"
+                        className="px-2 py-1 rounded border border-black bg-white font-sans text-xs font-bold cursor-pointer disabled:opacity-50"
                       >
                         <option value="STUDENT">STUDENT</option>
                         <option value="LECTURER">LECTURER</option>
@@ -308,7 +308,7 @@ export function SuperadminUsersHubView() {
                         className={`px-3 py-1.5 rounded border-2 font-bold text-xs transition-all flex items-center gap-1.5 mx-auto ${
                           !isDemo
                             ? 'border-neutral-400 bg-neutral-200 text-neutral-500 cursor-not-allowed opacity-75'
-                            : 'border-black bg-black text-white hover:bg-retro-warm hover:text-black cursor-pointer'
+                            : 'border-black bg-black text-white hover:bg-gray-soft hover:text-black cursor-pointer'
                         }`}
                       >
                         <UserCheck className="h-3.5 w-3.5" />
@@ -326,11 +326,11 @@ export function SuperadminUsersHubView() {
       {/* MODAL IMPERSONASI (ALASAN WAJIB MIN 10 KARAKTER - A3b) */}
       {impersonateTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
-          <div className="w-full max-w-lg bg-white rounded-xl border-4 border-black shadow-retro-lg p-6 space-y-4 animate-scale-in font-mono">
+          <div className="w-full max-w-lg bg-white rounded-xl border-4 border-black shadow-retro-lg p-6 space-y-4 animate-scale-in font-sans">
             <div className="flex items-center justify-between border-b-2 border-black pb-3">
               <div className="flex items-center gap-2">
                 <UserCheck className="h-5 w-5 text-primary" />
-                <h3 className="font-heading font-black text-lg text-black">
+                <h3 className="font-heading font-bold text-lg text-black">
                   Konfirmasi Impersonasi Pengguna
                 </h3>
               </div>
@@ -343,10 +343,10 @@ export function SuperadminUsersHubView() {
               </button>
             </div>
 
-            <div className="p-3 bg-amber-50 border-2 border-amber-500 rounded text-xs text-amber-950 space-y-1">
+            <div className="p-3 bg-gray-soft border-2 border-ink rounded text-xs text-ink space-y-1">
               <div className="font-bold">Target Pengguna: {impersonateTarget.name} ({impersonateTarget.role})</div>
               <div>ID: <code>{impersonateTarget.id}</code></div>
-              <div className="text-xs text-amber-900 mt-1">
+              <div className="text-xs text-ink mt-1">
                 Sesi berlangsung maksimal 30 menit. Seluruh aksi dicatat pada log audit sistem.
               </div>
             </div>
@@ -360,7 +360,7 @@ export function SuperadminUsersHubView() {
                 value={impersonateReason}
                 onChange={(e) => setImpersonateReason(e.target.value)}
                 placeholder="Contoh: Investigasi kendala sinkronisasi presensi mahasiswa bersangkutan..."
-                className="w-full p-2.5 rounded border-2 border-black bg-retro-warm/20 text-xs font-sans"
+                className="w-full p-2.5 rounded border-2 border-black bg-gray-soft/20 text-xs font-sans"
               />
               <span className="text-xs text-black/60">
                 Panjang karakter: {impersonateReason.trim().length} / minimal 10
@@ -379,7 +379,7 @@ export function SuperadminUsersHubView() {
                 type="button"
                 disabled={pending || impersonateReason.trim().length < 10}
                 onClick={handleConfirmImpersonate}
-                className="px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-bold text-xs hover:bg-retro-warm hover:text-black transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
+                className="px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-bold text-xs hover:bg-gray-soft hover:text-black transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5"
               >
                 <UserCheck className="h-4 w-4" />
                 <span>{pending ? 'Memulai Sesi...' : 'Mulai Impersonasi (30 Menit)'}</span>

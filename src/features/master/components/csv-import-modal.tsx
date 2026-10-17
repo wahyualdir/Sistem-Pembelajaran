@@ -101,7 +101,7 @@ export function CsvImportModal({ type, isOpen, onClose, onSuccess }: CsvImportMo
         </DialogHeader>
 
         {feedback && (
-          <div className="rounded-[8px] bg-danger-soft border border-danger-border p-3 text-xs text-danger">
+          <div className="rounded-[8px] bg-surface border border-ink p-3 text-xs text-primary-dark">
             {feedback}
           </div>
         )}
@@ -135,10 +135,10 @@ export function CsvImportModal({ type, isOpen, onClose, onSuccess }: CsvImportMo
           <div className="space-y-4 py-2">
             {/* Ringkasan Pratinjau Bab 6.10 */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-[8px] border border-success-border bg-success-soft p-3">
+              <div className="rounded-[8px] border border-ink bg-surface p-3">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-success" />
-                  <span className="text-xs font-semibold text-success">
+                  <CheckCircle2 className="h-4 w-4 text-ink" />
+                  <span className="text-xs font-semibold text-ink">
                     {validCount} Baris Valid
                   </span>
                 </div>
@@ -147,10 +147,10 @@ export function CsvImportModal({ type, isOpen, onClose, onSuccess }: CsvImportMo
                 </p>
               </div>
 
-              <div className="rounded-[8px] border border-danger-border bg-danger-soft p-3">
+              <div className="rounded-[8px] border border-ink bg-surface p-3">
                 <div className="flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-danger" />
-                  <span className="text-xs font-semibold text-danger">
+                  <AlertTriangle className="h-4 w-4 text-primary-dark" />
+                  <span className="text-xs font-semibold text-primary-dark">
                     {invalidRows.length} Baris Bermasalah
                   </span>
                 </div>

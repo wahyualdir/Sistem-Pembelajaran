@@ -80,7 +80,7 @@ export function SystemAuditHubView() {
       <RetroWindow
         title="jejak_audit_keamanan_immutable.sys"
         badge="IMMUTABLE_LOG :: READ_ONLY"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -89,7 +89,7 @@ export function SystemAuditHubView() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <ShieldCheck className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
                 Log Audit Sistem (Read-Only)
               </h1>
             </div>
@@ -99,7 +99,7 @@ export function SystemAuditHubView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-retro-warm text-black font-mono text-xs font-bold shadow-retro-sm">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-gray-soft text-black font-sans text-xs font-bold shadow-retro-sm">
               <Lock className="h-4 w-4 text-black" />
               {isDemo ? 'LOG AUDIT (MEMORI DEMO)' : 'LOG AUDIT (MENUNGGU MIGRASI DB)'}
             </span>
@@ -112,11 +112,11 @@ export function SystemAuditHubView() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black pb-3">
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-black/60" />
-            <span className="font-bold font-mono text-xs text-black">Filter Jenis Transaksi:</span>
+            <span className="font-bold font-sans text-xs text-black">Filter Jenis Transaksi:</span>
             <select
               value={filterAction}
               onChange={(e) => setFilterAction(e.target.value)}
-              className="px-2.5 py-1 rounded border-2 border-black bg-retro-warm font-mono text-xs font-bold"
+              className="px-2.5 py-1 rounded border-2 border-black bg-gray-soft font-sans text-xs font-bold"
             >
               <option value="ALL">Semua Transaksi</option>
               <option value="grade">Perubahan Nilai (Grade)</option>
@@ -124,20 +124,20 @@ export function SystemAuditHubView() {
               <option value="exam">Ujian & Pengawasan</option>
             </select>
           </div>
-          <span className="text-xs font-mono font-bold text-black/60">
+          <span className="text-xs font-sans font-bold text-black/60">
             Total Entri: {isDemo ? `${filteredLogs.length} Log` : '0 Log (Belum Terhubung)'}
           </span>
         </div>
 
         {!isDemo ? (
-          <div className="p-8 text-center text-black/60 font-mono text-xs border-2 border-dashed border-black/20 rounded-xl">
+          <div className="p-8 text-center text-black/60 font-sans text-xs border-2 border-dashed border-black/20 rounded-xl">
             Tabel pangkalan data log audit belum terhubung ke database production. Menunggu migrasi <code>20261011000015_audit_logs_hardening.sql</code> diterapkan.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs sm:text-sm border-collapse">
             <thead>
-              <tr className="border-b-2 border-black bg-retro-warm font-mono font-black text-black">
+              <tr className="border-b-2 border-black bg-gray-soft font-sans font-bold text-black">
                 <th className="p-3">Waktu Pencatatan</th>
                 <th className="p-3">Pelaku (Actor)</th>
                 <th className="p-3">Aksi Terdaftar</th>
@@ -145,13 +145,13 @@ export function SystemAuditHubView() {
                 <th className="p-3 text-center">Atas Nama (Impersonated)</th>
               </tr>
             </thead>
-            <tbody className="divide-y border-b border-black font-mono">
+            <tbody className="divide-y border-b border-black font-sans">
               {filteredLogs.map((log) => (
-                <tr key={log.id} className="hover:bg-retro-warm/30 transition-colors">
-                  <td className="p-3 font-mono text-black/80">{log.created_at}</td>
+                <tr key={log.id} className="hover:bg-gray-soft/30 transition-colors">
+                  <td className="p-3 font-sans text-black/80">{log.created_at}</td>
                   <td className="p-3">
                     <div className="font-bold text-black">{log.actor_name}</div>
-                    <span className="text-xs font-mono text-black/60">{log.actor_role}</span>
+                    <span className="text-xs font-sans text-black/60">{log.actor_role}</span>
                   </td>
                   <td className="p-3">
                     <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 font-bold text-xs">
@@ -163,7 +163,7 @@ export function SystemAuditHubView() {
                   </td>
                   <td className="p-3 text-center">
                     {log.on_behalf_of_name ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-amber-500 bg-amber-100 text-amber-950 font-bold text-xs">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-ink bg-gray-soft text-ink font-bold text-xs">
                         <ShieldAlert className="h-3 w-3" />
                         {log.on_behalf_of_name}
                       </span>

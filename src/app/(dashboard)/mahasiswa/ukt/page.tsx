@@ -79,7 +79,7 @@ export default async function MahasiswaUktPage() {
                   {tagihan.status === "LUNAS" && (
                     <div className="text-right text-xs text-muted-foreground">
                       <p>Tanggal: {tagihan.tanggalBayar || "-"}</p>
-                      <p className="font-mono text-xs text-foreground mt-0.5">
+                      <p className="font-sans text-xs text-foreground mt-0.5">
                         Ref: {tagihan.buktiPembayaran || "-"}
                       </p>
                     </div>
@@ -107,13 +107,13 @@ export default async function MahasiswaUktPage() {
                   </span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-success shrink-0 mt-0.5" />
+                  <CheckCircle2 className="h-4 w-4 text-ink shrink-0 mt-0.5" />
                   <span>
                     Pembayaran dapat dilakukan melalui Virtual Account Bank Riau Kepri Syariah atau Bank Mitra.
                   </span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <AlertTriangle className="h-4 w-4 text-warning shrink-0 mt-0.5" />
+                  <AlertTriangle className="h-4 w-4 text-ink shrink-0 mt-0.5" />
                   <span>
                     Mahasiswa yang membutuhkan keringanan jadwal pembayaran dapat mengajukan dispensasi ke Bagian Keuangan Kampus.
                   </span>

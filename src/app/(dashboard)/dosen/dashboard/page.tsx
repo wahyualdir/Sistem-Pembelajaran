@@ -73,10 +73,10 @@ export default async function DosenDashboardPage() {
               <CardTitle className="text-xs font-semibold text-muted-foreground uppercase">
                 Persetujuan KRS
               </CardTitle>
-              <ClipboardCheck className="h-4 w-4 text-warning" />
+              <ClipboardCheck className="h-4 w-4 text-ink" />
             </CardHeader>
             <CardContent>
-              <div className={`text-2xl font-bold ${krsMenunggu > 0 ? "text-warning" : "text-success"}`}>
+              <div className={`text-2xl font-bold ${krsMenunggu > 0 ? "text-ink" : "text-ink"}`}>
                 {krsMenunggu} Menunggu
               </div>
               <p className="text-xs text-muted-foreground mt-1">
@@ -90,10 +90,10 @@ export default async function DosenDashboardPage() {
               <CardTitle className="text-xs font-semibold text-muted-foreground uppercase">
                 Nilai Belum Final
               </CardTitle>
-              <GraduationCap className="h-4 w-4 text-danger" />
+              <GraduationCap className="h-4 w-4 text-primary-dark" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-danger">
+              <div className="text-2xl font-bold text-primary-dark">
                 {nilaiBelumFinal} Kelas
               </div>
               <p className="text-xs text-muted-foreground mt-1">
@@ -179,9 +179,9 @@ export default async function DosenDashboardPage() {
             </CardHeader>
             <CardContent className="p-4 space-y-3">
               {krsMenunggu > 0 ? (
-                <div className="p-3 rounded-[8px] bg-warning/10 border border-warning/20 text-xs flex items-center justify-between">
+                <div className="p-3 rounded-[8px] bg-gray-soft/10 border border-ink text-xs flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <p className="font-bold text-warning">
+                    <p className="font-bold text-ink">
                       {krsMenunggu} Mahasiswa Menunggu Persetujuan KRS
                     </p>
                     <p className="text-muted-foreground">
@@ -195,7 +195,7 @@ export default async function DosenDashboardPage() {
                   </Link>
                 </div>
               ) : (
-                <div className="p-3 rounded-[8px] bg-success-soft border border-success/20 text-xs text-success flex items-center gap-2">
+                <div className="p-3 rounded-[8px] bg-surface border border-ink text-xs text-ink flex items-center gap-2">
                   <ClipboardCheck className="h-4 w-4 shrink-0" />
                   <span>Seluruh pengajuan KRS mahasiswa bimbingan telah diproses.</span>
                 </div>

@@ -122,11 +122,10 @@ BEGIN
     ) ON CONFLICT DO NOTHING;
 END $$;
 
--- 4. Insert Demo Accounts into auth.users (with password Password123!)
--- Standard password hash for 'Password123!'
+-- 4. Insert Demo Accounts into auth.users (kata sandi dibaca dari konfigurasi sesi/environment, bukan ditulis di kode)
 DO $$
 DECLARE
-    pwd_hash text := crypt('Password123!', gen_salt('bf', 10));
+    pwd_hash text := crypt(coalesce(nullif(current_setting('app.settings.demo_password', true), ''), md5(random()::text)), gen_salt('bf', 10));
     r_student UUID;
     r_lecturer UUID;
     r_ta UUID;
@@ -148,7 +147,7 @@ BEGIN
         VALUES (
             'a0000001-0000-0000-0000-000000000001',
             '00000000-0000-0000-0000-000000000000',
-            'mhs@siajar.ac.id',
+            'mhs2024001@siajar.test',
             pwd_hash,
             now(),
             '{"full_name": "Ahmad Mahasiswa", "must_change_password": false}'::jsonb,
@@ -163,7 +162,7 @@ BEGIN
         VALUES (
             'a0000002-0000-0000-0000-000000000002',
             '00000000-0000-0000-0000-000000000000',
-            'dosen@siajar.ac.id',
+            'dosen001@siajar.test',
             pwd_hash,
             now(),
             '{"full_name": "Dr. Budi Santoso, M.Kom.", "must_change_password": false}'::jsonb,
@@ -178,7 +177,7 @@ BEGIN
         VALUES (
             'a0000003-0000-0000-0000-000000000003',
             '00000000-0000-0000-0000-000000000000',
-            'asdos@siajar.ac.id',
+            'mhs2024002@siajar.test',
             pwd_hash,
             now(),
             '{"full_name": "Citra Asisten", "must_change_password": false}'::jsonb,
@@ -193,7 +192,7 @@ BEGIN
         VALUES (
             'a0000004-0000-0000-0000-000000000004',
             '00000000-0000-0000-0000-000000000000',
-            'kaprodi@siajar.ac.id',
+            'kaprodi@siajar.test',
             pwd_hash,
             now(),
             '{"full_name": "Prof. Dewi Lestari, Ph.D.", "must_change_password": false}'::jsonb,
@@ -208,7 +207,7 @@ BEGIN
         VALUES (
             'a0000005-0000-0000-0000-000000000005',
             '00000000-0000-0000-0000-000000000000',
-            'staf@siajar.ac.id',
+            'staf@siajar.test',
             pwd_hash,
             now(),
             '{"full_name": "Eko Staf Akademik", "must_change_password": false}'::jsonb,
@@ -223,7 +222,7 @@ BEGIN
         VALUES (
             'a0000006-0000-0000-0000-000000000006',
             '00000000-0000-0000-0000-000000000000',
-            'admin@siajar.ac.id',
+            'sysadmin@siajar.test',
             pwd_hash,
             now(),
             '{"full_name": "System Administrator", "must_change_password": false}'::jsonb,
@@ -238,7 +237,7 @@ BEGIN
         VALUES (
             'a0000007-0000-0000-0000-000000000007',
             '00000000-0000-0000-0000-000000000000',
-            'newuser@siajar.ac.id',
+            'newuser@siajar.test',
             pwd_hash,
             now(),
             '{"full_name": "Fajar Baru", "must_change_password": true}'::jsonb,
@@ -253,7 +252,7 @@ BEGIN
         VALUES (
             'a0000008-0000-0000-0000-000000000008',
             '00000000-0000-0000-0000-000000000000',
-            'locked@siajar.ac.id',
+            'locked@siajar.test',
             pwd_hash,
             now(),
             '{"full_name": "Gilang Terkunci", "must_change_password": false}'::jsonb,
@@ -263,15 +262,15 @@ BEGIN
             now()
         ) ON CONFLICT (id) DO NOTHING;
 
-        -- Demo 9: Super Admin Wahyu
+        -- Demo 9: Super Admin (Fiktif)
         INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confirmed_at, raw_user_meta_data, role, aud, created_at, updated_at)
         VALUES (
-            'a0000009-0000-0000-0000-000000000009',
+            'a0000010-0000-0000-0000-000000000010',
             '00000000-0000-0000-0000-000000000000',
-            'wahyualdiriyanto80@gmail.com',
-            crypt('Wahyu11', gen_salt('bf')),
+            'superadmin@siajar.test',
+            pwd_hash,
             now(),
-            '{"full_name": "Wahyu Aldi Riyanto", "must_change_password": false}'::jsonb,
+            '{"full_name": "Super Administrator", "must_change_password": false}'::jsonb,
             'authenticated',
             'authenticated',
             now(),
@@ -282,15 +281,15 @@ BEGIN
     -- Profiles Insert
     INSERT INTO public.profiles (id, full_name, email, status, must_change_password, locked_until)
     VALUES
-        ('a0000001-0000-0000-0000-000000000001', 'Ahmad Mahasiswa', 'mhs@siajar.ac.id', 'ACTIVE', false, null),
-        ('a0000002-0000-0000-0000-000000000002', 'Dr. Budi Santoso, M.Kom.', 'dosen@siajar.ac.id', 'ACTIVE', false, null),
-        ('a0000003-0000-0000-0000-000000000003', 'Citra Asisten', 'asdos@siajar.ac.id', 'ACTIVE', false, null),
-        ('a0000004-0000-0000-0000-000000000004', 'Prof. Dewi Lestari, Ph.D.', 'kaprodi@siajar.ac.id', 'ACTIVE', false, null),
-        ('a0000005-0000-0000-0000-000000000005', 'Eko Staf Akademik', 'staf@siajar.ac.id', 'ACTIVE', false, null),
-        ('a0000006-0000-0000-0000-000000000006', 'System Administrator', 'admin@siajar.ac.id', 'ACTIVE', false, null),
-        ('a0000007-0000-0000-0000-000000000007', 'Fajar Baru', 'newuser@siajar.ac.id', 'ACTIVE', true, null),
-        ('a0000008-0000-0000-0000-000000000008', 'Gilang Terkunci', 'locked@siajar.ac.id', 'LOCKED', false, now() + INTERVAL '15 minutes'),
-        ('a0000009-0000-0000-0000-000000000009', 'Wahyu Aldi Riyanto', 'wahyualdiriyanto80@gmail.com', 'ACTIVE', false, null)
+        ('a0000001-0000-0000-0000-000000000001', 'Ahmad Mahasiswa', 'mhs2024001@siajar.test', 'ACTIVE', false, null),
+        ('a0000002-0000-0000-0000-000000000002', 'Dr. Budi Santoso, M.Kom.', 'dosen001@siajar.test', 'ACTIVE', false, null),
+        ('a0000003-0000-0000-0000-000000000003', 'Citra Asisten', 'mhs2024002@siajar.test', 'ACTIVE', false, null),
+        ('a0000004-0000-0000-0000-000000000004', 'Prof. Dewi Lestari, Ph.D.', 'kaprodi@siajar.test', 'ACTIVE', false, null),
+        ('a0000005-0000-0000-0000-000000000005', 'Eko Staf Akademik', 'staf@siajar.test', 'ACTIVE', false, null),
+        ('a0000006-0000-0000-0000-000000000006', 'System Administrator', 'sysadmin@siajar.test', 'ACTIVE', false, null),
+        ('a0000007-0000-0000-0000-000000000007', 'Fajar Baru', 'newuser@siajar.test', 'ACTIVE', true, null),
+        ('a0000008-0000-0000-0000-000000000008', 'Gilang Terkunci', 'locked@siajar.test', 'LOCKED', false, now() + INTERVAL '15 minutes'),
+        ('a0000010-0000-0000-0000-000000000010', 'Super Administrator', 'superadmin@siajar.test', 'ACTIVE', false, null)
     ON CONFLICT (id) DO UPDATE SET
         full_name = EXCLUDED.full_name,
         email = EXCLUDED.email,
@@ -301,23 +300,23 @@ BEGIN
     -- User Identifiers Insert
     INSERT INTO public.user_identifiers (user_id, type, value, is_primary) VALUES
         ('a0000001-0000-0000-0000-000000000001', 'NIM', '2024001', true),
-        ('a0000001-0000-0000-0000-000000000001', 'EMAIL', 'mhs@siajar.ac.id', false),
+        ('a0000001-0000-0000-0000-000000000001', 'EMAIL', 'mhs2024001@siajar.test', false),
         ('a0000002-0000-0000-0000-000000000002', 'NIDN', '0012345678', true),
-        ('a0000002-0000-0000-0000-000000000002', 'EMAIL', 'dosen@siajar.ac.id', false),
+        ('a0000002-0000-0000-0000-000000000002', 'EMAIL', 'dosen001@siajar.test', false),
         ('a0000003-0000-0000-0000-000000000003', 'NIM', '2024002', true),
-        ('a0000003-0000-0000-0000-000000000003', 'EMAIL', 'asdos@siajar.ac.id', false),
+        ('a0000003-0000-0000-0000-000000000003', 'EMAIL', 'mhs2024002@siajar.test', false),
         ('a0000004-0000-0000-0000-000000000004', 'NIDN', '0087654321', true),
-        ('a0000004-0000-0000-0000-000000000004', 'EMAIL', 'kaprodi@siajar.ac.id', false),
+        ('a0000004-0000-0000-0000-000000000004', 'EMAIL', 'kaprodi@siajar.test', false),
         ('a0000005-0000-0000-0000-000000000005', 'NIP', '198501012010121001', true),
-        ('a0000005-0000-0000-0000-000000000005', 'EMAIL', 'staf@siajar.ac.id', false),
+        ('a0000005-0000-0000-0000-000000000005', 'EMAIL', 'staf@siajar.test', false),
         ('a0000006-0000-0000-0000-000000000006', 'USERNAME', 'sysadmin', true),
-        ('a0000006-0000-0000-0000-000000000006', 'EMAIL', 'admin@siajar.ac.id', false),
+        ('a0000006-0000-0000-0000-000000000006', 'EMAIL', 'sysadmin@siajar.test', false),
         ('a0000007-0000-0000-0000-000000000007', 'NIM', '2024099', true),
-        ('a0000007-0000-0000-0000-000000000007', 'EMAIL', 'newuser@siajar.ac.id', false),
+        ('a0000007-0000-0000-0000-000000000007', 'EMAIL', 'newuser@siajar.test', false),
         ('a0000008-0000-0000-0000-000000000008', 'NIM', '2024088', true),
-        ('a0000008-0000-0000-0000-000000000008', 'EMAIL', 'locked@siajar.ac.id', false),
-        ('a0000009-0000-0000-0000-000000000009', 'EMAIL', 'wahyualdiriyanto80@gmail.com', true),
-        ('a0000009-0000-0000-0000-000000000009', 'USERNAME', 'wahyu', false)
+        ('a0000008-0000-0000-0000-000000000008', 'EMAIL', 'locked@siajar.test', false),
+        ('a0000010-0000-0000-0000-000000000010', 'EMAIL', 'superadmin@siajar.test', true),
+        ('a0000010-0000-0000-0000-000000000010', 'USERNAME', 'superadmin', false)
     ON CONFLICT (type, value) DO NOTHING;
 
     -- User Roles Assignments
@@ -363,14 +362,14 @@ BEGIN
     VALUES ('a0000008-0000-0000-0000-000000000008', r_student, 'GLOBAL', null, 'ACTIVE')
     ON CONFLICT DO NOTHING;
 
-    -- 9. Super Admin Wahyu -> SYSTEM_ADMIN, ACADEMIC_STAFF, PROGRAM_COORDINATOR, LECTURER, STUDENT (Global)
+    -- 9. Super Admin -> SYSTEM_ADMIN, ACADEMIC_STAFF, PROGRAM_COORDINATOR, LECTURER, STUDENT (Global)
     INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status)
     VALUES
-        ('a0000009-0000-0000-0000-000000000009', r_admin, 'GLOBAL', null, 'ACTIVE'),
-        ('a0000009-0000-0000-0000-000000000009', r_staff, 'GLOBAL', null, 'ACTIVE'),
-        ('a0000009-0000-0000-0000-000000000009', r_coord, 'GLOBAL', null, 'ACTIVE'),
-        ('a0000009-0000-0000-0000-000000000009', r_lecturer, 'GLOBAL', null, 'ACTIVE'),
-        ('a0000009-0000-0000-0000-000000000009', r_student, 'GLOBAL', null, 'ACTIVE')
+        ('a0000010-0000-0000-0000-000000000010', r_admin, 'GLOBAL', null, 'ACTIVE'),
+        ('a0000010-0000-0000-0000-000000000010', r_staff, 'GLOBAL', null, 'ACTIVE'),
+        ('a0000010-0000-0000-0000-000000000010', r_coord, 'GLOBAL', null, 'ACTIVE'),
+        ('a0000010-0000-0000-0000-000000000010', r_lecturer, 'GLOBAL', null, 'ACTIVE'),
+        ('a0000010-0000-0000-0000-000000000010', r_student, 'GLOBAL', null, 'ACTIVE')
     ON CONFLICT DO NOTHING;
 
     -- System settings default

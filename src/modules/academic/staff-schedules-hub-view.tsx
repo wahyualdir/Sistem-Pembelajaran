@@ -82,7 +82,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
       <RetroWindow
         title="penjadwalan_kuliah_dan_ujian_kampus.app"
         badge="Biro Penjadwalan & Sarana Prasarana"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -91,7 +91,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <CalendarDays className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Jadwal Kuliah & Ujian
               </h1>
             </div>
@@ -101,7 +101,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               Bebas Bentrok Ruang & Dosen
             </span>
           </div>
@@ -111,24 +111,24 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Sesi Kuliah Mingguan</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">{CLASS_SCHEDULES.length} Sesi</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Sesi Kuliah Mingguan</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{CLASS_SCHEDULES.length} Sesi</div>
           <span className="text-xs text-black/70">Terjadwal Aktif</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Jadwal Ujian Terpadu</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">{EXAM_SCHEDULES.length} Sesi</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Jadwal Ujian Terpadu</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{EXAM_SCHEDULES.length} Sesi</div>
           <span className="text-xs text-primary font-bold">UTS Semester</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Ruang & Lab Dipakai</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">4 Ruang</div>
-          <span className="text-xs text-emerald-800 font-bold">Terjadwal Optimal</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Ruang & Lab Dipakai</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">4 Ruang</div>
+          <span className="text-xs text-ink font-bold">Terjadwal Optimal</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Konflik / Bentrok</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-emerald-800">0 Konflik</div>
-          <span className="text-xs text-emerald-800 font-bold">Jadwal Bersih</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Konflik / Bentrok</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">0 Konflik</div>
+          <span className="text-xs text-ink font-bold">Jadwal Bersih</span>
         </div>
       </div>
 
@@ -143,10 +143,10 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -160,9 +160,9 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
       {/* TAB 1: JADWAL KULIAH */}
       {activeTab === 'jadwal-kuliah' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <CalendarDays className="h-5 w-5 text-primary" />
                 <span>Distribusi Waktu Perkuliahan Mingguan</span>
               </h2>
@@ -171,7 +171,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+              <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
                 Alur: Diusulkan Staf &rarr; Disetujui Prodi &rarr; Aktif
               </span>
             </div>
@@ -180,7 +180,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Hari & Jam</th>
                     <th className="p-3.5 sm:p-4">Mata Kuliah & Rombel</th>
@@ -193,25 +193,25 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {classSchedules.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada jadwal perkuliahan tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     classSchedules.map((s) => (
-                      <tr key={s.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={s.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{s.day}</div>
-                          <span className="text-xs font-mono text-black/60">{s.time}</span>
+                          <span className="text-xs font-sans text-black/60">{s.time}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 font-bold text-black">{s.course}</td>
                         <td className="p-3.5 sm:p-4 text-black/80">{s.room}</td>
                         <td className="p-3.5 sm:p-4 font-semibold text-black">{s.lecturer}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">
                           {s.enrolled} / {s.capacity}
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink font-sans text-xs font-bold">
                             AKTIF BERJALAN
                           </span>
                         </td>
@@ -228,9 +228,9 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
       {/* TAB 2: JADWAL UJIAN */}
       {activeTab === 'jadwal-ujian' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Award className="h-5 w-5 text-primary" />
                 <span>Penjadwalan Ujian Tengah & Akhir Semester Terpadu</span>
               </h2>
@@ -243,7 +243,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
               disabled={!isDemo}
               title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-bold shadow-xs transition-all shrink-0',
                 isDemo
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -251,14 +251,14 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
             >
               <Plus className="h-4 w-4" />
               <span>Jadwalkan Ujian Baru</span>
-              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Tanggal & Jam</th>
                     <th className="p-3.5 sm:p-4">Jenis & Mata Kuliah</th>
@@ -270,25 +270,25 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {examSchedules.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={5} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada jadwal ujian semester tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     examSchedules.map((e) => (
-                      <tr key={e.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={e.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{e.date}</div>
-                          <span className="text-xs font-mono text-black/60">{e.time}</span>
+                          <span className="text-xs font-sans text-black/60">{e.time}</span>
                         </td>
                         <td className="p-3.5 sm:p-4">
                           <div className="font-bold text-black">{e.course}</div>
-                          <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-retro-warm border border-black/30 font-bold">
+                          <span className="text-xs font-sans px-1.5 py-0.5 rounded bg-gray-soft border border-black/30 font-bold">
                             {e.type}
                           </span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{e.room}</td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs">{e.format}</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs">{e.format}</td>
                         <td className="p-3.5 sm:p-4 font-semibold text-black">{e.proctor}</td>
                       </tr>
                     ))
@@ -303,9 +303,9 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
       {/* TAB 3: PENGGUNAAN RUANG */}
       {activeTab === 'penggunaan-ruang' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Layers className="h-5 w-5 text-primary" />
                 <span>Monitoring Okupansi & Pemakaian Ruang Kuliah / Lab</span>
               </h2>
@@ -313,7 +313,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                 Peta pemanfaatan ruang kelas harian untuk memastikan tidak ada jam bentrok serta identifikasi ruang kosong yang dapat dipinjam.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
               Live Room Occupancy Matrix
             </span>
           </div>
@@ -321,7 +321,7 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Ruang & Tipe</th>
                     <th className="p-3.5 sm:p-4">Senin</th>
@@ -335,29 +335,29 @@ export function StaffSchedulesHubView({ isDemo = true }: StaffSchedulesHubViewPr
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {roomOccupancy.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={7} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada matriks pemakaian ruang tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     roomOccupancy.map((r, idx) => (
-                      <tr key={idx} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={idx} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{r.room}</div>
-                          <span className="text-xs font-mono text-black/60">{r.type} ({r.capacity} Kursi)</span>
+                          <span className="text-xs font-sans text-black/60">{r.type} ({r.capacity} Kursi)</span>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.monday}</td>
-                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.tuesday}</td>
-                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.wednesday}</td>
-                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.thursday}</td>
-                        <td className="p-3.5 sm:p-4 text-xs font-mono">{r.friday}</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-sans">{r.monday}</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-sans">{r.tuesday}</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-sans">{r.wednesday}</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-sans">{r.thursday}</td>
+                        <td className="p-3.5 sm:p-4 text-xs font-sans">{r.friday}</td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2 py-0.5 rounded border text-xs font-sans font-bold',
                               r.status === 'OKUPANSI_TINGGI'
-                                ? 'border-amber-500 bg-amber-100 text-amber-950'
-                                : 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                                ? 'border-ink bg-gray-soft text-ink'
+                                : 'border-ink bg-surface text-ink'
                             )}
                           >
                             {r.status === 'OKUPANSI_TINGGI' ? 'PADAT (>75%)' : 'TERSEDIA (<50%)'}

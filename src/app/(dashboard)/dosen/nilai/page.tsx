@@ -292,8 +292,8 @@ export default function DosenNilaiPage() {
         <div
           className={`flex items-center gap-2 rounded-[8px] p-3 text-sm font-medium ${
             pesanNotif.tipe === "sukses"
-              ? "bg-success-soft text-success border border-success-border"
-              : "bg-danger/10 text-danger border border-danger/20"
+              ? "bg-surface text-ink border border-ink"
+              : "bg-primary/10 text-primary-dark border border-ink"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
@@ -396,7 +396,7 @@ export default function DosenNilaiPage() {
                         size="sm"
                         onClick={() => setIsFinalisasiOpen(true)}
                         disabled={isLoading || !isBobotValid}
-                        className="gap-1.5 text-xs bg-success hover:bg-success/90"
+                        className="gap-1.5 text-xs bg-gray-dark hover:bg-gray-dark/90"
                       >
                         <Lock className="h-3.5 w-3.5" />
                         Finalisasi Nilai
@@ -413,7 +413,7 @@ export default function DosenNilaiPage() {
 
               <CardContent className="p-0">
                 {kelas.statusFinal && (
-                  <div className="bg-success-soft p-3 mx-4 my-3 rounded-[8px] border border-success-border text-xs text-success flex items-center gap-2">
+                  <div className="bg-surface p-3 mx-4 my-3 rounded-[8px] border border-ink text-xs text-ink flex items-center gap-2">
                     <Lock className="h-4 w-4 shrink-0" />
                     <span>
                       Nilai kelas ini telah difinalisasi pada <strong>{kelas.tanggalFinal}</strong>. Lembar nilai telah terkunci. Koreksi nilai hanya dapat diajukan melalui Administrator Akademik.
@@ -470,7 +470,7 @@ export default function DosenNilaiPage() {
                             <TableCell className="text-center font-medium text-xs text-muted-foreground">
                               {idx + 1}
                             </TableCell>
-                            <TableCell className="font-mono text-xs font-semibold text-foreground">
+                            <TableCell className="font-sans text-xs font-semibold text-foreground">
                               {peserta.nim}
                             </TableCell>
                             <TableCell className="text-xs font-medium text-foreground">
@@ -599,7 +599,7 @@ export default function DosenNilaiPage() {
                             const updated = komponenList.filter((_, i) => i !== idx);
                             setKomponenList(updated);
                           }}
-                          className="mt-5 p-2 rounded-[8px] text-danger hover:bg-danger/10"
+                          className="mt-5 p-2 rounded-[8px] text-primary-dark hover:bg-primary/10"
                           title="Hapus Komponen"
                         >
                           <Trash2 className="h-4 w-4" />
@@ -652,7 +652,7 @@ export default function DosenNilaiPage() {
       <Dialog open={isFinalisasiOpen} onOpenChange={setIsFinalisasiOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-danger">
+            <DialogTitle className="flex items-center gap-2 text-primary-dark">
               <Lock className="h-5 w-5" />
               Konfirmasi Finalisasi Nilai Kelas
             </DialogTitle>
@@ -666,7 +666,7 @@ export default function DosenNilaiPage() {
               </strong>
               ?
             </p>
-            <div className="rounded-[8px] bg-danger/10 p-3 text-xs text-danger space-y-1 border border-danger/20">
+            <div className="rounded-[8px] bg-primary/10 p-3 text-xs text-primary-dark space-y-1 border border-ink">
               <p className="font-bold">Perhatian Penting:</p>
               <ul className="list-disc list-inside space-y-0.5">
                 <li>Nilai akan terkunci permanen dan tidak dapat diubah lagi oleh dosen.</li>
@@ -684,7 +684,7 @@ export default function DosenNilaiPage() {
               variant="default"
               onClick={handleFinalisasi}
               disabled={isLoading}
-              className="bg-danger hover:bg-danger/90 text-white"
+              className="bg-primary hover:bg-primary/90 text-white"
             >
               Ya, Finalisasi dan Kunci Nilai
             </Button>
@@ -716,7 +716,7 @@ export default function DosenNilaiPage() {
                 onChange={(e) => setCsvContent(e.target.value)}
                 placeholder={`nim,Tugas,UTS,UAS\n223510001,85,82,88\n223510002,80,78,75`}
                 rows={5}
-                className="w-full rounded-[8px] border border-border p-3 font-mono text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full rounded-[8px] border border-border p-3 font-sans text-xs focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
 
@@ -740,7 +740,7 @@ export default function DosenNilaiPage() {
                   <TableBody>
                     {csvPreview.map((row, idx) => (
                       <TableRow key={idx}>
-                        <TableCell className="font-mono text-xs">{row.nim}</TableCell>
+                        <TableCell className="font-sans text-xs">{row.nim}</TableCell>
                         <TableCell>
                           <Badge variant={row.valid ? "success" : "danger"} className="text-xs">
                             {row.valid ? "Valid" : "Galat"}

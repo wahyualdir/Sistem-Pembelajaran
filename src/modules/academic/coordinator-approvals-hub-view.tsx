@@ -159,7 +159,7 @@ export function CoordinatorApprovalsHubView({
       <RetroWindow
         title="kotak_masuk_persetujuan_prodi.app"
         badge="Otorisasi Program Studi"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -168,7 +168,7 @@ export function CoordinatorApprovalsHubView({
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Persetujuan Program Studi
               </h1>
             </div>
@@ -179,7 +179,7 @@ export function CoordinatorApprovalsHubView({
 
           <div className="flex items-center gap-2.5 shrink-0">
             {totalPending > 0 && (
-              <span className="rounded-lg border-2 border-black bg-rose-500 text-white px-4 py-2 text-xs sm:text-sm font-mono font-black shadow-retro animate-pulse">
+              <span className="rounded-lg border-2 border-black bg-primary text-white px-4 py-2 text-xs sm:text-sm font-sans font-bold shadow-retro animate-pulse">
                 {totalPending} Berkas Menunggu Review
               </span>
             )}
@@ -199,16 +199,16 @@ export function CoordinatorApprovalsHubView({
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
               <span>{tab.label}</span>
               {count > 0 && (
-                <span className="px-1.5 py-0.2 bg-black text-white text-xs rounded-full font-mono">
+                <span className="px-1.5 py-0.2 bg-black text-white text-xs rounded-full font-sans">
                   {count}
                 </span>
               )}
@@ -220,9 +220,9 @@ export function CoordinatorApprovalsHubView({
       {/* 3. TAB 1: KELAS BARU */}
       {activeTab === 'kelas-baru' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <FolderPlus className="h-5 w-5 text-primary" />
                 <span>Persetujuan Pembukaan Kelas Baru & Pemecahan Rombel</span>
               </h2>
@@ -235,7 +235,7 @@ export function CoordinatorApprovalsHubView({
           {/* Empty state & TODO(backend) sesuai spesifikasi */}
           <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
             <CheckCircle2 className="h-10 w-10 text-black/40 mx-auto" />
-            <h3 className="font-heading font-black text-base sm:text-lg text-black">Tidak Ada Pengajuan Kelas Baru</h3>
+            <h3 className="font-heading font-bold text-base sm:text-lg text-black">Tidak Ada Pengajuan Kelas Baru</h3>
             <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
               Saat ini tidak ada permohonan pembukaan rombel kelas baru yang menunggu persetujuan Kaprodi.
             </p>
@@ -247,9 +247,9 @@ export function CoordinatorApprovalsHubView({
       {/* 4. TAB 2: SOAL UJIAN */}
       {activeTab === 'soal-ujian' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <FileCheck className="h-5 w-5 text-primary" />
                 <span>Moderasi & Verifikasi Naskah Soal Ujian (CPL Alignment)</span>
               </h2>
@@ -262,7 +262,7 @@ export function CoordinatorApprovalsHubView({
           {/* Empty state & TODO(backend) sesuai spesifikasi */}
           <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
             <FileCheck className="h-10 w-10 text-black/40 mx-auto" />
-            <h3 className="font-heading font-black text-base sm:text-lg text-black">Semua Naskah Soal Telah Dimoderasi</h3>
+            <h3 className="font-heading font-bold text-base sm:text-lg text-black">Semua Naskah Soal Telah Dimoderasi</h3>
             <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
               Belum ada draf naskah soal ujian baru yang diajukan dosen untuk moderasi semester ini.
             </p>
@@ -274,9 +274,9 @@ export function CoordinatorApprovalsHubView({
       {/* 5. TAB 3: PERUBAHAN NILAI (DATA REAL DARI DOSEN) */}
       {activeTab === 'perubahan-nilai' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <CheckSquare className="h-5 w-5 text-primary" />
                 <span>Permohonan Koreksi / Revisi Nilai Akhir Perkuliahan</span>
               </h2>
@@ -284,7 +284,7 @@ export function CoordinatorApprovalsHubView({
                 Permohonan resmi dosen pengampu. Setelah disetujui Kaprodi, berkas menunggu eksekusi perubahan nilai oleh Staf Akademik (Fase 2D).
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               Total Pengajuan: {requestsList.length}
             </span>
           </div>
@@ -292,7 +292,7 @@ export function CoordinatorApprovalsHubView({
           {requestsList.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <CheckCircle2 className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Tidak Ada Pengajuan Perubahan Nilai</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Tidak Ada Pengajuan Perubahan Nilai</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Saat ini belum ada dosen yang mengajukan usulan revisi nilai perkuliahan ke program studi.
               </p>
@@ -301,7 +301,7 @@ export function CoordinatorApprovalsHubView({
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Mahasiswa & Kelas</th>
                       <th className="p-3.5 sm:p-4">Komponen Evaluasi</th>
@@ -313,23 +313,23 @@ export function CoordinatorApprovalsHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {requestsList.map((r) => (
-                      <tr key={r.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={r.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4">
                           <span className="font-bold text-black block">{r.student_name}</span>
-                          <span className="text-xs text-black/60 font-mono">{r.class_title}</span>
+                          <span className="text-xs text-black/60 font-sans">{r.class_title}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 font-semibold text-black">
                           {r.assignment_title}
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono">
-                          <span className="text-rose-700 font-bold">{r.old_score}</span>
+                        <td className="p-3.5 sm:p-4 text-center font-sans">
+                          <span className="text-primary-dark font-bold">{r.old_score}</span>
                           <span className="text-black/40 mx-1.5">&rarr;</span>
-                          <span className="text-emerald-700 font-black text-sm">{r.proposed_score}</span>
+                          <span className="text-ink font-bold text-sm">{r.proposed_score}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80 max-w-sm">
                           <div>{r.reason}</div>
                           {r.review_note && (
-                            <div className="text-xs font-mono text-emerald-950 mt-1 bg-emerald-50 p-1.5 rounded border border-emerald-300">
+                            <div className="text-xs font-sans text-ink mt-1 bg-surface p-1.5 rounded border border-ink">
                               Catatan Kaprodi: {r.review_note}
                             </div>
                           )}
@@ -337,12 +337,12 @@ export function CoordinatorApprovalsHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold inline-block text-center',
+                              'px-2.5 py-0.5 rounded border text-xs font-sans font-bold inline-block text-center',
                               r.status === 'APPROVED'
-                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                                ? 'border-ink bg-surface text-ink'
                                 : r.status === 'REJECTED'
-                                ? 'border-rose-500 bg-rose-100 text-rose-950'
-                                : 'border-amber-500 bg-amber-100 text-amber-950'
+                                ? 'border-ink bg-surface text-primary-dark'
+                                : 'border-ink bg-gray-soft text-ink'
                             )}
                           >
                             {r.status === 'APPROVED'
@@ -374,7 +374,7 @@ export function CoordinatorApprovalsHubView({
                                     Tolak
                                   </button>
                                 </div>
-                                <span className="text-xs text-amber-900 font-mono font-bold bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                                <span className="text-xs text-ink font-sans font-bold bg-gray-soft border border-ink px-1.5 py-0.5 rounded">
                                   Menunggu Migrasi DB
                                 </span>
                               </div>
@@ -384,7 +384,7 @@ export function CoordinatorApprovalsHubView({
                                   type="button"
                                   disabled={isPending}
                                   onClick={() => openDecisionModal(r, true)}
-                                  className="px-2.5 py-1 rounded-lg border-2 border-black bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 transition-all cursor-pointer shadow-xs"
+                                  className="px-2.5 py-1 rounded-lg border-2 border-black bg-gray-dark text-white text-xs font-bold hover:bg-gray-dark transition-all cursor-pointer shadow-xs"
                                 >
                                   Setujui
                                 </button>
@@ -392,14 +392,14 @@ export function CoordinatorApprovalsHubView({
                                   type="button"
                                   disabled={isPending}
                                   onClick={() => openDecisionModal(r, false)}
-                                  className="px-2.5 py-1 rounded-lg border-2 border-black bg-rose-500 text-white text-xs font-bold hover:bg-rose-600 transition-all cursor-pointer shadow-xs"
+                                  className="px-2.5 py-1 rounded-lg border-2 border-black bg-primary text-white text-xs font-bold hover:bg-primary transition-all cursor-pointer shadow-xs"
                                 >
                                   Tolak
                                 </button>
                               </div>
                             )
                           ) : (
-                            <span className="text-xs font-mono text-black/60">Selesai Ditinjau</span>
+                            <span className="text-xs font-sans text-black/60">Selesai Ditinjau</span>
                           )}
                         </td>
                       </tr>
@@ -415,9 +415,9 @@ export function CoordinatorApprovalsHubView({
       {/* 6. TAB 4: LAINNYA */}
       {activeTab === 'lainnya' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <FileText className="h-5 w-5 text-primary" />
                 <span>Persetujuan Dispensasi Akademik & Cuti Kuliah</span>
               </h2>
@@ -429,7 +429,7 @@ export function CoordinatorApprovalsHubView({
 
           <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
             <CheckCircle2 className="h-10 w-10 text-black/40 mx-auto" />
-            <h3 className="font-heading font-black text-base sm:text-lg text-black">Tidak Ada Pengajuan Dispensasi</h3>
+            <h3 className="font-heading font-bold text-base sm:text-lg text-black">Tidak Ada Pengajuan Dispensasi</h3>
             <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
               Saat ini belum ada pengajuan dispensasi atau cuti kuliah yang memerlukan tanda tangan elektronik Kaprodi.
             </p>
@@ -445,22 +445,22 @@ export function CoordinatorApprovalsHubView({
             className={cn(
               'p-4 rounded-xl border-2 border-black shadow-retro flex items-start gap-3',
               toastMessage.type === 'success'
-                ? 'bg-emerald-100 text-emerald-950'
+                ? 'bg-surface text-ink'
                 : toastMessage.type === 'error'
-                ? 'bg-rose-100 text-rose-950'
-                : 'bg-retro-warm text-black'
+                ? 'bg-surface text-primary-dark'
+                : 'bg-gray-soft text-black'
             )}
           >
             {toastMessage.type === 'success' ? (
-              <CheckCircle2 className="h-5 w-5 text-emerald-700 shrink-0 mt-0.5" />
+              <CheckCircle2 className="h-5 w-5 text-ink shrink-0 mt-0.5" />
             ) : (
-              <AlertCircle className="h-5 w-5 text-rose-700 shrink-0 mt-0.5" />
+              <AlertCircle className="h-5 w-5 text-primary-dark shrink-0 mt-0.5" />
             )}
             <div className="flex-1 text-xs font-bold leading-relaxed">{toastMessage.text}</div>
             <button
               type="button"
               onClick={() => setToastMessage(null)}
-              className="p-1 hover:bg-black/10 rounded font-mono font-bold text-xs"
+              className="p-1 hover:bg-black/10 rounded font-sans font-bold text-xs"
             >
               ✕
             </button>
@@ -475,23 +475,23 @@ export function CoordinatorApprovalsHubView({
             <RetroWindow
               title={`otorisasi_${modalState.approve ? 'setujui' : 'tolak'}_nilai.app`}
               badge={modalState.approve ? 'Setujui Pengajuan' : 'Tolak Pengajuan'}
-              headerClassName={modalState.approve ? 'bg-emerald-300' : 'bg-rose-300'}
+              headerClassName={modalState.approve ? 'bg-gray-dark' : 'bg-primary'}
               bodyClassName="p-5 sm:p-6 bg-white space-y-4"
             >
               <div className="space-y-3">
                 <div className="p-3 bg-neutral-100 rounded-lg border-2 border-black text-xs space-y-1.5 font-medium">
                   <div className="flex justify-between">
                     <span className="font-bold text-black">{modalState.request.student_name}</span>
-                    <span className="font-mono text-black/60">{modalState.request.class_title}</span>
+                    <span className="font-sans text-black/60">{modalState.request.class_title}</span>
                   </div>
-                  <div className="text-black/80 font-mono">
+                  <div className="text-black/80 font-sans">
                     Komponen: <span className="font-bold">{modalState.request.assignment_title}</span>
                   </div>
-                  <div className="flex items-center gap-2 font-mono">
+                  <div className="flex items-center gap-2 font-sans">
                     <span>Nilai:</span>
-                    <span className="line-through text-rose-700 font-bold">{modalState.request.old_score}</span>
+                    <span className="line-through text-primary-dark font-bold">{modalState.request.old_score}</span>
                     <span>&rarr;</span>
-                    <span className="text-emerald-700 font-black text-sm">{modalState.request.proposed_score}</span>
+                    <span className="text-ink font-bold text-sm">{modalState.request.proposed_score}</span>
                   </div>
                   <div className="text-xs text-black/70 italic border-t border-black/20 pt-1">
                     Alasan Dosen: &ldquo;{modalState.request.reason}&rdquo;
@@ -499,12 +499,12 @@ export function CoordinatorApprovalsHubView({
                 </div>
 
                 {modalState.error && (
-                  <div className="p-3 bg-rose-50 border-2 border-rose-500 rounded-lg text-rose-950 text-xs font-bold flex items-start gap-2">
-                    <AlertCircle className="h-4 w-4 text-rose-600 shrink-0 mt-0.5" />
+                  <div className="p-3 bg-surface border-2 border-ink rounded-lg text-primary-dark text-xs font-bold flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 text-primary-dark shrink-0 mt-0.5" />
                     <div>
                       <div>{modalState.error}</div>
                       {modalState.error.includes('sendiri') && (
-                        <div className="text-xs font-normal text-rose-800 mt-1">
+                        <div className="text-xs font-normal text-primary-dark mt-1">
                           Catatan Eskalasi: Berkas pengajuan yang diajukan oleh dosen yang merangkap Kaprodi harus dialihkan persetujuannya ke Dekan / Wakil Dekan Akademik.
                         </div>
                       )}
@@ -514,12 +514,12 @@ export function CoordinatorApprovalsHubView({
 
                 <div className="space-y-1.5">
                   <div className="flex justify-between items-center">
-                    <label className="text-xs font-black uppercase text-black font-mono">
+                    <label className="text-xs font-bold uppercase text-black font-sans">
                       {modalState.approve ? 'Catatan Persetujuan Kaprodi' : 'Alasan Penolakan Kaprodi (Wajib)'}
                     </label>
                     <span className={cn(
-                      'text-xs font-mono font-bold',
-                      modalState.note.trim().length >= 10 ? 'text-emerald-700' : 'text-rose-600'
+                      'text-xs font-sans font-bold',
+                      modalState.note.trim().length >= 10 ? 'text-ink' : 'text-primary-dark'
                     )}>
                       {modalState.note.trim().length}/10 Karakter
                     </span>
@@ -547,10 +547,10 @@ export function CoordinatorApprovalsHubView({
                     disabled={isPending || modalState.note.trim().length < 10}
                     onClick={handleConfirmDecision}
                     className={cn(
-                      'px-4 py-2 rounded-lg border-2 border-black text-white text-xs font-black shadow-retro transition-all cursor-pointer flex items-center gap-1.5',
+                      'px-4 py-2 rounded-lg border-2 border-black text-white text-xs font-bold shadow-retro transition-all cursor-pointer flex items-center gap-1.5',
                       modalState.approve
-                        ? 'bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50'
-                        : 'bg-rose-600 hover:bg-rose-700 disabled:opacity-50'
+                        ? 'bg-gray-dark hover:bg-gray-dark disabled:opacity-50'
+                        : 'bg-primary hover:bg-primary disabled:opacity-50'
                     )}
                   >
                     {isPending ? 'Memproses...' : modalState.approve ? 'Konfirmasi Setujui' : 'Konfirmasi Tolak'}

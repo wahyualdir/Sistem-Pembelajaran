@@ -10,6 +10,7 @@ import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 import { recordSystemAuditLog } from '@/lib/audit';
 import { createClient } from '@/lib/supabase/server';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
+import { assertClassOwner, ClassAccessError, getQuizStore } from '@/lib/auth/class-access';
 
 export type QuestionType =
   | 'MULTIPLE_CHOICE'
@@ -60,6 +61,13 @@ export interface QuizQuestion {
   explanation?: string;
   image_url?: string;
   latex_formula?: string;
+  is_ai_generated?: boolean;
+  ai_draft_status?: 'DRAFT' | 'APPROVED';
+  approved_by?: string;
+  cpmk?: string;
+  rubric_criteria?: Array<{ criterion: string; weight: number; description?: string }>;
+  needs_revision?: boolean;
+  revision_note?: string;
 }
 
 export interface QuizItem {
@@ -192,7 +200,7 @@ export interface QuizAttempt {
 }
 
 // In-memory persistent store
-const quizStore: {
+export const quizStore: {
   quizzes: QuizItem[];
   attempts: QuizAttempt[];
   events: ExamEvent[];
@@ -218,7 +226,7 @@ if (quizStore.disputes.length === 0) {
       attempt_id: 'att-demo-1',
       exam_id: 'exam-demo-001',
       student_id: 'd0000001-0000-0000-0000-000000000001',
-      student_name: 'Wahyu Hidayat (Mahasiswa)',
+      student_name: 'Ahmad Mahasiswa',
       reason: 'Jawaban soal live coding nomor 3 telah memenuhi seluruh test case tersembunyi, namun autograder hanya mendeteksi 2/4 test case karena timeout koneksi.',
       status: 'PENDING',
       submitted_at: new Date(Date.now() - 3600000 * 5).toISOString(),
@@ -375,14 +383,93 @@ const createQuizSchema = z.object({
   ).min(1, 'Ujian/kuis harus memiliki minimal 1 soal.'),
 });
 
+const QUIZ_VIEW_ROLES = [
+  'STUDENT',
+  'LECTURER',
+  'TEACHING_ASSISTANT',
+  'PROGRAM_COORDINATOR',
+  'ACADEMIC_STAFF',
+  'SUPER_ADMIN',
+];
+
+const QUIZ_STAFF_ROLES = [
+  'LECTURER',
+  'TEACHING_ASSISTANT',
+  'PROGRAM_COORDINATOR',
+  'ACADEMIC_STAFF',
+  'SUPER_ADMIN',
+];
+
+const QUIZ_AUTHOR_ROLES = ['LECTURER', 'SUPER_ADMIN'];
+
+/**
+ * A3: Sanitasi soal agar mahasiswa (STUDENT) tidak pernah menerima kunci jawaban,
+ * rubrik/kunci esai, penjelasan jawaban, maupun test case tersembunyi.
+ */
+function sanitizeQuestionForRole(question: QuizQuestion, role?: string | null): QuizQuestion {
+  if (role !== 'STUDENT') {
+    return question;
+  }
+
+  const {
+    correct_answer_index: _correctAnswerIndex,
+    correct_answer_indices: _correctAnswerIndices,
+    correct_boolean: _correctBoolean,
+    correct_text: _correctText,
+    rubric: _rubric,
+    rubric_criteria: _rubricCriteria,
+    explanation: _explanation,
+    ...safeQuestion
+  } = question;
+
+  if (safeQuestion.test_cases) {
+    safeQuestion.test_cases = safeQuestion.test_cases.filter((tc) => !tc.is_hidden);
+  }
+
+  return safeQuestion;
+}
+
+function sanitizeQuizForRole(quiz: QuizItem, role?: string | null): QuizItem {
+  if (role !== 'STUDENT') {
+    return quiz;
+  }
+  return {
+    ...quiz,
+    questions: (quiz.questions ?? []).map((q) => sanitizeQuestionForRole(q, role)),
+  };
+}
+
 // Create Quiz / Exam
 export async function createQuizAction(input: unknown): Promise<ActionResponse<QuizItem>> {
+  const rawQuestions = Array.isArray((input as any)?.questions) ? (input as any).questions : [];
+  const hasUnapprovedAiDraft = rawQuestions.some(
+    (q: any) =>
+      q?.ai_draft_status === 'DRAFT' ||
+      (q?.is_ai_generated === true && q?.ai_draft_status !== 'APPROVED')
+  );
+  if (hasUnapprovedAiDraft) {
+    return {
+      ok: false,
+      error:
+        'FORBIDDEN: Soal draf AI berstatus DRAFT tidak dapat dimasukkan ke ujian aktif sebelum ditinjau dan disetujui Dosen Pengampu.',
+    };
+  }
+
   const p = createQuizSchema.safeParse(input);
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
 
   const user = await getCurrentUserWithRoles();
-  if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
-    return { ok: false, error: 'Aksi ini hanya dapat dilakukan oleh Dosen atau Administrator.' };
+  if (!user || !QUIZ_AUTHOR_ROLES.includes(user.activeRole ?? '')) {
+    return { ok: false, error: 'Aksi ini hanya dapat dilakukan oleh Dosen Pengampu atau Super Admin.' };
+  }
+
+  try {
+    await assertClassOwner(p.data.class_id);
+  } catch (err) {
+    if (err instanceof ClassAccessError) {
+      return { ok: false, error: err.message };
+    }
+    throw err;
   }
 
   const questionsWithIds: QuizQuestion[] = p.data.questions.map((q) => ({
@@ -465,7 +552,11 @@ export async function createQuizAction(input: unknown): Promise<ActionResponse<Q
     return { ok: false, error: 'Fitur ini belum aktif' };
   }
 
-  quizStore.quizzes.push(quiz);
+  const currentStore = getQuizStore();
+  currentStore.quizzes.push(quiz);
+  if (currentStore.quizzes !== quizStore.quizzes) {
+    quizStore.quizzes = currentStore.quizzes;
+  }
 
   // Send in-app notification to students
   await createNotification({
@@ -476,31 +567,55 @@ export async function createQuizAction(input: unknown): Promise<ActionResponse<Q
     class_id: quiz.class_id,
   }).catch(() => {});
 
-  revalidatePath('/classes/[id]', 'page');
+  try {
+    revalidatePath('/classes/[id]', 'page');
+  } catch {
+    // Ignore outside Next.js request context (e.g. unit tests)
+  }
   return { ok: true, data: quiz };
 }
 
 // List Quizzes in Class
 export async function listClassQuizzesAction(classId: string): Promise<QuizItem[]> {
-  return quizStore.quizzes
+  const user = await getCurrentUserWithRoles();
+  if (!user || !QUIZ_VIEW_ROLES.includes(user.activeRole ?? '')) {
+    return [];
+  }
+
+  const currentStore = getQuizStore();
+  return (currentStore.quizzes || [])
     .filter((q) => q.class_id === classId)
-    .sort((a, b) => b.created_at.localeCompare(a.created_at));
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))
+    .map((q) => sanitizeQuizForRole(q, user.activeRole));
 }
 
 // Get Single Quiz Detail
 export async function getQuizDetailAction(quizId: string): Promise<QuizItem | null> {
-  return quizStore.quizzes.find((q) => q.id === quizId) ?? null;
+  const user = await getCurrentUserWithRoles();
+  if (!user || !QUIZ_VIEW_ROLES.includes(user.activeRole ?? '')) {
+    return null;
+  }
+
+  const currentStore = getQuizStore();
+  const quiz = (currentStore.quizzes || []).find((q) => q.id === quizId) ?? null;
+  if (!quiz) return null;
+  return sanitizeQuizForRole(quiz, user.activeRole);
 }
 
 // Get My Quiz Attempt
 export async function getMyQuizAttemptAction(quizId: string): Promise<QuizAttempt | null> {
   const user = await getCurrentUserWithRoles();
-  if (!user) return null;
+  if (!user || user.activeRole === 'SYSTEM_ADMIN') return null;
   return quizStore.attempts.find((a) => a.quiz_id === quizId && a.student_id === user.user.id) ?? null;
 }
 
 // List All Attempts for an Exam
 export async function listQuizAttemptsAction(quizId: string): Promise<QuizAttempt[]> {
+  const user = await getCurrentUserWithRoles();
+  if (!user || !QUIZ_STAFF_ROLES.includes(user.activeRole ?? '')) {
+    return [];
+  }
+
   return quizStore.attempts
     .filter((a) => a.quiz_id === quizId)
     .sort((a, b) => b.submitted_at.localeCompare(a.submitted_at));
@@ -696,7 +811,9 @@ export async function recordExamEventAction(input: {
   details?: string;
 }): Promise<ActionResponse<ExamEvent>> {
   const user = await getCurrentUserWithRoles();
-  if (!user) return { ok: false, error: 'Silakan masuk terlebih dahulu.' };
+  if (!user || user.activeRole !== 'STUDENT') {
+    return { ok: false, error: 'Silakan masuk sebagai mahasiswa peserta ujian terlebih dahulu.' };
+  }
 
   // Hanya jenis event pelanggaran mahasiswa yang dapat dicatat lewat aksi ini
   if (!isStudentViolationEvent(input.event_type)) {
@@ -766,7 +883,9 @@ export async function submitQuizAttemptAction(
   violationsCount: number = 0
 ): Promise<ActionResponse<QuizAttempt>> {
   const user = await getCurrentUserWithRoles();
-  if (!user) return { ok: false, error: 'Silakan login terlebih dahulu.' };
+  if (!user || user.activeRole !== 'STUDENT') {
+    return { ok: false, error: 'Hanya mahasiswa peserta ujian yang dapat mengirimkan jawaban.' };
+  }
 
   // Guard A3c: Dilarang mengirim jawaban atau menyelesaikan ujian selama impersonasi aktif
   if (user.isImpersonating) {
@@ -888,12 +1007,25 @@ export async function gradeEssayQuestionAction(
   notes?: string
 ): Promise<ActionResponse> {
   const user = await getCurrentUserWithRoles();
-  if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
+  if (!user || !QUIZ_AUTHOR_ROLES.includes(user.activeRole ?? '')) {
     return { ok: false, error: 'Tidak memiliki izin menilai ujian.' };
   }
 
-  const att = quizStore.attempts.find((a) => a.id === attemptId);
+  const currentStore = getQuizStore();
+  const att = (currentStore.attempts || []).find((a) => a.id === attemptId);
   if (!att) return { ok: false, error: 'Data pengerjaan tidak ditemukan.' };
+
+  const quiz = (currentStore.quizzes || []).find((q) => q.id === att.quiz_id);
+  if (quiz?.class_id && user.activeRole !== 'SUPER_ADMIN') {
+    try {
+      await assertClassOwner(quiz.class_id);
+    } catch (err) {
+      if (err instanceof ClassAccessError) {
+        return { ok: false, error: err.message };
+      }
+      throw err;
+    }
+  }
 
   att.score = Math.min(att.max_score, Math.max(0, att.score + additionalScore));
   att.is_graded = true;
@@ -904,7 +1036,11 @@ export async function gradeEssayQuestionAction(
     });
   }
 
-  revalidatePath('/classes/[id]', 'page');
+  try {
+    revalidatePath('/classes/[id]', 'page');
+  } catch {
+    // Ignore outside Next.js request context
+  }
   return { ok: true };
 }
 
@@ -914,6 +1050,15 @@ export async function getExamLiveStatusAction(examId: string): Promise<{
   events: ExamEvent[];
   stats: { total: number; in_progress: number; submitted: number; terminated: number; total_violations: number };
 }> {
+  const user = await getCurrentUserWithRoles();
+  if (!user || !QUIZ_STAFF_ROLES.includes(user.activeRole ?? '')) {
+    return {
+      students: [],
+      events: [],
+      stats: { total: 0, in_progress: 0, submitted: 0, terminated: 0, total_violations: 0 },
+    };
+  }
+
   const studentsMap = quizStore.liveStatus[examId] ?? {};
   const students = Object.values(studentsMap);
   const events = quizStore.events
@@ -1058,7 +1203,9 @@ export async function lecturerInterventionAction(input: {
 // Grade Dispute: Submit Dispute by Student
 export async function submitExamDisputeAction(attemptId: string, reason: string): Promise<ActionResponse<ExamDispute>> {
   const user = await getCurrentUserWithRoles();
-  if (!user) return { ok: false, error: 'Silakan login terlebih dahulu.' };
+  if (!user || user.activeRole !== 'STUDENT') {
+    return { ok: false, error: 'Hanya mahasiswa peserta ujian yang dapat mengajukan keberatan nilai.' };
+  }
 
   const dbDisputesReady = isFeatureFlagActive('FF_PERSISTENCE_DISPUTES') && (await checkSupabaseOnline());
   if (!isDemoMode() && !dbDisputesReady) {
@@ -1186,7 +1333,7 @@ export async function resolveExamDisputeAction(input: {
 // Grade Dispute: List Disputes for Lecturer / Student
 export async function listExamDisputesAction(): Promise<ExamDispute[]> {
   const user = await getCurrentUserWithRoles();
-  if (!user) return [];
+  if (!user || !QUIZ_VIEW_ROLES.includes(user.activeRole ?? '')) return [];
   if (user.activeRole === 'STUDENT') {
     return (quizStore.disputes || []).filter((d) => d.student_id === user.user.id);
   }
@@ -1195,18 +1342,50 @@ export async function listExamDisputesAction(): Promise<ExamDispute[]> {
 
 // Question Bank: List & Search
 export async function getQuestionBankAction(topic?: string, difficulty?: string): Promise<QuizQuestion[]> {
-  return quizStore.questionBank.filter((q) => {
-    if (topic && q.topic_tag && !q.topic_tag.toLowerCase().includes(topic.toLowerCase())) return false;
-    if (difficulty && q.difficulty !== difficulty) return false;
-    return true;
-  });
+  const user = await getCurrentUserWithRoles();
+  if (!user || !QUIZ_STAFF_ROLES.includes(user.activeRole ?? '')) {
+    return [];
+  }
+
+  const currentStore = getQuizStore();
+  return (currentStore.questionBank || [])
+    .filter((q) => {
+      if (topic && q.topic_tag && !q.topic_tag.toLowerCase().includes(topic.toLowerCase())) return false;
+      if (difficulty && q.difficulty !== difficulty) return false;
+      return true;
+    })
+    .map((q) => sanitizeQuestionForRole(q, user.activeRole));
 }
 
 // Question Bank: Add Question
-export async function saveToQuestionBankAction(question: Omit<QuizQuestion, 'id'>): Promise<ActionResponse<QuizQuestion>> {
+export async function saveToQuestionBankAction(
+  question: Omit<QuizQuestion, 'id'> & { class_id?: string }
+): Promise<ActionResponse<QuizQuestion>> {
   const user = await getCurrentUserWithRoles();
-  if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
+  if (!user || !QUIZ_AUTHOR_ROLES.includes(user.activeRole ?? '')) {
     return { ok: false, error: 'Hanya dosen yang dapat menyimpan ke Bank Soal.' };
+  }
+
+  if (
+    question.ai_draft_status === 'DRAFT' ||
+    (question.is_ai_generated === true && question.ai_draft_status !== 'APPROVED')
+  ) {
+    return {
+      ok: false,
+      error:
+        'FORBIDDEN: Soal draf AI berstatus DRAFT wajib melalui proses persetujuan dosen (approveAiQuestionsToBankAction).',
+    };
+  }
+
+  if (question.class_id && user.activeRole !== 'SUPER_ADMIN') {
+    try {
+      await assertClassOwner(question.class_id);
+    } catch (err) {
+      if (err instanceof ClassAccessError) {
+        return { ok: false, error: err.message };
+      }
+      throw err;
+    }
   }
 
   const q: QuizQuestion = {
@@ -1214,7 +1393,11 @@ export async function saveToQuestionBankAction(question: Omit<QuizQuestion, 'id'
     id: randomUUID(),
   };
 
-  quizStore.questionBank.push(q);
+  const currentStore = getQuizStore();
+  currentStore.questionBank.push(q);
+  if (currentStore.questionBank !== quizStore.questionBank) {
+    quizStore.questionBank = currentStore.questionBank;
+  }
   return { ok: true, data: q };
 }
 
@@ -1229,6 +1412,20 @@ export async function getExamAnalyticsAction(examId: string): Promise<{
   difficulty_analysis: { question_id: string; question_text: string; difficulty_index: number; category: string }[];
   violation_summary: Record<string, number>;
 }> {
+  const user = await getCurrentUserWithRoles();
+  if (!user || !QUIZ_STAFF_ROLES.includes(user.activeRole ?? '')) {
+    return {
+      exam_title: '',
+      total_attempts: 0,
+      average_score: 0,
+      highest_score: 0,
+      lowest_score: 0,
+      passing_rate_percentage: 0,
+      difficulty_analysis: [],
+      violation_summary: {},
+    };
+  }
+
   const exam = quizStore.quizzes.find((q) => q.id === examId);
   const attempts = quizStore.attempts.filter((a) => a.quiz_id === examId);
   const events = quizStore.events.filter((e) => e.exam_id === examId);
@@ -1284,14 +1481,16 @@ export async function getExamAnalyticsAction(examId: string): Promise<{
 
 export async function getAllQuizzesAction(): Promise<QuizItem[]> {
   const c = await getCurrentUserWithRoles();
-  if (c?.isNewAccount) return [];
-  return quizStore.quizzes.sort((a, b) => b.created_at.localeCompare(a.created_at));
+  if (!c || c.isNewAccount || !QUIZ_VIEW_ROLES.includes(c.activeRole ?? '')) return [];
+  return quizStore.quizzes
+    .sort((a, b) => b.created_at.localeCompare(a.created_at))
+    .map((q) => sanitizeQuizForRole(q, c.activeRole));
 }
 
 export async function getAllAttemptsAction(): Promise<QuizAttempt[]> {
   const c = await getCurrentUserWithRoles();
-  if (c?.isNewAccount) return [];
-  if (c && c.activeRole === 'STUDENT') {
+  if (!c || c.isNewAccount || !QUIZ_VIEW_ROLES.includes(c.activeRole ?? '')) return [];
+  if (c.activeRole === 'STUDENT') {
     return quizStore.attempts.filter((a) => a.student_id === c.user.id);
   }
   return quizStore.attempts;

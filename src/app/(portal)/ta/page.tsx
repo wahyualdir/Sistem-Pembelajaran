@@ -22,7 +22,7 @@ export default async function AssistantPortalPage() {
       <RetroWindow
         title="asisten_dosen_portal.app"
         badge="ROLE: ASISTEN DOSEN"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-6 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -31,7 +31,7 @@ export default async function AssistantPortalPage() {
               <div className="p-2 rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-xs">
                 <Users className="h-5 w-5" />
               </div>
-              <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
                 Antrean Peninjauan Tugas Asistensi
               </h1>
             </div>
@@ -42,7 +42,7 @@ export default async function AssistantPortalPage() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="rounded-full border border-retro-border bg-retro-warm px-3 py-1 text-xs font-mono font-bold text-foreground">
+            <span className="rounded-full border border-retro-border bg-gray-soft px-3 py-1 text-xs font-sans font-bold text-foreground">
               {classes} Kelas Asistensi
             </span>
           </div>
@@ -50,23 +50,23 @@ export default async function AssistantPortalPage() {
 
         {/* Metrik Ringkasan Asdos */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-5 border-t border-retro-border/40 mt-5">
-          <div className="p-3.5 rounded-lg border border-retro-border bg-retro-warm/70 shadow-xs flex items-center gap-3">
+          <div className="p-3.5 rounded-lg border border-retro-border bg-gray-soft/70 shadow-xs flex items-center gap-3">
             <div className="p-2 rounded border border-retro-border bg-retro-surface text-foreground">
               <Layers className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Kelas Terdaftar</p>
-              <p className="font-heading font-black text-2xl text-foreground leading-tight">{classes}</p>
+              <p className="text-xs font-sans font-bold text-muted-foreground uppercase">Kelas Terdaftar</p>
+              <p className="font-heading font-bold text-2xl text-foreground leading-tight">{classes}</p>
             </div>
           </div>
 
-          <div className="p-3.5 rounded-lg border border-retro-border bg-retro-yellow/40 shadow-xs flex items-center gap-3">
+          <div className="p-3.5 rounded-lg border border-retro-border bg-gray-soft/40 shadow-xs flex items-center gap-3">
             <div className="p-2 rounded border border-retro-border bg-retro-surface text-foreground">
               <Clock className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-mono font-bold text-foreground uppercase">Tugas Perlu Review</p>
-              <p className="font-heading font-black text-2xl text-foreground leading-tight">{items.length}</p>
+              <p className="text-xs font-sans font-bold text-foreground uppercase">Tugas Perlu Review</p>
+              <p className="font-heading font-bold text-2xl text-foreground leading-tight">{items.length}</p>
             </div>
           </div>
 
@@ -75,8 +75,8 @@ export default async function AssistantPortalPage() {
               <FileCheck className="h-5 w-5" />
             </div>
             <div>
-              <p className="text-xs font-mono font-bold text-foreground uppercase">Total Submisi Pending</p>
-              <p className="font-heading font-black text-2xl text-foreground leading-tight">{totalPending}</p>
+              <p className="text-xs font-sans font-bold text-foreground uppercase">Total Submisi Pending</p>
+              <p className="font-heading font-bold text-2xl text-foreground leading-tight">{totalPending}</p>
             </div>
           </div>
         </div>
@@ -86,21 +86,21 @@ export default async function AssistantPortalPage() {
       <RetroWindow
         title={`antrean_peninjauan_tugas.list (${items.length})`}
         badge={items.length > 0 ? 'TUGAS AKTIF' : 'SELESAI'}
-        headerClassName="bg-retro-warm"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 space-y-4"
       >
         <div className="flex items-center justify-between">
-          <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
+          <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
             <ClipboardList className="h-4 w-4 text-primary" />
             <span>Daftar Pengumpulan Menunggu Penilaian</span>
           </h2>
-          <span className="text-xs font-mono text-muted-foreground">
+          <span className="text-xs font-sans text-muted-foreground">
             {totalPending} berkas belum dinilai
           </span>
         </div>
 
         {classes === 0 ? (
-          <div className="p-8 text-center rounded-lg border border-dashed border-retro-border bg-retro-warm/30 space-y-2">
+          <div className="p-8 text-center rounded-lg border border-dashed border-retro-border bg-gray-soft/30 space-y-2">
             <Users className="h-8 w-8 text-muted-foreground mx-auto" />
             <p className="text-sm font-bold text-foreground">Belum Ada Penugasan Asisten</p>
             <p className="text-xs text-muted-foreground max-w-md mx-auto">
@@ -108,7 +108,7 @@ export default async function AssistantPortalPage() {
             </p>
           </div>
         ) : items.length === 0 ? (
-          <div className="p-8 text-center rounded-lg border border-dashed border-retro-border bg-retro-warm/30 space-y-2">
+          <div className="p-8 text-center rounded-lg border border-dashed border-retro-border bg-gray-soft/30 space-y-2">
             <CheckCircle2 className="h-8 w-8 text-retro-mint mx-auto" />
             <p className="text-sm font-bold text-foreground">Semua Tugas Selesai Ditinjau!</p>
             <p className="text-xs text-muted-foreground max-w-md mx-auto">
@@ -121,12 +121,12 @@ export default async function AssistantPortalPage() {
               <Link
                 key={t.assignment_id}
                 href={`/classes/${t.class_id}/assignments/${t.assignment_id}`}
-                className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-retro hover:bg-retro-warm/40 transition-all focus-visible:outline-none"
+                className="group flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-retro hover:bg-gray-soft/40 transition-all focus-visible:outline-none"
                 style={{ animationDelay: `${i * 50}ms` }}
               >
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 rounded bg-retro-warm border border-retro-border text-xs font-mono font-bold text-foreground">
+                    <span className="px-2 py-0.5 rounded bg-gray-soft border border-retro-border text-xs font-sans font-bold text-foreground">
                       {t.class_title}
                     </span>
                     <h3 className="font-heading font-bold text-sm text-foreground group-hover:text-primary-dark transition-colors">
@@ -139,7 +139,7 @@ export default async function AssistantPortalPage() {
                 </div>
 
                 <div className="flex items-center gap-3 shrink-0 w-full sm:w-auto justify-between sm:justify-end">
-                  <span className="px-2.5 py-1 rounded border border-retro-border bg-retro-yellow text-black font-mono font-bold text-xs shadow-xs">
+                  <span className="px-2.5 py-1 rounded border border-retro-border bg-gray-soft text-black font-sans font-bold text-xs shadow-xs">
                     {t.pending} dari {t.total} belum dinilai
                   </span>
                   <div className="flex items-center gap-1 text-xs font-bold text-primary group-hover:translate-x-1 transition-transform">

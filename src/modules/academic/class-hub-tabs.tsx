@@ -44,12 +44,15 @@ import { RetroWindow } from '@/components/retro/retro-window';
 import { MarkdownViewer } from '@/components/shared/markdown-viewer';
 import { CreateAnnouncementForm, CreateAssignmentForm, CreateMaterialForm, SubmitForm } from './assignment-forms';
 import { AssistantForm, RevokeAssistant } from './assistant-forms';
-import { NewDiscussionForm } from './discussion-forms';
 import { CreateQuizModal } from './quiz-components';
 import { CreateAttendanceSessionModal, StudentCheckInForm, AttendanceSummaryCard } from './attendance-components';
 import { DELEGABLE_LABELS } from './permissions';
 import type { QuizItem } from './quiz-actions';
 import type { AttendanceSession, StudentAttendanceSummary } from './attendance-actions';
+import { ClassRiskCard } from '@/modules/early-warning/class-risk-card';
+import type { StudentRiskEvaluation } from '@/modules/early-warning/types';
+import { ClassForumTabView } from './class-forum-tab-view';
+import type { ForumTopic } from './forum-actions';
 
 export interface ClassDetailData {
   cls: {
@@ -101,12 +104,14 @@ export interface ClassDetailData {
   members?: Array<{
     student_id: string;
     name: string;
+    nim?: string;
     enrolled_at?: string;
   }>;
   assistants?: Array<{
     user_id: string;
     name: string;
-    email: string;
+    nim?: string;
+    nidn?: string;
     permissions: string[];
   }>;
   viewer: string;
@@ -114,6 +119,9 @@ export interface ClassDetailData {
   quizzes?: QuizItem[];
   attendanceSessions?: AttendanceSession[];
   attendanceSummary?: StudentAttendanceSummary | null;
+  riskEvaluations?: StudentRiskEvaluation[];
+  forumTopics?: ForumTopic[];
+  forumTags?: string[];
 }
 
 // 4 TAB IKONIK GOOGLE CLASSROOM
@@ -179,6 +187,8 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
     quizzes = [],
     attendanceSessions = [],
     attendanceSummary,
+    forumTopics = [],
+    forumTags = [],
   } = data;
 
   const lecturer = viewer === 'LECTURER';
@@ -224,7 +234,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
         {/* Tombol Kembali ke Daftar Kelas */}
         <Link
           href="/classes"
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border-2 border-black bg-white font-bold text-xs sm:text-sm text-black shadow-retro hover:bg-retro-warm transition-all w-fit"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border-2 border-black bg-white font-bold text-xs sm:text-sm text-black shadow-retro hover:bg-gray-soft transition-all w-fit"
         >
           <span>&larr;</span>
           <span>Daftar Kelas</span>
@@ -244,7 +254,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   'flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0 cursor-pointer',
                   isActive
                     ? 'border-2 border-black bg-black text-white shadow-retro scale-[1.02]'
-                    : 'border-2 border-black bg-white text-black shadow-xs hover:bg-retro-warm'
+                    : 'border-2 border-black bg-white text-black shadow-xs hover:bg-gray-soft'
                 )}
               >
                 <Icon className="h-4 w-4 shrink-0" />
@@ -260,7 +270,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             <button
               type="button"
               onClick={handleCopyCode}
-              className="text-xs font-bold bg-retro-yellow text-black border-2 border-black px-3 py-1.5 rounded-lg shadow-xs hover:bg-white transition-all flex items-center gap-1.5"
+              className="text-xs font-bold bg-surface text-black border-2 border-black px-3 py-1.5 rounded-lg shadow-xs hover:bg-white transition-all flex items-center gap-1.5"
               title="Salin Kode Kelas"
             >
               <Key className="h-3.5 w-3.5 text-primary" />
@@ -272,7 +282,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               )}
             </button>
           )}
-          <span className="text-xs font-bold text-black bg-retro-warm border-2 border-black px-2.5 py-1.5 rounded-lg">
+          <span className="text-xs font-bold text-black bg-gray-soft border-2 border-black px-2.5 py-1.5 rounded-lg">
             {cls.sks || 3} SKS
           </span>
         </div>
@@ -284,13 +294,13 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {(activeTab === 'forum' || activeTab === 'jawab-forum') && (
         <div className="space-y-6">
           {/* A. HERO COVER BANNER ALA GOOGLE CLASSROOM */}
-          <div className="rounded-2xl border-2 border-black bg-pastel-peach shadow-retro-md p-6 sm:p-8 lg:p-10 relative overflow-hidden">
+          <div className="rounded-2xl border-2 border-black bg-gray-soft shadow-retro-md p-6 sm:p-8 lg:p-10 relative overflow-hidden">
             {/* Header Baris & Status */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-traffic-red inline-block shadow-retro-sm" />
-                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-traffic-yellow inline-block shadow-retro-sm" />
-                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-traffic-green inline-block shadow-retro-sm" />
+                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-primary inline-block shadow-retro-sm" />
+                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-gray inline-block shadow-retro-sm" />
+                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-gray-dark inline-block shadow-retro-sm" />
                 <span className="text-xs font-semibold text-black ml-2">
                   Kelas {cls.section}
                 </span>
@@ -301,7 +311,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             </div>
 
             <div className="space-y-2 max-w-3xl">
-              <span className="text-xs font-semibold text-black bg-retro-yellow px-2.5 py-1 rounded border border-black inline-block shadow-xs">
+              <span className="text-xs font-semibold text-black bg-surface px-2.5 py-1 rounded border border-black inline-block shadow-xs">
                 Kelas {cls.section}
               </span>
               <h1 className="font-bold text-2xl sm:text-3xl text-black tracking-tight leading-snug">
@@ -351,7 +361,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 ) : (
                   <div className="space-y-2.5">
                     {upcomingAssignments.slice(0, 3).map((a) => (
-                      <div key={a.id} className="p-3 rounded-xl border border-black/20 bg-retro-warm/30 space-y-1">
+                      <div key={a.id} className="p-3 rounded-xl border border-black/20 bg-gray-soft/30 space-y-1">
                         <span className="text-xs font-semibold text-black/60 block">
                           Batas: {fmt(a.close_at)}
                         </span>
@@ -369,7 +379,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   <span>Presensi Perkuliahan</span>
                 </h3>
                 {attendanceSessions.length > 0 && attendanceSessions.some((s) => s.is_open) ? (
-                  <div className="p-3.5 rounded-xl border-2 border-black bg-retro-yellow/40 space-y-2 text-xs">
+                  <div className="p-3.5 rounded-xl border-2 border-black bg-surface/40 space-y-2 text-xs">
                     <span className="font-bold text-black block">Sesi Pertemuan Sedang Dibuka!</span>
                     <button
                       type="button"
@@ -408,34 +418,32 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
             {/* Kolom Kanan: Main Stream Feed */}
             <div className="lg:col-span-8 space-y-5">
-              {/* Post Box "Umumkan sesuatu ke kelas Anda..." */}
-              <div className="rounded-2xl border-2 border-black bg-white shadow-retro p-4 sm:p-5 space-y-3">
-                <div
-                  onClick={() => setIsAnnounceOpen(!isAnnounceOpen)}
-                  className="flex items-center gap-3.5 p-3 sm:p-3.5 rounded-xl border border-black/25 bg-neutral-50 hover:bg-retro-warm/30 cursor-pointer transition-all"
-                >
-                  <div className="h-9 w-9 rounded-full border-2 border-black bg-retro-warm flex items-center justify-center font-bold text-xs shrink-0">
-                    {viewer === 'LECTURER' ? 'DS' : 'MH'}
+              {/* Post Box "Umumkan sesuatu ke kelas Anda..." (Khusus Dosen Pengampu; diskusi forum menggunakan ClassForumTabView di bawah) */}
+              {lecturer && (
+                <div className="rounded-2xl border-2 border-black bg-white shadow-retro p-4 sm:p-5 space-y-3">
+                  <div
+                    onClick={() => setIsAnnounceOpen(!isAnnounceOpen)}
+                    className="flex items-center gap-3.5 p-3 sm:p-3.5 rounded-xl border border-black/25 bg-neutral-50 hover:bg-gray-soft/30 cursor-pointer transition-all"
+                  >
+                    <div className="h-9 w-9 rounded-full border-2 border-black bg-gray-soft flex items-center justify-center font-bold text-xs shrink-0">
+                      DS
+                    </div>
+                    <span className="text-xs sm:text-sm font-normal text-black/65 flex-1">
+                      Umumkan sesuatu ke kelas Anda...
+                    </span>
+                    <Send className="h-4 w-4 text-black/40 shrink-0" />
                   </div>
-                  <span className="text-xs sm:text-sm font-normal text-black/65 flex-1">
-                    Umumkan sesuatu atau ajukan pertanyaan ke kelas...
-                  </span>
-                  <Send className="h-4 w-4 text-black/40 shrink-0" />
-                </div>
 
-                {isAnnounceOpen && (
-                  <div className="pt-3 border-t-2 border-black/15 animate-fade-up space-y-3">
-                    <h4 className="text-xs font-bold text-black">
-                      {lecturer ? 'Kirim Pengumuman Resmi Dosen' : 'Mulai Topik Diskusi Mahasiswa'}
-                    </h4>
-                    {lecturer ? (
+                  {isAnnounceOpen && (
+                    <div className="pt-3 border-t-2 border-black/15 animate-fade-up space-y-3">
+                      <h4 className="text-xs font-bold text-black">
+                        Kirim Pengumuman Resmi Dosen
+                      </h4>
                       <CreateAnnouncementForm classId={cls.id} />
-                    ) : (
-                      <NewDiscussionForm classId={cls.id} />
-                    )}
-                  </div>
-                )}
-              </div>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Feed: Pengumuman Dosen & Diskusi Kelas */}
               <div className="space-y-4">
@@ -456,7 +464,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           <span className="text-xs font-normal text-black/60">{fmt(a.created_at)}</span>
                         </div>
                       </div>
-                      <span className="text-xs font-medium uppercase bg-retro-warm px-2 py-0.5 rounded border border-black">
+                      <span className="text-xs font-medium uppercase bg-gray-soft px-2 py-0.5 rounded border border-black">
                         Pengumuman
                       </span>
                     </div>
@@ -471,10 +479,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   <div
                     key={asg.id}
                     onClick={() => setActiveTab('tugas')}
-                    className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro hover:bg-retro-warm/20 cursor-pointer transition-all flex items-center justify-between gap-4"
+                    className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro hover:bg-gray-soft/20 cursor-pointer transition-all flex items-center justify-between gap-4"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="p-2.5 rounded-xl border-2 border-black bg-pastel-mint text-black shrink-0">
+                      <div className="p-2.5 rounded-xl border-2 border-black bg-surface text-black shrink-0">
                         <FileText className="h-5 w-5" />
                       </div>
                       <div>
@@ -489,31 +497,16 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   </div>
                 ))}
 
-                {/* Diskusi Kelas */}
-                {discussions.map((d) => (
-                  <Link
-                    key={d.id}
-                    href={`/classes/${cls.id}/discussions/${d.id}`}
-                    className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro hover:bg-retro-warm/20 transition-all flex items-center justify-between gap-4 block"
-                  >
-                    <div className="flex items-center gap-3.5">
-                      <div className="p-2.5 rounded-xl border-2 border-black bg-retro-warm text-black shrink-0">
-                        <MessagesSquare className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-sm sm:text-base text-black hover:underline">
-                          {d.title}
-                        </h4>
-                        <p className="text-xs text-black/70 font-normal">
-                          Oleh <strong>{d.author_name}</strong> · {d.reply_count} Balasan
-                        </p>
-                      </div>
-                    </div>
-                    <span className="text-xs font-bold text-black bg-retro-warm border border-black px-2.5 py-1 rounded-lg shrink-0">
-                      Diskusi &rarr;
-                    </span>
-                  </Link>
-                ))}
+                {/* Forum Diskusi Interaktif Terpadu Kelas */}
+                <div className="pt-2">
+                  <ClassForumTabView
+                    classId={cls.id}
+                    initialTopics={forumTopics}
+                    availableTags={forumTags}
+                    userRole={lecturer ? 'LECTURER' : ta ? 'TEACHING_ASSISTANT' : 'STUDENT'}
+                    currentUserId={viewer}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -544,7 +537,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     'px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0',
                     classworkFilter === f.id
                       ? 'border-2 border-black bg-black text-white shadow-xs'
-                      : 'border-2 border-black bg-white text-black hover:bg-retro-warm'
+                      : 'border-2 border-black bg-white text-black hover:bg-gray-soft'
                   )}
                 >
                   {f.label}
@@ -569,7 +562,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
           {/* Form Pembuatan Konten jika Dosen mengklik "+ Buat" */}
           {lecturer && isClassworkCreateOpen && (
-            <div className="p-6 rounded-2xl border-2 border-black bg-retro-warm/50 shadow-retro space-y-6 animate-fade-up">
+            <div className="p-6 rounded-2xl border-2 border-black bg-gray-soft/50 shadow-retro space-y-6 animate-fade-up">
               <h3 className="font-bold text-base text-black flex items-center gap-2">
                 <PlusCircle className="h-5 w-5 text-primary" />
                 <span>Publikasikan Tugas atau Materi</span>
@@ -627,7 +620,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           className="p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-neutral-50 transition-colors"
                         >
                           <div className="flex items-center gap-3.5 min-w-0">
-                            <div className="p-2.5 rounded-xl border-2 border-black bg-pastel-mint text-black shrink-0">
+                            <div className="p-2.5 rounded-xl border-2 border-black bg-surface text-black shrink-0">
                               <FileText className="h-5 w-5" />
                             </div>
                             <div className="min-w-0">
@@ -643,14 +636,14 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                               <span
                                 className={cn(
                                   'text-xs font-semibold px-2.5 py-1 rounded-lg border border-black',
-                                  a.mine ? 'bg-retro-mint text-black' : closed ? 'bg-danger text-white' : 'bg-retro-warm text-black'
+                                  a.mine ? 'bg-retro-mint text-black' : closed ? 'bg-primary text-white' : 'bg-gray-soft text-black'
                                 )}
                               >
                                 {a.mine ? 'Diserahkan' : closed ? 'Ditutup' : 'Ditugaskan'}
                               </span>
                             )}
                             {lecturer && (
-                              <span className="text-xs font-medium bg-retro-warm border border-black px-2 py-1 rounded-lg">
+                              <span className="text-xs font-medium bg-gray-soft border border-black px-2 py-1 rounded-lg">
                                 {a.submissions ?? 0} Submisi
                               </span>
                             )}
@@ -691,7 +684,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                                   )}
                                 </div>
                               ) : closed ? (
-                                <p className="text-xs font-bold text-danger">Batas waktu pengumpulan tugas telah berakhir.</p>
+                                <p className="text-xs font-bold text-primary-dark">Batas waktu pengumpulan tugas telah berakhir.</p>
                               ) : (
                                 <SubmitForm assignmentId={a.id} />
                               )}
@@ -724,13 +717,13 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                       className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-3.5">
-                        <div className="p-2.5 rounded-xl border-2 border-black bg-retro-yellow text-black shrink-0">
+                        <div className="p-2.5 rounded-xl border-2 border-black bg-surface text-black shrink-0">
                           <Award className="h-5 w-5" />
                         </div>
                         <div>
                           <div className="flex items-center gap-2">
                             <h4 className="font-semibold text-sm sm:text-base text-black">{q.title}</h4>
-                            <span className="text-xs font-medium bg-retro-warm border border-black px-2 py-0.5 rounded">
+                            <span className="text-xs font-medium bg-gray-soft border border-black px-2 py-0.5 rounded">
                               {q.exam_type ?? 'KUIS'}
                             </span>
                           </div>
@@ -773,7 +766,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-xl border-2 border-black bg-pastel-sky text-black">
+                          <div className="p-2 rounded-xl border-2 border-black bg-surface text-black">
                             <BookOpen className="h-4 w-4" />
                           </div>
                           <div>
@@ -781,12 +774,12 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                             <span className="text-xs font-normal text-black/60">{fmt(m.created_at)}</span>
                           </div>
                         </div>
-                        <span className="text-xs font-medium bg-retro-warm px-2.5 py-1 rounded border border-black">
+                        <span className="text-xs font-medium bg-gray-soft px-2.5 py-1 rounded border border-black">
                           Modul #{idx + 1}
                         </span>
                       </div>
                       {m.body_md && (
-                        <div className="p-4 rounded-xl border border-black/20 bg-retro-warm/20 text-xs sm:text-sm">
+                        <div className="p-4 rounded-xl border border-black/20 bg-gray-soft/20 text-xs sm:text-sm">
                           <MarkdownViewer content={m.body_md} />
                         </div>
                       )}
@@ -815,7 +808,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                       className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-3.5">
-                        <div className="p-2.5 rounded-xl border-2 border-black bg-retro-warm text-black shrink-0">
+                        <div className="p-2.5 rounded-xl border-2 border-black bg-gray-soft text-black shrink-0">
                           <CalendarCheck2 className="h-5 w-5" />
                         </div>
                         <div>
@@ -838,7 +831,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
                       <div className="flex items-center gap-2.5">
                         {lecturer && (
-                          <span className="text-xs font-bold bg-retro-warm border border-black px-2.5 py-1 rounded">
+                          <span className="text-xs font-bold bg-gray-soft border border-black px-2.5 py-1 rounded">
                             Kode: {s.code}
                           </span>
                         )}
@@ -863,6 +856,14 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {/* ======================================================== */}
       {(activeTab === 'anggota' || activeTab === 'peserta') && (
         <div className="space-y-8">
+          {/* Peringatan Dini Mahasiswa Berisiko (Dosen Pengampu & Asisten) */}
+          {(lecturer || ta) && (
+            <ClassRiskCard
+              evaluations={data.riskEvaluations || []}
+              classTitle={cls.title}
+            />
+          )}
+
           {/* Section Pengajar */}
           <div className="space-y-4">
             <div className="flex items-center justify-between border-b-2 border-black/20 pb-3">
@@ -870,7 +871,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 <UserCheck className="h-5 w-5 text-primary" />
                 <span>Dosen & Pengajar</span>
               </h3>
-              <span className="text-xs font-medium bg-retro-warm border border-black px-2.5 py-1 rounded">
+              <span className="text-xs font-medium bg-gray-soft border border-black px-2.5 py-1 rounded">
                 {(assistants?.length ?? 0) + 1} Pengajar
               </span>
             </div>
@@ -878,15 +879,15 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             {/* Dosen Utama */}
             <div className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex items-center justify-between gap-4">
               <div className="flex items-center gap-3.5">
-                <div className="h-11 w-11 rounded-full border-2 border-black bg-pastel-peach flex items-center justify-center font-bold text-sm text-black shrink-0">
+                <div className="h-11 w-11 rounded-full border-2 border-black bg-gray-soft flex items-center justify-center font-bold text-sm text-black shrink-0">
                   BS
                 </div>
                 <div>
                   <h4 className="font-semibold text-base text-black">Dr. Budi Santoso, M.Kom</h4>
-                  <span className="text-xs text-black/60 font-normal">Dosen Pengampu Utama</span>
+                  <span className="text-xs text-black/60 font-normal">NIDN: 0012345678 • Dosen Pengampu Utama</span>
                 </div>
               </div>
-              <span className="text-xs font-medium bg-retro-yellow border border-black px-3 py-1 rounded-lg">
+              <span className="text-xs font-medium bg-surface border border-black px-3 py-1 rounded-lg">
                 Dosen
               </span>
             </div>
@@ -900,20 +901,28 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     className="p-4 rounded-2xl border-2 border-black bg-white shadow-retro flex items-center justify-between gap-4"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="h-10 w-10 rounded-full border-2 border-black bg-retro-warm flex items-center justify-center font-bold text-xs text-black shrink-0">
+                      <div className="h-10 w-10 rounded-full border-2 border-black bg-gray-soft flex items-center justify-center font-bold text-xs text-black shrink-0">
                         {ast.name.slice(0, 2).toUpperCase()}
                       </div>
                       <div>
                         <h4 className="font-bold text-sm text-black">{ast.name}</h4>
-                        <span className="text-xs text-black/60">{ast.email}</span>
+                        <span className="text-xs text-black/60">
+                          {ast.nidn ? `NIDN: ${ast.nidn}` : `NIM: ${ast.nim || '2024002'}`}
+                        </span>
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold bg-retro-mint border border-black px-2.5 py-1 rounded">
+                      <span className="text-xs font-bold bg-surface text-ink border border-black px-2.5 py-1 rounded">
                         Asisten Dosen
                       </span>
-                      {lecturer && <RevokeAssistant classId={cls.id} email={ast.email} name={ast.name} />}
+                      {lecturer && (
+                        <RevokeAssistant
+                          classId={cls.id}
+                          identifier={ast.nim || ast.nidn || ast.user_id}
+                          name={ast.name}
+                        />
+                      )}
                     </div>
                   </div>
                 ))}
@@ -922,7 +931,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
             {/* Form Tambah Asisten untuk Dosen */}
             {lecturer && (
-              <div className="p-5 rounded-2xl border-2 border-black bg-retro-warm/40 space-y-3">
+              <div className="p-5 rounded-2xl border-2 border-black bg-gray-soft/40 space-y-3">
                 <h4 className="font-bold text-sm text-black">+ Tambah Asisten Dosen Baru</h4>
                 <AssistantForm classId={cls.id} />
               </div>
@@ -936,7 +945,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 <Users className="h-5 w-5 text-primary" />
                 <span>Daftar Mahasiswa</span>
               </h3>
-              <span className="text-xs font-medium bg-retro-warm border border-black px-2.5 py-1 rounded">
+              <span className="text-xs font-medium bg-gray-soft border border-black px-2.5 py-1 rounded">
                 {members.length} Mahasiswa
               </span>
             </div>
@@ -947,17 +956,19 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
-                {members.map((m, idx) => (
+                {members.map((m) => (
                   <div
                     key={m.student_id}
                     className="p-3.5 rounded-xl border-2 border-black bg-white shadow-retro flex items-center gap-3"
                   >
-                    <div className="h-9 w-9 rounded-full border-2 border-black bg-retro-warm flex items-center justify-center font-bold text-xs shrink-0">
+                    <div className="h-9 w-9 rounded-full border-2 border-black bg-gray-soft flex items-center justify-center font-bold text-xs shrink-0">
                       {m.name.slice(0, 2).toUpperCase()}
                     </div>
                     <div className="min-w-0">
                       <p className="font-medium text-xs sm:text-sm text-black truncate">{m.name}</p>
-                      <span className="text-xs font-normal text-black/60">Peserta #{idx + 1}</span>
+                      <span className="text-xs font-normal text-black/60">
+                        NIM: {m.nim || m.student_id.slice(0, 8)}
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -972,12 +983,12 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {/* ======================================================== */}
       {activeTab === 'asisten' && (
         <div className="space-y-6">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-2xl flex items-center justify-between">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-2xl flex items-center justify-between">
             <div>
-              <h3 className="font-heading font-black text-lg text-black">Kelola Asisten Dosen & Hak Akses</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Kelola Asisten Dosen & Hak Akses</h3>
               <p className="text-xs text-black/70 font-medium">Delegasikan izin pengelolaan presensi, koreksi tugas, dan materi kelas kepada asisten resmi.</p>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
               {assistants?.length ?? 0} Asisten Aktif
             </span>
           </div>
@@ -988,17 +999,25 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               {assistants.map((ast) => (
                 <div key={ast.user_id} className="p-4 rounded-2xl border-2 border-black bg-white shadow-retro flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3.5">
-                    <div className="h-10 w-10 rounded-full border-2 border-black bg-retro-warm flex items-center justify-center font-bold text-xs text-black shrink-0">
+                    <div className="h-10 w-10 rounded-full border-2 border-black bg-gray-soft flex items-center justify-center font-bold text-xs text-black shrink-0">
                       {ast.name.slice(0, 2).toUpperCase()}
                     </div>
                     <div>
                       <h4 className="font-bold text-sm text-black">{ast.name}</h4>
-                      <span className="text-xs text-black/60">{ast.email}</span>
+                      <span className="text-xs text-black/60">
+                        {ast.nidn ? `NIDN: ${ast.nidn}` : `NIM: ${ast.nim || '2024002'}`}
+                      </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold bg-retro-mint border border-black px-2.5 py-1 rounded">Asisten Dosen</span>
-                    {lecturer && <RevokeAssistant classId={cls.id} email={ast.email} name={ast.name} />}
+                    {lecturer && (
+                      <RevokeAssistant
+                        classId={cls.id}
+                        identifier={ast.nim || ast.nidn || ast.user_id}
+                        name={ast.name}
+                      />
+                    )}
                   </div>
                 </div>
               ))}
@@ -1007,7 +1026,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
           {/* Form Tambah Asisten untuk Dosen */}
           {lecturer && (
-            <div className="p-5 rounded-2xl border-2 border-black bg-retro-warm/40 space-y-3">
+            <div className="p-5 rounded-2xl border-2 border-black bg-gray-soft/40 space-y-3">
               <h4 className="font-bold text-sm text-black">+ Tambah Asisten Dosen Baru</h4>
               <AssistantForm classId={cls.id} />
             </div>
@@ -1020,13 +1039,13 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {/* ======================================================== */}
       {(activeTab === 'materi' || activeTab === 'materi-asisten') && (
         <div className="space-y-6">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-2xl flex items-center justify-between">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-2xl flex items-center justify-between">
             <div>
-              <h3 className="font-heading font-black text-lg text-black">Modul & Bahan Pembelajaran</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Modul & Bahan Pembelajaran</h3>
               <p className="text-xs text-black/70 font-medium">Bahan ajar kuliah, slide presentasi, panduan praktikum lab, dan referensi bacaan.</p>
             </div>
             {(lecturer || ta) && (
-              <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+              <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
                 {materials.length} Modul Terbit
               </span>
             )}
@@ -1052,7 +1071,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 <div key={m.id} className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-xl border-2 border-black bg-pastel-sky text-black">
+                      <div className="p-2 rounded-xl border-2 border-black bg-surface text-black">
                         <BookOpen className="h-4 w-4" />
                       </div>
                       <div>
@@ -1060,12 +1079,12 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                         <span className="text-xs font-normal text-black/60">{fmt(m.created_at)}</span>
                       </div>
                     </div>
-                    <span className="text-xs font-medium bg-retro-warm px-2.5 py-1 rounded border border-black">
+                    <span className="text-xs font-medium bg-gray-soft px-2.5 py-1 rounded border border-black">
                       Modul #{idx + 1}
                     </span>
                   </div>
                   {m.body_md && (
-                    <div className="p-4 rounded-xl border border-black/20 bg-retro-warm/20 text-xs sm:text-sm">
+                    <div className="p-4 rounded-xl border border-black/20 bg-gray-soft/20 text-xs sm:text-sm">
                       <MarkdownViewer content={m.body_md} />
                     </div>
                   )}
@@ -1081,9 +1100,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {/* ======================================================== */}
       {(activeTab === 'presensi' || activeTab === 'bantu-presensi') && (
         <div className="space-y-6">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-2xl flex items-center justify-between">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-2xl flex items-center justify-between">
             <div>
-              <h3 className="font-heading font-black text-lg text-black">
+              <h3 className="font-heading font-bold text-lg text-black">
                 {ta ? 'Bantu Presensi Kelas & Sesi Kehadiran' : student ? 'Presensi Perkuliahan Saya' : 'Presensi Perkuliahan Kelas'}
               </h3>
               <p className="text-xs text-black/70 font-medium">
@@ -1123,7 +1142,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               attendanceSessions.map((s) => (
                 <div key={s.id} className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-3.5">
-                    <div className="p-2.5 rounded-xl border-2 border-black bg-retro-warm text-black shrink-0">
+                    <div className="p-2.5 rounded-xl border-2 border-black bg-gray-soft text-black shrink-0">
                       <CalendarCheck2 className="h-5 w-5" />
                     </div>
                     <div>
@@ -1140,7 +1159,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   </div>
                   <div className="flex items-center gap-2.5">
                     {(lecturer || ta) && (
-                      <span className="text-xs font-bold bg-retro-warm border border-black px-2.5 py-1 rounded">
+                      <span className="text-xs font-bold bg-gray-soft border border-black px-2.5 py-1 rounded">
                         Kode: {s.code}
                       </span>
                     )}
@@ -1193,7 +1212,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 { label: 'Ujian Akhir (UAS)', bobot: '30%', score: '90.0' },
                 { label: 'Kehadiran Kuliah', bobot: '10%', score: '95.0' },
               ].map((it, i) => (
-                <div key={i} className="p-4 rounded-xl border-2 border-black bg-retro-warm/40 text-center space-y-1 shadow-xs">
+                <div key={i} className="p-4 rounded-xl border-2 border-black bg-gray-soft/40 text-center space-y-1 shadow-xs">
                   <span className="text-xs font-semibold text-black/60 uppercase">{it.label}</span>
                   <p className="text-2xl font-bold text-black">{it.score}</p>
                   <span className="text-xs font-normal text-black/70">Bobot {it.bobot}</span>
@@ -1202,7 +1221,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             </div>
 
             {/* Rekap Nilai Akhir */}
-            <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-retro-yellow text-black flex items-center justify-between gap-4">
+            <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-surface text-black flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold text-black/80">Estimasi Nilai Akhir</p>
                 <p className="text-2xl sm:text-3xl font-bold">A (Nilai Akhir: 88.55)</p>

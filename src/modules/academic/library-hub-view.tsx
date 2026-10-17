@@ -105,7 +105,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
       <RetroWindow
         title="Pustaka Digital & Referensi Ilmiah"
         badge={isStaffOrLecturer ? 'Portal Pengajar & Staf' : 'Koleksi Terbuka'}
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -114,7 +114,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <BookOpen className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Pustaka Digital & Modul Terbuka
               </h1>
             </div>
@@ -124,7 +124,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               {books.length} Dokumen Tersedia
             </span>
           </div>
@@ -138,10 +138,10 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
             type="button"
             onClick={() => setTab('koleksi')}
             className={cn(
-              'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+              'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
               activeTab === 'koleksi'
                 ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                : 'bg-white text-black hover:bg-gray-soft shadow-xs'
             )}
           >
             <BookOpen className="h-4 w-4" />
@@ -151,10 +151,10 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
             type="button"
             onClick={() => setTab('kelola')}
             className={cn(
-              'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+              'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
               activeTab === 'kelola'
                 ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                : 'bg-white text-black hover:bg-gray-soft shadow-xs'
             )}
           >
             <UploadCloud className="h-4 w-4" />
@@ -167,7 +167,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
       {activeTab === 'koleksi' && (
         <div className="space-y-6">
           {/* Search & Filter Bar */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 bg-retro-warm border-2 border-black rounded-xl shadow-retro">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 bg-gray-soft border-2 border-black rounded-xl shadow-retro">
             <div className="relative flex-1">
               <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-black" />
               <input
@@ -180,11 +180,11 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-black shrink-0 text-black">Kategori:</span>
+              <span className="text-xs font-sans font-bold shrink-0 text-black">Kategori:</span>
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-3 py-2 rounded-lg border-2 border-black bg-white text-xs sm:text-sm font-black text-black"
+                className="px-3 py-2 rounded-lg border-2 border-black bg-white text-xs sm:text-sm font-bold text-black"
               >
                 <option value="ALL">Semua Kategori</option>
                 <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
@@ -200,7 +200,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
           {filteredBooks.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <BookOpen className="h-10 w-10 text-black mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Tidak Ada Buku Ditemukan</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Tidak Ada Buku Ditemukan</h3>
               <p className="text-xs sm:text-sm text-black font-bold max-w-md mx-auto">
                 Tidak ada dokumen pustaka yang cocok dengan kriteria pencarian atau filter yang dipilih.
               </p>
@@ -214,20 +214,20 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span className="px-3 py-1 rounded border-2 border-black bg-retro-mint text-xs sm:text-sm font-mono font-black text-black">
+                      <span className="px-3 py-1 rounded border-2 border-black bg-retro-mint text-xs sm:text-sm font-sans font-bold text-black">
                         {book.badge}
                       </span>
-                      <span className="text-sm font-mono font-black text-black">
+                      <span className="text-sm font-sans font-bold text-black">
                         {book.pages} Hlm &bull; {book.year}
                       </span>
                     </div>
 
-                    <h2 className="font-heading font-black text-xl text-black leading-snug line-clamp-2">
+                    <h2 className="font-heading font-bold text-xl text-black leading-snug line-clamp-2">
                       {book.title}
                     </h2>
 
                     <p className="text-sm text-black font-bold">
-                      Penulis: <span className="font-black text-black">{book.author}</span> &bull; {book.category}
+                      Penulis: <span className="font-bold text-black">{book.author}</span> &bull; {book.category}
                     </p>
                   </div>
 
@@ -235,7 +235,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
                     <button
                       type="button"
                       onClick={() => alert(`Buku "${book.title}" disimpan ke daftar bacaan pribadi.`)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-white text-black text-xs font-black hover:bg-retro-warm shadow-xs transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-white text-black text-xs font-bold hover:bg-gray-soft shadow-xs transition-colors cursor-pointer"
                     >
                       <Bookmark className="h-3.5 w-3.5" />
                       <span>Simpan</span>
@@ -244,7 +244,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
                     <button
                       type="button"
                       onClick={() => alert(`Mengunduh berkas pustaka: ${book.title}.pdf`)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border-2 border-black bg-retro-yellow text-black text-xs font-black shadow-xs hover:bg-black hover:text-white transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border-2 border-black bg-gray-soft text-black text-xs font-bold shadow-xs hover:bg-black hover:text-white transition-all cursor-pointer"
                     >
                       <Download className="h-3.5 w-3.5" />
                       <span>Unduh PDF</span>
@@ -260,8 +260,8 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
       {/* 4. TAB 2: KELOLA & UNGGAH PUSTAKA (KHUSUS DOSEN/STAF) */}
       {isStaffOrLecturer && activeTab === 'kelola' && (
         <div className="max-w-3xl space-y-6">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl">
-            <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl">
+            <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
               <UploadCloud className="h-5 w-5 text-primary" />
               <span>Unggah Modul Perkuliahan & Buku Referensi Baru</span>
             </h2>
@@ -272,7 +272,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
 
           <form onSubmit={handleUploadSubmit} className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-5">
             <div className="space-y-1.5">
-              <label className="text-xs font-black uppercase text-black font-mono">
+              <label className="text-xs font-bold uppercase text-black font-sans">
                 Judul Buku / Modul Perkuliahan
               </label>
               <input
@@ -287,7 +287,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-black uppercase text-black font-mono">
+                <label className="text-xs font-bold uppercase text-black font-sans">
                   Nama Penulis / Tim Penyusun
                 </label>
                 <input
@@ -301,7 +301,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-black uppercase text-black font-mono">
+                <label className="text-xs font-bold uppercase text-black font-sans">
                   Kategori Pembahasan
                 </label>
                 <select
@@ -321,27 +321,27 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-black uppercase text-black font-mono">Tahun Terbit</label>
+                <label className="text-xs font-bold uppercase text-black font-sans">Tahun Terbit</label>
                 <input
                   type="text"
                   value={year}
                   onChange={(e) => setYear(e.target.value)}
-                  className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-mono bg-white"
+                  className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-sans bg-white"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-black uppercase text-black font-mono">Jumlah Halaman</label>
+                <label className="text-xs font-bold uppercase text-black font-sans">Jumlah Halaman</label>
                 <input
                   type="number"
                   value={pages}
                   onChange={(e) => setPages(e.target.value)}
-                  className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-mono bg-white"
+                  className="w-full rounded-lg border-2 border-black p-2.5 text-xs sm:text-sm font-sans bg-white"
                 />
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-black uppercase text-black font-mono">Label Badge</label>
+                <label className="text-xs font-bold uppercase text-black font-sans">Label Badge</label>
                 <select
                   value={badge}
                   onChange={(e) => setBadge(e.target.value)}
@@ -356,7 +356,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-black uppercase text-black font-mono">
+              <label className="text-xs font-bold uppercase text-black font-sans">
                 Berkas PDF Pustaka (Maks. 50 MB)
               </label>
               <div className="p-5 rounded-lg border-2 border-dashed border-black bg-neutral-50 text-center space-y-2">
@@ -375,9 +375,9 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
             </div>
 
             {!isDemo && (
-              <div className="p-3 rounded-lg border-2 border-black bg-amber-50 text-xs text-amber-950 font-medium space-y-1">
+              <div className="p-3 rounded-lg border-2 border-black bg-gray-soft text-xs text-ink font-medium space-y-1">
                 <p className="font-bold flex items-center gap-1.5">
-                  <AlertCircle className="h-4 w-4 text-amber-900" />
+                  <AlertCircle className="h-4 w-4 text-ink" />
                   <span>Pemberitahuan Persistensi Database (Fase 3)</span>
                 </p>
                 <p>
@@ -388,7 +388,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
 
             <div className="pt-3 border-t-2 border-black flex items-center justify-between">
               {isSuccessUpload && (
-                <span className="text-xs font-bold font-mono text-emerald-800 flex items-center gap-1.5">
+                <span className="text-xs font-bold font-sans text-ink flex items-center gap-1.5">
                   <CheckCircle2 className="h-4 w-4" />
                   Koleksi berhasil diunggah ke katalog pustaka!
                 </span>
@@ -397,7 +397,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
                 <button
                   type="button"
                   disabled
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-black bg-neutral-200 text-neutral-500 text-xs sm:text-sm font-black cursor-not-allowed ml-auto"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-black bg-neutral-200 text-neutral-500 text-xs sm:text-sm font-bold cursor-not-allowed ml-auto"
                 >
                   <span>Fitur Segera Aktif (Belum Tersimpan ke Database)</span>
                 </button>
@@ -405,7 +405,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer ml-auto"
+                  className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-bold shadow-retro hover:bg-neutral-800 transition-all cursor-pointer ml-auto"
                 >
                   <span>{isPending ? 'Mengunggah...' : 'Publikasikan ke Katalog'}</span>
                 </button>

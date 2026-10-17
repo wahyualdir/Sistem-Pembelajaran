@@ -106,8 +106,8 @@ export default function AdminSuratPage() {
         <div
           className={`flex items-center gap-2 rounded-[8px] p-3 text-sm font-medium ${
             pesanNotif.tipe === "sukses"
-              ? "bg-success-soft text-success border border-success-border"
-              : "bg-danger/10 text-danger border border-danger/20"
+              ? "bg-surface text-ink border border-ink"
+              : "bg-primary/10 text-primary-dark border border-ink"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
@@ -176,10 +176,10 @@ export default function AdminSuratPage() {
                       <TableCell className="text-center font-medium text-xs text-muted-foreground">
                         {idx + 1}
                       </TableCell>
-                      <TableCell className="text-xs font-mono text-muted-foreground">
+                      <TableCell className="text-xs font-sans text-muted-foreground">
                         {item.tanggalPengajuan}
                       </TableCell>
-                      <TableCell className="font-mono text-xs font-semibold text-foreground">
+                      <TableCell className="font-sans text-xs font-semibold text-foreground">
                         {item.nim}
                       </TableCell>
                       <TableCell className="text-xs font-medium text-foreground">
@@ -196,7 +196,7 @@ export default function AdminSuratPage() {
                       <TableCell className="text-center">
                         <StatusBadge status={item.status} size="sm" />
                       </TableCell>
-                      <TableCell className="font-mono text-xs font-semibold text-primary">
+                      <TableCell className="font-sans text-xs font-semibold text-primary">
                         {item.nomorSurat || "-"}
                       </TableCell>
                       <TableCell className="text-center">
@@ -207,7 +207,7 @@ export default function AdminSuratPage() {
                               variant="default"
                               onClick={() => handleSetujui(item.id)}
                               disabled={isLoading}
-                              className="h-7 text-xs bg-success hover:bg-success/90 gap-1 px-2"
+                              className="h-7 text-xs bg-gray-dark hover:bg-gray-dark/90 gap-1 px-2"
                             >
                               <CheckCircle className="h-3 w-3" />
                               Setujui
@@ -243,7 +243,7 @@ export default function AdminSuratPage() {
 
                         {item.status === "DITOLAK" && (
                           <span
-                            className="text-xs text-danger cursor-help underline"
+                            className="text-xs text-primary-dark cursor-help underline"
                             title={`Alasan tolak: ${item.alasanTolak || "Tidak memenuhi ketentuan"}`}
                           >
                             Ditolak
@@ -269,7 +269,7 @@ export default function AdminSuratPage() {
       <Dialog open={!!rejectTarget} onOpenChange={() => setRejectTarget(null)}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-danger">
+            <DialogTitle className="flex items-center gap-2 text-primary-dark">
               <XCircle className="h-5 w-5" />
               Tolak Permohonan Surat Keterangan
             </DialogTitle>
@@ -291,7 +291,7 @@ export default function AdminSuratPage() {
 
               <div>
                 <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                  Alasan Penolakan <span className="text-danger">*</span>:
+                  Alasan Penolakan <span className="text-primary-dark">*</span>:
                 </label>
                 <textarea
                   value={alasanTolak}

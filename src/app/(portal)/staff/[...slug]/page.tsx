@@ -36,28 +36,28 @@ const STAFF_STATS = [
     value: '2,840 Mhs',
     desc: 'Registrasi aktif semester ganjil',
     badge: '100% Terverifikasi',
-    badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    badgeColor: 'bg-surface text-ink border-ink',
   },
   {
     title: 'Dosen Tetap & Luar Biasa',
     value: '142 Dosen',
     desc: 'Terdaftar NIDN/NUPN nasional',
     badge: 'Aktif Mengajar',
-    badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    badgeColor: 'bg-surface text-ink border-ink',
   },
   {
     title: 'Ruang Kuliah & Lab',
     value: '38 Ruang',
     desc: 'Semua memiliki titik GPS terkalibrasi',
     badge: 'Geofence Siap',
-    badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    badgeColor: 'bg-surface text-ink border-ink',
   },
   {
     title: 'Kelas Perkuliahan',
     value: '94 Rombel',
     desc: 'Jadwal terdistribusi tanpa bentrok',
     badge: 'Jadwal Final',
-    badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-400',
+    badgeColor: 'bg-surface text-ink border-ink',
   },
 ];
 
@@ -147,7 +147,7 @@ export default async function StaffSubpage({ params }: PageProps) {
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
             <Icon className="h-7 w-7 text-primary" />
             <span>{current.title}</span>
           </h1>
@@ -166,14 +166,14 @@ export default async function StaffSubpage({ params }: PageProps) {
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold uppercase text-muted-foreground">{s.title}</span>
-                <span className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${s.badgeColor}`}>
+                <span className="text-xs font-sans font-bold uppercase text-muted-foreground">{s.title}</span>
+                <span className={`text-xs font-sans font-bold px-2 py-0.5 rounded border ${s.badgeColor}`}>
                   {s.badge}
                 </span>
               </div>
-              <p className="font-heading font-black text-2xl text-foreground mt-1">{s.value}</p>
+              <p className="font-heading font-bold text-2xl text-foreground mt-1">{s.value}</p>
             </div>
-            <p className="text-xs text-muted-foreground border-t border-neutral-100 pt-2 font-mono">
+            <p className="text-xs text-muted-foreground border-t border-neutral-100 pt-2 font-sans">
               {s.desc}
             </p>
           </div>
@@ -186,7 +186,7 @@ export default async function StaffSubpage({ params }: PageProps) {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-base text-foreground">Kelas & Peserta Kuliah</h3>
+              <h3 className="font-heading font-bold text-base text-foreground">Kelas & Peserta Kuliah</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Daftarkan rombongan belajar baru atau lakukan sinkronisasi massal via impor berkas spreadsheet CSV.
@@ -194,7 +194,7 @@ export default async function StaffSubpage({ params }: PageProps) {
           </div>
           <Link
             href="/staff/classes"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
+            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
           >
             <span>Buka Kelas & Peserta</span>
             <ArrowRight className="h-4 w-4" />
@@ -205,7 +205,7 @@ export default async function StaffSubpage({ params }: PageProps) {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <CalendarDays className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-base text-foreground">Jadwal Kuliah & Ujian</h3>
+              <h3 className="font-heading font-bold text-base text-foreground">Jadwal Kuliah & Ujian</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Alokasikan slot waktu dan ruang kuliah dengan proteksi deteksi bentrok ruang dan dosen otomatis.
@@ -213,7 +213,7 @@ export default async function StaffSubpage({ params }: PageProps) {
           </div>
           <Link
             href="/staff/schedules"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
+            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
           >
             <span>Buka Penjadwalan</span>
             <ArrowRight className="h-4 w-4" />
@@ -224,7 +224,7 @@ export default async function StaffSubpage({ params }: PageProps) {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <CheckSquare className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-base text-foreground">Nilai & Presensi Institusi</h3>
+              <h3 className="font-heading font-bold text-base text-foreground">Nilai & Presensi Institusi</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               Audit nilai akhir, eksekusi perubahan nilai yang disetujui Kaprodi, dan unduh laporan Feeder PDDIKTI.
@@ -232,7 +232,7 @@ export default async function StaffSubpage({ params }: PageProps) {
           </div>
           <Link
             href="/staff/grades"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all"
+            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
           >
             <span>Buka Nilai & Presensi</span>
             <ArrowRight className="h-4 w-4" />

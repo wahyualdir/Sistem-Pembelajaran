@@ -7,12 +7,12 @@ const styles = StyleSheet.create({
     padding: 36,
     fontSize: 8.5,
     fontFamily: "Helvetica",
-    color: "#101828",
+    color: "#111111",
     backgroundColor: "#FFFFFF",
   },
   header: {
     borderBottomWidth: 2,
-    borderBottomColor: "#2A4DB7",
+    borderBottomColor: "#ED1C24",
     paddingBottom: 10,
     marginBottom: 14,
     flexDirection: "row",
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   logoBox: {
     width: 44,
     height: 44,
-    backgroundColor: "#2A4DB7",
+    backgroundColor: "#ED1C24",
     borderRadius: 4,
     justifyContent: "center",
     alignItems: "center",
@@ -38,18 +38,18 @@ const styles = StyleSheet.create({
   instansiTitle: {
     fontSize: 13,
     fontWeight: "bold",
-    color: "#2A4DB7",
+    color: "#ED1C24",
     letterSpacing: 0.5,
   },
   instansiSub: {
     fontSize: 10,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
     marginTop: 2,
   },
   instansiAddress: {
     fontSize: 8,
-    color: "#667085",
+    color: "#58595B",
     marginTop: 2,
   },
   documentTitleContainer: {
@@ -59,13 +59,13 @@ const styles = StyleSheet.create({
   documentTitle: {
     fontSize: 12,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
     textTransform: "uppercase",
     letterSpacing: 0.8,
   },
   documentNo: {
     fontSize: 8,
-    color: "#667085",
+    color: "#58595B",
     marginTop: 2,
   },
   metaGrid: {
@@ -73,10 +73,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 12,
     padding: 8,
-    backgroundColor: "#F6F7F9",
+    backgroundColor: "#F3F3F4",
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#E4E7EC",
+    borderColor: "#E2E3E4",
   },
   metaCol: {
     width: "48%",
@@ -88,26 +88,26 @@ const styles = StyleSheet.create({
   metaLabel: {
     width: 85,
     fontSize: 8,
-    color: "#667085",
+    color: "#58595B",
   },
   metaValue: {
     flex: 1,
     fontSize: 8,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
   },
   table: {
     width: "100%",
     borderWidth: 1,
-    borderColor: "#E4E7EC",
+    borderColor: "#E2E3E4",
     borderRadius: 4,
     marginBottom: 12,
   },
   tableHeader: {
     flexDirection: "row",
-    backgroundColor: "#EEF2FC",
+    backgroundColor: "#E2E3E4",
     borderBottomWidth: 1,
-    borderBottomColor: "#E4E7EC",
+    borderBottomColor: "#E2E3E4",
     paddingVertical: 5,
     paddingHorizontal: 6,
     fontWeight: "bold",
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
-    borderBottomColor: "#E4E7EC",
+    borderBottomColor: "#E2E3E4",
     paddingVertical: 4.5,
     paddingHorizontal: 6,
   },
   tableRowEven: {
-    backgroundColor: "#FAFAFA",
+    backgroundColor: "#FFFFFF",
   },
   colNo: { width: "6%", textAlign: "center" },
   colSem: { width: "8%", textAlign: "center" },
@@ -134,22 +134,22 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginBottom: 16,
     padding: 8,
-    backgroundColor: "#EEF2FC",
+    backgroundColor: "#E2E3E4",
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#2A4DB7",
+    borderColor: "#ED1C24",
   },
   statCol: {
     alignItems: "center",
   },
   statLabel: {
     fontSize: 7.5,
-    color: "#667085",
+    color: "#58595B",
   },
   statVal: {
     fontSize: 11,
     fontWeight: "bold",
-    color: "#2A4DB7",
+    color: "#ED1C24",
     marginTop: 2,
   },
   footer: {
@@ -163,24 +163,24 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 8,
-    color: "#667085",
+    color: "#58595B",
     marginBottom: 3,
   },
   signTitle: {
     fontSize: 8,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
     marginBottom: 42,
   },
   signName: {
     fontSize: 8,
     fontWeight: "bold",
-    color: "#101828",
+    color: "#111111",
     textDecoration: "underline",
   },
   signNip: {
     fontSize: 7,
-    color: "#667085",
+    color: "#58595B",
     marginTop: 2,
   },
 });
@@ -311,7 +311,7 @@ export function DokumenTranskripPdf({
           </View>
         </View>
 
-        <Text style={{ fontSize: 7, color: "#667085", marginBottom: 10 }}>
+        <Text style={{ fontSize: 7, color: "#58595B", marginBottom: 10 }}>
           (*) Mata kuliah diulang: nilai dan bobot yang tercantum adalah nilai terbaik yang diperoleh mahasiswa.
         </Text>
 

@@ -95,16 +95,16 @@ export default function MahasiswaUjianPage() {
             <div
               className={`p-3 rounded-[8px] border text-xs ${
                 evaluasi.krsTerpenuhi
-                  ? "bg-success-soft/40 border-success-border"
-                  : "bg-danger-soft/40 border-danger-border"
+                  ? "bg-surface/40 border-ink"
+                  : "bg-surface/40 border-ink"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-semibold text-foreground">1. Persetujuan KRS</span>
                 {evaluasi.krsTerpenuhi ? (
-                  <CheckCircle className="h-4 w-4 text-success" />
+                  <CheckCircle className="h-4 w-4 text-ink" />
                 ) : (
-                  <XCircle className="h-4 w-4 text-danger" />
+                  <XCircle className="h-4 w-4 text-primary-dark" />
                 )}
               </div>
               <p className="text-muted-foreground">
@@ -124,16 +124,16 @@ export default function MahasiswaUjianPage() {
             <div
               className={`p-3 rounded-[8px] border text-xs ${
                 evaluasi.uktTerpenuhi
-                  ? "bg-success-soft/40 border-success-border"
-                  : "bg-danger-soft/40 border-danger-border"
+                  ? "bg-surface/40 border-ink"
+                  : "bg-surface/40 border-ink"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-semibold text-foreground">2. Tagihan UKT</span>
                 {evaluasi.uktTerpenuhi ? (
-                  <CheckCircle className="h-4 w-4 text-success" />
+                  <CheckCircle className="h-4 w-4 text-ink" />
                 ) : (
-                  <XCircle className="h-4 w-4 text-danger" />
+                  <XCircle className="h-4 w-4 text-primary-dark" />
                 )}
               </div>
               <p className="text-muted-foreground">
@@ -153,16 +153,16 @@ export default function MahasiswaUjianPage() {
             <div
               className={`p-3 rounded-[8px] border text-xs ${
                 evaluasi.kehadiranTerpenuhi
-                  ? "bg-success-soft/40 border-success-border"
-                  : "bg-danger-soft/40 border-danger-border"
+                  ? "bg-surface/40 border-ink"
+                  : "bg-surface/40 border-ink"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-semibold text-foreground">3. Kehadiran Presensi</span>
                 {evaluasi.kehadiranTerpenuhi ? (
-                  <CheckCircle className="h-4 w-4 text-success" />
+                  <CheckCircle className="h-4 w-4 text-ink" />
                 ) : (
-                  <XCircle className="h-4 w-4 text-danger" />
+                  <XCircle className="h-4 w-4 text-primary-dark" />
                 )}
               </div>
               <p className="text-muted-foreground">
@@ -181,8 +181,8 @@ export default function MahasiswaUjianPage() {
 
           {/* Banner Aksi */}
           {evaluasi.layak ? (
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-[8px] bg-success-soft border border-success-border text-xs gap-3">
-              <div className="flex items-center gap-2 text-success font-medium">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 rounded-[8px] bg-surface border border-ink text-xs gap-3">
+              <div className="flex items-center gap-2 text-ink font-medium">
                 <CheckCircle className="h-4 w-4 shrink-0" />
                 <span>
                   Selamat! Seluruh persyaratan akademik terpenuhi. Kartu Ujian resmi Anda telah diterbitkan.
@@ -195,7 +195,7 @@ export default function MahasiswaUjianPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Button size="sm" className="gap-1.5 text-xs bg-success hover:bg-success/90">
+                  <Button size="sm" className="gap-1.5 text-xs bg-gray-dark hover:bg-gray-dark/90">
                     <Download className="h-3.5 w-3.5" />
                     Unduh Kartu {activeJenis} (PDF)
                   </Button>
@@ -203,8 +203,8 @@ export default function MahasiswaUjianPage() {
               </div>
             </div>
           ) : (
-            <div className="p-3 rounded-[8px] bg-danger-soft border border-danger-border text-xs space-y-1">
-              <div className="flex items-center gap-1.5 font-bold text-danger">
+            <div className="p-3 rounded-[8px] bg-surface border border-ink text-xs space-y-1">
+              <div className="flex items-center gap-1.5 font-bold text-primary-dark">
                 <AlertTriangle className="h-4 w-4 shrink-0" />
                 <span>Kartu Ujian Belum Dapat Diterbitkan</span>
               </div>
@@ -250,7 +250,7 @@ export default function MahasiswaUjianPage() {
                       <TableCell className="text-center font-medium text-xs text-muted-foreground">
                         {idx + 1}
                       </TableCell>
-                      <TableCell className="font-mono text-xs font-semibold text-foreground">
+                      <TableCell className="font-sans text-xs font-semibold text-foreground">
                         {item.kodeMataKuliah}
                       </TableCell>
                       <TableCell className="text-xs font-medium text-foreground">
@@ -265,7 +265,7 @@ export default function MahasiswaUjianPage() {
                       <TableCell className="text-center text-xs font-medium">
                         {item.tanggal}
                       </TableCell>
-                      <TableCell className="text-center text-xs font-mono text-muted-foreground">
+                      <TableCell className="text-center text-xs font-sans text-muted-foreground">
                         {item.jamMulai} - {item.jamSelesai}
                       </TableCell>
                       <TableCell className="text-xs font-semibold text-primary">

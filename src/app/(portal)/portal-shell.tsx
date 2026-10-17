@@ -286,7 +286,7 @@ export function PortalShell({
           setHasRightPanel,
         }}
       >
-        <div className="min-h-screen bg-retro-bg text-foreground font-sans flex flex-col md:flex-row antialiased selection:bg-retro-yellow selection:text-black">
+        <div className="min-h-screen bg-retro-bg text-foreground font-sans flex flex-col md:flex-row antialiased selection:bg-ink selection:text-black">
           {/* Drawer Backdrop Overlay (scrim) untuk < 1280px */}
           {isDrawerOpen && (
             <div
@@ -313,7 +313,7 @@ export function PortalShell({
           >
             {/* Header Sidebar: Brand Block (Full vs Rail) */}
             {isRailActive ? (
-              <div className="flex h-header shrink-0 items-center justify-center border-b-2 border-retro-border bg-retro-warm px-2 box-border">
+              <div className="flex h-header shrink-0 items-center justify-center border-b-2 border-retro-border bg-gray-soft px-2 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center justify-center group focus-visible:outline-none"
@@ -325,7 +325,7 @@ export function PortalShell({
                 </Link>
               </div>
             ) : (
-              <div className="flex items-center justify-between h-header shrink-0 border-b-2 border-retro-border bg-retro-warm px-4 box-border">
+              <div className="flex items-center justify-between h-header shrink-0 border-b-2 border-retro-border bg-gray-soft px-4 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0"
@@ -334,23 +334,23 @@ export function PortalShell({
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-black text-white shadow-retro-sm group-hover:scale-105 transition-transform shrink-0">
                     <Flame className="h-5 w-5 fill-white text-white" />
                   </div>
-                  <span className="font-heading font-black text-lg tracking-tight text-black leading-none whitespace-nowrap">
+                  <span className="font-heading font-bold text-lg tracking-tight text-black leading-none whitespace-nowrap">
                     SIAJAR
                   </span>
                 </Link>
 
-                {/* Tiga titik jendela (merah, kuning, hijau) sejajar horizontal di kanan */}
+                {/* Tiga titik jendela (merah kampus, abu-abu, abu gelap) sejajar horizontal di kanan */}
                 <div className="flex items-center gap-1.5 shrink-0" title="Retro Window Controls">
                   <span
-                    className="h-2.5 w-2.5 rounded-full border border-black bg-traffic-red inline-block shadow-2xs"
+                    className="h-2.5 w-2.5 rounded-full border border-ink bg-primary inline-block shadow-2xs"
                     title="Tutup"
                   />
                   <span
-                    className="h-2.5 w-2.5 rounded-full border border-black bg-traffic-yellow inline-block shadow-2xs"
+                    className="h-2.5 w-2.5 rounded-full border border-ink bg-gray inline-block shadow-2xs"
                     title="Kecilkan"
                   />
                   <span
-                    className="h-2.5 w-2.5 rounded-full border border-black bg-traffic-green inline-block shadow-2xs"
+                    className="h-2.5 w-2.5 rounded-full border border-ink bg-gray-dark inline-block shadow-2xs"
                     title="Perbesar"
                   />
                 </div>
@@ -367,7 +367,7 @@ export function PortalShell({
                   <div key={group.id || group.title} className="space-y-1">
                     {!isRailActive && (
                       <div className="flex items-center justify-between px-3 py-1 mb-1">
-                        <p className="text-xs font-black uppercase tracking-wider text-gray-dark font-mono">
+                        <p className="text-xs font-bold uppercase tracking-wider text-gray-dark font-sans">
                           {group.title}
                         </p>
                         {group.collapsible && (
@@ -406,10 +406,10 @@ export function PortalShell({
                                   'flex items-center justify-between rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
                                   isRailActive
                                     ? 'justify-center w-12 h-10 mx-auto'
-                                    : 'px-3 py-2 gap-2.5 text-sm sm:text-base font-extrabold min-h-[42px]',
+                                    : 'px-3 py-2 gap-2.5 text-sm sm:text-base font-bold min-h-[42px]',
                                   isActive
-                                    ? 'border-2 border-ink border-l-4 border-l-primary bg-ink text-white shadow-retro font-black hover:bg-ink/90'
-                                    : 'text-ink hover:bg-gray-soft hover:text-ink font-extrabold'
+                                    ? 'border-2 border-ink border-l-4 border-l-primary bg-ink text-white shadow-retro font-bold hover:bg-ink/90'
+                                    : 'text-ink hover:bg-gray-soft hover:text-ink font-bold'
                                 )}
                               >
                                 <span className="flex items-center gap-2.5 truncate">
@@ -424,7 +424,7 @@ export function PortalShell({
                                 {!isRailActive && item.badge !== undefined && (
                                   <span
                                     className={cn(
-                                      'inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-black font-mono shrink-0',
+                                      'inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold font-sans shrink-0',
                                       isActive ? 'bg-surface text-ink' : 'bg-ink text-white'
                                     )}
                                   >
@@ -455,7 +455,7 @@ export function PortalShell({
             {/* ======================================================== */}
             {/* DI BAWAH MENU BAGIAN BAWAH: WIDGET PROFIL INTERAKTIF     */}
             {/* ======================================================== */}
-            <div className="p-2 sm:p-2.5 border-t-2 border-retro-border bg-retro-warm space-y-1.5 shrink-0 sidebar-compact-user-container">
+            <div className="p-2 sm:p-2.5 border-t-2 border-retro-border bg-gray-soft space-y-1.5 shrink-0 sidebar-compact-user-container">
               <div ref={profileMenuRef} className="relative">
                 {/* Menu Popover Profil saat Ditekan */}
                 {isProfileMenuOpen && (
@@ -466,8 +466,8 @@ export function PortalShell({
                     )}
                   >
                     <div className="px-2.5 py-2 border-b-2 border-retro-border/30 mb-1">
-                      <p className="text-sm font-black text-foreground truncate">{userName}</p>
-                      <p className="text-xs text-muted-foreground font-mono font-medium">{userSubtitle}</p>
+                      <p className="text-sm font-bold text-foreground truncate">{userName}</p>
+                      <p className="text-xs text-muted-foreground font-sans font-medium">{userSubtitle}</p>
                     </div>
 
                     <Link
@@ -476,7 +476,7 @@ export function PortalShell({
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer();
                       }}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-retro-warm text-sm font-bold text-foreground transition-colors group"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
                       <User className="h-4 w-4 text-black group-hover:scale-110 transition-transform" />
                       <span>Buka Profil Lengkap</span>
@@ -488,7 +488,7 @@ export function PortalShell({
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer();
                       }}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-retro-warm text-sm font-bold text-foreground transition-colors group"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
                       <Layers className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                       <span>Ganti Peran / Workspace</span>
@@ -500,7 +500,7 @@ export function PortalShell({
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer();
                       }}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-retro-warm text-sm font-bold text-foreground transition-colors group"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
                       <Settings className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                       <span>Pengaturan Akun</span>
@@ -512,7 +512,7 @@ export function PortalShell({
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer();
                       }}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-retro-warm text-sm font-bold text-foreground transition-colors group"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
                       <Laptop className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                       <span>Perangkat & Sesi</span>
@@ -522,7 +522,7 @@ export function PortalShell({
                       <form action={logoutAction}>
                         <button
                           type="submit"
-                          className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg hover:bg-danger/10 text-danger text-sm font-black transition-colors"
+                          className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg hover:bg-primary/10 text-primary-dark text-sm font-bold transition-colors"
                         >
                           <LogOut className="h-4 w-4" />
                           <span>Keluar Akun</span>
@@ -543,17 +543,17 @@ export function PortalShell({
                   title={isRailActive ? `Profil: ${userName}` : 'Buka Menu Profil Pengguna'}
                 >
                   {/* Box Kotak Inisial Avatar */}
-                  <div className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-lg border-2 border-retro-border bg-black text-white overflow-hidden flex items-center justify-center text-xs sm:text-sm font-black shrink-0 shadow-xs sidebar-compact-avatar">
+                  <div className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-lg border-2 border-retro-border bg-black text-white overflow-hidden flex items-center justify-center text-xs sm:text-sm font-bold shrink-0 shadow-xs sidebar-compact-avatar">
                     {initials}
                   </div>
 
                   {/* Nama dan Subtitle Role */}
                   {!isRailActive && (
                     <div className="text-left min-w-0 flex-1">
-                      <p className="text-base font-black text-black leading-tight truncate transition-colors">
+                      <p className="text-base font-bold text-black leading-tight truncate transition-colors">
                         {userName}
                       </p>
-                      <p className="text-xs text-black/80 font-mono font-bold leading-tight truncate mt-1">
+                      <p className="text-xs text-black/80 font-sans font-bold leading-tight truncate mt-1">
                         {userSubtitle}
                       </p>
                     </div>
@@ -577,7 +577,7 @@ export function PortalShell({
                   <form action={logoutAction} className="w-full">
                     <button
                       type="submit"
-                      className="flex items-center justify-center gap-2 w-full py-1.5 sm:py-2 px-3 rounded-lg border-2 border-retro-border bg-retro-surface hover:bg-danger/10 text-danger text-xs sm:text-sm font-bold transition-colors focus-visible:outline-none"
+                      className="flex items-center justify-center gap-2 w-full py-1.5 sm:py-2 px-3 rounded-lg border-2 border-retro-border bg-retro-surface hover:bg-primary/10 text-primary-dark text-xs sm:text-sm font-bold transition-colors focus-visible:outline-none"
                     >
                       <LogOut className="h-3.5 w-3.5" />
                       <span>Keluar Akun</span>
@@ -589,7 +589,7 @@ export function PortalShell({
                   <button
                     type="submit"
                     title="Keluar / Logout"
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-danger hover:bg-danger/10 transition-colors focus-visible:outline-none"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-primary-dark hover:bg-primary/10 transition-colors focus-visible:outline-none"
                   >
                     <LogOut className="h-4 w-4" />
                   </button>
@@ -617,7 +617,7 @@ export function PortalShell({
                 >
                   <button
                     type="submit"
-                    className="bg-retro-warm text-black px-3 py-1.5 rounded text-xs font-mono hover:bg-retro-surface border-2 border-black cursor-pointer font-bold shadow-xs flex items-center gap-1.5"
+                    className="bg-gray-soft text-black px-3 py-1.5 rounded text-xs font-sans hover:bg-retro-surface border-2 border-black cursor-pointer font-bold shadow-xs flex items-center gap-1.5"
                   >
                     <span>Keluar dari Impersonasi</span>
                     <span>&rarr;</span>
@@ -627,16 +627,16 @@ export function PortalShell({
             )}
 
             {/* ======================================================== */}
-            {/* HEADER ATAS: TAMPILAN WARM CREAM RETRO MAC               */}
+            {/* HEADER ATAS: TAMPILAN RETRO KAMPUS                       */}
             {/* ======================================================== */}
-            <header className="sticky top-0 z-30 flex items-center justify-between border-b-2 border-retro-border bg-retro-warm px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border">
+            <header className="sticky top-0 z-30 flex items-center justify-between border-b-2 border-retro-border bg-surface px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border">
               {/* SISI KIRI: TOMBOL TOGGLE BILAH SAMPING */}
               <div className="flex items-center shrink-0">
                 <button
                   ref={burgerButtonRef}
                   type="button"
                   onClick={handleBurgerClick}
-                  className="flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black shadow-retro-sm hover:bg-retro-yellow active:translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black shrink-0 cursor-pointer"
+                  className="flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black shadow-retro-sm hover:bg-gray-soft active:translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black shrink-0 cursor-pointer"
                   title={isCollapsed ? 'Perbesar Bilah Samping' : 'Kecilkan Bilah Samping'}
                   aria-label="Toggle Sidebar"
                 >
@@ -666,10 +666,10 @@ export function PortalShell({
                       className="w-full bg-transparent text-sm sm:text-base font-bold text-black placeholder:text-neutral-500 placeholder:font-medium focus:outline-none min-w-0"
                     />
                     <div className="hidden sm:flex items-center gap-1 shrink-0 ml-2 select-none">
-                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-retro-warm text-[10px] font-mono font-black text-black shadow-2xs">
+                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-gray-soft text-[10px] font-mono font-bold text-black shadow-2xs">
                         ⌘
                       </kbd>
-                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-retro-warm text-[10px] font-mono font-black text-black shadow-2xs">
+                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-gray-soft text-[10px] font-mono font-bold text-black shadow-2xs">
                         K
                       </kbd>
                     </div>
@@ -681,7 +681,7 @@ export function PortalShell({
               <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
                 {/* Badge Semester Monokrom Elegan */}
                 <div className="hidden lg:flex items-center">
-                  <span className="text-xs sm:text-sm font-sans font-black text-white uppercase tracking-wider bg-black px-3 py-1.5 rounded-lg border-2 border-retro-border shadow-retro-sm select-none">
+                  <span className="text-xs sm:text-sm font-sans font-bold text-white uppercase tracking-wider bg-black px-3 py-1.5 rounded-lg border-2 border-retro-border shadow-retro-sm select-none">
                     2026/2027 Ganjil
                   </span>
                 </div>
@@ -691,7 +691,7 @@ export function PortalShell({
                   <button
                     type="button"
                     onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                    className="xl:hidden relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro-sm hover:bg-retro-yellow transition-all focus-visible:outline-none cursor-pointer"
+                    className="xl:hidden relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro-sm hover:bg-gray-soft transition-all focus-visible:outline-none cursor-pointer"
                     title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan & Detail'}
                     aria-label="Panel Ringkasan & Detail"
                   >
@@ -702,13 +702,13 @@ export function PortalShell({
                 {/* Lonceng Notifikasi */}
                 <Link
                   href="/notifications"
-                  className="relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro-sm hover:bg-retro-yellow active:translate-y-0.5 transition-all focus-visible:outline-none"
+                  className="relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro-sm hover:bg-gray-soft active:translate-y-0.5 transition-all focus-visible:outline-none"
                   title="Notifikasi Kuliah & Tugas"
                   aria-label="Notifikasi"
                 >
                   <Bell className="h-5 w-5 text-black" />
                   {unread > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full border-2 border-retro-border bg-black text-[10px] font-black text-white shadow-xs">
+                    <span className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full border-2 border-retro-border bg-black text-[10px] font-bold text-white tabular-nums shadow-xs">
                       {unread}
                     </span>
                   )}
@@ -717,7 +717,7 @@ export function PortalShell({
                 {/* Tombol Bantuan / Help Circle (?) PERSIS GAMBAR 2 */}
                 <Link
                   href="/ai-assistant"
-                  className="flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black shadow-retro-sm hover:bg-retro-warm active:translate-y-0.5 transition-all focus-visible:outline-none"
+                  className="flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black shadow-retro-sm hover:bg-gray-soft active:translate-y-0.5 transition-all focus-visible:outline-none"
                   title="Bantuan & Tanya AI SIAJAR"
                   aria-label="Bantuan & AI"
                 >

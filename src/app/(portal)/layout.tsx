@@ -44,7 +44,7 @@ export default async function PortalLayout({ children }: { children: React.React
       </Link>
     ) : (
       <p className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span className="h-2 w-2 rounded-full bg-success" />
+        <span className="h-2 w-2 rounded-full bg-gray-dark" />
         {roleName}
       </p>
     );
@@ -56,7 +56,7 @@ export default async function PortalLayout({ children }: { children: React.React
       <form action={logoutAction}>
         <button
           type="submit"
-          className="-mx-2.5 flex items-center gap-2 rounded-control px-2.5 py-1.5 text-sm font-medium text-danger transition-colors hover:bg-danger-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
+          className="-mx-2.5 flex items-center gap-2 rounded-control px-2.5 py-1.5 text-sm font-medium text-primary-dark transition-colors hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger"
         >
           <LogOut className="h-4 w-4" />
           Keluar

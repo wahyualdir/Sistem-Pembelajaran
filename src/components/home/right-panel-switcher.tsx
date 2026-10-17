@@ -42,14 +42,14 @@ export function RightPanelSwitcher({
   const [saved, setSaved] = useState(false);
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-5">
       {/* 1. Pengalih Dua Kondisi (Tab Chip Retro) */}
-      <div className="flex items-center p-1 rounded-xl border-2 border-ink bg-gray-soft shadow-xs">
+      <div className="flex items-center p-1.5 rounded-xl border-2 border-ink bg-gray-soft shadow-xs">
         <button
           type="button"
           onClick={() => onTabChange('hari-ini')}
           className={cn(
-            'flex-1 py-1.5 px-2.5 rounded-lg text-xs sm:text-sm font-heading font-black transition-all focus-visible:outline-none text-center',
+            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center',
             activeTab === 'hari-ini'
               ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
               : 'text-ink hover:bg-ink/5'
@@ -61,7 +61,7 @@ export function RightPanelSwitcher({
           type="button"
           onClick={() => onTabChange('detail-kelas')}
           className={cn(
-            'flex-1 py-1.5 px-2.5 rounded-lg text-xs sm:text-sm font-heading font-black transition-all focus-visible:outline-none text-center',
+            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center',
             activeTab === 'detail-kelas'
               ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
               : 'text-ink hover:bg-ink/5'
@@ -75,66 +75,86 @@ export function RightPanelSwitcher({
       {/* KONDISI A: HARI INI                                       */}
       {/* ========================================================= */}
       {activeTab === 'hari-ini' && (
-        <div className="space-y-4 animate-fade-in pb-48">
-          {/* 1. Status Semester (Dipindah ke atas, aman dari tombol floating AI) */}
-          <div className="p-3 sm:p-3.5 rounded-xl border-2 border-ink bg-gray-soft flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 shadow-retro">
+        <div className="flex flex-col gap-5 animate-fade-in pb-24">
+          {/* 1. Status Semester */}
+          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-gray-soft flex flex-wrap items-center justify-between gap-2 shadow-retro">
             <div className="min-w-0">
-              <span className="text-xs font-sans font-black text-gray-dark uppercase tracking-wider block">
+              <span className="text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] block">
                 Status Akademik
               </span>
-              <p className="font-heading font-black text-sm sm:text-base text-ink mt-0.5 whitespace-nowrap">
+              <p className="font-heading font-bold text-sm sm:text-base text-ink mt-0.5 whitespace-nowrap">
                 {summary.semesterLabel}
               </p>
             </div>
-            <span className="text-xs font-black text-ink bg-success px-2.5 py-1 rounded-lg border-2 border-ink shadow-xs shrink-0">
-              {summary.semesterStatus}
+            <span className="text-xs font-bold text-white bg-gray-dark px-2.5 py-1 rounded-lg border-2 border-ink shadow-xs shrink-0 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-white" />
+              <span>{summary.semesterStatus}</span>
             </span>
           </div>
 
-          {/* 2. Ringkasan Baris Metrik (3 kolom rapi, teks proporsional tanpa terpotong) */}
-          <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl border-2 border-ink bg-surface shadow-retro text-center">
-            <div className="p-1 border-r border-ink/10 min-w-0">
-              <span className="text-xs font-sans font-black text-gray-dark uppercase tracking-tight block truncate">
-                Kehadiran
-              </span>
-              <p className="font-heading font-black text-sm sm:text-base text-ink my-0.5 tabular-nums">
-                {summary.averageAttendance}
-              </p>
-              {summary.attendanceQualified ? (
-                <span className="text-xs sm:text-xs font-bold text-ink bg-success/30 px-1 rounded block truncate">Syarat UAS ✓</span>
-              ) : (
-                <span className="text-xs sm:text-xs font-bold text-gray-dark block truncate">Belum Ada Data</span>
-              )}
-            </div>
+          {/* 2. Ringkasan Baris Metrik (Statistik: Hadir, IPK, Streak) */}
+          <div className="right-panel-stats-card p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro">
+            <div className="stats-responsive-layout">
+              {/* Item 1: Hadir */}
+              <div className="stats-responsive-item">
+                <span className="stats-label text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] shrink-0">
+                  Hadir
+                </span>
+                <div className="stats-right-group">
+                  <p className="stats-value font-heading font-bold text-sm sm:text-base text-ink tabular-nums">
+                    {summary.averageAttendance}
+                  </p>
+                  {summary.attendanceQualified ? (
+                    <span className="text-xs font-semibold text-ink bg-gray-soft px-1.5 py-0.5 rounded border border-ink/20 whitespace-normal text-center">
+                      Syarat UAS ✓
+                    </span>
+                  ) : (
+                    <span className="text-xs font-medium text-gray-dark whitespace-normal text-center">
+                      Belum Ada Data
+                    </span>
+                  )}
+                </div>
+              </div>
 
-            <div className="p-1 border-r border-ink/10 min-w-0">
-              <span className="text-xs font-sans font-black text-gray-dark uppercase tracking-tight block truncate">
-                IPK Berjalan
-              </span>
-              <p className="font-heading font-black text-sm sm:text-base text-ink my-0.5 tabular-nums">
-                {summary.ipk}
-              </p>
-              <span className="text-xs sm:text-xs font-bold text-gray-dark block truncate">Skala 4.0</span>
-            </div>
+              {/* Item 2: IPK */}
+              <div className="stats-responsive-item">
+                <span className="stats-label text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] shrink-0">
+                  IPK
+                </span>
+                <div className="stats-right-group">
+                  <p className="stats-value font-heading font-bold text-sm sm:text-base text-ink tabular-nums">
+                    {summary.ipk}
+                  </p>
+                  <span className="text-xs font-medium text-gray-dark whitespace-normal text-center">
+                    Skala 4.0
+                  </span>
+                </div>
+              </div>
 
-            <div className="p-1 min-w-0">
-              <span className="text-xs font-sans font-black text-gray-dark uppercase tracking-tight block truncate">
-                Streak Belajar
-              </span>
-              <p className="font-heading font-black text-sm sm:text-base text-ink flex items-center justify-center gap-1 my-0.5 tabular-nums">
-                <Flame className="h-3.5 w-3.5 text-primary fill-primary shrink-0" />
-                <span>{summary.studyStreakDays}h</span>
-              </p>
-              <span className="text-xs sm:text-xs font-bold text-primary-dark block truncate">Aktif Kuliah</span>
+              {/* Item 3: Streak */}
+              <div className="stats-responsive-item">
+                <span className="stats-label text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] shrink-0">
+                  Streak
+                </span>
+                <div className="stats-right-group">
+                  <p className="stats-value font-heading font-bold text-sm sm:text-base text-ink flex items-center justify-center gap-1 tabular-nums">
+                    <Flame className="h-3.5 w-3.5 text-primary-dark fill-primary-dark shrink-0" />
+                    <span>{summary.studyStreakDays}h</span>
+                  </p>
+                  <span className="text-xs font-semibold text-primary-dark whitespace-normal text-center">
+                    Aktif Kuliah
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
           {/* 3. Kalender Mini Bulan Berjalan (Oktober 2026 Lengkap) */}
-          <div className="p-3 sm:p-3.5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-2.5">
-            <div className="flex items-center justify-between border-b-2 border-ink pb-2">
+          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
+            <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
               <div className="flex items-center gap-1.5">
-                <CalendarDays className="h-4 w-4 text-primary" />
-                <span className="font-heading font-black text-sm text-ink">
+                <CalendarDays className="h-4 w-4 text-primary-dark" />
+                <span className="font-heading font-bold text-sm text-ink">
                   Oktober 2026
                 </span>
               </div>
@@ -146,7 +166,7 @@ export function RightPanelSwitcher({
             {/* Grid Hari Kalender Mini */}
             <div className="grid grid-cols-7 gap-1 text-center text-xs font-sans">
               {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((d) => (
-                <span key={d} className="font-black text-gray-dark py-0.5 text-xs">
+                <span key={d} className="font-bold text-gray-dark py-0.5 text-xs">
                   {d}
                 </span>
               ))}
@@ -176,7 +196,7 @@ export function RightPanelSwitcher({
                   >
                     <span>{day}</span>
                     {hasEvent && !isToday && (
-                      <span className="w-1 h-1 rounded-full bg-primary absolute bottom-0.5" />
+                      <span className="w-1 h-1 rounded-full bg-primary-dark absolute bottom-0.5" />
                     )}
                     {isToday && (
                       <span className="w-1 h-1 rounded-full bg-primary absolute bottom-0.5" />
@@ -186,31 +206,31 @@ export function RightPanelSwitcher({
               })}
             </div>
 
-            <div className="flex items-center gap-2.5 pt-1.5 text-xs font-sans text-gray-dark border-t border-ink/10">
+            <div className="flex items-center gap-2.5 pt-2 text-xs font-sans text-gray-dark border-t border-ink/10">
               <span className="flex items-center gap-1 font-semibold">
                 <span className="w-1.5 h-1.5 rounded-full bg-ink" /> Hari Ini
               </span>
               <span className="flex items-center gap-1 font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary" /> Ada Tenggat / Ujian
+                <span className="w-1.5 h-1.5 rounded-full bg-primary-dark" /> Ada Tenggat / Ujian
               </span>
             </div>
           </div>
 
           {/* 4. Agenda 7 Hari ke Depan (Dengan Teks Penuh Tanpa Truncate) */}
-          <div className="p-3 sm:p-3.5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-2.5">
-            <div className="flex items-center justify-between border-b-2 border-ink pb-2">
-              <h4 className="font-heading font-black text-sm text-ink uppercase tracking-wider">
+          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
+            <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
+              <h4 className="font-heading font-bold text-sm text-ink uppercase tracking-wider">
                 Agenda 7 Hari ke Depan
               </h4>
               <Link
                 href="/calendar"
-                className="text-xs font-black text-primary hover:text-primary-dark hover:underline transition-all"
+                className="text-xs font-bold text-primary-dark hover:underline transition-all"
               >
                 Kalender &rarr;
               </Link>
             </div>
 
-            <div className="space-y-2.5">
+            <div className="space-y-3">
               {agenda.length === 0 ? (
                 <div className="p-4 rounded-xl border-2 border-dashed border-ink/15 bg-surface text-center">
                   <p className="text-xs font-bold text-gray-dark">
@@ -232,9 +252,9 @@ export function RightPanelSwitcher({
                         className={cn(
                           'shrink-0 p-2 rounded-lg border border-ink mt-0.5',
                           isExam
-                            ? 'bg-warning text-ink'
+                            ? 'bg-primary text-white font-bold'
                             : isTask
-                            ? 'bg-urgent text-ink'
+                            ? 'bg-gray-soft text-ink'
                             : 'bg-ink text-white'
                         )}
                       >
@@ -253,7 +273,7 @@ export function RightPanelSwitcher({
                             {ag.dayName} • {ag.time}
                           </span>
                         </div>
-                        <p className="font-heading font-black text-sm text-ink leading-snug break-words group-hover:underline">
+                        <p className="font-heading font-bold text-sm text-ink leading-snug break-words group-hover:underline">
                           {ag.title}
                         </p>
                       </div>
@@ -270,11 +290,11 @@ export function RightPanelSwitcher({
       {/* KONDISI B: DETAIL KELAS                                   */}
       {/* ========================================================= */}
       {activeTab === 'detail-kelas' && (
-        <div className="space-y-4 animate-fade-in pb-48">
+        <div className="flex flex-col gap-5 animate-fade-in pb-24">
           {!selectedCourse ? (
-            <div className="p-6 rounded-xl border-2 border-dashed border-retro-border bg-white text-center space-y-3 shadow-retro">
+            <div className="p-5 sm:p-6 rounded-xl border-2 border-dashed border-retro-border bg-white text-center space-y-3 shadow-retro">
               <CalendarDays className="h-8 w-8 text-muted-foreground/60 mx-auto" />
-              <p className="font-heading font-black text-sm text-foreground">
+              <p className="font-heading font-bold text-sm text-foreground">
                 Belum Ada Kelas Terpilih
               </p>
               <p className="text-xs text-muted-foreground">
@@ -283,7 +303,7 @@ export function RightPanelSwitcher({
               <div className="pt-2">
                 <Link
                   href="/classes"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-black bg-retro-warm hover:bg-retro-yellow text-xs font-bold text-black transition-colors shadow-xs"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-black bg-gray-soft hover:bg-gray-soft text-xs font-bold text-black transition-colors shadow-xs"
                 >
                   <span>Buka Kelas Saya</span>
                   <ChevronRight className="h-3.5 w-3.5" />
@@ -293,91 +313,91 @@ export function RightPanelSwitcher({
           ) : (
             <>
               {/* TWO MAIN ACTION BUTTONS */}
-              <div className="space-y-2.5">
+              <div className="flex flex-col gap-3">
                 <Link
                   href={`/classes`}
-                  className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border-2 border-retro-border bg-retro-surface text-foreground font-heading font-black text-sm shadow-retro hover:bg-retro-warm hover:-translate-y-0.5 transition-all text-center focus-visible:outline-none"
+                  className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border-2 border-retro-border bg-retro-surface text-foreground font-heading font-bold text-sm shadow-retro hover:bg-gray-soft hover:-translate-y-0.5 transition-all text-center focus-visible:outline-none"
                 >
                   Buka Silabus & Modul Kuliah
                 </Link>
 
                 <Link
                   href={`/classes`}
-                  className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-retro-border bg-black text-white font-heading font-black text-base shadow-retro-md hover:bg-black/90 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
+                  className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-retro-border bg-black text-white font-heading font-bold text-base shadow-retro-md hover:bg-black/90 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
                 >
-              <Play className="h-5 w-5 fill-white" />
-              <span>Masuk Kelas / Presensi Aktif</span>
-            </Link>
-          </div>
+                  <Play className="h-5 w-5 fill-white" />
+                  <span>Masuk Kelas / Presensi Aktif</span>
+                </Link>
+              </div>
 
-          {/* THREE QUICK ACTIONS (DOWNLOAD, SAVE, ADD TO LIST) */}
-          <div className="grid grid-cols-3 gap-2 border-y-2 border-retro-border py-2.5">
-            <button
-              type="button"
-              className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-retro-warm transition-colors text-foreground focus-visible:outline-none"
-              title="Unduh RPS & Silabus"
-            >
-              <Download className="h-5 w-5 mb-1" />
-              <span className="text-xs font-black">Download</span>
-            </button>
+              {/* THREE QUICK ACTIONS (DOWNLOAD, SAVE, ADD TO LIST) */}
+              <div className="grid grid-cols-3 gap-2 border-y-2 border-retro-border py-3">
+                <button
+                  type="button"
+                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-foreground focus-visible:outline-none"
+                  title="Unduh RPS & Silabus"
+                >
+                  <Download className="h-5 w-5 mb-1" />
+                  <span className="text-xs font-bold">Download</span>
+                </button>
 
-            <button
-              type="button"
-              onClick={() => setSaved(!saved)}
-              className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-retro-warm transition-colors text-foreground focus-visible:outline-none"
-              title="Simpan ke favorit"
-            >
-              <Bookmark className={cn('h-5 w-5 mb-1', saved ? 'fill-current' : '')} />
-              <span className="text-xs font-black">Save</span>
-            </button>
+                <button
+                  type="button"
+                  onClick={() => setSaved(!saved)}
+                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-foreground focus-visible:outline-none"
+                  title="Simpan ke favorit"
+                >
+                  <Bookmark className={cn('h-5 w-5 mb-1', saved ? 'fill-current' : '')} />
+                  <span className="text-xs font-bold">Save</span>
+                </button>
 
-            <Link
-              href="/calendar"
-              className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-retro-warm transition-colors text-foreground focus-visible:outline-none"
-              title="Cek Jadwal Kuliah"
-            >
-              <ListPlus className="h-5 w-5 mb-1" />
-              <span className="text-xs font-black">Add to List</span>
-            </Link>
-          </div>
+                <Link
+                  href="/calendar"
+                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-foreground focus-visible:outline-none"
+                  title="Cek Jadwal Kuliah"
+                >
+                  <ListPlus className="h-5 w-5 mb-1" />
+                  <span className="text-xs font-bold">Add to List</span>
+                </Link>
+              </div>
 
-          {/* METADATA INFO TABLE */}
-          <div className="space-y-1.5 text-xs sm:text-sm">
-            <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
-              <span className="text-black font-bold">Kode MK</span>
-              <span className="font-mono font-black text-black">{selectedCourse.code}</span>
-            </div>
-            <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
-              <span className="text-black font-bold">Progres Belajar</span>
-              <span className="font-black text-black">{selectedCourse.progressPercent}% Selesai</span>
-            </div>
-            <div className="flex justify-between items-center gap-2 py-1.5 border-b border-retro-border/60">
-              <span className="text-black font-bold shrink-0">Jadwal Kuliah</span>
-              <span className="font-black text-black text-right text-xs">{selectedCourse.schedule}</span>
-            </div>
-            <div className="flex justify-between items-center gap-2 py-1.5 border-b border-retro-border/60">
-              <span className="text-black font-bold shrink-0">Ruang Kelas</span>
-              <span className="font-black text-black text-right">{selectedCourse.room}</span>
-            </div>
-            <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
-              <span className="text-black font-bold">Kehadiran</span>
-              <span className="font-black text-black underline decoration-2">{selectedCourse.attendance}</span>
-            </div>
-            <div className="flex justify-between items-center py-1.5">
-              <span className="text-black font-bold">Bobot SKS</span>
-              <span className="font-black text-black">{selectedCourse.sks} SKS</span>
-            </div>
-          </div>
+              {/* METADATA INFO TABLE */}
+              <div className="p-4 sm:p-5 rounded-xl border-2 border-retro-border bg-surface shadow-retro space-y-2 text-xs sm:text-sm">
+                <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
+                  <span className="text-black font-medium">Kode MK</span>
+                  <span className="font-sans font-semibold text-black">{selectedCourse.code}</span>
+                </div>
+                <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
+                  <span className="text-black font-medium">Progres Belajar</span>
+                  <span className="font-semibold text-black tabular-nums">{selectedCourse.progressPercent}% Selesai</span>
+                </div>
+                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-retro-border/60">
+                  <span className="text-black font-medium shrink-0">Jadwal Kuliah</span>
+                  <span className="font-medium text-black text-right text-xs">{selectedCourse.schedule}</span>
+                </div>
+                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-retro-border/60">
+                  <span className="text-black font-medium shrink-0">Ruang Kelas</span>
+                  <span className="font-medium text-black text-right">{selectedCourse.room}</span>
+                </div>
+                <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
+                  <span className="text-black font-medium">Kehadiran</span>
+                  <span className="font-semibold text-black underline decoration-2 tabular-nums">{selectedCourse.attendance}</span>
+                </div>
+                <div className="flex justify-between items-center py-1.5">
+                  <span className="text-black font-medium">Bobot SKS</span>
+                  <span className="font-semibold text-black tabular-nums">{selectedCourse.sks} SKS</span>
+                </div>
+              </div>
 
-          {/* EDITORIAL DESCRIPTION */}
-          <div className="p-3 sm:p-3.5 rounded-xl border-2 border-retro-border bg-white text-xs leading-relaxed text-black space-y-1.5 shadow-retro">
-            <p className="font-heading font-black text-black text-xs uppercase tracking-wider">
-              Deskripsi & Silabus Kuliah
-            </p>
-            <p className="text-xs text-black leading-relaxed font-medium">
-              {selectedCourse.description}
-            </p>
-          </div>
+              {/* EDITORIAL DESCRIPTION */}
+              <div className="p-4 sm:p-5 rounded-xl border-2 border-retro-border bg-white text-xs leading-relaxed text-black space-y-2 shadow-retro">
+                <p className="font-heading font-bold text-black text-xs uppercase tracking-wider">
+                  Deskripsi & Silabus Kuliah
+                </p>
+                <p className="text-xs text-black leading-relaxed font-medium">
+                  {selectedCourse.description}
+                </p>
+              </div>
             </>
           )}
         </div>

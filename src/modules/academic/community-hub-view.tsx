@@ -79,7 +79,7 @@ export function CommunityHubView({
       <RetroWindow
         title="komunitas_dan_kegiatan_akademik.app"
         badge="Komunitas Aktif"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -88,7 +88,7 @@ export function CommunityHubView({
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <MessageSquare className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Komunitas & Informasi Kampus
               </h1>
             </div>
@@ -98,7 +98,7 @@ export function CommunityHubView({
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               5 Kanal Terintegrasi
             </span>
           </div>
@@ -116,10 +116,10 @@ export function CommunityHubView({
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -135,7 +135,7 @@ export function CommunityHubView({
           {announcements.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <Bell className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Pengumuman Kampus</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Pengumuman Kampus</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Saat ini belum ada pengumuman resmi terbaru yang disematkan oleh dekanat atau program studi.
               </p>
@@ -147,29 +147,29 @@ export function CommunityHubView({
                   key={ann.id}
                   className={cn(
                     'rounded-xl border-2 border-black p-5 sm:p-6 shadow-retro flex flex-col justify-between space-y-4 transition-all hover:-translate-y-1',
-                    ann.isPinned ? 'bg-amber-50/70 border-black' : 'bg-white'
+                    ann.isPinned ? 'bg-gray-soft/70 border-black' : 'bg-white'
                   )}
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="px-2.5 py-0.5 rounded border border-black text-xs font-mono font-bold bg-retro-warm text-black">
+                      <span className="px-2.5 py-0.5 rounded border border-black text-xs font-sans font-bold bg-gray-soft text-black">
                         {ann.category}
                       </span>
                       {ann.isPinned && (
-                        <span className="inline-flex items-center gap-1 text-xs font-black text-amber-900 font-mono">
+                        <span className="inline-flex items-center gap-1 text-xs font-bold text-ink font-sans">
                           <Pin className="h-3.5 w-3.5 fill-current" />
                           <span>Disematkan</span>
                         </span>
                       )}
                     </div>
-                    <h3 className="font-heading font-black text-base sm:text-lg text-black leading-snug">
+                    <h3 className="font-heading font-bold text-base sm:text-lg text-black leading-snug">
                       {ann.title}
                     </h3>
                     <p className="text-xs sm:text-sm text-black/80 font-medium leading-relaxed">
                       {ann.content}
                     </p>
                   </div>
-                  <div className="flex items-center justify-between pt-3 border-t-2 border-black/10 text-xs font-mono text-black/60">
+                  <div className="flex items-center justify-between pt-3 border-t-2 border-black/10 text-xs font-sans text-black/60">
                     <span>Oleh: {ann.author}</span>
                     <span>{ann.date}</span>
                   </div>
@@ -184,13 +184,13 @@ export function CommunityHubView({
       {activeTab === 'forum' && (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="font-heading font-black text-base text-black">
+            <h2 className="font-heading font-bold text-base text-black">
               Diskusi Terbuka Mahasiswa & Dosen ({threads.length})
             </h2>
             <button
               type="button"
               onClick={() => alert('Fitur buat topik diskusi baru akan tersedia di versi komunitas lanjutan.')}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-black text-white text-xs font-black shadow-xs hover:bg-neutral-800 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-black text-white text-xs font-bold shadow-xs hover:bg-neutral-800 cursor-pointer"
             >
               <PlusCircle className="h-3.5 w-3.5" />
               <span>Mulai Diskusi</span>
@@ -200,7 +200,7 @@ export function CommunityHubView({
           {threads.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <MessageSquare className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Topik Diskusi</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Topik Diskusi</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Jadilah yang pertama memulai obrolan atau pertanyaan akademik di forum terbuka mahasiswa!
               </p>
@@ -210,35 +210,35 @@ export function CommunityHubView({
               {threads.map((th) => (
                 <div
                   key={th.id}
-                  className="rounded-xl border-2 border-black bg-white p-5 shadow-retro hover:bg-retro-warm/20 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                  className="rounded-xl border-2 border-black bg-white p-5 shadow-retro hover:bg-gray-soft/20 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   <div className="space-y-1.5 max-w-2xl">
                     <div className="flex items-center gap-2">
                       {th.isPinned && (
-                        <span className="px-2 py-0.5 rounded border border-black bg-retro-yellow text-xs font-mono font-black">
+                        <span className="px-2 py-0.5 rounded border border-black bg-gray-soft text-xs font-sans font-bold">
                           PIN
                         </span>
                       )}
-                      <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-mono font-bold">
+                      <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-sans font-bold">
                         {th.category}
                       </span>
-                      <span className="text-xs text-black/60 font-mono">
+                      <span className="text-xs text-black/60 font-sans">
                         {th.lastActive}
                       </span>
                     </div>
-                    <h3 className="font-heading font-black text-base sm:text-lg text-black hover:text-primary-dark transition-colors">
+                    <h3 className="font-heading font-bold text-base sm:text-lg text-black hover:text-primary-dark transition-colors">
                       {th.title}
                     </h3>
                     <p className="text-xs text-black/70 font-medium line-clamp-2">
                       {th.excerpt}
                     </p>
-                    <div className="text-xs font-mono text-black/60 pt-1">
+                    <div className="text-xs font-sans text-black/60 pt-1">
                       Diposting oleh <strong className="text-black">{th.author}</strong> ({th.authorRole})
                     </div>
                   </div>
 
                   <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-black/10">
-                    <div className="flex items-center gap-3 text-xs font-mono font-bold text-black/70">
+                    <div className="flex items-center gap-3 text-xs font-sans font-bold text-black/70">
                       <span className="flex items-center gap-1">
                         <MessageCircle className="h-4 w-4" />
                         {th.replies} balasan
@@ -262,7 +262,7 @@ export function CommunityHubView({
           {groups.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <Users className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Grup Belajar</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Grup Belajar</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Belum ada kelompok studi kolaboratif yang terdaftar pada semester ini.
               </p>
@@ -276,14 +276,14 @@ export function CommunityHubView({
                 >
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <span className="px-2.5 py-0.5 rounded border border-black bg-retro-warm text-xs font-mono font-bold">
+                      <span className="px-2.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-sans font-bold">
                         {g.topic}
                       </span>
-                      <span className="text-xs font-mono font-bold text-black/70">
+                      <span className="text-xs font-sans font-bold text-black/70">
                         {g.members} Anggota Aktif
                       </span>
                     </div>
-                    <h3 className="font-heading font-black text-base sm:text-lg text-black">
+                    <h3 className="font-heading font-bold text-base sm:text-lg text-black">
                       {g.name}
                     </h3>
                     <p className="text-xs sm:text-sm text-black/80 font-medium leading-relaxed">
@@ -291,13 +291,13 @@ export function CommunityHubView({
                     </p>
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {g.tags?.map((t: string) => (
-                        <span key={t} className="px-2 py-0.5 rounded border border-black bg-white text-xs font-mono">
+                        <span key={t} className="px-2 py-0.5 rounded border border-black bg-white text-xs font-sans">
                           #{t}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="pt-3 border-t-2 border-black/10 flex items-center justify-between text-xs font-mono">
+                  <div className="pt-3 border-t-2 border-black/10 flex items-center justify-between text-xs font-sans">
                     <span className="text-black/70">{g.schedule}</span>
                     <button
                       type="button"
@@ -320,7 +320,7 @@ export function CommunityHubView({
           {mentors.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <UserCheck className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Sesi Mentoring</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Sesi Mentoring</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Belum ada kuota bimbingan akademik atau asistensi sebaya yang dibuka minggu ini.
               </p>
@@ -335,17 +335,17 @@ export function CommunityHubView({
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2.5">
-                        <div className="h-10 w-10 rounded-lg border-2 border-black bg-retro-warm font-heading font-black text-sm flex items-center justify-center text-black">
+                        <div className="h-10 w-10 rounded-lg border-2 border-black bg-gray-soft font-heading font-bold text-sm flex items-center justify-center text-black">
                           {m.initials}
                         </div>
                         <div>
-                          <h3 className="font-heading font-black text-base text-black leading-tight">
+                          <h3 className="font-heading font-bold text-base text-black leading-tight">
                             {m.name}
                           </h3>
                           <p className="text-xs text-primary font-bold">{m.role}</p>
                         </div>
                       </div>
-                      <span className="text-xs font-mono font-bold px-2 py-0.5 rounded border border-emerald-500 bg-emerald-50 text-emerald-950">
+                      <span className="text-xs font-sans font-bold px-2 py-0.5 rounded border border-ink bg-surface text-ink">
                         {m.slots}
                       </span>
                     </div>
@@ -354,13 +354,13 @@ export function CommunityHubView({
                     </p>
                     <div className="flex flex-wrap gap-1.5 pt-1">
                       {m.topics?.map((top: string) => (
-                        <span key={top} className="px-2 py-0.5 rounded border border-black bg-white text-xs font-mono">
+                        <span key={top} className="px-2 py-0.5 rounded border border-black bg-white text-xs font-sans">
                           {top}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="pt-3 border-t-2 border-black/10 flex items-center justify-between text-xs font-mono">
+                  <div className="pt-3 border-t-2 border-black/10 flex items-center justify-between text-xs font-sans">
                     <span className="text-black/70">{m.schedule}</span>
                     <button
                       type="button"
@@ -383,7 +383,7 @@ export function CommunityHubView({
           {events.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <Calendar className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Agenda Kegiatan</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Agenda Kegiatan</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Saat ini belum ada jadwal webinar, workshop, atau hackathon kampus yang dipublikasikan.
               </p>
@@ -397,30 +397,30 @@ export function CommunityHubView({
                 >
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <span className="px-2.5 py-0.5 rounded border border-black bg-retro-warm text-xs font-mono font-bold">
+                      <span className="px-2.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-sans font-bold">
                         {ev.type}
                       </span>
-                      <span className="text-xs font-mono font-bold text-black/70">
+                      <span className="text-xs font-sans font-bold text-black/70">
                         {ev.seats}
                       </span>
                     </div>
-                    <h3 className="font-heading font-black text-base sm:text-lg text-black leading-tight">
+                    <h3 className="font-heading font-bold text-base sm:text-lg text-black leading-tight">
                       {ev.title}
                     </h3>
                     <div className="space-y-1 text-xs text-black/80 font-medium">
                       <div>Pembicara: <strong className="text-black">{ev.speaker}</strong> ({ev.role})</div>
-                      <div className="flex items-center gap-1.5 text-black/70 font-mono">
+                      <div className="flex items-center gap-1.5 text-black/70 font-sans">
                         <Calendar className="h-3.5 w-3.5" />
                         <span>{ev.date} &bull; {ev.time}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-black/70 font-mono">
+                      <div className="flex items-center gap-1.5 text-black/70 font-sans">
                         <MapPin className="h-3.5 w-3.5" />
                         <span>{ev.location}</span>
                       </div>
                     </div>
                   </div>
-                  <div className="pt-3 border-t-2 border-black/10 flex items-center justify-between text-xs font-mono">
-                    <span className="font-bold text-emerald-800">{ev.status}</span>
+                  <div className="pt-3 border-t-2 border-black/10 flex items-center justify-between text-xs font-sans">
+                    <span className="font-bold text-ink">{ev.status}</span>
                     <button
                       type="button"
                       onClick={() => alert(`Mendaftar event: ${ev.title}`)}

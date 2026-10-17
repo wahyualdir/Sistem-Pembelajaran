@@ -61,7 +61,7 @@ export default function PortfolioPage() {
       <RetroWindow
         title="portofolio_karya_mahasiswa.app"
         badge="Karya Terverifikasi"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -70,7 +70,7 @@ export default function PortfolioPage() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <FolderArchive className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Portofolio Belajar & Proyek
               </h1>
             </div>
@@ -80,7 +80,7 @@ export default function PortfolioPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-sans font-bold text-black shadow-retro">
               {PROJECTS.length} Proyek Terpublikasi
             </span>
           </div>
@@ -96,16 +96,16 @@ export default function PortfolioPage() {
           >
             <div className="space-y-3.5">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-mono text-xs sm:text-sm font-black px-3 py-1 rounded border-2 border-black bg-retro-warm text-black shadow-xs">
+                <span className="font-sans text-xs sm:text-sm font-bold px-3 py-1 rounded border-2 border-black bg-gray-soft text-black shadow-xs">
                   {proj.type}
                 </span>
-                <span className="text-xs sm:text-sm font-mono font-black px-3 py-1 rounded border-2 border-black bg-emerald-100 text-emerald-950 shadow-xs">
+                <span className="text-xs sm:text-sm font-sans font-bold px-3 py-1 rounded border-2 border-black bg-surface text-ink shadow-xs">
                   {proj.status}
                 </span>
               </div>
 
               <div>
-                <h2 className="font-heading font-black text-xl sm:text-2xl text-black leading-snug">
+                <h2 className="font-heading font-bold text-xl sm:text-2xl text-black leading-snug">
                   {proj.title}
                 </h2>
                 <p className="text-xs sm:text-sm text-primary font-bold mt-1">
@@ -122,7 +122,7 @@ export default function PortfolioPage() {
                 {proj.tech.map((t) => (
                   <span
                     key={t}
-                    className="text-xs font-mono font-bold px-2.5 py-0.5 rounded border-2 border-black/30 bg-retro-warm text-black"
+                    className="text-xs font-sans font-bold px-2.5 py-0.5 rounded border-2 border-black/30 bg-gray-soft text-black"
                   >
                     {t}
                   </span>
@@ -131,12 +131,12 @@ export default function PortfolioPage() {
             </div>
 
             <div className="pt-3.5 border-t-2 border-black/10 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
-              <span className="font-mono text-black font-bold truncate max-w-[240px] sm:max-w-[300px]">
+              <span className="font-sans text-black font-bold truncate max-w-[240px] sm:max-w-[300px]">
                 {proj.repo}
               </span>
               <button
                 type="button"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-retro-yellow text-black font-heading font-black text-xs sm:text-sm shadow-xs hover:bg-black hover:text-white transition-all shrink-0"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-gray-soft text-black font-heading font-bold text-xs sm:text-sm shadow-xs hover:bg-black hover:text-white transition-all shrink-0"
               >
                 <Code className="h-4 w-4" />
                 <span>Lihat Kode & Repositori</span>

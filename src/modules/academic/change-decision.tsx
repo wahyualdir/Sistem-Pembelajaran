@@ -22,7 +22,7 @@ export function ChangeDecision({ id }: { id: string }) {
           type="button"
           disabled={pending}
           onClick={() => decide(false)}
-          className="h-10 rounded-lg border-[1.5px] border-retro-border bg-retro-surface px-4 text-xs font-bold text-danger transition-colors hover:bg-danger/10 shadow-xs disabled:opacity-50 active:translate-x-0.5 active:translate-y-0.5"
+          className="h-10 rounded-lg border-[1.5px] border-retro-border bg-retro-surface px-4 text-xs font-bold text-primary-dark transition-colors hover:bg-primary/10 shadow-xs disabled:opacity-50 active:translate-x-0.5 active:translate-y-0.5"
         >
           Tolak Pengajuan
         </button>

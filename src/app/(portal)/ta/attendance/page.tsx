@@ -51,7 +51,7 @@ export default function AssistantAttendancePage() {
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
             <CalendarCheck2 className="h-7 w-7 text-primary" />
             <span>Bantu Presensi Kelas Praktikum</span>
           </h1>
@@ -70,15 +70,15 @@ export default function AssistantAttendancePage() {
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold px-2.5 py-1 rounded border border-black bg-retro-warm">
+                <span className="font-sans text-xs font-bold px-2.5 py-1 rounded border border-black bg-gray-soft">
                   {ses.code}
                 </span>
                 <span
-                  className={`text-xs font-mono font-bold px-2 py-0.5 rounded border ${
+                  className={`text-xs font-sans font-bold px-2 py-0.5 rounded border ${
                     ses.status === 'SESI DIBUKA'
-                      ? 'bg-emerald-100 text-emerald-900 border-emerald-400'
+                      ? 'bg-surface text-ink border-ink'
                       : ses.status === 'TERJADWAL'
-                      ? 'bg-amber-100 text-amber-900 border-amber-400'
+                      ? 'bg-gray-soft text-ink border-ink'
                       : 'bg-neutral-100 text-neutral-800 border-neutral-300'
                   }`}
                 >
@@ -87,7 +87,7 @@ export default function AssistantAttendancePage() {
               </div>
 
               <div>
-                <h2 className="font-heading font-black text-lg text-foreground leading-snug">
+                <h2 className="font-heading font-bold text-lg text-foreground leading-snug">
                   {ses.title}
                 </h2>
                 <p className="text-xs font-semibold text-primary mt-1">
@@ -96,15 +96,15 @@ export default function AssistantAttendancePage() {
               </div>
 
               <div className="space-y-1.5 pt-2 border-t border-neutral-100 text-xs">
-                <p className="text-muted-foreground flex items-center gap-1.5 font-mono">
+                <p className="text-muted-foreground flex items-center gap-1.5 font-sans">
                   <Clock className="h-3.5 w-3.5 text-neutral-500" />
                   <span>{ses.time}</span>
                 </p>
-                <p className="text-muted-foreground flex items-center gap-1.5 font-mono">
+                <p className="text-muted-foreground flex items-center gap-1.5 font-sans">
                   <MapPin className="h-3.5 w-3.5 text-neutral-500" />
                   <span>{ses.room}</span>
                 </p>
-                <p className="text-muted-foreground flex items-center gap-1.5 font-mono">
+                <p className="text-muted-foreground flex items-center gap-1.5 font-sans">
                   <QrCode className="h-3.5 w-3.5 text-neutral-500" />
                   <span>Metode: {ses.method}</span>
                 </p>
@@ -112,7 +112,7 @@ export default function AssistantAttendancePage() {
             </div>
 
             <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
-              <span className="font-mono text-xs font-bold text-foreground">
+              <span className="font-sans text-xs font-bold text-foreground">
                 Hadir: {ses.attendedCount} / {ses.totalCount} Mahasiswa
               </span>
 

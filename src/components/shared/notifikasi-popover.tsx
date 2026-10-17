@@ -119,39 +119,39 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
   const getJenisIcon = (jenis: JenisNotifikasi) => {
     switch (jenis) {
       case "TUGAS_TENGGAT":
-        return <AlertCircle className="h-4 w-4 text-warning" />;
+        return <AlertCircle className="h-4 w-4 text-primary-dark" />;
       case "KEHADIRAN":
-        return <Clock className="h-4 w-4 text-danger" />;
+        return <Clock className="h-4 w-4 text-ink" />;
       case "KRS":
-        return <FileCheck className="h-4 w-4 text-primary" />;
+        return <FileCheck className="h-4 w-4 text-ink" />;
       case "UKT":
-        return <CreditCard className="h-4 w-4 text-success" />;
+        return <CreditCard className="h-4 w-4 text-ink" />;
       case "NILAI":
-        return <BookOpen className="h-4 w-4 text-primary" />;
+        return <BookOpen className="h-4 w-4 text-ink" />;
       case "JADWAL":
-        return <Calendar className="h-4 w-4 text-info" />;
+        return <Calendar className="h-4 w-4 text-ink" />;
       case "KEAMANAN":
-        return <ShieldAlert className="h-4 w-4 text-danger" />;
+        return <ShieldAlert className="h-4 w-4 text-primary-dark" />;
       case "BRIEFING":
-        return <Info className="h-4 w-4 text-primary" />;
+        return <Info className="h-4 w-4 text-ink" />;
       case "PENGUMUMAN":
-        return <Megaphone className="h-4 w-4 text-warning" />;
+        return <Megaphone className="h-4 w-4 text-ink" />;
       default:
-        return <Bell className="h-4 w-4 text-primary" />;
+        return <Bell className="h-4 w-4 text-ink" />;
     }
   };
 
   const renderTingkatBadge = (tingkat: TingkatNotifikasi) => {
     if (tingkat === "MENDESAK") {
       return (
-        <span className="rounded-control bg-danger-soft border border-danger-border px-1.5 py-0.5 text-xs font-bold text-danger">
+        <span className="rounded-control bg-primary border border-ink px-1.5 py-0.5 text-xs font-bold text-white">
           Mendesak
         </span>
       );
     }
     if (tingkat === "PENTING") {
       return (
-        <span className="rounded-control bg-warning-soft border border-warning-border px-1.5 py-0.5 text-xs font-bold text-warning">
+        <span className="rounded-control bg-ink border border-ink px-1.5 py-0.5 text-xs font-bold text-white">
           Penting
         </span>
       );
@@ -181,7 +181,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
       >
         <Bell className="h-4 w-4" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-danger text-xs font-bold text-danger-foreground animate-pulse">
+          <span className="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-primary text-xs font-bold text-white animate-pulse">
             {unreadCount}
           </span>
         )}

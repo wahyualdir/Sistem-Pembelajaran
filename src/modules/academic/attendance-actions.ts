@@ -9,6 +9,8 @@ import { createNotification } from '@/modules/academic/actions';
 import { createClient } from '@/lib/supabase/server';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
+import { recordSystemAuditLog } from '@/lib/audit';
+import { evaluateGpsAttendanceIntegrity } from './attendance-gps-heuristic';
 
 function safeRevalidate(path: string, type?: 'page' | 'layout') {
   try {
@@ -67,6 +69,15 @@ export interface AttendanceRecord {
   anomaly_reason?: string;
   override_by?: string;
   override_reason?: string;
+
+  // Verifikasi GPS Palsu & Mock Location
+  needs_verification?: boolean;
+  verification_reason?: string;
+  verification_status?: 'MENUNGGU' | 'DISETUJUI' | 'DITOLAK';
+  verified_by?: string;
+  verified_at?: string;
+  verification_note?: string;
+  client_ip?: string;
 }
 
 export interface StudentAttendanceSummary {
@@ -167,6 +178,63 @@ if (presensiStore.sessions.length === 0) {
     qr_dynamic_token: 'QR-' + randomUUID().slice(0, 8).toUpperCase(),
     qr_token_expires_at: new Date(Date.now() + 30000).toISOString(),
   });
+}
+
+// Seed default records with GPS anomaly demo data if empty
+if (presensiStore.records.length === 0) {
+  presensiStore.records.push(
+    {
+      id: 'rec-anomaly-1',
+      session_id: 'ses-demo-001',
+      student_id: 'std-anom-1',
+      student_name: 'Budi Kurniawan (NIM: 2024012)',
+      status: 'HADIR',
+      method: 'LOCATION_GPS',
+      user_lat: -6.208801,
+      user_lng: 106.845602,
+      user_accuracy: 0.0,
+      distance_meters: 8,
+      is_flagged_anomaly: true,
+      needs_verification: true,
+      verification_status: 'MENUNGGU',
+      verification_reason: 'Akurasi GPS tidak wajar (0.0m < 1.0m). Terindikasi mock location/perangkat tiruan GPS tanpa deviasi sensor alami.',
+      recorded_at: new Date(Date.now() - 3600000).toISOString(),
+    },
+    {
+      id: 'rec-anomaly-2',
+      session_id: 'ses-demo-001',
+      student_id: 'std-anom-2',
+      student_name: 'Siti Rahma (NIM: 2024019)',
+      status: 'HADIR',
+      method: 'LOCATION_GPS',
+      user_lat: -6.208800,
+      user_lng: 106.845600,
+      user_accuracy: 12.5,
+      distance_meters: 10,
+      is_flagged_anomaly: true,
+      needs_verification: true,
+      verification_status: 'MENUNGGU',
+      verification_reason: 'Perpindahan posisi mustahil: terdeteksi loncatan 84.2 km dalam 18 menit (estimasi kecepatan 280 km/jam > 100 km/jam).',
+      recorded_at: new Date(Date.now() - 1800000).toISOString(),
+    },
+    {
+      id: 'rec-anomaly-3',
+      session_id: 'ses-demo-001',
+      student_id: 'std-anom-3',
+      student_name: 'Ahmad Fauzi (NIM: 2024035)',
+      status: 'HADIR',
+      method: 'LOCATION_GPS',
+      user_lat: -6.208800,
+      user_lng: 106.845600,
+      user_accuracy: 15.0,
+      distance_meters: 10,
+      is_flagged_anomaly: true,
+      needs_verification: true,
+      verification_status: 'MENUNGGU',
+      verification_reason: 'Koordinat GPS identik hingga 6 digit desimal (-6.208800, 106.845600) dengan peserta lain (std-anom-2). Terindikasi replikasi pin lokasi tiruan.',
+      recorded_at: new Date(Date.now() - 900000).toISOString(),
+    }
+  );
 }
 
 // Haversine Distance Calculation (Calculated strictly on server)
@@ -361,6 +429,7 @@ export async function submitMultiFactorAttendanceAction(input: {
   userLat?: number;
   userLng?: number;
   userAccuracy?: number;
+  clientIp?: string;
   credentialId?: string;
   deviceId?: string;
 }): Promise<ActionResponse<AttendanceRecord>> {
@@ -391,6 +460,9 @@ export async function submitMultiFactorAttendanceAction(input: {
   let isFlaggedAnomaly = false;
   let anomalyReason: string | undefined = undefined;
   let calculatedDistance: number | undefined = undefined;
+  let needsVerification = false;
+  let verificationReason: string | undefined = undefined;
+  let verificationStatus: 'MENUNGGU' | 'DISETUJUI' | 'DITOLAK' | undefined = undefined;
 
   // 1. QR Validation
   if (input.method === 'QR_DYNAMIC') {
@@ -403,26 +475,77 @@ export async function submitMultiFactorAttendanceAction(input: {
     }
   }
 
-  // 2. GPS Location Validation (Calculated strictly on server using Haversine)
+  // 2. GPS Location Validation & Mock Location Anomaly Heuristics
   if (input.method === 'LOCATION_GPS' || (s.methods?.includes('LOCATION_GPS') && input.userLat !== undefined)) {
     if (input.userLat === undefined || input.userLng === undefined) {
       return { ok: false, error: 'Koordinat lokasi GPS tidak terdeteksi.' };
-    }
-
-    if (input.userAccuracy && input.userAccuracy > 150) {
-      return { ok: false, error: `Akurasi GPS perangkat terlalu rendah (±${Math.round(input.userAccuracy)}m). Pastikan Anda berada di area terbuka.` };
     }
 
     const classLat = s.location_lat ?? -6.2088;
     const classLng = s.location_lng ?? 106.8456;
     calculatedDistance = await calculateHaversineDistanceMeters(input.userLat, input.userLng, classLat, classLng);
 
+    // Ambil riwayat presensi GPS sebelumnya dari mahasiswa ini untuk cek speed jump
+    const prevRecord = presensiStore.records
+      .filter((r) => r.student_id === user.user.id && r.user_lat !== undefined && r.user_lng !== undefined)
+      .sort((a, b) => new Date(b.recorded_at).getTime() - new Date(a.recorded_at).getTime())[0];
+
+    // Ambil catatan presensi mahasiswa lain dalam sesi ini untuk cek koordinat identik 6 desimal
+    const sessionRecords = presensiStore.records
+      .filter((r) => r.session_id === input.sessionId && r.user_lat !== undefined && r.user_lng !== undefined)
+      .map((r) => ({
+        lat: r.user_lat!,
+        lng: r.user_lng!,
+        studentId: r.student_id,
+        studentName: r.student_name,
+      }));
+
+    // Jalankan 4 heuristik deteksi GPS palsu (accuracy, speed jump, identical coordinates, IP mismatch)
+    const gpsEval = evaluateGpsAttendanceIntegrity({
+      studentId: user.user.id,
+      studentName: user.profile?.full_name,
+      userLat: input.userLat,
+      userLng: input.userLng,
+      userAccuracy: input.userAccuracy,
+      clientIp: input.clientIp,
+      recordedAt: new Date(),
+      previousRecord: prevRecord
+        ? {
+            lat: prevRecord.user_lat!,
+            lng: prevRecord.user_lng!,
+            recordedAt: prevRecord.recorded_at,
+            clientIp: prevRecord.client_ip,
+          }
+        : undefined,
+      sessionRecords,
+    });
+
+    if (gpsEval.needsVerification) {
+      isFlaggedAnomaly = true;
+      needsVerification = true;
+      verificationReason = gpsEval.reasons.join(' | ');
+      verificationStatus = 'MENUNGGU';
+      anomalyReason = verificationReason;
+    }
+
+    // Jika jarak melebihi batas radius kelas:
+    // Sesuai aturan: JANGAN tolak otomatis jika anomali, beri penanda verifikasi
     const allowedRadius = s.location_radius ?? 50;
     if (calculatedDistance > allowedRadius) {
-      return {
-        ok: false,
-        error: `Anda berada di luar radius kelas! Jarak terdeteksi: ${calculatedDistance} meter (Maksimal: ${allowedRadius} meter).`,
-      };
+      if (!gpsEval.needsVerification) {
+        if (calculatedDistance <= 500) {
+          isFlaggedAnomaly = true;
+          needsVerification = true;
+          verificationReason = `Jarak ${calculatedDistance}m melebihi radius kelas (${allowedRadius}m), perlu verifikasi dosen.`;
+          verificationStatus = 'MENUNGGU';
+          anomalyReason = verificationReason;
+        } else {
+          return {
+            ok: false,
+            error: `Anda berada di luar radius kelas! Jarak terdeteksi: ${calculatedDistance} meter (Maksimal: ${allowedRadius} meter).`,
+          };
+        }
+      }
     }
   }
 
@@ -445,6 +568,9 @@ export async function submitMultiFactorAttendanceAction(input: {
     if (recordsWithSameDevice.length > 0) {
       isFlaggedAnomaly = true;
       anomalyReason = `Satu perangkat terdeteksi digunakan oleh lebih dari 1 mahasiswa (${recordsWithSameDevice.length + 1} akun).`;
+      needsVerification = true;
+      verificationReason = (verificationReason ? verificationReason + ' | ' : '') + anomalyReason;
+      verificationStatus = 'MENUNGGU';
     }
   }
 
@@ -473,9 +599,13 @@ export async function submitMultiFactorAttendanceAction(input: {
     user_accuracy: input.userAccuracy,
     distance_meters: calculatedDistance,
     device_id: input.deviceId,
+    client_ip: input.clientIp,
     is_late: isLate,
     is_flagged_anomaly: isFlaggedAnomaly,
     anomaly_reason: anomalyReason,
+    needs_verification: needsVerification,
+    verification_reason: verificationReason,
+    verification_status: verificationStatus,
     recorded_at: new Date().toISOString(),
   };
 
@@ -504,10 +634,11 @@ export async function submitMultiFactorAttendanceAction(input: {
 
   presensiStore.records.push(record);
   safeRevalidate('/classes/[id]', 'page');
+  safeRevalidate('/attendance', 'page');
   return { ok: true, data: record };
 }
 
-// Lecturer / Admin Manual Override
+// Lecturer / Admin Manual Override (Enforcing Rule A2: SYSTEM_ADMIN cannot alter attendance)
 export async function updateStudentAttendanceAction(
   sessionId: string,
   studentId: string,
@@ -516,8 +647,12 @@ export async function updateStudentAttendanceAction(
   notes?: string
 ): Promise<ActionResponse> {
   const user = await getCurrentUserWithRoles();
-  if (!user || (user.activeRole !== 'LECTURER' && user.activeRole !== 'TEACHING_ASSISTANT' && user.activeRole !== 'SYSTEM_ADMIN' && user.activeRole !== 'SUPER_ADMIN')) {
-    return { ok: false, error: 'Tidak memiliki izin mengubah presensi.' };
+  if (
+    !user ||
+    user.activeRole === 'SYSTEM_ADMIN' ||
+    (user.activeRole !== 'LECTURER' && user.activeRole !== 'TEACHING_ASSISTANT' && user.activeRole !== 'SUPER_ADMIN')
+  ) {
+    return { ok: false, error: 'Tidak memiliki izin mengubah presensi (Aturan A2: Dibatasi untuk staf pengajar).' };
   }
 
   const existingIdx = presensiStore.records.findIndex((r) => r.session_id === sessionId && r.student_id === studentId);
@@ -542,7 +677,79 @@ export async function updateStudentAttendanceAction(
   }
 
   safeRevalidate('/classes/[id]', 'page');
+  safeRevalidate('/attendance', 'page');
   return { ok: true };
+}
+
+// Human Lecturer/TA Decision on Flagged GPS Anomaly (Non-punitive, Audited)
+export async function verifyAttendanceAction(input: {
+  recordId: string;
+  decision: 'DISETUJUI' | 'DITOLAK';
+  note?: string;
+}): Promise<ActionResponse> {
+  const user = await getCurrentUserWithRoles();
+  if (!user) return { ok: false, error: 'Silakan masuk terlebih dahulu.' };
+
+  // Rule A2: SYSTEM_ADMIN cannot alter attendance
+  if (user.activeRole === 'SYSTEM_ADMIN') {
+    return { ok: false, error: 'Aturan A2: Administrator Sistem dilarang memverifikasi atau mengubah data presensi.' };
+  }
+
+  const allowedRoles = ['LECTURER', 'TEACHING_ASSISTANT', 'SUPER_ADMIN'];
+  if (!allowedRoles.includes(user.activeRole)) {
+    return { ok: false, error: 'Hanya Dosen Pengampu dan Asisten Dosen yang dapat memverifikasi presensi.' };
+  }
+
+  const rec = presensiStore.records.find((r) => r.id === input.recordId);
+  if (!rec) return { ok: false, error: 'Data presensi tidak ditemukan.' };
+
+  const prevStatus = rec.status;
+  rec.needs_verification = false;
+  rec.verification_status = input.decision;
+  rec.verified_by = user.user.id;
+  rec.verified_at = new Date().toISOString();
+  rec.verification_note = input.note || (input.decision === 'DISETUJUI' ? 'Diverifikasi sah oleh pengajar' : 'Ditolak: anomali GPS');
+
+  if (input.decision === 'DITOLAK') {
+    rec.status = 'ALPA';
+    rec.notes = (rec.notes ? `${rec.notes} | ` : '') + `Ditolak Pengajar: ${rec.verification_note}`;
+  }
+
+  // Audit trail logging
+  try {
+    await recordSystemAuditLog({
+      actorId: user.user.id,
+      actorName: user.profile?.full_name || 'Pengajar',
+      actorRole: user.activeRole,
+      action: 'attendance.verify_anomaly',
+      entityType: 'attendance_record',
+      entityId: rec.id,
+      description: `Verifikasi anomali GPS mahasiswa ${rec.student_name}: Keputusan ${input.decision} (${rec.verification_note}). Status: ${prevStatus} -> ${rec.status}`,
+      valueBefore: JSON.stringify({ status: prevStatus, needs_verification: true, verification_reason: rec.verification_reason }),
+      valueAfter: JSON.stringify({ status: rec.status, needs_verification: false, verification_status: input.decision }),
+    });
+  } catch (err) {
+    console.warn('[Audit] Failed to log attendance verification:', err);
+  }
+
+  safeRevalidate('/attendance', 'page');
+  safeRevalidate('/classes/[id]', 'page');
+  return { ok: true };
+}
+
+// List records with GPS anomalies for Lecturer/TA review
+export async function listAttendanceAnomaliesAction(sessionId?: string): Promise<AttendanceRecord[]> {
+  let records = presensiStore.records.filter(
+    (r) => r.needs_verification === true || r.is_flagged_anomaly === true || r.verification_status !== undefined
+  );
+
+  if (sessionId) {
+    records = records.filter((r) => r.session_id === sessionId);
+  }
+
+  return [...records].sort(
+    (a, b) => new Date(b.recorded_at).getTime() - new Date(a.recorded_at).getTime()
+  );
 }
 
 export async function listAttendanceSessionsAction(classId: string): Promise<AttendanceSession[]> {

@@ -21,7 +21,7 @@ export function ReviewForm({ row, max, mode = 'full' }: { row: SubmissionItem; m
     return (
       <div className="space-y-3">
         <div className="animate-fade-up rounded-control border border-border bg-surface p-3 text-sm">
-          <p className="font-medium text-success">Nilai final {g.score} dari {g.max_score}</p>
+          <p className="font-medium text-ink">Nilai final {g.score} dari {g.max_score}</p>
           {g.comment && <p className="mt-1 whitespace-pre-wrap text-muted-foreground">{g.comment}</p>}
         </div>
         {mode === 'full' && <ChangeRequest row={row} />}
@@ -92,7 +92,7 @@ function ChangeRequest({ row }: { row: SubmissionItem }) {
   const c = row.change;
 
   if (c?.status === 'PENDING') {
-    return <p className="animate-fade-up text-sm text-warning">Pengajuan perubahan ke {c.proposed_score} menunggu persetujuan koordinator prodi.</p>;
+    return <p className="animate-fade-up text-sm text-ink">Pengajuan perubahan ke {c.proposed_score} menunggu persetujuan koordinator prodi.</p>;
   }
   return (
     <div className="space-y-2 text-sm">

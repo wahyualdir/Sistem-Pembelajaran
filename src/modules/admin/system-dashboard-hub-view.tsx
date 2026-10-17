@@ -29,7 +29,7 @@ export function SystemDashboardHubView() {
       <RetroWindow
         title="system_administrator_control_center.sys"
         badge="ROLE :: SYSTEM_ADMINISTRATOR"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -38,7 +38,7 @@ export function SystemDashboardHubView() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <Server className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
                 Pusat Kendali Administrator Sistem
               </h1>
             </div>
@@ -48,10 +48,10 @@ export function SystemDashboardHubView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black font-mono text-xs font-bold shadow-retro-sm ${
-              isDemo || dbConfigured ? 'bg-emerald-100 text-emerald-950' : 'bg-retro-warm text-black'
+            <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black font-sans text-xs font-bold shadow-retro-sm ${
+              isDemo || dbConfigured ? 'bg-surface text-ink' : 'bg-gray-soft text-black'
             }`}>
-              <span className={`h-2.5 w-2.5 rounded-full ${isDemo || dbConfigured ? 'bg-emerald-600 animate-pulse' : 'bg-black/40'}`} />
+              <span className={`h-2.5 w-2.5 rounded-full ${isDemo || dbConfigured ? 'bg-gray-dark animate-pulse' : 'bg-black/40'}`} />
               {isDemo ? 'INFRASTRUKTUR ONLINE' : dbConfigured ? 'BASIS DATA TERHUBUNG' : 'STATUS: BELUM TERHUBUNG'}
             </span>
           </div>
@@ -60,53 +60,53 @@ export function SystemDashboardHubView() {
         {/* METRIK 4 KARTU */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-6 pt-6 border-t-2 border-black/10">
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
-            <div className="flex items-center justify-between text-black/60 text-xs font-mono font-bold uppercase">
+            <div className="flex items-center justify-between text-black/60 text-xs font-sans font-bold uppercase">
               <span>Status Server</span>
               <Activity className="h-4 w-4" />
             </div>
-            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
+            <div className="text-xl sm:text-2xl font-bold font-sans text-black mt-1">
               {isDemo ? '100% ONLINE' : (dbConfigured ? 'TERHUBUNG' : 'Belum terhubung')}
             </div>
-            <div className="text-xs font-mono text-black/60 mt-1">
+            <div className="text-xs font-sans text-black/60 mt-1">
               {isDemo ? 'Uptime 18 Hari' : 'Tidak tersedia'}
             </div>
           </div>
 
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
-            <div className="flex items-center justify-between text-black/60 text-xs font-mono font-bold uppercase">
+            <div className="flex items-center justify-between text-black/60 text-xs font-sans font-bold uppercase">
               <span>PostgreSQL Pool</span>
               <Database className="h-4 w-4" />
             </div>
-            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
+            <div className="text-xl sm:text-2xl font-bold font-sans text-black mt-1">
               {isDemo ? '42 / 200 Pool' : (dbConfigured ? 'Aktif' : 'Tidak tersedia')}
             </div>
-            <div className="text-xs font-mono text-black/60 mt-1">
+            <div className="text-xs font-sans text-black/60 mt-1">
               {isDemo ? 'Latensi 12ms' : 'Tidak tersedia'}
             </div>
           </div>
 
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
-            <div className="flex items-center justify-between text-black/60 text-xs font-mono font-bold uppercase">
+            <div className="flex items-center justify-between text-black/60 text-xs font-sans font-bold uppercase">
               <span>WebSocket Realtime</span>
               <Radio className="h-4 w-4" />
             </div>
-            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
+            <div className="text-xl sm:text-2xl font-bold font-sans text-black mt-1">
               {isDemo ? '142 Conn' : 'Tidak tersedia'}
             </div>
-            <div className="text-xs font-mono text-black/60 mt-1">
+            <div className="text-xs font-sans text-black/60 mt-1">
               {isDemo ? '1.2k msg/s' : 'Tidak tersedia'}
             </div>
           </div>
 
           <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm">
-            <div className="flex items-center justify-between text-black/60 text-xs font-mono font-bold uppercase">
+            <div className="flex items-center justify-between text-black/60 text-xs font-sans font-bold uppercase">
               <span>Audit Anti-Tamper</span>
               <ShieldCheck className="h-4 w-4" />
             </div>
-            <div className="text-xl sm:text-2xl font-black font-mono text-black mt-1">
+            <div className="text-xl sm:text-2xl font-bold font-sans text-black mt-1">
               {isDemo ? 'IMMUTABLE' : (dbConfigured ? 'Trigger Aktif' : 'Belum dikonfigurasi')}
             </div>
-            <div className="text-xs font-mono text-black/60 mt-1">
+            <div className="text-xs font-sans text-black/60 mt-1">
               {isDemo ? 'Trigger Aktif' : 'Menunggu migrasi'}
             </div>
           </div>
@@ -119,7 +119,7 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Activity className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-lg text-black">Monitoring Sistem</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Monitoring Sistem</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
               Pantau beban CPU/RAM, throughput WebSocket telemetri ujian, status sandbox isolasi kode, dan log error level 500.
@@ -127,7 +127,7 @@ export function SystemDashboardHubView() {
           </div>
           <Link
             href="/admin/system/monitoring"
-            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-gray-soft font-sans font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
             <span>Buka Monitoring</span>
             <ArrowRight className="h-4 w-4" />
@@ -138,7 +138,7 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Globe className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-lg text-black">Integrasi Layanan</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Integrasi Layanan</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
               Kelola kredensial Zoom, Google Meet, Google Maps API, Sandbox Judge0, Gateway Notifikasi, dan Single Sign-On (SSO).
@@ -146,7 +146,7 @@ export function SystemDashboardHubView() {
           </div>
           <Link
             href="/admin/system/integrations"
-            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-gray-soft font-sans font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
             <span>Kelola Integrasi</span>
             <ArrowRight className="h-4 w-4" />
@@ -157,7 +157,7 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Laptop className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-lg text-black">Keamanan & Sesi</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Keamanan & Sesi</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
               Inspeksi daftar sesi pengguna aktif, deteksi percobaan login mencurigakan (*brute-force*), dan pembatasan laju panggilan API.
@@ -165,7 +165,7 @@ export function SystemDashboardHubView() {
           </div>
           <Link
             href="/admin/system/security"
-            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-gray-soft font-sans font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
             <span>Pusat Keamanan</span>
             <ArrowRight className="h-4 w-4" />
@@ -176,7 +176,7 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <FolderArchive className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-lg text-black">Backup & Restore</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Backup & Restore</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
               Manajemen cadangan basis data otomatis, verifikasi integritas checksum SHA-256, dan pemulihan bencana (*disaster recovery*).
@@ -184,7 +184,7 @@ export function SystemDashboardHubView() {
           </div>
           <Link
             href="/admin/system/backup"
-            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-gray-soft font-sans font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
             <span>Cadangan Sistem</span>
             <ArrowRight className="h-4 w-4" />
@@ -195,7 +195,7 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Sliders className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-lg text-black">Pengaturan Platform</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Pengaturan Platform</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
               Konfigurasi nama institusi kampus, parameter model AI evaluator akademik, dan alokasi batas kuota penyimpanan berkas.
@@ -203,7 +203,7 @@ export function SystemDashboardHubView() {
           </div>
           <Link
             href="/admin/system/settings"
-            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-gray-soft font-sans font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
             <span>Pengaturan Umum</span>
             <ArrowRight className="h-4 w-4" />
@@ -214,7 +214,7 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-black text-lg text-black">Log Audit Sistem</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Log Audit Sistem</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
               Tinjauan jejak audit forensik menyeluruh bersifat *append-only* (read-only) untuk kepatuhan regulasi dan transparansi transaksi.
@@ -222,7 +222,7 @@ export function SystemDashboardHubView() {
           </div>
           <Link
             href="/admin/system/audit"
-            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-retro-warm font-mono font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
+            className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-gray-soft font-sans font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
             <span>Tinjau Audit Log</span>
             <ArrowRight className="h-4 w-4" />

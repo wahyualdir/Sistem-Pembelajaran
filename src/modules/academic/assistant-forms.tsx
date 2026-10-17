@@ -21,8 +21,8 @@ export function AssistantForm({ classId }: { classId: string }) {
       className="space-y-3"
     >
       <div className="space-y-1.5">
-        <label htmlFor="as-id" className="block text-sm font-medium">Email atau NIM asisten</label>
-        <input id="as-id" value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Contoh: asdos@kampus.ac.id" disabled={pending} required className="field" />
+        <label htmlFor="as-id" className="block text-sm font-medium">NIM atau NIDN asisten</label>
+        <input id="as-id" value={identifier} onChange={(e) => setIdentifier(e.target.value)} placeholder="Contoh: 2024002" disabled={pending} required className="field" />
       </div>
       <fieldset className="space-y-2">
         <legend className="text-sm font-medium">Izin yang diberikan</legend>
@@ -44,7 +44,7 @@ export function AssistantForm({ classId }: { classId: string }) {
   );
 }
 
-export function RevokeAssistant({ classId, email, name }: { classId: string; email: string; name: string }) {
+export function RevokeAssistant({ classId, identifier, name }: { classId: string; identifier: string; name: string }) {
   const { pending, error, run } = useRun(() => {});
   return (
     <div>
@@ -52,12 +52,12 @@ export function RevokeAssistant({ classId, email, name }: { classId: string; ema
         type="button"
         disabled={pending}
         aria-label={`Cabut penugasan ${name}`}
-        onClick={() => run(() => setAssistantAction({ class_id: classId, identifier: email, permissions: [] }), 'Penugasan dicabut.')}
-        className="text-sm font-medium text-danger underline-offset-4 hover:underline disabled:opacity-50"
+        onClick={() => run(() => setAssistantAction({ class_id: classId, identifier, permissions: [] }), 'Penugasan dicabut.')}
+        className="text-sm font-medium text-primary-dark underline-offset-4 hover:underline disabled:opacity-50"
       >
         Cabut
       </button>
-      {error && <p role="alert" className="text-xs text-danger">{error}</p>}
+      {error && <p role="alert" className="text-xs text-primary-dark">{error}</p>}
     </div>
   );
 }

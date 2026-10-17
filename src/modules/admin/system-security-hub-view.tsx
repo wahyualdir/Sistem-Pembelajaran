@@ -29,7 +29,7 @@ export function SystemSecurityHubView() {
       <RetroWindow
         title="keamanan_dan_pertahanan_siber.app"
         badge="SYSTEM_ADMIN :: CYBER_SECURITY"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -38,7 +38,7 @@ export function SystemSecurityHubView() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <Laptop className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
                 Pusat Keamanan & Manajemen Sesi
               </h1>
             </div>
@@ -48,8 +48,8 @@ export function SystemSecurityHubView() {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-emerald-100 text-emerald-950 font-mono text-xs font-bold shadow-retro-sm">
-              <ShieldCheck className="h-4 w-4 text-emerald-700" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-surface text-ink font-sans text-xs font-bold shadow-retro-sm">
+              <ShieldCheck className="h-4 w-4 text-ink" />
               FIREWALL & GUARD AKTIF
             </span>
           </div>
@@ -69,10 +69,10 @@ export function SystemSecurityHubView() {
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id as SecurityTab)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold font-mono transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold font-sans transition-all cursor-pointer ${
                 isActive
                   ? 'bg-black text-white shadow-retro'
-                  : 'bg-white hover:bg-retro-warm text-black shadow-retro-sm'
+                  : 'bg-white hover:bg-gray-soft text-black shadow-retro-sm'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -88,23 +88,23 @@ export function SystemSecurityHubView() {
       {activeTab === 'sesi-aktif' && (
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
-            <h3 className="font-heading font-black text-lg text-black">
+            <h3 className="font-heading font-bold text-lg text-black">
               Daftar Sesi Pengguna Aktif di Perangkat
             </h3>
-            <span className="text-xs font-mono font-bold text-black/60">
+            <span className="text-xs font-sans font-bold text-black/60">
               Total: {isDemo ? '2 Sesi Terpantau' : '0 Sesi (Belum Terhubung)'}
             </span>
           </div>
 
           {!isDemo ? (
-            <div className="p-8 text-center text-black/60 font-mono text-xs border-2 border-dashed border-black/20 rounded-xl">
+            <div className="p-8 text-center text-black/60 font-sans text-xs border-2 border-dashed border-black/20 rounded-xl">
               Pangkalan data sesi pengguna aktif belum terhubung ke database. Fitur pencabutan sesi jarak jauh saat ini berstatus belum aktif.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm border-collapse">
                 <thead>
-                  <tr className="border-b-2 border-black bg-retro-warm font-mono font-black text-black">
+                  <tr className="border-b-2 border-black bg-gray-soft font-sans font-bold text-black">
                     <th className="p-3">Pengguna</th>
                     <th className="p-3">Peran</th>
                     <th className="p-3">Perangkat / Browser</th>
@@ -113,7 +113,7 @@ export function SystemSecurityHubView() {
                     <th className="p-3 text-center">Aksi</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y border-b border-black font-mono">
+                <tbody className="divide-y border-b border-black font-sans">
                   <tr>
                     <td className="p-3 font-bold text-black">Dr. Budi Santoso</td>
                     <td className="p-3 text-black/80 font-sans">LECTURER</td>
@@ -124,7 +124,7 @@ export function SystemSecurityHubView() {
                       <button
                         disabled={!isDemo}
                         title={!isDemo ? 'Fitur ini belum aktif' : undefined}
-                        className="px-2.5 py-1 rounded border border-black bg-rose-100 text-rose-950 font-bold hover:bg-rose-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-2.5 py-1 rounded border border-black bg-surface text-primary-dark font-bold hover:bg-surface cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Cabut Sesi
                       </button>
@@ -140,7 +140,7 @@ export function SystemSecurityHubView() {
                       <button
                         disabled={!isDemo}
                         title={!isDemo ? 'Fitur ini belum aktif' : undefined}
-                        className="px-2.5 py-1 rounded border border-black bg-rose-100 text-rose-950 font-bold hover:bg-rose-200 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-2.5 py-1 rounded border border-black bg-surface text-primary-dark font-bold hover:bg-surface cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Cabut Sesi
                       </button>
@@ -157,15 +157,15 @@ export function SystemSecurityHubView() {
       {activeTab === 'login-mencurigakan' && (
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
-            <h3 className="font-heading font-black text-lg text-black">
+            <h3 className="font-heading font-bold text-lg text-black">
               Deteksi Anomali Login & Percobaan Brute-Force
             </h3>
-            <span className="px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-bold font-mono text-xs">
+            <span className="px-2 py-0.5 rounded border border-ink bg-surface text-ink font-bold font-sans text-xs">
               0 ANOMALI KRITIS
             </span>
           </div>
 
-          <div className="p-8 text-center text-black/60 font-mono text-xs border-2 border-dashed border-black/20 rounded-xl">
+          <div className="p-8 text-center text-black/60 font-sans text-xs border-2 border-dashed border-black/20 rounded-xl">
             Tidak ada aktivitas login mencurigakan yang terdeteksi dalam 24 jam terakhir. Sistem mitigasi akun aman.
           </div>
         </div>
@@ -175,35 +175,35 @@ export function SystemSecurityHubView() {
       {activeTab === 'rate-limit' && (
         <div className="p-5 rounded-xl border-2 border-black bg-white shadow-retro space-y-6">
           <div className="border-b-2 border-black pb-3">
-            <h3 className="font-heading font-black text-lg text-black">
+            <h3 className="font-heading font-bold text-lg text-black">
               Konfigurasi Batas Laju Pemanggilan API (Rate Limiting)
             </h3>
-            <p className="text-xs text-black/60 font-mono">
+            <p className="text-xs text-black/60 font-sans">
               Melindungi server dari serangan DDoS dan abuse pengiriman jawaban ujian.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
-            <div className="p-4 border-2 border-black rounded-lg bg-retro-warm/20 space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-sans text-xs">
+            <div className="p-4 border-2 border-black rounded-lg bg-gray-soft/20 space-y-2">
               <span className="font-bold text-black">Endpoint: /login</span>
               <p className="text-black/60">Batas: 5 Percobaan / 15 Menit</p>
-              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">
+              <span className="inline-block px-2 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-bold">
                 AKTIF (IP BLOCKING)
               </span>
             </div>
 
-            <div className="p-4 border-2 border-black rounded-lg bg-retro-warm/20 space-y-2">
+            <div className="p-4 border-2 border-black rounded-lg bg-gray-soft/20 space-y-2">
               <span className="font-bold text-black">Endpoint: /exams/submit</span>
               <p className="text-black/60">Batas: 60 Request / Menit</p>
-              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">
+              <span className="inline-block px-2 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-bold">
                 AKTIF (BURST SAFE)
               </span>
             </div>
 
-            <div className="p-4 border-2 border-black rounded-lg bg-retro-warm/20 space-y-2">
+            <div className="p-4 border-2 border-black rounded-lg bg-gray-soft/20 space-y-2">
               <span className="font-bold text-black">Endpoint: /attendance/check-in</span>
               <p className="text-black/60">Batas: 10 Request / Menit</p>
-              <span className="inline-block px-2 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-bold">
+              <span className="inline-block px-2 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-bold">
                 AKTIF (GEOFENCE VERIFIED)
               </span>
             </div>

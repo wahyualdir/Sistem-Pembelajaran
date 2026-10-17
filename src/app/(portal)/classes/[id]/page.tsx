@@ -4,6 +4,8 @@ import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { getClassDetailAction } from '@/modules/academic/actions';
 import { listClassQuizzesAction } from '@/modules/academic/quiz-actions';
 import { listAttendanceSessionsAction, getClassAttendanceSummaryAction } from '@/modules/academic/attendance-actions';
+import { getClassRiskSummaryAction } from '@/modules/early-warning/actions';
+import { listClassForumTopicsAction } from '@/modules/academic/forum-actions';
 import { ClassHubTabs } from '@/modules/academic/class-hub-tabs';
 
 export default async function ClassDetailPage({ params }: { params: { id: string } }) {
@@ -15,6 +17,8 @@ export default async function ClassDetailPage({ params }: { params: { id: string
   const attendanceSessions = await listAttendanceSessionsAction(params.id).catch(() => []);
   const summaries = await getClassAttendanceSummaryAction(params.id, detail.members || []).catch(() => []);
   const mySummary = ctx ? summaries.find((s) => s.student_id === ctx.user.id) ?? null : null;
+  const riskEvaluations = await getClassRiskSummaryAction(params.id).catch(() => []);
+  const forumData = await listClassForumTopicsAction(params.id).catch(() => ({ ok: false, topics: [], tags: [] }));
 
   return (
     <div className="w-full">
@@ -24,6 +28,9 @@ export default async function ClassDetailPage({ params }: { params: { id: string
           quizzes,
           attendanceSessions,
           attendanceSummary: mySummary,
+          riskEvaluations,
+          forumTopics: forumData.topics || [],
+          forumTags: forumData.tags || [],
         }}
       />
     </div>

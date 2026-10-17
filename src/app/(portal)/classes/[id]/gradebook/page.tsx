@@ -41,30 +41,30 @@ export default async function GradebookPage({ params }: { params: { id: string }
             <span className="font-semibold text-foreground flex items-center gap-1.5">
               <Sliders className="h-3.5 w-3.5 text-primary" /> Bobot Komponen Penilaian (Total: 100%)
             </span>
-            <span className="text-xs text-success font-medium bg-success-soft px-2 py-0.5 rounded-full">
+            <span className="text-xs text-ink font-medium bg-surface px-2 py-0.5 rounded-full">
               Terverifikasi 100%
             </span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-muted-foreground pt-1">
             <div className="rounded bg-muted p-2 text-center">
               <span className="block text-xs">Tugas</span>
-              <strong className="text-foreground text-xs font-mono">30%</strong>
+              <strong className="text-foreground text-xs font-sans">30%</strong>
             </div>
             <div className="rounded bg-muted p-2 text-center">
               <span className="block text-xs">Kuis</span>
-              <strong className="text-foreground text-xs font-mono">20%</strong>
+              <strong className="text-foreground text-xs font-sans">20%</strong>
             </div>
             <div className="rounded bg-muted p-2 text-center">
               <span className="block text-xs">Presensi</span>
-              <strong className="text-foreground text-xs font-mono">10%</strong>
+              <strong className="text-foreground text-xs font-sans">10%</strong>
             </div>
             <div className="rounded bg-muted p-2 text-center">
               <span className="block text-xs">UTS</span>
-              <strong className="text-foreground text-xs font-mono">20%</strong>
+              <strong className="text-foreground text-xs font-sans">20%</strong>
             </div>
             <div className="rounded bg-muted p-2 text-center">
               <span className="block text-xs">UAS</span>
-              <strong className="text-foreground text-xs font-mono">20%</strong>
+              <strong className="text-foreground text-xs font-sans">20%</strong>
             </div>
           </div>
         </div>
@@ -104,8 +104,8 @@ export default async function GradebookPage({ params }: { params: { id: string }
                     {g.assignments.map((a) => (
                       <td key={a.id} className="px-3 py-2.5"><Cell c={r.cells[a.id]} /></td>
                     ))}
-                    <td className="px-3 py-2.5 font-medium font-mono">{r.average ?? '-'}</td>
-                    <td className="px-3 py-2.5 text-center font-mono">
+                    <td className="px-3 py-2.5 font-medium font-sans">{r.average ?? '-'}</td>
+                    <td className="px-3 py-2.5 text-center font-sans">
                       {hurufInfo ? (
                         <span className="inline-block px-2 py-0.5 rounded font-bold text-xs bg-primary-soft text-primary">
                           {hurufInfo.huruf} ({hurufInfo.bobot.toFixed(2)})

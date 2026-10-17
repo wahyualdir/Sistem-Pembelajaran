@@ -11,6 +11,18 @@ import { SYNTHETIC_DEMO_USERS } from '@/modules/identity/demo-users';
 import { DELEGABLE_CODES } from './permissions';
 import { recordSystemAuditLog } from '@/lib/audit';
 import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
+import {
+  assertClassMember,
+  ClassAccessError,
+  getAcademicStore,
+} from '@/lib/auth/class-access';
+import {
+  createForumTopicAction,
+  replyForumTopicAction,
+  moderateTopicAction,
+  moderateReplyAction,
+  getForumTopicDetailAction,
+} from './forum-actions';
 
 export interface ClassItem {
   id: string;
@@ -208,10 +220,9 @@ export async function joinClassAction(code: unknown): Promise<ActionResponse<Cla
 
 export async function listMyClassesAction(): Promise<ClassItem[]> {
   const c = await getCurrentUserWithRoles();
-  if (!c) return [];
+  if (!c || c.activeRole === 'SYSTEM_ADMIN') return [];
   const isAdminOrStaff =
     c.activeRole === 'SUPER_ADMIN' ||
-    c.activeRole === 'SYSTEM_ADMIN' ||
     c.activeRole === 'PROGRAM_COORDINATOR' ||
     c.activeRole === 'ACADEMIC_STAFF';
   const lecturer = c.activeRole === 'LECTURER' || c.activeRole === 'TEACHING_ASSISTANT';
@@ -237,13 +248,20 @@ export async function listMyClassesAction(): Promise<ClassItem[]> {
     return mem.classes.map((x) => ({ ...pub(x), members: mem.enrollments.filter((e) => e.class_id === x.id).length }));
   }
 
-  if (lecturer) {
+  if (c.activeRole === 'LECTURER') {
     return mem.classes
-      .filter((x) => x.created_by === c.user.id || demoPerms(x.id, c.user.id) !== null || (!c.isNewAccount && x.id.startsWith('c0000000-0000-0000-0000-')))
+      .filter((x) => x.created_by === c.user.id)
       .map((x) => ({ ...pub(x), members: mem.enrollments.filter((e) => e.class_id === x.id).length }));
   }
+
+  if (c.activeRole === 'TEACHING_ASSISTANT') {
+    return mem.classes
+      .filter((x) => demoPerms(x.id, c.user.id) !== null)
+      .map((x) => ({ ...pub(x), members: mem.enrollments.filter((e) => e.class_id === x.id).length }));
+  }
+
   return mem.classes
-    .filter((x) => mem.enrollments.some((e) => e.class_id === x.id && e.student_id === c.user.id) || (!c.isNewAccount && x.id.startsWith('c0000000-0000-0000-0000-')))
+    .filter((x) => mem.enrollments.some((e) => e.class_id === x.id && e.student_id === c.user.id))
     .map((x) => ({ ...pub(x), members: mem.enrollments.filter((e) => e.class_id === x.id).length }));
 }
 
@@ -259,7 +277,7 @@ export interface AssignmentItem {
   mine?: { text_body: string; is_late: boolean; submitted_at: string; grade?: GradeInfo | null } | null;
 }
 export interface MaterialItem { id: string; title: string; body_md: string; created_at: string }
-export interface MemberItem { student_id: string; name: string; enrolled_at: string }
+export interface MemberItem { student_id: string; name: string; nim?: string; enrolled_at: string }
 export interface ClassDetail {
   cls: ClassItem;
   assignments: AssignmentItem[];
@@ -359,10 +377,9 @@ export async function submitAssignmentAction(assignmentId: string, text: unknown
 // Mengembalikan null bila kelas tidak ada atau di luar akses (halaman menampilkan 404, bukan 403).
 export async function getClassDetailAction(id: string): Promise<ClassDetail | null> {
   const c = await getCurrentUserWithRoles();
-  if (!c || !z.string().uuid().safeParse(id).success) return null;
+  if (!c || c.activeRole === 'SYSTEM_ADMIN' || !z.string().uuid().safeParse(id).success) return null;
   const isAdminOrStaff =
     c.activeRole === 'SUPER_ADMIN' ||
-    c.activeRole === 'SYSTEM_ADMIN' ||
     c.activeRole === 'PROGRAM_COORDINATOR' ||
     c.activeRole === 'ACADEMIC_STAFF';
   const lecturer = c.activeRole === 'LECTURER';
@@ -370,8 +387,17 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
 
   if (await checkSupabaseOnline()) {
     const supabase = await createClient();
-    const { data: cls } = await supabase.from('classes').select('id,title,section,join_code,status,courses(code),semesters(label)').eq('id', id).maybeSingle();
+    const { data: cls } = await supabase.from('classes').select('id,title,section,join_code,status,created_by,courses(code),semesters(label)').eq('id', id).maybeSingle();
     if (!cls) return null;
+    const { data: ca } = await supabase.from('class_assistants').select('user_id,permission,profiles(full_name)').eq('class_id', id);
+    const isActualTa = ta && (ca ?? []).some((x: any) => x.user_id === c.user.id);
+    if (lecturer && (cls as any).created_by && (cls as any).created_by !== c.user.id) return null;
+    if (ta && !isActualTa) return null;
+    if (!lecturer && !isActualTa && !isAdminOrStaff) {
+      const { data: myEnr } = await supabase.from('enrollments').select('student_id').eq('class_id', id).eq('student_id', c.user.id).eq('status', 'ACTIVE').maybeSingle();
+      if (!myEnr) return null;
+    }
+
     const { data: rows } = await supabase
       .from('assignments')
       .select('id,class_id,title,description,due_at,close_at,submissions(count)')
@@ -382,13 +408,19 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
     let members: MemberItem[] | undefined;
     if (lecturer || isAdminOrStaff) {
       const { data: enr } = await supabase.from('enrollments').select('student_id,enrolled_at,profiles(full_name)').eq('class_id', id).eq('status', 'ACTIVE').order('enrolled_at');
-      members = (enr ?? []).map((e: any) => ({ student_id: e.student_id, name: e.profiles?.full_name ?? 'Mahasiswa', enrolled_at: e.enrolled_at }));
+      members = (enr ?? []).map((e: any) => {
+        const demo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === e.student_id);
+        return {
+          student_id: e.student_id,
+          name: e.profiles?.full_name ?? demo?.name ?? 'Mahasiswa',
+          nim: demo?.nim,
+          enrolled_at: e.enrolled_at,
+        };
+      });
     }
     const { data: dis } = await supabase.from('discussions').select('id,title,author_name,created_at,is_pinned,is_locked,discussion_replies(count)').eq('class_id', id).order('is_pinned', { ascending: false }).order('created_at', { ascending: false });
     let assistants: AssistantItem[] | undefined;
     let perms: string[] | undefined;
-    const { data: ca } = await supabase.from('class_assistants').select('user_id,permission,profiles(full_name,email)').eq('class_id', id);
-    const isActualTa = ta && (ca ?? []).some((x: any) => x.user_id === c.user.id);
     const viewer = lecturer || isAdminOrStaff ? 'LECTURER' : isActualTa ? 'TA' : 'STUDENT';
 
     if (lecturer || isActualTa || isAdminOrStaff) {
@@ -424,31 +456,25 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
     };
   }
 
-  const row = mem.classes.find((x) => x.id === id);
+  const liveStore = getAcademicStore();
+  const liveAssistants = liveStore.assistants;
+  const row = liveStore.classes.find((x) => x.id === id) as Row | undefined;
   if (!row) return null;
 
-  const isDemoClass = id === DEMO_CLASS_ID;
-  const isActualTa = ta && (demoPerms(id, c.user.id) !== null);
-  const isStudentEnrolled = mem.enrollments.some((e) => e.class_id === id && e.student_id === c.user.id);
+  const taRecord = liveAssistants.find((x) => x.class_id === id && x.user_id === c.user.id);
+  const isActualTa = ta && Boolean(taRecord);
+  const isStudentEnrolled = liveStore.enrollments.some(
+    (e) => e.class_id === id && e.student_id === c.user.id && (e.status ?? 'ACTIVE') === 'ACTIVE'
+  );
 
-  if (isDemoClass && !lecturer && !isActualTa && !isAdminOrStaff && !isStudentEnrolled) {
-    mem.enrollments.push({
-      class_id: id,
-      student_id: c.user.id,
-      student_name: c.profile?.full_name ?? 'Mahasiswa SIAJAR',
-      enrolled_at: new Date().toISOString(),
-    });
-  }
-
+  // Tahap B2: Hapus auto-enroll dan bypass isDemoClass. Mahasiswa yang tidak terdaftar ditolak (null).
   const allowed =
     isAdminOrStaff ||
-    (isDemoClass
-      ? true
-      : lecturer
-        ? row.created_by === c.user.id
-        : isActualTa
-          ? true
-          : isStudentEnrolled);
+    (lecturer
+      ? (row.created_by === c.user.id || (row as any).lecturer_id === c.user.id)
+      : isActualTa
+        ? true
+        : c.activeRole === 'STUDENT' && isStudentEnrolled);
   if (!allowed) return null;
 
   const viewer = lecturer || isAdminOrStaff ? 'LECTURER' : isActualTa ? 'TA' : 'STUDENT';
@@ -457,11 +483,31 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
     cls: pub(row),
     viewer,
     discussions: demoDiscussions(id, lecturer || isAdminOrStaff),
-    perms: isActualTa ? demoPerms(id, c.user.id) ?? [] : (isAdminOrStaff ? [...DELEGABLE_CODES] : undefined),
-    assistants: lecturer || isAdminOrStaff ? asisten.filter((x) => x.class_id === id).map((x) => ({ user_id: x.user_id, name: x.name, email: x.email, permissions: x.perms })) : undefined,
+    perms: isActualTa
+      ? (Array.isArray(taRecord?.perms) ? taRecord!.perms : demoPerms(id, c.user.id) ?? [])
+      : (isAdminOrStaff ? [...DELEGABLE_CODES] : undefined),
+    assistants: lecturer || isAdminOrStaff
+      ? liveAssistants
+          .filter((x) => x.class_id === id)
+          .map((x: any) => ({
+            user_id: x.user_id,
+            name: x.name ?? 'Asisten',
+            nim: x.nim,
+            nidn: x.nidn,
+            permissions: Array.isArray(x.perms) ? x.perms : [],
+          }))
+      : undefined,
     announcements: pengumuman.filter((a) => a.class_id === id).sort((a, b) => b.created_at.localeCompare(a.created_at)),
     materials: bahan.filter((m) => m.class_id === id).sort((a, b) => b.created_at.localeCompare(a.created_at)),
-    members: mem.enrollments.filter((e) => e.class_id === id).map((e) => ({ student_id: e.student_id, name: e.student_name ?? 'Mahasiswa', enrolled_at: e.enrolled_at ?? '' })),
+    members: liveStore.enrollments.filter((e) => e.class_id === id).map((e) => {
+      const demo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === e.student_id);
+      return {
+        student_id: e.student_id,
+        name: e.student_name ?? demo?.name ?? 'Mahasiswa',
+        nim: demo?.nim ?? (e.student_id === 'mhs-1' ? '2024001' : undefined),
+        enrolled_at: e.enrolled_at ?? '',
+      };
+    }),
     assignments: tugas.assignments
       .filter((a) => a.class_id === id)
       .sort((a, b) => a.due_at.localeCompare(b.due_at))
@@ -471,6 +517,111 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
         mine: lecturer || isActualTa || isAdminOrStaff ? null : demoMine(a.id, c.user.id),
       })),
   };
+}
+
+export async function listClassMembersAction(
+  classId: string
+): Promise<ActionResponse<{ lecturer: { name: string; nidn: string }; assistants: AssistantItem[]; members: MemberItem[] }>> {
+  const c = await getCurrentUserWithRoles();
+  if (!c) {
+    return { ok: false, error: 'Silakan masuk terlebih dahulu.' };
+  }
+
+  const allowedRoles = [
+    'STUDENT',
+    'LECTURER',
+    'TEACHING_ASSISTANT',
+    'PROGRAM_COORDINATOR',
+    'ACADEMIC_STAFF',
+    'SUPER_ADMIN',
+  ];
+  if (!allowedRoles.includes(c.activeRole ?? '')) {
+    return { ok: false, error: ERR.FORBIDDEN };
+  }
+
+  if (!z.string().uuid().safeParse(classId).success) {
+    return { ok: false, error: ERR.NOT_FOUND };
+  }
+
+  if (
+    c.activeRole === 'STUDENT' ||
+    c.activeRole === 'LECTURER' ||
+    c.activeRole === 'TEACHING_ASSISTANT'
+  ) {
+    try {
+      await assertClassMember(classId);
+    } catch (err) {
+      if (err instanceof ClassAccessError) {
+        return { ok: false, error: err.message };
+      }
+      throw err;
+    }
+  }
+
+  const lecturerInfo = {
+    name: 'Dr. Budi Santoso, M.Kom.',
+    nidn: '0012345678',
+  };
+
+  if (await checkSupabaseOnline()) {
+    const supabase = await createClient();
+    const [{ data: enr }, { data: ca }] = await Promise.all([
+      supabase
+        .from('enrollments')
+        .select('student_id,enrolled_at,profiles(full_name)')
+        .eq('class_id', classId)
+        .eq('status', 'ACTIVE')
+        .order('enrolled_at'),
+      supabase
+        .from('class_assistants')
+        .select('user_id,permission,profiles(full_name)')
+        .eq('class_id', classId),
+    ]);
+
+    const members: MemberItem[] = (enr ?? []).map((e: any) => {
+      const demo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === e.student_id);
+      return {
+        student_id: e.student_id,
+        name: e.profiles?.full_name ?? demo?.name ?? 'Mahasiswa',
+        nim: demo?.nim,
+        enrolled_at: e.enrolled_at,
+      };
+    });
+
+    const assistants = groupAssistants(ca ?? []);
+    return { ok: true, data: { lecturer: lecturerInfo, assistants, members } };
+  }
+
+  const liveStore = getAcademicStore();
+  const liveAssistants = liveStore.assistants;
+  const cls = liveStore.classes.find((x) => x.id === classId);
+  if (!cls) {
+    return { ok: false, error: ERR.NOT_FOUND };
+  }
+
+  const assistants: AssistantItem[] = liveAssistants
+    .filter((x) => x.class_id === classId)
+    .map((x: any) => ({
+      user_id: x.user_id,
+      name: x.name ?? 'Asisten',
+      nim: x.nim,
+      nidn: x.nidn,
+      permissions: Array.isArray(x.perms) ? x.perms : [],
+    }));
+
+  const members: MemberItem[] = liveStore.enrollments
+    .filter((e) => e.class_id === classId)
+    .map((e) => {
+      const demo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === e.student_id);
+      return {
+        student_id: e.student_id,
+        name: e.student_name ?? demo?.name ?? 'Mahasiswa',
+        nim: demo?.nim ?? (e.student_id === 'mhs-1' ? '2024001' : undefined),
+        enrolled_at: e.enrolled_at ?? '',
+      };
+    });
+
+  return { ok: true, data: { lecturer: lecturerInfo, assistants, members } };
 }
 
 // ---------- Review dan penilaian (Bagian 13, langkah 5-6) ----------
@@ -1455,8 +1606,8 @@ export async function listCalendarAction(): Promise<CalendarItem[]> {
 }
 
 // ---------- Delegasi izin asisten (Bagian 7.3) ----------
-export interface AssistantItem { user_id: string; name: string; email: string; permissions: string[] }
-type DemoAsisten = { class_id: string; user_id: string; name: string; email: string; perms: string[] };
+export interface AssistantItem { user_id: string; name: string; nim?: string; nidn?: string; permissions: string[] }
+type DemoAsisten = { class_id: string; user_id: string; name: string; nim?: string; nidn?: string; perms: string[] };
 const asisten: DemoAsisten[] = ((globalThis as any).__siajarAsdos ??= []);
 
 if (!asisten.some((x) => x.class_id === DEMO_CLASS_ID)) {
@@ -1464,7 +1615,7 @@ if (!asisten.some((x) => x.class_id === DEMO_CLASS_ID)) {
     class_id: DEMO_CLASS_ID,
     user_id: 'a0000003-0000-0000-0000-000000000003',
     name: 'Citra Asisten',
-    email: 'asdos@siajar.ac.id',
+    nim: '2024002',
     perms: ['ASSIGNMENT_CREATE', 'ASSIGNMENT_GRADE', 'MATERIAL_CREATE'],
   });
 }
@@ -1474,7 +1625,14 @@ const demoPerms = (classId: string, uid: string) => asisten.find((x) => x.class_
 function groupAssistants(rows: any[]): AssistantItem[] {
   const by = new Map<string, AssistantItem>();
   for (const r of rows) {
-    const cur: AssistantItem = by.get(r.user_id) ?? { user_id: r.user_id, name: r.profiles?.full_name ?? 'Pengguna', email: r.profiles?.email ?? '', permissions: [] };
+    const demo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === r.user_id);
+    const cur: AssistantItem = by.get(r.user_id) ?? {
+      user_id: r.user_id,
+      name: r.profiles?.full_name ?? demo?.name ?? 'Pengguna',
+      nim: demo?.nim,
+      nidn: demo?.nidn,
+      permissions: [],
+    };
     cur.permissions.push(r.permission);
     by.set(r.user_id, cur);
   }
@@ -1483,7 +1641,7 @@ function groupAssistants(rows: any[]): AssistantItem[] {
 
 const assistantSchema = z.object({
   class_id: z.string().uuid(),
-  identifier: z.string().trim().min(3, 'Isi email atau NIM asisten.').max(120),
+  identifier: z.string().trim().min(3, 'Isi NIM/NIDN asisten.').max(120),
   permissions: z.array(z.enum(DELEGABLE_CODES)).max(DELEGABLE_CODES.length),
 });
 
@@ -1502,53 +1660,47 @@ export async function setAssistantAction(input: unknown): Promise<ActionResponse
   } else {
     if (mem.classes.find((x) => x.id === class_id)?.created_by !== me.id) return { ok: false, error: ERR.FORBIDDEN };
     const key = identifier.toLowerCase();
-    const u = Object.values(SYNTHETIC_DEMO_USERS).find((x) => x.email.toLowerCase() === key) ?? SYNTHETIC_DEMO_USERS[identifier];
+    const u =
+      SYNTHETIC_DEMO_USERS[identifier] ??
+      Object.values(SYNTHETIC_DEMO_USERS).find(
+        (x) =>
+          x.id === identifier ||
+          x.nim === identifier ||
+          x.nidn === identifier ||
+          x.email.toLowerCase() === key
+      );
     if (!u) return { ok: false, error: ERR.USER_NOT_FOUND };
     if (u.id === me.id) return { ok: false, error: ERR.INVALID_ASSISTANT };
     const rest = asisten.filter((x) => !(x.class_id === class_id && x.user_id === u.id));
     asisten.length = 0;
     asisten.push(...rest);
-    if (permissions.length) asisten.push({ class_id, user_id: u.id, name: u.name, email: u.email, perms: [...new Set<string>(permissions)] });
+    if (permissions.length) asisten.push({ class_id, user_id: u.id, name: u.name, nim: u.nim, nidn: u.nidn, perms: [...new Set<string>(permissions)] });
   }
   revalidatePath('/classes/[id]', 'page');
   return { ok: true };
 }
 
-// ---------- Diskusi kelas (Bagian 5.1) ----------
+// ---------- Diskusi kelas (Terpadu dengan Forum Kelas, Bagian 5.1) ----------
 export interface DiscussionItem { id: string; title: string; author_name: string; created_at: string; reply_count: number; is_pinned: boolean; is_locked: boolean }
 export interface ReplyItem { id: string; author_name: string; body: string; created_at: string; is_hidden: boolean }
 export interface DiscussionThread {
   class_id: string; class_title: string; discussion: DiscussionItem & { body: string }; replies: ReplyItem[]; viewer: 'LECTURER' | 'TA' | 'STUDENT';
 }
-type DemoDiscussion = DiscussionItem & { class_id: string; author_id: string; body: string };
-type DemoReply = ReplyItem & { discussion_id: string; class_id: string; author_id: string };
-const diskusi: DemoDiscussion[] = ((globalThis as any).__siajarDiskusi ??= []);
-const balasan: DemoReply[] = ((globalThis as any).__siajarBalasan ??= []);
 
-if (!diskusi.some((d) => d.class_id === DEMO_CLASS_ID)) {
-  diskusi.push({
-    id: 'dis-demo-001',
-    class_id: DEMO_CLASS_ID,
-    author_id: 'a0000002-0000-0000-0000-000000000002',
-    author_name: 'Dr. Budi Santoso, M.Kom.',
-    title: 'Ruang Diskusi & Tanya Jawab: Proyek Akhir & Modul 1',
-    body: 'Silakan ajukan pertanyaan seputar materi arsitektur cloud dan ketentuan proyek akhir semester di thread ini.',
-    is_pinned: true,
-    is_locked: false,
-    reply_count: 0,
-    created_at: new Date(Date.now() - 86400000 * 2).toISOString(),
-  });
-}
-const MEMBERS = ['STUDENT', 'LECTURER', 'TEACHING_ASSISTANT'];
-
-// Mode demo: anggota kelas = mahasiswa terdaftar, dosen pemilik, atau asisten.
-function demoMember(classId: string, uid: string) {
-  return mem.enrollments.some((e) => e.class_id === classId && e.student_id === uid) || mem.classes.find((x) => x.id === classId)?.created_by === uid || demoPerms(classId, uid) !== null;
-}
 function demoDiscussions(classId: string, lecturer: boolean): DiscussionItem[] {
-  return diskusi
-    .filter((d) => d.class_id === classId)
-    .map((d) => ({ id: d.id, title: d.title, author_name: d.author_name, created_at: d.created_at, is_pinned: d.is_pinned, is_locked: d.is_locked, reply_count: balasan.filter((r) => r.discussion_id === d.id && (lecturer || !r.is_hidden)).length }))
+  const forumTopics: any[] = (globalThis as any).__siajarForumTopics ?? [];
+  const forumReplies: any[] = (globalThis as any).__siajarForumReplies ?? [];
+  return forumTopics
+    .filter((d) => d.class_id === classId && (lecturer || !d.is_hidden))
+    .map((d) => ({
+      id: d.id,
+      title: d.title,
+      author_name: d.author_name,
+      created_at: d.created_at,
+      is_pinned: d.is_pinned,
+      is_locked: d.is_locked,
+      reply_count: forumReplies.filter((r) => r.topic_id === d.id && (lecturer || !r.is_hidden)).length,
+    }))
     .sort((a, b) => Number(b.is_pinned) - Number(a.is_pinned) || b.created_at.localeCompare(a.created_at));
 }
 
@@ -1558,103 +1710,63 @@ const discussionSchema = z.object({
   body: z.string().trim().min(1, 'Isi diskusi tidak boleh kosong.').max(5000),
 });
 const replySchema = z.object({ discussion_id: z.string().uuid(), body: z.string().trim().min(1, 'Isi balasan tidak boleh kosong.').max(5000) });
-const moderateSchema = z.object({ kind: z.enum(['pin', 'lock', 'hide']), id: z.string().uuid(), value: z.boolean() });
+const moderateSchema = z.object({ kind: z.enum(['pin', 'lock', 'hide']), id: z.string(), value: z.boolean() });
 
 export async function createDiscussionAction(input: unknown): Promise<ActionResponse<{ id: string }>> {
   const p = discussionSchema.safeParse(input);
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
-  const me = await actor(MEMBERS);
-  if (!me) return { ok: false, error: ERR.FORBIDDEN };
-  const { class_id, title, body } = p.data;
-
-  let id: string;
-  if (me.online) {
-    const supabase = await createClient();
-    const { data, error } = await supabase.rpc('post_discussion', { p_class: class_id, p_title: title, p_body: body });
-    if (error || !data) return { ok: false, error: pesan(error?.message) };
-    id = (data as { id: string }).id;
-  } else {
-    if (!demoMember(class_id, me.id)) return { ok: false, error: ERR.FORBIDDEN };
-    id = randomUUID();
-    diskusi.push({ id, class_id, author_id: me.id, author_name: me.name, title, body, created_at: new Date().toISOString(), is_pinned: false, is_locked: false, reply_count: 0 });
-  }
-  revalidatePath('/classes/[id]', 'page');
-  return { ok: true, data: { id } };
+  return createForumTopicAction({
+    class_id: p.data.class_id,
+    title: p.data.title,
+    body: p.data.body,
+    tags: ['#Diskusi'],
+  });
 }
 
 export async function replyDiscussionAction(input: unknown): Promise<ActionResponse> {
   const p = replySchema.safeParse(input);
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
-  const me = await actor(MEMBERS);
-  if (!me) return { ok: false, error: ERR.FORBIDDEN };
-  const { discussion_id, body } = p.data;
-
-  if (me.online) {
-    const supabase = await createClient();
-    const { error } = await supabase.rpc('reply_discussion', { p_discussion: discussion_id, p_body: body });
-    if (error) return { ok: false, error: pesan(error.message) };
-  } else {
-    const d = diskusi.find((x) => x.id === discussion_id);
-    if (!d || !demoMember(d.class_id, me.id)) return { ok: false, error: ERR.NOT_FOUND };
-    const owner = mem.classes.find((x) => x.id === d.class_id)?.created_by === me.id;
-    if (d.is_locked && !owner) return { ok: false, error: ERR.LOCKED };
-    balasan.push({ id: randomUUID(), discussion_id, class_id: d.class_id, author_id: me.id, author_name: me.name, body, created_at: new Date().toISOString(), is_hidden: false });
-  }
-  revalidatePath('/classes/[id]/discussions/[did]', 'page');
-  revalidatePath('/classes/[id]', 'page');
-  return { ok: true };
+  const res = await replyForumTopicAction({
+    topic_id: p.data.discussion_id,
+    body: p.data.body,
+  });
+  return res.ok ? { ok: true } : { ok: false, error: res.error };
 }
 
-// Moderasi hanya untuk dosen kelas: sematkan, kunci, atau sembunyikan balasan.
 export async function moderateDiscussionAction(input: unknown): Promise<ActionResponse> {
   const p = moderateSchema.safeParse(input);
   if (!p.success) return { ok: false, error: ERR.NOT_FOUND };
-  const me = await actor('LECTURER');
-  if (!me) return { ok: false, error: ERR.FORBIDDEN };
-  const { kind, id, value } = p.data;
-
-  if (me.online) {
-    const supabase = await createClient();
-    const { error } = await supabase.rpc('moderate_discussion', { p_kind: kind, p_id: id, p_value: value });
-    if (error) return { ok: false, error: pesan(error.message) };
-  } else {
-    const target = kind === 'hide' ? balasan.find((x) => x.id === id) : diskusi.find((x) => x.id === id);
-    if (!target) return { ok: false, error: ERR.NOT_FOUND };
-    if (mem.classes.find((x) => x.id === target.class_id)?.created_by !== me.id) return { ok: false, error: ERR.FORBIDDEN };
-    if (kind === 'hide') (target as DemoReply).is_hidden = value;
-    else if (kind === 'pin') (target as DemoDiscussion).is_pinned = value;
-    else (target as DemoDiscussion).is_locked = value;
-  }
-  revalidatePath('/classes/[id]/discussions/[did]', 'page');
-  revalidatePath('/classes/[id]', 'page');
-  return { ok: true };
+  const res =
+    p.data.kind === 'hide'
+      ? await moderateReplyAction(p.data.id, 'hide')
+      : await moderateTopicAction(p.data.id, p.data.kind, p.data.value);
+  return res.ok ? { ok: true } : { ok: false, error: res.error };
 }
 
 export async function getDiscussionAction(classId: string, did: string): Promise<DiscussionThread | null> {
-  const c = await getCurrentUserWithRoles();
-  const uuid = z.string().uuid();
-  if (!c || !MEMBERS.includes(c.activeRole ?? '') || !uuid.safeParse(classId).success || !uuid.safeParse(did).success) return null;
-  const viewer = c.activeRole === 'LECTURER' ? 'LECTURER' : c.activeRole === 'TEACHING_ASSISTANT' ? 'TA' : 'STUDENT';
-
-  if (await checkSupabaseOnline()) {
-    const supabase = await createClient();
-    const { data: d } = await supabase.from('discussions').select('id,title,author_name,body,created_at,is_pinned,is_locked').eq('id', did).eq('class_id', classId).maybeSingle();
-    if (!d) return null;
-    const { data: cls } = await supabase.from('classes').select('title').eq('id', classId).maybeSingle();
-    const { data: rs } = await supabase.from('discussion_replies').select('id,author_name,body,created_at,is_hidden').eq('discussion_id', did).order('created_at');
-    return { class_id: classId, class_title: (cls as any)?.title ?? '', discussion: { ...(d as any), reply_count: (rs ?? []).length }, replies: (rs ?? []) as ReplyItem[], viewer };
-  }
-
-  const d = diskusi.find((x) => x.id === did && x.class_id === classId);
-  if (!d || !demoMember(classId, c.user.id)) return null;
-  const lecturer = viewer === 'LECTURER';
-  const replies = balasan.filter((r) => r.discussion_id === did && (lecturer || !r.is_hidden)).sort((a, b) => a.created_at.localeCompare(b.created_at)).map((r) => ({ id: r.id, author_name: r.author_name, body: r.body, created_at: r.created_at, is_hidden: r.is_hidden }));
+  const res = await getForumTopicDetailAction(classId, did);
+  if (!res.ok || !res.topic || !res.viewer) return null;
   return {
     class_id: classId,
-    class_title: mem.classes.find((x) => x.id === classId)?.title ?? '',
-    discussion: { id: d.id, title: d.title, author_name: d.author_name, created_at: d.created_at, is_pinned: d.is_pinned, is_locked: d.is_locked, body: d.body, reply_count: replies.length },
-    replies,
-    viewer,
+    class_title: res.topic.class_title ?? '',
+    discussion: {
+      id: res.topic.id,
+      title: res.topic.title,
+      author_name: res.topic.author_name,
+      created_at: res.topic.created_at,
+      is_pinned: res.topic.is_pinned,
+      is_locked: res.topic.is_locked,
+      body: res.topic.body,
+      reply_count: res.replies.length,
+    },
+    replies: res.replies.map((r) => ({
+      id: r.id,
+      author_name: r.author_name,
+      body: r.body,
+      created_at: r.created_at,
+      is_hidden: r.is_hidden,
+    })),
+    viewer: res.viewer.role === 'TEACHING_ASSISTANT' ? 'TA' : res.viewer.role,
   };
 }
 

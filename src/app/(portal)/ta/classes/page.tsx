@@ -51,7 +51,7 @@ export default function AssistantClassesPage() {
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
             <Layers className="h-7 w-7 text-primary" />
             <span>Kelas yang Diasistensi</span>
           </h1>
@@ -70,16 +70,16 @@ export default function AssistantClassesPage() {
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-mono text-xs font-bold px-2.5 py-1 rounded border border-black bg-retro-warm">
+                <span className="font-sans text-xs font-bold px-2.5 py-1 rounded border border-black bg-gray-soft">
                   {cls.code} · {cls.section}
                 </span>
-                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-400">
+                <span className="text-xs font-sans font-bold px-2 py-0.5 rounded bg-surface text-ink border border-ink">
                   {cls.status}
                 </span>
               </div>
 
               <div>
-                <h2 className="font-heading font-black text-lg text-foreground leading-snug">
+                <h2 className="font-heading font-bold text-lg text-foreground leading-snug">
                   {cls.title}
                 </h2>
                 <p className="text-xs text-muted-foreground mt-1">
@@ -88,11 +88,11 @@ export default function AssistantClassesPage() {
               </div>
 
               <div className="space-y-1.5 pt-2 border-t border-neutral-100 text-xs">
-                <p className="text-muted-foreground flex items-center gap-1.5 font-mono">
+                <p className="text-muted-foreground flex items-center gap-1.5 font-sans">
                   <Clock className="h-3.5 w-3.5 text-neutral-500" />
                   <span>{cls.schedule}</span>
                 </p>
-                <p className="text-muted-foreground flex items-center gap-1.5 font-mono">
+                <p className="text-muted-foreground flex items-center gap-1.5 font-sans">
                   <Users className="h-3.5 w-3.5 text-neutral-500" />
                   <span>{cls.studentsCount} Mahasiswa Terdaftar</span>
                 </p>
@@ -100,14 +100,14 @@ export default function AssistantClassesPage() {
 
               {/* Izin Mandat Asdos */}
               <div className="pt-2">
-                <span className="text-xs font-mono font-bold uppercase text-muted-foreground block mb-1.5">
+                <span className="text-xs font-sans font-bold uppercase text-muted-foreground block mb-1.5">
                   Izin Mandat Dosen:
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {cls.permissions.map((perm) => (
                     <span
                       key={perm}
-                      className="text-xs font-mono font-semibold px-2 py-0.5 rounded border border-neutral-300 bg-neutral-100 text-neutral-800"
+                      className="text-xs font-sans font-semibold px-2 py-0.5 rounded border border-neutral-300 bg-neutral-100 text-neutral-800"
                     >
                       {perm}
                     </span>
@@ -118,11 +118,11 @@ export default function AssistantClassesPage() {
 
             <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
               {cls.pendingReviews > 0 ? (
-                <span className="font-mono text-xs font-bold text-amber-700 bg-amber-50 px-2 py-1 rounded border border-amber-300">
+                <span className="font-sans text-xs font-bold text-ink bg-gray-soft px-2 py-1 rounded border border-ink">
                   {cls.pendingReviews} Draf Menunggu
                 </span>
               ) : (
-                <span className="font-mono text-xs font-bold text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-300">
+                <span className="font-sans text-xs font-bold text-ink bg-surface px-2 py-1 rounded border border-ink">
                   Semua Selesai Ditinjau
                 </span>
               )}

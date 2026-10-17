@@ -110,7 +110,7 @@ export default function AdminAuditPage() {
                 {filteredLogs.length > 0 ? (
                   filteredLogs.map((log) => (
                     <TableRow key={log.id} className="text-xs hover:bg-muted/50">
-                      <TableCell className="font-mono text-muted-foreground whitespace-nowrap">
+                      <TableCell className="font-sans text-muted-foreground whitespace-nowrap">
                         {log.waktu}
                       </TableCell>
                       <TableCell>
@@ -133,16 +133,16 @@ export default function AdminAuditPage() {
                           {log.aksi}
                         </Badge>
                       </TableCell>
-                      <TableCell className="font-mono text-muted-foreground">
+                      <TableCell className="font-sans text-muted-foreground">
                         {log.entitas}
                       </TableCell>
                       <TableCell className="text-foreground leading-relaxed">
                         {log.keterangan}
                       </TableCell>
-                      <TableCell className="font-mono text-muted-foreground">
+                      <TableCell className="font-sans text-muted-foreground">
                         {log.nilaiLama || "-"}
                       </TableCell>
-                      <TableCell className="font-mono font-semibold text-primary">
+                      <TableCell className="font-sans font-semibold text-primary">
                         {log.nilaiBaru || "-"}
                       </TableCell>
                     </TableRow>

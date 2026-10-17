@@ -141,7 +141,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-black flex items-center gap-3">
               <Key className="h-7 w-7 text-primary" />
               <span>Buka Sesi Presensi Terpadu</span>
             </h1>
@@ -157,7 +157,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
             <h2 className="font-heading font-bold text-xl sm:text-2xl text-black">Sesi Presensi Aktif & Terjadwal ({activeSessions.length})</h2>
             <Link
               href="/classes"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black bg-retro-yellow text-black font-bold text-sm sm:text-base shadow-xs hover:bg-black hover:text-white transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black bg-gray-soft text-black font-bold text-sm sm:text-base shadow-xs hover:bg-black hover:text-white transition-all"
             >
               <span>Buka Hub Kelas &rarr;</span>
             </Link>
@@ -171,10 +171,10 @@ export default async function AttendanceSubpage({ params }: PageProps) {
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold uppercase bg-emerald-100 text-emerald-950 border-2 border-emerald-500 px-3 py-1 rounded">
+                    <span className="text-xs font-sans font-bold uppercase bg-surface text-ink border-2 border-ink px-3 py-1 rounded">
                       SESI TERBUKA
                     </span>
-                    <span className="font-mono text-sm font-bold text-black">
+                    <span className="font-sans text-sm font-bold text-black">
                       Kode: {ses.code}
                     </span>
                   </div>
@@ -188,7 +188,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                     </p>
                   </div>
 
-                  <div className="space-y-2 pt-2 border-t-2 border-black/10 text-sm font-mono font-bold">
+                  <div className="space-y-2 pt-2 border-t-2 border-black/10 text-sm font-sans font-bold">
                     <p className="text-black flex items-center gap-2">
                       <Clock className="h-4 w-4 text-primary" />
                       <span>{ses.time || '08:00 - 10:30 WIB'}</span>
@@ -201,7 +201,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                 </div>
 
                 <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-black">
+                  <div className="flex items-center gap-1.5 text-xs font-sans font-bold text-black">
                     <QrCode className="h-4 w-4" />
                     <span>QR DINAMIS AKTIF</span>
                   </div>
@@ -232,7 +232,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-black flex items-center gap-3">
               <FileSpreadsheet className="h-7 w-7 text-primary" />
               <span>Rekapitulasi Kehadiran Mahasiswa</span>
             </h1>
@@ -245,25 +245,25 @@ export default async function AttendanceSubpage({ params }: PageProps) {
         {/* 3 Metric Cards Full Width */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-1.5">
-            <span className="text-sm font-mono font-bold text-black uppercase">Tingkat Kehadiran Kelas</span>
+            <span className="text-sm font-sans font-bold text-black uppercase">Tingkat Kehadiran Kelas</span>
             <p className="font-heading font-bold text-3xl sm:text-4xl text-black">92.4%</p>
-            <span className="text-sm text-emerald-800 font-bold flex items-center gap-1 pt-1">
+            <span className="text-sm text-ink font-bold flex items-center gap-1 pt-1">
               ✓ Di atas ambang batas universitas
             </span>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-1.5">
-            <span className="text-sm font-mono font-bold text-black uppercase">Lolos Syarat UAS (&ge;75%)</span>
-            <p className="font-heading font-bold text-3xl sm:text-4xl text-emerald-800 font-mono">34 <span className="text-sm font-mono text-black font-bold">/ 36 Mhs</span></p>
-            <span className="text-sm text-emerald-900 font-mono font-bold pt-1 block">
+            <span className="text-sm font-sans font-bold text-black uppercase">Lolos Syarat UAS (&ge;75%)</span>
+            <p className="font-heading font-bold text-3xl sm:text-4xl text-ink font-sans">34 <span className="text-sm font-sans text-black font-bold">/ 36 Mhs</span></p>
+            <span className="text-sm text-ink font-sans font-bold pt-1 block">
               94.4% Mahasiswa Memenuhi Syarat
             </span>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-1.5">
-            <span className="text-sm font-mono font-bold text-black uppercase">Terkunci / Berisiko (&lt;75%)</span>
-            <p className="font-heading font-bold text-3xl sm:text-4xl text-amber-700 font-mono">2 Mhs</p>
-            <span className="text-sm text-amber-900 font-mono font-bold pt-1 block">
+            <span className="text-sm font-sans font-bold text-black uppercase">Terkunci / Berisiko (&lt;75%)</span>
+            <p className="font-heading font-bold text-3xl sm:text-4xl text-ink font-sans">2 Mhs</p>
+            <span className="text-sm text-ink font-sans font-bold pt-1 block">
               Perlu Remedial Presensi / Tugas
             </span>
           </div>
@@ -273,15 +273,15 @@ export default async function AttendanceSubpage({ params }: PageProps) {
         <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
             <h2 className="font-heading font-bold text-lg sm:text-xl text-black">Ringkasan Kehadiran Rombongan Belajar (TI-301)</h2>
-            <span className="text-sm font-mono font-bold bg-retro-warm px-3 py-1 rounded border-2 border-black">
+            <span className="text-sm font-sans font-bold bg-gray-soft px-3 py-1 rounded border-2 border-black">
               Ambang Batas UAS: &ge; 75%
             </span>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm sm:text-base font-mono">
+            <table className="w-full text-left text-sm sm:text-base font-sans">
               <thead>
-                <tr className="border-b-2 border-black bg-retro-warm font-bold text-black text-sm uppercase">
+                <tr className="border-b-2 border-black bg-gray-soft font-bold text-black text-sm uppercase">
                   <th className="p-3.5">NIM</th>
                   <th className="p-3.5">Nama Mahasiswa</th>
                   <th className="p-3.5 text-center">Hadir</th>
@@ -300,8 +300,8 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                   <td className="p-3.5 text-center font-bold text-black">1</td>
                   <td className="p-3.5 text-center font-bold text-black">0</td>
                   <td className="p-3.5 text-center font-bold text-black">0</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-800">93.3%</td>
-                  <td className="p-3.5 text-right"><span className="px-2.5 py-1 rounded bg-emerald-100 text-emerald-950 border-2 border-emerald-500 font-bold text-xs">MEMENUHI</span></td>
+                  <td className="p-3.5 text-center font-bold text-ink">93.3%</td>
+                  <td className="p-3.5 text-right"><span className="px-2.5 py-1 rounded bg-surface text-ink border-2 border-ink font-bold text-xs">MEMENUHI</span></td>
                 </tr>
                 <tr className="hover:bg-neutral-50">
                   <td className="p-3.5 font-bold text-black">2024002</td>
@@ -310,8 +310,8 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                   <td className="p-3.5 text-center font-bold text-black">0</td>
                   <td className="p-3.5 text-center font-bold text-black">0</td>
                   <td className="p-3.5 text-center font-bold text-black">0</td>
-                  <td className="p-3.5 text-center font-bold text-emerald-800">100.0%</td>
-                  <td className="p-3.5 text-right"><span className="px-2.5 py-1 rounded bg-emerald-100 text-emerald-950 border-2 border-emerald-500 font-bold text-xs">MEMENUHI</span></td>
+                  <td className="p-3.5 text-center font-bold text-ink">100.0%</td>
+                  <td className="p-3.5 text-right"><span className="px-2.5 py-1 rounded bg-surface text-ink border-2 border-ink font-bold text-xs">MEMENUHI</span></td>
                 </tr>
                 <tr className="hover:bg-neutral-50">
                   <td className="p-3.5 font-bold text-black">2024018</td>
@@ -320,8 +320,8 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                   <td className="p-3.5 text-center font-bold text-black">2</td>
                   <td className="p-3.5 text-center font-bold text-black">1</td>
                   <td className="p-3.5 text-center font-bold text-black">3</td>
-                  <td className="p-3.5 text-center font-bold text-amber-800">60.0%</td>
-                  <td className="p-3.5 text-right"><span className="px-2.5 py-1 rounded bg-amber-100 text-amber-950 border-2 border-amber-500 font-bold text-xs">TERKUNCI (&lt;75%)</span></td>
+                  <td className="p-3.5 text-center font-bold text-ink">60.0%</td>
+                  <td className="p-3.5 text-right"><span className="px-2.5 py-1 rounded bg-gray-soft text-ink border-2 border-ink font-bold text-xs">TERKUNCI (&lt;75%)</span></td>
                 </tr>
               </tbody>
             </table>
@@ -341,7 +341,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
           bodyClassName="p-4 sm:p-6 lg:p-8"
         >
           <div className="p-6 sm:p-8 space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-black flex items-center gap-3">
               <MapPin className="h-7 w-7 text-primary" />
               <span>Pengaturan Titik Lokasi Presensi</span>
             </h1>
@@ -360,10 +360,10 @@ export default async function AttendanceSubpage({ params }: PageProps) {
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs sm:text-sm font-bold px-2.5 py-1 rounded border-2 border-black bg-retro-warm text-black">
+                  <span className="font-sans text-xs sm:text-sm font-bold px-2.5 py-1 rounded border-2 border-black bg-gray-soft text-black">
                     {loc.code}
                   </span>
-                  <span className="text-xs sm:text-sm font-mono font-bold text-emerald-950 bg-emerald-100 px-2.5 py-1 rounded border-2 border-emerald-500">
+                  <span className="text-xs sm:text-sm font-sans font-bold text-ink bg-surface px-2.5 py-1 rounded border-2 border-ink">
                     {loc.radius}
                   </span>
                 </div>
@@ -372,14 +372,14 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                   {loc.name}
                 </h3>
 
-                <p className="text-sm font-mono font-bold text-black/80">
+                <p className="text-sm font-sans font-bold text-black/80">
                   {loc.coords}
                 </p>
               </div>
 
               <div className="pt-3 border-t-2 border-black/10 flex items-center justify-between text-sm">
-                <span className="text-black font-mono font-bold">{loc.capacity}</span>
-                <span className="text-emerald-800 font-bold">Tervalidasi</span>
+                <span className="text-black font-sans font-bold">{loc.capacity}</span>
+                <span className="text-ink font-bold">Tervalidasi</span>
               </div>
             </div>
           ))}
@@ -398,7 +398,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
         bodyClassName="p-4 sm:p-6 lg:p-8"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-black flex items-center gap-3">
             <FileText className="h-7 w-7 text-primary" />
             <span>Pengajuan Izin & Sakit Mahasiswa</span>
           </h1>
@@ -417,14 +417,14 @@ export default async function AttendanceSubpage({ params }: PageProps) {
           >
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className={`text-xs font-mono font-bold px-3 py-1 rounded border-2 ${
+                <span className={`text-xs font-sans font-bold px-3 py-1 rounded border-2 ${
                   req.status.includes('MENUNGGU')
-                    ? 'bg-amber-100 text-amber-950 border-amber-500'
-                    : 'bg-emerald-100 text-emerald-950 border-emerald-500'
+                    ? 'bg-gray-soft text-ink border-ink'
+                    : 'bg-surface text-ink border-ink'
                 }`}>
                   {req.status}
                 </span>
-                <span className="text-sm font-mono font-bold text-black">{req.date}</span>
+                <span className="text-sm font-sans font-bold text-black">{req.date}</span>
               </div>
 
               <div>
@@ -436,7 +436,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                 </p>
               </div>
 
-              <p className="text-sm text-black bg-retro-warm/60 p-3.5 rounded border-2 border-black/20 leading-relaxed font-medium">
+              <p className="text-sm text-black bg-gray-soft/60 p-3.5 rounded border-2 border-black/20 leading-relaxed font-medium">
                 &quot;{req.reason}&quot;
               </p>
             </div>

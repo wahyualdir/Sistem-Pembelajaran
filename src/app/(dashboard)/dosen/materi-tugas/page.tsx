@@ -360,14 +360,14 @@ export default function DosenMateriTugasPage() {
         <div
           className={`p-3 text-xs rounded border-2 border-black flex items-center gap-2 shadow-retro-sm ${
             pesanNotif.tipe === "sukses"
-              ? "bg-retro-warm text-black"
-              : "bg-retro-warm text-danger"
+              ? "bg-gray-soft text-black"
+              : "bg-gray-soft text-primary-dark"
           }`}
         >
           {pesanNotif.tipe === "sukses" ? (
             <CheckCircle className="h-4 w-4 shrink-0" />
           ) : (
-            <AlertTriangle className="h-4 w-4 shrink-0 text-danger" />
+            <AlertTriangle className="h-4 w-4 shrink-0 text-primary-dark" />
           )}
           <span className="font-bold">{pesanNotif.teks}</span>
         </div>
@@ -413,7 +413,7 @@ export default function DosenMateriTugasPage() {
                 {rekapProgres.mahasiswaPerluPerhatian} Mahasiswa
               </h3>
             </div>
-            <AlertTriangle className="h-7 w-7 text-danger/70" />
+            <AlertTriangle className="h-7 w-7 text-primary-dark/70" />
           </CardContent>
         </Card>
       </div>
@@ -507,15 +507,15 @@ export default function DosenMateriTugasPage() {
                         <h3 className="font-semibold text-sm text-foreground truncate">
                           {mat.judul}
                         </h3>
-                        <Badge variant="secondary" className="text-2xs font-mono">
+                        <Badge variant="secondary" className="text-2xs font-sans">
                           {mat.ukuranMb} MB
                         </Badge>
                         {isStorageFile && (
-                          <Badge variant="outline" className="text-2xs font-mono bg-retro-warm">
+                          <Badge variant="outline" className="text-2xs font-sans bg-gray-soft">
                             Cloud Storage
                           </Badge>
                         )}
-                        <Badge variant="outline" className="text-2xs font-mono">
+                        <Badge variant="outline" className="text-2xs font-sans">
                           {progresMateri.selesaiCount}/{progresMateri.totalMahasiswa} Mahasiswa Selesai ({progresMateri.persen}%)
                         </Badge>
                       </div>
@@ -547,7 +547,7 @@ export default function DosenMateriTugasPage() {
                         size="sm"
                         onClick={() => handleHapusMateri(mat.id)}
                         disabled={isLoading}
-                        className="gap-1 text-xs text-danger hover:bg-danger hover:text-white"
+                        className="gap-1 text-xs text-primary-dark hover:bg-primary hover:text-white"
                         title="Hapus materi"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
@@ -589,7 +589,7 @@ export default function DosenMateriTugasPage() {
                         {tug.deskripsi}
                       </p>
                       <div className="flex items-center gap-3 pl-6 text-xs text-muted-foreground pt-1">
-                        <span className="flex items-center gap-1 font-medium text-danger">
+                        <span className="flex items-center gap-1 font-medium text-primary-dark">
                           <Clock className="h-3.5 w-3.5" />
                           Tenggat: {tug.tenggat.replace("T", " ")}
                         </span>
@@ -655,14 +655,14 @@ export default function DosenMateriTugasPage() {
                 <TableBody>
                   {rekapProgres.daftarMahasiswa.map((mhs: RekapProgresKelas['daftarMahasiswa'][number]) => (
                     <TableRow key={mhs.mahasiswaId}>
-                      <TableCell className="text-xs font-mono font-bold">{mhs.nim}</TableCell>
+                      <TableCell className="text-xs font-sans font-bold">{mhs.nim}</TableCell>
                       <TableCell className="text-xs font-medium">{mhs.nama}</TableCell>
                       <TableCell className="text-xs text-center font-bold">
                         {mhs.materiSelesai} / {mhs.totalMateri}
                       </TableCell>
                       <TableCell className="text-xs text-center">
                         <div className="flex items-center justify-center gap-2">
-                          <div className="w-16 h-2 rounded-full border border-black bg-retro-warm overflow-hidden inline-block">
+                          <div className="w-16 h-2 rounded-full border border-black bg-gray-soft overflow-hidden inline-block">
                             <div
                               className="bg-black h-full rounded-full transition-all"
                               style={{ width: `${mhs.persenProgres}%` }}
@@ -740,7 +740,7 @@ export default function DosenMateriTugasPage() {
                       <TableRow key={item.id}>
                         <TableCell className="text-xs">
                           <p className="font-bold text-foreground">{item.namaMahasiswa}</p>
-                          <p className="text-2xs text-muted-foreground font-mono">{item.nim}</p>
+                          <p className="text-2xs text-muted-foreground font-sans">{item.nim}</p>
                         </TableCell>
                         <TableCell className="text-xs">
                           <p>{item.waktuKumpul}</p>
@@ -767,7 +767,7 @@ export default function DosenMateriTugasPage() {
                         </TableCell>
                         <TableCell className="text-xs text-center">
                           {item.nilai !== null ? (
-                            <span className="font-bold text-success bg-success-soft px-2 py-0.5 rounded">
+                            <span className="font-bold text-ink bg-surface px-2 py-0.5 rounded">
                               {item.nilai}
                             </span>
                           ) : (
@@ -817,7 +817,7 @@ export default function DosenMateriTugasPage() {
         <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-sm">
-              <Award className="h-5 w-5 text-success" />
+              <Award className="h-5 w-5 text-ink" />
               Evaluasi & Nilai Pengumpulan Tugas
             </DialogTitle>
           </DialogHeader>
@@ -825,7 +825,7 @@ export default function DosenMateriTugasPage() {
           {nilaiTarget && (
             <div className="space-y-3 py-2 text-xs">
               {pesanNotif && pesanNotif.tipe === "galat" && (
-                <div className="p-2.5 rounded border border-danger/30 bg-danger/10 text-danger text-xs font-semibold">
+                <div className="p-2.5 rounded border border-ink bg-primary/10 text-primary-dark text-xs font-semibold">
                   {pesanNotif.teks}
                 </div>
               )}
@@ -942,8 +942,8 @@ export default function DosenMateriTugasPage() {
                   onClick={() => setModeUnggahMateri("file")}
                   className={`h-9 px-3 rounded border-2 border-black text-xs font-bold transition-all ${
                     modeUnggahMateri === "file"
-                      ? "bg-retro-yellow text-black shadow-retro-sm"
-                      : "bg-white text-black hover:bg-retro-warm"
+                      ? "bg-gray-soft text-black shadow-retro-sm"
+                      : "bg-white text-black hover:bg-gray-soft"
                   }`}
                 >
                   Unggah Berkas Baru
@@ -953,8 +953,8 @@ export default function DosenMateriTugasPage() {
                   onClick={() => setModeUnggahMateri("link")}
                   className={`h-9 px-3 rounded border-2 border-black text-xs font-bold transition-all ${
                     modeUnggahMateri === "link"
-                      ? "bg-retro-yellow text-black shadow-retro-sm"
-                      : "bg-white text-black hover:bg-retro-warm"
+                      ? "bg-gray-soft text-black shadow-retro-sm"
+                      : "bg-white text-black hover:bg-gray-soft"
                   }`}
                 >
                   Tautkan Link Eksternal

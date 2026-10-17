@@ -84,7 +84,7 @@ export default async function WorkspacePage() {
         fontFamily:
           "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
       }}
-      className="min-h-[100dvh] w-full bg-background text-black font-sans selection:bg-retro-yellow selection:text-black flex flex-col justify-between antialiased relative"
+      className="min-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-black flex flex-col justify-between antialiased relative"
     >
       {/* Background Dot-Grid Texture */}
       <div
@@ -96,13 +96,13 @@ export default async function WorkspacePage() {
       />
 
       {/* Top Bar Navigasi Sistem Retro Konsisten dengan Dashboard & Login */}
-      <header className="h-header-mobile md:h-header flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 border-black bg-retro-yellow shrink-0 select-none shadow-retro-sm relative z-10 pt-[env(safe-area-inset-top,0px)]">
+      <header className="h-header-mobile md:h-header flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 border-black bg-gray-soft shrink-0 select-none shadow-retro-sm relative z-10 pt-[env(safe-area-inset-top,0px)]">
         <div className="flex items-center gap-3">
           {/* Mac Traffic Light Buttons */}
           <div className="flex items-center gap-1.5 shrink-0">
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-traffic-red inline-block shadow-retro-sm" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-traffic-yellow inline-block shadow-retro-sm" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-traffic-green inline-block shadow-retro-sm" />
+            <span className="h-3.5 w-3.5 rounded-full border border-black bg-primary inline-block shadow-retro-sm" />
+            <span className="h-3.5 w-3.5 rounded-full border border-black bg-gray inline-block shadow-retro-sm" />
+            <span className="h-3.5 w-3.5 rounded-full border border-black bg-gray-dark inline-block shadow-retro-sm" />
           </div>
 
           <div className="flex items-center gap-2.5 ml-1">
@@ -116,7 +116,7 @@ export default async function WorkspacePage() {
         </div>
 
         <div className="flex items-center gap-2.5">
-          <span className="hidden sm:inline-flex items-center px-3 py-1 border-2 border-black bg-white text-xs font-mono font-bold text-black shadow-retro-sm">
+          <span className="hidden sm:inline-flex items-center px-3 py-1 border-2 border-black bg-white text-xs font-sans font-bold text-black shadow-retro-sm">
             TA 2026/2027 GANJIL
           </span>
         </div>
@@ -128,16 +128,16 @@ export default async function WorkspacePage() {
           {/* Retro Window Container */}
           <div className="rounded-xl sm:rounded-2xl border-2 border-black bg-white shadow-retro-md sm:shadow-retro-window overflow-hidden transition-all animate-fade-up">
             {/* Header Bar Jendela Retro */}
-            <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b-2 border-black bg-retro-warm">
+            <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b-2 border-black bg-gray-soft">
               <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-traffic-red shadow-retro-sm" />
-                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-traffic-yellow shadow-retro-sm" />
-                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-traffic-green shadow-retro-sm" />
+                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-primary shadow-retro-sm" />
+                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-gray shadow-retro-sm" />
+                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-gray-dark shadow-retro-sm" />
                 <span className="text-xs sm:text-sm font-bold text-black ml-1.5 font-heading">
                   Pilih Ruang Kerja — SIAJAR
                 </span>
               </div>
-              <span className="text-xs font-mono font-bold bg-white text-black border border-black px-2.5 py-0.5 rounded shadow-retro-sm">
+              <span className="text-xs font-sans font-bold bg-white text-black border border-black px-2.5 py-0.5 rounded shadow-retro-sm">
                 Multi-Peran
               </span>
             </div>
@@ -168,8 +168,8 @@ export default async function WorkspacePage() {
                       key={r.id}
                       className={`rounded-xl border-2 border-black p-4 sm:p-5 flex items-center justify-between gap-4 transition-all ${
                         isActive
-                          ? 'bg-retro-warm border-black shadow-retro'
-                          : 'bg-white hover:bg-retro-warm/30 border-black shadow-retro hover:shadow-retro-md hover:-translate-y-0.5'
+                          ? 'bg-gray-soft border-black shadow-retro'
+                          : 'bg-white hover:bg-gray-soft/30 border-black shadow-retro hover:shadow-retro-md hover:-translate-y-0.5'
                       }`}
                     >
                       <div className="flex items-start gap-3.5 min-w-0">
@@ -219,7 +219,7 @@ export default async function WorkspacePage() {
       </main>
 
       {/* Footer Minimalis */}
-      <footer className="py-4 text-center text-xs text-black/50 relative z-10 border-t border-black/10 bg-retro-warm/30">
+      <footer className="py-4 text-center text-xs text-black/50 relative z-10 border-t border-black/10 bg-gray-soft/30">
         SIAJAR &copy; 2026 &middot; Sistem Informasi Ajar Terpadu &middot; Hak Cipta Dilindungi
       </footer>
     </div>

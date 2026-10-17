@@ -158,14 +158,14 @@ export function DosenPerwalianView({
       </div>
 
       {feedback && (
-        <div className="p-3 bg-success-soft border border-success-border text-success text-xs font-semibold rounded-[8px] flex items-center gap-2">
+        <div className="p-3 bg-surface border border-ink text-ink text-xs font-semibold rounded-[8px] flex items-center gap-2">
           <CheckCircle2 className="h-4 w-4 shrink-0" />
           <span>{feedback}</span>
         </div>
       )}
 
       {errorFeedback && (
-        <div className="p-3 bg-danger-soft border border-danger-border text-danger text-xs font-semibold rounded-[8px] flex items-center gap-2">
+        <div className="p-3 bg-surface border border-ink text-primary-dark text-xs font-semibold rounded-[8px] flex items-center gap-2">
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>{errorFeedback}</span>
         </div>
@@ -201,14 +201,14 @@ export function DosenPerwalianView({
                   const isExceeded = krs.totalSks > krs.batasSks;
                   return (
                     <TableRow key={krs.id}>
-                      <TableCell className="text-center font-mono text-xs">
+                      <TableCell className="text-center font-sans text-xs">
                         {index + 1}
                       </TableCell>
                       <TableCell>
                         <span className="font-semibold text-sm text-foreground block">
                           {krs.namaMahasiswa}
                         </span>
-                        <span className="font-mono text-xs text-muted-foreground">
+                        <span className="font-sans text-xs text-muted-foreground">
                           NIM: {krs.nimMahasiswa}
                         </span>
                       </TableCell>
@@ -218,7 +218,7 @@ export function DosenPerwalianView({
                       <TableCell>
                         <span
                           className={`font-bold text-xs ${
-                            isExceeded ? "text-danger" : "text-foreground"
+                            isExceeded ? "text-primary-dark" : "text-foreground"
                           }`}
                         >
                           {krs.totalSks} SKS
@@ -249,7 +249,7 @@ export function DosenPerwalianView({
                               <Button
                                 variant="default"
                                 size="sm"
-                                className="h-8 gap-1 text-xs bg-success hover:bg-success/90"
+                                className="h-8 gap-1 text-xs bg-gray-dark hover:bg-gray-dark/90"
                                 onClick={() => handleApprove(krs.id)}
                                 disabled={loading || isExceeded}
                               >
@@ -304,7 +304,7 @@ export function DosenPerwalianView({
                         <span className="font-bold text-sm text-foreground">
                           {bim.namaMahasiswa}
                         </span>
-                        <span className="font-mono text-xs text-muted-foreground">
+                        <span className="font-sans text-xs text-muted-foreground">
                           ({bim.nimMahasiswa})
                         </span>
                         <Badge
@@ -400,7 +400,7 @@ export function DosenPerwalianView({
 
               <div>
                 <label className="text-xs font-semibold text-muted-foreground block mb-1">
-                  Catatan Arahan / Rekomendasi Dosen Wali <span className="text-danger">*</span>:
+                  Catatan Arahan / Rekomendasi Dosen Wali <span className="text-primary-dark">*</span>:
                 </label>
                 <textarea
                   value={catatanDosenInput}
@@ -443,7 +443,7 @@ export function DosenPerwalianView({
             <div className="grid grid-cols-2 gap-2 text-xs bg-muted p-3 rounded-[8px] border border-border">
               <div>
                 <span className="text-muted-foreground block">NIM Mahasiswa</span>
-                <span className="font-mono font-semibold text-foreground">
+                <span className="font-sans font-semibold text-foreground">
                   {detailTarget?.nimMahasiswa}
                 </span>
               </div>
@@ -494,7 +494,7 @@ export function DosenPerwalianView({
             </div>
 
             {detailTarget?.catatanWali && (
-              <div className="text-xs p-2.5 rounded-[6px] bg-warning-soft border border-warning-border text-foreground">
+              <div className="text-xs p-2.5 rounded-[6px] bg-gray-soft border border-ink text-foreground">
                 <strong>Catatan Sebelumnya:</strong> {detailTarget.catatanWali}
               </div>
             )}

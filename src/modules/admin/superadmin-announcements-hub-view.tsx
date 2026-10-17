@@ -50,7 +50,7 @@ export function SuperadminAnnouncementsHubView() {
       <RetroWindow
         title="pengumuman_global_universitas.app"
         badge="SUPER_ADMIN :: BROADCAST"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -59,7 +59,7 @@ export function SuperadminAnnouncementsHubView() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
                 <Bell className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-black tracking-tight">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
                 Pengumuman Global Universitas
               </h1>
             </div>
@@ -72,7 +72,7 @@ export function SuperadminAnnouncementsHubView() {
             <button
               disabled={!isDemo}
               title={!isDemo ? 'Fitur ini belum aktif' : undefined}
-              className="px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-mono font-bold text-xs hover:bg-neutral-800 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-retro"
+              className="px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-sans font-bold text-xs hover:bg-neutral-800 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-retro"
             >
               <Plus className="h-4 w-4" />
               <span>Buat Maklumat Baru</span>
@@ -84,24 +84,24 @@ export function SuperadminAnnouncementsHubView() {
       {/* 2. DAFTAR PENGUMUMAN GLOBAL */}
       <div className="p-5 sm:p-6 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
         <div className="flex items-center justify-between border-b-2 border-black pb-3">
-          <h3 className="font-heading font-black text-lg text-black">
+          <h3 className="font-heading font-bold text-lg text-black">
             Maklumat & Siaran Resmi Aktif
           </h3>
-          <span className="text-xs font-mono font-bold text-black/60">
+          <span className="text-xs font-sans font-bold text-black/60">
             Total: {isDemo ? `${SAMPLE_GLOBAL_ANNOUNCEMENTS.length} Maklumat` : '0 Maklumat (Belum Terhubung)'}
           </span>
         </div>
 
         {!isDemo ? (
-          <div className="p-8 text-center text-black/60 font-mono text-xs border-2 border-dashed border-black/20 rounded-xl">
+          <div className="p-8 text-center text-black/60 font-sans text-xs border-2 border-dashed border-black/20 rounded-xl">
             Tabel pangkalan data pengumuman global belum terhubung ke database production.
           </div>
         ) : (
-          <div className="space-y-3 font-mono text-xs">
+          <div className="space-y-3 font-sans text-xs">
           {SAMPLE_GLOBAL_ANNOUNCEMENTS.map((a) => (
             <div
               key={a.id}
-              className="p-4 border-2 border-black rounded-lg bg-retro-warm/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
+              className="p-4 border-2 border-black rounded-lg bg-gray-soft/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -113,7 +113,7 @@ export function SuperadminAnnouncementsHubView() {
                 <h4 className="font-sans font-bold text-black text-sm">{a.title}</h4>
               </div>
               <div className="flex items-center gap-2">
-                <span className="px-2 py-1 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-bold text-xs">
+                <span className="px-2 py-1 rounded border border-ink bg-surface text-ink font-bold text-xs">
                   TAYANG GLOBAL
                 </span>
               </div>

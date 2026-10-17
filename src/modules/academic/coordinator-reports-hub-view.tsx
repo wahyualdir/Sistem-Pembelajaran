@@ -10,9 +10,21 @@ import {
   BarChart3,
   CheckCircle2,
   BookOpen,
+  Send,
+  Bell,
+  Sliders,
+  FileCheck,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
+import {
+  getCoordinatorEvaluationReportAction,
+  toggleEvaluationPeriodStatusAction,
+  sendEvaluationRemindersAction,
+  exportCoordinatorEvaluationCsvAction,
+  type CoordinatorEdomRecapItem,
+  type EvaluationPeriod,
+} from './evaluation-actions';
 
 export const COORDINATOR_REPORTS_TABS = [
   { id: 'laporan-prodi', label: 'Laporan Prodi', icon: FileSpreadsheet },
@@ -46,6 +58,59 @@ export function CoordinatorReportsHubView({
     const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tab);
     router.push(`/coordinator/reports?${params.toString()}`);
+  };
+
+  const [edomPeriod, setEdomPeriod] = React.useState<EvaluationPeriod | null>(null);
+  const [edomRecap, setEdomRecap] = React.useState<CoordinatorEdomRecapItem[]>([]);
+  const [edomToast, setEdomToast] = React.useState<string | null>(null);
+  const [isPending, startTransition] = React.useTransition();
+
+  React.useEffect(() => {
+    getCoordinatorEvaluationReportAction().then((res) => {
+      if (res.ok) {
+        if (res.period) setEdomPeriod(res.period);
+        setEdomRecap(res.lecturerRecap);
+      }
+    });
+  }, []);
+
+  const handleTogglePeriod = () => {
+    if (!edomPeriod) return;
+    const newStatus = edomPeriod.status === 'OPEN' ? 'CLOSED' : 'OPEN';
+    startTransition(async () => {
+      const res = await toggleEvaluationPeriodStatusAction(edomPeriod.id, newStatus);
+      if (res.ok) {
+        setEdomPeriod((prev) => (prev ? { ...prev, status: newStatus } : null));
+        setEdomToast(`Periode kuesioner berhasil diubah menjadi ${newStatus}.`);
+      }
+    });
+  };
+
+  const handleSendReminders = () => {
+    startTransition(async () => {
+      const res = await sendEvaluationRemindersAction();
+      if (res.ok) {
+        setEdomToast(res.message || 'Pengingat berhasil dikirim.');
+      } else {
+        setEdomToast(res.error || 'Gagal mengirim pengingat.');
+      }
+    });
+  };
+
+  const handleExportCsv = () => {
+    startTransition(async () => {
+      const res = await exportCoordinatorEvaluationCsvAction();
+      if (res.ok && res.csvContent && res.filename) {
+        const blob = new Blob([res.csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = res.filename;
+        a.click();
+        URL.revokeObjectURL(url);
+        setEdomToast('File CSV laporan akreditasi berhasil diunduh.');
+      }
+    });
   };
 
   const PRODI_REPORTS = isDemo
@@ -154,7 +219,7 @@ export function CoordinatorReportsHubView({
       <RetroWindow
         title="laporan_dan_evaluasi_prodi.app"
         badge="Evaluasi Mutu Prodi"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -163,7 +228,7 @@ export function CoordinatorReportsHubView({
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <FileSpreadsheet className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Laporan & Evaluasi Mutu Prodi
               </h1>
             </div>
@@ -173,7 +238,7 @@ export function CoordinatorReportsHubView({
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               Akreditasi Unggul (LAM-INFOKOM)
             </span>
           </div>
@@ -191,10 +256,10 @@ export function CoordinatorReportsHubView({
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -207,9 +272,9 @@ export function CoordinatorReportsHubView({
       {/* 3. TAB 1: LAPORAN PRODI */}
       {activeTab === 'laporan-prodi' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <FileSpreadsheet className="h-5 w-5 text-primary" />
                 <span>Dokumen Laporan Kinerja Akademik Program Studi</span>
               </h2>
@@ -222,7 +287,7 @@ export function CoordinatorReportsHubView({
           {PRODI_REPORTS.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <FileSpreadsheet className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Dokumen Laporan</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Dokumen Laporan</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Laporan kinerja semesteran belum digenerate untuk program studi ini.
               </p>
@@ -232,18 +297,18 @@ export function CoordinatorReportsHubView({
               {PRODI_REPORTS.map((rep) => (
                 <div key={rep.id} className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-3 flex flex-col justify-between">
                   <div className="space-y-2">
-                    <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-mono font-bold">
+                    <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-sans font-bold">
                       {rep.period}
                     </span>
-                    <h3 className="font-heading font-black text-base text-black">{rep.title}</h3>
+                    <h3 className="font-heading font-bold text-base text-black">{rep.title}</h3>
                     <p className="text-xs text-black/70">{rep.metrics}</p>
                   </div>
                   <div className="pt-3 border-t border-black/10 flex items-center justify-between">
-                    <span className="text-xs font-mono text-black/60">{rep.date}</span>
+                    <span className="text-xs font-sans text-black/60">{rep.date}</span>
                     <button
                       type="button"
                       onClick={() => alert(`Mengunduh dokumen: ${rep.title}`)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-retro-warm text-black text-xs font-black hover:bg-retro-yellow transition-all cursor-pointer shadow-xs"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-gray-soft text-black text-xs font-bold hover:bg-gray-soft transition-all cursor-pointer shadow-xs"
                     >
                       <Download className="h-3.5 w-3.5" />
                       <span>{rep.fileFormat}</span>
@@ -259,9 +324,18 @@ export function CoordinatorReportsHubView({
       {/* 4. TAB 2: EVALUASI DOSEN (EDOM) */}
       {activeTab === 'evaluasi-dosen' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          {edomToast && (
+            <div className="p-3 bg-surface border-2 border-black rounded-lg text-xs font-sans font-bold text-ink flex items-center justify-between">
+              <span>{edomToast}</span>
+              <button type="button" onClick={() => setEdomToast(null)} className="cursor-pointer">
+                &times;
+              </button>
+            </div>
+          )}
+
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Award className="h-5 w-5 text-primary" />
                 <span>Hasil Evaluasi Dosen Oleh Mahasiswa (EDOM)</span>
               </h2>
@@ -269,24 +343,75 @@ export function CoordinatorReportsHubView({
                 Kuesioner evaluasi kompetensi pedagogik, profesionalitas, dan kepuasan mahasiswa per kelas kuliah.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-black/60">
-              Skala Penilaian: 1.00 - 5.00
-            </span>
+
+            {/* Aksi Kaprodi: Buka/Tutup Periode, Kirim Notifikasi Pengingat, dan Ekspor CSV */}
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              {edomPeriod && (
+                <button
+                  type="button"
+                  onClick={handleTogglePeriod}
+                  disabled={isPending}
+                  className={cn(
+                    'px-3 py-1.5 rounded-lg border-2 border-black text-xs font-bold transition-all shadow-xs cursor-pointer',
+                    edomPeriod.status === 'OPEN'
+                      ? 'bg-surface text-ink hover:bg-neutral-100'
+                      : 'bg-primary text-white hover:bg-primary-dark'
+                  )}
+                >
+                  {edomPeriod.status === 'OPEN' ? 'Tutup Periode' : 'Buka Periode'}
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={handleSendReminders}
+                disabled={isPending || edomPeriod?.status !== 'OPEN'}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-white text-xs font-bold hover:bg-neutral-100 transition-all shadow-xs cursor-pointer disabled:opacity-50"
+              >
+                <Bell className="h-3.5 w-3.5 text-primary" />
+                <span>Kirim Pengingat</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleExportCsv}
+                disabled={isPending}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-ink text-white text-xs font-bold hover:bg-black transition-all shadow-xs cursor-pointer"
+              >
+                <Download className="h-3.5 w-3.5 text-white" />
+                <span>Ekspor Akreditasi (CSV)</span>
+              </button>
+            </div>
           </div>
 
-          {LECTURER_EVALUATIONS.length === 0 ? (
+          {/* Banner Status Periode */}
+          {edomPeriod && (
+            <div className="p-3 bg-white border-2 border-black rounded-lg flex items-center justify-between text-xs font-sans">
+              <div>
+                <span className="font-bold text-black">{edomPeriod.title}</span>
+                <span className="text-black/60 block sm:inline sm:ml-2">
+                  Status: <strong className={edomPeriod.status === 'OPEN' ? 'text-primary' : 'text-black/70'}>{edomPeriod.status === 'OPEN' ? 'SEDANG DIBUKA' : 'DITUTUP'}</strong>
+                </span>
+              </div>
+              <span className="text-[11px] text-black/50">
+                Responden Minimal untuk Akses Dosen: 5 Mahasiswa
+              </span>
+            </div>
+          )}
+
+          {edomRecap.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <Award className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Rekap Kuesioner EDOM</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Rekap Kuesioner EDOM</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
-                Pengisian kuesioner evaluasi dosen oleh mahasiswa belum dibuka untuk semester ini.
+                Pengisian kuesioner evaluasi dosen oleh mahasiswa belum memiliki data responden untuk semester ini.
               </p>
             </div>
           ) : (
             <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Dosen & Mata Kuliah</th>
                       <th className="p-3.5 sm:p-4 text-center">Tingkat Respons Mhs</th>
@@ -294,25 +419,25 @@ export function CoordinatorReportsHubView({
                       <th className="p-3.5 sm:p-4 text-center">Profesional</th>
                       <th className="p-3.5 sm:p-4 text-center">Sosial</th>
                       <th className="p-3.5 sm:p-4 text-center">Skor Total</th>
-                      <th className="p-3.5 sm:p-4 text-center">Kategori</th>
+                      <th className="p-3.5 sm:p-4 text-center">Kategori Mutu</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
-                    {LECTURER_EVALUATIONS.map((ev) => (
-                      <tr key={ev.id} className="hover:bg-retro-warm/30 transition-colors">
+                    {edomRecap.map((ev) => (
+                      <tr key={ev.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4">
-                          <span className="font-bold text-black block">{ev.name}</span>
-                          <span className="text-xs text-black/60 font-mono">{ev.subject}</span>
+                          <span className="font-bold text-black block">{ev.lecturerName}</span>
+                          <span className="text-xs text-black/60 font-sans">{ev.subjectTitle}</span>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono text-xs">{ev.respondents}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{ev.pedagogy.toFixed(1)}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{ev.professional.toFixed(1)}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{ev.social.toFixed(1)}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-black text-sm text-emerald-800">
-                          {ev.scoreTotal}
+                        <td className="p-3.5 sm:p-4 text-center font-sans text-xs font-bold">{ev.respondentsCount} Mahasiswa</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{ev.pedagogyScore.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{ev.professionalScore.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{ev.socialScore.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-sm text-ink">
+                          {ev.totalScore.toFixed(2)}
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 text-xs font-mono font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-sans font-bold">
                             {ev.category}
                           </span>
                         </td>
@@ -329,9 +454,9 @@ export function CoordinatorReportsHubView({
       {/* 5. TAB 3: CAPAIAN CPL OBE */}
       {activeTab === 'capaian-cpl' && (
         <div className="space-y-5">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <TrendingUp className="h-5 w-5 text-primary" />
                 <span>Ketercapaian Capaian Pembelajaran Lulusan (CPL Kurikulum OBE)</span>
               </h2>
@@ -339,7 +464,7 @@ export function CoordinatorReportsHubView({
                 Agregasi penilaian berbasis portofolio dan asesmen ketercapaian kompetensi lulusan program studi.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 bg-retro-mint border border-black rounded-lg">
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-retro-mint border border-black rounded-lg">
               Kurikulum OBE 2024
             </span>
           </div>
@@ -347,7 +472,7 @@ export function CoordinatorReportsHubView({
           {CPL_ACHIEVEMENTS.length === 0 ? (
             <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
               <TrendingUp className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-black text-base sm:text-lg text-black">Belum Ada Pemetaan CPL</h3>
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Pemetaan CPL</h3>
               <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
                 Data ketercapaian CPL belum dihitung untuk angkatan aktif semester ini.
               </p>
@@ -358,36 +483,36 @@ export function CoordinatorReportsHubView({
                 <div key={cpl.code} className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">
-                      <span className="px-2.5 py-1 rounded border-2 border-black bg-primary text-white font-mono font-black text-xs">
+                      <span className="px-2.5 py-1 rounded border-2 border-black bg-primary text-white font-sans font-bold text-xs">
                         {cpl.code}
                       </span>
                       <h3 className="font-heading font-bold text-sm sm:text-base text-black">{cpl.name}</h3>
                     </div>
                     <span
                       className={cn(
-                        'px-2.5 py-0.5 rounded border text-xs font-mono font-bold shrink-0 self-start sm:self-auto',
+                        'px-2.5 py-0.5 rounded border text-xs font-sans font-bold shrink-0 self-start sm:self-auto',
                         cpl.status === 'TERCAPAI'
-                          ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                          : 'border-amber-500 bg-amber-100 text-amber-950'
+                          ? 'border-ink bg-surface text-ink'
+                          : 'border-ink bg-gray-soft text-ink'
                       )}
                     >
                       {cpl.status === 'TERCAPAI' ? 'Target Tercapai' : 'Mendekati Target'}
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-black/10 font-mono text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-black/10 font-sans text-xs">
                     <div>
                       <span className="text-black/60 text-xs block">Target Minimum:</span>
                       <span className="font-bold">{cpl.target}</span>
                     </div>
                     <div>
                       <span className="text-black/60 text-xs block">Realisasi Capaian:</span>
-                      <span className="font-black text-emerald-800 text-sm">{cpl.achievement}</span>
+                      <span className="font-bold text-ink text-sm">{cpl.achievement}</span>
                     </div>
                     <div className="sm:col-span-2 flex items-center">
                       <div className="h-3 w-full bg-neutral-200 rounded-full overflow-hidden border border-black/20">
                         <div
-                          className="h-full bg-emerald-500 rounded-full"
+                          className="h-full bg-gray-dark rounded-full"
                           style={{ width: cpl.achievement }}
                         />
                       </div>

@@ -53,7 +53,7 @@ export default function MentoringPage() {
       <RetroWindow
         title="program_mentoring_akademik.app"
         badge="Bimbingan Aktif"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -62,7 +62,7 @@ export default function MentoringPage() {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <UserCheck className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Mentoring & Bimbingan Belajar
               </h1>
             </div>
@@ -72,7 +72,7 @@ export default function MentoringPage() {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-sans font-bold text-black shadow-retro">
               {MENTORS.length} Mentor Siaga
             </span>
           </div>
@@ -89,21 +89,21 @@ export default function MentoringPage() {
             <div className="space-y-4">
               {/* Badges Bar */}
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="px-3 py-1 rounded border-2 border-black bg-retro-mint text-xs sm:text-sm font-mono font-black text-black shadow-xs">
+                <span className="px-3 py-1 rounded border-2 border-black bg-retro-mint text-xs sm:text-sm font-sans font-bold text-black shadow-xs">
                   {m.role}
                 </span>
-                <span className="px-3 py-1 rounded border-2 border-black bg-emerald-100 text-xs sm:text-sm font-mono font-black text-emerald-950 shadow-xs">
+                <span className="px-3 py-1 rounded border-2 border-black bg-surface text-xs sm:text-sm font-sans font-bold text-ink shadow-xs">
                   {m.slots}
                 </span>
               </div>
 
               {/* Mentor Avatar + Name */}
               <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-xl border-2 border-black bg-retro-warm flex items-center justify-center font-heading font-black text-xl text-black shrink-0 shadow-xs">
+                <div className="w-14 h-14 rounded-xl border-2 border-black bg-gray-soft flex items-center justify-center font-heading font-bold text-xl text-black shrink-0 shadow-xs">
                   {m.initials}
                 </div>
                 <div className="space-y-1">
-                  <h2 className="font-heading font-black text-xl sm:text-2xl text-black leading-snug">
+                  <h2 className="font-heading font-bold text-xl sm:text-2xl text-black leading-snug">
                     {m.name}
                   </h2>
                   <p className="text-sm sm:text-base text-neutral-800 font-medium leading-relaxed">
@@ -117,7 +117,7 @@ export default function MentoringPage() {
                 {m.topics.map((top) => (
                   <span
                     key={top}
-                    className="px-2.5 py-0.5 rounded border-2 border-black bg-retro-warm text-xs font-mono font-bold text-black"
+                    className="px-2.5 py-0.5 rounded border-2 border-black bg-gray-soft text-xs font-sans font-bold text-black"
                   >
                     #{top}
                   </span>
@@ -125,7 +125,7 @@ export default function MentoringPage() {
               </div>
 
               {/* Schedule Info */}
-              <div className="pt-3 border-t-2 border-black/10 flex items-center gap-2 text-sm font-mono font-bold text-black">
+              <div className="pt-3 border-t-2 border-black/10 flex items-center gap-2 text-sm font-sans font-bold text-black">
                 <Clock className="h-4 w-4 text-primary shrink-0" />
                 <span>{m.schedule}</span>
               </div>
@@ -134,7 +134,7 @@ export default function MentoringPage() {
             {/* Action Button */}
             <button
               type="button"
-              className="w-full py-3.5 px-4 rounded-lg border-2 border-black bg-retro-yellow hover:bg-black hover:text-white text-black font-heading font-black text-sm sm:text-base shadow-retro hover:shadow-retro-md transition-all flex items-center justify-center gap-2"
+              className="w-full py-3.5 px-4 rounded-lg border-2 border-black bg-gray-soft hover:bg-black hover:text-white text-black font-heading font-bold text-sm sm:text-base shadow-retro hover:shadow-retro-md transition-all flex items-center justify-center gap-2"
             >
               <span>Ajukan Konsultasi Sekarang</span>
               <ArrowRight className="h-4 w-4" />

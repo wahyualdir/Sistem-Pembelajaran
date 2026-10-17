@@ -35,7 +35,7 @@ export function MarkdownViewer({ content, className }: MarkdownViewerProps) {
         tokens.push(
           <code
             key={keyIdx++}
-            className="rounded bg-muted px-1.5 py-0.5 font-mono text-[13px] text-primary"
+            className="rounded bg-muted px-1.5 py-0.5 font-sans text-[13px] text-primary"
           >
             {codeMatch[1]}
           </code>
@@ -113,7 +113,7 @@ export function MarkdownViewer({ content, className }: MarkdownViewerProps) {
         elements.push(
           <div key={`code-${i}`} className="my-3 overflow-x-auto rounded-control bg-slate-900 p-3 text-slate-100">
             {codeLanguage && (
-              <div className="mb-2 text-xs font-mono uppercase tracking-wider text-slate-400">
+              <div className="mb-2 text-xs font-sans uppercase tracking-wider text-slate-400">
                 {codeLanguage}
               </div>
             )}

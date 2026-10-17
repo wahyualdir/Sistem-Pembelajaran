@@ -85,7 +85,7 @@ export default function HomePage() {
           <div className="grid md:grid-cols-[1.1fr_1fr] items-center gap-8 lg:gap-12">
             {/* Left: Headline & Call To Action */}
             <div className="space-y-4 sm:space-y-6">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-heading font-black tracking-tight text-black leading-[0.98]">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-heading font-bold tracking-tight text-black leading-[0.98]">
                 Hello.
                 <br />
                 I&apos;m Mac.
@@ -127,7 +127,7 @@ export default function HomePage() {
 
           {/* 2. QUICK LINKS BAR */}
           <div className="mt-12 sm:mt-16">
-            <h2 className="text-xl sm:text-2xl font-heading font-black text-black mb-3">
+            <h2 className="text-xl sm:text-2xl font-heading font-bold text-black mb-3">
               Quick links
             </h2>
             <div className="border-2 border-black bg-white shadow-retro-md grid grid-cols-2 md:grid-cols-4 overflow-hidden">
@@ -169,7 +169,7 @@ export default function HomePage() {
           className="w-full border-y-2 border-black bg-retro-dither py-12 sm:py-16"
         >
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
-            <h2 className="text-3xl sm:text-4xl font-heading font-black text-black mb-6 sm:mb-8">
+            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-black mb-6 sm:mb-8">
               Projects
             </h2>
 
@@ -178,13 +178,13 @@ export default function HomePage() {
               {/* Project Card 1: Possimus */}
               <article className="border-2 border-black bg-white shadow-retro-lg overflow-hidden flex flex-col transition-transform hover:-translate-y-0.5">
                 {/* Window Header */}
-                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-retro-warm">
+                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-gray-soft">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-primary inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark inline-block shadow-retro-sm" />
                   </div>
-                  <span className="font-mono text-xs font-bold text-black tracking-tight">
+                  <span className="font-sans text-xs font-bold text-black tracking-tight">
                     2020-04-08-project.html
                   </span>
                 </div>
@@ -202,7 +202,7 @@ export default function HomePage() {
                 {/* Card Content */}
                 <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-xl sm:text-2xl font-heading font-black text-black mb-2">
+                    <h3 className="text-xl sm:text-2xl font-heading font-bold text-black mb-2">
                       Possimus
                     </h3>
                     <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
@@ -229,13 +229,13 @@ export default function HomePage() {
               {/* Project Card 2: Dolorum Ullam Totam */}
               <article className="border-2 border-black bg-white shadow-retro-lg overflow-hidden flex flex-col transition-transform hover:-translate-y-0.5">
                 {/* Window Header */}
-                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-retro-warm">
+                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-gray-soft">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-primary inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark inline-block shadow-retro-sm" />
                   </div>
-                  <span className="font-mono text-xs font-bold text-black tracking-tight">
+                  <span className="font-sans text-xs font-bold text-black tracking-tight">
                     2020-04-08-project.html
                   </span>
                 </div>
@@ -253,7 +253,7 @@ export default function HomePage() {
                 {/* Card Content */}
                 <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <h3 className="text-xl sm:text-2xl font-heading font-black text-black mb-2">
+                    <h3 className="text-xl sm:text-2xl font-heading font-bold text-black mb-2">
                       Dolorum Ullam Totam
                     </h3>
                     <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
@@ -281,7 +281,7 @@ export default function HomePage() {
         {/* 4. FROM THE BLOG SECTION (OVERLAPPING RETRO WINDOWS) */}
         <section id="blog" className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
           <div className="mb-8">
-            <h2 className="text-3xl sm:text-4xl font-heading font-black text-black">
+            <h2 className="text-3xl sm:text-4xl font-heading font-bold text-black">
               From the blog
             </h2>
             <a
@@ -300,13 +300,13 @@ export default function HomePage() {
           <div className="relative pt-2 pb-12">
             {/* Top Window: Fox (2020-04-07-blog.pdf) */}
             <div className="border-2 border-black bg-white shadow-retro-lg max-w-lg mb-6 transition-transform hover:-translate-y-1">
-              <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-retro-warm">
+              <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-gray-soft">
                 <div className="flex items-center gap-1.5">
-                  <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red inline-block shadow-retro-sm" />
-                  <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow inline-block shadow-retro-sm" />
-                  <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green inline-block shadow-retro-sm" />
+                  <span className="h-3 w-3 rounded-full border border-black/80 bg-primary inline-block shadow-retro-sm" />
+                  <span className="h-3 w-3 rounded-full border border-black/80 bg-gray inline-block shadow-retro-sm" />
+                  <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark inline-block shadow-retro-sm" />
                 </div>
-                <span className="font-mono text-xs font-bold text-black">
+                <span className="font-sans text-xs font-bold text-black">
                   2020-04-07-blog.pdf
                 </span>
               </div>
@@ -321,13 +321,13 @@ export default function HomePage() {
 
             {/* Middle Window: City Aerial Feet (2020-04-06-blog.pdf) */}
             <div className="border-2 border-black bg-white shadow-retro-lg max-w-lg md:ml-48 -mt-16 sm:-mt-24 mb-6 z-10 relative transition-transform hover:-translate-y-1">
-              <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-retro-warm">
+              <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-gray-soft">
                 <div className="flex items-center gap-1.5">
-                  <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red inline-block shadow-retro-sm" />
-                  <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow inline-block shadow-retro-sm" />
-                  <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green inline-block shadow-retro-sm" />
+                  <span className="h-3 w-3 rounded-full border border-black/80 bg-primary inline-block shadow-retro-sm" />
+                  <span className="h-3 w-3 rounded-full border border-black/80 bg-gray inline-block shadow-retro-sm" />
+                  <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark inline-block shadow-retro-sm" />
                 </div>
-                <span className="font-mono text-xs font-bold text-black">
+                <span className="font-sans text-xs font-bold text-black">
                   2020-04-06-blog.pdf
                 </span>
               </div>
@@ -343,13 +343,13 @@ export default function HomePage() {
             {/* Bottom Window 1: Office Workspace (2020-04-06-blog.pdf) */}
             <div className="grid md:grid-cols-2 gap-6 -mt-8 sm:-mt-12 z-20 relative">
               <div className="border-2 border-black bg-white shadow-retro-lg transition-transform hover:-translate-y-1">
-                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-retro-warm">
+                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-gray-soft">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-primary inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark inline-block shadow-retro-sm" />
                   </div>
-                  <span className="font-mono text-xs font-bold text-black">
+                  <span className="font-sans text-xs font-bold text-black">
                     2020-04-06-blog.pdf
                   </span>
                 </div>
@@ -364,13 +364,13 @@ export default function HomePage() {
 
               {/* Bottom Window 2: Night City Bokeh (2020-04-06-blog.pdf) */}
               <div className="border-2 border-black bg-white shadow-retro-lg transition-transform hover:-translate-y-1">
-                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-retro-warm">
+                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-gray-soft">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-primary inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark inline-block shadow-retro-sm" />
                   </div>
-                  <span className="font-mono text-xs font-bold text-black">
+                  <span className="font-sans text-xs font-bold text-black">
                     2020-04-06-blog.pdf
                   </span>
                 </div>
@@ -391,10 +391,10 @@ export default function HomePage() {
           <div className="max-w-5xl mx-auto px-4 sm:px-6">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
-                <span className="inline-block px-2.5 py-0.5 border-2 border-black bg-white text-xs font-mono font-bold text-black shadow-retro mb-3">
+                <span className="inline-block px-2.5 py-0.5 border-2 border-black bg-white text-xs font-sans font-bold text-black shadow-retro mb-3">
                   SIAJAR INTEGRATION
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-heading font-black text-black mb-3">
+                <h3 className="text-2xl sm:text-3xl font-heading font-bold text-black mb-3">
                   Aesthetic retro design, modern power.
                 </h3>
                 <p className="text-xs sm:text-sm text-gray-700 leading-relaxed mb-6">
@@ -413,7 +413,7 @@ export default function HomePage() {
                     onClick={handleCopyLink}
                     className="px-4 py-2 border-2 border-black bg-white text-black font-bold text-xs shadow-retro hover:bg-black hover:text-white transition-all inline-flex items-center gap-1.5"
                   >
-                    {copied ? <Check className="h-3.5 w-3.5 text-green-600" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copied ? <Check className="h-3.5 w-3.5 text-primary-dark" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copied ? 'Tersalin!' : 'Bagikan Link'}</span>
                   </button>
                 </div>
@@ -421,17 +421,17 @@ export default function HomePage() {
 
               {/* Mini Window Preview */}
               <div className="border-2 border-black bg-white shadow-retro-lg">
-                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-retro-warm">
+                <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-gray-soft">
                   <div className="flex items-center gap-1.5">
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow inline-block shadow-retro-sm" />
-                    <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-primary inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray inline-block shadow-retro-sm" />
+                    <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark inline-block shadow-retro-sm" />
                   </div>
-                  <span className="font-mono text-xs font-bold text-black">
+                  <span className="font-sans text-xs font-bold text-black">
                     siajar://system-status.log
                   </span>
                 </div>
-                <div className="p-4 font-mono text-xs text-gray-800 space-y-1.5">
+                <div className="p-4 font-sans text-xs text-gray-800 space-y-1.5">
                   <p className="font-bold text-black">✓ Theme: Retro Mac Monochrome (1984)</p>
                   <p>✓ Window frame: Dual circular controls (○ ○)</p>
                   <p>✓ Halftone Dither: Active on projects</p>
@@ -447,8 +447,8 @@ export default function HomePage() {
       </main>
 
       {/* -------------------- FOOTER / SYSTEM STATUS BAR -------------------- */}
-      <footer id="contact" className="w-full border-t-2 border-black bg-retro-warm py-4">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono font-bold text-black">
+      <footer id="contact" className="w-full border-t-2 border-black bg-gray-soft py-4">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-sans font-bold text-black">
           <div className="flex items-center gap-3">
             <span>Macintosh System 7.1</span>
             <span>•</span>
@@ -484,13 +484,13 @@ export default function HomePage() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header */}
-            <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-retro-warm">
+            <div className="flex items-center justify-between px-3 py-2 border-b-2 border-black bg-gray-soft">
               <div className="flex items-center gap-1.5">
-                <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-red inline-block shadow-retro-sm" />
-                <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-yellow inline-block shadow-retro-sm" />
-                <span className="h-3 w-3 rounded-full border border-black/80 bg-traffic-green inline-block shadow-retro-sm" />
+                <span className="h-3 w-3 rounded-full border border-black/80 bg-primary inline-block shadow-retro-sm" />
+                <span className="h-3 w-3 rounded-full border border-black/80 bg-gray inline-block shadow-retro-sm" />
+                <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark inline-block shadow-retro-sm" />
               </div>
-              <span className="font-mono text-xs font-bold text-black truncate max-w-[200px]">
+              <span className="font-sans text-xs font-bold text-black truncate max-w-[200px]">
                 {activeModal === 'clone' ? 'clone-template.app' : `${activeModal}.detail`}
               </span>
               <button
@@ -506,7 +506,7 @@ export default function HomePage() {
             <div className="p-6 space-y-4">
               {activeModal === 'clone' ? (
                 <>
-                  <h4 className="text-xl font-heading font-black text-black">
+                  <h4 className="text-xl font-heading font-bold text-black">
                     Clone me on Webflow
                   </h4>
                   <p className="text-xs text-gray-700 leading-relaxed">
@@ -531,7 +531,7 @@ export default function HomePage() {
                 </>
               ) : (
                 <>
-                  <h4 className="text-xl font-heading font-black text-black">
+                  <h4 className="text-xl font-heading font-bold text-black">
                     {activeModal}
                   </h4>
                   <p className="text-xs text-gray-700 leading-relaxed">

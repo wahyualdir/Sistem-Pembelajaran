@@ -64,7 +64,7 @@ export function ModerateButton({ kind, id, value, label }: { kind: 'pin' | 'lock
       <button type="button" disabled={pending} onClick={() => run(() => moderateDiscussionAction({ kind, id, value }), label)} className="text-sm font-medium underline-offset-4 hover:underline disabled:opacity-50">
         {label}
       </button>
-      {error && <span role="alert" className="ml-2 text-xs text-danger">{error}</span>}
+      {error && <span role="alert" className="ml-2 text-xs text-primary-dark">{error}</span>}
     </span>
   );
 }

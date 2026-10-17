@@ -75,11 +75,11 @@ export function ImpersonateUserCard() {
         {DEMO_TARGETS.map((u) => (
           <div
             key={u.id}
-            className="p-3.5 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-xs flex flex-col justify-between space-y-3 hover:bg-retro-warm/30 transition-all"
+            className="p-3.5 rounded-lg border-[1.5px] border-retro-border bg-retro-surface shadow-xs flex flex-col justify-between space-y-3 hover:bg-gray-soft/30 transition-all"
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold uppercase bg-retro-warm px-2 py-0.5 rounded border border-retro-border">
+                <span className="text-xs font-sans font-bold uppercase bg-gray-soft px-2 py-0.5 rounded border border-retro-border">
                   {u.identifier}
                 </span>
                 <Users className="h-3.5 w-3.5 text-muted-foreground" />
@@ -98,7 +98,7 @@ export function ImpersonateUserCard() {
               className={`w-full rounded border-2 border-retro-border px-2.5 py-1.5 text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
                 !isDemo
                   ? 'bg-neutral-300 text-neutral-600 border-neutral-400 cursor-not-allowed opacity-75'
-                  : 'bg-black text-white hover:bg-retro-warm hover:text-black cursor-pointer'
+                  : 'bg-black text-white hover:bg-gray-soft hover:text-black cursor-pointer'
               }`}
             >
               <UserCheck className="h-3.5 w-3.5" />

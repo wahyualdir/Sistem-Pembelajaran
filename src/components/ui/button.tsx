@@ -12,11 +12,11 @@ const buttonVariants = cva(
         destructive:
           "bg-black text-white shadow-retro hover:bg-white hover:text-black active:shadow-retro-sm",
         outline:
-          "bg-white text-black shadow-retro hover:bg-retro-warm active:shadow-retro-sm",
+          "bg-white text-black shadow-retro hover:bg-gray-soft active:shadow-retro-sm",
         secondary:
           "bg-retro-surface text-black shadow-retro hover:bg-white active:shadow-retro-sm",
         ghost:
-          "border-transparent bg-transparent hover:bg-retro-warm text-black shadow-none",
+          "border-transparent bg-transparent hover:bg-gray-soft text-black shadow-none",
         link:
           "border-transparent bg-transparent text-black underline-offset-4 hover:underline p-0 min-h-0 shadow-none",
       },

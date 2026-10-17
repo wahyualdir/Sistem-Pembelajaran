@@ -93,7 +93,7 @@ export default async function ClassAttendancePage({ params }: { params: { id: st
                         Pertemuan {s.meeting_number}: {s.title}
                       </span>
                       {s.is_open ? (
-                        <span className="text-xs font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-semibold text-ink bg-surface px-2 py-0.5 rounded-full">
                           Sesi Dibuka
                         </span>
                       ) : (
@@ -151,20 +151,20 @@ export default async function ClassAttendancePage({ params }: { params: { id: st
                 {classSummary.map((st) => (
                   <tr key={st.student_id} className="hover:bg-muted/50 transition-colors">
                     <td className="py-2.5 px-3 font-medium text-foreground">{st.student_name}</td>
-                    <td className="py-2.5 px-3 text-center font-mono">{st.hadir}</td>
-                    <td className="py-2.5 px-3 text-center font-mono">{st.izin}</td>
-                    <td className="py-2.5 px-3 text-center font-mono">{st.sakit}</td>
-                    <td className="py-2.5 px-3 text-center font-mono text-danger">{st.alpa}</td>
-                    <td className="py-2.5 px-3 text-right font-mono font-semibold">
+                    <td className="py-2.5 px-3 text-center font-sans">{st.hadir}</td>
+                    <td className="py-2.5 px-3 text-center font-sans">{st.izin}</td>
+                    <td className="py-2.5 px-3 text-center font-sans">{st.sakit}</td>
+                    <td className="py-2.5 px-3 text-center font-sans text-primary-dark">{st.alpa}</td>
+                    <td className="py-2.5 px-3 text-right font-sans font-semibold">
                       {st.percentage}%
                     </td>
                     <td className="py-2.5 px-3 text-center">
                       {st.can_take_uas ? (
-                        <span className="text-xs font-semibold text-success bg-success-soft px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-semibold text-ink bg-surface px-2 py-0.5 rounded-full">
                           Lolos
                         </span>
                       ) : (
-                        <span className="text-xs font-semibold text-danger bg-danger-soft px-2 py-0.5 rounded-full">
+                        <span className="text-xs font-semibold text-primary-dark bg-surface px-2 py-0.5 rounded-full">
                           Ditolak (&lt;75%)
                         </span>
                       )}

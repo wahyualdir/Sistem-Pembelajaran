@@ -68,11 +68,11 @@ export function Topbar({
   return (
     <header className="sticky top-0 z-30 flex flex-col sm:flex-row items-stretch border-b-[1.5px] border-retro-border bg-retro-bg transition-colors">
       {/* Banner Pencarian Retro Kuning (Persis Gambar Image 1) */}
-      <div className="flex-1 bg-retro-yellow px-4 sm:px-6 py-2.5 flex items-center justify-between border-b sm:border-b-0 sm:border-r-[1.5px] border-retro-border gap-3">
+      <div className="flex-1 bg-gray-soft px-4 sm:px-6 py-2.5 flex items-center justify-between border-b sm:border-b-0 sm:border-r-[1.5px] border-retro-border gap-3">
         <div className="flex items-center gap-3 w-full max-w-xl">
           <button
             onClick={onMenuToggle}
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-[1.5px] border-retro-border bg-retro-surface text-foreground shadow-retro hover:bg-retro-warm focus:outline-none transition-all"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border-[1.5px] border-retro-border bg-retro-surface text-foreground shadow-retro hover:bg-gray-soft focus:outline-none transition-all"
             title="Buka / Tutup Navigasi (Burger)"
             aria-label="Menu navigasi buka tutup"
           >
@@ -96,7 +96,7 @@ export function Topbar({
 
         {/* Semester Badge */}
         <div className="hidden lg:flex items-center gap-2 shrink-0">
-          <span className="text-xs sm:text-sm font-black text-black uppercase tracking-wider bg-black/10 px-3 py-1 rounded-md border-2 border-black">
+          <span className="text-xs sm:text-sm font-bold text-black uppercase tracking-wider bg-black/10 px-3 py-1 rounded-md border-2 border-black">
             2026/2027 Ganjil
           </span>
         </div>
@@ -106,7 +106,7 @@ export function Topbar({
       <div className="flex items-center justify-end gap-3 px-4 sm:px-6 py-2.5 bg-retro-bg shrink-0">
         <button
           onClick={toggleDarkMode}
-          className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-retro-surface text-foreground shadow-retro hover:bg-retro-warm focus:outline-none transition-all"
+          className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-retro-surface text-foreground shadow-retro hover:bg-gray-soft focus:outline-none transition-all"
           aria-label={isDark ? "Ganti ke mode terang" : "Ganti ke mode gelap"}
           title={isDark ? "Mode Terang" : "Mode Gelap"}
         >
@@ -117,14 +117,14 @@ export function Topbar({
 
         <Link
           href="/profile"
-          className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-lg border-2 border-black bg-retro-surface shadow-retro hover:bg-retro-warm transition-all group"
+          className="hidden md:flex items-center gap-2.5 px-3 py-1.5 rounded-lg border-2 border-black bg-retro-surface shadow-retro hover:bg-gray-soft transition-all group"
           title="Lihat Profil Akun"
         >
-          <div className="h-7 w-7 rounded border border-black bg-primary text-white flex items-center justify-center text-xs font-black">
+          <div className="h-7 w-7 rounded border border-black bg-primary text-white flex items-center justify-center text-xs font-bold">
             {userInitial}
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-sm font-black text-foreground leading-tight truncate max-w-[130px] group-hover:text-primary-dark transition-colors">
+            <span className="text-sm font-bold text-foreground leading-tight truncate max-w-[130px] group-hover:text-primary-dark transition-colors">
               {userName}
             </span>
             <span className="text-xs text-black font-bold leading-tight mt-0.5">{roleLabel}</span>
@@ -133,7 +133,7 @@ export function Topbar({
 
         <button
           onClick={onLogout}
-          className="flex h-9 items-center gap-1.5 px-3 rounded-lg border-2 border-black bg-retro-surface text-danger shadow-retro hover:bg-danger/10 text-xs sm:text-sm font-black transition-all focus:outline-none cursor-pointer"
+          className="flex h-9 items-center gap-1.5 px-3 rounded-lg border-2 border-black bg-retro-surface text-primary-dark shadow-retro hover:bg-primary/10 text-xs sm:text-sm font-bold transition-all focus:outline-none cursor-pointer"
           title="Keluar dari sesi"
         >
           <LogOut className="h-4 w-4" />

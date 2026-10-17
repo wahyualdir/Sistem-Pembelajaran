@@ -17,49 +17,41 @@ const PROGRAMMING_LANGUAGES = [
     id: 'python',
     name: 'Python',
     svgPath: '/tech-logos/python.svg',
-    glowColor: 'rgba(56, 126, 184, 0.35)',
   },
   {
     id: 'javascript',
     name: 'JavaScript',
     svgPath: '/tech-logos/javascript.svg',
-    glowColor: 'rgba(240, 219, 79, 0.35)',
   },
   {
     id: 'typescript',
     name: 'TypeScript',
     svgPath: '/tech-logos/typescript.svg',
-    glowColor: 'rgba(0, 122, 204, 0.35)',
   },
   {
     id: 'react',
     name: 'React.js',
     svgPath: '/tech-logos/react.svg',
-    glowColor: 'rgba(97, 218, 251, 0.35)',
   },
   {
     id: 'cplusplus',
     name: 'C++',
     svgPath: '/tech-logos/cplusplus.svg',
-    glowColor: 'rgba(0, 89, 156, 0.35)',
   },
   {
     id: 'java',
     name: 'Java',
     svgPath: '/tech-logos/java.svg',
-    glowColor: 'rgba(234, 45, 46, 0.35)',
   },
   {
     id: 'rust',
     name: 'Rust',
     svgPath: '/tech-logos/rust.svg',
-    glowColor: 'rgba(206, 65, 43, 0.35)',
   },
   {
     id: 'php',
     name: 'PHP',
     svgPath: '/tech-logos/php.svg',
-    glowColor: 'rgba(119, 123, 180, 0.35)',
   },
 ];
 
@@ -114,7 +106,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        'relative group cursor-pointer select-none flex flex-col items-center justify-between rounded-2xl border-2 border-retro-border bg-gradient-to-b from-retro-surface via-retro-warm/30 to-retro-surface shadow-retro transition-all duration-300',
+        'relative group cursor-pointer select-none flex flex-col items-center justify-between rounded-2xl border-2 border-ink bg-surface shadow-retro transition-all duration-300',
         'w-full h-64 sm:h-72 md:h-80 overflow-hidden p-6',
         className
       )}
@@ -123,15 +115,12 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
       }}
       title={`Logo 3D ${currentLang.name} - Klik untuk ganti bahasa pemrograman`}
     >
-      {/* Background Retro Grid Texture */}
-      <div className="absolute inset-0 bg-[radial-gradient(#000000_1.2px,transparent_1.2px)] [background-size:12px_12px] opacity-15 pointer-events-none" />
-
-      {/* Ambient Radial Glow yang Berubah Warna Halus Sesuai Bahasa Pemrograman */}
+      {/* Background Pola Titik Abu-Abu (--gray-soft) Netral */}
       <div
-        className="absolute inset-0 transition-all duration-1000 ease-out pointer-events-none blur-xl"
+        className="absolute inset-0 pointer-events-none opacity-60"
         style={{
-          background: `radial-gradient(circle, ${currentLang.glowColor} 0%, rgba(0,0,0,0) 70%)`,
-          opacity: 0.9,
+          backgroundImage: 'radial-gradient(var(--gray-soft) 1.5px, transparent 1.5px)',
+          backgroundSize: '12px 12px',
         }}
       />
 
@@ -142,7 +131,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
           transformStyle: 'preserve-3d',
         }}
       >
-        {/* Kontainer Logo Melayang 3D (Animasi Perspektif Mengambang Halus) */}
+        {/* Kontainer Logo Melayang 3D (Animasi Perspektif Mengambang Halus & Grayscale) */}
         <div
           className={cn(
             'relative w-[150px] h-[150px] sm:w-[170px] sm:h-[170px] flex items-center justify-center transition-transform duration-300 ease-out',
@@ -153,6 +142,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
               ? `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale3d(1.1, 1.1, 1.1)`
               : undefined,
             transformStyle: 'preserve-3d',
+            filter: 'grayscale(1)',
           }}
         >
           {/* Efek Kilau Cahaya 3D Menyapu Logo */}
@@ -160,7 +150,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
             <div className="w-full h-full animate-uir-shine bg-gradient-to-r from-transparent via-white/80 to-transparent" />
           </div>
 
-          {/* Seluruh Logo Resmi Ditumpuk dengan Transisi Silky-Smooth Crossfade 700ms */}
+          {/* Seluruh Logo Resmi Ditumpuk dengan Warna Asli Devicon yang Hidup */}
           {PROGRAMMING_LANGUAGES.map((lang, idx) => {
             const isActive = idx === currentIndex;
             return (
@@ -169,7 +159,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
                 className={cn(
                   'absolute inset-0 flex items-center justify-center pointer-events-none transition-all duration-700',
                   isActive
-                    ? 'opacity-100 scale-100 translate-y-0 rotate-0 filter drop-shadow-[0_16px_24px_rgba(0,0,0,0.32)]'
+                    ? 'opacity-100 scale-100 translate-y-0 rotate-0 filter drop-shadow-[0_16px_24px_rgba(0,0,0,0.25)]'
                     : 'opacity-0 scale-90 translate-y-4 pointer-events-none'
                 )}
                 style={{
@@ -183,7 +173,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
                     src={lang.svgPath}
                     alt={`Logo Resmi ${lang.name}`}
                     fill
-                    className="object-contain filter contrast-105 drop-shadow-[0_2px_4px_rgba(255,255,255,0.6)]"
+                    className="object-contain filter contrast-105 drop-shadow-[0_4px_12px_rgba(0,0,0,0.18)]"
                     priority={idx === 0}
                     sizes="(max-width: 640px) 150px, 170px"
                   />
@@ -196,7 +186,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
         {/* Bayangan Lantai 3D Dinamis */}
         <div
           className={cn(
-            'absolute bottom-1 w-[130px] sm:w-[155px] h-[16px] rounded-full bg-black/45 blur-[4px] pointer-events-none transition-all',
+            'absolute bottom-1 w-[130px] sm:w-[155px] h-[16px] rounded-full bg-ink/45 blur-[4px] pointer-events-none transition-all',
             !isHovered && 'animate-uir-perspective-shadow'
           )}
           style={{
@@ -207,9 +197,9 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
         />
       </div>
 
-      {/* Pill Indikator Nama Bahasa Pemrograman (Murni Nama, Tanpa Bulatan Warna) */}
-      <div className="relative z-20 flex items-center px-4 py-1.5 rounded-full border-2 border-retro-border bg-retro-surface shadow-retro mt-2">
-        <span className="font-mono text-xs font-black uppercase tracking-wider text-foreground">
+      {/* Pill Indikator Nama Bahasa Pemrograman (Monokrom Neo-Brutalism) */}
+      <div className="relative z-20 flex items-center px-4 py-1.5 rounded-full border-2 border-ink bg-gray-soft shadow-retro mt-2">
+        <span className="font-sans text-xs font-bold uppercase tracking-wider text-ink">
           {currentLang.name}
         </span>
       </div>

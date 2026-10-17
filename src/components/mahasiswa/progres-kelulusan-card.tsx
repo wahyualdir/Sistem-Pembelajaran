@@ -79,7 +79,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
           <div className="p-3 rounded-[8px] bg-muted/30 border border-border/60 space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="font-medium text-foreground flex items-center gap-1.5">
-                <Layers className="h-3.5 w-3.5 text-info" />
+                <Layers className="h-3.5 w-3.5 text-gray-dark" />
                 Mata Kuliah Pilihan
               </span>
               <span className="font-bold text-foreground font-heading tabular-nums">
@@ -88,7 +88,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
             </div>
             <div className="w-full bg-border rounded-full h-2 overflow-hidden">
               <div
-                className="bg-info h-2 rounded-full transition-all duration-500 ease-out"
+                className="bg-gray-dark h-2 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${progres.persenPilihan}%` }}
               />
             </div>
@@ -118,7 +118,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
           <div className="flex items-center gap-1.5">
             <CheckCircle2
               className={`h-4 w-4 ${
-                progres.statusKelayakanSkripsi ? "text-success" : "text-muted-foreground"
+                progres.statusKelayakanSkripsi ? "text-ink" : "text-muted-foreground"
               }`}
             />
             <span className="text-xs font-medium text-foreground">

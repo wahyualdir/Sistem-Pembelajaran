@@ -72,12 +72,13 @@ export async function loginWithCredentials(
     }
   }
 
-  // Fallback untuk kata sandi default seed hanya pada lingkungan pengembangan jika flag aktif
+  // Fallback untuk kata sandi demo hanya pada lingkungan pengembangan jika flag aktif dan DEMO_PASSWORD disetel
+  const demoPassword = process.env.DEMO_PASSWORD;
   if (
     !isPasswordValid &&
     process.env.NODE_ENV !== "production" &&
     process.env.NEXT_PUBLIC_ENABLE_DEMO_LOGIN === "true" &&
-    (password === "password123" || (email.toLowerCase() === "wahyualdiriyanto80@gmail.com" && password === "Wahyu11"))
+    Boolean(demoPassword && password === demoPassword)
   ) {
     isPasswordValid = true;
   }

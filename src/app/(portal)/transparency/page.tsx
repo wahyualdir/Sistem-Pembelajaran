@@ -22,7 +22,7 @@ export default function TransparencyPage() {
       <RetroWindow
         title="transparansi_data_dan_privasi.doc"
         badge="PRIVASI & AUDIT AKADEMIK"
-        headerClassName="bg-retro-warm"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-6 bg-retro-surface"
       >
         <div className="space-y-3">
@@ -31,7 +31,7 @@ export default function TransparencyPage() {
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <h1 className="font-heading font-black text-2xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
                 Transparansi Data & Kebijakan Pemantauan SIAJAR
               </h1>
               <p className="text-xs text-muted-foreground mt-0.5">
@@ -46,7 +46,7 @@ export default function TransparencyPage() {
       <div className="grid gap-6 md:grid-cols-3">
         <div className="rounded-[3px] border-2 border-black bg-surface p-5 space-y-3 shadow-retro">
           <div className="flex items-center gap-2">
-            <ShieldAlert className="h-5 w-5 text-warning" />
+            <ShieldAlert className="h-5 w-5 text-ink" />
             <h3 className="font-bold text-sm text-foreground">Pemantauan Ujian (Proctoring)</h3>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
@@ -104,7 +104,7 @@ export default function TransparencyPage() {
 
       {/* 3. RETENSI DAN HAK PENGGUNA */}
       <div className="rounded-[3px] border-2 border-black bg-surface p-6 space-y-4 shadow-retro">
-        <h3 className="font-heading font-black text-lg text-foreground flex items-center gap-2">
+        <h3 className="font-heading font-bold text-lg text-foreground flex items-center gap-2">
           <Clock className="h-5 w-5 text-primary" /> Kebijakan Retensi Data & Hak Mahasiswa
         </h3>
 

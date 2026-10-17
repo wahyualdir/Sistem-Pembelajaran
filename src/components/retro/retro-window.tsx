@@ -38,24 +38,24 @@ export function RetroWindow({
       {/* Window Header Bar with Retro Mac Circles */}
       <div
         className={cn(
-          'flex h-11 sm:h-12 items-center justify-between border-b-2 border-black bg-retro-warm px-3 sm:px-4',
+          'flex h-11 sm:h-12 items-center justify-between border-b-2 border-black bg-gray-soft px-3 sm:px-4',
           headerClassName
         )}
       >
         <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-          {/* Mac Traffic Light Buttons (Merah, Kuning, Hijau) */}
+          {/* Retro Window Dot Controls (Merah Kampus, Abu-abu, Abu Gelap) */}
           <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-traffic-red inline-block shadow-retro-sm" />
-            <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-traffic-yellow inline-block shadow-retro-sm" />
-            <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-traffic-green inline-block shadow-retro-sm" />
+            <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-ink bg-primary inline-block shadow-retro-sm" />
+            <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-ink bg-gray inline-block shadow-retro-sm" />
+            <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-ink bg-gray-dark inline-block shadow-retro-sm" />
           </div>
 
           <div className="ml-1 sm:ml-2 flex items-center gap-2 min-w-0">
-            <span className="text-sm sm:text-base font-black text-black tracking-tight font-heading truncate">
+            <span className="text-sm sm:text-base font-bold text-black tracking-tight font-heading truncate">
               {title}
             </span>
             {displayBadge && (
-              <span className="rounded-sm border border-black bg-retro-surface px-2 py-0.5 text-xs font-black font-mono text-black shadow-retro-sm shrink-0">
+              <span className="rounded-sm border border-black bg-retro-surface px-2 py-0.5 text-xs font-bold font-sans text-black shadow-retro-sm shrink-0">
                 {displayBadge}
               </span>
             )}

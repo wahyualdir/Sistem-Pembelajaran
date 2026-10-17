@@ -1,15 +1,15 @@
 export type JenisNotifikasi =
-  | "TUGAS_TENGGAT"
-  | "KEHADIRAN"
-  | "KRS"
-  | "UKT"
-  | "NILAI"
-  | "JADWAL"
-  | "KEAMANAN"
-  | "BRIEFING"
-  | "PENGUMUMAN";
+  | 'TUGAS_TENGGAT'
+  | 'KEHADIRAN'
+  | 'KRS'
+  | 'UKT'
+  | 'NILAI'
+  | 'JADWAL'
+  | 'KEAMANAN'
+  | 'BRIEFING'
+  | 'PENGUMUMAN';
 
-export type TingkatNotifikasi = "INFO" | "PENTING" | "MENDESAK";
+export type TingkatNotifikasi = 'INFO' | 'PENTING' | 'MENDESAK';
 
 export interface NotifikasiItem {
   id: string;
@@ -47,10 +47,10 @@ export const DEFAULT_JENIS_AKTIF: JenisAktifMap = {
 
 export interface PreferensiNotifikasiItem {
   penggunaId: string;
-  jamTenangMulai: string | null; // Contoh: "22:00"
-  jamTenangSelesai: string | null; // Contoh: "06:00"
+  jamTenangMulai: string | null;
+  jamTenangSelesai: string | null;
   jenisAktif: JenisAktifMap;
-  emailCadangan: string | null;
+  emailCadangan?: string | null;
 }
 
 export interface BuatNotifikasiInput {

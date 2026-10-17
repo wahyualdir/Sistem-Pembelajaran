@@ -94,7 +94,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
       <RetroWindow
         title="data_master_akademik_universitas.app"
         badge="Biro Administrasi Akademik (BAA)"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -103,7 +103,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <Compass className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Data Master Akademik
               </h1>
             </div>
@@ -113,7 +113,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               T.A. 2026/2027 Ganjil
             </span>
           </div>
@@ -123,24 +123,24 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Program Studi</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">4 Prodi</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Program Studi</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">4 Prodi</div>
           <span className="text-xs text-black/70">Fakultas Terpadu</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Mata Kuliah Aktif</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">5 Mata Kuliah</div>
-          <span className="text-xs text-emerald-800 font-bold">Terverifikasi BAA</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Mata Kuliah Aktif</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">5 Mata Kuliah</div>
+          <span className="text-xs text-ink font-bold">Terverifikasi BAA</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Tahun Ajaran Aktif</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">2026/2027</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Tahun Ajaran Aktif</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">2026/2027</div>
           <span className="text-xs text-primary font-bold">Semester Ganjil</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Ruang & Lab Geofence</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">4 Titik GPS</div>
-          <span className="text-xs text-emerald-800 font-bold">100% Terkalibrasi</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Ruang & Lab Geofence</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">4 Titik GPS</div>
+          <span className="text-xs text-ink font-bold">100% Terkalibrasi</span>
         </div>
       </div>
 
@@ -155,10 +155,10 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -172,9 +172,9 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
       {/* TAB 1: PROGRAM STUDI */}
       {activeTab === 'program-studi' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Compass className="h-5 w-5 text-primary" />
                 <span>Direktori Program Studi & Pimpinan Akademik</span>
               </h2>
@@ -187,7 +187,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
               disabled={!isDemo}
               title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-bold shadow-xs transition-all shrink-0',
                 isDemo
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -195,14 +195,14 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Program Studi</span>
-              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Kode & Program Studi</th>
                     <th className="p-3.5 sm:p-4">Jenjang</th>
@@ -215,26 +215,26 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {programs.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada data program studi tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     programs.map((p) => (
-                      <tr key={p.code} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={p.code} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{p.name}</div>
-                          <span className="text-xs font-mono text-black/60">{p.code}</span>
+                          <span className="text-xs font-sans text-black/60">{p.code}</span>
                         </td>
-                        <td className="p-3.5 sm:p-4 font-mono font-bold">{p.degree}</td>
+                        <td className="p-3.5 sm:p-4 font-sans font-bold">{p.degree}</td>
                         <td className="p-3.5 sm:p-4 text-black/80">{p.faculty}</td>
                         <td className="p-3.5 sm:p-4 font-semibold text-black">{p.coordinator}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-black bg-retro-warm font-mono font-bold text-xs">
+                          <span className="px-2.5 py-0.5 rounded border border-black bg-gray-soft font-sans font-bold text-xs">
                             {p.accreditation}
                           </span>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{p.activeStudents} Mhs</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{p.activeStudents} Mhs</td>
                       </tr>
                     ))
                   )}
@@ -248,9 +248,9 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
       {/* TAB 2: MATA KULIAH */}
       {activeTab === 'mata-kuliah' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-primary" />
                 <span>Katalog Mata Kuliah & Validasi Usulan Prodi</span>
               </h2>
@@ -259,7 +259,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+              <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
                 Alur: Usulan Prodi &rarr; Validasi Staf BAA &rarr; Terbit
               </span>
             </div>
@@ -268,7 +268,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Kode & Mata Kuliah</th>
                     <th className="p-3.5 sm:p-4 text-center">Bobot SKS</th>
@@ -282,28 +282,28 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {courses.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={7} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada data mata kuliah tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     courses.map((c) => (
-                    <tr key={c.code} className="hover:bg-retro-warm/30 transition-colors">
+                    <tr key={c.code} className="hover:bg-gray-soft/30 transition-colors">
                       <td className="p-3.5 sm:p-4 font-bold text-black">
                         <div>{c.name}</div>
-                        <span className="text-xs font-mono text-black/60">{c.code}</span>
+                        <span className="text-xs font-sans text-black/60">{c.code}</span>
                       </td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{c.sks} SKS</td>
+                      <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{c.sks} SKS</td>
                       <td className="p-3.5 sm:p-4 text-black/80">{c.type}</td>
                       <td className="p-3.5 sm:p-4 font-semibold text-black">{c.prodi}</td>
-                      <td className="p-3.5 sm:p-4 text-center font-mono">Semester {c.semester}</td>
+                      <td className="p-3.5 sm:p-4 text-center font-sans">Semester {c.semester}</td>
                       <td className="p-3.5 sm:p-4 text-center">
                         <span
                           className={cn(
-                            'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
+                            'px-2.5 py-0.5 rounded border text-xs font-sans font-bold',
                             c.status === 'VALIDATED'
-                              ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                              : 'border-amber-500 bg-amber-100 text-amber-950'
+                              ? 'border-ink bg-surface text-ink'
+                              : 'border-ink bg-gray-soft text-ink'
                           )}
                         >
                           {c.status === 'VALIDATED' ? 'TERVALIDASI BAA' : 'USULAN PRODI (MENUNGGU)'}
@@ -311,7 +311,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                       </td>
                       <td className="p-3.5 sm:p-4 text-center">
                         {c.status === 'VALIDATED' ? (
-                          <span className="text-xs font-mono font-bold text-emerald-700">✓ Aktif</span>
+                          <span className="text-xs font-sans font-bold text-ink">✓ Aktif</span>
                         ) : (
                           <button
                             type="button"
@@ -325,7 +325,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                             )}
                           >
                             <span>Validasi MK</span>
-                            {!isDemo && <span className="ml-1 text-xs font-mono">(Belum Aktif)</span>}
+                            {!isDemo && <span className="ml-1 text-xs font-sans">(Belum Aktif)</span>}
                           </button>
                         )}
                       </td>
@@ -342,9 +342,9 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
       {/* TAB 3: TAHUN AJARAN */}
       {activeTab === 'tahun-ajaran' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-primary" />
                 <span>Periode Tahun Ajaran & Batas Administrasi Nilai</span>
               </h2>
@@ -357,7 +357,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
               disabled={!isDemo}
               title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-bold shadow-xs transition-all shrink-0',
                 isDemo
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -365,14 +365,14 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             >
               <Plus className="h-4 w-4" />
               <span>Buka Semester Baru</span>
-              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Kode & Tahun Ajaran</th>
                     <th className="p-3.5 sm:p-4">Rentang Waktu Semester</th>
@@ -384,26 +384,26 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {academicYears.length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={5} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada periode tahun ajaran tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     academicYears.map((y) => (
-                      <tr key={y.code} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={y.code} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{y.name}</div>
-                          <span className="text-xs font-mono text-black/60">{y.code}</span>
+                          <span className="text-xs font-sans text-black/60">{y.code}</span>
                         </td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs">{y.startDate} - {y.endDate}</td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs text-primary font-bold">{y.krsLock}</td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs font-bold">{y.gradeLock}</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs">{y.startDate} - {y.endDate}</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs text-primary font-bold">{y.krsLock}</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs font-bold">{y.gradeLock}</td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-sans font-bold',
                               y.isCurrent
-                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                                ? 'border-ink bg-surface text-ink'
                                 : 'border-neutral-400 bg-neutral-100 text-neutral-800'
                             )}
                           >
@@ -423,9 +423,9 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
       {/* TAB 4: RUANG & TITIK LOKASI */}
       {activeTab === 'ruang-dan-titik-lokasi' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <MapPin className="h-5 w-5 text-primary" />
                 <span>Master Ruang Kuliah & Geofence GPS Presensi</span>
               </h2>
@@ -438,7 +438,7 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
               disabled={!isDemo}
               title={!isDemo ? 'Fitur ini belum aktif' : undefined}
               className={cn(
-                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-black shadow-xs transition-all shrink-0',
+                'inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black text-xs font-bold shadow-xs transition-all shrink-0',
                 isDemo
                   ? 'bg-white text-black hover:bg-neutral-100 cursor-pointer'
                   : 'bg-neutral-200 text-neutral-500 border-neutral-400 cursor-not-allowed'
@@ -446,14 +446,14 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
             >
               <Plus className="h-4 w-4" />
               <span>Tambah Titik Ruang</span>
-              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-mono text-neutral-600">(Belum Aktif)</span>}
+              {!isDemo && <span className="text-xs bg-neutral-200 px-1.5 py-0.2 rounded font-sans text-neutral-600">(Belum Aktif)</span>}
             </button>
           </div>
 
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Kode & Ruang</th>
                     <th className="p-3.5 sm:p-4">Gedung & Lokasi</th>
@@ -466,26 +466,26 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
                 <tbody className="divide-y-2 divide-black/10 font-medium">
                   {rooms.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada data ruang dan titik geofence tersimpan di pangkalan data produksi.
                       </td>
                     </tr>
                   ) : (
                     rooms.map((r) => (
-                      <tr key={r.code} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={r.code} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{r.name}</div>
-                          <span className="text-xs font-mono text-black/60">{r.code}</span>
+                          <span className="text-xs font-sans text-black/60">{r.code}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">
                           <div>{r.building}</div>
                           <span className="text-xs text-black/60">{r.floor}</span>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{r.capacity} Kursi</td>
-                        <td className="p-3.5 sm:p-4 font-mono text-xs">{r.lat.toFixed(6)}, {r.lng.toFixed(6)}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{r.radius} Meter</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{r.capacity} Kursi</td>
+                        <td className="p-3.5 sm:p-4 font-sans text-xs">{r.lat.toFixed(6)}, {r.lng.toFixed(6)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{r.radius} Meter</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink font-sans text-xs font-bold">
                             TERKALIBRASI AKTIF
                           </span>
                         </td>

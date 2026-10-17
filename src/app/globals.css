@@ -1,29 +1,21 @@
-@import "./fonts-sf-pro.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-sans: 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", var(--font-inter), "Inter", "Segoe UI", system-ui, sans-serif;
 
-  /* Dasar (tetap gaya sekarang) */
-  --bg: #F4EFE3;          /* krem */
+  /* Dasar Identitas Kampus (HANYA merah, abu-abu, putih, dan hitam netral) */
+  --bg: #F3F3F4;
   --surface: #FFFFFF;
-  --ink: #111111;         /* teks, border, bayangan */
+  --ink: #111111;
 
   /* Identitas kampus */
-  --primary: #ED1C24;     /* tombol, ikon aktif, link */
-  --primary-dark: #A91117;/* hover, pressed, teks merah di atas putih */
-  --gray: #808285;        /* teks sekunder, border tipis */
-  --gray-dark: #58595B;   /* label, ikon nonaktif */
-  --gray-soft: #E6E3DA;   /* chip, background kartu sekunder */
-
-  /* Status */
-  --success: #2FD38A;     /* Aktif Berjalan, hadir */
-  --warning: #FFC53D;     /* Sedang Dipelajari, segera */
-  --urgent:  #FF7A1A;     /* Mendesak */
-  --info:    #5B8DEF;     /* info, pengumuman */
+  --primary: #ED1C24;
+  --primary-dark: #A91117;
+  --gray: #808285;
+  --gray-dark: #58595B;
+  --gray-soft: #E2E3E4;
   --shadow: 4px 4px 0 var(--ink);
 
   /* Pemetaan Dasar ke Token Sistem */
@@ -40,29 +32,17 @@
 
   /* Aksen Utama */
   --primary-hover: var(--primary-dark);
-  --primary-soft: #FDE8E9;
+  --primary-soft: var(--gray-soft);
   --primary-foreground: #FFFFFF;
   --ring: rgb(237 28 36 / 0.4);
   --panel: var(--ink);
   --panel-accent: var(--primary);
 
-  /* Status Berkontras Jelas */
-  --status-success: var(--success);
-  --status-success-soft: #E6FBF2;
-  --status-success-border: var(--ink);
-  --status-success-foreground: var(--ink);
-  --status-warning: var(--warning);
-  --status-warning-soft: #FFF9E6;
-  --status-warning-border: var(--ink);
-  --status-warning-foreground: var(--ink);
+  /* Status Berkontras Jelas Berbasis Logo Kampus */
   --status-danger: var(--primary-dark);
-  --status-danger-soft: #FDE8E9;
+  --status-danger-soft: var(--gray-soft);
   --status-danger-border: var(--ink);
   --status-danger-foreground: #FFFFFF;
-  --status-info: var(--info);
-  --status-info-soft: #EEF4FD;
-  --status-info-border: var(--ink);
-  --status-info-foreground: #FFFFFF;
 
   /* Bentuk: Sudut tajam / retro 2px, bayangan balok hitam pekat */
   --radius-sm: 0px;
@@ -76,22 +56,15 @@
   --retro-bg: var(--bg);
   --retro-surface: var(--surface);
   --retro-warm: var(--gray-soft);
-  --retro-yellow: var(--warning);
-  --retro-orange: var(--primary);
   --retro-border: var(--ink);
-  --retro-purple: #D4BBFF;
-  --retro-mint: var(--success);
-  --retro-pink: #FF85C0;
-  --retro-blue: var(--info);
-  --retro-dither: #DCD8CE;
-  --retro-video-bg: #DFE5EF;
+  --retro-dither: var(--gray-soft);
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Layout Dimension Tokens (Rem-based Responsive Scaling) */
   --layout-sidebar-width: 15rem;
   --layout-rail-width: 4.5rem;
-  --layout-right-panel-width: 20rem;
+  --layout-right-panel-width: clamp(280px, 24vw, 340px);
   --layout-header-height: 4.5rem;
   --layout-header-height-mobile: 3.5rem;
 
@@ -100,19 +73,6 @@
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
-
-  /* Retro Window & Traffic Lights */
-  --retro-traffic-red: #FF5F56;
-  --retro-traffic-yellow: #FFBD2E;
-  --retro-traffic-green: #27C93F;
-
-  /* Card Pastel Backgrounds */
-  --card-peach: #FFE4D6;
-  --card-mint: #D8F3DC;
-  --card-sky: #E0F4FF;
-  --card-lavender: #F3E8FF;
-  --card-lemon: #FEF08A;
-  --card-rose: #FFD6E0;
 }
 
 /* Kepadatan Vertikal Khusus Viewport Tinggi < 720px (Baseline ~650px) */
@@ -139,56 +99,30 @@
 }
 
 .dark {
-  --bg-main: #0C0C0C;
-  --bg-surface: #141414;
-  --bg-surface-raised: #1E1E1E;
+  --bg-main: #111111;
+  --bg-surface: #111111;
+  --bg-surface-raised: #58595B;
   --border-main: #FFFFFF;
   --border-strong: #FFFFFF;
   --text-primary: #FFFFFF;
-  --text-secondary: #F3F4F6;
-  --text-subtle: #E5E7EB;
-  --primary: #FFFFFF;
-  --primary-hover: #E5E5E5;
-  --primary-soft: #252525;
-  --primary-foreground: #000000;
-  --ring: rgb(255 255 255 / 0.5);
-  --panel: #1A1A1A;
+  --text-secondary: #E2E3E4;
+  --text-subtle: #808285;
+  --primary: #ED1C24;
+  --primary-hover: #A91117;
+  --primary-soft: #58595B;
+  --primary-foreground: #FFFFFF;
+  --ring: rgb(237 28 36 / 0.5);
+  --panel: #111111;
 
-  --retro-bg: #0C0C0C;
-  --retro-surface: #141414;
-  --retro-warm: #1F1F1F;
-  --retro-yellow: #FACC15;
-  --retro-orange: #FB923C;
+  --retro-bg: #111111;
+  --retro-surface: #111111;
+  --retro-warm: #58595B;
   --retro-border: #FFFFFF;
-  --retro-purple: #C084FC;
-  --retro-mint: #4ADE80;
-  --retro-pink: #F472B6;
-  --retro-blue: #60A5FA;
-  --retro-dither: #262626;
+  --retro-dither: #58595B;
 
-  --retro-traffic-red: #FF5F56;
-  --retro-traffic-yellow: #FFBD2E;
-  --retro-traffic-green: #27C93F;
-
-  --card-peach: #FFE4D6;
-  --card-mint: #D8F3DC;
-  --card-sky: #E0F4FF;
-  --card-lavender: #F3E8FF;
-  --card-lemon: #FEF08A;
-  --card-rose: #FFD6E0;
-
-  --status-success: #4ADE80;
-  --status-success-soft: #064E3B;
-  --status-success-border: #FFFFFF;
-  --status-warning: #FBBF24;
-  --status-warning-soft: #78350F;
-  --status-warning-border: #FFFFFF;
-  --status-danger: #F87171;
-  --status-danger-soft: #7F1D1D;
+  --status-danger: #ED1C24;
+  --status-danger-soft: #58595B;
   --status-danger-border: #FFFFFF;
-  --status-info: #38BDF8;
-  --status-info-soft: #0C4A6E;
-  --status-info-border: #FFFFFF;
   --shadow-md: 3px 3px 0px #FFFFFF;
 }
 
@@ -222,31 +156,71 @@
 
   body {
     font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-kerning: normal;
+    font-synthesis: none;
+    letter-spacing: -0.01em;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     background-color: var(--bg-main);
     color: var(--text-primary);
     font-size: 0.9375rem;
     line-height: 1.5;
-    letter-spacing: -0.01em;
     min-height: 100dvh;
     overflow-x: hidden;
-    font-weight: 600;
+    font-weight: 500;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1 {
     font-family: var(--font-sans);
-    font-weight: 800;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+  h2 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+  h3 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--text-primary);
+    text-wrap: balance;
+  }
+  h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.01em;
     color: var(--text-primary);
     text-wrap: balance;
   }
   p {
-    font-weight: 600;
+    font-weight: 500;
+  }
+  .uppercase, [class*="uppercase"] {
+    letter-spacing: 0.04em;
   }
   code, pre, kbd, samp {
     font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    font-weight: 600;
+    font-weight: 500;
   }
   input, textarea, select, button {
     font-family: inherit;
-    font-weight: 600;
+    font-optical-sizing: inherit;
+    font-kerning: inherit;
+    font-synthesis: inherit;
+    letter-spacing: inherit;
+  }
+  .tabular-nums,
+  [data-tabular-nums],
+  table td,
+  th {
+    font-variant-numeric: tabular-nums;
   }
 }
 
@@ -377,7 +351,7 @@
     box-shadow: 3px 3px 0px 0px #000000;
     transition: border-color 0.15s, box-shadow 0.2s;
   }
-  .field::placeholder { color: #555555; font-size: 0.875rem; font-weight: 500; }
+  .field::placeholder { color: #58595B; font-size: 0.875rem; font-weight: 500; }
   .field:focus-visible { outline: none; border-color: #000000; box-shadow: 4px 4px 0px 0px #000000; }
   .field:disabled { opacity: 0.6; cursor: not-allowed; }
 
@@ -508,14 +482,95 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
   align-items: center;
   justify-content: space-between;
 }
-/* Halftone Dither Pattern (seperti bagian Projects pada desain Mac asli) */
+/* Halftone Dither Pattern */
 .bg-retro-dither {
-  background-color: #E2E2E2;
+  background-color: #E2E3E4;
   background-image: radial-gradient(#000000 1.15px, transparent 1.15px);
   background-size: 4px 4px;
 }
 .bg-retro-grid {
   background-size: 20px 20px;
-  background-image: linear-gradient(to right, #00000014 1px, transparent 1px),
-                    linear-gradient(to bottom, #00000014 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
 }
+
+/* ========================================================= */
+/* KARTU STATISTIK PANEL KANAN (RESPONSIF CONTAINER QUERY)   */
+/* ========================================================= */
+.right-panel-stats-card {
+  container-type: inline-size;
+  container-name: stats;
+}
+
+@container stats (min-width: 300px) {
+  .stats-responsive-layout {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.375rem;
+    text-align: center;
+  }
+  .stats-responsive-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.25rem 0.25rem;
+    border-right: 1px solid rgba(17, 17, 17, 0.1);
+    min-width: 0;
+  }
+  .stats-responsive-item:last-child {
+    border-right: none;
+  }
+  .stats-responsive-item .stats-right-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
+  }
+}
+
+@container stats (max-width: 299px) {
+  .stats-responsive-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .stats-responsive-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.625rem;
+    border-bottom: 1px solid rgba(17, 17, 17, 0.1);
+    border-right: none;
+    text-align: left;
+    width: 100%;
+  }
+  .stats-responsive-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .stats-responsive-item .stats-right-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: right;
+  }
+}
+
+/* ========================================================= */
+/* TOMBOL AI MENGAMBANG: IKON SAJA PADA TINGGI < 700PX ATAU  */
+/* LEBAR < 1280PX                                            */
+/* ========================================================= */
+@media (max-width: 1279px), (max-height: 699px) {
+  .ai-assistant-btn-text {
+    display: none !important;
+  }
+  .ai-assistant-btn {
+    padding: 0.75rem !important;
+    gap: 0 !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
+}
+

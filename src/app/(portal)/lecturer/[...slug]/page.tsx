@@ -15,6 +15,8 @@ import {
   FolderArchive,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { getMentoringRiskListAction } from '@/modules/early-warning/actions';
+import { MentoringRiskView } from '@/modules/early-warning/mentoring-risk-view';
 
 interface PageProps {
   params: {
@@ -29,7 +31,7 @@ const LECTURER_CLASSES = [
     title: 'Pemrograman Web Lanjut (Kelas A)',
     sks: 3,
     studentsCount: 36,
-    assistant: 'Budi Santoso',
+    assistant: 'Citra Asisten',
     schedule: 'Senin, 08:00 - 10:30 WIB · Lab Cloud',
     pendingGrading: 4,
     materialsCount: 8,
@@ -61,7 +63,7 @@ const LECTURER_CLASSES = [
   },
 ];
 
-export default function LecturerSubpage({ params }: PageProps) {
+export default async function LecturerSubpage({ params }: PageProps) {
   const subroute = params.slug?.[0] || 'materials';
 
   const titles: Record<string, { title: string; subtitle: string; icon: any; desc: string }> = {
@@ -97,9 +99,9 @@ export default function LecturerSubpage({ params }: PageProps) {
     },
     mentoring: {
       title: 'Mahasiswa Bimbingan Akademik (Dosen Wali)',
-      subtitle: 'Konsultasi Studi & Rencana Perkuliahan',
+      subtitle: 'Konsultasi Studi, Kehadiran & Status Risiko',
       icon: Users,
-      desc: 'Monitoring progres akademik, evaluasi indeks prestasi, dan konsultasi rencana studi mahasiswa bimbingan.',
+      desc: 'Monitoring progres akademik, evaluasi kehadiran, tugas tertunda, dan konsultasi rencana studi mahasiswa bimbingan.',
     },
   };
 
@@ -111,21 +113,53 @@ export default function LecturerSubpage({ params }: PageProps) {
   };
   const Icon = current.icon;
 
+  if (subroute === 'mentoring') {
+    const advisees = await getMentoringRiskListAction();
+
+    return (
+      <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
+        <RetroWindow
+          title={current.title}
+          badge="DOSEN WALI :: MENTORING"
+          headerClassName="bg-gray-soft"
+          bodyClassName="p-6 sm:p-8 space-y-2 bg-surface"
+        >
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-ink flex items-center gap-3">
+                <Icon className="h-7 w-7 text-primary" />
+                <span>{current.title}</span>
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-dark font-medium max-w-3xl leading-relaxed">
+                {current.desc}
+              </p>
+            </div>
+          </div>
+        </RetroWindow>
+
+        <MentoringRiskView advisees={advisees} />
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
       <RetroWindow
         title={current.title}
-        headerBadge="Mode Dosen"
-        headerBadgeVariant="warning"
+        badge="MODE DOSEN"
+        headerClassName="bg-gray-soft"
+        bodyClassName="p-6 sm:p-8 space-y-2 bg-surface"
       >
-        <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-foreground flex items-center gap-3">
-            <Icon className="h-7 w-7 text-primary" />
-            <span>{current.title}</span>
-          </h1>
-          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
-            {current.desc}
-          </p>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-ink flex items-center gap-3">
+              <Icon className="h-7 w-7 text-primary" />
+              <span>{current.title}</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-medium max-w-3xl leading-relaxed">
+              {current.desc}
+            </p>
+          </div>
         </div>
       </RetroWindow>
 
@@ -133,12 +167,12 @@ export default function LecturerSubpage({ params }: PageProps) {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 className="font-heading font-black text-xl text-foreground">Daftar Kelas Perkuliahan Diampu</h2>
-            <p className="text-xs text-black font-bold">Pilih kelas kuliah untuk mengelola {current.title.toLowerCase()}.</p>
+            <h2 className="font-heading font-bold text-xl text-ink">Daftar Kelas Perkuliahan Diampu</h2>
+            <p className="text-xs text-gray-dark font-bold">Pilih kelas kuliah untuk mengelola {current.title.toLowerCase()}.</p>
           </div>
           <Link
             href="/classes"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-black text-xs shadow-retro hover:bg-neutral-800 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-ink text-white font-bold text-xs shadow-retro hover:bg-gray-dark transition-all"
           >
             <span>Buka Hub Kelas &rarr;</span>
           </Link>
@@ -148,34 +182,34 @@ export default function LecturerSubpage({ params }: PageProps) {
           {LECTURER_CLASSES.map((cls) => (
             <div
               key={cls.id}
-              className="rounded-xl border-2 border-black bg-white p-6 shadow-retro flex flex-col justify-between space-y-5 hover:-translate-y-0.5 transition-transform"
+              className="rounded-xl border-2 border-black bg-surface p-6 shadow-retro flex flex-col justify-between space-y-5 hover:-translate-y-0.5 transition-transform"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded border border-black bg-retro-warm">
+                  <span className="font-sans text-xs font-bold px-2.5 py-1 rounded border border-black bg-gray-soft text-ink">
                     {cls.code}
                   </span>
-                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-400">
+                  <span className="text-xs font-sans font-bold px-2 py-0.5 rounded bg-surface text-ink border border-ink">
                     {cls.status}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-heading font-black text-lg text-foreground leading-snug">
+                  <h3 className="font-heading font-bold text-lg text-ink leading-snug">
                     {cls.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Asisten Dosen: <strong className="text-foreground">{cls.assistant}</strong>
+                  <p className="text-xs text-gray-dark mt-1 font-sans">
+                    Asisten Dosen: <strong className="text-ink">{cls.assistant}</strong>
                   </p>
                 </div>
 
-                <div className="space-y-1.5 pt-2 border-t border-neutral-100 text-xs font-mono">
-                  <p className="text-muted-foreground flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-neutral-500" />
+                <div className="space-y-1.5 pt-2 border-t border-black/10 text-xs font-sans">
+                  <p className="text-gray-dark flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5 text-gray-dark" />
                     <span>{cls.schedule}</span>
                   </p>
-                  <p className="text-muted-foreground flex items-center gap-1.5">
-                    <Users className="h-3.5 w-3.5 text-neutral-500" />
+                  <p className="text-gray-dark flex items-center gap-1.5">
+                    <Users className="h-3.5 w-3.5 text-gray-dark" />
                     <span>{cls.studentsCount} Mahasiswa Terdaftar</span>
                   </p>
                 </div>
@@ -183,18 +217,18 @@ export default function LecturerSubpage({ params }: PageProps) {
 
               <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
                 {cls.pendingGrading > 0 ? (
-                  <span className="text-xs font-mono font-bold text-amber-800 bg-amber-50 px-2.5 py-1 rounded border border-amber-300">
+                  <span className="text-xs font-sans font-bold text-ink bg-gray-soft px-2.5 py-1 rounded border border-ink">
                     {cls.pendingGrading} Tugas Perlu Nilai
                   </span>
                 ) : (
-                  <span className="text-xs font-mono font-bold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-300">
+                  <span className="text-xs font-sans font-bold text-ink bg-surface px-2.5 py-1 rounded border border-ink">
                     Nilai Lengkap
                   </span>
                 )}
 
                 <Link
                   href="/classes"
-                  className="inline-flex items-center gap-1 px-3.5 py-2 rounded-lg border-2 border-black bg-black text-white font-bold text-xs shadow-xs hover:bg-neutral-800 transition-all"
+                  className="inline-flex items-center gap-1 px-3.5 py-2 rounded-lg border-2 border-black bg-ink text-white font-bold text-xs shadow-xs hover:bg-gray-dark transition-all"
                 >
                   <span>Kelola</span>
                   <ArrowRight className="h-3.5 w-3.5" />

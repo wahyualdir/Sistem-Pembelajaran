@@ -113,7 +113,7 @@ export function StaffGradesHubView({
       <RetroWindow
         title="rekapitulasi_nilai_dan_presensi_kampus.app"
         badge="Biro Evaluasi & Transkrip Akademik"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
@@ -122,7 +122,7 @@ export function StaffGradesHubView({
               <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
                 <CheckSquare className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
                 Nilai & Presensi Institusi
               </h1>
             </div>
@@ -132,7 +132,7 @@ export function StaffGradesHubView({
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-mono font-black text-black shadow-retro">
+            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               {pendingExecutions.length} Menunggu Eksekusi Staf
             </span>
           </div>
@@ -142,26 +142,26 @@ export function StaffGradesHubView({
       {/* 2. STATS PILLS */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Tingkat Kelulusan MK</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">96.4%</div>
-          <span className="text-xs text-emerald-800 font-bold">Seluruh Fakultas</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Tingkat Kelulusan MK</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">96.4%</div>
+          <span className="text-xs text-ink font-bold">Seluruh Fakultas</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Rata-rata Kehadiran</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">91.8%</div>
-          <span className="text-xs text-emerald-800 font-bold">Memenuhi Syarat Ujian</span>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Rata-rata Kehadiran</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">91.8%</div>
+          <span className="text-xs text-ink font-bold">Memenuhi Syarat Ujian</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Menunggu Eksekusi Staf</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-primary">{pendingExecutions.length} Berkas</div>
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Menunggu Eksekusi Staf</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-primary">{pendingExecutions.length} Berkas</div>
           <span className="text-xs text-black/70 font-semibold">Telah Disetujui Kaprodi</span>
         </div>
         <div className="rounded-xl border-2 border-black bg-white p-4 shadow-retro space-y-1">
-          <span className="text-xs font-mono font-bold uppercase text-black/60">Total Nilai Dieksekusi</span>
-          <div className="text-2xl sm:text-3xl font-heading font-black text-black">
+          <span className="text-xs font-sans font-bold uppercase text-black/60">Total Nilai Dieksekusi</span>
+          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">
             {requestsList.filter((r) => r.status === 'EXECUTED').length} Nilai
           </div>
-          <span className="text-xs text-emerald-800 font-bold">Tercatat di Audit Log</span>
+          <span className="text-xs text-ink font-bold">Tercatat di Audit Log</span>
         </div>
       </div>
 
@@ -176,16 +176,16 @@ export function StaffGradesHubView({
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-black transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
                   ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-retro-warm shadow-xs'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
               )}
             >
               <Icon className="h-4 w-4" />
               <span>{tab.label}</span>
               {tab.id === 'perubahan-nilai' && pendingExecutions.length > 0 && (
-                <span className="px-1.5 py-0.2 rounded-full bg-black text-white text-xs font-mono font-bold">
+                <span className="px-1.5 py-0.2 rounded-full bg-black text-white text-xs font-sans font-bold">
                   {pendingExecutions.length}
                 </span>
               )}
@@ -198,9 +198,9 @@ export function StaffGradesHubView({
       {/* TAB 1: REKAP NILAI (BACA SAJA UNTUK STAF) */}
       {activeTab === 'rekap-nilai' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <CheckSquare className="h-5 w-5 text-primary" />
                 <span>Rekapitulasi Nilai Akhir Mahasiswa (Read-Only Audit)</span>
               </h2>
@@ -208,7 +208,7 @@ export function StaffGradesHubView({
                 Kompilasi nilai akhir seluruh mata kuliah semester aktif. Staf tidak dapat mengubah nilai langsung tanpa pengajuan revisi yang disetujui.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
               Mode Baca Saja (Staf BAA)
             </span>
           </div>
@@ -216,7 +216,7 @@ export function StaffGradesHubView({
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">NIM & Mahasiswa</th>
                     <th className="p-3.5 sm:p-4">Program Studi</th>
@@ -234,7 +234,7 @@ export function StaffGradesHubView({
                     { nim: '2024039', name: 'Dimas Aditya', prodi: 'Teknik Informatika (S1)', sks: 18, ips: 3.25, ipk: 3.30, status: 'AKTIF' },
                   ]).length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={6} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada data rekapitulasi nilai mahasiswa di pangkalan data produksi.
                       </td>
                     </tr>
@@ -245,17 +245,17 @@ export function StaffGradesHubView({
                       { nim: '2024025', name: 'Siti Rahma', prodi: 'Teknik Informatika (S1)', sks: 24, ips: 3.92, ipk: 3.88, status: 'AKTIF (CUMLAUDE)' },
                       { nim: '2024039', name: 'Dimas Aditya', prodi: 'Teknik Informatika (S1)', sks: 18, ips: 3.25, ipk: 3.30, status: 'AKTIF' },
                     ].map((m) => (
-                      <tr key={m.nim} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={m.nim} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{m.name}</div>
-                          <span className="text-xs font-mono text-black/60">{m.nim}</span>
+                          <span className="text-xs font-sans text-black/60">{m.nim}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{m.prodi}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold">{m.sks} SKS</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-primary">{m.ips.toFixed(2)}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-black text-black">{m.ipk.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{m.sks} SKS</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-primary">{m.ips.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-black">{m.ipk.toFixed(2)}</td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-emerald-500 bg-emerald-100 text-emerald-950 font-mono text-xs font-bold">
+                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink font-sans text-xs font-bold">
                             {m.status}
                           </span>
                         </td>
@@ -272,9 +272,9 @@ export function StaffGradesHubView({
       {/* TAB 2: REKAP PRESENSI (BACA SAJA UNTUK STAF) */}
       {activeTab === 'rekap-presensi' && (
         <div className="space-y-4">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <Clock className="h-5 w-5 text-primary" />
                 <span>Rekapitulasi Presensi Kuliah & Kelayakan Ujian (Read-Only)</span>
               </h2>
@@ -282,7 +282,7 @@ export function StaffGradesHubView({
                 Audit persentase kehadiran mahasiswa per kelas. Syarat minimal mengikuti ujian akhir semester adalah 75% kehadiran kuliah.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg">
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
               Syarat Ujian: Minimal 75% Hadir
             </span>
           </div>
@@ -290,7 +290,7 @@ export function StaffGradesHubView({
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">NIM & Mahasiswa</th>
                     <th className="p-3.5 sm:p-4">Kelas Mata Kuliah</th>
@@ -310,7 +310,7 @@ export function StaffGradesHubView({
                     { nim: '2024099', name: 'Zulkifli Mansur', course: 'Basis Data Terdistribusi (IF-3B)', total: 14, hadir: 9, izin: 1, alpa: 4, pct: 64.2, eligible: false },
                   ]).length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="p-8 text-center text-black/60 font-mono text-xs">
+                      <td colSpan={8} className="p-8 text-center text-black/60 font-sans text-xs">
                         Belum ada data rekapitulasi presensi kuliah di pangkalan data produksi.
                       </td>
                     </tr>
@@ -321,24 +321,24 @@ export function StaffGradesHubView({
                       { nim: '2024025', name: 'Siti Rahma', course: 'Basis Data Terdistribusi (IF-3B)', total: 14, hadir: 14, izin: 0, alpa: 0, pct: 100.0, eligible: true },
                       { nim: '2024099', name: 'Zulkifli Mansur', course: 'Basis Data Terdistribusi (IF-3B)', total: 14, hadir: 9, izin: 1, alpa: 4, pct: 64.2, eligible: false },
                     ].map((p) => (
-                      <tr key={p.nim} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={p.nim} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{p.name}</div>
-                          <span className="text-xs font-mono text-black/60">{p.nim}</span>
+                          <span className="text-xs font-sans text-black/60">{p.nim}</span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80">{p.course}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono">{p.total}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-emerald-800">{p.hadir}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono text-amber-800">{p.izin}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono text-rose-800">{p.alpa}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-black">{p.pct.toFixed(1)}%</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans">{p.total}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-ink">{p.hadir}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans text-ink">{p.izin}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans text-primary-dark">{p.alpa}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-black">{p.pct.toFixed(1)}%</td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-sans font-bold',
                               p.eligible
-                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
-                                : 'border-rose-500 bg-rose-100 text-rose-950'
+                                ? 'border-ink bg-surface text-ink'
+                                : 'border-ink bg-surface text-primary-dark'
                             )}
                           >
                             {p.eligible ? '✓ MEMENUHI SYARAT' : '✗ TIDAK MEMENUHI'}
@@ -357,9 +357,9 @@ export function StaffGradesHubView({
       {/* TAB 3: PERUBAHAN NILAI (EKSEKUSI OLEH STAF) */}
       {activeTab === 'perubahan-nilai' && (
         <div className="space-y-6">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <FileText className="h-5 w-5 text-primary" />
                 <span>Eksekusi Perubahan Nilai Mahasiswa (Wewenang Staf BAA)</span>
               </h2>
@@ -367,7 +367,7 @@ export function StaffGradesHubView({
                 Staf hanya dapat mengeksekusi pengajuan berstatus <strong>APPROVED</strong> dari Koordinator Program Studi. Nilai lama diverifikasi secara otomatis di server sebelum mutasi dieksekusi ke pangkalan data.
               </p>
             </div>
-            <span className="text-xs font-mono font-bold px-3 py-1 bg-white border border-black rounded-lg shrink-0">
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg shrink-0">
               {pendingExecutions.length} Menunggu Eksekusi
             </span>
           </div>
@@ -375,7 +375,7 @@ export function StaffGradesHubView({
           <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs sm:text-sm">
-                <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
+                <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                     <th className="p-3.5 sm:p-4">Mahasiswa & Kelas</th>
                     <th className="p-3.5 sm:p-4">Komponen Nilai</th>
@@ -395,27 +395,27 @@ export function StaffGradesHubView({
                     </tr>
                   ) : (
                     requestsList.map((req) => (
-                      <tr key={req.id} className="hover:bg-retro-warm/30 transition-colors">
+                      <tr key={req.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">
                           <div>{req.student_name}</div>
-                          <div className="text-xs font-mono text-black/60">{req.class_title}</div>
+                          <div className="text-xs font-sans text-black/60">{req.class_title}</div>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80 font-semibold">{req.assignment_title}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-bold text-rose-800 bg-rose-50/50">
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-primary-dark bg-surface/50">
                           {req.old_score}
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center font-mono font-black text-emerald-800 bg-emerald-50/50">
+                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-ink bg-surface/50">
                           {req.proposed_score}
                         </td>
                         <td className="p-3.5 sm:p-4 text-xs text-black/80 max-w-xs">
                           <div>{req.reason}</div>
                           {req.review_note && (
-                            <div className="mt-1 text-xs font-mono text-black/60 border-t border-black/10 pt-1">
+                            <div className="mt-1 text-xs font-sans text-black/60 border-t border-black/10 pt-1">
                               <strong>Catatan Kaprodi:</strong> {req.review_note}
                             </div>
                           )}
                           {req.execution_note && (
-                            <div className="mt-1 text-xs font-mono text-emerald-800 border-t border-black/10 pt-1">
+                            <div className="mt-1 text-xs font-sans text-ink border-t border-black/10 pt-1">
                               <strong>Eksekusi BAA:</strong> {req.execution_note}
                             </div>
                           )}
@@ -423,13 +423,13 @@ export function StaffGradesHubView({
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2.5 py-0.5 rounded border text-xs font-mono font-bold',
+                              'px-2.5 py-0.5 rounded border text-xs font-sans font-bold',
                               req.status === 'APPROVED'
-                                ? 'border-amber-500 bg-amber-100 text-amber-950'
+                                ? 'border-ink bg-gray-soft text-ink'
                                 : req.status === 'EXECUTED'
-                                ? 'border-emerald-500 bg-emerald-100 text-emerald-950'
+                                ? 'border-ink bg-surface text-ink'
                                 : req.status === 'REJECTED'
-                                ? 'border-rose-500 bg-rose-100 text-rose-950'
+                                ? 'border-ink bg-surface text-primary-dark'
                                 : 'border-neutral-400 bg-neutral-100 text-neutral-800'
                             )}
                           >
@@ -454,7 +454,7 @@ export function StaffGradesHubView({
                                 >
                                   Eksekusi Nilai
                                 </button>
-                                <span className="text-xs text-amber-900 font-mono font-bold bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                                <span className="text-xs text-ink font-sans font-bold bg-gray-soft border border-ink px-1.5 py-0.5 rounded">
                                   Menunggu Migrasi DB
                                 </span>
                               </div>
@@ -466,18 +466,18 @@ export function StaffGradesHubView({
                                   setModalError(null);
                                   setExecutionNote('');
                                 }}
-                                className="px-3 py-1.5 rounded-lg border-2 border-black bg-primary text-white text-xs font-black shadow-xs hover:bg-black transition-all cursor-pointer"
+                                className="px-3 py-1.5 rounded-lg border-2 border-black bg-primary text-white text-xs font-bold shadow-xs hover:bg-black transition-all cursor-pointer"
                               >
                                 Eksekusi Nilai
                               </button>
                             )
                           ) : req.status === 'EXECUTED' ? (
-                            <span className="text-xs font-mono font-bold text-emerald-700 flex items-center justify-center gap-1">
+                            <span className="text-xs font-sans font-bold text-ink flex items-center justify-center gap-1">
                               <CheckCircle2 className="h-3.5 w-3.5" />
                               <span>Selesai</span>
                             </span>
                           ) : (
-                            <span className="text-xs font-mono text-black/40">-</span>
+                            <span className="text-xs font-sans text-black/40">-</span>
                           )}
                         </td>
                       </tr>
@@ -493,8 +493,8 @@ export function StaffGradesHubView({
       {/* TAB 4: EKSPOR LAPORAN */}
       {activeTab === 'ekspor-laporan' && (
         <div className="space-y-6">
-          <div className="p-4 bg-retro-warm border-2 border-black rounded-xl">
-            <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl">
+            <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
               <FileSpreadsheet className="h-5 w-5 text-primary" />
               <span>Ekspor Laporan Transaksional Akademik & Feeder PDDIKTI</span>
             </h2>
@@ -508,7 +508,7 @@ export function StaffGradesHubView({
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <FileSpreadsheet className="h-5 w-5 text-primary" />
-                  <h3 className="font-heading font-black text-base text-black">Format Feeder PDDIKTI</h3>
+                  <h3 className="font-heading font-bold text-base text-black">Format Feeder PDDIKTI</h3>
                 </div>
                 <p className="text-xs text-black/70 leading-relaxed">
                   Ekspor rekapan nilai semester, krs, dan aktivitas kuliah sesuai template resmi aplikasi Feeder PDDIKTI.
@@ -517,7 +517,7 @@ export function StaffGradesHubView({
               <button
                 type="button"
                 onClick={() => setToastMessage({ type: 'info', text: 'Mengunduh laporan Feeder PDDIKTI format Excel (.xlsx)...' })}
-                className="w-full inline-flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all cursor-pointer"
               >
                 <Download className="h-4 w-4" />
                 <span>Unduh File Feeder</span>
@@ -528,7 +528,7 @@ export function StaffGradesHubView({
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <CheckSquare className="h-5 w-5 text-primary" />
-                  <h3 className="font-heading font-black text-base text-black">Buku Nilai Universitas</h3>
+                  <h3 className="font-heading font-bold text-base text-black">Buku Nilai Universitas</h3>
                 </div>
                 <p className="text-xs text-black/70 leading-relaxed">
                   Laporan rekapitulasi nilai akhir seluruh kelas dan program studi untuk penerbitan KHS dan arsip dekanat.
@@ -537,7 +537,7 @@ export function StaffGradesHubView({
               <button
                 type="button"
                 onClick={() => setToastMessage({ type: 'info', text: 'Mengunduh Buku Nilai Universitas (.xlsx)...' })}
-                className="w-full inline-flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all cursor-pointer"
               >
                 <Download className="h-4 w-4" />
                 <span>Unduh Buku Nilai</span>
@@ -548,7 +548,7 @@ export function StaffGradesHubView({
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-primary" />
-                  <h3 className="font-heading font-black text-base text-black">Audit Presensi Kuliah</h3>
+                  <h3 className="font-heading font-bold text-base text-black">Audit Presensi Kuliah</h3>
                 </div>
                 <p className="text-xs text-black/70 leading-relaxed">
                   Daftar hadir per sesi kuliah, data verifikasi izin sakit dokter, dan rekap kepatuhan 75% syarat ujian.
@@ -557,7 +557,7 @@ export function StaffGradesHubView({
               <button
                 type="button"
                 onClick={() => setToastMessage({ type: 'info', text: 'Mengunduh Rekap Audit Presensi (.xlsx)...' })}
-                className="w-full inline-flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-mono transition-all cursor-pointer"
+                className="w-full inline-flex items-center justify-center gap-2 p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all cursor-pointer"
               >
                 <Download className="h-4 w-4" />
                 <span>Unduh Audit Presensi</span>
@@ -577,10 +577,10 @@ export function StaffGradesHubView({
                   <ShieldCheck className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-heading font-black text-lg sm:text-xl text-black">
+                  <h3 className="font-heading font-bold text-lg sm:text-xl text-black">
                     Eksekusi Perubahan Nilai
                   </h3>
-                  <span className="text-xs font-mono font-bold text-black/60">
+                  <span className="text-xs font-sans font-bold text-black/60">
                     Otoritas Staf Biro Akademik (BAA)
                   </span>
                 </div>
@@ -595,25 +595,25 @@ export function StaffGradesHubView({
             </div>
 
             {/* Ringkasan Data Perubahan Nilai */}
-            <div className="p-4 rounded-xl border-2 border-black bg-retro-warm space-y-2">
+            <div className="p-4 rounded-xl border-2 border-black bg-gray-soft space-y-2">
               <div className="flex justify-between text-xs font-bold text-black">
                 <span>Mahasiswa:</span>
-                <span className="font-mono">{selectedRequest.student_name}</span>
+                <span className="font-sans">{selectedRequest.student_name}</span>
               </div>
               <div className="flex justify-between text-xs font-bold text-black">
                 <span>Kelas:</span>
-                <span className="font-mono">{selectedRequest.class_title}</span>
+                <span className="font-sans">{selectedRequest.class_title}</span>
               </div>
               <div className="flex justify-between text-xs font-bold text-black">
                 <span>Komponen:</span>
-                <span className="font-mono">{selectedRequest.assignment_title}</span>
+                <span className="font-sans">{selectedRequest.assignment_title}</span>
               </div>
-              <div className="flex justify-between items-center text-xs font-black pt-2 border-t border-black/20">
+              <div className="flex justify-between items-center text-xs font-bold pt-2 border-t border-black/20">
                 <span>Perubahan Nilai:</span>
-                <div className="flex items-center gap-2 font-mono text-sm">
-                  <span className="text-rose-800 line-through">{selectedRequest.old_score}</span>
+                <div className="flex items-center gap-2 font-sans text-sm">
+                  <span className="text-primary-dark line-through">{selectedRequest.old_score}</span>
                   <ArrowRight className="h-4 w-4" />
-                  <span className="text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-500">
+                  <span className="text-ink bg-surface px-2 py-0.5 rounded border border-ink">
                     {selectedRequest.proposed_score}
                   </span>
                 </div>
@@ -622,22 +622,22 @@ export function StaffGradesHubView({
                 <strong>Alasan Dosen:</strong> {selectedRequest.reason}
               </div>
               {selectedRequest.review_note && (
-                <div className="text-xs text-black/80 font-mono">
+                <div className="text-xs text-black/80 font-sans">
                   <strong>Persetujuan Kaprodi:</strong> {selectedRequest.review_note}
                 </div>
               )}
             </div>
 
             {modalError && (
-              <div className="p-3 bg-rose-50 border-2 border-rose-500 rounded-lg text-rose-950 text-xs font-bold flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 text-rose-600 shrink-0" />
+              <div className="p-3 bg-surface border-2 border-ink rounded-lg text-primary-dark text-xs font-bold flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-primary-dark shrink-0" />
                 <span>{modalError}</span>
               </div>
             )}
 
             <form onSubmit={handleExecute} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-black uppercase text-black font-mono">
+                <label className="text-xs font-bold uppercase text-black font-sans">
                   Catatan Berita Acara Eksekusi (Opsional)
                 </label>
                 <textarea
@@ -654,14 +654,14 @@ export function StaffGradesHubView({
                   type="button"
                   onClick={() => setSelectedRequest(null)}
                   disabled={isPending}
-                  className="px-4 py-2.5 rounded-lg border-2 border-black bg-white text-xs font-black shadow-xs hover:bg-neutral-100 transition-all cursor-pointer"
+                  className="px-4 py-2.5 rounded-lg border-2 border-black bg-white text-xs font-bold shadow-xs hover:bg-neutral-100 transition-all cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black bg-black text-white text-xs font-black shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border-2 border-black bg-black text-white text-xs font-bold shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
                 >
                   <Send className="h-4 w-4" />
                   <span>{isPending ? 'Mengeksekusi...' : 'Konfirmasi & Eksekusi Nilai Sekarang'}</span>
@@ -679,16 +679,16 @@ export function StaffGradesHubView({
             className={cn(
               'px-4 py-3 rounded-xl border-2 border-black font-bold text-xs sm:text-sm shadow-retro flex items-center gap-2.5',
               toastMessage.type === 'success'
-                ? 'bg-emerald-100 text-emerald-950'
+                ? 'bg-surface text-ink'
                 : 'bg-white text-black'
             )}
           >
-            <CheckCircle2 className="h-5 w-5 text-emerald-700" />
+            <CheckCircle2 className="h-5 w-5 text-ink" />
             <span>{toastMessage.text}</span>
             <button
               type="button"
               onClick={() => setToastMessage(null)}
-              className="ml-2 font-mono hover:underline cursor-pointer"
+              className="ml-2 font-sans hover:underline cursor-pointer"
             >
               [Tutup]
             </button>

@@ -4,9 +4,37 @@ import { MasterStore } from "@/features/master/master-store";
 import { KrsStore } from "@/features/krs/krs-store";
 import { UktStore } from "@/features/ukt/ukt-store";
 import { NilaiStore } from "@/features/nilai/nilai-store";
+import { getCurrentUserWithRoles } from "@/modules/identity/actions";
 
-export async function GET() {
+const ALLOWED_EXPORT_ROLES = [
+  "ACADEMIC_STAFF",
+  "PROGRAM_COORDINATOR",
+  "SUPER_ADMIN",
+];
+
+export async function GET(_req: NextRequest) {
   try {
+    const userContext = await getCurrentUserWithRoles();
+    if (!userContext?.user) {
+      return NextResponse.json(
+        { error: "UNAUTHORIZED: Silakan masuk terlebih dahulu." },
+        { status: 401 }
+      );
+    }
+
+    if (
+      !userContext.activeRole ||
+      !ALLOWED_EXPORT_ROLES.includes(userContext.activeRole)
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "FORBIDDEN: Akses ekspor laporan akademik hanya diizinkan untuk Staf Akademik, Koordinator Program Studi, atau Super Admin.",
+        },
+        { status: 403 }
+      );
+    }
+
     const workbook = new ExcelJS.Workbook();
     workbook.creator = "SIAKAD Universitas Islam Riau";
     workbook.created = new Date();

@@ -19,9 +19,11 @@ import {
   ArrowRight,
   Flame,
   FileText,
+  Sparkles,
 } from 'lucide-react';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { getStudentBadgesAction } from '@/modules/academic/badge-certificate-actions';
 
 export default async function ProfilePage() {
   const userContext = await getCurrentUserWithRoles();
@@ -32,7 +34,7 @@ export default async function ProfilePage() {
 
   const { user, profile, roles, activeRole } = userContext;
   const fullName = profile?.full_name || 'Wahyu Aldiriyanto';
-  const email = profile?.email || user.email || 'wahyualdiriyanto80@gmail.com';
+  const badges = await getStudentBadgesAction(user.id).catch(() => []);
 
   const initials =
     fullName
@@ -59,13 +61,13 @@ export default async function ProfilePage() {
       <RetroWindow
         title="identitas_pengguna_uir.card"
         badge="TERVERIFIKASI"
-        headerClassName="bg-retro-yellow"
+        headerClassName="bg-gray-soft"
         bodyClassName="p-6 bg-retro-surface"
       >
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
           {/* Avatar Kotak Retro dengan Border & Shadow */}
           <div className="relative group shrink-0">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl border-[2px] border-retro-border bg-retro-warm shadow-retro-md flex items-center justify-center text-4xl font-mono font-black text-primary overflow-hidden">
+            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl border-[2px] border-retro-border bg-gray-soft shadow-retro-md flex items-center justify-center text-4xl font-sans font-bold text-primary overflow-hidden">
               {initials}
             </div>
             <div className="absolute -bottom-2 -right-2 p-1.5 rounded-full border border-retro-border bg-retro-mint shadow-retro text-retro-border" title="Status Akun Aktif">
@@ -76,7 +78,7 @@ export default async function ProfilePage() {
           {/* Info Utama Pengguna */}
           <div className="flex-1 text-center sm:text-left space-y-2">
             <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
-              <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-foreground">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-foreground">
                 {fullName}
               </h1>
               {roles.map((r) => {
@@ -98,10 +100,10 @@ export default async function ProfilePage() {
               })}
             </div>
 
-            <p className="text-sm font-medium text-muted-foreground flex items-center justify-center sm:justify-start gap-1.5">
-              <Mail className="h-4 w-4 text-primary" />
-              <span>{email}</span>
-              <span className="text-xs text-muted-foreground">&bull; NIM: 2024001</span>
+            <p className="text-sm font-medium text-black flex items-center justify-center sm:justify-start gap-1.5 font-sans">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              <span className="font-bold">NIM: 2024001</span>
+              <span className="text-xs text-black/60">&bull; Akun Mahasiswa Terverifikasi</span>
             </p>
 
             <p className="text-xs text-muted-foreground">
@@ -110,13 +112,13 @@ export default async function ProfilePage() {
 
             {/* Quick Badges Bar */}
             <div className="pt-2 flex flex-wrap gap-2 justify-center sm:justify-start">
-              <span className="rounded border border-retro-border bg-retro-warm px-2.5 py-1 text-xs font-semibold text-foreground">
+              <span className="rounded border border-retro-border bg-gray-soft px-2.5 py-1 text-xs font-semibold text-foreground">
                 Angkatan 2024
               </span>
-              <span className="rounded border border-retro-border bg-retro-warm px-2.5 py-1 text-xs font-semibold text-foreground">
+              <span className="rounded border border-retro-border bg-gray-soft px-2.5 py-1 text-xs font-semibold text-foreground">
                 Semester 5 (Ganjil 2026/2027)
               </span>
-              <span className="rounded border border-retro-border bg-retro-yellow px-2.5 py-1 text-xs font-bold text-black shadow-xs">
+              <span className="rounded border border-retro-border bg-gray-soft px-2.5 py-1 text-xs font-bold text-black shadow-xs">
                 IPK: 3.85
               </span>
               <span className="rounded border border-retro-border bg-retro-mint px-2.5 py-1 text-xs font-bold text-black shadow-xs">
@@ -135,36 +137,36 @@ export default async function ProfilePage() {
         <div className="lg:col-span-2 space-y-6">
           <RetroWindow
             title="ringkasan_akademik.window"
-            headerClassName="bg-retro-warm"
+            headerClassName="bg-gray-soft"
             bodyClassName="p-5 space-y-4"
           >
-            <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
+            <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
               <GraduationCap className="h-5 w-5 text-primary" />
               <span>Data Riwayat Akademik Terpadu</span>
             </h2>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-              <div className="p-3 rounded-lg border border-retro-border bg-retro-warm shadow-retro">
-                <p className="text-xs font-mono font-bold text-muted-foreground uppercase">IPK Kumulatif</p>
-                <p className="font-heading font-black text-xl text-primary mt-1">3.85</p>
+              <div className="p-3 rounded-lg border border-retro-border bg-gray-soft shadow-retro">
+                <p className="text-xs font-sans font-bold text-muted-foreground uppercase">IPK Kumulatif</p>
+                <p className="font-heading font-bold text-xl text-primary mt-1">3.85</p>
                 <p className="text-xs text-muted-foreground">Skala 4.00</p>
               </div>
 
-              <div className="p-3 rounded-lg border border-retro-border bg-retro-warm shadow-retro">
-                <p className="text-xs font-mono font-bold text-muted-foreground uppercase">SKS Lulus</p>
-                <p className="font-heading font-black text-xl text-foreground mt-1">72 SKS</p>
+              <div className="p-3 rounded-lg border border-retro-border bg-gray-soft shadow-retro">
+                <p className="text-xs font-sans font-bold text-muted-foreground uppercase">SKS Lulus</p>
+                <p className="font-heading font-bold text-xl text-foreground mt-1">72 SKS</p>
                 <p className="text-xs text-muted-foreground">Target: 144 SKS</p>
               </div>
 
-              <div className="p-3 rounded-lg border border-retro-border bg-retro-warm shadow-retro">
-                <p className="text-xs font-mono font-bold text-muted-foreground uppercase">SKS Semester Ini</p>
-                <p className="font-heading font-black text-xl text-foreground mt-1">21 SKS</p>
+              <div className="p-3 rounded-lg border border-retro-border bg-gray-soft shadow-retro">
+                <p className="text-xs font-sans font-bold text-muted-foreground uppercase">SKS Semester Ini</p>
+                <p className="font-heading font-bold text-xl text-foreground mt-1">21 SKS</p>
                 <p className="text-xs text-muted-foreground">Maksimal: 24 SKS</p>
               </div>
 
-              <div className="p-3 rounded-lg border border-retro-border bg-retro-warm shadow-retro">
-                <p className="text-xs font-mono font-bold text-muted-foreground uppercase">Presensi Rata-Rata</p>
-                <p className="font-heading font-black text-xl text-success mt-1">94%</p>
+              <div className="p-3 rounded-lg border border-retro-border bg-gray-soft shadow-retro">
+                <p className="text-xs font-sans font-bold text-muted-foreground uppercase">Presensi Rata-Rata</p>
+                <p className="font-heading font-bold text-xl text-ink mt-1">94%</p>
                 <p className="text-xs text-muted-foreground">Syarat UAS &ge;75%</p>
               </div>
             </div>
@@ -173,7 +175,7 @@ export default async function ProfilePage() {
             <div className="border border-retro-border rounded-lg overflow-hidden bg-retro-surface divide-y divide-retro-border text-xs">
               <div className="flex justify-between p-3 bg-retro-bg">
                 <span className="text-muted-foreground font-medium">Nomor Induk Mahasiswa (NIM)</span>
-                <span className="font-mono font-bold text-foreground">2024001</span>
+                <span className="font-sans font-bold text-foreground">2024001</span>
               </div>
               <div className="flex justify-between p-3">
                 <span className="text-muted-foreground font-medium">Dosen Pembimbing Akademik (Wali)</span>
@@ -181,7 +183,7 @@ export default async function ProfilePage() {
               </div>
               <div className="flex justify-between p-3 bg-retro-bg">
                 <span className="text-muted-foreground font-medium">Status Keaktifan Kuliah</span>
-                <span className="font-bold text-success">Aktif Memprogram KRS</span>
+                <span className="font-bold text-ink">Aktif Memprogram KRS</span>
               </div>
               <div className="flex justify-between p-3">
                 <span className="text-muted-foreground font-medium">Jalur Masuk & Tahun</span>
@@ -193,22 +195,84 @@ export default async function ProfilePage() {
             <div className="pt-2 flex flex-wrap gap-2">
               <Link
                 href="/calendar"
-                className="px-3.5 py-2 rounded-md border border-retro-border bg-retro-surface hover:bg-retro-warm shadow-retro text-xs font-bold transition-all"
+                className="px-3.5 py-2 rounded-md border border-retro-border bg-retro-surface hover:bg-gray-soft shadow-retro text-xs font-bold transition-all"
               >
                 Jadwal & Kalender &rarr;
               </Link>
               <Link
                 href="/grades"
-                className="px-3.5 py-2 rounded-md border border-retro-border bg-retro-surface hover:bg-retro-warm shadow-retro text-xs font-bold transition-all"
+                className="px-3.5 py-2 rounded-md border border-retro-border bg-retro-surface hover:bg-gray-soft shadow-retro text-xs font-bold transition-all"
               >
                 Nilai & Progres &rarr;
               </Link>
               <Link
                 href="/portfolio"
-                className="px-3.5 py-2 rounded-md border border-retro-border bg-retro-surface hover:bg-retro-warm shadow-retro text-xs font-bold transition-all"
+                className="px-3.5 py-2 rounded-md border border-retro-border bg-retro-surface hover:bg-gray-soft shadow-retro text-xs font-bold transition-all"
               >
                 Portofolio Belajar &rarr;
               </Link>
+            </div>
+          </RetroWindow>
+
+          {/* LENCANA PRESTASI AKADEMIK (MONOCHROME RETRO PALETTE) */}
+          <RetroWindow
+            title="lencana_prestasi_mahasiswa.badge"
+            headerClassName="bg-gray-soft"
+            bodyClassName="p-5 space-y-4"
+          >
+            <div className="flex items-center justify-between">
+              <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
+                <Award className="h-5 w-5 text-primary" />
+                <span>Lencana Prestasi & Pencapaian Belajar</span>
+              </h2>
+              <span className="text-xs font-sans font-bold px-2.5 py-0.5 rounded border border-retro-border bg-surface text-ink shadow-xs">
+                {badges.filter((b) => b.isUnlocked).length} / {badges.length} Terbuka
+              </span>
+            </div>
+
+            <p className="text-xs text-black/70">
+              Pengakuan otomatis atas konsistensi belajar, ketepatan waktu pengumpulan, kehadiran penuh, dan keaktifan forum diskusi.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              {badges.map((b) => {
+                const IconComponent =
+                  b.iconName === 'CalendarCheck2'
+                    ? Calendar
+                    : b.iconName === 'Flame'
+                    ? Flame
+                    : b.iconName === 'Clock'
+                    ? Clock
+                    : Sparkles;
+
+                return (
+                  <div
+                    key={b.id}
+                    className="p-4 rounded-xl border-2 border-black bg-white shadow-retro flex items-start gap-3.5 hover:-translate-y-0.5 transition-all"
+                  >
+                    <div className="p-2.5 rounded-lg border-2 border-black bg-gray-soft text-black shrink-0">
+                      <IconComponent className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="space-y-1 flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-1">
+                        <h3 className="font-heading font-bold text-xs sm:text-sm text-black truncate">
+                          {b.title}
+                        </h3>
+                        <span className="px-1.5 py-0.5 rounded border border-black bg-surface text-[10px] font-bold text-ink font-sans shrink-0">
+                          ✓ Terbuka
+                        </span>
+                      </div>
+                      <p className="text-xs text-black/75 font-sans leading-relaxed">
+                        {b.description}
+                      </p>
+                      <div className="pt-1.5 flex items-center justify-between text-[11px] font-sans text-black/60 border-t border-black/10 mt-1">
+                        <span className="font-bold text-black">{b.progress}</span>
+                        <span>{b.earnedAt}</span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </RetroWindow>
 
@@ -218,7 +282,7 @@ export default async function ProfilePage() {
             headerClassName="bg-retro-mint/40"
             bodyClassName="p-5 space-y-3"
           >
-            <h2 className="font-heading font-black text-base text-foreground flex items-center gap-2">
+            <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
               <Download className="h-5 w-5 text-primary" />
               <span>Dokumen Akademik Resmi</span>
             </h2>
@@ -232,7 +296,7 @@ export default async function ProfilePage() {
                 <p className="text-xs text-muted-foreground">Kartu Tanda Mahasiswa aktif ber-barcode resmi.</p>
                 <button
                   type="button"
-                  className="w-full py-1.5 rounded border border-retro-border bg-retro-warm text-xs font-bold hover:bg-retro-yellow transition-colors"
+                  className="w-full py-1.5 rounded border border-retro-border bg-gray-soft text-xs font-bold hover:bg-gray-soft transition-colors"
                 >
                   Unduh KTM
                 </button>
@@ -246,7 +310,7 @@ export default async function ProfilePage() {
                 <p className="text-xs text-muted-foreground">Rekap nilai kumulatif dan progres studi.</p>
                 <Link
                   href="/grades"
-                  className="block text-center w-full py-1.5 rounded border border-retro-border bg-retro-warm text-xs font-bold hover:bg-retro-yellow transition-colors"
+                  className="block text-center w-full py-1.5 rounded border border-retro-border bg-gray-soft text-xs font-bold hover:bg-gray-soft transition-colors"
                 >
                   Buka Nilai & Progres
                 </Link>
@@ -255,12 +319,12 @@ export default async function ProfilePage() {
               <div className="p-3.5 rounded-lg border border-retro-border bg-retro-surface shadow-retro space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-foreground">Sertifikat & Prestasi</span>
-                  <Award className="h-4 w-4 text-info" />
+                  <Award className="h-4 w-4 text-ink" />
                 </div>
                 <p className="text-xs text-muted-foreground">Daftar sertifikat dan pencapaian akademik.</p>
                 <Link
                   href="/certificates"
-                  className="block text-center w-full py-1.5 rounded border border-retro-border bg-retro-warm text-xs font-bold hover:bg-retro-yellow transition-colors"
+                  className="block text-center w-full py-1.5 rounded border border-retro-border bg-gray-soft text-xs font-bold hover:bg-gray-soft transition-colors"
                 >
                   Buka Sertifikat
                 </Link>
@@ -274,10 +338,10 @@ export default async function ProfilePage() {
           {/* MULTI-PERAN AKTIF */}
           <RetroWindow
             title="peran_akses_rbac.config"
-            headerClassName="bg-retro-purple/40"
+            headerClassName="bg-gray-soft/40"
             bodyClassName="p-5 space-y-3.5"
           >
-            <h2 className="font-heading font-black text-sm text-foreground flex items-center gap-2">
+            <h2 className="font-heading font-bold text-sm text-foreground flex items-center gap-2">
               <ShieldCheck className="h-4 w-4 text-primary" />
               <span>Hak Akses Peran Aktif ({roles.length})</span>
             </h2>
@@ -323,10 +387,10 @@ export default async function ProfilePage() {
           {/* KEAMANAN & SESI LOGIN */}
           <RetroWindow
             title="keamanan_sesi.lock"
-            headerClassName="bg-retro-warm"
+            headerClassName="bg-gray-soft"
             bodyClassName="p-5 space-y-3 text-xs"
           >
-            <h2 className="font-heading font-black text-sm text-foreground flex items-center gap-2">
+            <h2 className="font-heading font-bold text-sm text-foreground flex items-center gap-2">
               <KeyRound className="h-4 w-4 text-primary" />
               <span>Keamanan & Sesi</span>
             </h2>
@@ -334,7 +398,7 @@ export default async function ProfilePage() {
             <div className="space-y-2 text-muted-foreground">
               <div className="flex justify-between py-1 border-b border-retro-border/40">
                 <span>Status Password</span>
-                <span className="font-bold text-success">Kuat & Terverifikasi</span>
+                <span className="font-bold text-ink">Kuat & Terverifikasi</span>
               </div>
               <div className="flex justify-between py-1 border-b border-retro-border/40">
                 <span>Perangkat Anda</span>
@@ -349,14 +413,14 @@ export default async function ProfilePage() {
             <div className="pt-2 space-y-2">
               <Link
                 href="/devices"
-                className="flex items-center justify-between p-2 rounded border border-retro-border bg-retro-warm hover:bg-retro-yellow transition-colors font-bold text-xs"
+                className="flex items-center justify-between p-2 rounded border border-retro-border bg-gray-soft hover:bg-gray-soft transition-colors font-bold text-xs"
               >
                 <span>Kelola Perangkat & Sesi</span>
                 <ArrowRight className="h-3.5 w-3.5" />
               </Link>
               <Link
                 href="/notifications/preferences"
-                className="flex items-center justify-between p-2 rounded border border-retro-border bg-retro-warm hover:bg-retro-yellow transition-colors font-bold text-xs"
+                className="flex items-center justify-between p-2 rounded border border-retro-border bg-gray-soft hover:bg-gray-soft transition-colors font-bold text-xs"
               >
                 <span>Preferensi Notifikasi</span>
                 <ArrowRight className="h-3.5 w-3.5" />
