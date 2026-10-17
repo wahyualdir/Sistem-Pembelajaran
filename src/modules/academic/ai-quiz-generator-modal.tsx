@@ -159,7 +159,7 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
                 <div>
                   <h3 className="font-heading font-bold text-lg sm:text-xl text-ink flex items-center gap-2">
                     Generator Draf Soal AI (Bank Soal)
-                    <span className="px-2.5 py-0.5 rounded border border-black bg-gray-soft text-[10px] font-sans font-bold">
+                    <span className="px-2.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-sans font-bold">
                       STATUS: DRAF WAJIB REVIEW
                     </span>
                   </h3>
@@ -305,7 +305,7 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
                     <Clock className="h-4 w-4 text-primary" />
                     Batas Pemakaian AI Dosen: 10 sesi generasi per hari
                   </span>
-                  <span className="font-sans text-[11px] text-gray-dark">
+                  <span className="font-sans text-xs text-gray-dark">
                     Model: SIAJAR AI Assistant (Tanya AI Engine)
                   </span>
                 </div>
@@ -338,12 +338,12 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
                     <p className="font-bold">
                       Tinjau & Edit Draf Soal AI ({drafts.length} Butir)
                     </p>
-                    <p className="text-gray-dark text-[11px]">
+                    <p className="text-gray-dark text-xs">
                       Aturan A2 & Standar Bank Soal: Dosen wajib meneliti dan dapat mengedit isi pertanyaan sebelum menyetujuinya ke Bank Soal.
                     </p>
                   </div>
                   {remainingQuota !== null && (
-                    <span className="px-2.5 py-1 rounded bg-gray-soft border border-black text-[10px] font-bold">
+                    <span className="px-2.5 py-1 rounded bg-gray-soft border border-black text-xs font-bold">
                       Sisa Kuota Hari Ini: {remainingQuota}
                     </span>
                   )}
@@ -357,13 +357,13 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
                     >
                       <div className="flex items-center justify-between border-b border-black/10 pb-2">
                         <div className="flex items-center gap-2">
-                          <span className="px-2 py-0.5 rounded border border-black bg-ink text-white font-bold text-[10px]">
+                          <span className="px-2 py-0.5 rounded border border-black bg-ink text-white font-bold text-xs">
                             DRAF #{idx + 1}
                           </span>
-                          <span className="px-2 py-0.5 rounded border border-black bg-gray-soft text-[10px] font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-gray-soft text-xs font-bold">
                             {draft.question_type}
                           </span>
-                          <span className="px-2 py-0.5 rounded border border-black bg-surface text-[10px] font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-surface text-xs font-bold">
                             {draft.difficulty}
                           </span>
                         </div>
@@ -379,7 +379,7 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[11px] font-bold text-gray-dark uppercase">
+                        <label className="text-xs font-bold text-gray-dark uppercase">
                           Teks Pertanyaan:
                         </label>
                         <textarea
@@ -393,7 +393,7 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
                       {/* Opsi Pilihan Ganda */}
                       {draft.question_type === 'MULTIPLE_CHOICE' && draft.options && (
                         <div className="space-y-2">
-                          <label className="text-[11px] font-bold text-gray-dark uppercase">
+                          <label className="text-xs font-bold text-gray-dark uppercase">
                             Pilihan Jawaban (Tandai Kunci Jawaban Benar):
                           </label>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -428,7 +428,7 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
                           </div>
 
                           <div className="space-y-1 pt-1">
-                            <label className="text-[11px] font-bold text-gray-dark uppercase">
+                            <label className="text-xs font-bold text-gray-dark uppercase">
                               Penjelasan Kunci Jawaban:
                             </label>
                             <input
@@ -444,7 +444,7 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
                       {/* Rubrik Esai */}
                       {draft.question_type === 'ESSAY' && (
                         <div className="space-y-2">
-                          <label className="text-[11px] font-bold text-gray-dark uppercase">
+                          <label className="text-xs font-bold text-gray-dark uppercase">
                             Rubrik Penilaian & Kriteria Pembobotan:
                           </label>
                           <textarea
@@ -459,8 +459,8 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
                               {draft.rubric_criteria.map((crit, cIdx) => (
                                 <div key={cIdx} className="p-2 rounded border border-black bg-gray-soft/30 text-xs">
                                   <p className="font-bold text-ink">{crit.criterion}</p>
-                                  <p className="text-[10px] text-gray-dark">{crit.description}</p>
-                                  <span className="font-bold text-primary text-[11px]">Bobot: {crit.weight}%</span>
+                                  <p className="text-xs text-gray-dark">{crit.description}</p>
+                                  <span className="font-bold text-primary text-xs">Bobot: {crit.weight}%</span>
                                 </div>
                               ))}
                             </div>

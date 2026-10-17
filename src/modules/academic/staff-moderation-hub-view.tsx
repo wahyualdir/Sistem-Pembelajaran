@@ -85,7 +85,7 @@ export function StaffModerationHubView({ isDemo = true }: StaffModerationHubView
                 <ShieldAlert className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
-                Moderasi Komunitas & Mentoring
+                Moderasi Komunitas dan Mentoring
               </h1>
             </div>
             <p className="text-sm sm:text-base text-black font-medium max-w-3xl leading-relaxed">

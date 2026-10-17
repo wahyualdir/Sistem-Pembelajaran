@@ -23,7 +23,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { logoutAction, stopImpersonatingAction } from '@/modules/identity/actions';
+import { logoutAction, stopImpersonatingAction, switchActiveRoleAction } from '@/modules/identity/actions';
 import {
   getNavGroups,
   getHomeHref,
@@ -67,6 +67,7 @@ interface PortalShellProps {
   } | null;
   account: React.ReactNode;
   isImpersonating?: boolean;
+  availableRoles?: string[];
   children: React.ReactNode;
 }
 
@@ -78,6 +79,7 @@ export function PortalShell({
   badges,
   profile,
   isImpersonating,
+  availableRoles,
   children,
 }: PortalShellProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -365,9 +367,9 @@ export function PortalShell({
                   : !!group.defaultCollapsed;
                 return (
                   <div key={group.id || group.title} className="space-y-1">
-                    {!isRailActive && (
+                    {!isRailActive && group.title ? (
                       <div className="flex items-center justify-between px-3 py-1 mb-1">
-                        <p className="text-xs font-bold uppercase tracking-wider text-gray-dark font-sans">
+                        <p className="text-xs font-bold tracking-wider text-gray-dark font-sans">
                           {group.title}
                         </p>
                         {group.collapsible && (
@@ -387,7 +389,7 @@ export function PortalShell({
                           </button>
                         )}
                       </div>
-                    )}
+                    ) : null}
                     {(!isGroupCollapsed || isRailActive) && (
                       <div className="space-y-0.5 sm:space-y-1">
                         {group.items.map((item) => {
@@ -506,6 +508,33 @@ export function PortalShell({
                       <span>Pengaturan Akun</span>
                     </Link>
 
+                    {availableRoles && availableRoles.length > 1 && (
+                      <div className="pb-2 mb-2 border-b-2 border-retro-border/30">
+                        <p className="px-3 py-1 text-[11px] font-bold uppercase text-muted-foreground tracking-wider">
+                          Pilih Peran Aktif
+                        </p>
+                        {availableRoles.map((rCode) => {
+                          const isCurrent = rCode === role;
+                          const rLabel = getRoleLabel(rCode);
+                          return (
+                            <form key={rCode} action={switchActiveRoleAction}>
+                              <input type="hidden" name="role" value={rCode} />
+                              <button
+                                type="submit"
+                                className={cn(
+                                  'flex items-center justify-between w-full px-3 py-1.5 rounded-md text-xs font-bold transition-colors text-left cursor-pointer',
+                                  isCurrent ? 'bg-black text-white' : 'hover:bg-gray-soft text-foreground'
+                                )}
+                              >
+                                <span>{rLabel}</span>
+                                {isCurrent && <span className="text-[10px] font-mono bg-white/20 px-1 rounded">Aktif</span>}
+                              </button>
+                            </form>
+                          );
+                        })}
+                      </div>
+                    )}
+
                     <Link
                       href="/devices"
                       onClick={() => {
@@ -515,7 +544,7 @@ export function PortalShell({
                       className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
                       <Laptop className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
-                      <span>Perangkat & Sesi</span>
+                      <span>Perangkat dan Sesi</span>
                     </Link>
 
                     <div className="pt-1.5 border-t-2 border-retro-border/30">
@@ -666,10 +695,10 @@ export function PortalShell({
                       className="w-full bg-transparent text-sm sm:text-base font-bold text-black placeholder:text-neutral-500 placeholder:font-medium focus:outline-none min-w-0"
                     />
                     <div className="hidden sm:flex items-center gap-1 shrink-0 ml-2 select-none">
-                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-gray-soft text-[10px] font-mono font-bold text-black shadow-2xs">
+                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-mono font-bold text-black shadow-2xs">
                         ⌘
                       </kbd>
-                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-gray-soft text-[10px] font-mono font-bold text-black shadow-2xs">
+                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-mono font-bold text-black shadow-2xs">
                         K
                       </kbd>
                     </div>
@@ -686,14 +715,27 @@ export function PortalShell({
                   </span>
                 </div>
 
+                {/* Tombol Ganti Peran Cepat di Header jika user punya lebih dari 1 peran */}
+                {availableRoles && availableRoles.length > 1 && (
+                  <Link
+                    href="/workspace"
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border-2 border-black bg-surface hover:bg-gray-soft text-xs font-bold text-foreground transition-all shadow-xs"
+                    title="Beralih peran pengguna"
+                  >
+                    <Layers className="h-3.5 w-3.5 text-primary" />
+                    <span className="hidden sm:inline">{roleName}</span>
+                    <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                  </Link>
+                )}
+
                 {/* Tombol Panel Kanan Geser jika halaman memiliki panel kanan */}
                 {hasRightPanel && (
                   <button
                     type="button"
                     onClick={() => setIsRightDrawerOpen((prev) => !prev)}
                     className="xl:hidden relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro-sm hover:bg-gray-soft transition-all focus-visible:outline-none cursor-pointer"
-                    title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan & Detail'}
-                    aria-label="Panel Ringkasan & Detail"
+                    title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan dan Detail'}
+                    aria-label="Panel Ringkasan dan Detail"
                   >
                     <PanelRightOpen className="h-5 w-5 text-black" />
                   </button>
@@ -703,12 +745,12 @@ export function PortalShell({
                 <Link
                   href="/notifications"
                   className="relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro-sm hover:bg-gray-soft active:translate-y-0.5 transition-all focus-visible:outline-none"
-                  title="Notifikasi Kuliah & Tugas"
+                  title="Notifikasi Kuliah dan Tugas"
                   aria-label="Notifikasi"
                 >
                   <Bell className="h-5 w-5 text-black" />
                   {unread > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full border-2 border-retro-border bg-black text-[10px] font-bold text-white tabular-nums shadow-xs">
+                    <span className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full border-2 border-retro-border bg-black text-xs font-bold text-white tabular-nums shadow-xs">
                       {unread}
                     </span>
                   )}
@@ -718,8 +760,8 @@ export function PortalShell({
                 <Link
                   href="/ai-assistant"
                   className="flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black shadow-retro-sm hover:bg-gray-soft active:translate-y-0.5 transition-all focus-visible:outline-none"
-                  title="Bantuan & Tanya AI SIAJAR"
-                  aria-label="Bantuan & AI"
+                  title="Bantuan dan Tanya AI"
+                  aria-label="Bantuan dan AI"
                 >
                   <HelpCircle className="h-5 w-5 text-black" />
                 </Link>

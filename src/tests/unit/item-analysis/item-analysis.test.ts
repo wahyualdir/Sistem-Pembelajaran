@@ -29,7 +29,8 @@ import {
   flagQuestionForRevisionAction,
   exportItemAnalysisCsvAction,
 } from '@/modules/academic/item-analysis-actions';
-import { quizStore } from '@/modules/academic/quiz-actions';
+import { quizStore } from '@/modules/academic/quiz-store';
+
 
 describe('SIAJAR Fitur 4: Analitik Butir Soal, Penandaan Revisi & Rekap CPL Kaprodi', () => {
   const lecturerUser = {

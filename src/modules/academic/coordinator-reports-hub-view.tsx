@@ -393,7 +393,7 @@ export function CoordinatorReportsHubView({
                   Status: <strong className={edomPeriod.status === 'OPEN' ? 'text-primary' : 'text-black/70'}>{edomPeriod.status === 'OPEN' ? 'SEDANG DIBUKA' : 'DITUTUP'}</strong>
                 </span>
               </div>
-              <span className="text-[11px] text-black/50">
+              <span className="text-xs text-black/50">
                 Responden Minimal untuk Akses Dosen: 5 Mahasiswa
               </span>
             </div>

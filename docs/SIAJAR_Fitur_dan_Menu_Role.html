@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>SIAJAR - Spesifikasi Fitur dan Menu per Role</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 15mm 12mm 15mm 12mm;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #0f172a;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .header {
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0 0 6px 0;
+            font-size: 22px;
+            color: #1e3a8a;
+            letter-spacing: -0.5px;
+        }
+        .header p {
+            margin: 0;
+            color: #475569;
+            font-size: 12px;
+        }
+        .meta-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 20px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .role-section {
+            margin-bottom: 24px;
+            page-break-inside: avoid;
+        }
+        .role-header {
+            background: #f1f5f9;
+            border-left: 4px solid #2563eb;
+            padding: 8px 12px;
+            font-size: 14px;
+            margin: 0 0 10px 0;
+            color: #0f172a;
+            border-radius: 0 6px 6px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        th {
+            background-color: #f8fafc;
+            color: #334155;
+            text-align: left;
+            padding: 8px 10px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #cbd5e1;
+            border-top: 1px solid #e2e8f0;
+        }
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: top;
+        }
+        tr:nth-child(even) td {
+            background-color: #fafafa;
+        }
+        .badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        .badge-shortcut {
+            display: inline-block;
+            background: #fef3c7;
+            color: #b45309;
+            padding: 1px 5px;
+            border-radius: 3px;
+            font-size: 9px;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+        .text-muted {
+            color: #94a3b8;
+        }
+        code {
+            background: #f1f5f9;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+        }
+        .footer {
+            text-align: center;
+            font-size: 10px;
+            color: #64748b;
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SIAJAR — Sistem Informasi Ajar Terpadu</h1>
+        <p><strong>Spesifikasi Lengkap Menu, Rute & Fungsionalitas Setiap Peran (Role)</strong></p>
+    </div>
+    
+    <div class="meta-box">
+        <div><strong>Status Sistem:</strong> Fase 2E/3 (Single Source of Truth <code>src/lib/config/menu-config.ts</code>)</div>
+        <div><strong>Cakupan:</strong> 7 Role + 1 Menu Dukungan Bersama (Total 86 Item Menu Terdefinisi)</div>
+        <div><strong>Arsitektur:</strong> RBAC, RLS PostgreSQL, Next.js 14 App Router</div>
+    </div>
+
+    
+        <div class="role-section">
+            <h2 class="role-header">1. Mahasiswa (STUDENT)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grup Menu</th>
+                        <th>Item & Rute</th>
+                        <th>Badge / Status</th>
+                        <th>Deskripsi & Fungsionalitas Fitur</th>
+                        <th>Batasan Wewenang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Beranda<br>
+                    <code style="font-size: 11px; color: #475569;">/student</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Dashboard terpadu mahasiswa dengan kartu ringkasan kelas aktif, jadwal kuliah hari ini, tugas mendekati tenggat (H-1), pengumuman terbaru, dan chip filter cepat ('Semua', 'Kelas Saya', 'Tugas & Kuis', 'Ujian', 'Presensi', 'Jadwal', 'Nilai').</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Hanya dapat melihat data pribadi dan kelas yang di-enroll secara aktif.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kalender<br>
+                    <code style="font-size: 11px; color: #475569;">/calendar</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Kalender akademik terintegrasi yang menggabungkan jadwal perkuliahan rutin, tenggat pengumpulan tugas/kuis, jadwal UTS & UAS, serta fitur berlangganan iCal feed.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Read-only jadwal kegiatan perkuliahan yang diikuti.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Notifikasi<br>
+                    <code style="font-size: 11px; color: #475569;">/notifications</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah pesan belum dibaca (unreadCount > 0)</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pusat notifikasi in-app untuk pengingat tugas H-1 otomatis, materi baru, pengumuman kelas, nilai yang dipublikasikan, absensi, dan peringatan login perangkat baru.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Dapat menandai telah dibaca dan mengatur preferensi notifikasi personal.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pengumuman<br>
+                    <code style="font-size: 11px; color: #475569;">/announcements</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Papan pengumuman resmi kampus, fakultas, dan program studi dengan pencatatan status baca (read-tracking).</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Read-only pengumuman yang ditargetkan untuk Mahasiswa / Prodi terkait.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kelas Saya<br>
+                    <code style="font-size: 11px; color: #475569;">/classes</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Ruang belajar mata kuliah aktif: mengunduh materi ajar (Markdown/PDF/video), silabus/RPS, forum diskusi kelas per pertemuan, tugas kuliah, dan pengumpulan jawaban tugas.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Hanya kelas terdaftar. Keterlambatan pengumpulan tugas ditandai otomatis.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Presensi<br>
+                    <code style="font-size: 11px; color: #475569;">/attendance</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Riwayat absensi pertemuan 1-16, input kode verifikasi sesi presensi atau scan QR presensi, serta deteksi peringatan kehadiran < 75% sebagai syarat mutlak UAS.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Hanya dapat mencatat kehadiran saat sesi presensi dibuka oleh dosen.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Ujian Aktif <span class='badge-shortcut'>Pintasan</span><br>
+                    <code style="font-size: 11px; color: #475569;">/exams</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pintasan cepat langsung ke Computer Based Test (CBT) kuis atau ujian resmi (UTS/UAS) yang sedang berlangsung dengan timer pengerjaan dan deteksi kecurangan (tab switch/blur).</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Hanya tampil jika ada jadwal ujian aktif dan syarat kehadiran >= 75% terpenuhi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pustaka Digital<br>
+                    <code style="font-size: 11px; color: #475569;">/library</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Koleksi materi referensi, e-book, repositori jurnal, dan bahan bacaan suplemen yang disediakan oleh dosen atau perpustakaan kampus.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Akses baca dan unduh materi repositori publik institusi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Tanya AI SIAJAR<br>
+                    <code style="font-size: 11px; color: #475569;">/ai-assistant</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Asisten bimbingan belajar cerdas berbasis AI untuk membantu memahami konsep kuliah, penjelasan materi, ringkasan akademik, dan konsultasi studi interaktif.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Interaksi tanya-jawab pembelajaran dalam batas konteks perkuliahan.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Komunitas<br>
+                    <code style="font-size: 11px; color: #475569;">/community</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Forum diskusi kampus lintas prodi dan angkatan untuk berbagi pengalaman akademik, kelompok belajar, dan informasi kemahasiswaan.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Membuat postingan & balasan sesuai pedoman moderasi komunitas kampus.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">EVALUASI & PRESTASI</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Nilai & Progres<br>
+                    <code style="font-size: 11px; color: #475569;">/grades</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Rekapitulasi nilai tugas, kuis, UTS, UAS, umpan balik dosen, diagram capaian kompetensi CPL, dan evaluasi hasil belajar semester berjalan.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Hanya menampilkan nilai yang sudah difinalisasi atau diizinkan terlihat oleh dosen.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">EVALUASI & PRESTASI</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Sertifikat & Portofolio<br>
+                    <code style="font-size: 11px; color: #475569;">/certificates</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Portofolio capaian akademik mahasiswa serta penerbitan dan verifikasi sertifikat kompetensi berbasis kode QR digital resmi (/verify/certificate/[code]).</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Mengunduh sertifikat sah milik mahasiswa yang bersangkutan.</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="role-section">
+            <h2 class="role-header">2. Asisten Dosen (TEACHING_ASSISTANT)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grup Menu</th>
+                        <th>Item & Rute</th>
+                        <th>Badge / Status</th>
+                        <th>Deskripsi & Fungsionalitas Fitur</th>
+                        <th>Batasan Wewenang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Beranda<br>
+                    <code style="font-size: 11px; color: #475569;">/ta</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Dashboard sentral asisten: ringkasan kelas yang dibina, jumlah tugas mahasiswa yang menunggu pemeriksaan, dan jadwal praktikum/asistensi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Tergantung penugasan asisten oleh Dosen Pengampu.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kalender<br>
+                    <code style="font-size: 11px; color: #475569;">/calendar</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Kalender kegiatan terpadu jadwal mengasistensi praktikum dipadukan dengan jadwal kuliah pribadi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Read-only jadwal asistensi dan perkuliahan.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Notifikasi<br>
+                    <code style="font-size: 11px; color: #475569;">/notifications</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah unread notifikasi</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pusat notifikasi penerimaan tugas baru dari mahasiswa, instruksi dosen pengampu, dan pembaruan jadwal praktikum.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Mengelola notifikasi peran asistensi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pengumuman<br>
+                    <code style="font-size: 11px; color: #475569;">/announcements</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Papan pengumuman akademik fakultas dan program studi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Read-only pengumuman publik/akademik.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MODE ASISTEN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kelas Diasistensi<br>
+                    <code style="font-size: 11px; color: #475569;">/ta/classes</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Manajemen kelas asistensi: melihat peserta kelas binaan, mengunggah materi praktikum (jika diizinkan), dan memoderasi forum diskusi praktikum.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Hanya pada kelas yang terdaftar pada tabel class_assistants.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MODE ASISTEN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Antrean Koreksi<br>
+                    <code style="font-size: 11px; color: #475569;">/ta/grading</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah tugas belum dinilai (taGradingCount)</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Antrean penilaian tugas mahasiswa: memeriksa berkas jawaban, menginput nilai draf (DRAFT score), dan memberikan catatan umpan balik per mahasiswa.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">DILARANG memfinalisasi nilai akhir (hanya wewenang Dosen Pengampu).</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MODE ASISTEN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pantau Ujian<br>
+                    <code style="font-size: 11px; color: #475569;">/ta/exam-monitor</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Ruang proctoring/pengawasan CBT online secara langsung: memantau telemetri peserta ujian, peringatan tab switch/blur, dan status pengumpulan ujian.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Memantau jalannya ujian dan mencatat dugaan pelanggaran integritas akademik.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kelas Saya<br>
+                    <code style="font-size: 11px; color: #475569;">/classes</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Mengikuti kelas perkuliahan sebagai mahasiswa biasa (mengunduh materi, mengumpulkan tugas pribadi).</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Sama dengan hak mahasiswa biasa.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Presensi<br>
+                    <code style="font-size: 11px; color: #475569;">/attendance</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Presensi kehadiran pribadi pada mata kuliah yang diambil sebagai mahasiswa.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Presensi diri sendiri.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Ujian Aktif <span class='badge-shortcut'>Pintasan</span><br>
+                    <code style="font-size: 11px; color: #475569;">/exams</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Mengikuti ujian sebagai mahasiswa (CBT ujian pribadi).</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Hanya bila ada jadwal ujian kelas yang diikutinya.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pustaka Digital<br>
+                    <code style="font-size: 11px; color: #475569;">/library</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Akses materi bacaan dan referensi digital kampus.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Akses baca dan unduh.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Tanya AI SIAJAR<br>
+                    <code style="font-size: 11px; color: #475569;">/ai-assistant</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Asisten cerdas AI untuk referensi studi dan praktikum.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Tanya-jawab AI interaktif.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Komunitas<br>
+                    <code style="font-size: 11px; color: #475569;">/community</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Forum komunitas mahasiswa dan asisten kampus.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Partisipasi forum umum.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">EVALUASI & PRESTASI</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Nilai & Progres<br>
+                    <code style="font-size: 11px; color: #475569;">/grades</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Melihat nilai hasil belajar akademik pribadi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Hanya nilai pribadi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">EVALUASI & PRESTASI</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Sertifikat & Portofolio<br>
+                    <code style="font-size: 11px; color: #475569;">/certificates</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Portofolio dan sertifikat penugasan asisten laboratorium/asisten dosen resmi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Akses sertifikat diri sendiri.</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="role-section">
+            <h2 class="role-header">3. Dosen Pengampu (LECTURER)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grup Menu</th>
+                        <th>Item & Rute</th>
+                        <th>Badge / Status</th>
+                        <th>Deskripsi & Fungsionalitas Fitur</th>
+                        <th>Batasan Wewenang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Dashboard Pengajar<br>
+                    <code style="font-size: 11px; color: #475569;">/lecturer</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Dashboard komprehensif pengajaran: rekapitulasi kelas aktif, jadwal mengajar hari ini, tingkat kehadiran kelas, tugas yang perlu diperiksa, dan progress SAP perkuliahan.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Akses data kelas dan mahasiswa yang diampu.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kalender<br>
+                    <code style="font-size: 11px; color: #475569;">/calendar</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Kalender pengajaran dosen: jadwal kuliah mingguan, tenggat penilaian tugas, jadwal UTS/UAS kelas diampu, dan agenda bimbingan mahasiswa.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Read-only agenda pengajaran dan kalender akademik.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Notifikasi<br>
+                    <code style="font-size: 11px; color: #475569;">/notifications</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah unread notifikasi</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Notifikasi pengumpulan tugas, permohonan bimbingan mahasiswa wali, konfirmasi persetujuan revisi nilai dari Kaprodi, dan pengingat presensi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Notifikasi operasional pengajaran.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pengumuman<br>
+                    <code style="font-size: 11px; color: #475569;">/announcements</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Membaca dan mempublikasikan pengumuman perkuliahan untuk kelas yang diampu atau prodi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Membuat pengumuman dengan target kelas yang diampu.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGAJARAN & PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kelas Diampu<br>
+                    <code style="font-size: 11px; color: #475569;">/classes</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Manajemen penuh ruang kelas: mempublikasikan materi (Markdown/PDF), membuat penugasan terstruktur berbatas tenggat, menunjuk asisten dosen (class_assistants), dan moderasi forum diskusi (pin/kunci topik).</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Penuh atas kelas binaannya. Tidak dapat mengakses kelas dosen lain.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGAJARAN & PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Presensi<br>
+                    <code style="font-size: 11px; color: #475569;">/attendance</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Buka/tutup sesi perkuliahan 1-16, generate token QR presensi dinamis atau kode unik, persetujuan izin/sakit, dan verifikasi ambang kehadiran >= 75% syarat UAS.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Mengontrol kehadiran pada kelas yang diampu.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGAJARAN & PEMBELAJARAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pustaka Digital<br>
+                    <code style="font-size: 11px; color: #475569;">/library</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Mempublikasikan modul ajar mandiri, artikel ilmiah, dan bahan pustaka suplemen untuk mahasiswa institusi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Unggah dan kelola materi ajar terverifikasi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UJIAN & PENILAIAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Ujian & Kuis<br>
+                    <code style="font-size: 11px; color: #475569;">/exams</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pembuatan kuis online & evaluasi ujian resmi (UTS/UAS): pengaturan durasi, pembatasan waktu buka-tutup, pengacakan soal, dan aktivasi telemetri proctoring.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Penuh pada penjadwalan evaluasi kelas sendiri.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UJIAN & PENILAIAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Bank Soal<br>
+                    <code style="font-size: 11px; color: #475569;">/exams/question-bank</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Manajemen repositori butir soal dosen (Pilihan Ganda dengan kunci jawaban, Esai, Koding) terklasifikasi menurut capaian pembelajaran mata kuliah.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Bank soal bersifat privat per dosen atau dibagikan ke tim teaching.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UJIAN & PENILAIAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Review Essay & Coding<br>
+                    <code style="font-size: 11px; color: #475569;">/exams/review</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah review pending (lecturerReviewCount)</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pemeriksaan manual jawaban esai dan peninjauan kode program mahasiswa dengan rubrik evaluasi dan umpan balik personal.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Memberikan skor evaluasi subjektif ujian.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UJIAN & PENILAIAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Analitik & Nilai<br>
+                    <code style="font-size: 11px; color: #475569;">/analytics</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Gradebook terpadu berbobot dinamis (Tugas, Kuis, UTS, UAS = 100%), konversi huruf mutu (A-E), ekspor CSV/Excel, penguncian nilai permanen (Finalize), dan permohonan revisi nilai pasca-finalisasi ke Kaprodi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Dapat mengunci nilai kelas. Setelah terkunci, perubahan wajib melalui approval Kaprodi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">LAINNYA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Komunitas<br>
+                    <code style="font-size: 11px; color: #475569;">/community</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Forum komunikasi civitas akademika dan koordinasi antarstaf pengajar.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Partisipasi diskusi institusional.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">LAINNYA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Mahasiswa Bimbingan<br>
+                    <code style="font-size: 11px; color: #475569;">/lecturer/mentoring</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Dashboard Dosen Wali (Bimbingan Akademik): pemantauan rekam jejak IPS/IPK, riwayat konsultasi, persetujuan KRS (legacy flow), dan deteksi dini mahasiswa berisiko.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Hanya untuk mahasiswa yang ditetapkan di bawah perwaliannya.</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="role-section">
+            <h2 class="role-header">4. Koordinator Program Studi (PROGRAM_COORDINATOR / Kaprodi)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grup Menu</th>
+                        <th>Item & Rute</th>
+                        <th>Badge / Status</th>
+                        <th>Deskripsi & Fungsionalitas Fitur</th>
+                        <th>Batasan Wewenang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Dashboard Prodi<br>
+                    <code style="font-size: 11px; color: #475569;">/coordinator</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Dashboard pimpinan prodi: statistik rata-rata IPK angkatan, rasio dosen-mahasiswa, ketercapaian SAP perkuliahan, dan distribusi beban mengajar SKS.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Cakupan data terbatas pada Program Studi yang dipimpinnya.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kalender<br>
+                    <code style="font-size: 11px; color: #475569;">/calendar</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Kalender agenda akademik prodi: batas akhir input nilai, jadwal rapat kurikulum, dan jadwal ujian komprehensif/sidang.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Read-only agenda prodi dan universitas.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Notifikasi<br>
+                    <code style="font-size: 11px; color: #475569;">/notifications</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah unread notifikasi</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pemberitahuan pengajuan persetujuan revisi nilai final dari dosen, permohonan pembukaan kelas baru, dan laporan mahasiswa berisiko.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Notifikasi tata kelola prodi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MANAJEMEN PRODI</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kurikulum & CPL<br>
+                    <code style="font-size: 11px; color: #475569;">/coordinator/curriculum</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Penyusunan kurikulum prodi, penetapan Capaian Pembelajaran Lulusan (CPL), bobot semester paket, dan pemetaan prasyarat matkul dengan deteksi otomatis circular prerequisites.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Wewenang penuh kurikulum prodi terkait.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MANAJEMEN PRODI</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Mata Kuliah<br>
+                    <code style="font-size: 11px; color: #475569;">/coordinator/courses</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Master data mata kuliah prodi: pengaturan kode matkul, SKS (teori/praktik), silabus acuan, dan status keaktifan penawaran semester.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">CRUD mata kuliah di prodi sendiri.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MANAJEMEN PRODI</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Penugasan & Kelas<br>
+                    <code style="font-size: 11px; color: #475569;">/coordinator/assignments</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Penetapan dosen pengampu (teaching assignment) pada rombongan belajar/kelas semester aktif, serta persetujuan pembukaan rombel paralel.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Menugaskan dosen homebase prodi pada kelas-kelas prodi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MONITORING</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Monitoring<br>
+                    <code style="font-size: 11px; color: #475569;">/coordinator/monitoring</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Monitoring real-time keterlaksanaan proses pembelajaran: progres pengisian materi pertemuan 1-16 dosen, rekap kehadiran, dan ketepatan waktu input nilai.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Pemantauan seluruh kelas di bawah prodi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MONITORING</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Mahasiswa Berisiko<br>
+                    <code style="font-size: 11px; color: #475569;">/coordinator/monitoring/at-risk</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Early Warning System (EWS) mahasiswa berisiko: mendeteksi mahasiswa terancam DO atau bermasalah berdasarkan IPK < 2.00, kehadiran < 75%, atau ketidakaktifan submission tugas.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Melihat daftar mahasiswa berisiko dan menginstruksikan tindak lanjut ke Dosen Wali.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PERSETUJUAN & LAPORAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Persetujuan<br>
+                    <code style="font-size: 11px; color: #475569;">/coordinator/approvals</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah permohonan pending (coordinatorApprovalsCount)</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Verifikasi dan otorisasi persetujuan perubahan nilai final dari dosen pengampu (grade_change_requests) dengan catatan evaluasi akademik resmi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Kaprodi menjadi pemutus wewenang revisi nilai sebelum dieksekusi Staf BAAK.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PERSETUJUAN & LAPORAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Laporan & Evaluasi<br>
+                    <code style="font-size: 11px; color: #475569;">/coordinator/reports</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Laporan ketercapaian CPL prodi, rekapitulasi distribusi nilai prodi, dan laporan mutu perkuliahan untuk kebutuhan akreditasi LAM-INFOKOM/BAN-PT.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Ekspor dan pelaporan analitik mutu prodi.</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="role-section">
+            <h2 class="role-header">5. Staf Akademik (ACADEMIC_STAFF / BAAK)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grup Menu</th>
+                        <th>Item & Rute</th>
+                        <th>Badge / Status</th>
+                        <th>Deskripsi & Fungsionalitas Fitur</th>
+                        <th>Batasan Wewenang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Dashboard<br>
+                    <code style="font-size: 11px; color: #475569;">/staff</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Dashboard operasional BAAK/Akademik: jumlah mahasiswa aktif per angkatan, status penjadwalan kelas, antrean verifikasi berkas, dan agenda kerja harian.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Operasional administrasi akademik seluruh fakultas/universitas.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kalender<br>
+                    <code style="font-size: 11px; color: #475569;">/calendar</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Manajemen kalender akademik induk: masa pengisian KRS, masa perkuliahan aktif, minggu tenang, dan periode ujian resmi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Mengatur jadwal periode kegiatan akademik kampus.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Notifikasi<br>
+                    <code style="font-size: 11px; color: #475569;">/notifications</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah unread notifikasi</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Notifikasi pengajuan berkas/surat mahasiswa, jadwal baru, dan persetujuan perubahan nilai dari Kaprodi yang siap dieksekusi ke master nilai.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Notifikasi administratif harian.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">DATA MASTER</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Mahasiswa<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/master/students</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Manajemen data induk mahasiswa: pengelolaan NIM, biodata, status aktif/cuti/lulus, penetapan dosen wali, dan impor massal CSV 3-tahap dengan validasi error baris.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">CRUD data induk mahasiswa dan impor massal.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">DATA MASTER</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Dosen<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/master/lecturers</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pengelolaan data induk dosen: NIDN/NIP, kepangkatan akademik, homebase prodi, dan status keaktifan mengajar.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">CRUD data pengajar institusi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">DATA MASTER</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Data Akademik<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/master</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Master data program studi (programs), tahun akademik & semester aktif (semesters), serta master ruang perkuliahan (rooms beserta kapasitas & koordinat geofencing).</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">CRUD entitas master institusional.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KELAS & AKADEMIK</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Jadwal<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/schedules</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Penyusunan jadwal kuliah dan jadwal ujian dengan algoritma pendeteksi bentrok jadwal dosen mengajar, pemakaian ruang, dan mahasiswa.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Menyusun dan menerbitkan jadwal perkuliahan terkoordinasi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KELAS & AKADEMIK</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kelas & Peserta<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/classes</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pembentukan rombel kelas, kuota daya tampung, enrollment peserta kelas secara batch/massal via CSV, dan perpindahan kelas mahasiswa.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Mengelola kapasitas dan penetapan peserta kelas.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KELAS & AKADEMIK</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Nilai & Presensi<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/grades</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Rekapitulasi nilai institusional, pemantauan penguncian gradebook, eksekusi pembaruan nilai final pasca-persetujuan Kaprodi, dan laporan presensi komprehensif.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Mengeksekusi nilai final setelah otorisasi Kaprodi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KONTEN & LAYANAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Verifikasi Berkas<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/services/verification</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pemrosesan permohonan surat keterangan aktif kuliah, surat dispensasi, cuti akademik, dan legalisasi transkrip nilai resmi dengan nomor registrasi unik.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Memverifikasi, menyetujui, dan menerbitkan surat resmi PDF.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KONTEN & LAYANAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pengumuman & Event<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/announcements</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Publikasi agenda event kampus, kalender registrasi, dan pengumuman administratif ke civitas akademika.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Mempublikasikan pengumuman administratif kampus.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KONTEN & LAYANAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pustaka & Sertifikat<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/content</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pengelolaan repositori berkas publik, template dokumen institusi, dan penerbitan sertifikat kelulusan/kegiatan terverifikasi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Mengelola aset dokumen institusi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KONTEN & LAYANAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Moderasi Komunitas<br>
+                    <code style="font-size: 11px; color: #475569;">/staff/moderation</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Moderasi forum komunitas civitas: menindaklanjuti laporan konten tidak pantas atau postingan yang melanggar tata tertib kampus.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Menyembunyikan/menghapus konten forum yang melanggar ketentuan.</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="role-section">
+            <h2 class="role-header">6. System Administrator (SYSTEM_ADMIN)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grup Menu</th>
+                        <th>Item & Rute</th>
+                        <th>Badge / Status</th>
+                        <th>Deskripsi & Fungsionalitas Fitur</th>
+                        <th>Batasan Wewenang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Dashboard Sistem<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Dashboard teknis kesehatan infrastruktur: beban CPU & RAM, kapasitas penyimpanan, status koneksi Supabase & PgBouncer, status background worker, dan error rate.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Wewenang teknis infrastruktur. TIDAK MEMILIKI akses membaca/mengedit data nilai/akademik mahasiswa.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Notifikasi<br>
+                    <code style="font-size: 11px; color: #475569;">/notifications</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah unread notifikasi</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Peringatan darurat teknis: kegagalan cron job, lonjakan kesalahan server, peringatan disk space, dan percobaan intrusi keamanan.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Peringatan operasional teknis sistem.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MONITORING & INTEGRASI</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Monitoring Sistem<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/monitoring</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Telemetri uptime layanan, latensi response time server action, performa query database Postgres, koneksi Supabase Realtime, dan error tracking.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Pemantauan telemetri performa dan ketersediaan layanan.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">MONITORING & INTEGRASI</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Integrasi<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/integrations</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Manajemen integrasi eksternal: Google OAuth Client ID, konfigurasi Supabase Storage bucket, webhook eksternal, dan integrasi feeder PDDIKTI.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Konfigurasi API credentials dan konektivitas antarsistem.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KEAMANAN & CADANGAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Keamanan<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/security</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pemantauan deteksi sesi dan perangkat (user_devices), aturan rate-limiting login (anti brute-force 5x gagal lock 15 menit), dan pencabutan sesi darurat.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Pengendalian perimeter keamanan siber dan sesi pengguna.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KEAMANAN & CADANGAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Backup & Restore<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/backup</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Jadwal pencadangan otomatis skema basis data publik (scripts/backup-db.sh), manajemen snapshot cadangan, dan skrip verifikasi restorasi data.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Menjalankan prosedur backup dan disaster recovery testing.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGATURAN & AUDIT</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pengaturan Platform<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/settings</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Konfigurasi platform global: domain email yang diizinkan (ALLOWED_EMAIL_DOMAIN), mode pemeliharaan (maintenance mode), batas ukuran upload, dan feature flags.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Konfigurasi variabel runtime platform.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGATURAN & AUDIT</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Log Audit<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/audit</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Audit trail permanen (audit_logs) yang bersifat immutable: merekam waktu, aktor, peran, aksi, entitas, IP address, user-agent, serta nilai sebelum dan sesudah perubahan data sensitif.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Read-only riwayat log forensik (tidak dapat dimodifikasi atau dihapus).</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="role-section">
+            <h2 class="role-header">7. Super Administrator (SUPER_ADMIN)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grup Menu</th>
+                        <th>Item & Rute</th>
+                        <th>Badge / Status</th>
+                        <th>Deskripsi & Fungsionalitas Fitur</th>
+                        <th>Batasan Wewenang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Dashboard Universitas<br>
+                    <code style="font-size: 11px; color: #475569;">/admin</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Dashboard eksekutif universitas: rekapitulasi data seluruh sivitas akademika, sebaran mahasiswa per prodi, efektivitas perkuliahan, dan statistik kepatuhan sistem.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Pimpinan tertinggi dengan tinjauan makro seluruh institusi.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">UTAMA</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Notifikasi<br>
+                    <code style="font-size: 11px; color: #475569;">/notifications</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='badge'>Jumlah unread notifikasi</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Notifikasi strategis institusional, peringatan keamanan tingkat tinggi, dan eskalasi audit insiden.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Pemberitahuan tingkat eksekutif.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGGUNA & AKSES</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kelola Pengguna<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/users</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Manajemen seluruh akun pengguna (Mahasiswa, Dosen, Kaprodi, Staf): aktivasi/suspend akun, reset password paksa, dan fitur impersonasi akun berproteksi HMAC fail-closed untuk troubleshooting.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Wewenang penuh akun pengguna dan impersonasi berizin audit.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGGUNA & AKSES</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Role & Permission<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/roles</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Manajemen matriks Role-Based Access Control (RBAC): penugasan multi-role, penetapan ruang lingkup peran (GLOBAL, PROGRAM, CLASS), dan pengaturan granular hak akses.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Mengatur hierarki dan matriks otorisasi sistem.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KEBIJAKAN & GLOBAL</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Kebijakan<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/policies</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pengaturan kebijakan akademik institusi: skala konversi huruf mutu (A-E), batas minimal kehadiran ujian (default 75%), rumus SKS maksimal berdasarkan IPS semester lalu.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Menetapkan aturan bisnis akademik universitas.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">KEBIJAKAN & GLOBAL</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pengumuman Global<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/announcements</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Publikasi pengumuman darurat atau keputusan rektorat berskala luas ke seluruh pengguna sistem dengan push notifikasi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Broadcast pengumuman ke seluruh sivitas kampus.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">SISTEM</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Monitoring Sistem<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/monitoring</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Akses shared hub ke telemetri kesehatan server dan infrastruktur.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Shared akses teknis (collapsible grup).</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">SISTEM</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Integrasi<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/integrations</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Akses shared hub ke konfigurasi integrasi OAuth, storage, dan API eksternal.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Shared akses teknis.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">SISTEM</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Keamanan<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/security</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Akses shared hub ke manajemen keamanan sesi dan pembatasan login.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Shared akses teknis.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">SISTEM</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Backup & Restore<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/backup</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Akses shared hub ke status backup basis data dan opsi pemulihan.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Shared akses teknis.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">SISTEM</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pengaturan Platform<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/settings</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Akses shared hub ke pengaturan feature flags dan environment platform.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Shared akses teknis.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">SISTEM</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Log Audit<br>
+                    <code style="font-size: 11px; color: #475569;">/admin/system/audit</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Akses shared hub ke log audit permanen aktivitas sistem.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Shared akses teknis.</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="role-section">
+            <h2 class="role-header">8. Menu Bersama Seluruh Role (PENGATURAN & BANTUAN)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Grup Menu</th>
+                        <th>Item & Rute</th>
+                        <th>Badge / Status</th>
+                        <th>Deskripsi & Fungsionalitas Fitur</th>
+                        <th>Batasan Wewenang</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGATURAN & BANTUAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pengaturan Tampilan<br>
+                    <code style="font-size: 11px; color: #475569;">/settings</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Preferensi personalisasi antarmuka: mode tampilan (Light / Dark / System Default), kepadatan elemen, bahasa, dan pengaturan notifikasi personal.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Dapat diakses oleh seluruh pengguna terdaftar.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGATURAN & BANTUAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Pusat Bantuan<br>
+                    <code style="font-size: 11px; color: #475569;">/help</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Pusat bantuan komprehensif, petunjuk operasional sistem per role, FAQ interaktif, dan formulir pengajuan kendala teknis (helpdesk).</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Dapat diakses oleh seluruh pengguna terdaftar.</td>
+            </tr>
+            
+            <tr>
+                <td style="font-weight: 600; width: 14%;">PENGATURAN & BANTUAN</td>
+                <td style="font-weight: 600; width: 18%; color: #1e3a8a;">
+                    Transparansi Data<br>
+                    <code style="font-size: 11px; color: #475569;">/transparency</code>
+                </td>
+                <td style="width: 12%; font-size: 12px; color: #64748b;"><span class='text-muted'>-</span></td>
+                <td style="width: 38%; font-size: 12px; line-height: 1.5;">Kepatuhan terhadap UU Pelindungan Data Pribadi (UU PDP): ringkasan data profil yang disimpan, daftar sesi dan perangkat terdaftar (/devices), tombol darurat 'Ini bukan saya', dan persetujuan privasi.</td>
+                <td style="width: 18%; font-size: 11px; color: #475569; line-height: 1.4;">Dapat diakses oleh seluruh pengguna terdaftar untuk audit data mandiri.</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        
+
+    <div class="footer">
+        Dokumen Resmi SIAJAR • Diterbitkan Otomatis untuk Penjaminan Mutu & Otorisasi Sistem Akademik
+    </div>
+</body>
+</html>

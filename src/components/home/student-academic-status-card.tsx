@@ -122,7 +122,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
                     {item.classTitle}
                   </h3>
                   <span
-                    className={`px-2 py-0.5 rounded border text-[11px] shrink-0 font-bold ${
+                    className={`px-2 py-0.5 rounded border text-xs shrink-0 font-bold ${
                       item.riskLevel === 'RISIKO_TINGGI'
                         ? 'bg-primary text-white border-black'
                         : 'bg-gray-dark text-white border-black'
@@ -142,7 +142,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
                       <AlertTriangle className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
                       <div>
                         <span className="font-bold text-ink block">{ind.label}</span>
-                        <span className="text-gray-dark text-[11px] font-sans">{ind.reason}</span>
+                        <span className="text-gray-dark text-xs font-sans">{ind.reason}</span>
                       </div>
                     </div>
                   ))}
@@ -155,7 +155,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
                       <Sparkles className="h-3.5 w-3.5 text-primary" />
                       Saran Tindakan:
                     </span>
-                    <p className="text-[11px] text-gray-dark leading-relaxed font-sans">
+                    <p className="text-xs text-gray-dark leading-relaxed font-sans">
                       {item.recommendations[0]}
                     </p>
                   </div>

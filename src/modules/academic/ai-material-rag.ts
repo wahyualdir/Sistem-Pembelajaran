@@ -4,9 +4,10 @@ import { randomUUID } from 'crypto';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import {
   getAuthorizedClassesForUser,
-  getQuizStore,
   getMaterialStore,
 } from '@/lib/auth/class-access';
+import { quizStore } from './quiz-store';
+
 
 export interface MaterialSnippet {
   id: string;
@@ -45,7 +46,6 @@ export async function checkStudentActiveExamSession(userId: string): Promise<{
   hasActiveExam: boolean;
   examTitle?: string;
 }> {
-  const quizStore = getQuizStore();
   // Cek apakah mahasiswa sedang berada di sesi ujian aktif
   const liveAttempts = (quizStore.attempts || []).filter(
     (a) => a.student_id === userId && ((a as any).status === 'IN_PROGRESS' || !a.submitted_at)

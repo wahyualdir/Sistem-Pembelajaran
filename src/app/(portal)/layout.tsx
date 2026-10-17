@@ -75,6 +75,7 @@ export default async function PortalLayout({ children }: { children: React.React
       profile={profile}
       account={account}
       isImpersonating={userContext.isImpersonating}
+      availableRoles={roles.map((r) => (r.roles as any)?.code || r.role_id).filter(Boolean)}
     >
       {children}
       <AiAcademicAssistant />

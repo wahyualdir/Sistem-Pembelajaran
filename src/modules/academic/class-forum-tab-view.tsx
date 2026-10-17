@@ -370,27 +370,27 @@ export function ClassForumTabView({
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/10 pb-2.5">
                   <div className="flex flex-wrap items-center gap-2">
                     {topic.is_pinned && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded border border-black bg-ink text-white font-bold text-[11px] shadow-xs">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded border border-black bg-ink text-white font-bold text-xs shadow-xs">
                         <Pin className="h-3 w-3 fill-white" />
                         Tersemat
                       </span>
                     )}
 
                     {topic.is_locked && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded border border-black bg-gray-soft text-ink font-bold text-[11px]">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded border border-black bg-gray-soft text-ink font-bold text-xs">
                         <Lock className="h-3 w-3" />
                         Terkunci
                       </span>
                     )}
 
                     {isBestAnswered && (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded border border-black bg-surface text-ink font-bold text-[11px] shadow-xs">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded border border-black bg-surface text-ink font-bold text-xs shadow-xs">
                         <CheckCircle2 className="h-3 w-3 text-ink" />
                         Solusi Terbaik Terjawab
                       </span>
                     )}
 
-                    <span className="text-[11px] font-sans font-bold text-gray-dark">
+                    <span className="text-xs font-sans font-bold text-gray-dark">
                       Oleh{' '}
                       <strong className="text-ink">
                         {topic.author_name}
@@ -399,7 +399,7 @@ export function ClassForumTabView({
                     </span>
                   </div>
 
-                  <span className="text-[11px] text-gray-dark font-sans flex items-center gap-1">
+                  <span className="text-xs text-gray-dark font-sans flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     {new Date(topic.created_at).toLocaleDateString('id-ID', {
                       day: 'numeric',
@@ -429,14 +429,14 @@ export function ClassForumTabView({
                       topic.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-0.5 rounded border border-black/40 bg-gray-soft text-[10px] font-bold text-ink"
+                          className="px-2 py-0.5 rounded border border-black/40 bg-gray-soft text-xs font-bold text-ink"
                         >
                           #{tag}
                         </span>
                       ))}
 
                     {topic.attachments && topic.attachments.length > 0 && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-black bg-surface text-[10px] font-bold text-ink">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-black bg-surface text-xs font-bold text-ink">
                         <Paperclip className="h-3 w-3 text-primary" />
                         {topic.attachments[0].name}
                       </span>

@@ -124,7 +124,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. RETRO WINDOW HEADER */}
       <RetroWindow
-        title="Nilai & Progres Pembelajaran"
+        title="Nilai Saya"
         headerBadge="Semester Ganjil 2026/2027"
         headerBadgeVariant="info"
         bodyClassName="p-4 sm:p-6 lg:p-8"
@@ -133,7 +133,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
           <div className="space-y-1.5 sm:space-y-2">
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2.5 sm:gap-3">
               <CheckSquare className="h-6 w-6 sm:h-7 sm:w-7 text-primary shrink-0" />
-              <span>Nilai & Progres Pembelajaran</span>
+              <span>Nilai Saya</span>
             </h1>
             <p className="text-sm sm:text-base lg:text-lg text-black font-bold max-w-2xl leading-relaxed">
               Pantau bobot nilai per komponen (tugas, kuis, ujian, presensi), riwayat evaluasi, dan proyeksi capaian indeks prestasi kumulatif semester ini secara transparan.
@@ -322,7 +322,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
               href="/exams"
               className="text-xs sm:text-sm font-sans font-bold text-black hover:underline flex items-center gap-1"
             >
-              <span>Lihat Ujian Aktif</span>
+              <span>Lihat Ujian</span>
               <span>&rarr;</span>
             </Link>
           </div>
@@ -332,7 +332,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
               <Award className="h-12 w-12 text-black mx-auto" />
               <h3 className="font-sans font-bold text-lg sm:text-xl text-black">Belum Ada Riwayat Ujian</h3>
               <p className="text-sm sm:text-base text-black font-bold max-w-md mx-auto">
-                Anda belum memiliki riwayat pengerjaan ujian atau kuis. Silakan mulai pengerjaan dari menu Ujian Aktif.
+                Anda belum memiliki riwayat pengerjaan ujian atau kuis. Silakan mulai pengerjaan dari menu Ujian.
               </p>
             </div>
           ) : (

@@ -245,7 +245,7 @@ export function SuperadminPoliciesHubView() {
                   }
                   className="w-full p-2.5 rounded border-2 border-black bg-white font-sans font-bold"
                 />
-                <span className="text-[11px] text-gray-dark block mt-1">
+                <span className="text-xs text-gray-dark block mt-1">
                   Kehadiran di bawah persentase ini dikategorikan <b>Risiko Tinggi</b>.
                 </span>
               </div>
@@ -262,7 +262,7 @@ export function SuperadminPoliciesHubView() {
                   }
                   className="w-full p-2.5 rounded border-2 border-black bg-white font-sans font-bold"
                 />
-                <span className="text-[11px] text-gray-dark block mt-1">
+                <span className="text-xs text-gray-dark block mt-1">
                   Kehadiran di antara syarat minimal dan ambang ini dikategorikan <b>Perhatian</b>.
                 </span>
               </div>
@@ -319,7 +319,7 @@ export function SuperadminPoliciesHubView() {
                   }
                   className="w-full p-2.5 rounded border-2 border-black bg-white font-sans font-bold"
                 />
-                <span className="text-[11px] text-gray-dark block mt-1">
+                <span className="text-xs text-gray-dark block mt-1">
                   Jika nilai tugas/kuis terbaru turun melebihi poin ini dari rata-rata sebelumnya.
                 </span>
               </div>
@@ -342,7 +342,7 @@ export function SuperadminPoliciesHubView() {
                   }
                   className="w-full p-2.5 rounded border-2 border-black bg-white font-sans font-bold"
                 />
-                <span className="text-[11px] text-gray-dark block mt-1">
+                <span className="text-xs text-gray-dark block mt-1">
                   Penyelesaian modul di bawah nilai ini memicu catatan keaktifan belajar.
                 </span>
               </div>

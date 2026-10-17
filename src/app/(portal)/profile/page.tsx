@@ -258,14 +258,14 @@ export default async function ProfilePage() {
                         <h3 className="font-heading font-bold text-xs sm:text-sm text-black truncate">
                           {b.title}
                         </h3>
-                        <span className="px-1.5 py-0.5 rounded border border-black bg-surface text-[10px] font-bold text-ink font-sans shrink-0">
+                        <span className="px-1.5 py-0.5 rounded border border-black bg-surface text-xs font-bold text-ink font-sans shrink-0">
                           ✓ Terbuka
                         </span>
                       </div>
                       <p className="text-xs text-black/75 font-sans leading-relaxed">
                         {b.description}
                       </p>
-                      <div className="pt-1.5 flex items-center justify-between text-[11px] font-sans text-black/60 border-t border-black/10 mt-1">
+                      <div className="pt-1.5 flex items-center justify-between text-xs font-sans text-black/60 border-t border-black/10 mt-1">
                         <span className="font-bold text-black">{b.progress}</span>
                         <span>{b.earnedAt}</span>
                       </div>

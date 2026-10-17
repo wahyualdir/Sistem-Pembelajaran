@@ -30,14 +30,14 @@ import {
   type AiDraftQuestion,
 } from '@/modules/academic/ai-quiz-generator';
 import {
-  quizStore,
   createQuizAction,
   saveToQuestionBankAction,
   gradeEssayQuestionAction,
   listClassQuizzesAction,
   getQuizDetailAction,
 } from '@/modules/academic/quiz-actions';
-import { getQuizStore } from '@/lib/auth/class-access';
+import { quizStore, getQuizStore } from '@/modules/academic/quiz-store';
+
 
 describe('SIAJAR Fitur 2: Generator Draf Soal AI di Bank Soal & Keamanan Ujian', () => {
   const classId = 'c0000000-0000-0000-0000-000000000001';

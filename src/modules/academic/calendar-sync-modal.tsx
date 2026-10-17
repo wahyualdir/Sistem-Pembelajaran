@@ -129,7 +129,7 @@ export function CalendarSyncModal() {
                     <span>{copied ? 'Tersalin' : 'Salin URL'}</span>
                   </button>
                 </div>
-                <p className="text-[11px] text-black/60 font-sans">
+                <p className="text-xs text-black/60 font-sans">
                   Format standar iCalendar RFC 5545. Tanpa login OAuth; aplikasi kalender akan membaca pembaruan jadwal secara berkala via URL ini.
                 </p>
               </div>

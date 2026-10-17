@@ -139,7 +139,7 @@ export function AiAssistantPageView({ enrolledClasses, initialHistory = [] }: Ai
 
           {/* Konteks Selector Dropdown */}
           <div className="p-3 rounded-xl border-2 border-black bg-surface shadow-retro-sm space-y-1 min-w-[240px]">
-            <label className="text-[10px] font-bold text-gray-dark uppercase tracking-wider block">
+            <label className="text-xs font-bold text-gray-dark uppercase tracking-wider block">
               Konteks Materi Kuliah:
             </label>
             <select
@@ -166,7 +166,7 @@ export function AiAssistantPageView({ enrolledClasses, initialHistory = [] }: Ai
             <Sparkles className="h-4 w-4 text-primary" />
             Mode Grounding RAG: Menjawab hanya dari materi kelas resmi (Anti-Halusinasi)
           </span>
-          <span className="text-[11px] text-gray-dark">
+          <span className="text-xs text-gray-dark">
             Proteksi Ujian Aktif Otomatis
           </span>
         </div>
@@ -200,14 +200,14 @@ export function AiAssistantPageView({ enrolledClasses, initialHistory = [] }: Ai
                 {/* Pill Rujukan Materi */}
                 {m.citations && m.citations.length > 0 && (
                   <div className="pt-2 border-t border-black/15 flex flex-wrap items-center gap-1.5">
-                    <span className="text-[10px] font-bold text-gray-dark uppercase">
+                    <span className="text-xs font-bold text-gray-dark uppercase">
                       Rujukan Resmi:
                     </span>
                     {m.citations.map((c, i) => (
                       <Link
                         key={i}
                         href={c.url}
-                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-black bg-gray-soft text-[10px] font-bold text-ink hover:underline"
+                        className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-black bg-gray-soft text-xs font-bold text-ink hover:underline"
                       >
                         <BookOpen className="h-3 w-3 text-primary" />
                         <span>{c.title} (Pertemuan {c.meeting})</span>
@@ -218,7 +218,7 @@ export function AiAssistantPageView({ enrolledClasses, initialHistory = [] }: Ai
                 )}
               </div>
 
-              <span className="mt-1 text-[10px] font-sans text-gray-dark px-1">
+              <span className="mt-1 text-xs font-sans text-gray-dark px-1">
                 {m.time}
               </span>
             </div>
@@ -235,7 +235,7 @@ export function AiAssistantPageView({ enrolledClasses, initialHistory = [] }: Ai
 
         {/* Quick Suggestions Chips */}
         <div className="p-3 bg-gray-soft/50 border-t border-black/20 flex items-center gap-2 overflow-x-auto no-scrollbar">
-          <span className="text-[11px] font-bold text-gray-dark uppercase shrink-0">
+          <span className="text-xs font-bold text-gray-dark uppercase shrink-0">
             Saran Cepat:
           </span>
           {samplePrompts.map((p, idx) => (

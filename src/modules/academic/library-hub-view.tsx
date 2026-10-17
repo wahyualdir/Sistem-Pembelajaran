@@ -103,8 +103,8 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. HEADER RETRO */}
       <RetroWindow
-        title="Pustaka Digital & Referensi Ilmiah"
-        badge={isStaffOrLecturer ? 'Portal Pengajar & Staf' : 'Koleksi Terbuka'}
+        title="Perpustakaan dan Referensi Ilmiah"
+        badge={isStaffOrLecturer ? 'Portal Pengajar dan Staf' : 'Koleksi Terbuka'}
         headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
       >
@@ -115,7 +115,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
                 <BookOpen className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
-                Pustaka Digital & Modul Terbuka
+                Perpustakaan dan Modul Terbuka
               </h1>
             </div>
             <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">

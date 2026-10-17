@@ -65,11 +65,12 @@ const SAMPLE_AUDIT_LOGS: AuditItem[] = [
   },
 ];
 
-export function SystemAuditHubView() {
+export function SystemAuditHubView({ initialLogs = SAMPLE_AUDIT_LOGS }: { initialLogs?: AuditItem[] }) {
   const [filterAction, setFilterAction] = useState('ALL');
   const isDemo = isDemoMode();
 
-  const filteredLogs = SAMPLE_AUDIT_LOGS.filter((l) => {
+  const logs = initialLogs.length > 0 ? initialLogs : SAMPLE_AUDIT_LOGS;
+  const filteredLogs = logs.filter((l) => {
     if (filterAction === 'ALL') return true;
     return l.action.startsWith(filterAction);
   });
@@ -101,13 +102,13 @@ export function SystemAuditHubView() {
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-gray-soft text-black font-sans text-xs font-bold shadow-retro-sm">
               <Lock className="h-4 w-4 text-black" />
-              {isDemo ? 'LOG AUDIT (MEMORI DEMO)' : 'LOG AUDIT (MENUNGGU MIGRASI DB)'}
+              {isDemo ? 'LOG AUDIT (MEMORI DEMO)' : 'LOG AUDIT (TERHUBUNG DB)'}
             </span>
           </div>
         </div>
       </RetroWindow>
 
-      {/* 2. FILTER & DAFTAR LOG AUDIT */}
+      {/* 2. FILTER DAN DAFTAR LOG AUDIT */}
       <div className="p-5 sm:p-6 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black pb-3">
           <div className="flex items-center gap-2">
@@ -120,12 +121,12 @@ export function SystemAuditHubView() {
             >
               <option value="ALL">Semua Transaksi</option>
               <option value="grade">Perubahan Nilai (Grade)</option>
-              <option value="auth">Autentikasi & Impersonasi</option>
-              <option value="exam">Ujian & Pengawasan</option>
+              <option value="auth">Autentikasi dan Impersonasi</option>
+              <option value="exam">Ujian dan Pengawasan</option>
             </select>
           </div>
           <span className="text-xs font-sans font-bold text-black/60">
-            Total Entri: {isDemo ? `${filteredLogs.length} Log` : '0 Log (Belum Terhubung)'}
+            Total Entri: {filteredLogs.length} Log
           </span>
         </div>
 

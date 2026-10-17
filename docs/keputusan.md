@@ -248,3 +248,16 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
       - RLS testing di `supabase/tests/database/06_storage_and_progress_rls.sql` dan `npm run check:rls` (29 tabel lulus).
       - E2E Playwright di `tests/e2e/lms-materi-tugas-progres.spec.ts` memvalidasi alur terpadu.
 
+
+
+### Keputusan 28: Penyelarasan Celah Skema, Restrukturisasi 102 Menu, dan Pemisahan Store Kuis (Fase 0)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Melaksanakan penyelarasan skema database melalui migrasi baru `supabase/migrations/20261017000022_phase0_gap_alignment.sql` yang menambahkan flag `can_open_attendance` pada `class_assistants`, tabel `student_requests` untuk permohonan mahasiswa, tabel pembatasan domain email (`allowed_email_domains`, `email_allowlist`), dan view `audit_logs_for_sysadmin` dengan masking IP & user agent.
+  2. Mengonfigurasi `src/lib/config/menu-config.ts` untuk merefleksikan 102 menu lengkap dari 7 peran pengguna SIAJAR sesuai pedoman bahasa dan terminologi yang ditetapkan di `docs/INSTRUKSI_ANTIGRAVITY.md` (menghapus buzzwords promosi, tidak memakai tanda & atau garis miring pada label).
+  3. Memisahkan in-memory store kuis ke `src/modules/academic/quiz-store.ts` tanpa deklarasi `'use server'`, sehingga mematuhi aturan ketat Next.js App Router (berkas `'use server'` hanya boleh mengekspor async functions, bukan objek atau singleton store).
+  4. Menyediakan rute-rute antarmuka yang sebelumnya absen (`/requests`, `/messages`, `/achievements`, `/evaluations`, `/ta/materials`, `/lecturer/journals`, `/lecturer/rubrics`, `/lecturer/evaluations`, `/lecturer/disputes`, `/exams/analysis`, `/coordinator/evaluations`) dengan proteksi role guard dan state kosong yang informatif.
+- **Alasan**: Menjamin fondasi SIAJAR bersih, bebas galat kompilasi Next.js, dan sepenuhnya selaras dengan kontrak navigasi dan keamanan multi-peran sebelum melangkah ke implementasi Fase 1 sampai 7.
+- **Alternatif yang ditolak**:
+  - *Mempertahankan rute lama yang tidak sesuai tabel*: Ditolak karena membingungkan navigasi pengguna antar-peran.
+  - *Mengedit migrasi lama (1-21)*: Ditolak demi integritas audit dan kepatuhan prinsip migrasi idempoten berbasis append-only.

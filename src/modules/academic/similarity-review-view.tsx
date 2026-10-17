@@ -417,7 +417,7 @@ export function SimilarityReviewView({
                   className="w-full p-2.5 rounded-lg border-2 border-black text-xs font-sans outline-none focus:ring-2 focus:ring-primary"
                   required
                 />
-                <span className="text-[11px] text-black/50 block mt-1">
+                <span className="text-xs text-black/50 block mt-1">
                   Catatan ini akan tersimpan permanen di Audit Trail dan hanya dapat dilihat oleh Dosen Pengampu & Kaprodi.
                 </span>
               </div>

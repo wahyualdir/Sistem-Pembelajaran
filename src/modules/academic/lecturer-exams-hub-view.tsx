@@ -319,7 +319,7 @@ export function LecturerExamsHubView({
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-white text-xs sm:text-sm font-bold shadow-xs hover:bg-neutral-100"
             >
               <FileCheck className="h-4 w-4" />
-              <span>Review Essay & Coding</span>
+              <span>Periksa Jawaban</span>
             </Link>
           </div>
         </div>
@@ -355,7 +355,7 @@ export function LecturerExamsHubView({
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h2 className="font-heading font-bold text-lg text-black">
-                Daftar Sesi Ujian Aktif & Terjadwal ({quizzes.length})
+                Daftar Sesi Ujian dan Terjadwal ({quizzes.length})
               </h2>
               <p className="text-xs text-black/70">
                 Pilih sesi ujian untuk memantau pengerjaan secara langsung atau membuat paket soal baru.

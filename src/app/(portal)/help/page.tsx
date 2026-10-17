@@ -78,11 +78,11 @@ export default function HelpCenterPage() {
                 <HelpCircle className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-foreground">
-                Pusat Bantuan & Panduan LMS
+                Bantuan dan Panduan LMS
               </h1>
             </div>
             <p className="text-base sm:text-lg text-black font-medium max-w-2xl mt-1 leading-relaxed">
-              Temukan panduan lengkap penggunaan portal pembelajaran SIAJAR, tata cara pelaksanaan ujian terawasi, mekanisme presensi berbasis GPS & QR dinamis, serta perlindungan privasi data akademik.
+              Temukan panduan lengkap penggunaan portal pembelajaran SIAJAR, tata cara pelaksanaan ujian terawasi, mekanisme presensi berbasis GPS dan QR dinamis, serta perlindungan privasi data akademik.
             </p>
           </div>
 

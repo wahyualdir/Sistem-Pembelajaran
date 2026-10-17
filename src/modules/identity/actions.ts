@@ -559,6 +559,17 @@ export async function switchWorkspaceAction(formData: FormData | unknown): Promi
 }
 
 /**
+ * Ganti peran aktif pengguna dengan penanganan FormData atau string role
+ */
+export async function switchActiveRoleAction(formData: FormData | string): Promise<void> {
+  if (typeof formData === 'string') {
+    return switchWorkspaceAction({ roleCode: formData });
+  }
+  const roleCode = (formData.get('role') || formData.get('roleCode')) as string;
+  return switchWorkspaceAction({ roleCode });
+}
+
+/**
  * Server Action: changePassword
  * Kebijakan password Bagian 3.3 dan penanganan must_change_password
  */

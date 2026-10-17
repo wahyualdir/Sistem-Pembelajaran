@@ -217,27 +217,29 @@ export function Sidebar({
               : !!group.defaultCollapsed;
             return (
               <div key={group.id || group.title} className="space-y-1.5">
-                <div className="flex items-center justify-between px-2.5 mb-1.5">
-                  <p className="text-xs font-bold uppercase tracking-wider text-gray-dark">
-                    {group.title}
-                  </p>
-                  {group.collapsible && (
-                    <button
-                      type="button"
-                      onClick={() => toggleGroupCollapse(group.id)}
-                      className="p-1 rounded hover:bg-gray-soft text-gray-dark transition-transform cursor-pointer"
-                      title={`Buka/Tutup grup ${group.title}`}
-                      aria-label={`Toggle grup ${group.title}`}
-                    >
-                      <ChevronDown
-                        className={cn(
-                          "h-3.5 w-3.5 transition-transform duration-200",
-                          isGroupCollapsed ? "-rotate-90 text-gray" : "rotate-0 text-gray-dark"
-                        )}
-                      />
-                    </button>
-                  )}
-                </div>
+                {group.title ? (
+                  <div className="flex items-center justify-between px-2.5 mb-1.5">
+                    <p className="text-xs font-bold tracking-wider text-gray-dark">
+                      {group.title}
+                    </p>
+                    {group.collapsible && (
+                      <button
+                        type="button"
+                        onClick={() => toggleGroupCollapse(group.id)}
+                        className="p-1 rounded hover:bg-gray-soft text-gray-dark transition-transform cursor-pointer"
+                        title={`Buka/Tutup grup ${group.title}`}
+                        aria-label={`Toggle grup ${group.title}`}
+                      >
+                        <ChevronDown
+                          className={cn(
+                            "h-3.5 w-3.5 transition-transform duration-200",
+                            isGroupCollapsed ? "-rotate-90 text-gray" : "rotate-0 text-gray-dark"
+                          )}
+                        />
+                      </button>
+                    )}
+                  </div>
+                ) : null}
                 {!isGroupCollapsed && (
                   <div className="space-y-1">
                     {group.items.map((item) => {

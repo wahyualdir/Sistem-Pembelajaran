@@ -33,7 +33,7 @@ export function SystemBackupHubView() {
                 <FolderArchive className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
-                Cadangan Basis Data & Pemulihan (Backup & Restore)
+                Cadangan Data Basis Data dan Pemulihan
               </h1>
             </div>
             <p className="text-xs sm:text-sm text-black/70 font-medium max-w-2xl">

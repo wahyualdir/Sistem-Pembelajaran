@@ -161,7 +161,7 @@ export function SuperadminUsersHubView() {
                 <Users className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
-                Kelola Pengguna & Penyamaran Sesi (Impersonate)
+                Akun Pengguna dan Penyamaran Sesi (Impersonate)
               </h1>
             </div>
             <p className="text-xs sm:text-sm text-black/70 font-medium max-w-2xl">

@@ -75,41 +75,41 @@ export default async function VerifyCertificatePage({ params }: VerifyCertificat
             <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-4 text-xs font-sans">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <span className="text-black/60 block font-bold uppercase text-[11px]">Nama Mahasiswa:</span>
+                  <span className="text-black/60 block font-bold uppercase text-xs">Nama Mahasiswa:</span>
                   <span className="font-heading font-bold text-base text-black">{result.certificate.recipientName}</span>
                 </div>
                 <div>
-                  <span className="text-black/60 block font-bold uppercase text-[11px]">Nomor Induk Mahasiswa (NIM):</span>
+                  <span className="text-black/60 block font-bold uppercase text-xs">Nomor Induk Mahasiswa (NIM):</span>
                   <span className="font-heading font-bold text-base text-black">{result.certificate.studentNim}</span>
                 </div>
               </div>
 
               <div className="border-t border-black/10 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <span className="text-black/60 block font-bold uppercase text-[11px]">Mata Kuliah / Kompetensi:</span>
+                  <span className="text-black/60 block font-bold uppercase text-xs">Mata Kuliah / Kompetensi:</span>
                   <span className="font-bold text-black">{result.certificate.courseName}</span>
                 </div>
                 <div>
-                  <span className="text-black/60 block font-bold uppercase text-[11px]">Predikat Capaian:</span>
+                  <span className="text-black/60 block font-bold uppercase text-xs">Predikat Capaian:</span>
                   <span className="font-bold text-primary">{result.certificate.grade}</span>
                 </div>
               </div>
 
               <div className="border-t border-black/10 pt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <span className="text-black/60 block font-bold uppercase text-[11px]">Beban Jam Pelajaran:</span>
+                  <span className="text-black/60 block font-bold uppercase text-xs">Beban Jam Pelajaran:</span>
                   <span className="font-bold text-black">{result.certificate.creditHours}</span>
                 </div>
                 <div>
-                  <span className="text-black/60 block font-bold uppercase text-[11px]">Tanggal Penerbitan:</span>
+                  <span className="text-black/60 block font-bold uppercase text-xs">Tanggal Penerbitan:</span>
                   <span className="font-bold text-black">{result.certificate.issueDate}</span>
                 </div>
               </div>
 
               <div className="border-t border-black/10 pt-3">
-                <span className="text-black/60 block font-bold uppercase text-[11px]">Instansi Penerbit:</span>
+                <span className="text-black/60 block font-bold uppercase text-xs">Instansi Penerbit:</span>
                 <span className="font-bold text-black">{result.certificate.issuer}</span>
-                <div className="text-[11px] text-black/70 mt-0.5">Penandatangan: {result.certificate.issuerRole}</div>
+                <div className="text-xs text-black/70 mt-0.5">Penandatangan: {result.certificate.issuerRole}</div>
               </div>
             </div>
 
@@ -141,13 +141,13 @@ export default async function VerifyCertificatePage({ params }: VerifyCertificat
               </div>
 
               <div className="space-y-1 text-center sm:text-left flex-1 min-w-0">
-                <span className="text-[11px] font-bold uppercase text-black/60 font-sans">
+                <span className="text-xs font-bold uppercase text-black/60 font-sans">
                   Nomor Seri Kredensial Unik:
                 </span>
                 <p className="font-sans font-bold text-base text-black tracking-wide">
                   {result.certificate.verificationCode}
                 </p>
-                <p className="text-[10px] text-black/60 truncate font-sans font-bold">
+                <p className="text-xs text-black/60 truncate font-sans font-bold">
                   Hash SHA-256: {result.certificate.signatureHash}
                 </p>
               </div>

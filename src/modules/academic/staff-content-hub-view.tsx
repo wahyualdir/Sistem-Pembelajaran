@@ -79,11 +79,11 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
                 <BookOpen className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
-                Pustaka & Sertifikat Digital
+                Berkas dan Sertifikat Digital
               </h1>
             </div>
             <p className="text-sm sm:text-base text-black font-medium max-w-3xl leading-relaxed">
-              Katalog repositori buku digital & fisik perpustakaan universitas, serta template sertifikat kompetensi dan lencana mikro (micro-credentials) mahasiswa.
+              Katalog repositori berkas digital dan fisik perpustakaan universitas, serta template sertifikat kompetensi dan lencana mikro (micro-credentials) mahasiswa.
             </p>
           </div>
 
@@ -151,7 +151,7 @@ export function StaffContentHubView({ isDemo = true }: StaffContentHubViewProps)
             <div>
               <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
                 <BookOpen className="h-5 w-5 text-primary" />
-                <span>Katalog Pustaka Digital & Fisik Perpustakaan</span>
+                <span>Katalog Berkas dan Koleksi Fisik Perpustakaan</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
                 Kelola daftar buku referensi perkuliahan, ketersediaan eksemplar, dan nomor rak penyimpanan.

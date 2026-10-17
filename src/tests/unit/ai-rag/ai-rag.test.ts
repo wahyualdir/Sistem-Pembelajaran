@@ -18,7 +18,8 @@ import {
   getUserChatHistoryAction,
 } from '@/modules/academic/ai-material-rag';
 import { askAiAcademicAssistantAction } from '@/modules/academic/ai-actions';
-import { quizStore } from '@/modules/academic/quiz-actions';
+import { quizStore } from '@/modules/academic/quiz-store';
+
 
 describe('SIAJAR Fitur 3: Tanya AI SIAJAR (Class Material RAG & Exam Protection)', () => {
   const studentId = 'std-rag-001';

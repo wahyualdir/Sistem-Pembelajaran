@@ -119,7 +119,7 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Activity className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-bold text-lg text-black">Monitoring Sistem</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Pemantauan</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
               Pantau beban CPU/RAM, throughput WebSocket telemetri ujian, status sandbox isolasi kode, dan log error level 500.
@@ -129,7 +129,7 @@ export function SystemDashboardHubView() {
             href="/admin/system/monitoring"
             className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-gray-soft font-sans font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
-            <span>Buka Monitoring</span>
+            <span>Buka Pemantauan</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -167,7 +167,7 @@ export function SystemDashboardHubView() {
             href="/admin/system/security"
             className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-gray-soft font-sans font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
-            <span>Pusat Keamanan</span>
+            <span>Sesi Login</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
@@ -176,7 +176,7 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <FolderArchive className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-bold text-lg text-black">Backup & Restore</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Cadangan Data</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
               Manajemen cadangan basis data otomatis, verifikasi integritas checksum SHA-256, dan pemulihan bencana (*disaster recovery*).
@@ -195,7 +195,7 @@ export function SystemDashboardHubView() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Sliders className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-bold text-lg text-black">Pengaturan Platform</h3>
+              <h3 className="font-heading font-bold text-lg text-black">Pengaturan Sistem</h3>
             </div>
             <p className="text-xs text-black/70 font-medium leading-relaxed">
               Konfigurasi nama institusi kampus, parameter model AI evaluator akademik, dan alokasi batas kuota penyimpanan berkas.
@@ -205,7 +205,7 @@ export function SystemDashboardHubView() {
             href="/admin/system/settings"
             className="inline-flex items-center justify-between w-full p-2.5 rounded-lg border-2 border-black bg-gray-soft font-sans font-bold text-xs hover:bg-neutral-200 transition-all shadow-retro-sm"
           >
-            <span>Pengaturan Umum</span>
+            <span>Buka Pengaturan Sistem</span>
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>

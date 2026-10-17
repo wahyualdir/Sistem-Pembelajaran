@@ -331,6 +331,142 @@ export interface Database {
           updated_at?: string;
         };
       };
+      class_assistants: {
+        Row: {
+          id: string;
+          class_id: string;
+          user_id: string;
+          permission: string;
+          can_open_attendance: boolean;
+          granted_by: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          class_id: string;
+          user_id: string;
+          permission: string;
+          can_open_attendance?: boolean;
+          granted_by: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          class_id?: string;
+          user_id?: string;
+          permission?: string;
+          can_open_attendance?: boolean;
+          granted_by?: string;
+          created_at?: string;
+        };
+      };
+      student_requests: {
+        Row: {
+          id: string;
+          student_id: string;
+          type: 'surat_aktif' | 'dispensasi' | 'cuti' | 'legalisir';
+          details: Json;
+          attachment_path: string | null;
+          status: 'MENUNGGU' | 'DIPROSES' | 'DISETUJUI' | 'DITOLAK';
+          staff_note: string | null;
+          result_path: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          student_id: string;
+          type: 'surat_aktif' | 'dispensasi' | 'cuti' | 'legalisir';
+          details?: Json;
+          attachment_path?: string | null;
+          status?: 'MENUNGGU' | 'DIPROSES' | 'DISETUJUI' | 'DITOLAK';
+          staff_note?: string | null;
+          result_path?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          student_id?: string;
+          type?: 'surat_aktif' | 'dispensasi' | 'cuti' | 'legalisir';
+          details?: Json;
+          attachment_path?: string | null;
+          status?: 'MENUNGGU' | 'DIPROSES' | 'DISETUJUI' | 'DITOLAK';
+          staff_note?: string | null;
+          result_path?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      allowed_email_domains: {
+        Row: {
+          id: string;
+          domain: string;
+          role_hint: string | null;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          domain: string;
+          role_hint?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          domain?: string;
+          role_hint?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+        };
+      };
+      email_allowlist: {
+        Row: {
+          id: string;
+          email: string;
+          role_hint: string | null;
+          notes: string | null;
+          is_active: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          email: string;
+          role_hint?: string | null;
+          notes?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          role_hint?: string | null;
+          notes?: string | null;
+          is_active?: boolean;
+          created_at?: string;
+        };
+      };
+    };
+    Views: {
+      audit_logs_for_sysadmin: {
+        Row: {
+          id: string;
+          actor_user_id: string | null;
+          actor_role: string | null;
+          action: string;
+          entity_type: string;
+          entity_id: string | null;
+          scope_type: string | null;
+          scope_id: string | null;
+          before_json: Json | null;
+          after_json: Json | null;
+          ip_address: string | null;
+          user_agent: string | null;
+          request_id: string | null;
+          created_at: string;
+        };
+      };
     };
     Functions: {
       has_global_role: {

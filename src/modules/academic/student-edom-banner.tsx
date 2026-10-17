@@ -33,7 +33,7 @@ export function StudentEdomBanner({ period, pendingClasses }: StudentEdomBannerP
               <h3 className="font-heading font-bold text-sm text-black">
                 {period.title}
               </h3>
-              <span className="px-2 py-0.5 rounded border border-black bg-white text-[11px] font-sans font-bold">
+              <span className="px-2 py-0.5 rounded border border-black bg-white text-xs font-sans font-bold">
                 100% Anonim
               </span>
             </div>

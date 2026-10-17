@@ -240,7 +240,7 @@ export default async function ExamSubpage({ params }: PageProps) {
                     <div className="p-2.5 rounded-lg border-2 border-primary bg-primary text-white text-xs font-bold flex items-start gap-2 shadow-xs">
                       <ShieldAlert className="h-4 w-4 shrink-0 mt-0.5" />
                       <div>
-                        <span className="block font-heading uppercase text-[11px] opacity-90">Peringatan Bank Soal</span>
+                        <span className="block font-heading uppercase text-xs opacity-90">Peringatan Bank Soal</span>
                         <span>Perlu Ditinjau: {q.revision_note || 'Daya pembeda rendah / dicurigai keliru'}</span>
                       </div>
                     </div>
@@ -251,7 +251,7 @@ export default async function ExamSubpage({ params }: PageProps) {
                   </p>
 
                   {q.explanation && (
-                    <p className="text-[11px] text-gray-dark bg-gray-soft/40 p-2 rounded border border-black/10 font-medium">
+                    <p className="text-xs text-gray-dark bg-gray-soft/40 p-2 rounded border border-black/10 font-medium">
                       <strong className="text-ink">Penjelasan:</strong> {q.explanation}
                     </p>
                   )}

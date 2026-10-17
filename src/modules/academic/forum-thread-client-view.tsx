@@ -242,7 +242,7 @@ export function ForumThreadClientView({
               topic.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded border border-black/40 bg-gray-soft text-[11px] font-bold text-ink"
+                  className="px-2 py-0.5 rounded border border-black/40 bg-gray-soft text-xs font-bold text-ink"
                 >
                   #{tag}
                 </span>
@@ -301,7 +301,7 @@ export function ForumThreadClientView({
                       <span className="font-heading font-bold text-xs sm:text-sm text-ink block">
                         {reply.author_name}
                       </span>
-                      <span className="text-[11px] text-gray-dark font-sans">
+                      <span className="text-xs text-gray-dark font-sans">
                         {reply.author_role === 'LECTURER' ? 'Dosen Pengampu' : reply.author_role === 'TEACHING_ASSISTANT' ? 'Asisten Dosen' : 'Mahasiswa'} · {new Date(reply.created_at).toLocaleString('id-ID', { dateStyle: 'short', timeStyle: 'short' })}
                       </span>
                     </div>
@@ -335,7 +335,7 @@ export function ForumThreadClientView({
                     {reply.attachments.map((att, i) => (
                       <span
                         key={i}
-                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded border border-black bg-gray-soft text-[11px] font-bold text-ink"
+                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-bold text-ink"
                       >
                         <Paperclip className="h-3 w-3 text-primary" />
                         {att.name}

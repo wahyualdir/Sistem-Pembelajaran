@@ -90,13 +90,13 @@ export default async function AssistantForumPage() {
                   <div>
                     <div className="flex items-center gap-1.5 mb-1">
                       {d.is_pinned && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-ink text-white text-[10px] font-bold">
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-ink text-white text-xs font-bold">
                           <Pin className="h-2.5 w-2.5 fill-white" />
                           Pin
                         </span>
                       )}
                       {d.is_locked && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-soft text-ink text-[10px] font-bold">
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-gray-soft text-ink text-xs font-bold">
                           <Lock className="h-2.5 w-2.5" />
                           Kunci
                         </span>
@@ -118,7 +118,7 @@ export default async function AssistantForumPage() {
                   {d.tags && d.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 pt-1">
                       {d.tags.map((t) => (
-                        <span key={t} className="text-[10px] font-bold px-1.5 py-0.5 bg-gray-soft border border-black/30 rounded text-ink">
+                        <span key={t} className="text-xs font-bold px-1.5 py-0.5 bg-gray-soft border border-black/30 rounded text-ink">
                           #{t}
                         </span>
                       ))}

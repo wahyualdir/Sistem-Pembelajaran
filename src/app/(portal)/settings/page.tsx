@@ -7,7 +7,7 @@ import { PreferencesView } from '@/modules/notifications/preferences-view';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
 export const metadata = {
-  title: 'Pengaturan Akun & Preferensi - SIAJAR LMS',
+  title: 'Pengaturan Akun dan Preferensi - SIAJAR LMS',
   description: 'Pengaturan preferensi notifikasi, saluran pengiriman, tampilan, dan keamanan akun',
 };
 
@@ -41,7 +41,7 @@ export default async function SettingsPage() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-ink text-white text-xs sm:text-sm font-heading font-bold shadow-retro-sm transition-all"
           >
             <Bell className="h-4 w-4 text-primary" />
-            <span>Notifikasi & Pengingat</span>
+            <span>Notifikasi dan Pengingat</span>
           </Link>
 
           <Link
@@ -49,7 +49,7 @@ export default async function SettingsPage() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-surface text-ink hover:bg-gray-soft text-xs sm:text-sm font-heading font-bold shadow-retro-sm transition-all"
           >
             <Sliders className="h-4 w-4 text-primary" />
-            <span>Tampilan & Bahasa</span>
+            <span>Tampilan dan Bahasa</span>
           </Link>
 
           <Link
@@ -57,7 +57,7 @@ export default async function SettingsPage() {
             className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-surface text-ink hover:bg-gray-soft text-xs sm:text-sm font-heading font-bold shadow-retro-sm transition-all"
           >
             <Shield className="h-4 w-4 text-primary" />
-            <span>Perangkat & Keamanan</span>
+            <span>Perangkat dan Keamanan</span>
           </Link>
         </div>
       </div>

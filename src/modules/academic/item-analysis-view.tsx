@@ -146,7 +146,7 @@ export function ItemAnalysisView({
       {/* 2. REKAP KELAS & METRIK CPMK */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 rounded-xl border-2 border-black bg-surface shadow-retro-sm space-y-1">
-          <span className="text-[10px] font-bold text-gray-dark uppercase tracking-wider">
+          <span className="text-xs font-bold text-gray-dark uppercase tracking-wider">
             Rata-rata Nilai Ujian
           </span>
           <p className="font-heading font-bold text-2xl text-ink">
@@ -158,7 +158,7 @@ export function ItemAnalysisView({
         </div>
 
         <div className="p-4 rounded-xl border-2 border-black bg-surface shadow-retro-sm space-y-1 sm:col-span-2">
-          <span className="text-[10px] font-bold text-gray-dark uppercase tracking-wider block mb-1">
+          <span className="text-xs font-bold text-gray-dark uppercase tracking-wider block mb-1">
             Ketercapaian CPMK Kelas (Standar Kurikulum OBE)
           </span>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -176,12 +176,12 @@ export function ItemAnalysisView({
                   <span>{c.cpmk}</span>
                   <span>{c.averageScorePercent}%</span>
                 </div>
-                <p className="text-[10px] text-gray-dark truncate mt-0.5" title={c.description}>
+                <p className="text-xs text-gray-dark truncate mt-0.5" title={c.description}>
                   {c.description}
                 </p>
                 <span
                   className={cn(
-                    'mt-1 inline-block text-[9px] font-bold px-1.5 py-0.2 rounded border',
+                    'mt-1 inline-block text-xs font-bold px-1.5 py-0.2 rounded border',
                     c.status === 'TERCAPAI'
                       ? 'border-black bg-surface text-ink'
                       : 'border-black bg-primary text-white'
@@ -225,7 +225,7 @@ export function ItemAnalysisView({
                   <span className="font-heading font-bold text-sm text-ink">{cpl.cplCode}</span>
                   <span
                     className={cn(
-                      'text-[10px] font-bold px-2 py-0.5 rounded border border-black',
+                      'text-xs font-bold px-2 py-0.5 rounded border border-black',
                       cpl.status === 'Tercapai'
                         ? 'bg-surface text-ink'
                         : 'bg-primary text-white'
@@ -238,7 +238,7 @@ export function ItemAnalysisView({
                   {cpl.description}
                 </p>
                 <div className="pt-1 border-t border-black/10 flex items-center justify-between text-xs font-bold">
-                  <span className="text-[11px] text-gray-dark">{cpl.classesAssessed} Kelas Paralel</span>
+                  <span className="text-xs text-gray-dark">{cpl.classesAssessed} Kelas Paralel</span>
                   <span className="text-ink">{cpl.achievementPercentage}%</span>
                 </div>
               </div>
@@ -282,7 +282,7 @@ export function ItemAnalysisView({
 
                     <td className="p-3.5 sm:p-4 max-w-xs space-y-1">
                       <p className="font-bold text-ink line-clamp-2 leading-snug">{q.questionText}</p>
-                      <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded border border-black/30 bg-gray-soft text-ink">
+                      <span className="inline-block text-xs font-bold px-2 py-0.5 rounded border border-black/30 bg-gray-soft text-ink">
                         {q.cpmk}
                       </span>
                     </td>
@@ -292,7 +292,7 @@ export function ItemAnalysisView({
                       <span className="font-bold text-ink block tabular-nums">{q.difficultyIndex}</span>
                       <span
                         className={cn(
-                          'inline-block text-[10px] font-bold px-2 py-0.5 rounded border mt-0.5',
+                          'inline-block text-xs font-bold px-2 py-0.5 rounded border mt-0.5',
                           q.difficultyLabel === 'Terlalu mudah'
                             ? 'bg-gray-soft text-ink border-black'
                             : q.difficultyLabel === 'Terlalu sulit'
@@ -309,7 +309,7 @@ export function ItemAnalysisView({
                       <span className="font-bold text-ink block tabular-nums">{q.discriminationIndex}</span>
                       <span
                         className={cn(
-                          'inline-block text-[10px] font-bold px-2 py-0.5 rounded border mt-0.5',
+                          'inline-block text-xs font-bold px-2 py-0.5 rounded border mt-0.5',
                           q.discriminationLabel === 'Perlu ditinjau'
                             ? 'bg-primary text-white border-black font-bold'
                             : 'bg-surface text-ink border-black'
@@ -321,12 +321,12 @@ export function ItemAnalysisView({
 
                     {/* Distractor Stats */}
                     <td className="p-3.5 sm:p-4 min-w-[160px] space-y-1">
-                      <div className="flex items-center gap-1 text-[11px] font-mono font-bold">
+                      <div className="flex items-center gap-1 text-xs font-mono font-bold">
                         {q.distractors.map((d) => (
                           <span
                             key={d.option}
                             className={cn(
-                              'px-1.5 py-0.5 rounded border text-[10px]',
+                              'px-1.5 py-0.5 rounded border text-xs',
                               d.isKey
                                 ? 'bg-ink text-white border-black'
                                 : 'bg-surface text-ink border-black/30'
@@ -337,7 +337,7 @@ export function ItemAnalysisView({
                           </span>
                         ))}
                       </div>
-                      <p className="text-[10px] text-gray-dark leading-tight">
+                      <p className="text-xs text-gray-dark leading-tight">
                         {q.distractorEvaluation}
                       </p>
                     </td>
@@ -366,7 +366,7 @@ export function ItemAnalysisView({
                         <button
                           type="button"
                           onClick={() => handleOpenRevisionModal(q)}
-                          className="inline-flex items-center gap-1 text-[11px] font-bold text-ink hover:text-primary underline cursor-pointer"
+                          className="inline-flex items-center gap-1 text-xs font-bold text-ink hover:text-primary underline cursor-pointer"
                         >
                           <Edit3 className="h-3 w-3" />
                           <span>{q.isFlaggedForRevision ? 'Ubah Catatan' : 'Tandai Revisi'}</span>
@@ -395,7 +395,7 @@ export function ItemAnalysisView({
 
             <div className="p-3 rounded-lg border border-black/20 bg-gray-soft/40 text-xs space-y-1">
               <p className="font-bold text-ink">{selectedQuestion.questionText}</p>
-              <p className="text-[11px] text-gray-dark">
+              <p className="text-xs text-gray-dark">
                 P-Value: {selectedQuestion.difficultyIndex} ({selectedQuestion.difficultyLabel}) · Daya Pembeda: {selectedQuestion.discriminationIndex} ({selectedQuestion.discriminationLabel})
               </p>
             </div>
@@ -412,7 +412,7 @@ export function ItemAnalysisView({
                 className="w-full p-3 rounded-lg border-2 border-black text-xs font-medium text-ink focus:outline-none"
                 required
               />
-              <span className="text-[10px] text-gray-dark block">
+              <span className="text-xs text-gray-dark block">
                 Catatan ini akan otomatis muncul sebagai peringatan di Bank Soal (/exams/question-bank) dan dicatat pada audit trail.
               </span>
             </div>

@@ -283,6 +283,31 @@ export async function createAttendanceSessionAction(input: unknown): Promise<Act
     return { ok: false, error: 'Aksi ini hanya dapat dilakukan oleh Dosen atau Asisten Dosen.' };
   }
 
+  // Asisten hanya boleh membuka presensi jika memiliki izin can_open_attendance = true
+  if (user.activeRole === 'TEACHING_ASSISTANT') {
+    let canOpen = false;
+    if (await checkSupabaseOnline()) {
+      try {
+        const supabase = await createClient();
+        const { data: ca } = await supabase
+          .from('class_assistants')
+          .select('can_open_attendance')
+          .eq('class_id', p.data.class_id)
+          .eq('user_id', user.user.id)
+          .eq('can_open_attendance', true)
+          .maybeSingle();
+        if (ca?.can_open_attendance) canOpen = true;
+      } catch {
+        canOpen = false;
+      }
+    } else {
+      canOpen = isDemoMode();
+    }
+    if (!canOpen) {
+      return { ok: false, error: 'Asisten dosen belum diberikan izin untuk membuka presensi pada kelas ini.' };
+    }
+  }
+
   // Generate 6-digit numeric verification code
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const initialQr = 'QR-' + randomUUID().slice(0, 8).toUpperCase();
@@ -375,6 +400,30 @@ export async function toggleAttendanceSessionAction(sessionId: string, isOpen: b
 
   const s = presensiStore.sessions.find((x) => x.id === sessionId);
   if (!s) return { ok: false, error: 'Sesi presensi tidak ditemukan.' };
+
+  if (user.activeRole === 'TEACHING_ASSISTANT') {
+    let canOpen = false;
+    if (await checkSupabaseOnline()) {
+      try {
+        const supabase = await createClient();
+        const { data: ca } = await supabase
+          .from('class_assistants')
+          .select('can_open_attendance')
+          .eq('class_id', s.class_id)
+          .eq('user_id', user.user.id)
+          .eq('can_open_attendance', true)
+          .maybeSingle();
+        if (ca?.can_open_attendance) canOpen = true;
+      } catch {
+        canOpen = false;
+      }
+    } else {
+      canOpen = isDemoMode();
+    }
+    if (!canOpen) {
+      return { ok: false, error: 'Asisten dosen belum diberikan izin untuk mengubah status presensi kelas ini.' };
+    }
+  }
 
   s.is_open = isOpen;
   safeRevalidate('/classes/[id]', 'page');

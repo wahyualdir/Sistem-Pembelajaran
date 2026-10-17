@@ -4,7 +4,8 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { recordSystemAuditLog } from '@/lib/audit';
-import { quizStore, type QuizQuestion } from './quiz-actions';
+import { quizStore, type QuizQuestion } from './quiz-store';
+
 
 export interface DistractorStat {
   option: string;

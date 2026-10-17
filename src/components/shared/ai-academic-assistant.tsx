@@ -89,7 +89,7 @@ export function AiAcademicAssistant() {
             <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-white ring-2 ring-primary" />
           </div>
           <span className="ai-assistant-btn-text text-xs font-bold tracking-wide text-white whitespace-nowrap">
-            Tanya AI SIAJAR
+            Tanya AI
           </span>
         </button>
       )}

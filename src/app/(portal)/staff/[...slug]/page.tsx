@@ -124,8 +124,8 @@ export default async function StaffSubpage({ params }: PageProps) {
       desc: 'Kelola data dosen pengampu, NIDN, jabatan fungsional, dan asosiasi program studi.',
     },
     'services/verification': {
-      title: 'Layanan Verifikasi Berkas Mahasiswa',
-      subtitle: 'Legalisir Transkrip & Surat Keterangan Aktif',
+      title: 'Pengajuan Masuk Mahasiswa',
+      subtitle: 'Legalisasi Transkrip dan Surat Keterangan Aktif',
       icon: FileText,
       desc: 'Verifikasi keaslian dokumen akademik dan surat keterangan mahasiswa aktif kuliah.',
     },
@@ -135,7 +135,7 @@ export default async function StaffSubpage({ params }: PageProps) {
     title: 'Layanan Administrasi Akademik',
     subtitle: 'Sistem Pembelajaran Terpadu LMS SIAJAR',
     icon: FileSpreadsheet,
-    desc: 'Pengelolaan data master, penjadwalan kelas, pendaftaran rombel, dan verifikasi berkas.',
+    desc: 'Pengelolaan data master, penjadwalan kelas, pendaftaran rombel, dan pengajuan masuk.',
   };
   const Icon = current.icon;
 

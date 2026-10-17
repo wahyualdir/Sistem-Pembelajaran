@@ -5,8 +5,8 @@ import { z } from 'zod';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { recordSystemAuditLog } from '@/lib/audit';
 import { assertClassOwner, ClassAccessError } from '@/lib/auth/class-access';
-import type { QuizQuestion } from './quiz-actions';
-import { quizStore } from './quiz-actions';
+import { quizStore, type QuizQuestion } from './quiz-store';
+
 
 // -------------------------------------------------------------
 // Rate Limiter Harian per Dosen untuk Penggunaan AI Generator

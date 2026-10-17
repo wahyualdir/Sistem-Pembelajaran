@@ -73,7 +73,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
       {/* 1. HEADER WINDOW RETRO */}
       <RetroWindow
-        title="Sertifikat & Portofolio Mahasiswa"
+        title="Sertifikat Mahasiswa"
         badge="Terverifikasi Resmi"
         headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-retro-surface"
@@ -85,7 +85,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                 <Award className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
-                Sertifikat & Portofolio Mahasiswa
+                Sertifikat Mahasiswa
               </h1>
             </div>
             <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">

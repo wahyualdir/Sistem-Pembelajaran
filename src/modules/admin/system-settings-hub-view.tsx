@@ -43,7 +43,7 @@ export function SystemSettingsHubView() {
                 <Sliders className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
-                Pengaturan Platform & Branding
+                Pengaturan Sistem dan Identitas
               </h1>
             </div>
             <p className="text-xs sm:text-sm text-black/70 font-medium max-w-2xl">
@@ -56,7 +56,7 @@ export function SystemSettingsHubView() {
       {/* 2. TAB NAVIGASI */}
       <div className="flex flex-wrap gap-2 border-b-2 border-black pb-2">
         {[
-          { id: 'platform-branding', label: 'Platform & Branding', icon: Building2 },
+          { id: 'platform-branding', label: 'Sistem dan Identitas', icon: Building2 },
           { id: 'pengaturan-ai', label: 'Mesin AI SIAJAR', icon: Sparkles },
           { id: 'penyimpanan-file', label: 'Penyimpanan Berkas', icon: FolderArchive },
         ].map((t) => {

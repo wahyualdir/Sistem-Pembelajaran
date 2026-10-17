@@ -82,7 +82,7 @@ export function ClassRiskCard({ evaluations, classTitle }: ClassRiskCardProps) {
                 </div>
 
                 <span
-                  className={`px-2 py-0.5 rounded border text-[11px] font-bold shrink-0 ${
+                  className={`px-2 py-0.5 rounded border text-xs font-bold shrink-0 ${
                     st.riskLevel === 'RISIKO_TINGGI'
                       ? 'bg-primary text-white border-black'
                       : 'bg-gray-dark text-white border-black'
@@ -97,7 +97,7 @@ export function ClassRiskCard({ evaluations, classTitle }: ClassRiskCardProps) {
                 {st.indicators.map((ind, idx) => (
                   <div
                     key={idx}
-                    className="p-1.5 rounded bg-gray-soft/30 border border-black/10 text-[11px] font-medium text-ink flex items-start gap-1.5"
+                    className="p-1.5 rounded bg-gray-soft/30 border border-black/10 text-xs font-medium text-ink flex items-start gap-1.5"
                   >
                     <AlertTriangle className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
                     <span>{ind.reason}</span>
@@ -107,7 +107,7 @@ export function ClassRiskCard({ evaluations, classTitle }: ClassRiskCardProps) {
 
               {/* Saran Tindakan Dosen */}
               {st.recommendations.length > 0 && (
-                <p className="text-[11px] text-gray-dark font-sans leading-relaxed pt-1 border-t border-black/10">
+                <p className="text-xs text-gray-dark font-sans leading-relaxed pt-1 border-t border-black/10">
                   <span className="font-bold text-ink">Rekomendasi Dosen:</span> Berikan pendampingan tugas atau ingatkan mahasiswa terkait kehadiran.
                 </p>
               )}

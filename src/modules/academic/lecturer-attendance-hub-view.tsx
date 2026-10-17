@@ -205,7 +205,7 @@ export function LecturerAttendanceHubView({
               <Icon className="h-4 w-4" />
               <span>{tab.label}</span>
               {showBadge && (
-                <span className="px-1.5 py-0.5 rounded-full border border-black bg-primary text-white text-[10px] font-bold">
+                <span className="px-1.5 py-0.5 rounded-full border border-black bg-primary text-white text-xs font-bold">
                   {pendingAnomaliesCount}
                 </span>
               )}
@@ -524,23 +524,23 @@ export function LecturerAttendanceHubView({
           {/* Quick Metrics */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
             <div className="p-3 rounded-lg border-2 border-black bg-white shadow-xs">
-              <p className="text-[11px] font-bold text-black/60 uppercase font-sans">Total Anomali</p>
+              <p className="text-xs font-bold text-black/60 uppercase font-sans">Total Anomali</p>
               <p className="font-heading font-bold text-xl text-black mt-0.5">{anomaliesList.length}</p>
             </div>
             <div className="p-3 rounded-lg border-2 border-black bg-white shadow-xs">
-              <p className="text-[11px] font-bold text-primary uppercase font-sans">Perlu Verifikasi</p>
+              <p className="text-xs font-bold text-primary uppercase font-sans">Perlu Verifikasi</p>
               <p className="font-heading font-bold text-xl text-primary mt-0.5">
                 {anomaliesList.filter((a) => a.needs_verification).length}
               </p>
             </div>
             <div className="p-3 rounded-lg border-2 border-black bg-white shadow-xs">
-              <p className="text-[11px] font-bold text-ink uppercase font-sans">Disetujui Sah</p>
+              <p className="text-xs font-bold text-ink uppercase font-sans">Disetujui Sah</p>
               <p className="font-heading font-bold text-xl text-ink mt-0.5">
                 {anomaliesList.filter((a) => a.verification_status === 'DISETUJUI').length}
               </p>
             </div>
             <div className="p-3 rounded-lg border-2 border-black bg-white shadow-xs">
-              <p className="text-[11px] font-bold text-black/60 uppercase font-sans">Ditolak (Alpa)</p>
+              <p className="text-xs font-bold text-black/60 uppercase font-sans">Ditolak (Alpa)</p>
               <p className="font-heading font-bold text-xl text-black/80 mt-0.5">
                 {anomaliesList.filter((a) => a.verification_status === 'DITOLAK').length}
               </p>
@@ -577,13 +577,13 @@ export function LecturerAttendanceHubView({
                         <tr key={rec.id} className="hover:bg-gray-soft/30 transition-colors">
                           <td className="p-3.5 sm:p-4">
                             <div className="font-bold text-black">{rec.student_name}</div>
-                            <div className="text-[11px] text-black/60 font-sans mt-0.5">
+                            <div className="text-xs text-black/60 font-sans mt-0.5">
                               {new Date(rec.recorded_at).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
                             </div>
                           </td>
                           <td className="p-3.5 sm:p-4 max-w-md">
                             {rec.needs_verification ? (
-                              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-black bg-primary text-white text-[11px] font-bold font-sans mb-1.5">
+                              <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded border border-black bg-primary text-white text-xs font-bold font-sans mb-1.5">
                                 <AlertCircle className="h-3 w-3" />
                                 <span>Perlu diverifikasi</span>
                               </div>
@@ -649,7 +649,7 @@ export function LecturerAttendanceHubView({
                                 <button
                                   type="button"
                                   onClick={() => setSelectedAnomalyId(isSelected ? null : rec.id)}
-                                  className="text-[11px] text-black/70 hover:text-black underline font-sans"
+                                  className="text-xs text-black/70 hover:text-black underline font-sans"
                                 >
                                   {isSelected ? 'Tutup Catatan' : '+ Beri Catatan'}
                                 </button>
@@ -666,7 +666,7 @@ export function LecturerAttendanceHubView({
                                 )}
                               </div>
                             ) : (
-                              <div className="text-[11px] font-sans text-black/70 max-w-[140px] mx-auto">
+                              <div className="text-xs font-sans text-black/70 max-w-[140px] mx-auto">
                                 <span>{rec.verification_note || 'Selesai ditinjau'}</span>
                               </div>
                             )}

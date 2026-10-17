@@ -84,20 +84,20 @@ export function CoordinatorCohortRiskView({ cohorts, totalAtRisk }: CoordinatorC
 
                 <div className="grid grid-cols-3 gap-2 text-center text-xs font-sans">
                   <div className="p-2 rounded border border-black bg-surface">
-                    <p className="text-[10px] text-gray-dark font-bold uppercase">Aman</p>
+                    <p className="text-xs text-gray-dark font-bold uppercase">Aman</p>
                     <p className="font-bold text-base text-ink tabular-nums">{c.aman}</p>
                   </div>
                   <div className="p-2 rounded border border-black bg-gray-soft">
-                    <p className="text-[10px] text-gray-dark font-bold uppercase">Perhatian</p>
+                    <p className="text-xs text-gray-dark font-bold uppercase">Perhatian</p>
                     <p className="font-bold text-base text-ink tabular-nums">{c.perhatian}</p>
                   </div>
                   <div className="p-2 rounded border border-black bg-primary text-white font-bold">
-                    <p className="text-[10px] uppercase opacity-90">Tinggi</p>
+                    <p className="text-xs uppercase opacity-90">Tinggi</p>
                     <p className="text-base tabular-nums">{c.risikoTinggi}</p>
                   </div>
                 </div>
 
-                <div className="pt-1 flex items-center justify-between text-[11px] text-gray-dark font-sans">
+                <div className="pt-1 flex items-center justify-between text-xs text-gray-dark font-sans">
                   <span>Persentase Berisiko:</span>
                   <span className="font-bold text-ink">{percent}%</span>
                 </div>
@@ -128,7 +128,7 @@ export function CoordinatorCohortRiskView({ cohorts, totalAtRisk }: CoordinatorC
                   <td className="p-3 tabular-nums font-bold text-gray-dark">{c.perhatian}</td>
                   <td className="p-3 tabular-nums font-bold text-primary-dark">{c.risikoTinggi}</td>
                   <td className="p-3">
-                    <span className="text-[11px] text-gray-dark">
+                    <span className="text-xs text-gray-dark">
                       Koordinasikan dengan Dosen Wali angkatan {c.angkatan}
                     </span>
                   </td>

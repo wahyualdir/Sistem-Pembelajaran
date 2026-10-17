@@ -86,3 +86,68 @@ export function validasiEmailStudent({
     normalizedEmail: `${username}@${domain}`,
   };
 }
+
+/**
+ * Validasi email multi-domain dan allowlist dari basis data
+ */
+export async function validasiEmailKampusAsync({
+  email,
+  emailVerified,
+}: {
+  email: string | null | undefined;
+  emailVerified: boolean | null | undefined;
+}): Promise<ValidasiEmailResult> {
+  if (!email || typeof email !== 'string') {
+    return { valid: false, pesanError: 'Alamat email tidak valid atau kosong.' };
+  }
+  if (!emailVerified) {
+    return { valid: false, pesanError: 'Alamat email Google belum diverifikasi.' };
+  }
+
+  const trimmedEmail = email.trim().toLowerCase();
+  const parts = trimmedEmail.split('@');
+  if (parts.length !== 2) {
+    return { valid: false, pesanError: 'Format alamat email tidak valid.' };
+  }
+  const [username, domain] = parts;
+  if (!username || !domain) {
+    return { valid: false, pesanError: 'Bagian username atau domain email tidak boleh kosong.' };
+  }
+
+  try {
+    const { createClient } = await import('@/lib/supabase/server');
+    const supabase = await createClient();
+
+    // 1. Cek allowlist spesifik
+    const { data: allowlistMatch } = await supabase
+      .from('email_allowlist')
+      .select('id')
+      .eq('email', trimmedEmail)
+      .eq('is_active', true)
+      .maybeSingle();
+
+    if (allowlistMatch) {
+      return { valid: true, normalizedEmail: trimmedEmail };
+    }
+
+    // 2. Cek domain yang diizinkan
+    const { data: domainMatch } = await supabase
+      .from('allowed_email_domains')
+      .select('id')
+      .eq('domain', domain)
+      .eq('is_active', true)
+      .maybeSingle();
+
+    if (domainMatch) {
+      return { valid: true, normalizedEmail: trimmedEmail };
+    }
+  } catch {
+    // Fallback saat offline
+  }
+
+  return validasiEmailStudent({
+    email,
+    emailVerified,
+    allowedDomains: ['student.uir.ac.id', 'dosen.uir.ac.id', 'uir.ac.id', 'siakad.uir.ac.id'],
+  });
+}

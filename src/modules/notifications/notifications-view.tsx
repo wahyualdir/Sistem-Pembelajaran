@@ -287,7 +287,7 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
           >
             <span>Belum Dibaca</span>
             {unreadCount > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-primary text-white">
+              <span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-primary text-white">
                 {unreadCount}
               </span>
             )}
@@ -343,7 +343,7 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
                       )}
 
                       <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded border text-[11px] font-sans ${badge.className}`}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded border text-xs font-sans ${badge.className}`}
                       >
                         {getTypeIcon(n.type)}
                         <span>{badge.label}</span>
@@ -385,7 +385,7 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
                           <ArrowRight className="h-3.5 w-3.5 text-primary" />
                         </Link>
                       ) : (
-                        <span className="text-[11px] text-gray font-sans font-medium">
+                        <span className="text-xs text-gray font-sans font-medium">
                           Pemberitahuan Sistem
                         </span>
                       )}

@@ -179,7 +179,7 @@ export function MentoringRiskView({ advisees }: MentoringRiskViewProps) {
 
                 {/* Rekomendasi Bimbingan & Aksi Dosen Wali */}
                 <div className="pt-2 border-t border-black/10 flex flex-wrap items-center justify-between gap-2">
-                  <p className="text-[11px] text-gray-dark font-sans">
+                  <p className="text-xs text-gray-dark font-sans">
                     <span className="font-bold text-ink">Saran Pembimbing:</span>{' '}
                     {item.recommendations[0] || 'Lakukan pemantauan berkala saat KRS revisi.'}
                   </p>

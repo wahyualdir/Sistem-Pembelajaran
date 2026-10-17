@@ -151,7 +151,7 @@ export function EvaluationFormModal({
                   </div>
 
                   <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-black/10">
-                    <span className="text-[11px] text-black/50">1 (Sangat Kurang)</span>
+                    <span className="text-xs text-black/50">1 (Sangat Kurang)</span>
                     <div className="flex items-center gap-1.5 sm:gap-2">
                       {[1, 2, 3, 4, 5].map((val) => {
                         const isSelected = scores[q.id] === val;
@@ -172,7 +172,7 @@ export function EvaluationFormModal({
                         );
                       })}
                     </div>
-                    <span className="text-[11px] text-black/50">5 (Sangat Baik)</span>
+                    <span className="text-xs text-black/50">5 (Sangat Baik)</span>
                   </div>
                 </div>
               ))}
@@ -191,7 +191,7 @@ export function EvaluationFormModal({
                 className="w-full p-3 rounded-lg border-2 border-black text-xs font-sans outline-none focus:ring-2 focus:ring-primary"
                 required
               />
-              <span className="text-[11px] text-black/50 block">
+              <span className="text-xs text-black/50 block">
                 Minimal 5 karakter. Ulasan Anda akan digabungkan secara acak bersama responden lain.
               </span>
             </div>

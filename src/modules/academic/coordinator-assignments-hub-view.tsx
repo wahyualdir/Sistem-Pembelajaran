@@ -156,7 +156,7 @@ export function CoordinatorAssignmentsHubView({
                 <Users className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
-                Penugasan & Kelas Program Studi
+                Penugasan Dosen Program Studi
               </h1>
             </div>
             <p className="text-sm sm:text-base text-black font-medium max-w-3xl leading-relaxed">

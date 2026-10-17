@@ -32,7 +32,7 @@ export default function TransparencyPage() {
             </div>
             <div>
               <h1 className="font-heading font-bold text-2xl tracking-tight text-foreground">
-                Transparansi Data & Kebijakan Pemantauan SIAJAR
+                Privasi dan Kebijakan Pemantauan SIAJAR
               </h1>
               <p className="text-xs text-muted-foreground mt-0.5">
                 Dokumentasi resmi mengenai hak pengguna, parameter pemantauan proctoring ujian, geolokasi presensi, dan retensi data.

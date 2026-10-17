@@ -53,7 +53,7 @@ export function SuperadminRolesHubView() {
                 <ShieldAlert className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
-                Role & Permission Matrix (7 Peran SIAJAR)
+                Peran dan Akses (7 Peran SIAJAR)
               </h1>
             </div>
             <p className="text-xs sm:text-sm text-black/70 font-medium max-w-2xl">

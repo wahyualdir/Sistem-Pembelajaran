@@ -60,11 +60,11 @@ export function SuperadminAnnouncementsHubView() {
                 <Bell className="h-6 w-6" />
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl text-black tracking-tight">
-                Pengumuman Global Universitas
+                Pengumuman Kampus Universitas
               </h1>
             </div>
             <p className="text-xs sm:text-sm text-black/70 font-medium max-w-2xl">
-              Terbitkan maklumat resmi rektorat dan edaran universitas yang disiarkan langsung ke seluruh portal dashboard mahasiswa, dosen, dan tenaga kependidikan.
+              Terbitkan maklumat resmi rektorat dan edaran universitas yang disiarkan langsung ke seluruh portal mahasiswa, dosen, dan tenaga kependidikan.
             </p>
           </div>
 
@@ -81,11 +81,11 @@ export function SuperadminAnnouncementsHubView() {
         </div>
       </RetroWindow>
 
-      {/* 2. DAFTAR PENGUMUMAN GLOBAL */}
+      {/* 2. DAFTAR PENGUMUMAN KAMPUS */}
       <div className="p-5 sm:p-6 rounded-xl border-2 border-black bg-white shadow-retro space-y-4">
         <div className="flex items-center justify-between border-b-2 border-black pb-3">
           <h3 className="font-heading font-bold text-lg text-black">
-            Maklumat & Siaran Resmi Aktif
+            Maklumat dan Siaran Resmi Aktif
           </h3>
           <span className="text-xs font-sans font-bold text-black/60">
             Total: {isDemo ? `${SAMPLE_GLOBAL_ANNOUNCEMENTS.length} Maklumat` : '0 Maklumat (Belum Terhubung)'}
@@ -94,7 +94,7 @@ export function SuperadminAnnouncementsHubView() {
 
         {!isDemo ? (
           <div className="p-8 text-center text-black/60 font-sans text-xs border-2 border-dashed border-black/20 rounded-xl">
-            Tabel pangkalan data pengumuman global belum terhubung ke database production.
+            Tabel pangkalan data pengumuman kampus belum terhubung ke database production.
           </div>
         ) : (
           <div className="space-y-3 font-sans text-xs">
