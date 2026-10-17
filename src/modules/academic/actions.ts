@@ -273,10 +273,18 @@ export interface AssignmentItem {
   description: string;
   due_at: string;
   close_at: string;
+  release_at?: string | null;
   submissions?: number;
   mine?: { text_body: string; is_late: boolean; submitted_at: string; grade?: GradeInfo | null } | null;
 }
-export interface MaterialItem { id: string; title: string; body_md: string; created_at: string }
+export interface MaterialItem {
+  id: string;
+  class_id?: string;
+  title: string;
+  body_md: string;
+  created_at: string;
+  release_at?: string | null;
+}
 export interface MemberItem { student_id: string; name: string; nim?: string; enrolled_at: string }
 export interface ClassDetail {
   cls: ClassItem;
@@ -302,6 +310,7 @@ if (!tugas.assignments.some((a) => a.class_id === DEMO_CLASS_ID)) {
     description: 'Buatlah resume komparasi antara arsitektur Monolitik Modular vs Microservices. Lampirkan studi kasus nyata.',
     due_at: new Date(Date.now() + 86400000 * 4).toISOString(),
     close_at: new Date(Date.now() + 86400000 * 6).toISOString(),
+    release_at: null,
   });
 }
 
@@ -312,6 +321,7 @@ const assignmentSchema = z
     description: z.string().trim().max(5000).optional(),
     due_at: z.string().datetime({ offset: true, message: 'Isi tenggat pengumpulan.' }),
     close_at: z.string().datetime({ offset: true, message: 'Isi batas akhir pengumpulan.' }),
+    release_at: z.string().datetime({ offset: true }).optional().nullable(),
   })
   .refine((v) => Date.parse(v.close_at) >= Date.parse(v.due_at), {
     message: ERR.INVALID_DATES,
@@ -336,10 +346,21 @@ export async function createAssignmentAction(input: unknown): Promise<ActionResp
       p_close: v.close_at,
     });
     if (error || !data) return { ok: false, error: pesan(error?.message) };
-    item = data as AssignmentItem;
+    if (v.release_at) {
+      await supabase.from('assignments').update({ release_at: v.release_at }).eq('id', (data as any).id);
+    }
+    item = { ...(data as AssignmentItem), release_at: v.release_at ?? null };
   } else {
     if (mem.classes.find((x) => x.id === v.class_id)?.created_by !== me.id) return { ok: false, error: ERR.FORBIDDEN };
-    item = { id: randomUUID(), class_id: v.class_id, title: v.title, description: v.description ?? '', due_at: v.due_at, close_at: v.close_at };
+    item = {
+      id: randomUUID(),
+      class_id: v.class_id,
+      title: v.title,
+      description: v.description ?? '',
+      due_at: v.due_at,
+      close_at: v.close_at,
+      release_at: v.release_at ?? null,
+    };
     tugas.assignments.push(item);
     mem.enrollments.filter((e) => e.class_id === v.class_id).forEach((e) => notify(e.student_id, 'ASSIGNMENT_NEW', `Tugas baru: ${v.title}`, 'Buka kelas untuk melihat petunjuk dan tenggat.', v.class_id));
   }
@@ -400,10 +421,10 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
 
     const { data: rows } = await supabase
       .from('assignments')
-      .select('id,class_id,title,description,due_at,close_at,submissions(count)')
+      .select('id,class_id,title,description,due_at,close_at,release_at,submissions(count)')
       .eq('class_id', id)
       .order('due_at');
-    const { data: mats } = await supabase.from('materials').select('id,title,body_md,created_at').eq('class_id', id).order('created_at', { ascending: false });
+    const { data: mats } = await supabase.from('materials').select('id,title,body_md,created_at,release_at').eq('class_id', id).order('created_at', { ascending: false });
     const { data: ann } = await supabase.from('announcements').select('id,title,body,created_at').eq('class_id', id).order('created_at', { ascending: false }).limit(20);
     let members: MemberItem[] | undefined;
     if (lecturer || isAdminOrStaff) {
@@ -498,7 +519,9 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
           }))
       : undefined,
     announcements: pengumuman.filter((a) => a.class_id === id).sort((a, b) => b.created_at.localeCompare(a.created_at)),
-    materials: bahan.filter((m) => m.class_id === id).sort((a, b) => b.created_at.localeCompare(a.created_at)),
+    materials: bahan
+      .filter((m) => m.class_id === id && (viewer !== 'STUDENT' || !m.release_at || new Date(m.release_at) <= new Date()))
+      .sort((a, b) => b.created_at.localeCompare(a.created_at)),
     members: liveStore.enrollments.filter((e) => e.class_id === id).map((e) => {
       const demo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === e.student_id);
       return {
@@ -509,7 +532,7 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
       };
     }),
     assignments: tugas.assignments
-      .filter((a) => a.class_id === id)
+      .filter((a) => a.class_id === id && (viewer !== 'STUDENT' || !a.release_at || new Date(a.release_at) <= new Date()))
       .sort((a, b) => a.due_at.localeCompare(b.due_at))
       .map((a) => ({
         ...a,
@@ -967,6 +990,7 @@ const materialSchema = z.object({
   class_id: z.string().uuid(),
   title: z.string().trim().min(3, 'Judul materi minimal 3 karakter.').max(200),
   body: z.string().trim().max(20000).optional(),
+  release_at: z.string().datetime({ offset: true }).optional().nullable(),
 });
 
 export async function createMaterialAction(input: unknown): Promise<ActionResponse> {
@@ -974,15 +998,25 @@ export async function createMaterialAction(input: unknown): Promise<ActionRespon
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
   const me = await actor('LECTURER');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
-  const { class_id, title, body = '' } = p.data;
+  const { class_id, title, body = '', release_at } = p.data;
 
   if (me.online) {
     const supabase = await createClient();
-    const { error } = await supabase.rpc('create_material', { p_class: class_id, p_title: title, p_body: body });
+    const { data, error } = await supabase.rpc('create_material', { p_class: class_id, p_title: title, p_body: body });
     if (error) return { ok: false, error: pesan(error.message) };
+    if (release_at && (data as any)?.id) {
+      await supabase.from('materials').update({ release_at }).eq('id', (data as any).id);
+    }
   } else {
     if (mem.classes.find((x) => x.id === class_id)?.created_by !== me.id) return { ok: false, error: ERR.FORBIDDEN };
-    bahan.push({ id: randomUUID(), class_id, title, body_md: body, created_at: new Date().toISOString() });
+    bahan.push({
+      id: randomUUID(),
+      class_id,
+      title,
+      body_md: body,
+      created_at: new Date().toISOString(),
+      release_at: release_at ?? null,
+    });
     mem.enrollments.filter((e) => e.class_id === class_id).forEach((e) => notify(e.student_id, 'MATERIAL_NEW', `Materi baru: ${title}`, 'Buka kelas untuk membacanya.', class_id));
   }
   revalidatePath('/classes/[id]', 'page');

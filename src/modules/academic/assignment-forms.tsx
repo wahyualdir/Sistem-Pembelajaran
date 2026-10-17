@@ -30,7 +30,7 @@ export function useRun(onOk: () => void) {
 }
 
 const iso = (v: string) => (v ? new Date(v).toISOString() : '');
-const EMPTY = { title: '', description: '', due: '', close: '' };
+const EMPTY = { title: '', description: '', due: '', close: '', release: '' };
 
 export function CreateAssignmentForm({ classId }: { classId: string }) {
   const [f, setF] = useState(EMPTY);
@@ -43,8 +43,15 @@ export function CreateAssignmentForm({ classId }: { classId: string }) {
       onSubmit={(e) => {
         e.preventDefault();
         run(
-          () => createAssignmentAction({ class_id: classId, title: f.title, description: f.description, due_at: iso(f.due), close_at: iso(f.close) }),
-          'Tugas diterbitkan dan langsung terlihat oleh mahasiswa kelas ini.'
+          () => createAssignmentAction({
+            class_id: classId,
+            title: f.title,
+            description: f.description,
+            due_at: iso(f.due),
+            close_at: iso(f.close),
+            release_at: f.release ? iso(f.release) : undefined,
+          }),
+          'Tugas diterbitkan dan disimpan.'
         );
       }}
       className="space-y-3"
@@ -66,6 +73,11 @@ export function CreateAssignmentForm({ classId }: { classId: string }) {
           <label htmlFor="a-close" className="block text-sm font-medium">Ditutup pada</label>
           <input id="a-close" type="datetime-local" value={f.close} onChange={set('close')} disabled={pending} required className="field" />
         </div>
+      </div>
+      <div className="space-y-1.5">
+        <label htmlFor="a-release" className="block text-sm font-medium">Jadwal rilis ke mahasiswa (opsional)</label>
+        <input id="a-release" type="datetime-local" value={f.release} onChange={set('release')} disabled={pending} className="field" />
+        <span className="text-xs text-muted-foreground">Kosongkan jika ingin langsung tampil saat diterbitkan.</span>
       </div>
       <button type="submit" disabled={pending} data-pending={pending} className="btn-solid !w-auto px-5">
         {pending ? 'Menerbitkan...' : 'Terbitkan tugas'}
@@ -99,13 +111,21 @@ export function SubmitForm({ assignmentId }: { assignmentId: string }) {
 }
 
 export function CreateMaterialForm({ classId }: { classId: string }) {
-  const [f, setF] = useState({ title: '', body: '' });
-  const { pending, error, success, tick, run } = useRun(() => setF({ title: '', body: '' }));
+  const [f, setF] = useState({ title: '', body: '', release: '' });
+  const { pending, error, success, tick, run } = useRun(() => setF({ title: '', body: '', release: '' }));
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        run(() => createMaterialAction({ class_id: classId, title: f.title, body: f.body }), 'Materi diterbitkan dan terlihat oleh mahasiswa kelas ini.');
+        run(
+          () => createMaterialAction({
+            class_id: classId,
+            title: f.title,
+            body: f.body,
+            release_at: f.release ? iso(f.release) : undefined,
+          }),
+          'Materi diterbitkan dan disimpan.'
+        );
       }}
       className="space-y-3"
     >
@@ -116,6 +136,11 @@ export function CreateMaterialForm({ classId }: { classId: string }) {
       <div className="space-y-1.5">
         <label htmlFor="m-body" className="block text-sm font-medium">Isi materi</label>
         <textarea id="m-body" rows={5} value={f.body} onChange={(e) => setF({ ...f, body: e.target.value })} disabled={pending} className="field !h-auto py-2" />
+      </div>
+      <div className="space-y-1.5">
+        <label htmlFor="m-release" className="block text-sm font-medium">Jadwal rilis ke mahasiswa (opsional)</label>
+        <input id="m-release" type="datetime-local" value={f.release} onChange={(e) => setF({ ...f, release: e.target.value })} disabled={pending} className="field" />
+        <span className="text-xs text-muted-foreground">Kosongkan jika ingin langsung tampil saat diterbitkan.</span>
       </div>
       <button type="submit" disabled={pending} data-pending={pending} className="btn-solid !w-auto px-5">
         {pending ? 'Menerbitkan...' : 'Terbitkan materi'}

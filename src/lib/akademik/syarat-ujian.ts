@@ -83,3 +83,4 @@ export function evaluasiKelayakanUjian(
 export function cekKeterlambatanTugas(waktuKumpul: Date, tenggat: Date): boolean {
   return waktuKumpul.getTime() > tenggat.getTime();
 }
+

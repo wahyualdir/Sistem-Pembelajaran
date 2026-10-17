@@ -642,6 +642,11 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                                 {a.mine ? 'Diserahkan' : closed ? 'Ditutup' : 'Ditugaskan'}
                               </span>
                             )}
+                            {(lecturer || ta) && (a as any).release_at && new Date((a as any).release_at) > new Date() && (
+                              <span className="text-xs font-semibold px-2.5 py-1 rounded-lg border border-black bg-amber-100 text-amber-900">
+                                Tampil untuk mahasiswa pada {fmt((a as any).release_at)}
+                              </span>
+                            )}
                             {lecturer && (
                               <span className="text-xs font-medium bg-gray-soft border border-black px-2 py-1 rounded-lg">
                                 {a.submissions ?? 0} Submisi
@@ -721,11 +726,16 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           <Award className="h-5 w-5" />
                         </div>
                         <div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <h4 className="font-semibold text-sm sm:text-base text-black">{q.title}</h4>
                             <span className="text-xs font-medium bg-gray-soft border border-black px-2 py-0.5 rounded">
                               {q.exam_type ?? 'KUIS'}
                             </span>
+                            {(lecturer || ta) && (q as any).release_at && new Date((q as any).release_at) > new Date() && (
+                              <span className="text-xs font-semibold px-2 py-0.5 rounded border border-black bg-amber-100 text-amber-900">
+                                Tampil untuk mahasiswa pada {fmt((q as any).release_at)}
+                              </span>
+                            )}
                           </div>
                           <p className="text-xs text-black/70 font-normal mt-0.5">
                             Durasi: {q.duration_minutes} Menit · Total: {q.total_points} Poin · KKM: {q.kkm ?? 70}
@@ -774,9 +784,16 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                             <span className="text-xs font-normal text-black/60">{fmt(m.created_at)}</span>
                           </div>
                         </div>
-                        <span className="text-xs font-medium bg-gray-soft px-2.5 py-1 rounded border border-black">
-                          Modul #{idx + 1}
-                        </span>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {(lecturer || ta) && (m as any).release_at && new Date((m as any).release_at) > new Date() && (
+                            <span className="text-xs font-semibold px-2.5 py-1 rounded-lg border border-black bg-amber-100 text-amber-900">
+                              Tampil untuk mahasiswa pada {fmt((m as any).release_at)}
+                            </span>
+                          )}
+                          <span className="text-xs font-medium bg-gray-soft px-2.5 py-1 rounded border border-black">
+                            Modul #{idx + 1}
+                          </span>
+                        </div>
                       </div>
                       {m.body_md && (
                         <div className="p-4 rounded-xl border border-black/20 bg-gray-soft/20 text-xs sm:text-sm">

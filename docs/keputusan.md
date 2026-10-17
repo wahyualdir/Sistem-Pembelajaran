@@ -261,3 +261,32 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alternatif yang ditolak**:
   - *Mempertahankan rute lama yang tidak sesuai tabel*: Ditolak karena membingungkan navigasi pengguna antar-peran.
   - *Mengedit migrasi lama (1-21)*: Ditolak demi integritas audit dan kepatuhan prinsip migrasi idempoten berbasis append-only.
+
+### Keputusan 29: Kebijakan Institusi Terkonfigurasi & Pemisahan Boundary Server Action (Fase 1)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Membuat tabel `institution_policies` (Migrasi 23) dengan RLS dan fungsi SQL `get_policy(key)`, serta melakukan seeding untuk 21 kebijakan default Lampiran A.
+  2. Membuat helper `getPolicy<T>(key)` di `src/lib/policies/index.ts` dengan in-memory cache 60 detik dan fallback fail-safe ke `DEFAULT_INSTITUTION_POLICIES`.
+  3. Memisahkan server actions ke `src/lib/policies/actions.ts` dengan directive `'use server'`, sehingga komponen klien seperti `SuperadminPoliciesHubView` dapat memanggil mutasi dan kueri kebijakan tanpa menyebabkan modul backend (`@/lib/supabase/server`, `@/lib/audit.ts`) ter-bundle ke klien.
+- **Alasan**: Menghindari runtime/build error Webpack "You're importing a component that needs server-only" dan menjamin integritas jejak audit sensitif saat kebijakan diubah oleh Super Admin.
+- **Alternatif yang ditolak**:
+  - *Hardcode nilai ambang batas di setiap modul*: Ditolak karena aturan kampus dinamis dan harus dapat diubah tanpa deploy ulang.
+
+### Keputusan 30: Isolasi Evaluasi Syarat Ujian Sisi Server (Fase 1)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**: Menyimpan evaluasi asinkron dinamis di `src/lib/akademik/syarat-ujian-server.ts`, sementara `src/lib/akademik/syarat-ujian.ts` tetap berupa modul fungsi murni (pure functions) tanpa dependensi server atau `next/headers`.
+- **Alasan**: `syarat-ujian.ts` diimpor oleh berbagai store antarmuka klien (seperti `ujian-store.ts`). Adanya import server-only di file tersebut akan merusak kompilasi webpack klien.
+- **Alternatif yang ditolak**:
+  - *Memaksa semua komponen klien menjadi server component*: Ditolak karena halaman ujian dan input form membutuhkan state interaktif reaktif di browser.
+
+### Keputusan 31: Notifikasi Terjadwal Idempoten dan Keamanan Cron Fail-Closed (Fase 1)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Mengimplementasikan tabel `scheduled_notifications` dengan RLS dan indeks gabungan `(send_at, sent_at)`.
+  2. Fungsi `scheduleNotification` menggunakan `dedupe_key` untuk menjamin idempotensi saat penjadwalan berulang.
+  3. Endpoint cron dilindungi secara ketat melalui `src/lib/cron/auth.ts` (`Authorization: Bearer ${CRON_SECRET}`). Bila header absen atau `CRON_SECRET` di environment kosong, permintaan langsung ditolak (fail-closed dengan status HTTP 401).
+  4. Mendaftarkan seluruh 10 pekerjaan terjadwal Lampiran C di `vercel.json` dan membuat route handler terkait.
+- **Alasan**: Mencegah spam notifikasi ganda kepada mahasiswa dan memastikan route cron tidak dapat dipicu secara sepihak oleh publik tanpa otentikasi sah.
+- **Alternatif yang ditolak**:
+  - *Memicu cron tanpa secret di development*: Ditolak karena rawan terbawa ke lingkungan staging/produksi yang menimbulkan kerentanan Denial-of-Service.
+

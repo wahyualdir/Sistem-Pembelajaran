@@ -447,6 +447,61 @@ export interface Database {
           created_at?: string;
         };
       };
+      institution_policies: {
+        Row: {
+          key: string;
+          value: Json;
+          description: string | null;
+          updated_by: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          key: string;
+          value: Json;
+          description?: string | null;
+          updated_by?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          key?: string;
+          value?: Json;
+          description?: string | null;
+          updated_by?: string | null;
+          updated_at?: string;
+        };
+      };
+      scheduled_notifications: {
+        Row: {
+          id: string;
+          user_id: string;
+          kind: string;
+          payload: Json;
+          send_at: string;
+          sent_at: string | null;
+          dedupe_key: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          kind: string;
+          payload?: Json;
+          send_at?: string;
+          sent_at?: string | null;
+          dedupe_key?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          kind?: string;
+          payload?: Json;
+          send_at?: string;
+          sent_at?: string | null;
+          dedupe_key?: string | null;
+          created_at?: string;
+        };
+      };
     };
     Views: {
       audit_logs_for_sysadmin: {
@@ -496,6 +551,10 @@ export interface Database {
       report_not_me: {
         Args: { p_user_id: string; p_details?: string };
         Returns: boolean;
+      };
+      get_policy: {
+        Args: { p_key: string };
+        Returns: Json;
       };
     };
   };

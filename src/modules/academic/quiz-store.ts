@@ -71,6 +71,7 @@ export interface QuizItem {
   questions: QuizQuestion[];
   total_points: number;
   is_published: boolean;
+  release_at?: string | null;
   created_at: string;
 
   // Extended Settings

@@ -74,6 +74,7 @@ const createQuizSchema = z.object({
   exam_type: z.enum(['KUIS', 'UTS', 'UAS', 'LATIHAN', 'REMEDIAL']).default('KUIS'),
   duration_minutes: z.coerce.number().int().min(5).max(300),
   due_at: z.string().datetime({ offset: true }),
+  release_at: z.string().datetime({ offset: true }).optional().nullable(),
   proctoring_level: z.enum(['OFF', 'LIGHT', 'STANDARD', 'STRICT']).default('STANDARD'),
   max_violations: z.coerce.number().int().min(1).max(20).default(5),
   shuffle_questions: z.boolean().default(false),
@@ -241,6 +242,7 @@ export async function createQuizAction(input: unknown): Promise<ActionResponse<Q
     questions: questionsWithIds,
     total_points: totalPoints,
     is_published: true,
+    release_at: p.data.release_at ?? null,
     created_at: new Date().toISOString(),
     proctoring_level: p.data.proctoring_level,
     max_violations: p.data.max_violations,
@@ -317,8 +319,11 @@ export async function listClassQuizzesAction(classId: string): Promise<QuizItem[
   }
 
   const currentStore = getQuizStore();
+  const isStudent = user.activeRole === 'STUDENT';
+  const now = new Date();
+
   return (currentStore.quizzes || [])
-    .filter((q) => q.class_id === classId)
+    .filter((q) => q.class_id === classId && (!isStudent || !q.release_at || new Date(q.release_at) <= now))
     .sort((a, b) => b.created_at.localeCompare(a.created_at))
     .map((q) => sanitizeQuizForRole(q, user.activeRole));
 }
@@ -333,6 +338,9 @@ export async function getQuizDetailAction(quizId: string): Promise<QuizItem | nu
   const currentStore = getQuizStore();
   const quiz = (currentStore.quizzes || []).find((q) => q.id === quizId) ?? null;
   if (!quiz) return null;
+  if (user.activeRole === 'STUDENT' && quiz.release_at && new Date(quiz.release_at) > new Date()) {
+    return null;
+  }
   return sanitizeQuizForRole(quiz, user.activeRole);
 }
 
