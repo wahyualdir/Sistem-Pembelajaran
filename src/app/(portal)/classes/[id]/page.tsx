@@ -25,6 +25,7 @@ export default async function ClassDetailPage({ params }: { params: { id: string
       <ClassHubTabs
         data={{
           ...detail,
+          currentUserId: ctx?.user.id,
           quizzes,
           attendanceSessions,
           attendanceSummary: mySummary,

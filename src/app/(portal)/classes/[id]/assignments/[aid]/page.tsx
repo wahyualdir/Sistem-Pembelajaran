@@ -6,6 +6,8 @@ import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { ReviewForm } from '@/modules/academic/review-form';
 import { runAssignmentSimilarityCheckAction } from '@/modules/academic/similarity-actions';
 import { SimilarityReviewView } from '@/modules/academic/similarity-review-view';
+import { AssignmentExtensionsCard } from '@/modules/academic/assignment-extensions-card';
+import { getClassDetailAction } from '@/modules/academic/actions';
 
 const fmt = (iso: string) =>
   `${new Date(iso).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', dateStyle: 'medium', timeStyle: 'short' })} WIB`;
@@ -14,6 +16,9 @@ export default async function ReviewPage({ params }: { params: { id: string; aid
   const user = await getCurrentUserWithRoles();
   const data = await listSubmissionsAction(params.id, params.aid);
   if (!data) notFound();
+
+  const classDetail = await getClassDetailAction(params.id);
+  const members = classDetail?.members || [];
 
   const isStaff =
     user?.activeRole === 'LECTURER' ||
@@ -38,6 +43,13 @@ export default async function ReviewPage({ params }: { params: { id: string; aid
           {data.rows.length} pengumpulan, nilai maksimum {data.max_score}. Draf nilai baru terlihat mahasiswa setelah difinalisasi.
         </p>
       </div>
+
+      {/* PERPANJANGAN TENGGAT */}
+      <AssignmentExtensionsCard
+        assignmentId={params.aid}
+        isLecturer={user?.activeRole === 'LECTURER' || user?.activeRole === 'SUPER_ADMIN'}
+        members={members}
+      />
 
       {/* DETEKSI KEMIRIPAN (KHUSUS DOSEN & ASDOS, TIDAK TERLIHAT OLEH MAHASISWA) */}
       {isStaff && simRes?.ok && (

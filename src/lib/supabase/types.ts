@@ -502,6 +502,492 @@ export interface Database {
           created_at?: string;
         };
       };
+      assignments: {
+        Row: {
+          id: string;
+          class_id: string;
+          title: string;
+          description: string;
+          due_at: string;
+          close_at: string;
+          release_at: string | null;
+          max_score: number;
+          late_policy: 'none' | 'per_day' | 'per_hour' | 'flat';
+          late_penalty_value: number;
+          late_penalty_cap: number;
+          allow_resubmit: boolean;
+          max_resubmits: number | null;
+          submission_mode: 'individual' | 'group';
+          group_set_id: string | null;
+          rubric_snapshot: Json | null;
+          created_by: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          class_id: string;
+          title: string;
+          description?: string;
+          due_at: string;
+          close_at: string;
+          release_at?: string | null;
+          max_score?: number;
+          late_policy?: 'none' | 'per_day' | 'per_hour' | 'flat';
+          late_penalty_value?: number;
+          late_penalty_cap?: number;
+          allow_resubmit?: boolean;
+          max_resubmits?: number | null;
+          submission_mode?: 'individual' | 'group';
+          group_set_id?: string | null;
+          rubric_snapshot?: Json | null;
+          created_by: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          class_id?: string;
+          title?: string;
+          description?: string;
+          due_at?: string;
+          close_at?: string;
+          release_at?: string | null;
+          max_score?: number;
+          late_policy?: 'none' | 'per_day' | 'per_hour' | 'flat';
+          late_penalty_value?: number;
+          late_penalty_cap?: number;
+          allow_resubmit?: boolean;
+          max_resubmits?: number | null;
+          submission_mode?: 'individual' | 'group';
+          group_set_id?: string | null;
+          rubric_snapshot?: Json | null;
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      assignment_extensions: {
+        Row: {
+          id: string;
+          assignment_id: string;
+          student_id: string | null;
+          group_id: string | null;
+          new_due_at: string;
+          new_close_at: string | null;
+          reason: string;
+          granted_by: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          assignment_id: string;
+          student_id?: string | null;
+          group_id?: string | null;
+          new_due_at: string;
+          new_close_at?: string | null;
+          reason: string;
+          granted_by: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          assignment_id?: string;
+          student_id?: string | null;
+          group_id?: string | null;
+          new_due_at?: string;
+          new_close_at?: string | null;
+          reason?: string;
+          granted_by?: string;
+          created_at?: string;
+        };
+      };
+      submissions: {
+        Row: {
+          id: string;
+          assignment_id: string;
+          student_id: string;
+          attempt_no: number;
+          status: string;
+          text_body: string;
+          submitted_at: string;
+          is_late: boolean;
+          late_minutes: number;
+          raw_score: number | null;
+          penalty_percent: number;
+          penalty_waived: boolean;
+          penalty_waived_reason: string | null;
+          group_id: string | null;
+          submitted_by: string | null;
+        };
+        Insert: {
+          id?: string;
+          assignment_id: string;
+          student_id: string;
+          attempt_no?: number;
+          status?: string;
+          text_body: string;
+          submitted_at?: string;
+          is_late?: boolean;
+          late_minutes?: number;
+          raw_score?: number | null;
+          penalty_percent?: number;
+          penalty_waived?: boolean;
+          penalty_waived_reason?: string | null;
+          group_id?: string | null;
+          submitted_by?: string | null;
+        };
+        Update: {
+          id?: string;
+          assignment_id?: string;
+          student_id?: string;
+          attempt_no?: number;
+          status?: string;
+          text_body?: string;
+          submitted_at?: string;
+          is_late?: boolean;
+          late_minutes?: number;
+          raw_score?: number | null;
+          penalty_percent?: number;
+          penalty_waived?: boolean;
+          penalty_waived_reason?: string | null;
+          group_id?: string | null;
+          submitted_by?: string | null;
+        };
+      };
+      submission_versions: {
+        Row: {
+          id: string;
+          submission_id: string;
+          attempt_no: number;
+          file_paths: Json;
+          submitted_at: string;
+        };
+        Insert: {
+          id?: string;
+          submission_id: string;
+          attempt_no: number;
+          file_paths?: Json;
+          submitted_at?: string;
+        };
+        Update: {
+          id?: string;
+          submission_id?: string;
+          attempt_no?: number;
+          file_paths?: Json;
+          submitted_at?: string;
+        };
+      };
+      group_sets: {
+        Row: {
+          id: string;
+          class_id: string;
+          name: string;
+          formation: 'lecturer' | 'random' | 'self';
+          min_size: number;
+          max_size: number;
+          lock_at: string | null;
+          created_by: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          class_id: string;
+          name: string;
+          formation: 'lecturer' | 'random' | 'self';
+          min_size?: number;
+          max_size?: number;
+          lock_at?: string | null;
+          created_by: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          class_id?: string;
+          name?: string;
+          formation?: 'lecturer' | 'random' | 'self';
+          min_size?: number;
+          max_size?: number;
+          lock_at?: string | null;
+          created_by?: string;
+          created_at?: string;
+        };
+      };
+      groups: {
+        Row: {
+          id: string;
+          set_id: string;
+          name: string;
+          join_code: string;
+        };
+        Insert: {
+          id?: string;
+          set_id: string;
+          name: string;
+          join_code: string;
+        };
+        Update: {
+          id?: string;
+          set_id?: string;
+          name?: string;
+          join_code?: string;
+        };
+      };
+      group_members: {
+        Row: {
+          group_id: string;
+          set_id: string;
+          student_id: string;
+          role: 'leader' | 'member';
+          joined_at: string;
+        };
+        Insert: {
+          group_id: string;
+          set_id: string;
+          student_id: string;
+          role?: 'leader' | 'member';
+          joined_at?: string;
+        };
+        Update: {
+          group_id?: string;
+          set_id?: string;
+          student_id?: string;
+          role?: 'leader' | 'member';
+          joined_at?: string;
+        };
+      };
+      submission_member_adjustments: {
+        Row: {
+          submission_id: string;
+          student_id: string;
+          contribution_percent: number;
+          note: string | null;
+        };
+        Insert: {
+          submission_id: string;
+          student_id: string;
+          contribution_percent?: number;
+          note?: string | null;
+        };
+        Update: {
+          submission_id?: string;
+          student_id?: string;
+          contribution_percent?: number;
+          note?: string | null;
+        };
+      };
+      rubrics: {
+        Row: {
+          id: string;
+          owner_id: string;
+          title: string;
+          description: string | null;
+          is_template: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_id: string;
+          title: string;
+          description?: string | null;
+          is_template?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          owner_id?: string;
+          title?: string;
+          description?: string | null;
+          is_template?: boolean;
+          created_at?: string;
+        };
+      };
+      rubric_criteria: {
+        Row: {
+          id: string;
+          rubric_id: string;
+          position: number;
+          title: string;
+          description: string | null;
+          max_points: number;
+        };
+        Insert: {
+          id?: string;
+          rubric_id: string;
+          position: number;
+          title: string;
+          description?: string | null;
+          max_points: number;
+        };
+        Update: {
+          id?: string;
+          rubric_id?: string;
+          position?: number;
+          title?: string;
+          description?: string | null;
+          max_points?: number;
+        };
+      };
+      rubric_levels: {
+        Row: {
+          id: string;
+          criterion_id: string;
+          position: number;
+          label: string;
+          description: string | null;
+          points: number;
+        };
+        Insert: {
+          id?: string;
+          criterion_id: string;
+          position: number;
+          label: string;
+          description?: string | null;
+          points: number;
+        };
+        Update: {
+          id?: string;
+          criterion_id?: string;
+          position?: number;
+          label?: string;
+          description?: string | null;
+          points?: number;
+        };
+      };
+      rubric_scores: {
+        Row: {
+          submission_id: string;
+          criterion_id: string;
+          level_label: string | null;
+          points: number;
+          comment: string | null;
+          graded_by: string;
+          created_at: string;
+        };
+        Insert: {
+          submission_id: string;
+          criterion_id: string;
+          level_label?: string | null;
+          points: number;
+          comment?: string | null;
+          graded_by: string;
+          created_at?: string;
+        };
+        Update: {
+          submission_id?: string;
+          criterion_id?: string;
+          level_label?: string | null;
+          points?: number;
+          comment?: string | null;
+          graded_by?: string;
+          created_at?: string;
+        };
+      };
+      feedback_comments: {
+        Row: {
+          id: string;
+          submission_id: string;
+          author_id: string;
+          file_path: string | null;
+          anchor: Json | null;
+          body: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          submission_id: string;
+          author_id: string;
+          file_path?: string | null;
+          anchor?: Json | null;
+          body: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          submission_id?: string;
+          author_id?: string;
+          file_path?: string | null;
+          anchor?: Json | null;
+          body?: string;
+          created_at?: string;
+        };
+      };
+      grade_disputes: {
+        Row: {
+          id: string;
+          class_id: string;
+          student_id: string;
+          target_type: 'submission' | 'exam_attempt' | 'exam_question' | 'attendance';
+          target_id: string;
+          reason: string;
+          evidence_path: string | null;
+          status: 'diajukan' | 'ditinjau' | 'diterima' | 'ditolak' | 'ditarik';
+          response: string | null;
+          old_score: number | null;
+          new_score: number | null;
+          resolved_by: string | null;
+          resolved_at: string | null;
+          linked_change_request_id: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          class_id: string;
+          student_id: string;
+          target_type: 'submission' | 'exam_attempt' | 'exam_question' | 'attendance';
+          target_id: string;
+          reason: string;
+          evidence_path?: string | null;
+          status?: 'diajukan' | 'ditinjau' | 'diterima' | 'ditolak' | 'ditarik';
+          response?: string | null;
+          old_score?: number | null;
+          new_score?: number | null;
+          resolved_by?: string | null;
+          resolved_at?: string | null;
+          linked_change_request_id?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          class_id?: string;
+          student_id?: string;
+          target_type?: 'submission' | 'exam_attempt' | 'exam_question' | 'attendance';
+          target_id?: string;
+          reason?: string;
+          evidence_path?: string | null;
+          status?: 'diajukan' | 'ditinjau' | 'diterima' | 'ditolak' | 'ditarik';
+          response?: string | null;
+          old_score?: number | null;
+          new_score?: number | null;
+          resolved_by?: string | null;
+          resolved_at?: string | null;
+          linked_change_request_id?: string | null;
+          created_at?: string;
+        };
+      };
+      grade_dispute_messages: {
+        Row: {
+          id: string;
+          dispute_id: string;
+          author_id: string;
+          body: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          dispute_id: string;
+          author_id: string;
+          body: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          dispute_id?: string;
+          author_id?: string;
+          body?: string;
+          created_at?: string;
+        };
+      };
     };
     Views: {
       audit_logs_for_sysadmin: {
@@ -555,6 +1041,28 @@ export interface Database {
       get_policy: {
         Args: { p_key: string };
         Returns: Json;
+      };
+      calc_late_penalty: {
+        Args: {
+          p_late_minutes: number;
+          p_late_policy: string;
+          p_late_penalty_value: number;
+          p_late_penalty_cap: number;
+        };
+        Returns: number;
+      };
+      join_group_with_code: {
+        Args: {
+          p_set_id: string;
+          p_join_code: string;
+        };
+        Returns: string;
+      };
+      leave_group: {
+        Args: {
+          p_group_id: string;
+        };
+        Returns: boolean;
       };
     };
   };

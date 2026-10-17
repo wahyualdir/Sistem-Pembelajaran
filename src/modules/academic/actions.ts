@@ -265,7 +265,7 @@ export async function listMyClassesAction(): Promise<ClassItem[]> {
     .map((x) => ({ ...pub(x), members: mem.enrollments.filter((e) => e.class_id === x.id).length }));
 }
 
-// ---------- Tugas dan pengumpulan (Bagian 13, langkah 3-4) ----------
+// ---------- Tugas dan pengumpulan (Bagian 13, langkah 3-4 & Fase 2) ----------
 export interface AssignmentItem {
   id: string;
   class_id: string;
@@ -274,8 +274,25 @@ export interface AssignmentItem {
   due_at: string;
   close_at: string;
   release_at?: string | null;
+  late_policy?: 'none' | 'per_day' | 'per_hour' | 'flat';
+  late_penalty_value?: number;
+  late_penalty_cap?: number;
+  allow_resubmit?: boolean;
+  max_resubmits?: number | null;
+  submission_mode?: 'individual' | 'group';
+  group_set_id?: string | null;
+  rubric_snapshot?: any;
   submissions?: number;
-  mine?: { text_body: string; is_late: boolean; submitted_at: string; grade?: GradeInfo | null } | null;
+  mine?: {
+    text_body: string;
+    is_late: boolean;
+    submitted_at: string;
+    attempt_no?: number;
+    late_minutes?: number;
+    penalty_percent?: number;
+    penalty_waived?: boolean;
+    grade?: GradeInfo | null;
+  } | null;
 }
 export interface MaterialItem {
   id: string;
@@ -298,7 +315,23 @@ export interface ClassDetail {
   discussions: DiscussionItem[];
 }
 
-type SubRow = { id: string; student_name: string; assignment_id: string; student_id: string; text_body: string; is_late: boolean; submitted_at: string };
+type SubRow = {
+  id: string;
+  student_name: string;
+  assignment_id: string;
+  student_id: string;
+  text_body: string;
+  is_late: boolean;
+  submitted_at: string;
+  attempt_no?: number;
+  late_minutes?: number;
+  raw_score?: number | null;
+  penalty_percent?: number;
+  penalty_waived?: boolean;
+  penalty_waived_reason?: string | null;
+  group_id?: string | null;
+  submitted_by?: string | null;
+};
 const tugas: { assignments: AssignmentItem[]; submissions: SubRow[] } =
   ((globalThis as any).__siajarTugas ??= { assignments: [], submissions: [] });
 
@@ -311,6 +344,11 @@ if (!tugas.assignments.some((a) => a.class_id === DEMO_CLASS_ID)) {
     due_at: new Date(Date.now() + 86400000 * 4).toISOString(),
     close_at: new Date(Date.now() + 86400000 * 6).toISOString(),
     release_at: null,
+    late_policy: 'per_day',
+    late_penalty_value: 10,
+    late_penalty_cap: 50,
+    allow_resubmit: true,
+    submission_mode: 'individual',
   });
 }
 
@@ -322,6 +360,13 @@ const assignmentSchema = z
     due_at: z.string().datetime({ offset: true, message: 'Isi tenggat pengumpulan.' }),
     close_at: z.string().datetime({ offset: true, message: 'Isi batas akhir pengumpulan.' }),
     release_at: z.string().datetime({ offset: true }).optional().nullable(),
+    late_policy: z.enum(['none', 'per_day', 'per_hour', 'flat']).optional(),
+    late_penalty_value: z.coerce.number().min(0).max(100).optional(),
+    late_penalty_cap: z.coerce.number().min(0).max(100).optional(),
+    allow_resubmit: z.boolean().optional(),
+    max_resubmits: z.coerce.number().int().positive().optional().nullable(),
+    submission_mode: z.enum(['individual', 'group']).optional(),
+    group_set_id: z.string().uuid().optional().nullable(),
   })
   .refine((v) => Date.parse(v.close_at) >= Date.parse(v.due_at), {
     message: ERR.INVALID_DATES,
@@ -346,10 +391,32 @@ export async function createAssignmentAction(input: unknown): Promise<ActionResp
       p_close: v.close_at,
     });
     if (error || !data) return { ok: false, error: pesan(error?.message) };
-    if (v.release_at) {
-      await supabase.from('assignments').update({ release_at: v.release_at }).eq('id', (data as any).id);
+
+    const updatePayload: Record<string, any> = {};
+    if (v.release_at) updatePayload.release_at = v.release_at;
+    if (v.late_policy) updatePayload.late_policy = v.late_policy;
+    if (v.late_penalty_value !== undefined) updatePayload.late_penalty_value = v.late_penalty_value;
+    if (v.late_penalty_cap !== undefined) updatePayload.late_penalty_cap = v.late_penalty_cap;
+    if (v.allow_resubmit !== undefined) updatePayload.allow_resubmit = v.allow_resubmit;
+    if (v.max_resubmits !== undefined) updatePayload.max_resubmits = v.max_resubmits;
+    if (v.submission_mode) updatePayload.submission_mode = v.submission_mode;
+    if (v.group_set_id) updatePayload.group_set_id = v.group_set_id;
+
+    if (Object.keys(updatePayload).length > 0) {
+      await supabase.from('assignments').update(updatePayload).eq('id', (data as any).id);
     }
-    item = { ...(data as AssignmentItem), release_at: v.release_at ?? null };
+
+    item = {
+      ...(data as AssignmentItem),
+      release_at: v.release_at ?? null,
+      late_policy: v.late_policy ?? 'none',
+      late_penalty_value: v.late_penalty_value ?? 0,
+      late_penalty_cap: v.late_penalty_cap ?? 100,
+      allow_resubmit: v.allow_resubmit ?? true,
+      max_resubmits: v.max_resubmits ?? null,
+      submission_mode: v.submission_mode ?? 'individual',
+      group_set_id: v.group_set_id ?? null,
+    };
   } else {
     if (mem.classes.find((x) => x.id === v.class_id)?.created_by !== me.id) return { ok: false, error: ERR.FORBIDDEN };
     item = {
@@ -360,6 +427,13 @@ export async function createAssignmentAction(input: unknown): Promise<ActionResp
       due_at: v.due_at,
       close_at: v.close_at,
       release_at: v.release_at ?? null,
+      late_policy: v.late_policy ?? 'none',
+      late_penalty_value: v.late_penalty_value ?? 0,
+      late_penalty_cap: v.late_penalty_cap ?? 100,
+      allow_resubmit: v.allow_resubmit ?? true,
+      max_resubmits: v.max_resubmits ?? null,
+      submission_mode: v.submission_mode ?? 'individual',
+      group_set_id: v.group_set_id ?? null,
     };
     tugas.assignments.push(item);
     mem.enrollments.filter((e) => e.class_id === v.class_id).forEach((e) => notify(e.student_id, 'ASSIGNMENT_NEW', `Tugas baru: ${v.title}`, 'Buka kelas untuk melihat petunjuk dan tenggat.', v.class_id));
@@ -377,19 +451,147 @@ export async function submitAssignmentAction(assignmentId: string, text: unknown
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
   const { id, body } = parsed.data;
 
+  // Import helper keterlambatan murni
+  const { calcLateMinutes, calcLatePenalty, getEffectiveDates, isSubmissionClosed } = await import('@/lib/akademik/late-penalty');
+  const { listAssignmentExtensionsAction } = await import('./assignment-late-actions');
+
+  const now = new Date();
+
   if (me.online) {
     const supabase = await createClient();
-    const { error } = await supabase.rpc('submit_assignment', { p_assignment: id, p_text: body });
-    if (error) return { ok: false, error: pesan(error.message) };
+
+    // 1. Cek assignment dan tenggat efektif
+    const { data: a } = await supabase
+      .from('assignments')
+      .select('id, class_id, due_at, close_at, late_policy, late_penalty_value, late_penalty_cap, allow_resubmit, max_resubmits')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (!a) return { ok: false, error: ERR.NOT_FOUND };
+
+    const extensions = await listAssignmentExtensionsAction(id);
+    const myExt = extensions.find((e) => e.student_id === me.id);
+    const { effectiveDueAt, effectiveCloseAt } = getEffectiveDates({
+      dueAt: a.due_at,
+      closeAt: a.close_at,
+      extensionNewDueAt: myExt?.new_due_at,
+      extensionNewCloseAt: myExt?.new_close_at,
+    });
+
+    if (isSubmissionClosed(now, effectiveCloseAt)) {
+      return { ok: false, error: ERR.CLOSED };
+    }
+
+    // 2. Cek pengumpulan sebelumnya (pengiriman ulang)
+    const { data: prevSub } = await supabase
+      .from('submissions')
+      .select('id, attempt_no')
+      .eq('assignment_id', id)
+      .eq('student_id', me.id)
+      .maybeSingle();
+
+    if (prevSub) {
+      if (a.allow_resubmit === false) {
+        return { ok: false, error: 'Pengumpulan ulang tidak diizinkan untuk tugas ini.' };
+      }
+      if (a.max_resubmits && prevSub.attempt_no >= a.max_resubmits) {
+        return { ok: false, error: 'Batas pengumpulan ulang telah tercapai.' };
+      }
+    }
+
+    const lateMinutes = calcLateMinutes(now, effectiveDueAt);
+    const penaltyPercent = calcLatePenalty({
+      lateMinutes,
+      latePolicy: (a.late_policy as any) || 'none',
+      latePenaltyValue: a.late_penalty_value || 0,
+      latePenaltyCap: a.late_penalty_cap || 100,
+    });
+
+    const newAttemptNo = prevSub ? prevSub.attempt_no + 1 : 1;
+    const subId = prevSub ? prevSub.id : randomUUID();
+
+    await supabase.from('submissions').upsert({
+      id: subId,
+      assignment_id: id,
+      student_id: me.id,
+      attempt_no: newAttemptNo,
+      text_body: body,
+      submitted_at: now.toISOString(),
+      is_late: lateMinutes > 0,
+      late_minutes: lateMinutes,
+      penalty_percent: penaltyPercent,
+      penalty_waived: false,
+    });
+
+    // Simpan riwayat versi
+    await supabase.from('submission_versions').insert({
+      submission_id: subId,
+      attempt_no: newAttemptNo,
+      file_paths: [],
+      submitted_at: now.toISOString(),
+    });
   } else {
     const a = tugas.assignments.find((x) => x.id === id);
     if (!a || !mem.enrollments.some((e) => e.class_id === a.class_id && e.student_id === me.id))
       return { ok: false, error: ERR.NOT_FOUND };
-    const now = Date.now();
-    if (now > Date.parse(a.close_at)) return { ok: false, error: ERR.CLOSED };
-    if (tugas.submissions.some((x) => x.assignment_id === id && x.student_id === me.id))
-      return { ok: false, error: ERR.ALREADY_SUBMITTED };
-    tugas.submissions.push({ id: randomUUID(), student_name: me.name, assignment_id: id, student_id: me.id, text_body: body, is_late: now > Date.parse(a.due_at), submitted_at: new Date(now).toISOString() });
+
+    const extensions = await listAssignmentExtensionsAction(id);
+    const myExt = extensions.find((e) => e.student_id === me.id);
+    const { effectiveDueAt, effectiveCloseAt } = getEffectiveDates({
+      dueAt: a.due_at,
+      closeAt: a.close_at,
+      extensionNewDueAt: myExt?.new_due_at,
+      extensionNewCloseAt: myExt?.new_close_at,
+    });
+
+    if (isSubmissionClosed(now, effectiveCloseAt)) return { ok: false, error: ERR.CLOSED };
+
+    const existingSubIdx = tugas.submissions.findIndex((x) => x.assignment_id === id && x.student_id === me.id);
+    if (existingSubIdx !== -1) {
+      const prev = tugas.submissions[existingSubIdx];
+      if (a.allow_resubmit === false) {
+        return { ok: false, error: 'Pengumpulan ulang tidak diizinkan untuk tugas ini.' };
+      }
+      if (a.max_resubmits && (prev.attempt_no ?? 1) >= a.max_resubmits) {
+        return { ok: false, error: 'Batas pengumpulan ulang telah tercapai.' };
+      }
+    }
+
+    const lateMinutes = calcLateMinutes(now, effectiveDueAt);
+    const penaltyPercent = calcLatePenalty({
+      lateMinutes,
+      latePolicy: a.late_policy || 'none',
+      latePenaltyValue: a.late_penalty_value || 0,
+      latePenaltyCap: a.late_penalty_cap || 100,
+    });
+
+    if (existingSubIdx !== -1) {
+      const prev = tugas.submissions[existingSubIdx];
+      const newAttempt = (prev.attempt_no ?? 1) + 1;
+      tugas.submissions[existingSubIdx] = {
+        ...prev,
+        text_body: body,
+        submitted_at: now.toISOString(),
+        attempt_no: newAttempt,
+        is_late: lateMinutes > 0,
+        late_minutes: lateMinutes,
+        penalty_percent: penaltyPercent,
+      };
+    } else {
+      tugas.submissions.push({
+        id: randomUUID(),
+        student_name: me.name,
+        assignment_id: id,
+        student_id: me.id,
+        text_body: body,
+        is_late: lateMinutes > 0,
+        late_minutes: lateMinutes,
+        penalty_percent: penaltyPercent,
+        attempt_no: 1,
+        penalty_waived: false,
+        submitted_at: now.toISOString(),
+      });
+    }
   }
   revalidatePath('/classes/[id]', 'page');
   return { ok: true };
@@ -649,7 +851,23 @@ export async function listClassMembersAction(
 
 // ---------- Review dan penilaian (Bagian 13, langkah 5-6) ----------
 export interface GradeInfo { score: number; max_score: number; comment: string; status: 'DRAFT' | 'FINAL' }
-export interface SubmissionItem { id: string; student_name: string; text_body: string; is_late: boolean; submitted_at: string; grade: GradeInfo | null; change?: { status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXECUTED'; proposed_score: number; reason: string; review_note: string | null } | null }
+export interface SubmissionItem {
+  id: string;
+  student_name: string;
+  text_body: string;
+  is_late: boolean;
+  submitted_at: string;
+  attempt_no?: number;
+  late_minutes?: number;
+  raw_score?: number | null;
+  penalty_percent?: number;
+  penalty_waived?: boolean;
+  penalty_waived_reason?: string | null;
+  group_id?: string | null;
+  submitted_by?: string | null;
+  grade: GradeInfo | null;
+  change?: { status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'EXECUTED'; proposed_score: number; reason: string; review_note: string | null } | null;
+}
 export interface ReviewData { class_title: string; title: string; max_score: number; rows: SubmissionItem[]; mode: 'full' | 'draft' | 'read' }
 
 const notas: { assignment_id: string; student_id: string; score: number; comment: string; status: 'DRAFT' | 'FINAL' }[] =
@@ -742,7 +960,7 @@ export async function listSubmissionsAction(classId: string, aid: string): Promi
       if (!have.includes('submission.review')) return null;
       mode = have.includes('assignment.grade') ? 'draft' : 'read';
     }
-    const { data: subs } = await supabase.from('submissions').select('id,student_id,text_body,is_late,submitted_at,profiles(full_name)').eq('assignment_id', aid).order('submitted_at');
+    const { data: subs } = await supabase.from('submissions').select('id,student_id,text_body,is_late,submitted_at,attempt_no,late_minutes,raw_score,penalty_percent,penalty_waived,penalty_waived_reason,profiles(full_name)').eq('assignment_id', aid).order('submitted_at');
     const { data: gr } = await supabase.from('grades').select('id,student_id,score,max_score,comment,status').eq('item_id', aid);
     const { data: ch } = await supabase.from('grade_change_requests').select('grade_id,proposed_score,reason,status,review_note').eq('class_id', classId).order('created_at', { ascending: false });
     const byStudent = new Map((gr ?? []).map((g: any) => [g.student_id, g]));
@@ -754,7 +972,17 @@ export async function listSubmissionsAction(classId: string, aid: string): Promi
       rows: (subs ?? []).map((s: any) => {
         const g = byStudent.get(s.student_id);
         return {
-          id: s.id, student_name: s.profiles?.full_name ?? 'Mahasiswa', text_body: s.text_body, is_late: s.is_late, submitted_at: s.submitted_at,
+          id: s.id,
+          student_name: s.profiles?.full_name ?? 'Mahasiswa',
+          text_body: s.text_body,
+          is_late: s.is_late,
+          submitted_at: s.submitted_at,
+          attempt_no: s.attempt_no ?? 1,
+          late_minutes: s.late_minutes ?? 0,
+          raw_score: s.raw_score ?? null,
+          penalty_percent: s.penalty_percent ?? 0,
+          penalty_waived: s.penalty_waived ?? false,
+          penalty_waived_reason: s.penalty_waived_reason ?? null,
           grade: g ? { score: Number(g.score), max_score: Number(g.max_score), comment: g.comment, status: g.status } : null,
           change: g ? (ch ?? []).find((x: any) => x.grade_id === g.id) ?? null : null,
         };
@@ -774,7 +1002,21 @@ export async function listSubmissionsAction(classId: string, aid: string): Promi
     max_score: 100,
     rows: tugas.submissions
       .filter((s) => s.assignment_id === aid)
-      .map((s) => ({ id: s.id, student_name: s.student_name, text_body: s.text_body, is_late: s.is_late, submitted_at: s.submitted_at, grade: toInfo(demoGrade(aid, s.student_id)), change: [...perubahan].reverse().find((x) => x.submission_id === s.id) ?? null })),
+      .map((s) => ({
+        id: s.id,
+        student_name: s.student_name,
+        text_body: s.text_body,
+        is_late: s.is_late,
+        submitted_at: s.submitted_at,
+        attempt_no: s.attempt_no ?? 1,
+        late_minutes: s.late_minutes ?? 0,
+        raw_score: s.raw_score ?? null,
+        penalty_percent: s.penalty_percent ?? 0,
+        penalty_waived: s.penalty_waived ?? false,
+        penalty_waived_reason: s.penalty_waived_reason ?? null,
+        grade: toInfo(demoGrade(aid, s.student_id)),
+        change: [...perubahan].reverse().find((x) => x.submission_id === s.id) ?? null,
+      })),
   };
 }
 

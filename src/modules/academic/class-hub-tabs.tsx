@@ -53,6 +53,7 @@ import { ClassRiskCard } from '@/modules/early-warning/class-risk-card';
 import type { StudentRiskEvaluation } from '@/modules/early-warning/types';
 import { ClassForumTabView } from './class-forum-tab-view';
 import type { ForumTopic } from './forum-actions';
+import { ClassGroupsTabView } from './class-groups-tab-view';
 
 export interface ClassDetailData {
   cls: {
@@ -115,6 +116,7 @@ export interface ClassDetailData {
     permissions: string[];
   }>;
   viewer: string;
+  currentUserId?: string;
   perms?: string[];
   quizzes?: QuizItem[];
   attendanceSessions?: AttendanceSession[];
@@ -135,6 +137,7 @@ export const TA_CLASSROOM_TABS = [
 export const LECTURER_CLASSROOM_TABS = [
   { id: 'materi', label: 'Materi', icon: BookOpen, badgeLabel: 'Materi' },
   { id: 'tugas', label: 'Tugas & Penilaian', icon: ClipboardList, badgeLabel: 'Classwork' },
+  { id: 'kelompok', label: 'Kelompok', icon: Users, badgeLabel: 'Kelompok' },
   { id: 'peserta', label: 'Peserta', icon: Users, badgeLabel: 'Peserta' },
   { id: 'asisten', label: 'Asisten', icon: UserCheck, badgeLabel: 'Asisten' },
   { id: 'forum', label: 'Forum & Pengumuman', icon: MessagesSquare, badgeLabel: 'Stream' },
@@ -145,6 +148,7 @@ export const LECTURER_CLASSROOM_TABS = [
 export const STUDENT_CLASSROOM_TABS = [
   { id: 'forum', label: 'Forum', icon: MessagesSquare, badgeLabel: 'Stream' },
   { id: 'tugas', label: 'Tugas Kelas', icon: ClipboardList, badgeLabel: 'Classwork' },
+  { id: 'kelompok', label: 'Kelompok', icon: Users, badgeLabel: 'Kelompok' },
   { id: 'presensi', label: 'Presensi', icon: CalendarCheck2, badgeLabel: 'Presensi' },
   { id: 'anggota', label: 'Anggota', icon: Users, badgeLabel: 'People' },
   { id: 'nilai', label: 'Nilai', icon: GraduationCap, badgeLabel: 'Grades' },
@@ -183,6 +187,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
     members = [],
     assistants = [],
     viewer,
+    currentUserId,
     perms = [],
     quizzes = [],
     attendanceSessions = [],
@@ -1249,6 +1254,17 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             </div>
           </div>
         </div>
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: KELOMPOK (TUGAS KELOMPOK FASE 2)                    */}
+      {/* ======================================================== */}
+      {activeTab === 'kelompok' && (
+        <ClassGroupsTabView
+          classId={cls.id}
+          isLecturer={lecturer}
+          currentUserId={currentUserId}
+        />
       )}
     </div>
   );

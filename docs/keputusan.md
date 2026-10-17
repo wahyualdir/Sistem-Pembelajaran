@@ -290,3 +290,24 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alternatif yang ditolak**:
   - *Memicu cron tanpa secret di development*: Ditolak karena rawan terbawa ke lingkungan staging/produksi yang menimbulkan kerentanan Denial-of-Service.
 
+### Keputusan 32: Arsitektur Aturan Keterlambatan, Penalti dan Perpanjangan Tenggat (Fase 2)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**: Mengimplementasikan `calcLatePenalty`, `calcLateMinutes`, dan `getEffectiveDates` sebagai fungsi murni TypeScript (`src/lib/akademik/late-penalty.ts`) dan fungsi SQL (`calc_late_penalty`). Penalti didukung dalam mode `flat`, `per_hour`, `per_day`, dan `none` dengan batas atas pemotongan `late_penalty_cap` (maks 100%). Pemaafan penalti (`penalty_waived = true`) oleh dosen tetap mencatat alasan pemaafan dan riwayat penalti asli untuk audit, namun skor akhir dihitung dari skor mentah utuh.
+- **Alasan**: Menjamin transparansi dan akurasi perhitungan penalti di sisi database maupun antarmuka pengguna tanpa inkonsistensi waktu.
+
+### Keputusan 33: Arsitektur Tugas Kelompok dan Penilaian Kontribusi Anggota (Fase 2)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**: Menyediakan 3 skema pembentukan kelompok (`self`, `lecturer`, `random`). Pada mode `self`, mahasiswa membentuk dan bergabung menggunakan kode alfanumerik 6 karakter acak yang unik. Satu pengumpulan per kelompok (`uq_submissions_group`) mewakili seluruh anggota kelompok, dengan riwayat versi di `submission_versions`. Penyesuaian kontribusi anggota (`submission_member_adjustments`) dibatasi pada rentang 0.50 s.d. 1.50 dari skor kelompok dengan pencatatan justifikasi dosen.
+- **Alasan**: Mencegah beban pengumpulan ganda pada tugas tim serta memberikan fleksibilitas penilaian yang adil bagi anggota tim yang berkontribusi lebih atau kurang.
+
+### Keputusan 34: Struktur Rubrik Penilaian dan Pemisahan Hak Draf Asisten (Fase 2)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**: Rubrik disimpan berjenjang: `rubrics` -> `rubric_criteria` (dengan bobot persentase) -> `rubric_levels` (poin dan deskripsi). Snapshot rubrik dikunci pada saat tugas dibuat. Asisten dosen (TA) hanya dapat menyimpan nilai rubrik sebagai draf (`is_draft = true`), sedangkan publikasi nilai final ke mahasiswa hanya dapat dilakukan oleh Dosen Pengampu.
+- **Alasan**: Mematuhi hierarki akademik kampus bahwa penilaian akhir dan penerbitan nilai resmi merupakan kewenangan dosen penanggung jawab mata kuliah.
+
+### Keputusan 35: Alur Sanggah Nilai dan Integrasi Permintaan Perubahan Nilai (Fase 2)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**: Sanggah nilai (`grade_disputes`) dibatasi jendela pengajuan tepat 7 hari kalender sejak nilai diterbitkan, dengan kuota maksimal 3 sanggahan aktif per mahasiswa per kelas. Jika nilai kelas telah difinalisasi di buku nilai (`gradebook`), persetujuan sanggahan oleh dosen secara otomatis menghasilkan draf `grade_change_requests` untuk diverifikasi oleh Koordinator Program Studi sesuai regulasi akademik universitas.
+- **Alasan**: Memberikan ruang klarifikasi yang adil dan transparan bagi mahasiswa sekaligus menjaga integritas data nilai yang telah dikunci.
+
+
