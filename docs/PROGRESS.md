@@ -183,6 +183,53 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
   - `npx tsc --noEmit`: 0 error.
   - `npm run lint`: 0 error.
   - `npm run build`: Kompilasi produksi Next.js hijau dan bersih.
+### [18 Oktober 2026] Fase 7 Selesai — Penutup, Dokumentasi Final, Runbook, Data Demo, dan Verifikasi Sistem
+- **14.1 & 14.2 Dokumentasi & Sinkronisasi Dokumen Fitur (102 Menu)**:
+  - `docs/SIAJAR_Fitur_dan_Menu_Role.md`:
+    - Mengganti matriks lama dengan daftar poin otorisasi komprehensif (14.1).
+    - Memutakhirkan seluruh 102 menu navigasi aplikasi sesuai `src/lib/config/menu-config.ts` dan fitur baru Fase 1 hingga Fase 6.
+    - Mengganti seluruh tautan berkas absolut menjadi tautan relatif (`./SIAJAR_Fitur_dan_Menu_Role.pdf`, dll.).
+    - Menghapus bagian usang "Panduan Mengunduh".
+    - Menuliskan persentase dalam teks biasa (misal: "kurang dari 75%"), tanpa notasi matematika LaTeX.
+    - Menjamin tidak ada kata terlarang di seluruh teks dokumen.
+  - Skrip Pembuat Dokumen (`scripts/generate_feature_menu_documents.py`):
+    - Dijalankan ulang untuk menghasilkan dan menyinkronkan 4 format dokumen turunan: PDF (`docs/SIAJAR_Fitur_dan_Menu_Role.pdf`), Excel multi-lembar per peran (`docs/SIAJAR_Fitur_dan_Menu_Role.xlsx`), CSV (`docs/SIAJAR_Fitur_dan_Menu_Role.csv`), dan HTML mandiri (`docs/SIAJAR_Fitur_dan_Menu_Role.html`).
+  - Halaman Bantuan Pengguna (`src/app/(portal)/help/page.tsx`):
+    - Diperbarui dengan komponen interaktif pemilih peran (Mahasiswa, Asisten, Dosen, Kaprodi, Staf, Administrator).
+    - Memuat alur kerja operasional spesifik per peran dan tanya-jawab umum menggunakan Bahasa Indonesia baku tanpa kata terlarang.
+  - Runbook Operasional (`docs/RUNBOOK.md`):
+    - Disusun lengkap mencakup 4 panduan teknis: integrasi dan kesehatan konektor Judge, rotasi kunci rahasia `CRON_SECRET` tanpa waktu henti, skrip pemulihan database `restore-db.sh` dan pemeriksaan integritas RLS, serta tata cara membaca log audit dengan penyamaran data untuk Administrator Sistem vs Administrator Utama.
+- **14.3 Data Contoh Realistis (Seed)**:
+  - `supabase/seed/README.md`: Panduan akun demo terstandarisasi untuk 7 peran (Mahasiswa, Asisten, Dosen, Kaprodi, Staf Akademik, Administrator Sistem, Administrator Utama) dengan kredensial masuk yang seragam (`demo12345`).
+  - `supabase/seed/demo_seed.sql`: Skrip PL/pgSQL idempoten yang memuat:
+    - 1 Program Studi (Teknik Informatika), 2 Semester (2025/2026 Genap berstatus arsip dan 2026/2027 Ganjil aktif).
+    - 8 Dosen, 3 Asisten Dosen, 120 Mahasiswa fiktif berurutan.
+    - 6 Kelas perkuliahan dengan 16 pertemuan lengkap beserta jurnal perkuliahan dosen.
+    - Tugas individu (dengan variasi penalti keterlambatan) dan tugas kelompok (dengan perpanjangan tenggat waktu).
+    - 1 Ujian CBT komprehensif berisi 40 butir soal (pilihan ganda, benar/salah, isian singkat, esai, dan kasus uji koding).
+    - 1 Periode kuesioner evaluasi dosen (EDOM) dengan pola pemisahan anonimitas sejati (True Anonymity Decoupling).
+    - Permohonan izin sakit berlampiran, sanggahan nilai, percakapan langsung terarah, dan polling kelas interaktif.
+    - Seluruh data surel menggunakan domain resmi kampus (`@student.uir.ac.id` dan `@uir.ac.id`) demi kepatuhan kebijakan keamanan privasi data.
+- **14.4 Pemeriksaan Akhir & Verifikasi Kualitas Produksi**:
+  - `check:rls`: 122 dari 122 tabel pada skema public memiliki RLS aktif (100% SUKSES).
+  - `tests/nav-roles.test.ts`: 17 pengujian navigasi multi-aktor lulus 100% (memverifikasi 102 menu, diferensiasi peran, dan 0 kata terlarang).
+  - `src/tests/unit/security/cross-feature-security.test.ts`: 8 pengujian privasi dan keamanan lulus 100% (bebas surel pribadi, tidak ada store palsu).
+  - `npm test`: Seluruh 45 berkas tes dan 373 pengujian unit vitest lulus 100% (waktu eksekusi 62.74 detik).
+  - `npx tsc --noEmit` (`npm run typecheck`): 0 error / peringatan ketik TypeScript.
+  - `npm run lint`: 0 error ESLint.
+  - `npm run build`: Kompilasi produksi Next.js hijau dan bersih (131 rute terkompilasi sukses).
+  - Audit Keamanan Bundel Klien: Direktori `.next/static` diperiksa bersih 100% dari kebocoran rahasia (`JUDGE_API_KEY`, `CRON_SECRET`, dan kunci layanan).
+- **Status Transformasi Proyek Keseluruhan**:
+  - Fase 0 (Fondasi Bersama): Selesai 100%
+  - Fase 1 (Ruang Kelas & Perkuliahan Inti): Selesai 100%
+  - Fase 2 (Tugas, Rubrik & Penilaian Lanjutan): Selesai 100%
+  - Fase 3 (Presensi, Pertemuan Sinkron & Jurnal): Selesai 100%
+  - Fase 4 (Ujian CBT, Bank Soal, CPL/CPMK & Deteksi Kemiripan): Selesai 100%
+  - Fase 5 (Interaksi, Gamifikasi, AI & Evaluasi Dosen): Selesai 100%
+  - Fase 6 (Salin & Arsip Kelas, Impor Massal, Moodle XML & QTI): Selesai 100%
+  - Fase 7 (Penutup, Dokumentasi Final, Runbook, Seed & Verifikasi): Selesai 100%
+  - **Fase yang Ditunda**: Tidak ada. Seluruh 8 fase instruksi arsitektur LMS SIAJAR telah diselesaikan secara paripurna dan siap produksi.
+
 
 
 

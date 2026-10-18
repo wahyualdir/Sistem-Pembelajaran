@@ -473,4 +473,34 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
   3. Uji putar-balik (round-trip test) diverifikasi secara otomatis pada rangkaian unit test untuk menjamin kesetaraan data hasil ekspor dan impor kembali.
 - **Alasan**: Mencegah penguncian vendor (vendor lock-in) dan memudahkan pertukaran bank soal antar-institusi pendidikan tinggi.
 
+### Keputusan 55: Struktur Dokumentasi Fitur dan Matriks Otorisasi Berbasis Poin (Fase 7)
+- **Tanggal**: 18 Oktober 2026
+- **Keputusan**:
+  1. Menghilangkan tabel matriks lama yang rawan usang dan menggantikannya dengan daftar poin otorisasi komprehensif pada Bagian 14.1 di `docs/SIAJAR_Fitur_dan_Menu_Role.md`.
+  2. Seluruh tautan absolut berkas sistem (`file:///c:/...`) diganti secara ketat dengan tautan relatif (`./SIAJAR_Fitur_dan_Menu_Role.pdf`, dll.) agar portabel di semua sistem operasi dan peladen repositori.
+  3. Menghapus bagian usang "Panduan Mengunduh" yang bersifat catatan teknis sementara.
+  4. Seluruh angka persentase dituliskan menggunakan teks biasa (misalnya "kurang dari 75%"), tanpa notasi matematika LaTeX di dokumen panduan pengguna.
+  5. Menyelaraskan 102 menu navigasi aplikasi di seluruh dokumen turunan (Markdown, PDF, Excel multi-lembar, CSV, dan HTML) secara otomatis melalui skrip generator `scripts/generate_feature_menu_documents.py`.
+- **Alasan**: Menjaga integritas dokumentasi arsitektur perangkat lunak agar selalu mutakhir, bersih dari istilah pemasaran yang berlebihan, dan dapat diaudit secara konsisten oleh pemangku kepentingan.
+
+### Keputusan 56: Prosedur Operasional Standar dan Runbook Pemulihan Bencana (Fase 7)
+- **Tanggal**: 18 Oktober 2026
+- **Keputusan**:
+  1. Menyusun panduan operasional teknis `docs/RUNBOOK.md` yang memuat empat pilar utama:
+     - Manajemen Konektor Mesin Penilai Otomatis (Judge): variabel lingkungan, validasi kriptografis HMAC webhook, mekanisme cadangan polling, health-check status, dan tombol henti darurat.
+     - Prosedur Rotasi Kunci Rahasia Pekerjaan Terjadwal (`CRON_SECRET`): strategi rotasi tanpa waktu henti (zero-downtime) menggunakan dukungan kunci transisi ganda.
+     - Tata Kelola Cadangan dan Pemulihan Bencana Database: skrip otomasi `restore-db.sh`, pengaktifan mode pemeliharaan, dan prosedur verifikasi integritas 122 tabel RLS pascapemulihan.
+     - Pemeriksaan Log Audit Sistem: penegakan penyamaran data entitas akademik untuk Administrator Sistem vs tampilan utuh untuk Administrator Utama, serta audit forensik sesi penyamaran peran (impersonasi).
+- **Alasan**: Memberikan kepastian operasional tingkat produksi dan menjamin kesiapan tim teknis kampus dalam menangani insiden maupun pemeliharaan berkala.
+
+### Keputusan 57: Perancangan Data Demo Realistis Idempoten dan Akun Standar (Fase 7)
+- **Tanggal**: 18 Oktober 2026
+- **Keputusan**:
+  1. Menyediakan berkas bibit data `supabase/seed/demo_seed.sql` berbasis PL/pgSQL idempoten yang aman dieksekusi berulang kali tanpa merusak integritas kunci unik.
+  2. Struktur data mencakup 1 program studi (Teknik Informatika), 2 semester (semester lampau berstatus arsip dan semester berjalan aktif), 8 dosen, 3 asisten, 120 mahasiswa fiktif berurutan, 6 kelas dengan 16 pertemuan lengkap beserta jurnal perkuliahan, penugasan individu dan kelompok dengan variasi keterlambatan, satu ujian CBT 40 butir soal komprehensif termasuk kasus uji koding, periode evaluasi dosen dengan pola pemisahan anonimitas sejati (True Anonymity Decoupling), permohonan izin sakit berlampiran, sanggahan nilai, percakapan langsung, dan polling kelas.
+  3. Seluruh alamat surat elektronik data fiktif menggunakan domain resmi institusi (`@student.uir.ac.id` dan `@uir.ac.id`) demi memenuhi kebijakan privasi data dan lulus uji keamanan repositori.
+  4. Menyediakan panduan masuk akun demo pada `supabase/seed/README.md` dengan kata sandi terstandarisasi untuk mempermudah evaluasi fungsional menyeluruh oleh tim penguji.
+- **Alasan**: Memastikan lingkungan pengujian lokal maupun lingkungan demo pimpinan memiliki data operasional yang hidup, realistis, dan mencerminkan dinamika perkuliahan sesungguhnya di Universitas Islam Riau.
+
+
 
