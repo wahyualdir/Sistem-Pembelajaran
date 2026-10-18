@@ -258,7 +258,7 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
 
 ### 1. Informasi Cabang dan Komit
 - **Cabang Git**: `perbaikan-menu-desain`
-- **Hash Komit**: `9842723` (`984272396028912639626190bee4bd585a437145`)
+- **Hash Komit**: `888cd92` (`888cd9249e0a811776cebf89d582312630a9962a`)
 - **Status Basis Kerja**: Bersih dan tersinkronisasi dengan perubahan pengamanan, migrasi, modul akademik, dan pengujian otomatis.
 
 ### 2. Status Penerapan Migrasi Basis Data
