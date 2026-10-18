@@ -3,7 +3,13 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { RetroWindow } from '@/components/retro/retro-window';
-import { BadgeCheck, ArrowRight, Layers, FileCheck2 } from 'lucide-react';
+import { BadgeCheck, Layers } from 'lucide-react';
+import {
+  getLecturerConsentAction,
+  listPendingContentReviewsAction,
+  checkAiAvailabilityAction,
+} from '@/modules/academic/content-review-actions';
+import { ContentReviewClient } from './content-review-client';
 
 export default async function ContentReviewPage() {
   const user = await getCurrentUserWithRoles();
@@ -14,6 +20,12 @@ export default async function ContentReviewPage() {
     redirect(role === 'STUDENT' ? '/student' : '/admin');
   }
 
+  const [consentRes, pendingRes, aiAvail] = await Promise.all([
+    getLecturerConsentAction().catch(() => ({ consented: false })),
+    listPendingContentReviewsAction().catch(() => ({ cards: [], podcasts: [] })),
+    checkAiAvailabilityAction().catch(() => ({ isAvailable: false, message: undefined })),
+  ]);
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 w-full space-y-6 sm:space-y-8 animate-fade-up font-sans">
       <RetroWindow
@@ -21,51 +33,35 @@ export default async function ContentReviewPage() {
         badge="Kurasi Pengajar"
         headerClassName="bg-gray-soft"
       >
-        <div className="p-6 space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border pb-5">
+        <div className="p-4 sm:p-6 space-y-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-black/15 pb-5">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
+              <h1 className="text-xl sm:text-2xl font-heading font-bold tracking-tight text-black flex items-center gap-2">
                 <BadgeCheck className="w-6 h-6 text-primary" />
-                Tinjau Konten
+                <span>Tinjau Konten</span>
               </h1>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="text-xs sm:text-sm text-black/70 mt-1">
                 Tinjau, sunting, dan setujui draf flashcard dan naskah podcast hasil kurasi materi bab sebelum diterbitkan untuk mahasiswa.
               </p>
             </div>
             <div className="flex items-center gap-2">
               <Link
                 href="/classes"
-                className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium border border-border rounded-md hover:bg-muted transition-colors"
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold border-2 border-black rounded-xl bg-white hover:bg-gray-soft transition-all shadow-xs text-black"
               >
                 <Layers className="w-4 h-4" />
-                Kelas Saya
+                <span>Kelas Saya</span>
               </Link>
             </div>
           </div>
 
-          {/* Keadaan Kosong (Empty State) Sesuai Panduan Tulisan */}
-          <div className="rounded-lg border border-dashed border-border p-8 text-center space-y-4 bg-muted/20">
-            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto text-primary">
-              <FileCheck2 className="w-6 h-6" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-base font-semibold text-foreground">
-                Tidak ada konten yang menunggu tinjauan
-              </h3>
-              <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                Draf kartu belajar atau naskah podcast bab yang perlu ditinjau sebelum terbit akan muncul di sini.
-              </p>
-            </div>
-            <div className="pt-2">
-              <Link
-                href="/classes"
-                className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
-              >
-                Buka Pengaturan Bab di Kelas
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
+          <ContentReviewClient
+            initialConsent={consentRes.consented}
+            initialCards={pendingRes.cards}
+            initialPodcasts={pendingRes.podcasts}
+            isAiAvailable={aiAvail.isAvailable}
+            aiUnavailableMessage={aiAvail.message}
+          />
         </div>
       </RetroWindow>
     </div>

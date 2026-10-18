@@ -444,6 +444,26 @@ export function ClassIslandMap({
                   </div>
                 </div>
 
+                {/* 2.5 Podcast Bab */}
+                {selectedChapter.has_podcast && (
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
+                      <Headphones className="w-3.5 h-3.5 text-primary" />
+                      Podcast Ringkasan Bab
+                    </h4>
+                    <div className="p-3 bg-muted/20 border border-border rounded-md text-xs flex items-center justify-between">
+                      <span>Dengarkan audio ringkasan bab (~3-6 menit) dengan transkrip.</span>
+                      <Link
+                        href={`/classes/${classId}?tab=materi&podcast=${selectedChapter.id}`}
+                        className="text-primary font-semibold hover:underline inline-flex items-center gap-1"
+                      >
+                        <Play className="w-3.5 h-3.5" />
+                        <span>Dengarkan</span>
+                      </Link>
+                    </div>
+                  </div>
+                )}
+
                 {/* 3. Topik Bab */}
                 {selectedChapter.topics && selectedChapter.topics.length > 0 && (
                   <div className="space-y-2">
