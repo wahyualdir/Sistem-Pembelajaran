@@ -332,18 +332,111 @@ Sub-sistem Peta Pulau melengkapi SIAJAR dengan modul pembelajaran terstruktur (p
 
 ### 6.3. Pekerjaan Terjadwal (*Cron Jobs*) Peta Pulau
 Seluruh cron jobs dipanggil melalui `GET /api/cron/<nama>` dengan proteksi header `Authorization: Bearer $CRON_SECRET` dan bersifat idempoten:
-1. `content_stale_check` (Eksekusi: Tiap 1 Jam):
-   - Memeriksa materi kuliah yang mengalami pembaruan revisi konten.
-   - Kartu flashcard dan podcast yang terkait otomatis ditandai statusnya menjadi `'perlu_tinjau_ulang'` agar dosen pengampu dapat memverifikasi relevansinya kembali.
-2. `activity_purge` (Eksekusi: Harian Pukul 02.00 WIB):
-   - Menghapus rekaman log aktivitas (`activity_events`) yang telah melampaui masa simpan institusi (`activity_retention_days`, bawaan 365 hari / 1 tahun).
-   - Mahasiswa juga memiliki hak hapus mandiri melalui menu **Privasi** > **Hapus Riwayat Saya**.
-3. `recap_generate` (Eksekusi: Harian Pukul 03.00 WIB):
+1. `ai_content_jobs` (Eksekusi: Tiap Menit `* * * * *`):
+   - Mengambil antrean pembuatan kartu flashcard dan naskah podcast (`ai_generation_jobs`) berstatus `antre`.
+   - Mengontrol kuota harian per kelas dan batas 2 pekerjaan konkuren per dosen.
+2. `tts_jobs` (Eksekusi: Tiap Menit `* * * * *`):
+   - Mengambil antrean sintesis audio podcast (`tts_jobs`) berstatus `antre`.
+   - Menghasilkan potongan audio MP3 dan menghitung durasi kumulatif secara idempoten.
+3. `content_stale_check` (Eksekusi: Tiap 1 Jam `0 * * * *`):
+   - Memeriksa materi kuliah yang mengalami pembaruan revisi konten dengan menghitung ulang `source_hash`.
+   - Konten terkait otomatis ditandai statusnya menjadi `'perlu_tinjau_ulang'` agar dosen pengampu dapat memverifikasi relevansinya kembali.
+4. `morning_summary` (Eksekusi: Harian Pukul 07.00 WIB / 00.00 UTC `0 0 * * *`):
+   - Mengirimkan ringkasan pagi ke mahasiswa aktif: tugas yang mendekati tenggat dan kartu flashcard jatuh tempo hari ini.
+5. `content_review_digest` (Eksekusi: Harian Pukul 08.00 WIB / 01.00 UTC `0 1 * * *`):
+   - Mengirimkan ringkasan harian terpadu ke dosen pengampu yang memiliki draf kartu/naskah menunggu tinjauan kurasi.
+6. `skill_request_expire` (Eksekusi: Harian Pukul 09.00 WIB / 02.00 UTC `0 2 * * *`):
+   - Menutup permintaan bantuan Tukar Keahlian terbuka yang telah melampaui masa kedaluwarsa (`skill_request_expire_days`, bawaan 14 hari).
+7. `recap_generate` (Eksekusi: Harian Pukul 10.00 WIB / 03.00 UTC `0 3 * * *`):
    - Menghasilkan ringkasan `semester_recaps` untuk semester yang telah berakhir pada kelas-kelas yang mengaktifkan fitur.
    - Bersifat idempoten (tidak menduplikasi rekapitulasi yang sudah ada).
    - Mahasiswa dapat memicu pembuatan ulang secara mandiri melalui tombol **Muat Ulang** di tab Rekap Semester (dibatasi 1x per hari).
+8. `activity_purge` (Eksekusi: Harian Pukul 11.00 WIB / 04.00 UTC `0 4 * * *`):
+   - Menghapus rekaman log aktivitas (`activity_events`) yang telah melampaui masa simpan institusi (`activity_retention_days`, bawaan 365 hari / 1 tahun).
+   - Mahasiswa juga memiliki hak hapus mandiri melalui menu **Privasi** > **Hapus Riwayat Aktivitas**.
 
-### 6.4. Sakelar Penonaktifan Fitur Global (*Kill Switches*)
+### 6.4. Batasan Frekuensi Paket Hosting dan Solusi Pengganti (*Fallbacks*)
+> [!IMPORTANT]
+> **Batasan Layanan Hosting Vercel**:
+> - **Vercel Paket Gratis (Hobby)**: Hanya mendukung frekuensi eksekusi cron **maksimal 1 kali per hari** (frekuensi harian). Panggilan berfrekuensi per menit (`* * * * *`) atau per jam (`0 * * * *`) **TIDAK DIDUKUNG** dan deployment akan ditolak atau dilewati.
+> - **Vercel Paket Berbayar (Pro / Enterprise)**: Mendukung eksekusi hingga frekuensi **1 kali per menit** (`* * * * *`) untuk seluruh 8 endpoint.
+
+Bila institusi menggunakan paket hosting tanpa dukungan sub-harian (misalnya Vercel Hobby atau hosting statis), gunakan salah satu dari dua solusi pengganti resmi berikut:
+
+#### Opsi 1: Penjadwal Database Eksternal (`pg_cron` Supabase) — Sangat Direkomendasikan
+Gunakan ekstensi bawaan PostgreSQL `pg_cron` dan `pg_net` di kluster Supabase untuk memanggil endpoint API secara terjadwal:
+```sql
+-- 1. Aktifkan ekstensi yang diperlukan
+CREATE EXTENSION IF NOT EXISTS pg_cron;
+CREATE EXTENSION IF NOT EXISTS pg_net;
+
+-- 2. Jadwalkan antrean AI dan TTS tiap menit
+SELECT cron.schedule(
+    'siajar_ai_content_jobs',
+    '* * * * *',
+    $$
+    SELECT net.http_get(
+        url := 'https://siajar.institution.ac.id/api/cron/ai_content_jobs',
+        headers := jsonb_build_object(
+            'Authorization', 'Bearer ' || coalesce(current_setting('app.cron_secret', true), 'RAHASIA_CRON_ANDA')
+        )
+    );
+    $$
+);
+
+SELECT cron.schedule(
+    'siajar_tts_jobs',
+    '* * * * *',
+    $$
+    SELECT net.http_get(
+        url := 'https://siajar.institution.ac.id/api/cron/tts_jobs',
+        headers := jsonb_build_object(
+            'Authorization', 'Bearer ' || coalesce(current_setting('app.cron_secret', true), 'RAHASIA_CRON_ANDA')
+        )
+    );
+    $$
+);
+
+-- 3. Jadwalkan pemeriksaan konten basi tiap jam
+SELECT cron.schedule(
+    'siajar_content_stale_check',
+    '0 * * * *',
+    $$
+    SELECT net.http_get(
+        url := 'https://siajar.institution.ac.id/api/cron/content_stale_check',
+        headers := jsonb_build_object(
+            'Authorization', 'Bearer ' || coalesce(current_setting('app.cron_secret', true), 'RAHASIA_CRON_ANDA')
+        )
+    );
+    $$
+);
+```
+
+#### Opsi 2: GitHub Actions Scheduled Runner
+Buat berkas alur kerja `.github/workflows/cron-peta-pulau.yml` dengan rahasia repositori `CRON_SECRET` dan `SIAJAR_BASE_URL`:
+```yaml
+name: SIAJAR Peta Pulau Crons
+on:
+  schedule:
+    # Eksekusi antrean setiap 5 menit (batas minimum gratis GitHub Actions)
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run-crons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger AI Content Jobs
+        run: |
+          curl -f -X GET "${{ secrets.SIAJAR_BASE_URL }}/api/cron/ai_content_jobs" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+      - name: Trigger TTS Jobs
+        run: |
+          curl -f -X GET "${{ secrets.SIAJAR_BASE_URL }}/api/cron/tts_jobs" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+```
+
+### 6.5. Sakelar Penonaktifan Fitur Global (*Kill Switches*)
 Super Administrator dapat menonaktifkan fitur secara global tanpa deploy ulang melalui tabel kebijakan institusi (`institution_policies`):
 - Mematikan Peta Pulau secara global:
   ```sql

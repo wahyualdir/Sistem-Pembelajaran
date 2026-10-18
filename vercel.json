@@ -44,6 +44,38 @@
     {
       "path": "/api/cron/end-impersonation-sessions",
       "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/ai_content_jobs",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/tts_jobs",
+      "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/cron/content_stale_check",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/morning_summary",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/content_review_digest",
+      "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/cron/skill_request_expire",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/recap_generate",
+      "schedule": "0 3 * * *"
+    },
+    {
+      "path": "/api/cron/activity_purge",
+      "schedule": "0 4 * * *"
     }
   ]
 }

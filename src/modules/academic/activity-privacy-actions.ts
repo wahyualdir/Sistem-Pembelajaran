@@ -190,3 +190,39 @@ export async function clearActivityHistoryAction(): Promise<{
     return { success: false, error: err?.message || 'Gagal menghapus riwayat aktivitas.' };
   }
 }
+
+/**
+ * Reset seluruh kemajuan flashcard mahasiswa (kembali ke kondisi awal belum dipelajari)
+ */
+export async function resetFlashcardProgressAction(): Promise<{
+  success: boolean;
+  deletedReviews?: number;
+  deletedLogs?: number;
+  error?: string;
+}> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authErr,
+    } = await supabase.auth.getUser();
+
+    if (authErr || !user) {
+      return { success: false, error: 'Pengguna belum terautentikasi.' };
+    }
+
+    const { data, error } = await supabase.rpc('reset_my_flashcard_progress');
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    return {
+      success: true,
+      deletedReviews: data?.deleted_reviews || 0,
+      deletedLogs: data?.deleted_logs || 0,
+    };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Gagal mereset kemajuan flashcard.' };
+  }
+}

@@ -79,14 +79,14 @@ export async function savePodcastProgressAction(
       return { success: false, error: upsertErr.message };
     }
 
-    // Catat log aktivitas belajar mandiri secara aman via RPC log_activity
+    // Catat log aktivitas belajar mandiri secara aman via RPC log_activity (Lampiran D: podcast_selesai tanpa meta)
     if (isCompleted) {
       await supabase.rpc('log_activity', {
-        kind: 'podcast_progress',
-        class_id: classId,
-        ref_type: 'podcast',
-        ref_id: podcastId,
-        meta: { event: 'podcast_selesai', duration: Math.round(positionSeconds) },
+        p_kind: 'podcast_selesai',
+        p_class_id: classId,
+        p_ref_type: 'podcast',
+        p_ref_id: podcastId,
+        p_meta: {},
       });
     }
 

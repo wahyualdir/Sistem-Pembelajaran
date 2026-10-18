@@ -105,6 +105,7 @@ END;
 $$;
 
 -- 4. RPC Pembersihan Mandiri Riwayat Aktivitas & Rekap Semester (Privasi Mahasiswa)
+-- Menghapus log aktivitas, rekap semester, dan progres podcast tanpa merusak progres kartu flashcard
 CREATE OR REPLACE FUNCTION public.clear_my_activity_log()
 RETURNS JSONB
 LANGUAGE plpgsql
@@ -116,7 +117,6 @@ DECLARE
     v_deleted_events INT := 0;
     v_deleted_recaps INT := 0;
     v_deleted_podcast_prog INT := 0;
-    v_deleted_flashcard_reviews INT := 0;
 BEGIN
     IF v_uid IS NULL THEN
         RAISE EXCEPTION 'Akses ditolak: pengguna belum login' USING ERRCODE = 'P0001';
@@ -134,18 +134,43 @@ BEGIN
     DELETE FROM public.podcast_progress WHERE student_id = v_uid;
     GET DIAGNOSTICS v_deleted_podcast_prog = ROW_COUNT;
 
-    -- Hapus data ulasan flashcard
-    DELETE FROM public.flashcard_reviews WHERE student_id = v_uid;
-    GET DIAGNOSTICS v_deleted_flashcard_reviews = ROW_COUNT;
-
-    DELETE FROM public.flashcard_review_log WHERE student_id = v_uid;
-
     RETURN jsonb_build_object(
         'ok', true,
         'deleted_events', v_deleted_events,
         'deleted_recaps', v_deleted_recaps,
-        'deleted_podcast_prog', v_deleted_podcast_prog,
-        'deleted_flashcard_reviews', v_deleted_flashcard_reviews
+        'deleted_podcast_prog', v_deleted_podcast_prog
+    );
+END;
+$$;
+
+-- 5. RPC Reset Kemajuan Flashcard Mandiri (Terpisah dari Riwayat Aktivitas)
+CREATE OR REPLACE FUNCTION public.reset_my_flashcard_progress()
+RETURNS JSONB
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+DECLARE
+    v_uid UUID := (SELECT auth.uid());
+    v_deleted_reviews INT := 0;
+    v_deleted_logs INT := 0;
+BEGIN
+    IF v_uid IS NULL THEN
+        RAISE EXCEPTION 'Akses ditolak: pengguna belum login' USING ERRCODE = 'P0001';
+    END IF;
+
+    -- Hapus log ulasan kartu
+    DELETE FROM public.flashcard_review_log WHERE student_id = v_uid;
+    GET DIAGNOSTICS v_deleted_logs = ROW_COUNT;
+
+    -- Hapus status dan jadwal ulasan kartu (mengembalikan ke kondisi baru belum dipelajari)
+    DELETE FROM public.flashcard_reviews WHERE student_id = v_uid;
+    GET DIAGNOSTICS v_deleted_reviews = ROW_COUNT;
+
+    RETURN jsonb_build_object(
+        'ok', true,
+        'deleted_reviews', v_deleted_reviews,
+        'deleted_logs', v_deleted_logs
     );
 END;
 $$;

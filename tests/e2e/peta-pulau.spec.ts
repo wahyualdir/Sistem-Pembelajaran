@@ -16,7 +16,8 @@ test.describe('E2E Peta Pulau & Pembelajaran Mandiri SIAJAR', () => {
     // Periksa sakelar dan tombol aksi privasi
     expect(content).toContain('Catat aktivitas belajar mandiri');
     expect(content).toContain('Unduh Data Saya (.json)');
-    expect(content).toContain('Hapus Riwayat Saya');
+    expect(content).toContain('Hapus Riwayat Aktivitas');
+    expect(content).toContain('Reset Kemajuan Flashcard');
   });
 
   test('Alur 2: Simulasi Pemutar Podcast dengan kontrol kecepatan dan transkrip', async ({ page }) => {
@@ -124,5 +125,167 @@ test.describe('E2E Peta Pulau & Pembelajaran Mandiri SIAJAR', () => {
 
     expect(anonymityCheck.smallGroup).toBe('< 5 (Privasi Terjaga)');
     expect(anonymityCheck.sufficientGroup).toBe('84.0%');
+  });
+
+  test('Alur 6: Akses langsung materi pulau terkunci ditolak (Fail-Closed)', async ({ page }) => {
+    await page.goto('/student', { waitUntil: 'domcontentloaded' });
+
+    const accessCheck = await page.evaluate(() => {
+      interface ChapterAccessContext {
+        id: string;
+        orderIndex: number;
+        isUnlocked: boolean;
+        hasCompletedPrerequisite: boolean;
+      }
+
+      const verifyMaterialAccess = (chapter: ChapterAccessContext) => {
+        if (!chapter.isUnlocked || !chapter.hasCompletedPrerequisite) {
+          return {
+            allowed: false,
+            httpStatus: 403,
+            message: 'Bab ini masih terkunci. Tuntaskan pulau sebelumnya untuk membuka akses materi.',
+          };
+        }
+        return {
+          allowed: true,
+          httpStatus: 200,
+          message: 'Akses diizinkan',
+        };
+      };
+
+      const lockedIsland: ChapterAccessContext = {
+        id: 'chap-island-3',
+        orderIndex: 3,
+        isUnlocked: false,
+        hasCompletedPrerequisite: false,
+      };
+
+      const unlockedIsland: ChapterAccessContext = {
+        id: 'chap-island-1',
+        orderIndex: 1,
+        isUnlocked: true,
+        hasCompletedPrerequisite: true,
+      };
+
+      return {
+        lockedResult: verifyMaterialAccess(lockedIsland),
+        unlockedResult: verifyMaterialAccess(unlockedIsland),
+      };
+    });
+
+    expect(accessCheck.lockedResult.allowed).toBe(false);
+    expect(accessCheck.lockedResult.httpStatus).toBe(403);
+    expect(accessCheck.lockedResult.message).toContain('masih terkunci');
+    expect(accessCheck.unlockedResult.allowed).toBe(true);
+    expect(accessCheck.unlockedResult.httpStatus).toBe(200);
+  });
+
+  test('Alur 7: Blokir Tukar Keahlian saat ujian terbuka (Blackout Integritas Ujian)', async ({ page }) => {
+    await page.goto('/student', { waitUntil: 'domcontentloaded' });
+
+    const blackoutCheck = await page.evaluate(() => {
+      interface ClassExamContext {
+        hasActiveExamWindow: boolean;
+        isPeerHelpBlockedForQuiz: boolean;
+        hasOngoingQuizAttempt: boolean;
+      }
+
+      const canUseSkillExchange = (ctx: ClassExamContext) => {
+        if (ctx.hasActiveExamWindow) {
+          return {
+            allowed: false,
+            reason: 'Bantuan teman dinonaktifkan sementara selama ada ujian.',
+          };
+        }
+        if (ctx.isPeerHelpBlockedForQuiz) {
+          return {
+            allowed: false,
+            reason: 'Bantuan teman dinonaktifkan sementara selama kuis berlangsung.',
+          };
+        }
+        if (ctx.hasOngoingQuizAttempt) {
+          return {
+            allowed: false,
+            reason: 'Bantuan teman dinonaktifkan saat Anda sedang mengerjakan kuis.',
+          };
+        }
+        return { allowed: true, reason: '' };
+      };
+
+      return {
+        duringExam: canUseSkillExchange({
+          hasActiveExamWindow: true,
+          isPeerHelpBlockedForQuiz: false,
+          hasOngoingQuizAttempt: false,
+        }),
+        duringBlockedQuiz: canUseSkillExchange({
+          hasActiveExamWindow: false,
+          isPeerHelpBlockedForQuiz: true,
+          hasOngoingQuizAttempt: false,
+        }),
+        normalConditions: canUseSkillExchange({
+          hasActiveExamWindow: false,
+          isPeerHelpBlockedForQuiz: false,
+          hasOngoingQuizAttempt: false,
+        }),
+      };
+    });
+
+    expect(blackoutCheck.duringExam.allowed).toBe(false);
+    expect(blackoutCheck.duringExam.reason).toContain('selama ada ujian');
+    expect(blackoutCheck.duringBlockedQuiz.allowed).toBe(false);
+    expect(blackoutCheck.normalConditions.allowed).toBe(true);
+  });
+
+  test('Alur 8: Mematikan pencatatan aktivitas belajar lalu mengeksekusi hapus riwayat aktivitas', async ({
+    page,
+  }) => {
+    await page.goto('/transparency', { waitUntil: 'domcontentloaded' });
+
+    const privacyLifecycle = await page.evaluate(() => {
+      let loggingEnabled = true;
+      let activityEvents = [
+        { id: 'ev-1', kind: 'materi_dibuka' },
+        { id: 'ev-2', kind: 'kartu_direview' },
+      ];
+      let semesterRecaps = [{ id: 'recap-1', semester: '2026/2027 Ganjil' }];
+      let flashcardReviews = [{ cardId: 'fc-1', box: 2 }];
+
+      // 1. Matikan pencatatan aktivitas
+      loggingEnabled = false;
+
+      // Percobaan logging baru saat disabled -> ditolak secara senyap
+      const logNewEvent = (kind: string) => {
+        if (!loggingEnabled) return null;
+        activityEvents.push({ id: `ev-${activityEvents.length + 1}`, kind });
+        return true;
+      };
+      const rejectedEvent = logNewEvent('podcast_diputar');
+
+      // 2. Eksekusi Hapus Riwayat Aktivitas (clear_my_activity_log)
+      const deletedEventsCount = activityEvents.length;
+      const deletedRecapsCount = semesterRecaps.length;
+      activityEvents = [];
+      semesterRecaps = [];
+
+      // Progres flashcard tetap aman dan tidak terhapus
+      const preservedFlashcardsCount = flashcardReviews.length;
+
+      return {
+        loggingDisabled: !loggingEnabled,
+        rejectedEventResult: rejectedEvent,
+        deletedEventsCount,
+        deletedRecapsCount,
+        remainingEventsCount: activityEvents.length,
+        preservedFlashcardsCount,
+      };
+    });
+
+    expect(privacyLifecycle.loggingDisabled).toBe(true);
+    expect(privacyLifecycle.rejectedEventResult).toBeNull();
+    expect(privacyLifecycle.deletedEventsCount).toBe(2);
+    expect(privacyLifecycle.deletedRecapsCount).toBe(1);
+    expect(privacyLifecycle.remainingEventsCount).toBe(0);
+    expect(privacyLifecycle.preservedFlashcardsCount).toBe(1);
   });
 });

@@ -14,6 +14,7 @@ import {
   validateFlashcardsOutput,
   computeCardDiff,
   MockContentGenerator,
+  GeminiContentGenerator,
   MockSpeechSynthesizer,
   getContentGenerator,
   getSpeechSynthesizer,
@@ -422,6 +423,7 @@ describe('Tahap 2: Grounding Konten, Validator AI, & Pemecah Naskah (ai-content.
     const origEnv = process.env.NODE_ENV;
     const origMock = process.env.MOCK_AI;
     const origGemini = process.env.GEMINI_API_KEY;
+    const origAiModel = process.env.AI_MODEL;
 
     try {
       (process.env as any).NODE_ENV = 'production';
@@ -445,6 +447,36 @@ describe('Tahap 2: Grounding Konten, Validator AI, & Pemecah Naskah (ai-content.
       (process.env as any).NODE_ENV = origEnv;
       if (origMock) process.env.MOCK_AI = origMock;
       if (origGemini) process.env.GEMINI_API_KEY = origGemini;
+      if (origAiModel) process.env.AI_MODEL = origAiModel;
+    }
+  });
+
+  it('GeminiContentGenerator menginisialisasi model dari AI_MODEL dan fail-closed jika apiKey kosong pada mode real', () => {
+    const origKey = process.env.GEMINI_API_KEY;
+    const origModel = process.env.AI_MODEL;
+
+    try {
+      delete process.env.GEMINI_API_KEY;
+      delete process.env.OPENAI_API_KEY;
+      // Tanpa konfigurasi: generator bernilai null
+      const failed = getContentGenerator({ forceReal: true });
+      expect(failed.generator).toBeNull();
+      expect(failed.error).toBe('Pembuatan konten AI belum aktif. Hubungi admin.');
+
+      // Dengan konfigurasi API key dan model AI_MODEL
+      process.env.GEMINI_API_KEY = 'test-gemini-key-12345';
+      process.env.AI_MODEL = 'gemini-1.5-pro';
+
+      const real = getContentGenerator({ forceReal: true });
+      expect(real.generator).toBeInstanceOf(GeminiContentGenerator);
+      const geminiGen = real.generator as GeminiContentGenerator;
+      expect(geminiGen.apiKey).toBe('test-gemini-key-12345');
+      expect(geminiGen.model).toBe('gemini-1.5-pro');
+    } finally {
+      if (origKey) process.env.GEMINI_API_KEY = origKey;
+      else delete process.env.GEMINI_API_KEY;
+      if (origModel) process.env.AI_MODEL = origModel;
+      else delete process.env.AI_MODEL;
     }
   });
 });

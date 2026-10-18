@@ -19,6 +19,7 @@ import {
   setActivityLoggingAction,
   exportActivityDataAction,
   clearActivityHistoryAction,
+  resetFlashcardProgressAction,
   type ActivityPrivacyStatus,
 } from './activity-privacy-actions';
 
@@ -27,9 +28,11 @@ export function ActivityPrivacyClient() {
   const [updating, setUpdating] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [resettingCards, setResettingCards] = useState(false);
   const [status, setStatus] = useState<ActivityPrivacyStatus | null>(null);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [showConfirmDeleteActivity, setShowConfirmDeleteActivity] = useState(false);
+  const [showConfirmResetFlashcards, setShowConfirmResetFlashcards] = useState(false);
 
   const fetchStatus = async () => {
     setLoading(true);
@@ -83,29 +86,51 @@ export function ActivityPrivacyClient() {
     setDownloading(false);
   };
 
-  const handleDeleteHistory = async () => {
+  const handleDeleteActivityHistory = async () => {
     setDeleting(true);
     setFeedback(null);
     const res = await clearActivityHistoryAction();
     if (res.success) {
       setFeedback({
         type: 'success',
-        message: `Riwayat berhasil dihapus: ${res.deletedEvents} kejadian aktivitas dan ${res.deletedRecaps} rekap semester dibersihkan permanen.`,
+        message: `Riwayat aktivitas berhasil dibersihkan: ${res.deletedEvents ?? 0} kejadian aktivitas dan ${res.deletedRecaps ?? 0} rekap semester dihapus permanen. Progres kartu flashcard Anda tetap dipertahankan.`,
       });
-      setShowConfirmDelete(false);
+      setShowConfirmDeleteActivity(false);
       await fetchStatus();
     } else {
-      setFeedback({ type: 'error', message: res.error || 'Gagal menghapus riwayat.' });
+      setFeedback({ type: 'error', message: res.error || 'Gagal menghapus riwayat aktivitas.' });
     }
     setDeleting(false);
   };
 
+  const handleResetFlashcardProgress = async () => {
+    setResettingCards(true);
+    setFeedback(null);
+    const res = await resetFlashcardProgressAction();
+    if (res.success) {
+      setFeedback({
+        type: 'success',
+        message: `Kemajuan flashcard berhasil direset: ${res.deletedReviews ?? 0} jadwal kartu dan ${res.deletedLogs ?? 0} riwayat ulasan dibersihkan. Seluruh kartu kini kembali ke status awal.`,
+      });
+      setShowConfirmResetFlashcards(false);
+      await fetchStatus();
+    } else {
+      setFeedback({ type: 'error', message: res.error || 'Gagal mereset kemajuan flashcard.' });
+    }
+    setResettingCards(false);
+  };
+
   const kindLabels: Record<string, string> = {
-    chapter_view: 'Membuka Modul Bab',
-    quiz_complete: 'Penyelesaian Kuis Pemahaman',
-    flashcard_review: 'Ulasan Kartu Leitner',
-    podcast_progress: 'Pemutaran Podcast Materi',
-    skill_exchange_interaction: 'Bantuan Tukar Keahlian',
+    materi_dibuka: 'Membuka Modul Materi',
+    podcast_diputar: 'Memutar Podcast Materi',
+    podcast_selesai: 'Menyelesaikan Podcast Materi',
+    kartu_direview: 'Mengulas Kartu Flashcard',
+    kuis_selesai: 'Menyelesaikan Kuis Bab',
+    pulau_selesai: 'Menuntaskan Pulau Belajar',
+    tugas_dikumpulkan: 'Mengumpulkan Tugas Kuliah',
+    bantuan_diminta: 'Meminta Bantuan Teman',
+    bantuan_diberikan: 'Menjawab Permintaan Bantuan',
+    bantuan_terbantu: 'Bantuan Ditandai Terbantu',
   };
 
   return (
@@ -224,53 +249,112 @@ export function ActivityPrivacyClient() {
           )}
         </div>
 
-        {/* HAK UNDUH & HAK HAPUS */}
-        <div className="pt-4 border-t border-border flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-          <Button
-            variant="outline"
-            onClick={handleDownload}
-            disabled={downloading || loading}
-            className="border-2 border-black shadow-retro font-bold text-xs gap-2"
-          >
-            <Download className="h-4 w-4" />
-            {downloading ? 'Menyiapkan Berkas...' : 'Unduh Data Saya (.json)'}
-          </Button>
-
-          {!showConfirmDelete ? (
+        {/* HAK UNDUH & PEMBERSIHAN DATA */}
+        <div className="pt-4 border-t border-border flex flex-col gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <Button
-              variant="destructive"
-              onClick={() => setShowConfirmDelete(true)}
-              disabled={deleting || loading}
+              variant="outline"
+              onClick={handleDownload}
+              disabled={downloading || loading}
               className="border-2 border-black shadow-retro font-bold text-xs gap-2"
             >
-              <Trash2 className="h-4 w-4" />
-              Hapus Riwayat Saya
+              <Download className="h-4 w-4" />
+              {downloading ? 'Menyiapkan Berkas...' : 'Unduh Data Saya (.json)'}
             </Button>
-          ) : (
-            <div className="p-3 rounded border-2 border-red-500 bg-red-50 flex flex-col sm:flex-row items-center gap-3">
-              <div className="text-xs text-red-900 leading-snug">
-                <span className="font-bold flex items-center gap-1">
-                  <ShieldAlert className="h-4 w-4 text-red-600 inline" />
-                  Konfirmasi Penghapusan Permanen:
+
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              {!showConfirmResetFlashcards && (
+                <Button
+                  variant="outline"
+                  onClick={() => setShowConfirmResetFlashcards(true)}
+                  disabled={resettingCards || deleting || loading}
+                  className="border-2 border-amber-600 text-amber-800 hover:bg-amber-50 shadow-retro font-bold text-xs gap-2"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Reset Kemajuan Flashcard
+                </Button>
+              )}
+
+              {!showConfirmDeleteActivity && (
+                <Button
+                  variant="destructive"
+                  onClick={() => setShowConfirmDeleteActivity(true)}
+                  disabled={deleting || resettingCards || loading}
+                  className="border-2 border-black shadow-retro font-bold text-xs gap-2"
+                >
+                  <Trash2 className="h-4 w-4" />
+                  Hapus Riwayat Aktivitas
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* DIALOG KONFIRMASI HAPUS RIWAYAT AKTIVITAS */}
+          {showConfirmDeleteActivity && (
+            <div className="p-4 rounded border-2 border-red-500 bg-red-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="text-xs text-red-900 leading-snug space-y-1">
+                <span className="font-bold flex items-center gap-1.5 text-sm text-red-700">
+                  <ShieldAlert className="h-4 w-4 text-red-600 inline shrink-0" />
+                  Konfirmasi Hapus Riwayat Aktivitas
                 </span>
-                Tindakan ini akan menghapus semua log aktivitas, riwayat kartu, progres podcast, dan rekap semester Anda secara permanen.
+                <p>
+                  Tindakan ini akan menghapus <strong>seluruh log aktivitas belajar, progres pemutaran podcast, dan rekap semester</strong> Anda secara permanen.
+                  <br />
+                  <span className="text-muted-foreground font-medium">Catatan: Jadwal pengulangan kartu flashcard dan riwayat nilai kuis Anda <strong>tidak terpengaruh</strong>.</span>
+                </p>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                 <Button
                   size="sm"
                   variant="destructive"
-                  onClick={handleDeleteHistory}
+                  onClick={handleDeleteActivityHistory}
                   disabled={deleting}
                   className="text-xs font-bold"
                 >
-                  {deleting ? 'Menghapus...' : 'Ya, Hapus'}
+                  {deleting ? 'Menghapus...' : 'Ya, Hapus Aktivitas'}
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => setShowConfirmDelete(false)}
+                  onClick={() => setShowConfirmDeleteActivity(false)}
                   disabled={deleting}
-                  className="text-xs border-black"
+                  className="text-xs border-black bg-white"
+                >
+                  Batal
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* DIALOG KONFIRMASI RESET KEMAJUAN FLASHCARD */}
+          {showConfirmResetFlashcards && (
+            <div className="p-4 rounded border-2 border-amber-500 bg-amber-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="text-xs text-amber-900 leading-snug space-y-1">
+                <span className="font-bold flex items-center gap-1.5 text-sm text-amber-800">
+                  <AlertTriangle className="h-4 w-4 text-amber-600 inline shrink-0" />
+                  Konfirmasi Reset Kemajuan Flashcard
+                </span>
+                <p>
+                  Tindakan ini akan mereset <strong>seluruh status hafalan kartu flashcard kembali ke Kotak 1 (atau status awal belum dipelajari)</strong> serta menghapus log ulasan kartu. Anda akan memulai latihan pengulangan kartu dari awal.
+                  <br />
+                  <span className="text-muted-foreground font-medium">Catatan: Log aktivitas umum, riwayat nilai kuis, dan rekap semester Anda <strong>tidak terpengaruh</strong>.</span>
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                <Button
+                  size="sm"
+                  onClick={handleResetFlashcardProgress}
+                  disabled={resettingCards}
+                  className="text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white"
+                >
+                  {resettingCards ? 'Mereset...' : 'Ya, Reset Kartu'}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setShowConfirmResetFlashcards(false)}
+                  disabled={resettingCards}
+                  className="text-xs border-black bg-white"
                 >
                   Batal
                 </Button>

@@ -3,14 +3,25 @@
 Dokumen ini memantau implementasi fitur Peta Pulau secara transparan, berbasis bukti eksekusi tes aktual, dan mengikuti kaidah **fail-closed** sesuai `docs/INSTRUKSI_PETA_PULAU.md`.
 
 - **Cabang Aktif**: `fitur-peta-pulau`
-- **Rangkaian Komit**:
+- **Rangkaian Komit Terkait**:
   - `36524d1` (`feat(peta-pulau): selesaikan fase p0 fondasi, navigasi 107 menu, dan migrasi skema`)
   - `2188563` (`feat(peta-pulau): implementasikan tahap 1 visualisasi peta, tab bab, progres kelas, dan prioritas hari ini`)
   - `91a6fad` (`feat(peta-pulau): implementasikan tahap 2 flashcard leitner, tinjau ai, dan podcast materi`)
   - `56b1e8e` (`feat(peta-pulau): implementasikan tahap 3 tukar keahlian, rekap semester, dan laporan kaprodi dengan k-anonymity`)
   - `40aad70` (`docs(peta-pulau): perbarui runbook operasional, privasi data aktivitas, evaluasi suara, bantuan, dan sinkronisasi dokumen 107 menu`)
-- **Status Akhir Basis Kode**: Seluruh item spesifikasi lanjutan telah terpasang lengkap di cabang `fitur-peta-pulau`.
-- **Aturan Pelaporan**: Tidak ada klaim "100% selesai". Seluruh unit test murni telah dieksekusi dan lolos 100% (565 tests). Uji pgTAP dan Playwright dicatat secara jujur sebagai "belum dijalankan di host ini" karena ketiadaan daemon Docker lokal.
+  - `e9e24cc` (`feat(peta-pulau): lengkapi 8 rute cron, kontrol privasi aktivitas, pemutar podcast, dan ekspansi tes`)
+- **Status Penerapan Migrasi Database (Migrasi 29 s.d. 33)**:
+  - `20261018000029_peta_pulau_p0_foundation.sql`: **Belum dijalankan di host ini** (menunggu koneksi container Supabase lokal/staging).
+  - `20261018000030_peta_pulau_tahap1_core.sql`: **Belum dijalankan di host ini**.
+  - `20261018000031_peta_pulau_tahap2_content.sql`: **Belum dijalankan di host ini**.
+  - `20261018000032_peta_pulau_tahap3_social.sql`: **Belum dijalankan di host ini**.
+  - `20261018000033_peta_pulau_rpc_playback.sql`: **Belum dijalankan di host ini**.
+  - *Catatan Skema*: Seluruh 5 berkas migrasi SQL telah divalidasi skema dan relasinya melalui `npm run check:rls` dengan hasil 147/147 tabel publik terproteksi RLS.
+- **Status Pengujian pgTAP Database (`supabase test db`)**:
+  - Status: **Belum dijalankan di host ini** (tidak ada daemon Docker lokal pada lingkungan ini). Berkas uji pgTAP (`09_peta_pulau_p0.test.sql`, `10_peta_pulau_tahap1.test.sql`, `11_peta_pulau_tahap2.test.sql`, `12_peta_pulau_tahap3.test.sql`) telah disusun lengkap mencakup skenario positif dan kasus negatif (penolakan akses).
+- **Status Pengujian Playwright E2E (`npx playwright test`)**:
+  - Status: **Belum dijalankan di host ini** (ketiadaan browser binaries/display server di mesin pengembangan). Berkas spesifikasi telah memuat 8 alur utama di `tests/e2e/peta-pulau.spec.ts`.
+- **Aturan Pelaporan**: Tidak ada klaim "100% selesai". Seluruh unit test murni telah dieksekusi sungguhan dan lolos (566 tests lulus dari 58 berkas uji).
 
 ---
 
@@ -18,15 +29,15 @@ Dokumen ini memantau implementasi fitur Peta Pulau secara transparan, berbasis b
 
 | Komponen / Fitur | Status | Berkas Implementasi & Bukti Tes | Hasil Uji Aktual | Catatan Kepatuhan |
 | :--- | :--- | :--- | :--- | :--- |
-| **8 Rute Cron Terjadwal** | Selesai | `src/app/api/cron/*`, `peta-pulau-cron.ts`, `cron-jobs.test.ts` | 9/9 tes lolos (100%) | Dilindungi `CRON_SECRET`, penolakan 401 tanpa rahasia, idempoten penuh. |
-| **Data Aktivitas Belajar (Privasi)** | Selesai | `activity-privacy-actions.ts`, `activity-privacy-client.tsx`, `transparency/page.tsx` | Terpasang & lolos lint | Sakelar pencatatan, Unduh JSON, Hapus Riwayat (termasuk rekap), jaminan non-penalti. |
+| **8 Rute Cron Terjadwal** | Selesai | `src/app/api/cron/*`, `peta-pulau-cron.ts`, `cron-jobs.test.ts`, `vercel.json` | 9/9 tes lolos (100%) | Didaftarkan di `vercel.json`, dokumentasi batas hosting di `RUNBOOK.md`, penolakan tanpa secret, idempoten. |
+| **Data Aktivitas Belajar (Privasi)** | Selesai | `activity-privacy-actions.ts`, `activity-privacy-client.tsx`, `transparency/page.tsx` | Terpasang & lolos lint | Sakelar pencatatan, Unduh JSON, Hapus Riwayat Aktivitas terpisah dari Reset Kemajuan Flashcard. |
 | **Pemutar Podcast & RPC Playback** | Selesai | `podcast-player.tsx`, `podcast-actions.ts`, `20261018000033_peta_pulau_rpc_playback.sql` | Terpasang & lolos RLS | Kecepatan 0.75x–2x, lompat ±15s, transkrip per segmen, posisi tersimpan debounced 10s. |
-| **Antarmuka AI & TTS Fail-Closed** | Selesai | `src/lib/akademik/ai-content.ts`, `tahap2-content.test.ts` | 37/37 tes lolos (100%) | `ContentGenerator` & `SpeechSynthesizer` dengan mock offline, nonaktif jika config nihil. |
+| **Antarmuka AI & TTS Fail-Closed** | Selesai | `src/lib/akademik/ai-content.ts`, `tahap2-content.test.ts` | 38/38 tes lolos (100%) | `GeminiContentGenerator` nyata (model dari `AI_MODEL`), mock untuk tes, fail-closed jika config nihil. |
 | **Pengaturan Notifikasi per Jenis** | Selesai | `notifications/types.ts`, `notifications/preferences-view.tsx` | Terverifikasi selaras | 12 jenis baru (Lampiran B) dan 5 kategori preferensi pengguna. |
 | **Kekuatan Topik & Prioritas Hari Ini** | Selesai | `topic-mastery.ts`, `daily-priorities.ts`, `tahap1-core.test.ts` | 42/42 tes lolos (100%) | 17 kasus `buildDailyPriorities` (>= 15), 14 kasus `chapter_state` (>= 12). |
-| **Flashcard Leitner & Validasi AI** | Selesai | `leitner.ts`, `ai-content.ts`, `tahap2-content.test.ts` | 37/37 tes lolos (100%) | 21 kasus `reviewCard` (>= 15), pemecah naskah, validator keluaran AI, groundingScore. |
+| **Flashcard Leitner & Validasi AI** | Selesai | `leitner.ts`, `ai-content.ts`, `tahap2-content.test.ts` | 38/38 tes lolos (100%) | 21 kasus `reviewCard` (>= 15), pemecah naskah, validator keluaran AI, groundingScore. |
 | **Tukar Keahlian & Rekap Semester** | Selesai | `skill-exchange.ts`, `semester-recap.ts`, `tahap3-social.test.ts` | 21/21 tes lolos (100%) | 11 kasus aturan poin & cap pasangan (>= 10), K-Anonymity `< 5`, rekap autentik. |
-| **Spesifikasi Playwright E2E** | Selesai | `tests/e2e/peta-pulau.spec.ts` | 5 skenario alur utama | Siap jalan di runner staging dengan Docker backend. |
+| **Spesifikasi Playwright E2E** | Selesai | `tests/e2e/peta-pulau.spec.ts` | 8 skenario alur utama | Memuat alur materi terkunci, blackout ujian, dan siklus nonaktif+hapus log. |
 
 ---
 
@@ -101,17 +112,17 @@ Didaftarkan pada `src/modules/notifications/types.ts`:
 > vitest run
 
 Test Files  58 passed (58)
-     Tests  565 passed (565)
-  Start at  10:01:19
-  Duration  70.22s
+     Tests  566 passed (566)
+  Start at  11:22:30
+  Duration  82.05s
 
 ✓ src/tests/unit/peta-pulau/p0-foundation.test.ts (19 tests)
 ✓ src/tests/unit/peta-pulau/tahap1-core.test.ts (42 tests)
-✓ src/tests/unit/peta-pulau/tahap2-content.test.ts (37 tests)
+✓ src/tests/unit/peta-pulau/tahap2-content.test.ts (38 tests)
 ✓ src/tests/unit/peta-pulau/tahap3-social.test.ts (21 tests)
 ✓ src/tests/unit/peta-pulau/cron-jobs.test.ts (9 tests)
 ✓ tests/nav-roles.test.ts (18 tests) - 107 menu terverifikasi bebas kata terlarang
-✓ ... 52 berkas uji modul lainnya (565 tests passing 100%)
+✓ ... 52 berkas uji modul lainnya (566 tests passing 100%)
 ```
 
 ### 4.2. Pengecekan Linting (`npm run lint`)
