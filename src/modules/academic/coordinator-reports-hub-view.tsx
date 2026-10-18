@@ -14,6 +14,8 @@ import {
   Bell,
   Sliders,
   FileCheck,
+  Compass,
+  Layers,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
@@ -25,11 +27,16 @@ import {
   type CoordinatorEdomRecapItem,
   type EvaluationPeriod,
 } from './evaluation-actions';
+import {
+  getKaprodiAdoptionReportAction,
+  type KaprodiReportItem,
+} from './kaprodi-report-actions';
 
 export const COORDINATOR_REPORTS_TABS = [
   { id: 'laporan-prodi', label: 'Laporan Prodi', icon: FileSpreadsheet },
   { id: 'evaluasi-dosen', label: 'Evaluasi Dosen', icon: Award },
   { id: 'capaian-cpl', label: 'Capaian CPL', icon: TrendingUp },
+  { id: 'adopsi-peta-pulau', label: 'Adopsi Peta Pulau', icon: Compass },
 ] as const;
 
 export type CoordinatorReportsTabId = (typeof COORDINATOR_REPORTS_TABS)[number]['id'];
@@ -49,6 +56,7 @@ export function CoordinatorReportsHubView({
     'laporan-prodi',
     'evaluasi-dosen',
     'capaian-cpl',
+    'adopsi-peta-pulau',
   ];
   const activeTab: CoordinatorReportsTabId = validTabs.includes(tabParam)
     ? tabParam
@@ -63,6 +71,8 @@ export function CoordinatorReportsHubView({
   const [edomPeriod, setEdomPeriod] = React.useState<EvaluationPeriod | null>(null);
   const [edomRecap, setEdomRecap] = React.useState<CoordinatorEdomRecapItem[]>([]);
   const [edomToast, setEdomToast] = React.useState<string | null>(null);
+  const [adoptionItems, setAdoptionItems] = React.useState<KaprodiReportItem[]>([]);
+  const [isLoadingAdoption, setIsLoadingAdoption] = React.useState(false);
   const [isPending, startTransition] = React.useTransition();
 
   React.useEffect(() => {
@@ -73,6 +83,18 @@ export function CoordinatorReportsHubView({
       }
     });
   }, []);
+
+  React.useEffect(() => {
+    if (activeTab === 'adopsi-peta-pulau' && adoptionItems.length === 0 && !isLoadingAdoption) {
+      setIsLoadingAdoption(true);
+      getKaprodiAdoptionReportAction().then((res) => {
+        setIsLoadingAdoption(false);
+        if (res.ok) {
+          setAdoptionItems(res.items);
+        }
+      });
+    }
+  }, [activeTab]);
 
   const handleTogglePeriod = () => {
     if (!edomPeriod) return;
@@ -520,6 +542,121 @@ export function CoordinatorReportsHubView({
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* 6. TAB 4: ADOPSI PETA PULAU & FITUR BELAJAR */}
+      {activeTab === 'adopsi-peta-pulau' && (
+        <div className="space-y-5">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
+                <Compass className="h-5 w-5 text-primary" />
+                <span>Laporan Penggunaan & Adopsi Fitur Peta Pulau</span>
+              </h2>
+              <p className="text-xs text-black/70 mt-1">
+                Agregasi adopsi fitur pembelajaran mandiri per kelas mata kuliah di program studi.
+              </p>
+            </div>
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
+              Privasi K-Anonymity (N ≥ 5)
+            </span>
+          </div>
+
+          {isLoadingAdoption ? (
+            <div className="p-10 text-center text-xs font-sans text-black/60 rounded-xl border-2 border-black bg-white">
+              Memuat data adopsi fitur program studi...
+            </div>
+          ) : adoptionItems.length === 0 ? (
+            <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
+              <Compass className="h-10 w-10 text-black/40 mx-auto" />
+              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Kelas Mengaktifkan Fitur</h3>
+              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+                Dosen pengampu dapat mengaktifkan fitur Peta Pulau, Flashcard, Podcast, dan Tukar Keahlian melalui tab Pengaturan Fitur di kelas masing-masing.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              <div className="rounded-xl border-2 border-black bg-white overflow-hidden shadow-retro">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left font-sans text-xs">
+                    <thead className="bg-gray-soft border-b-2 border-black text-black uppercase font-bold text-[11px]">
+                      <tr>
+                        <th className="p-3.5">Mata Kuliah / Kelas</th>
+                        <th className="p-3.5">Dosen Pengampu</th>
+                        <th className="p-3.5">Fitur Aktif</th>
+                        <th className="p-3.5 text-center">Jumlah Bab</th>
+                        <th className="p-3.5 text-center">Mahasiswa Terdaftar</th>
+                        <th className="p-3.5 text-right">Rata-rata Kelulusan Bab</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-black/10">
+                      {adoptionItems.map((item) => (
+                        <tr key={item.class_id} className="hover:bg-retro-surface/50 transition-colors">
+                          <td className="p-3.5 font-bold text-foreground">
+                            {item.class_title}
+                          </td>
+                          <td className="p-3.5 text-muted-foreground">
+                            {item.lecturer_name}
+                          </td>
+                          <td className="p-3.5">
+                            <div className="flex flex-wrap gap-1">
+                              {item.is_peta_enabled && (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary border border-primary/20">
+                                  Peta
+                                </span>
+                              )}
+                              {item.is_flashcard_enabled && (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                  Flashcard
+                                </span>
+                              )}
+                              {item.is_podcast_enabled && (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                                  Podcast
+                                </span>
+                              )}
+                              {item.is_tukar_keahlian_enabled && (
+                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+                                  Tukar Keahlian
+                                </span>
+                              )}
+                              {!item.is_peta_enabled && !item.is_flashcard_enabled && !item.is_podcast_enabled && !item.is_tukar_keahlian_enabled && (
+                                <span className="text-[10px] text-muted-foreground">Tidak aktif</span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="p-3.5 text-center tabular-nums">
+                            {item.total_chapters}
+                          </td>
+                          <td className="p-3.5 text-center tabular-nums">
+                            {item.total_students}
+                          </td>
+                          <td className="p-3.5 text-right font-bold tabular-nums">
+                            {item.is_masked ? (
+                              <span className="text-muted-foreground text-[11px] font-normal italic">
+                                {item.avg_completion_pct}
+                              </span>
+                            ) : (
+                              <span className="text-emerald-700 dark:text-emerald-400">
+                                {item.avg_completion_pct}
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Catatan Privasi K-Anonymity */}
+              <div className="p-4 rounded-xl border-2 border-black bg-retro-surface text-xs text-black/80 leading-relaxed font-sans shadow-xs">
+                <span className="font-bold text-black block mb-0.5">Penjelasan Perlindungan Privasi K-Anonymity:</span>
+                Sesuai dengan ketentuan perlindungan data pembelajaran, kelas yang memiliki jumlah mahasiswa terdaftar di bawah 5 disamarkan nilainya (<span className="font-semibold">&lt; 5 (Privasi Terjaga)</span>). Kebijakan ini memastikan bahwa pimpinan program studi dapat meninjau adopsi kurikulum secara sehat tanpa risiko de-anonimisasi terhadap mahasiswa perseorangan.
+              </div>
             </div>
           )}
         </div>
