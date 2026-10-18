@@ -12,7 +12,19 @@ export async function GET(request: NextRequest) {
     const now = Date.now();
     let finalizedCount = 0;
 
-    // Evaluasi attempt aktif yang melebihi durasi kuis
+    // 1. Eksekusi RPC Database Postgres
+    try {
+      const { createClient } = await import('@/lib/supabase/server');
+      const supabase = await createClient();
+      const { data: dbCount } = await (supabase.rpc as any)('finalize_expired_attempts');
+      if (typeof dbCount === 'number') {
+        finalizedCount += dbCount;
+      }
+    } catch {
+      // fallback jika db tidak terhubung
+    }
+
+    // 2. Evaluasi store in-memory untuk lingkungan mock/demo
     for (const attempt of store.attempts) {
       if (!attempt.submitted_at) {
         const quiz = store.quizzes.find((q) => q.id === attempt.quiz_id);

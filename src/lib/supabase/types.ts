@@ -338,6 +338,7 @@ export interface Database {
           user_id: string;
           permission: string;
           can_open_attendance: boolean;
+          can_view_similarity: boolean;
           granted_by: string;
           created_at: string;
         };
@@ -347,6 +348,7 @@ export interface Database {
           user_id: string;
           permission: string;
           can_open_attendance?: boolean;
+          can_view_similarity?: boolean;
           granted_by: string;
           created_at?: string;
         };
@@ -356,6 +358,7 @@ export interface Database {
           user_id?: string;
           permission?: string;
           can_open_attendance?: boolean;
+          can_view_similarity?: boolean;
           granted_by?: string;
           created_at?: string;
         };
@@ -1154,6 +1157,727 @@ export interface Database {
           completed_at?: string | null;
         };
       };
+      quizzes: {
+        Row: {
+          id: string;
+          class_id: string;
+          title: string;
+          description: string;
+          exam_type: string;
+          duration_minutes: number;
+          start_time: string;
+          end_time: string;
+          max_attempts: number;
+          shuffle_questions: boolean;
+          shuffle_options: boolean;
+          is_published: boolean;
+          strict_proctoring: boolean;
+          proctoring_level: string;
+          max_violations: number;
+          require_fullscreen: boolean;
+          block_copy_paste: boolean;
+          require_attendance: boolean;
+          passcode: string | null;
+          kkm: number;
+          result_display: string;
+          status: string;
+          total_points: number;
+          access_mode: 'open' | 'token';
+          parent_quiz_id: string | null;
+          kind: 'utama' | 'susulan' | 'remedial';
+          score_cap: number | null;
+          combine_policy: 'tertinggi' | 'ganti' | 'rata_rata';
+          release_at: string | null;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          class_id: string;
+          title: string;
+          description?: string;
+          exam_type?: string;
+          duration_minutes?: number;
+          start_time?: string;
+          end_time?: string;
+          max_attempts?: number;
+          shuffle_questions?: boolean;
+          shuffle_options?: boolean;
+          is_published?: boolean;
+          strict_proctoring?: boolean;
+          proctoring_level?: string;
+          max_violations?: number;
+          require_fullscreen?: boolean;
+          block_copy_paste?: boolean;
+          require_attendance?: boolean;
+          passcode?: string | null;
+          kkm?: number;
+          result_display?: string;
+          status?: string;
+          total_points?: number;
+          access_mode?: 'open' | 'token';
+          parent_quiz_id?: string | null;
+          kind?: 'utama' | 'susulan' | 'remedial';
+          score_cap?: number | null;
+          combine_policy?: 'tertinggi' | 'ganti' | 'rata_rata';
+          release_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          class_id?: string;
+          title?: string;
+          description?: string;
+          exam_type?: string;
+          duration_minutes?: number;
+          start_time?: string;
+          end_time?: string;
+          max_attempts?: number;
+          shuffle_questions?: boolean;
+          shuffle_options?: boolean;
+          is_published?: boolean;
+          strict_proctoring?: boolean;
+          proctoring_level?: string;
+          max_violations?: number;
+          require_fullscreen?: boolean;
+          block_copy_paste?: boolean;
+          require_attendance?: boolean;
+          passcode?: string | null;
+          kkm?: number;
+          result_display?: string;
+          status?: string;
+          total_points?: number;
+          access_mode?: 'open' | 'token';
+          parent_quiz_id?: string | null;
+          kind?: 'utama' | 'susulan' | 'remedial';
+          score_cap?: number | null;
+          combine_policy?: 'tertinggi' | 'ganti' | 'rata_rata';
+          release_at?: string | null;
+          created_by?: string | null;
+          created_at?: string;
+        };
+      };
+      quiz_questions: {
+        Row: {
+          id: string;
+          quiz_id: string | null;
+          question_text: string;
+          question_type: string;
+          points: number;
+          order_index: number;
+          topic_tag: string | null;
+          cpl_tag: string | null;
+          difficulty: string | null;
+          rubric: string | null;
+          starter_code: string | null;
+          programming_language: string | null;
+          explanation: string | null;
+          code_language: 'python' | 'javascript' | 'java' | 'c' | 'cpp' | 'php' | null;
+          time_limit_ms: number;
+          memory_limit_mb: number;
+          compare_mode: 'exact' | 'trim' | 'tokens' | 'float';
+          needs_revision: boolean;
+          metadata: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          quiz_id?: string | null;
+          question_text: string;
+          question_type?: string;
+          points?: number;
+          order_index?: number;
+          topic_tag?: string | null;
+          cpl_tag?: string | null;
+          difficulty?: string | null;
+          rubric?: string | null;
+          starter_code?: string | null;
+          programming_language?: string | null;
+          explanation?: string | null;
+          code_language?: 'python' | 'javascript' | 'java' | 'c' | 'cpp' | 'php' | null;
+          time_limit_ms?: number;
+          memory_limit_mb?: number;
+          compare_mode?: 'exact' | 'trim' | 'tokens' | 'float';
+          needs_revision?: boolean;
+          metadata?: Json;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          quiz_id?: string | null;
+          question_text?: string;
+          question_type?: string;
+          points?: number;
+          order_index?: number;
+          topic_tag?: string | null;
+          cpl_tag?: string | null;
+          difficulty?: string | null;
+          rubric?: string | null;
+          starter_code?: string | null;
+          programming_language?: string | null;
+          explanation?: string | null;
+          code_language?: 'python' | 'javascript' | 'java' | 'c' | 'cpp' | 'php' | null;
+          time_limit_ms?: number;
+          memory_limit_mb?: number;
+          compare_mode?: 'exact' | 'trim' | 'tokens' | 'float';
+          needs_revision?: boolean;
+          metadata?: Json;
+          created_at?: string;
+        };
+      };
+      exam_attempts: {
+        Row: {
+          id: string;
+          quiz_id: string;
+          student_id: string;
+          student_name: string | null;
+          started_at: string;
+          deadline_at: string;
+          expires_at: string | null;
+          extra_time_seconds: number;
+          last_heartbeat_at: string | null;
+          active_session_id: string | null;
+          auto_submitted: boolean;
+          submit_idempotency_key: string | null;
+          finished_at: string | null;
+          total_score: number;
+          max_score: number;
+          is_graded: boolean;
+          violations_count: number;
+          is_terminated: boolean;
+          status: string;
+          answers_json: Json;
+          ai_grading_drafts: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          quiz_id: string;
+          student_id: string;
+          student_name?: string | null;
+          started_at?: string;
+          deadline_at?: string;
+          expires_at?: string | null;
+          extra_time_seconds?: number;
+          last_heartbeat_at?: string | null;
+          active_session_id?: string | null;
+          auto_submitted?: boolean;
+          submit_idempotency_key?: string | null;
+          finished_at?: string | null;
+          total_score?: number;
+          max_score?: number;
+          is_graded?: boolean;
+          violations_count?: number;
+          is_terminated?: boolean;
+          status?: string;
+          answers_json?: Json;
+          ai_grading_drafts?: Json;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          quiz_id?: string;
+          student_id?: string;
+          student_name?: string | null;
+          started_at?: string;
+          deadline_at?: string;
+          expires_at?: string | null;
+          extra_time_seconds?: number;
+          last_heartbeat_at?: string | null;
+          active_session_id?: string | null;
+          auto_submitted?: boolean;
+          submit_idempotency_key?: string | null;
+          finished_at?: string | null;
+          total_score?: number;
+          max_score?: number;
+          is_graded?: boolean;
+          violations_count?: number;
+          is_terminated?: boolean;
+          status?: string;
+          answers_json?: Json;
+          ai_grading_drafts?: Json;
+          created_at?: string;
+        };
+      };
+      exam_answers: {
+        Row: {
+          id: string;
+          attempt_id: string;
+          question_id: string;
+          selected_option_id: string | null;
+          essay_text: string | null;
+          answer_data: Json;
+          revision: number;
+          is_draft: boolean;
+          last_saved_at: string;
+          updated_at: string;
+          score_earned: number;
+          graded_by: string | null;
+          graded_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          attempt_id: string;
+          question_id: string;
+          selected_option_id?: string | null;
+          essay_text?: string | null;
+          answer_data?: Json;
+          revision?: number;
+          is_draft?: boolean;
+          last_saved_at?: string;
+          updated_at?: string;
+          score_earned?: number;
+          graded_by?: string | null;
+          graded_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          attempt_id?: string;
+          question_id?: string;
+          selected_option_id?: string | null;
+          essay_text?: string | null;
+          answer_data?: Json;
+          revision?: number;
+          is_draft?: boolean;
+          last_saved_at?: string;
+          updated_at?: string;
+          score_earned?: number;
+          graded_by?: string | null;
+          graded_at?: string | null;
+        };
+      };
+      exam_events: {
+        Row: {
+          id: number;
+          attempt_id: string;
+          kind: 'offline' | 'online' | 'tab_hidden' | 'tab_visible' | 'fullscreen_exit' | 'sesi_ganda' | 'waktu_ditambah';
+          meta: Json;
+          client_time: string | null;
+          server_time: string;
+        };
+        Insert: {
+          id?: number;
+          attempt_id: string;
+          kind: 'offline' | 'online' | 'tab_hidden' | 'tab_visible' | 'fullscreen_exit' | 'sesi_ganda' | 'waktu_ditambah';
+          meta?: Json;
+          client_time?: string | null;
+          server_time?: string;
+        };
+        Update: {
+          id?: number;
+          attempt_id?: string;
+          kind?: 'offline' | 'online' | 'tab_hidden' | 'tab_visible' | 'fullscreen_exit' | 'sesi_ganda' | 'waktu_ditambah';
+          meta?: Json;
+          client_time?: string | null;
+          server_time?: string;
+        };
+      };
+      exam_access_tokens: {
+        Row: {
+          quiz_id: string;
+          token: string;
+          rotated_at: string;
+          rotate_every_minutes: number | null;
+        };
+        Insert: {
+          quiz_id: string;
+          token: string;
+          rotated_at?: string;
+          rotate_every_minutes?: number | null;
+        };
+        Update: {
+          quiz_id?: string;
+          token?: string;
+          rotated_at?: string;
+          rotate_every_minutes?: number | null;
+        };
+      };
+      exam_makeup_participants: {
+        Row: {
+          quiz_id: string;
+          student_id: string;
+          reason: string;
+          approved_by: string;
+          created_at: string;
+        };
+        Insert: {
+          quiz_id: string;
+          student_id: string;
+          reason: string;
+          approved_by: string;
+          created_at?: string;
+        };
+        Update: {
+          quiz_id?: string;
+          student_id?: string;
+          reason?: string;
+          approved_by?: string;
+          created_at?: string;
+        };
+      };
+      coding_test_cases: {
+        Row: {
+          id: string;
+          question_id: string;
+          position: number;
+          stdin: string;
+          expected_stdout: string;
+          is_hidden: boolean;
+          weight: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          question_id: string;
+          position?: number;
+          stdin?: string;
+          expected_stdout: string;
+          is_hidden?: boolean;
+          weight?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          question_id?: string;
+          position?: number;
+          stdin?: string;
+          expected_stdout?: string;
+          is_hidden?: boolean;
+          weight?: number;
+          created_at?: string;
+        };
+      };
+      coding_submissions: {
+        Row: {
+          id: string;
+          attempt_id: string;
+          question_id: string;
+          language: string;
+          source_code: string;
+          purpose: 'coba' | 'final';
+          status: 'antre' | 'berjalan' | 'selesai' | 'galat';
+          compile_output: string | null;
+          results: Json;
+          score: number | null;
+          judged_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          attempt_id: string;
+          question_id: string;
+          language: string;
+          source_code: string;
+          purpose: 'coba' | 'final';
+          status?: 'antre' | 'berjalan' | 'selesai' | 'galat';
+          compile_output?: string | null;
+          results?: Json;
+          score?: number | null;
+          judged_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          attempt_id?: string;
+          question_id?: string;
+          language?: string;
+          source_code?: string;
+          purpose?: 'coba' | 'final';
+          status?: 'antre' | 'berjalan' | 'selesai' | 'galat';
+          compile_output?: string | null;
+          results?: Json;
+          score?: number | null;
+          judged_at?: string | null;
+          created_at?: string;
+        };
+      };
+      exam_item_stats: {
+        Row: {
+          quiz_id: string;
+          question_id: string;
+          n: number;
+          difficulty_p: number | null;
+          discrimination_d: number | null;
+          point_biserial: number | null;
+          option_counts: Json;
+          avg_time_seconds: number | null;
+          omit_rate: number | null;
+          computed_at: string;
+        };
+        Insert: {
+          quiz_id: string;
+          question_id: string;
+          n?: number;
+          difficulty_p?: number | null;
+          discrimination_d?: number | null;
+          point_biserial?: number | null;
+          option_counts?: Json;
+          avg_time_seconds?: number | null;
+          omit_rate?: number | null;
+          computed_at?: string;
+        };
+        Update: {
+          quiz_id?: string;
+          question_id?: string;
+          n?: number;
+          difficulty_p?: number | null;
+          discrimination_d?: number | null;
+          point_biserial?: number | null;
+          option_counts?: Json;
+          avg_time_seconds?: number | null;
+          omit_rate?: number | null;
+          computed_at?: string;
+        };
+      };
+      exam_summary_stats: {
+        Row: {
+          quiz_id: string;
+          n: number;
+          mean: number | null;
+          median: number | null;
+          stddev: number | null;
+          min: number | null;
+          max: number | null;
+          kr20: number | null;
+          histogram: Json;
+          computed_at: string;
+        };
+        Insert: {
+          quiz_id: string;
+          n?: number;
+          mean?: number | null;
+          median?: number | null;
+          stddev?: number | null;
+          min?: number | null;
+          max?: number | null;
+          kr20?: number | null;
+          histogram?: Json;
+          computed_at?: string;
+        };
+        Update: {
+          quiz_id?: string;
+          n?: number;
+          mean?: number | null;
+          median?: number | null;
+          stddev?: number | null;
+          min?: number | null;
+          max?: number | null;
+          kr20?: number | null;
+          histogram?: Json;
+          computed_at?: string;
+        };
+      };
+      cpl: {
+        Row: {
+          id: string;
+          program_id: string;
+          code: string;
+          description: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          program_id: string;
+          code: string;
+          description: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          program_id?: string;
+          code?: string;
+          description?: string;
+          created_at?: string;
+        };
+      };
+      cpmk: {
+        Row: {
+          id: string;
+          course_id: string;
+          code: string;
+          description: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          course_id: string;
+          code: string;
+          description: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          course_id?: string;
+          code?: string;
+          description?: string;
+          created_at?: string;
+        };
+      };
+      cpmk_cpl_map: {
+        Row: {
+          cpmk_id: string;
+          cpl_id: string;
+          weight_percent: number;
+          created_at: string;
+        };
+        Insert: {
+          cpmk_id: string;
+          cpl_id: string;
+          weight_percent?: number;
+          created_at?: string;
+        };
+        Update: {
+          cpmk_id?: string;
+          cpl_id?: string;
+          weight_percent?: number;
+          created_at?: string;
+        };
+      };
+      assessment_cpmk_map: {
+        Row: {
+          id: string;
+          class_id: string;
+          assessment_type: 'assignment' | 'question';
+          assessment_id: string;
+          cpmk_id: string;
+          weight_percent: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          class_id: string;
+          assessment_type: 'assignment' | 'question';
+          assessment_id: string;
+          cpmk_id: string;
+          weight_percent?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          class_id?: string;
+          assessment_type?: 'assignment' | 'question';
+          assessment_id?: string;
+          cpmk_id?: string;
+          weight_percent?: number;
+          created_at?: string;
+        };
+      };
+      achievement_snapshots: {
+        Row: {
+          student_id: string;
+          class_id: string;
+          cpmk_id: string;
+          score_percent: number | null;
+          computed_at: string;
+        };
+        Insert: {
+          student_id: string;
+          class_id: string;
+          cpmk_id: string;
+          score_percent?: number | null;
+          computed_at?: string;
+        };
+        Update: {
+          student_id?: string;
+          class_id?: string;
+          cpmk_id?: string;
+          score_percent?: number | null;
+          computed_at?: string;
+        };
+      };
+      journal_cpmk: {
+        Row: {
+          journal_id: string;
+          cpmk_id: string;
+        };
+        Insert: {
+          journal_id: string;
+          cpmk_id: string;
+        };
+        Update: {
+          journal_id?: string;
+          cpmk_id?: string;
+        };
+      };
+      similarity_runs: {
+        Row: {
+          id: string;
+          assignment_id: string;
+          started_by: string;
+          scope: 'class' | 'course_history';
+          status: 'antre' | 'berjalan' | 'selesai' | 'galat';
+          threshold: number;
+          created_at: string;
+          finished_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          assignment_id: string;
+          started_by: string;
+          scope?: 'class' | 'course_history';
+          status?: 'antre' | 'berjalan' | 'selesai' | 'galat';
+          threshold?: number;
+          created_at?: string;
+          finished_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          assignment_id?: string;
+          started_by?: string;
+          scope?: 'class' | 'course_history';
+          status?: 'antre' | 'berjalan' | 'selesai' | 'galat';
+          threshold?: number;
+          created_at?: string;
+          finished_at?: string | null;
+        };
+      };
+      submission_fingerprints: {
+        Row: {
+          submission_id: string;
+          kind: 'teks' | 'kode';
+          hashes: number[];
+        };
+        Insert: {
+          submission_id: string;
+          kind: 'teks' | 'kode';
+          hashes: number[];
+        };
+        Update: {
+          submission_id?: string;
+          kind?: 'teks' | 'kode';
+          hashes?: number[];
+        };
+      };
+      similarity_pairs: {
+        Row: {
+          run_id: string;
+          submission_a: string;
+          submission_b: string;
+          score: number;
+          matched_segments: Json;
+          review_status: 'baru' | 'wajar' | 'perlu_ditinjau';
+          review_note: string | null;
+        };
+        Insert: {
+          run_id: string;
+          submission_a: string;
+          submission_b: string;
+          score: number;
+          matched_segments?: Json;
+          review_status?: 'baru' | 'wajar' | 'perlu_ditinjau';
+          review_note?: string | null;
+        };
+        Update: {
+          run_id?: string;
+          submission_a?: string;
+          submission_b?: string;
+          score?: number;
+          matched_segments?: Json;
+          review_status?: 'baru' | 'wajar' | 'perlu_ditinjau';
+          review_note?: string | null;
+        };
+      };
     };
     Views: {
       audit_logs_for_sysadmin: {
@@ -1244,6 +1968,56 @@ export interface Database {
           p_note?: string | null;
         };
         Returns: Json;
+      };
+      claim_attempt_session: {
+        Args: { p_attempt_id: string };
+        Returns: Json;
+      };
+      save_exam_answers: {
+        Args: {
+          p_attempt_id: string;
+          p_session_id: string;
+          p_items: Json;
+        };
+        Returns: Json;
+      };
+      exam_heartbeat: {
+        Args: {
+          p_attempt_id: string;
+          p_session_id: string;
+        };
+        Returns: Json;
+      };
+      submit_exam: {
+        Args: {
+          p_attempt_id: string;
+          p_session_id: string;
+          p_idempotency_key: string;
+        };
+        Returns: Json;
+      };
+      grant_exam_extra_time: {
+        Args: {
+          p_attempt_id: string;
+          p_seconds: number;
+          p_reason: string;
+        };
+        Returns: Json;
+      };
+      enter_exam: {
+        Args: {
+          p_quiz_id: string;
+          p_token: string;
+        };
+        Returns: Json;
+      };
+      get_exam_monitoring_summary: {
+        Args: { p_quiz_id: string };
+        Returns: Json;
+      };
+      finalize_expired_attempts: {
+        Args: Record<PropertyKey, never>;
+        Returns: number;
       };
     };
   };

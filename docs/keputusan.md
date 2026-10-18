@@ -346,5 +346,54 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
   3. Dosen dapat memantau daftar mahasiswa yang belum membuka materi dan mengirimkan pengingat ("Ingatkan Mahasiswa Belum Membuka") yang dibatasi laju maksimal 1 kali per 24 jam per materi.
 - **Alasan**: Mendukung alur pembelajaran mandiri yang terstruktur (sequential learning path) dan mencegah spam notifikasi ke mahasiswa.
 
+### Keputusan 40: Arsitektur Autosave Ujian, Sesi Tunggal, Pemulihan Offline, dan Detak Jantung Server (Fase 4)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Menambahkan kolom `expires_at`, `extra_time_seconds`, `last_heartbeat_at`, `active_session_id`, `auto_submitted`, dan `submit_idempotency_key` pada `exam_attempts` serta `revision` pada `exam_answers` (Migrasi 26).
+  2. Implementasi hook klien `useExamAutosave` dengan penyimpanan cadangan lokal (`exam:${attemptId}`), debounce batch 1,5 detik, exponential backoff (1s s.d. 30s), dan pengiriman ulang otomatis saat kembali online.
+  3. Penegakan sesi tunggal via RPC `claim_attempt_session`. Tab atau perangkat lain yang terbuka otomatis terkunci menjadi hanya-baca dengan pesan peringatan natural dan kejadian `sesi_ganda` dicatat di `exam_events`.
+  4. Sinkronisasi sisa waktu berbasis jam server (`serverOffset = server_now - Date.now()`). Perubahan jam perangkat lokal tidak memengaruhi sisa waktu ujian.
+  5. Pengawas dan dosen memantau status pengerjaan seluruh peserta secara real-time via polling 10 detik melalui fungsi agregat `get_exam_monitoring_summary`.
+- **Alasan**: Mencegah kecurangan multi-tab/perangkat dan memastikan tidak ada jawaban mahasiswa yang hilang saat terjadi pemadaman listrik atau gangguan jaringan internet.
 
+### Keputusan 41: Token Masuk Ujian, Ujian Susulan, Remedial, dan Kebijakan Penggabungan Nilai (Fase 4)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Tabel `exam_access_tokens` menyimpan token 6 karakter tanpa huruf ambigu (0/O, 1/I/L). Token hanya terbaca oleh dosen/asisten pengawas melalui RLS.
+  2. Verifikasi token diatur melalui RPC `enter_exam` dengan batasan laju percobaan maksimal 5 kali per menit.
+  3. Ujian susulan dan remedial membuat baris ujian baru dengan `parent_quiz_id`, membatasi peserta hanya pada daftar `exam_makeup_participants`, dan menerapkan kebijakan gabung nilai (`tertinggi`, `ganti`, `rata_rata`) dengan pembatasan nilai maksimal remedial (`score_cap`).
+- **Alasan**: Menjaga ketertiban ruang ujian dan menyediakan mekanisme remedial yang adil serta transparan sesuai buku pedoman akademik universitas.
 
+### Keputusan 42: Arsitektur Sandbox Koding Terisolasi dengan Adapter Judge0 CE dan Mode Pencocokan (Fase 4)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Kode mahasiswa dilarang keras dieksekusi di server Next.js atau Vercel. Dibuat antarmuka `CodeRunner` dengan adapter `Judge0Adapter` untuk eksekusi di server sandbox Docker terpisah.
+  2. Jika variabel lingkungan `JUDGE_API_URL` tidak diatur atau kebijakan institusi `coding_autograder_enabled` bernilai salah, sistem kembali dengan anggun (graceful fallback) ke mode pemeriksaan manual dengan pemberitahuan informatif.
+  3. Mendukung 4 mode evaluasi keluaran: `exact`, `trim`, `tokens`, dan `float` (dengan toleransi epsilon $10^{-4}$).
+  4. Pembatasan laju "Coba Jalankan" maksimal 1 kali per 5 detik per mahasiswa untuk mencegah serangan DoS pada runner sandbox.
+- **Alasan**: Menjaga keamanan server institusi dari eksekusi kode berbahaya atau loop tak hingga (fork bomb/OOM) dan memastikan fleksibilitas penilaian soal algoritma pemrograman.
+
+### Keputusan 43: Analisis Butir Soal (Kesukaran, Daya Pembeda, KR-20, Pengecoh) dan Alur Revisi Bank Soal (Fase 4)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Implementasi modul kalkulator murni `analyzeExamItems` (`src/lib/akademik/exam-utils.ts`) untuk menghitung indeks kesukaran ($p$), daya pembeda ($D$ kelompok 27% atas vs bawah), korelasi point-biserial ($r_{pb}$), reliabilitas Kuder-Richardson 20 (KR-20), dan efektivitas pengecoh.
+  2. Hasil analisis butir disimpan di tabel `exam_item_stats` dan ringkasan di `exam_summary_stats`.
+  3. Butir soal dengan daya pembeda rendah ($D < 0.20$) atau pengecoh tidak efektif secara otomatis ditandai `needs_revision = true` pada tabel `quiz_questions` untuk ditinjau dosen di Bank Soal.
+- **Alasan**: Membantu dosen penanggung jawab mata kuliah meningkatkan mutu instrumen evaluasi pembelajaran secara ilmiah.
+
+### Keputusan 44: Pemetaan Capaian Pembelajaran Lulusan (CPL) dan CPMK Berbasis Data Penilaian Riil (Fase 4)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Membuat struktur database kurikulum OBE (Outcome-Based Education): `cpl`, `cpmk`, `cpmk_cpl_map`, `assessment_cpmk_map`, `achievement_snapshots`, dan `journal_cpmk` (Migrasi 26).
+  2. Skor CPMK mahasiswa dihitung dari rata-rata tertimbang seluruh tugas dan soal yang terpetakan dan berstatus dipublikasikan. Skor CPL dihitung dari pemetaan bobot CPMK ke CPL.
+  3. Grafik CPL pada menu Nilai Saya menampilkan data kalkulasi riil dengan catatan "Dihitung dari penilaian yang sudah dipublikasikan", serta peringatan dashboard dosen bila ada CPMK yang belum memiliki instrumen penilaian.
+- **Alasan**: Menjamin kepatuhan standar akreditasi internasional dan nasional berbasis luaran pembelajaran mahasiswa.
+
+### Keputusan 45: Deteksi Kemiripan Tugas dengan Shingling Jaccard Teks dan Winnowing Kode (Fase 4)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Tabel `similarity_runs`, `submission_fingerprints`, dan `similarity_pairs` mencatat hasil pemeriksaan kemiripan tugas.
+  2. Analisis teks menggunakan normalisasi stop-words Bahasa Indonesia, 5-word shingling, dan koefisien kemiripan Jaccard.
+  3. Analisis kode menggunakan tokenisasi normalisasi identifier/literal, 8-gram, winnowing (jendela 4), dan penyaringan kode dasar dosen (`extractStarterCodeKgrams`) agar kode template tidak memicu kemiripan palsu.
+  4. Antarmuka peninjauan mewajibkan penempatan disclaimer: "Kemiripan tinggi belum tentu plagiarisme. Tinjau isinya sebelum mengambil keputusan. Tidak ada penalti otomatis."
+- **Alasan**: Memberikan alat bantu telaah yang adil dan obyektif bagi dosen dalam menjaga integritas akademik mahasiswa.

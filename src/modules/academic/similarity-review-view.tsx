@@ -104,7 +104,7 @@ export function SimilarityReviewView({
               </h2>
             </div>
             <p className="text-xs text-black/70 mt-1 max-w-2xl leading-relaxed">
-              Mendeteksi kemiripan teks menggunakan N-Gram shingling dan normalisasi sintaksis kode sumber. Skor berfungsi sebagai alat bantu telaah manusia (bukan penalti otomatis).
+              Kemiripan tinggi belum tentu plagiarisme. Tinjau isinya sebelum mengambil keputusan. Tidak ada penalti otomatis.
             </p>
           </div>
 

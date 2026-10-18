@@ -11,7 +11,7 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
 | **Fase 1** | Fondasi Bersama | **Selesai** | Kebijakan institusi (Lampiran A), rilis terjadwal (release_at), notifikasi terjadwal, 10 cron endpoint, 5 bucket storage RLS, lulus typecheck, 32 tes unit, lint, dan Next.js build. |
 | **Fase 2** | Tugas dan Nilai | **Selesai** | Keterlambatan dan perpanjangan, tugas kelompok dan penyesuaian kontribusi, rubrik bertingkat, sanggah nilai dan integrasi perubahan nilai, 34 tes lulus, typecheck, lint, dan build hijau. |
 | **Fase 3** | Kehadiran dan Perkuliahan | **Selesai** | Izin & sakit, berita acara, kuliah daring, progres materi, 36 berkas tes (330 tes) lulus, typecheck, lint, dan build hijau. |
-| **Fase 4** | Ujian | Menunggu | Autosave CBT, token, auto-grader koding, analisis butir soal, CPMK->CPL, kemiripan. |
+| **Fase 4** | Ujian | **Selesai** | Autosave CBT, token, auto-grader koding, analisis butir soal, CPMK->CPL, kemiripan, 38 berkas tes (351 tes) lulus, typecheck, lint, dan build hijau. |
 | **Fase 5** | Interaksi | Menunggu | Pesan & konsultasi, polling, pencapaian, pengingat AI, evaluasi dosen. |
 | **Fase 6** | Alat Bantu Dosen dan Sistem | Menunggu | Salin kelas, arsip, impor soal Excel/Word, Moodle XML & QTI. |
 | **Fase 7** | Penutup | Menunggu | Matriks baru, dokumentasi akhir, data seed, verifikasi akhir. |
@@ -106,3 +106,27 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
   - `npx tsc --noEmit`: 0 error.
   - `npm run lint`: 0 error.
   - `npm run build`: Kompilasi produksi Next.js hijau dan bersih.
+
+### [17 Oktober 2026] Fase 4 Selesai — Ujian
+- **Migrasi 26 (Ujian, CBT, Analisis Butir, CPMK-CPL, dan Kemiripan)**: `supabase/migrations/20261017000026_phase4_exams_analytics.sql` dibuat dengan instruksi rollback di komentar atas berkas:
+  - 16 tabel baru dengan RLS: `exam_events`, `exam_access_tokens`, `exam_makeup_participants`, `coding_test_cases`, `coding_submissions`, `exam_item_stats`, `exam_summary_stats`, `cpl`, `cpmk`, `cpmk_cpl_map`, `assessment_cpmk_map`, `achievement_snapshots`, `journal_cpmk`, `similarity_runs`, `submission_fingerprints`, `similarity_pairs`.
+  - Kolom CBT & Ujian: `expires_at`, `extra_time_seconds`, `last_heartbeat_at`, `active_session_id`, `auto_submitted`, `submit_idempotency_key` pada `exam_attempts`; `revision`, `updated_at` pada `exam_answers`; `access_mode`, `parent_quiz_id`, `kind`, `score_cap`, `combine_policy` pada `quizzes`; `code_language`, `time_limit_ms`, `memory_limit_mb`, `compare_mode`, `needs_revision` pada `quiz_questions`; `can_view_similarity` pada `class_assistants`.
+  - 8 RPC Postgres atomik: `claim_attempt_session`, `save_exam_answers`, `exam_heartbeat`, `submit_exam`, `grant_exam_extra_time`, `enter_exam`, `get_exam_monitoring_summary`, `finalize_expired_attempts`.
+- **Kalkulator Murni & Server Actions**:
+  - `src/lib/akademik/exam-utils.ts`: Analisis butir soal (`analyzeExamItems` dengan hitungan p, D, r_pb, KR-20, dan efektivitas distractor), gabungan nilai susulan/remedial (`calcCombinedExamScore`), pembanding output autograder (`compareOutput`), pemetaan capaian CPMK/CPL (`calcStudentCpmkScores`, `calcStudentCplScores`), dan deteksi kemiripan teks shingling/Jaccard serta kode winnowing dengan pengecualian starter code.
+  - `src/lib/judge/coderunner.ts`: Adapter Judge0 fail-safe dengan deteksi ketersediaan API instan.
+  - `src/hooks/use-exam-autosave.ts`: Hook autosave CBT dengan backup IndexedDB/localStorage, batch debounce 1.5 detik, retry exponential backoff, kunci sesi aktif tunggal, time offset server, heartbeat 15 detik, dan telemetri proctoring.
+  - `src/modules/academic/exam-actions.ts`: Kumpulan server action terproteksi untuk alur CBT, perpanjangan waktu pengawas, rotasi token, pembuatan ujian susulan/remedial, submit kode autograder dengan rate-limit 5 detik, hitung analisis butir, rekap capaian CPMK kelas, dan cek kemiripan berkas.
+- **Antarmuka Pengguna Terpadu**:
+  - Pengawas Ujian (`/ta/exam-monitor` & `src/modules/academic/exam-proctor-view.tsx`): Ringkasan status peserta realtime (mengerjakan, selesai, koneksi terputus, curang/fokus hilang), panel token dinamis, modal tambah waktu ujian, dan log telemetri proctoring.
+  - Analisis Butir Soal (`/exams/analysis` & `src/modules/academic/exam-analysis-view.tsx`): Indeks kesukaran (p), daya beda (D), korelasi point-biserial, reliabilitas KR-20, analisis distraktor, dan penandaan otomatis soal yang butuh revisi.
+  - Cek Kemiripan (`src/modules/academic/similarity-check-panel.tsx` & `src/modules/academic/similarity-review-view.tsx`): Pemicu analisis kemiripan per tugas dengan disclaimer hukum tegas bahwa skor tinggi bukan bukti plagiarisme otomatis melainkan indikator telaah manual.
+  - Radar Capaian CPMK/CPL (`src/modules/academic/cpmk-cpl-radar-card.tsx`): Visualisasi capaian lulusan per mata kuliah terintegrasi di tab kelas dan buku nilai mahasiswa.
+- **Pengujian Unit & Verifikasi Kualitas**:
+  - `src/tests/unit/phase4/exam-utils.test.ts`: 21 pengujian murni spesifik Fase 4 lulus 100%.
+  - Total pengujian unit: 38 berkas tes, 351 pengujian lulus 100%.
+  - `npm run check:rls`: 98 dari 98 tabel skema public memiliki RLS aktif.
+  - `npx tsc --noEmit`: 0 error.
+  - `npm run lint`: 0 error.
+  - `npm run build`: Kompilasi produksi Next.js hijau dan bersih.
+

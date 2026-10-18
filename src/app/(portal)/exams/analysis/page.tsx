@@ -1,8 +1,10 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
-import { EmptyState } from '@/components/shared/empty-state';
-import { BarChart3 } from 'lucide-react';
+import { createClient } from '@/lib/supabase/server';
+import { ExamAnalysisView } from '@/modules/academic/exam-analysis-view';
+
+export const dynamic = 'force-dynamic';
 
 export default async function ExamAnalysisPage() {
   const user = await getCurrentUserWithRoles();
@@ -11,6 +13,18 @@ export default async function ExamAnalysisPage() {
   if (role !== 'LECTURER' && role !== 'TEACHING_ASSISTANT' && role !== 'PROGRAM_COORDINATOR' && role !== 'SUPER_ADMIN') {
     redirect(role === 'STUDENT' ? '/student' : '/admin');
   }
+
+  const supabase = await createClient();
+  const { data: quizzesData } = await supabase
+    .from('quizzes')
+    .select('id, title, classes(title)')
+    .order('created_at', { ascending: false });
+
+  const quizzes = (quizzesData || []).map((q: any) => ({
+    id: q.id,
+    title: q.title,
+    class_title: q.classes?.title || 'Kelas',
+  }));
 
   return (
     <div className="space-y-6">
@@ -21,13 +35,7 @@ export default async function ExamAnalysisPage() {
         </p>
       </div>
 
-      <div className="rounded-[12px] border border-border bg-surface p-6">
-        <EmptyState
-          icon={<BarChart3 className="h-6 w-6" />}
-          title="Belum ada data analisis ujian"
-          description="Pilih ujian yang sudah selesai untuk menghitung parameter butir soal."
-        />
-      </div>
+      <ExamAnalysisView quizzes={quizzes} />
     </div>
   );
 }

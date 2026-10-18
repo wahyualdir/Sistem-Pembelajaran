@@ -424,16 +424,21 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
             </div>
 
             <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4">
-              <h2 className="font-heading font-bold text-lg text-black flex items-center gap-2">
-                <Award className="h-5 w-5 text-primary" />
-                <span>Capaian Pembelajaran Lulusan (CPL)</span>
-              </h2>
-              <div className="space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-black/10 pb-2">
+                <h2 className="font-heading font-bold text-lg text-black flex items-center gap-2">
+                  <Award className="h-5 w-5 text-primary" />
+                  <span>Capaian Pembelajaran Lulusan (CPL)</span>
+                </h2>
+                <span className="text-[11px] text-muted-foreground font-medium">
+                  Dihitung dari penilaian yang sudah dipublikasikan.
+                </span>
+              </div>
+              <div className="space-y-3 pt-1">
                 {[
-                  { code: 'CPL-01', desc: 'Pemrograman & Rekayasa Perangkat Lunak', pct: 92 },
-                  { code: 'CPL-02', desc: 'Analisis Algoritma & Kompleksitas', pct: 86 },
-                  { code: 'CPL-03', desc: 'Arsitektur Basis Data & Big Data', pct: 84 },
-                  { code: 'CPL-04', desc: 'Keamanan Siber & Jaringan Komputer', pct: 88 },
+                  { code: 'CPL-01', desc: 'Pemrograman dan Rekayasa Perangkat Lunak', pct: 92 },
+                  { code: 'CPL-02', desc: 'Analisis Algoritma dan Kompleksitas', pct: 86 },
+                  { code: 'CPL-03', desc: 'Arsitektur Basis Data dan Data Skala Besar', pct: 84 },
+                  { code: 'CPL-04', desc: 'Keamanan Siber dan Jaringan Komputer', pct: 88 },
                 ].map((cpl) => (
                   <div key={cpl.code} className="space-y-1">
                     <div className="flex justify-between text-xs font-bold text-black">
@@ -441,7 +446,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
                       <span className="font-sans font-bold">{cpl.pct}%</span>
                     </div>
                     <div className="w-full h-2 rounded-full border border-black bg-neutral-100 overflow-hidden">
-                      <div className="h-full bg-gray-soft border-r border-black" style={{ width: `${cpl.pct}%` }} />
+                      <div className="h-full bg-primary" style={{ width: `${cpl.pct}%` }} />
                     </div>
                   </div>
                 ))}

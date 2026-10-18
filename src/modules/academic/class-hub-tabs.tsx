@@ -59,6 +59,7 @@ import type { ForumTopic } from './forum-actions';
 import { ClassGroupsTabView } from './class-groups-tab-view';
 import { StudentAbsenceModal, LecturerAbsenceTabView } from './absence-modal-and-view';
 import { toggleMaterialCompleteAction, remindUnreadStudentsAction } from './material-progress-actions';
+import { CpmkCplRadarCard } from './cpmk-cpl-radar-card';
 
 export interface ClassDetailData {
   cls: {
@@ -430,6 +431,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   <span className="font-bold text-primary">75% (Syarat UAS)</span>
                 </div>
               </div>
+
+              {/* Pemetaan Capaian CPMK & CPL */}
+              <CpmkCplRadarCard classId={cls.id} />
             </div>
 
             {/* Kolom Kanan: Main Stream Feed */}
