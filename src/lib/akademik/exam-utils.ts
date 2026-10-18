@@ -288,6 +288,31 @@ export function calcCombinedExamScore(
   return Math.round(result * 100) / 100;
 }
 
+/**
+ * Memvalidasi apakah mahasiswa berhak mengikuti ujian susulan / remedial (Bagian 11.2)
+ */
+export function validateMakeupParticipation(
+  examKind: 'utama' | 'susulan' | 'remedial',
+  studentId: string,
+  allowedStudentIds: string[]
+): { allowed: boolean; reason?: string } {
+  if (examKind === 'utama') {
+    return { allowed: true };
+  }
+
+  const isRegistered = allowedStudentIds.includes(studentId);
+  if (!isRegistered) {
+    return {
+      allowed: false,
+      reason: `Akses ditolak. Anda tidak terdaftar sebagai peserta ujian ${examKind} ini.`,
+    };
+  }
+
+  return { allowed: true };
+}
+
+
+
 // ============================================================================
 // 3. AUTO-GRADER SOAL KODING (Bagian 11.3)
 // ============================================================================

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { validasiEmailStudent } from "@/lib/auth/validasi-email";
+import { validasiEmailKampusAsync } from "@/lib/auth/validasi-email";
 import { findUserByEmail, createSessionCookie } from "@/lib/auth/session";
 import { createSupabaseServerClient } from "@/lib/auth/supabase";
 
@@ -22,10 +22,11 @@ export async function GET(request: NextRequest) {
       const email = data.user.email || "";
       const emailVerified = !!data.user.email_confirmed_at;
 
-      // 1. Validasi domain student persis di server
-      const check = validasiEmailStudent({ email, emailVerified });
+      // 1. Validasi domain dan allowlist kampus di database
+      const check = await validasiEmailKampusAsync({ email, emailVerified });
       if (!check.valid || !check.normalizedEmail) {
         await supabase.auth.signOut();
+
         return NextResponse.redirect(
           new URL(
             `/login?error=${encodeURIComponent(

@@ -62,6 +62,36 @@ const startConvSchema = z.object({
   classId: z.string().uuid().optional().nullable(),
 });
 
+/**
+ * Aturan Bisnis 12.1:
+ * - Mahasiswa TIDAK diizinkan mengirim pesan langsung ke sesama mahasiswa (hanya diarahkan ke forum komunitas).
+ * - Mahasiswa hanya dapat mengirim pesan ke Dosen Pengampu atau Asisten Dosen di kelas yang diikutinya, atau ke Dosen Wali.
+ */
+export async function validateDirectMessagePermission(
+  callerRole: string,
+  targetRoles: string[],
+  isEnrolledInSameClass: boolean = true
+): Promise<{ allowed: boolean; reason?: string }> {
+  const isCallerStudent = callerRole === 'STUDENT';
+  const isTargetOnlyStudent = targetRoles.every((r) => r === 'STUDENT');
+
+  if (isCallerStudent && isTargetOnlyStudent) {
+    return {
+      allowed: false,
+      reason: 'Akses percakapan ditolak. Mahasiswa tidak dapat mengirim pesan langsung antarmahasiswa. Silakan gunakan forum komunitas.',
+    };
+  }
+
+  if (isCallerStudent && !isEnrolledInSameClass) {
+    return {
+      allowed: false,
+      reason: 'Akses percakapan ditolak. Anda hanya dapat menghubungi dosen atau asisten pada kelas aktif Anda.',
+    };
+  }
+
+  return { allowed: true };
+}
+
 export async function startConversationAction(input: unknown) {
   const user = await getCurrentUserWithRoles();
   if (!user) return { ok: false, error: 'Silakan masuk terlebih dahulu.' };
@@ -71,6 +101,20 @@ export async function startConversationAction(input: unknown) {
 
   const { targetUserId, classId } = parsed.data;
   const supabase = await createClient();
+
+  // 1. Validasi di sisi aplikasi sebelum RPC: Tolak pesan antarmahasiswa
+  if (user.activeRole === 'STUDENT') {
+    const { data: targetRoleRows } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', targetUserId);
+
+    const targetRoles = (targetRoleRows || []).map((r: any) => r.role);
+    const perm = await validateDirectMessagePermission(user.activeRole, targetRoles.length > 0 ? targetRoles : ['STUDENT']);
+    if (!perm.allowed) {
+      return { ok: false, error: perm.reason || 'Akses percakapan ditolak.' };
+    }
+  }
 
   const { data, error } = await (supabase as any).rpc('start_conversation', {
     target_user_id: targetUserId,
@@ -84,6 +128,7 @@ export async function startConversationAction(input: unknown) {
   revalidatePath('/messages');
   return { ok: true, conversationId: data as string };
 }
+
 
 // -------------------------------------------------------------
 // 2. Daftar Percakapan Pengguna

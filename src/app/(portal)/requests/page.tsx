@@ -3,10 +3,11 @@ import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { getStudentRequestsAction } from '@/modules/requests/actions';
 import { RequestsView } from '@/modules/requests/requests-view';
+import { KrsStore } from '@/features/krs/krs-store';
 
 export const metadata = {
-  title: 'Pengajuan Surat Akademik - SIAJAR LMS',
-  description: 'Layanan mandiri pengajuan surat keterangan aktif, dispensasi, dan legalisasi berkas.',
+  title: 'Pengajuan Surat Akademik dan KRS - SIAJAR LMS',
+  description: 'Layanan mandiri pengajuan surat keterangan aktif, dispensasi, legalisasi berkas, dan Kartu Rencana Studi.',
 };
 
 export default async function RequestsPage() {
@@ -17,7 +18,9 @@ export default async function RequestsPage() {
     redirect(role === 'ACADEMIC_STAFF' ? '/staff/services/verification' : '/admin');
   }
 
+  const studentId = user?.user?.id || 'mhs-1';
   const requests = await getStudentRequestsAction();
+  const krs = KrsStore.getKrsByMahasiswa(studentId);
 
-  return <RequestsView initialRequests={requests} />;
+  return <RequestsView initialRequests={requests} initialKrs={krs} />;
 }

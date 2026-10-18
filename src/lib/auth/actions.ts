@@ -2,8 +2,9 @@
 
 import { z } from "zod";
 import bcrypt from "bcryptjs";
-import { validasiEmailStudent } from "./validasi-email";
+import { validasiEmailStudent, validasiEmailKampusAsync } from "./validasi-email";
 import { createSessionCookie, clearSessionCookie, findUserByEmail, Role } from "./session";
+
 import { SEED_MAHASISWA, SEED_DOSEN } from "@/lib/db/seed-data";
 import { prisma } from "@/lib/db";
 
@@ -158,11 +159,12 @@ export async function loginStudentGoogle(
 
   const email = validated.data.email;
 
-  // 1. Validasi domain email student di server
-  const check = validasiEmailStudent({
+  // 1. Validasi domain email student dan allowlist di server
+  const check = await validasiEmailKampusAsync({
     email,
     emailVerified: true,
   });
+
 
   if (!check.valid || !check.normalizedEmail) {
     return {

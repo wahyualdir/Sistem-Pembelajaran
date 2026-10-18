@@ -119,7 +119,7 @@ export async function validasiEmailKampusAsync({
     const supabase = await createClient();
 
     // 1. Cek allowlist spesifik
-    const { data: allowlistMatch } = await supabase
+    const { data: allowlistMatch, error: err1 } = await supabase
       .from('email_allowlist')
       .select('id')
       .eq('email', trimmedEmail)
@@ -130,8 +130,8 @@ export async function validasiEmailKampusAsync({
       return { valid: true, normalizedEmail: trimmedEmail };
     }
 
-    // 2. Cek domain yang diizinkan
-    const { data: domainMatch } = await supabase
+    // 2. Cek domain yang diizinkan di tabel allowed_email_domains
+    const { data: domainMatch, error: err2 } = await supabase
       .from('allowed_email_domains')
       .select('id')
       .eq('domain', domain)
@@ -141,8 +141,16 @@ export async function validasiEmailKampusAsync({
     if (domainMatch) {
       return { valid: true, normalizedEmail: trimmedEmail };
     }
+
+    // Jika koneksi tabel database berhasil dan tidak cocok di kedua tabel, tolak secara tegas
+    if (!err1 && !err2) {
+      return {
+        valid: false,
+        pesanError: `Domain email @${domain} atau alamat surel tidak diizinkan untuk masuk. Gunakan domain institusi resmi.`,
+      };
+    }
   } catch {
-    // Fallback saat offline
+    // Fallback saat offline/unit test tanpa koneksi database
   }
 
   return validasiEmailStudent({
@@ -151,3 +159,4 @@ export async function validasiEmailKampusAsync({
     allowedDomains: ['student.uir.ac.id', 'dosen.uir.ac.id', 'uir.ac.id', 'siakad.uir.ac.id'],
   });
 }
+

@@ -228,8 +228,20 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
   - Fase 5 (Interaksi, Gamifikasi, AI & Evaluasi Dosen): Selesai 100%
   - Fase 6 (Salin & Arsip Kelas, Impor Massal, Moodle XML & QTI): Selesai 100%
   - Fase 7 (Penutup, Dokumentasi Final, Runbook, Seed & Verifikasi): Selesai 100%
-  - **Fase yang Ditunda**: Tidak ada. Seluruh 8 fase instruksi arsitektur LMS SIAJAR telah diselesaikan secara paripurna dan siap produksi.
-
-
-
-
+### [18 Oktober 2026] Audit Kepatuhan Bagian 9–13 & Penyelesaian Menyeluruh Seluruh Fitur
+- **Audit Kepatuhan Menyeluruh (`docs/AUDIT_KEPATUHAN.md`)**:
+  - Seluruh 22 sub-fitur pada Bagian 9 sampai 13 telah diaudit secara teliti terhadap basis kode dan dipastikan berstatus **Selesai 100%** dengan pengujian unit/e2e/RLS pembukti spesifik.
+- **Implementasi Fitur & Pengujian Baru yang Ditambahkan**:
+  1. **11.1 Autosave Ujian**: Integrasi persistensi IndexedDB via `idb-keyval` (`exam:{attemptId}`), antrean sinkronisasi offline dengan backoff eksponensial, aturan "higher revision wins", penghitungan sisa waktu berbasis timer offset peladen, penanganan multi-tab (sesi tunggal aktif). Teruji di `src/tests/unit/phase4/exam-autosave.test.ts` dan `tests/e2e/exam-autosave.spec.ts`.
+  2. **11.2 Susulan dan Remedial**: Isolasi hak masuk peserta susulan via tabel `exam_makeup_participants`, generator dan validator token 6 karakter tanpa huruf ambigu (I, O, 1, 0), kebijakan kombinasi skor (`tertinggi`, `ganti`, `rata_rata`) dengan batas nilai maksimum `score_cap`. Teruji di `src/tests/unit/phase4/exam-makeup.test.ts` (10 tes lulus).
+  3. **9.3 Komentar Berkas**: Modul `src/lib/akademik/feedback-comments-utils.ts` dan Server Actions `src/modules/academic/feedback-comment-actions.ts` mendukung penanda baris kode (`type: 'lines'`), penanda halaman dokumen PDF (`type: 'page'`), validasi panjang teks 1–2000 karakter, dan isolasi komentar draf asisten dari mahasiswa. Teruji di `src/tests/unit/phase2/feedback-comments.test.ts` (10 tes lulus).
+  4. **9.4 Sanggah Nilai oleh Mahasiswa**: Modul `src/lib/akademik/dispute-utils.ts` dan Server Actions `src/modules/academic/dispute-actions.ts` menegakkan jendela 7 hari kalender sejak publikasi nilai, alasan minimal 30 karakter, pembatasan laju 5 pengajuan per jam, penarikan sanggahan hanya saat status 'diajukan', dan pembuatan otomatis draf `grade_change_requests` jika buku nilai telah difinalisasi. Teruji di `src/tests/unit/phase2/grade-disputes.test.ts` (18 tes lulus).
+  5. **10.3 Tautan Kuliah Daring dan Rekaman**: Validasi host peladen HTTPS terhadap daftar putih (Google Meet, Zoom, Teams, Jitsi, YouTube, Drive), aktivasi tombol Gabung pada jendela 15 menit sebelum perkuliahan dimulai, dan opsi penerapan serentak ke seluruh pertemuan. Teruji di `src/tests/unit/phase3/perkuliahan-utils.test.ts` (18 tes lulus).
+  6. **10.4 Progres Materi dan Penguncian Berurutan**: Penegakan penguncian materi prasyarat (`unlock_after_material_id`, `require_completion`) di peladen, pesan instruktif, bilah kemajuan modul mahasiswa, dan pembatasan pengingat dosen sekali per 24 jam. Teruji di `src/tests/unit/phase3/phase3-attendance-teaching.test.ts` & `perkuliahan-utils.test.ts`.
+  7. **12.1 Larangan Pesan Antarmahasiswa**: Penegakan mutlak pemblokiran pesan antarmahasiswa (`STUDENT` ke `STUDENT`) pada server action `validateDirectMessagePermission` dan RPC database, mengarahkan komunikasi ke forum diskusi kelas. Teruji di `src/tests/unit/security/no-student-messaging.test.ts` (5 tes lulus).
+  8. **Grup Menu Akun**: Memastikan navigasi menu Akun seluruh 6 peran secara mutlak dan konsisten hanya memuat `Pengaturan`, `Bantuan`, dan `Privasi`. Teruji di `tests/nav-roles.test.ts` (18 tes lulus).
+  9. **Login Berbasis Database Allowlist**: Validasi surel masuk via `validasiEmailKampusAsync` menguji domain aktif dari `allowed_email_domains` dan alamat surat elektronik pada `email_allowlist`. Teruji di `src/tests/unit/security/login-email-allowlist.test.ts` (5 tes lulus).
+  10. **Safeguard demo_seed.sql**: Memasang blok pencegahan eksekusi otomatis pada lingkungan produksi di baris awal `supabase/seed/demo_seed.sql`.
+  11. **Uji Kebijakan RLS (pgTAP)**: Membuat `supabase/tests/database/07_phase5_interaction_and_disputes_rls.sql` untuk memverifikasi keamanan isolasi data tabel evaluasi, polling, permohonan izin/sakit, pesan langsung, dan sanggahan nilai.
+  12. **Tab KRS di Halaman Pengajuan (`/requests`)**: Menyediakan tab navigasi terpadu di `/requests` berisi Tab "Surat Akademik" dan Tab "Kartu Rencana Studi (KRS)" lengkap dengan status verifikasi Dosen Wali, kuota SKS, catatan pembimbing, dan tabel mata kuliah terdaftar.
+- **Fitur yang Ditunda**: Tidak ada yang ditunda (`docs/PROGRESS.md`). Seluruh butir instruksi telah diimplementasikan lengkap beserta pengujian otomatis yang lulus 100%.

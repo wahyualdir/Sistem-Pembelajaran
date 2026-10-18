@@ -24,11 +24,19 @@ interface AutosaveOptions {
   onAnotherSessionActive?: () => void;
 }
 
+import { get, set } from 'idb-keyval';
+
 /**
- * Penyimpanan lokal persisten menggunakan IndexedDB asli browser dengan fallback aman
+ * Penyimpanan lokal persisten menggunakan IndexedDB (idb-keyval) dengan kunci exam:{attemptId}
  */
 async function getStoredLocalAnswers(key: string): Promise<Record<string, AnswerItem>> {
   if (typeof window === 'undefined') return {};
+  try {
+    const val = await get<Record<string, AnswerItem>>(key);
+    if (val && typeof val === 'object') return val;
+  } catch {
+    // fallback ke localStorage jika IndexedDB bermasalah
+  }
   try {
     const raw = localStorage.getItem(key);
     if (raw) return JSON.parse(raw);
@@ -41,11 +49,17 @@ async function getStoredLocalAnswers(key: string): Promise<Record<string, Answer
 async function setStoredLocalAnswers(key: string, data: Record<string, AnswerItem>): Promise<void> {
   if (typeof window === 'undefined') return;
   try {
-    localStorage.setItem(key, JSON.stringify(data));
+    await set(key, data);
   } catch {
-    // fallback diam
+    // fallback ke localStorage jika IndexedDB tidak tersedia
+    try {
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch {
+      // fallback diam
+    }
   }
 }
+
 
 export function useExamAutosave({
   attemptId,

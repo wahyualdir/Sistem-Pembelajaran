@@ -360,5 +360,19 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR - 102 Me
         isNavItemActive('/notifications', '/settings', studentHrefs)
       ).toBe(false);
     });
+
+    it('memastikan grup menu Akun secara ketat berisi Pengaturan, Bantuan, dan Privasi untuk seluruh peran', () => {
+      const roles = ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'];
+      for (const r of roles) {
+        const groups = getNavGroups(r);
+        const akunGroup = groups.find((g) => g.title === 'Akun');
+        expect(akunGroup).toBeDefined();
+        const labels = akunGroup!.items.map((i) => i.label);
+        expect(labels).toEqual(['Pengaturan', 'Bantuan', 'Privasi']);
+        const hrefs = akunGroup!.items.map((i) => i.href);
+        expect(hrefs).toEqual(['/settings', '/help', '/transparency']);
+      }
+    });
   });
 });
+
