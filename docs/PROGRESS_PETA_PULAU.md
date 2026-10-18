@@ -10,6 +10,7 @@ Dokumen ini memantau implementasi fitur Peta Pulau secara transparan, berbasis b
   - `56b1e8e` (`feat(peta-pulau): implementasikan tahap 3 tukar keahlian, rekap semester, dan laporan kaprodi dengan k-anonymity`)
   - `40aad70` (`docs(peta-pulau): perbarui runbook operasional, privasi data aktivitas, evaluasi suara, bantuan, dan sinkronisasi dokumen 107 menu`)
   - `e9e24cc` (`feat(peta-pulau): lengkapi 8 rute cron, kontrol privasi aktivitas, pemutar podcast, dan ekspansi tes`)
+  - `b5b3bce` (`feat(peta-pulau): selaraskan rute cron vercel, implementasi ai nyata, kontrol privasi lampiran d, dan alur e2e`)
 - **Status Penerapan Migrasi Database (Migrasi 29 s.d. 33)**:
   - `20261018000029_peta_pulau_p0_foundation.sql`: **Belum dijalankan di host ini** (menunggu koneksi container Supabase lokal/staging).
   - `20261018000030_peta_pulau_tahap1_core.sql`: **Belum dijalankan di host ini**.
