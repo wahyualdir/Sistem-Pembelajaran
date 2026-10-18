@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>SIAJAR - Instruksi Pengerjaan untuk Antigravity</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 15mm 12mm 15mm 12mm;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #0f172a;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            font-size: 11px;
+            line-height: 1.6;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .header {
+            border-bottom: 2px solid #2563eb;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0 0 4px 0;
+            font-size: 20px;
+            color: #1e3a8a;
+        }
+        .header p {
+            margin: 0;
+            color: #475569;
+            font-size: 11px;
+        }
+        h1 {
+            color: #1e3a8a;
+            font-size: 16px;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 4px;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+        h2, .sec-title {
+            color: #1e40af;
+            font-size: 14px;
+            background: #f1f5f9;
+            border-left: 4px solid #2563eb;
+            padding: 6px 10px;
+            margin-top: 16px;
+            margin-bottom: 8px;
+            border-radius: 0 4px 4px 0;
+        }
+        h3, .subsec-title {
+            color: #0f172a;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            border-bottom: 1px dashed #e2e8f0;
+            padding-bottom: 2px;
+        }
+        p {
+            margin: 0 0 8px 0;
+        }
+        ul {
+            margin: 0 0 10px 0;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 4px;
+        }
+        code {
+            background: #f1f5f9;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+            font-size: 10.5px;
+            color: #0969da;
+        }
+        pre {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 10px;
+            overflow-x: auto;
+            margin: 8px 0;
+        }
+        .alert-box {
+            background: #eff6ff;
+            border-left: 3px solid #3b82f6;
+            padding: 8px 12px;
+            border-radius: 0 6px 6px 0;
+            margin: 10px 0;
+            color: #1e40af;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 10.5px;
+        }
+        th {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            padding: 6px 8px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            border: 1px solid #e2e8f0;
+            padding: 5px 8px;
+            vertical-align: top;
+        }
+        tr:nth-child(even) td {
+            background: #fbfcfd;
+        }
+        .footer {
+            text-align: center;
+            font-size: 9.5px;
+            color: #64748b;
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>SIAJAR — Dokumen Asli Instruksi dan Spesifikasi Pengerjaan</h1>
+        <p>Universitas Islam Riau • Sumber Instruksi Utama Pengembangan LMS SIAJAR (Fase 0 – Fase 7)</p>
+    </div>
+
+    <p>SIAJAR — Instruksi Pengerjaan untuk Antigravity</p>
+<p>Versi 2 · Oktober 2026 · Bahasa antarmuka dan dokumentasi: Indonesia</p>
+<p>Berkas ini adalah satu-satunya sumber instruksi untuk tahap penyempurnaan SIAJAR. Taruh di docs/INSTRUKSI_ANTIGRAVITY.md pada repo, lalu tempel prompt pembuka di bawah ke chat Antigravity.</p>
+<p>Prompt pembuka (tempel ke Antigravity)</p>
+<p>Baca seluruh isi docs/INSTRUKSI_ANTIGRAVITY.md sebelum menyentuh kode apa pun.</p>
+<p>Kerjakan Fase 0 sampai Fase 7 secara berurutan dan mandiri. Jangan berhenti untuk meminta</p>
+<p>konfirmasi di antara fase. Kalau menemukan hal yang tidak jelas, pilih opsi paling aman,</p>
+<p>catat keputusannya di docs/KEPUTUSAN.md, lalu lanjut.</p>
+<p>Mulai dengan audit kode (Fase 0, langkah 1). Jangan berasumsi nama tabel, kolom, atau rute:</p>
+<p>semua nama di dokumen ini adalah sketsa, nama sebenarnya ikuti yang ada di repo.</p>
+<p>Setelah tiap fase selesai: jalankan typecheck, lint, test, dan build; perbaiki sampai hijau;</p>
+<p>commit; tulis ringkasan di docs/PROGRESS.md. Jangan menghapus atau mengubah perilaku fitur</p>
+<p>yang sudah ada kecuali dinyatakan eksplisit di dokumen.</p>
+<p>1. Cara kerja yang diminta</p>
+<p>Audit dulu, baru ubah. Fase 0 langkah 1 adalah membaca repo: struktur folder, src/lib/config/menu-config.ts, skema database di supabase/migrations, kebijakan RLS yang ada, daftar server action, dan komponen UI bersama. Hasil audit ditulis ke docs/AUDIT_AWAL.md (maksimal dua halaman): nama tabel sebenarnya, helper RLS yang sudah ada, library UI dan chart yang dipakai, pola validasi, pola penanganan error.</p>
+<p>Pakai yang sudah ada. Kalau repo sudah punya helper, komponen, atau pola (misalnya helper RLS, komponen tabel, toast, form), pakai itu. Jangan membuat versi kedua.</p>
+<p>Satu fase, satu rangkaian commit. Pesan commit memakai awalan konvensional dan deskripsi Indonesia, contoh: feat(tugas): tambah aturan keterlambatan dan perpanjangan tenggat.</p>
+<p>Migrasi database selalu berupa berkas baru bernomor di supabase/migrations. Jangan mengedit migrasi lama. Setiap migrasi idempoten sejauh mungkin (if not exists), dan di komentar atas berkas tulis cara membatalkannya.</p>
+<p>Setelah tiap fase jalankan perintah pemeriksaan sesuai package manager repo (typecheck, lint, test unit, build). Fase dianggap selesai hanya kalau semuanya lolos dan semua poin "Selesai bila" terpenuhi.</p>
+<p>Jangan menambah fitur di luar dokumen. Tidak ada PWA, tidak ada notifikasi push, tidak ada mode hemat data. Kalau muncul ide perbaikan, catat di docs/IDE_LANJUTAN.md dan jangan dikerjakan.</p>
+<p>Jangan menebak API library dari ingatan. Sebelum memakai library baru, cek versi stabil terbaru dan baca dokumentasinya. Pasang versi yang sudah beredar cukup lama, bukan rilis hari ini.</p>
+<p>Laporan akhir (Fase 7) berisi: daftar fitur yang selesai, daftar yang sengaja ditunda beserta alasannya, daftar keputusan di KEPUTUSAN.md, dan cara menjalankan seed data demo.</p>
+<p>2. Konteks proyek</p>
+<p>Aplikasi: web LMS kampus untuk Universitas Islam Riau, nama produk SIAJAR.</p>
+<p>Stack yang sudah berjalan: Next.js (App Router, Server Actions), Supabase (Postgres, Row-Level Security, Realtime, Storage, PgBouncer), login Google OAuth, hosting Vercel.</p>
+<p>Navigasi dikendalikan satu berkas: src/lib/config/menu-config.ts. Semua perubahan menu lewat berkas ini.</p>
+<p>Tujuh peran: STUDENT, TEACHING_ASSISTANT, LECTURER, PROGRAM_COORDINATOR, ACADEMIC_STAFF, SYSTEM_ADMIN, SUPER_ADMIN.</p>
+<p>Tabel yang menurut dokumen lama sudah ada (cari nama pastinya): class_assistants, grade_change_requests, audit_logs, user_devices, programs, semesters, rooms, serta tabel kelas, peserta kelas, pertemuan 1–16, materi, tugas, pengumpulan, presensi, ujian, soal, percobaan ujian, dan nilai.</p>
+<p>Zona waktu tampilan: Asia/Jakarta (WIB). Simpan semua waktu sebagai timestamptz (UTC) dan ubah ke WIB hanya saat ditampilkan.</p>
+<p>Skala pemakaian yang direncanakan: ratusan mahasiswa serentak saat ujian. Semua query di jalur ujian, presensi, dan polling harus punya indeks yang tepat dan tidak boleh N+1.</p>
+<p>3. Aturan teknis lintas fitur</p>
+<p>RLS wajib untuk setiap tabel baru. Aktifkan enable row level security di migrasi yang sama dengan pembuatan tabel. Tidak boleh ada tabel tanpa kebijakan. Pakai helper yang sudah ada (misalnya "dosen pengampu kelas ini", "asisten kelas ini", "anggota kelas ini"). Kalau belum ada, buat sebagai fungsi security definer dengan set search_path = '', lalu pakai di semua kebijakan baru.</p>
+<p>Operasi lintas tabel yang harus atomik ditulis sebagai fungsi Postgres (RPC) dan dipanggil dari server action. Jangan merangkai beberapa insert dari sisi aplikasi.</p>
+<p>Validasi semua input di server action dengan Zod. Skema Zod dipakai juga di form (satu sumber). Pesan galat validasi berbahasa Indonesia natural.</p>
+<p>Format hasil server action seragam: { ok: true, data } atau { ok: false, pesan, kolom? }. Pesan galat ditulis untuk pengguna, bukan pesan teknis.</p>
+<p>Audit log untuk setiap aksi sensitif (ubah nilai, finalisasi, setujui atau tolak, impersonasi, ubah kebijakan, hapus massal, lihat berkas bukti izin/sakit). Pakai tabel audit_logs yang ada. Isi: aktor, peran, aksi, entitas, id entitas, IP, user-agent, nilai sebelum dan sesudah.</p>
+<p>Storage: bucket privat, akses lewat signed URL berumur pendek (60 detik). Batasi tipe MIME dan ukuran di sisi server, bukan hanya di klien. Nama berkas disimpan sebagai UUID, nama asli disimpan di kolom terpisah.</p>
+<p>Rate limit untuk aksi yang bisa disalahgunakan: kirim pesan, masuk token ujian, jalankan kode, kirim sanggahan, kirim vote polling.</p>
+<p>Pagination untuk semua daftar yang bisa lebih dari 50 baris. Pakai keyset (cursor) untuk daftar besar seperti pesan dan log.</p>
+<p>Cron: pekerjaan terjadwal ditulis sebagai route handler yang dilindungi CRON_SECRET, dipicu Vercel Cron atau pg_cron. Setiap pekerjaan harus aman dijalankan dua kali (idempoten).</p>
+<p>Hindari cache statis pada halaman yang bergantung waktu atau peran (tenggat, ujian, rilis terjadwal). Pakai dynamic = 'force-dynamic' atau no-store sesuai pola repo.</p>
+<p>Tipe TypeScript database digenerate ulang setelah tiap migrasi. Dilarang memakai any.</p>
+<p>Aksesibilitas: semua kontrol bisa dioperasikan dengan keyboard, label form terhubung ke input, kontras warna cukup, status tidak hanya dibedakan lewat warna.</p>
+<p>Responsif: semua halaman baru harus nyaman di lebar 360 px. Tabel lebar menggulir di dalam wadahnya sendiri.</p>
+<p>Keadaan kosong, memuat, dan galat harus ada di setiap halaman baru.</p>
+<p>Pengujian: fungsi murni (hitung denda, hitung CPL, analisis soal, kemiripan, parser Moodle XML) wajib punya unit test. Kebijakan RLS tabel baru diuji dengan pgTAP (supabase test db) atau skrip SQL setara. Alur kritis (autosave ujian, sanggah nilai, izin sakit) diuji end-to-end dengan Playwright per peran.</p>
+<p>4. Aturan tulisan antarmuka (supaya tidak terasa buatan AI)</p>
+<p>Semua teks yang tampil ke pengguna mengikuti aturan ini: judul menu, judul halaman, tombol, label, keadaan kosong, pesan galat, notifikasi, dan teks bantuan.</p>
+<p>Prinsip</p>
+<p>Pendek, langsung, seperti ditulis staf kampus yang rapi. Tidak promosi, tidak antusias berlebihan.</p>
+<p>Pakai istilah Indonesia yang sudah lazim: tugas, nilai, tenggat, kelas, berkas, kumpulkan. Hindari serapan Inggris yang tidak perlu (submit, deadline, grade, feedback) di teks antarmuka.</p>
+<p>Tanpa emoji. Tanpa tanda seru berlebihan (maksimal sangat jarang). Tanpa kalimat pembuka basa-basi seperti "Wah", "Yuk", "Selamat datang di dunia…".</p>
+<p>Kalau perlu menyapa pengguna, mahasiswa disapa "kamu", dosen, staf, dan admin "Anda". Kalimat tanpa subjek lebih disukai.</p>
+<p>Tombol berupa kata kerja konkret: "Kumpulkan", "Simpan", "Ajukan Sanggahan", "Setujui", "Tolak", "Batalkan".</p>
+<p>Pesan galat menyebut penyebab dan langkah berikutnya, tidak menyalahkan pengguna.</p>
+<p>Keadaan kosong cukup satu kalimat fakta, ditambah satu tindakan bila ada.</p>
+<p>Contoh yang benar dan yang dihindari</p>
+<p>Benar: "Belum ada tugas di kelas ini." Hindari: "Wah, sepertinya belum ada apa-apa di sini!"</p>
+<p>Benar: "Berkas terlalu besar. Maksimal 10 MB." Hindari: "Terjadi kesalahan yang tidak terduga. Silakan coba lagi nanti."</p>
+<p>Benar: "Tugas Basis Data Bab 3 ditutup besok pukul 23.59." Hindari: "Jangan lewatkan tenggat tugasmu! ⏰"</p>
+<p>Benar: "Jawaban tersimpan pukul 14.03." Hindari: "Auto-save berhasil dilakukan secara real-time."</p>
+<p>Benar: "Kehadiranmu di Algoritma 78%. Satu kali absen lagi, kamu turun di bawah 75%." Hindari: "Waspada! Kehadiranmu berada di zona kritis!"</p>
+<p>Kata dan pola yang dilarang dipakai di nama menu, judul, dan teks</p>
+<p>Kata: Dashboard, Insight, Hub, Smart, Pusat (sebagai awalan), Portal, Seamless, Powerful, Eksplorasi, Optimalkan, Tingkatkan, Revolusi, Ekosistem.</p>
+<p>Pola: tiga kata sejajar berirama ("Cepat, Mudah, Aman"), tanda &amp; di nama menu (tulis "dan" bila perlu), garis miring pada nama menu, awalan "Kelola …" di setiap menu, judul huruf kapital semua.</p>
+<p>Gaya penulisan menu: Title Case pendek, satu sampai tiga kata. Judul grup menu satu atau dua kata, bukan huruf kapital semua.</p>
+<p>5. Aturan tampilan</p>
+<p>Pakai token desain (warna, radius, spasi, tipografi) yang sudah ada. Jangan mendesain ulang halaman lama.</p>
+<p>Jangan memakai gradien ungu-biru, bayangan berlapis, kartu kaca (glassmorphism), atau ilustrasi generik. Tampilan harus tenang dan padat informasi, seperti aplikasi kerja.</p>
+<p>Satu warna aksen untuk tindakan utama. Warna status (sukses, peringatan, bahaya) hanya untuk status.</p>
+<p>Animasi seperlunya: transisi 150–200 ms untuk hover, buka tutup panel, dan perubahan status. Hormati prefers-reduced-motion. Tidak ada animasi dekoratif yang berulang.</p>
+<p>Ikon dari lucide-react yang sudah dipakai. Sebelum memakai ikon baru, pastikan namanya ada di versi yang terpasang.</p>
+<p>Tabel data: kepala tabel melekat saat menggulir, baris bisa dipindai, aksi baris di sisi kanan, pencarian dan filter di atas.</p>
+<p>6. Peta menu final (menu-config.ts)</p>
+<p>Hanya label dan pengelompokan yang berganti pada menu lama. Rute lama tidak diubah supaya tautan, bookmark, dan kebijakan akses tidak rusak. Menu baru memakai rute baru seperti tertulis. Judul halaman (&lt;h1&gt;), judul tab browser (&lt;title&gt;), breadcrumb, teks notifikasi, dan halaman bantuan harus ikut memakai nama baru.</p>
+<p>Format tiap baris: Label — rute — ikon — badge — catatan.</p>
+<p>Total setelah perubahan: 102 butir menu (sub-hub Super Admin dihitung 6 butir, menu bersama dihitung sekali). Pakai angka ini sebagai pemeriksaan akhir.</p>
+<h3 class='subsec-title'>6.1 Mahasiswa (STUDENT)</h3>
+<p>Tanpa judul grup:</p>
+<p>Beranda — /student — GraduationCap</p>
+<p>Kalender — /calendar — CalendarDays</p>
+<p>Notifikasi — /notifications — Bell — unreadCount</p>
+<p>Pengumuman — /announcements — Megaphone</p>
+<p>Grup Belajar:</p>
+<p>Kelas Saya — /classes — Layers — tab di dalam kelas: Materi, Tugas, Kelompok, Forum, Pertemuan, Nilai</p>
+<p>Presensi — /attendance — CalendarCheck2 — tab: Riwayat, Izin dan Sakit</p>
+<p>Ujian — /exams — FileCheck2 — daftar ujian berlangsung, akan datang, dan selesai</p>
+<p>Perpustakaan — /library — Library</p>
+<p>Tanya AI — /ai-assistant — Sparkles</p>
+<p>Pesan — /messages — MessageCircle — unreadMessages — tab: Percakapan, Konsultasi</p>
+<p>Grup Nilai:</p>
+<p>Nilai Saya — /grades — CheckSquare — memuat grafik CPL dan tombol sanggahan</p>
+<p>Pencapaian — /achievements — Trophy</p>
+<p>Sertifikat — /certificates — Award</p>
+<p>Grup Lainnya:</p>
+<p>Komunitas — /community — MessageSquare</p>
+<p>Evaluasi Dosen — /evaluations — ClipboardCheck — pendingEvaluations</p>
+<p>Pengajuan — /requests — FilePlus2</p>
+<h3 class='subsec-title'>6.2 Asisten Dosen (TEACHING_ASSISTANT)</h3>
+<p>Menu Asisten = menu Mahasiswa (6.1) ditambah satu grup di antara "Utama" dan "Belajar". Susun lewat komposisi di menu-config.ts, jangan salin ulang daftar. Beranda Asisten memakai rute /ta.</p>
+<p>Grup Asistensi (bisa dilipat):</p>
+<p>Kelas Asistensi — /ta/classes — Layers</p>
+<p>Koreksi — /ta/grading — ClipboardList — taGradingCount</p>
+<p>Pantau Ujian — /ta/exam-monitor — ShieldAlert</p>
+<h3 class='subsec-title'>6.3 Dosen Pengampu (LECTURER)</h3>
+<p>Tanpa judul grup:</p>
+<p>Beranda — /lecturer — LayoutDashboard</p>
+<p>Kalender — /calendar — CalendarDays</p>
+<p>Notifikasi — /notifications — Bell — unreadCount</p>
+<p>Pengumuman — /announcements — Megaphone</p>
+<p>Grup Mengajar:</p>
+<p>Kelas Saya — /classes — Layers</p>
+<p>Presensi — /attendance — CalendarCheck2 — tab: Sesi, Permohonan Izin</p>
+<p>Berita Acara — /lecturer/journals — NotebookPen</p>
+<p>Perpustakaan — /library — Library</p>
+<p>Grup Ujian dan Nilai:</p>
+<p>Ujian dan Kuis — /exams — PlusCircle</p>
+<p>Bank Soal — /exams/question-bank — FolderArchive</p>
+<p>Periksa Jawaban — /exams/review — CheckSquare — lecturerReviewCount</p>
+<p>Analisis Soal — /exams/analysis — BarChart3</p>
+<p>Rubrik — /lecturer/rubrics — ListChecks</p>
+<p>Buku Nilai — /analytics — Table2</p>
+<p>Sanggahan — /lecturer/disputes — MessageSquareWarning — disputeCount</p>
+<p>Grup Lainnya:</p>
+<p>Pesan — /messages — MessageCircle — unreadMessages</p>
+<p>Mahasiswa Bimbingan — /lecturer/mentoring — Users</p>
+<p>Hasil Evaluasi — /lecturer/evaluations — ClipboardCheck</p>
+<p>Komunitas — /community — MessageSquare</p>
+<h3 class='subsec-title'>6.4 Koordinator Program Studi (PROGRAM_COORDINATOR)</h3>
+<p>Tanpa judul grup:</p>
+<p>Beranda — /coordinator — Compass</p>
+<p>Kalender — /calendar — CalendarDays</p>
+<p>Notifikasi — /notifications — Bell — unreadCount</p>
+<p>Pengumuman — /announcements — Megaphone — baru ditambahkan</p>
+<p>Grup Prodi:</p>
+<p>Kurikulum — /coordinator/curriculum — BookOpen — memuat CPL, CPMK, pemetaan, prasyarat</p>
+<p>Mata Kuliah — /coordinator/courses — Layers</p>
+<p>Penugasan Dosen — /coordinator/assignments — Users</p>
+<p>Evaluasi Dosen — /coordinator/evaluations — ClipboardCheck</p>
+<p>Grup Pantauan:</p>
+<p>Perkuliahan — /coordinator/monitoring — Activity</p>
+<p>Mahasiswa Berisiko — /coordinator/monitoring/at-risk — AlertCircle</p>
+<p>Grup Persetujuan:</p>
+<p>Persetujuan Nilai — /coordinator/approvals — CheckCircle2 — coordinatorApprovalsCount</p>
+<p>Laporan — /coordinator/reports — FileSpreadsheet</p>
+<h3 class='subsec-title'>6.5 Staf Akademik (ACADEMIC_STAFF)</h3>
+<p>Tanpa judul grup:</p>
+<p>Beranda — /staff — LayoutDashboard</p>
+<p>Kalender — /calendar — CalendarDays</p>
+<p>Notifikasi — /notifications — Bell — unreadCount</p>
+<p>Grup Data Induk:</p>
+<p>Mahasiswa — /staff/master/students — Users</p>
+<p>Dosen — /staff/master/lecturers — UserCheck</p>
+<p>Data Akademik — /staff/master — Database</p>
+<p>Grup Akademik:</p>
+<p>Jadwal — /staff/schedules — CalendarClock</p>
+<p>Kelas dan Peserta — /staff/classes — Layers</p>
+<p>Nilai dan Presensi — /staff/grades — CheckSquare</p>
+<p>Grup Layanan:</p>
+<p>Pengajuan Masuk — /staff/services/verification — FileText — requestCount</p>
+<p>Pengumuman dan Acara — /staff/announcements — Megaphone</p>
+<p>Berkas dan Sertifikat — /staff/content — BookOpen</p>
+<p>Moderasi — /staff/moderation — MessageSquare</p>
+<h3 class='subsec-title'>6.6 System Administrator (SYSTEM_ADMIN)</h3>
+<p>Tanpa judul grup:</p>
+<p>Beranda — /admin/system — Server</p>
+<p>Notifikasi — /notifications — Bell — unreadCount</p>
+<p>Grup Server:</p>
+<p>Pemantauan — /admin/system/monitoring — Activity</p>
+<p>Integrasi — /admin/system/integrations — Globe</p>
+<p>Grup Keamanan:</p>
+<p>Sesi Login — /admin/system/security — Lock</p>
+<p>Cadangan Data — /admin/system/backup — FolderArchive</p>
+<p>Grup Pengaturan:</p>
+<p>Pengaturan Sistem — /admin/system/settings — Sliders</p>
+<p>Log Audit — /admin/system/audit — ScrollText</p>
+<h3 class='subsec-title'>6.7 Super Administrator (SUPER_ADMIN)</h3>
+<p>Tanpa judul grup:</p>
+<p>Beranda — /admin — LayoutDashboard</p>
+<p>Notifikasi — /notifications — Bell — unreadCount</p>
+<p>Grup Pengguna:</p>
+<p>Akun Pengguna — /admin/users — Users</p>
+<p>Peran dan Akses — /admin/roles — ShieldAlert</p>
+<p>Grup Aturan Kampus:</p>
+<p>Aturan Akademik — /admin/policies — Scale</p>
+<p>Pengumuman Kampus — /admin/announcements — Megaphone</p>
+<p>Grup Sistem: enam butir yang sama dengan 6.6 (Pemantauan, Integrasi, Sesi Login, Cadangan Data, Pengaturan Sistem, Log Audit), rute /admin/system/*.</p>
+<h3 class='subsec-title'>6.8 Menu bersama semua peran</h3>
+<p>Grup Akun (paling bawah sidebar):</p>
+<p>Pengaturan — /settings — Settings — tampilan (terang, gelap, ikuti sistem), kerapatan, dan preferensi notifikasi per jenis</p>
+<p>Bantuan — /help — LifeBuoy</p>
+<p>Privasi — /transparency — Eye — ringkasan data tersimpan, sesi dan perangkat (/devices), tombol "Ini bukan saya", riwayat persetujuan privasi</p>
+<h3 class='subsec-title'>6.9 Peta label lama ke label baru</h3>
+<p>Gunakan daftar ini untuk mencari dan mengganti semua kemunculan (kode, snapshot test, e2e, seed, dokumentasi, teks notifikasi, halaman bantuan).</p>
+<p>Dashboard Pengajar, Dashboard Prodi, Dashboard, Dashboard Sistem, Dashboard Universitas → Beranda</p>
+<p>Ujian Aktif → Ujian</p>
+<p>Pustaka Digital → Perpustakaan</p>
+<p>Tanya AI SIAJAR → Tanya AI</p>
+<p>Nilai &amp; Progres → Nilai Saya</p>
+<p>Sertifikat &amp; Portofolio → Sertifikat</p>
+<p>Kelas Diampu → Kelas Saya (untuk Dosen; rute tetap /classes)</p>
+<p>Kelas Diasistensi → Kelas Asistensi</p>
+<p>Antrean Koreksi → Koreksi</p>
+<p>Ujian &amp; Kuis → Ujian dan Kuis</p>
+<p>Review Essay &amp; Coding → Periksa Jawaban</p>
+<p>Analitik &amp; Nilai → Buku Nilai</p>
+<p>Kurikulum &amp; CPL → Kurikulum</p>
+<p>Penugasan &amp; Kelas → Penugasan Dosen</p>
+<p>Monitoring (Kaprodi) → Perkuliahan</p>
+<p>Persetujuan (Kaprodi) → Persetujuan Nilai</p>
+<p>Laporan &amp; Evaluasi → Laporan</p>
+<p>Kelas &amp; Peserta → Kelas dan Peserta</p>
+<p>Nilai &amp; Presensi → Nilai dan Presensi</p>
+<p>Verifikasi Berkas → Pengajuan Masuk</p>
+<p>Pengumuman &amp; Event → Pengumuman dan Acara</p>
+<p>Pustaka &amp; Sertifikat → Berkas dan Sertifikat</p>
+<p>Moderasi Komunitas → Moderasi</p>
+<p>Monitoring Sistem → Pemantauan</p>
+<p>Keamanan (item) → Sesi Login</p>
+<p>Backup &amp; Restore → Cadangan Data</p>
+<p>Pengaturan Platform → Pengaturan Sistem</p>
+<p>Kelola Pengguna → Akun Pengguna</p>
+<p>Role &amp; Permission → Peran dan Akses</p>
+<p>Kebijakan → Aturan Akademik</p>
+<p>Pengumuman Global → Pengumuman Kampus</p>
+<p>Pengaturan Tampilan → Pengaturan</p>
+<p>Pusat Bantuan → Bantuan</p>
+<p>Transparansi Data → Privasi</p>
+<p>Judul grup lama → baru: PEMBELAJARAN → Belajar; EVALUASI &amp; PRESTASI → Nilai; MODE ASISTEN → Asistensi; PENGAJARAN &amp; PEMBELAJARAN → Mengajar; UJIAN &amp; PENILAIAN → Ujian dan Nilai; LAINNYA → Lainnya; MANAJEMEN PRODI → Prodi; MONITORING → Pantauan; PERSETUJUAN &amp; LAPORAN → Persetujuan; DATA MASTER → Data Induk; KELAS &amp; AKADEMIK → Akademik; KONTEN &amp; LAYANAN → Layanan; MONITORING &amp; INTEGRASI → Server; KEAMANAN &amp; CADANGAN → Keamanan; PENGATURAN &amp; AUDIT → Pengaturan; PENGGUNA &amp; AKSES → Pengguna; KEBIJAKAN &amp; GLOBAL → Aturan Kampus; SISTEM → Sistem; PENGATURAN &amp; BANTUAN → Akun. Grup "UTAMA" tidak lagi diberi judul.</p>
+<p>Chip filter di Beranda Mahasiswa: "Tugas &amp; Kuis" menjadi "Tugas dan Kuis". Chip lain tetap.</p>
+<p>7. Fase 0 — Audit, penamaan ulang menu, dan penyelarasan celah</p>
+<h3 class='subsec-title'>7.1 Langkah</h3>
+<p>Audit kode dan tulis docs/AUDIT_AWAL.md (lihat bagian 1, poin 1).</p>
+<p>Terapkan peta menu bagian 6 ke menu-config.ts. Tambahkan menu baru dengan halaman sementara yang sah (judul, keadaan kosong, dan pembatasan akses sudah benar) supaya navigasi tidak menghasilkan 404 sebelum fiturnya selesai di fase berikutnya.</p>
+<p>Ganti semua label lama sesuai bagian 6.9 di seluruh repo. Jalankan pencarian untuk setiap label lama dan pastikan tidak tersisa, termasuk di teks notifikasi, seed, test, dan dokumentasi.</p>
+<p>Terapkan penyelarasan celah di 7.2.</p>
+<p>Tambahkan test snapshot menu per peran yang memastikan jumlah butir sesuai (total 102) dan tidak ada kata terlarang dari bagian 4.</p>
+<h3 class='subsec-title'>7.2 Penyelarasan celah dari spesifikasi lama</h3>
+<p>Keputusan di bawah sudah diambil. Kerjakan sebagai bagian Fase 0, kecuali dinyatakan lain.</p>
+<p>Satu halaman per rute bersama. Rute /classes, /attendance, /exams, /library, /community, /messages, /calendar, /notifications, /announcements dipakai banyak peran. Implementasikan sebagai satu page.tsx per rute yang memilih tampilan berdasarkan peran aktif di server (misalnya getRoleView()), bukan beberapa route group dengan URL yang sama (itu membuat build Next.js gagal). Tambahkan test yang memastikan build tidak memiliki dua halaman yang resolve ke path yang sama.</p>
+<p>Peran ganda. Kalau satu akun punya lebih dari satu peran (misalnya Dosen dan Koordinator), tampilkan pengganti peran di header. Sidebar menampilkan menu peran yang sedang aktif. Peran aktif disimpan di cookie yang ditandatangani dan diverifikasi ulang terhadap tabel peran pada setiap permintaan.</p>
+<p>Pengumuman untuk Koordinator. Sudah ditambahkan di 6.4.</p>
+<p>Asisten membuka presensi. Tambahkan kolom can_open_attendance boolean not null default false pada class_assistants. Dosen mengaturnya per asisten per kelas lewat tab Asisten di pengaturan kelas. Kalau true, Asisten melihat tombol buka sesi presensi di kelas itu. Aksinya masuk audit log dengan aktor Asisten.</p>
+<p>Entri matriks tanpa fitur. Hapus dari matriks otorisasi: "Usulan" jadwal untuk Dosen dan Kaprodi, "Masukan" kurikulum untuk Dosen, "Dukungan Teknis" kurikulum untuk Staf. Ganti dengan "Tidak ada akses". (Matriks baru ada di bagian 14.1.)</p>
+<p>Pengajuan mahasiswa. Buat halaman /requests (menu Pengajuan) sebagai sisi pengaju dari alur yang sudah dilayani Staf di Pengajuan Masuk:</p>
+<p>Jenis pengajuan: surat keterangan aktif kuliah, dispensasi, cuti akademik, legalisasi transkrip.</p>
+<p>Tabel student_requests(id, student_id, type, details jsonb, attachment_path, status check in ('diajukan','diproses','perlu_perbaikan','selesai','ditolak'), staff_note, result_path, created_at, updated_at) dengan RLS: mahasiswa membaca dan membuat miliknya sendiri; Staf membaca semua dan memperbarui status; tidak ada yang bisa menghapus.</p>
+<p>Mahasiswa melihat status, catatan Staf, dan mengunduh hasil (surat ber-QR yang sudah ada). Staf memproses dari Pengajuan Masuk dengan badge requestCount.</p>
+<p>Jika tabel serupa sudah ada dari audit, pakai itu dan hanya tambahkan sisi mahasiswa.</p>
+<p>KRS: periksa apakah sudah ada tabel dan alur KRS. Jika ada, tambahkan sisi mahasiswa pada tab kedua di /requests bernama "KRS". Jika belum ada, jangan membuat alur KRS baru. Catat di KEPUTUSAN.md bahwa persetujuan KRS oleh Dosen Wali belum punya sisi pengaju.</p>
+<p>Log audit untuk System Admin disamarkan. Buat view audit_logs_for_sysadmin yang mengganti kolom nilai sebelum dan sesudah menjadi '[disembunyikan]' untuk entitas akademik (nilai, pengumpulan, jawaban ujian, permintaan revisi nilai, permohonan izin dan sakit, pesan, sanggahan). Halaman Log Audit untuk System Admin membaca view ini. Super Admin membaca tabel penuh.</p>
+<p>Impersonasi hanya lihat. Saat Super Admin masuk sebagai pengguna lain: alasan wajib (minimal 20 karakter), durasi maksimal 30 menit lalu berakhir otomatis, semua server action yang menulis data ditolak dengan pesan "Mode lihat sebagai pengguna lain tidak bisa mengubah data.", pita merah tetap di atas layar bertuliskan nama pengguna dan tombol "Keluar dari mode ini", awal dan akhir sesi serta alasan masuk audit log, dan tidak boleh meniru sesama Super Admin. Perlindungan HMAC fail-closed yang sudah ada tetap dipakai.</p>
+<p>Login lebih dari satu domain. Ganti ALLOWED_EMAIL_DOMAIN tunggal dengan dua hal yang bisa diatur dari Pengaturan Sistem:</p>
+<p>tabel allowed_email_domains(domain, allowed_roles text[], is_active); domain email mahasiswa hanya boleh STUDENT;</p>
+<p>tabel email_allowlist(email, role, added_by, created_at) untuk dosen, staf, dan admin yang emailnya berada di domain lain.</p>
+<p>Setelah callback Google OAuth: cek domain atau allowlist; kalau tidak lolos, keluarkan sesi dan tampilkan "Email ini belum terdaftar di SIAJAR. Hubungi BAAK atau admin kampus." Pengguna non-mahasiswa tidak boleh menentukan perannya sendiri; perannya selalu dari allowlist atau data induk. Perilaku login mahasiswa yang sekarang jangan dirusak; sesuaikan dengan alur yang ada.</p>
+<p>Ambang kehadiran dari kebijakan. Semua angka 75% di kode dan teks diganti pembacaan dari kebijakan min_attendance_percent. Tidak ada angka tetap yang tersebar.</p>
+<p>8. Fase 1 — Fondasi bersama</p>
+<p>Kerjakan semuanya dulu karena dipakai banyak fitur.</p>
+<h3 class='subsec-title'>8.1 Kebijakan akademik terkonfigurasi</h3>
+<p>Tabel institution_policies(key text primary key, value jsonb not null, description text, updated_by uuid, updated_at timestamptz). Hanya Super Admin yang bisa mengubah; semua peran login bisa membaca kunci yang tidak sensitif lewat fungsi get_policy(key).</p>
+<p>Seed kunci dan nilai awal (lihat Lampiran A). Halaman Aturan Akademik menampilkannya dalam kelompok dengan penjelasan satu kalimat dan nilai bawaan. Setiap perubahan masuk audit log dengan nilai sebelum dan sesudah.</p>
+<p>Di kode, baca lewat satu helper (getPolicy&lt;T&gt;(key)) dengan cache pendek (maksimal 60 detik) dan nilai bawaan aman.</p>
+<h3 class='subsec-title'>8.2 Rilis terjadwal dan arsip</h3>
+<p>Tambahkan release_at timestamptz null pada materi, tugas, dan kuis (ujian sudah punya jadwal buka). Aturan RLS untuk mahasiswa: baris terlihat bila release_at is null or release_at &lt;= now(). Dosen dan Asisten kelas selalu melihat, dengan label "Tampil untuk mahasiswa pada 12 Okt 08.00".</p>
+<p>Tambahkan classes.status dengan nilai aktif, selesai, diarsipkan (bawaan aktif) bila belum ada. Detail arsip ada di bagian 13.1.</p>
+<h3 class='subsec-title'>8.3 Notifikasi</h3>
+<p>Pakai tabel notifikasi yang sudah ada. Tambahkan jenis notifikasi baru (Lampiran B) sebagai enum atau konstanta terpusat, bukan string tersebar.</p>
+<p>Tambahkan notification_preferences(user_id, kind, enabled) bila belum ada, dan tampilkan di Pengaturan. Notifikasi keamanan (login dari perangkat baru) tidak bisa dimatikan.</p>
+<p>Pekerjaan terjadwal scheduled_notifications (tabel: id, user_id, kind, payload, send_at, sent_at, dedupe_key unique) dijalankan tiap 5 menit.</p>
+<h3 class='subsec-title'>8.4 Pekerjaan terjadwal dan keamanan cron</h3>
+<p>Satu pola route handler /api/cron/&lt;nama&gt; dengan pemeriksaan header Authorization: Bearer ${CRON_SECRET}. Daftar pekerjaan ada di Lampiran C. Catat jadwal di vercel.json atau pg_cron, mana yang sudah dipakai repo.</p>
+<h3 class='subsec-title'>8.5 Bucket storage baru</h3>
+<p>absence-proofs (privat), submission-feedback (privat), message-attachments (privat), question-assets (privat, gambar soal), import-staging (privat, otomatis dihapus setelah 24 jam). Tiap bucket punya kebijakan akses tertulis di migrasi.</p>
+<p>Selesai bila: kebijakan terbaca dan bisa diubah dari antarmuka dengan audit; rilis terjadwal bekerja di RLS (diuji dengan akun mahasiswa); satu notifikasi contoh terkirim lewat scheduled_notifications; cron terlindungi (permintaan tanpa rahasia ditolak 401).</p>
+<p>9. Fase 2 — Tugas dan nilai</p>
+<h3 class='subsec-title'>9.1 Aturan keterlambatan dan perpanjangan tenggat</h3>
+<p>Tujuan. Penalti keterlambatan otomatis dan adil, perpanjangan tenggat untuk mahasiswa atau kelompok tertentu, dan opsi kirim ulang.</p>
+<p>Hak akses.</p>
+<p>Dosen pengampu: atur kebijakan per tugas, beri atau cabut perpanjangan, hapus penalti per pengumpulan dengan alasan.</p>
+<p>Asisten: hanya melihat.</p>
+<p>Mahasiswa: melihat tenggat efektifnya sendiri, mengirim dan mengirim ulang sesuai aturan.</p>
+<p>Skema (sketsa).</p>
+<p>alter table assignments</p>
+<p>add column late_policy text not null default 'none'</p>
+<p>check (late_policy in ('none','per_day','per_hour','flat')),</p>
+<p>add column late_penalty_value numeric(5,2) not null default 0,   -- persen</p>
+<p>add column late_penalty_cap numeric(5,2) not null default 100,   -- batas penalti total, persen</p>
+<p>add column close_at timestamptz,                                  -- null = tidak ada penutupan keras</p>
+<p>add column allow_resubmit boolean not null default true,</p>
+<p>add column max_resubmits int;                                      -- null = tanpa batas</p>
+<p>create table assignment_extensions (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>assignment_id uuid not null references assignments(id) on delete cascade,</p>
+<p>student_id uuid references profiles(id),</p>
+<p>group_id uuid,                                                     -- diisi bila tugas kelompok</p>
+<p>new_due_at timestamptz not null,</p>
+<p>new_close_at timestamptz,</p>
+<p>reason text not null check (char_length(reason) &gt;= 5),</p>
+<p>granted_by uuid not null references profiles(id),</p>
+<p>created_at timestamptz not null default now(),</p>
+<p>check ((student_id is not null)::int + (group_id is not null)::int = 1)</p>
+<p>);</p>
+<p>alter table submissions</p>
+<p>add column attempt_no int not null default 1,</p>
+<p>add column late_minutes int not null default 0,</p>
+<p>add column raw_score numeric(6,2),</p>
+<p>add column penalty_percent numeric(5,2) not null default 0,</p>
+<p>add column penalty_waived boolean not null default false,</p>
+<p>add column penalty_waived_reason text;</p>
+<p>create table submission_versions (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>submission_id uuid not null references submissions(id) on delete cascade,</p>
+<p>attempt_no int not null,</p>
+<p>file_paths jsonb not null,</p>
+<p>submitted_at timestamptz not null default now()</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Waktu selalu dari server. Jam perangkat mahasiswa tidak dipakai untuk menentukan terlambat.</p>
+<p>Tenggat efektif = coalesce(perpanjangan.new_due_at, assignment.due_at). Penutupan efektif = coalesce(perpanjangan.new_close_at, assignment.close_at).</p>
+<p>Setelah penutupan efektif, pengumpulan ditolak di server dengan pesan "Pengumpulan sudah ditutup pada 12 Okt 23.59."</p>
+<p>Menit terlambat = selisih waktu pengumpulan terakhir terhadap tenggat efektif, dibulatkan ke atas. Satuan penalti: per_day = ceil(menit/1440), per_hour = ceil(menit/60), flat = satu kali. Penalti persen = min(late_penalty_cap, late_penalty_value * satuan).</p>
+<p>Skor akhir = raw_score * (1 - penalty_percent/100), kecuali penalty_waived = true. Skor mentah dan penalti disimpan terpisah supaya dosen bisa menghapus penalti tanpa kehilangan skor mentah. Fungsi hitung berupa fungsi SQL murni calc_late_penalty(...) dan fungsi TypeScript yang setara; keduanya diuji dengan data yang sama.</p>
+<p>Kirim ulang: setiap kirim ulang membuat baris submission_versions baru dan menaikkan attempt_no. Yang dinilai adalah versi terakhir. Waktu terlambat dihitung dari pengiriman terakhir. Kirim ulang ditolak bila allow_resubmit = false atau max_resubmits terlampaui.</p>
+<p>Perpanjangan tidak bisa mengurangi tenggat; new_due_at harus lebih besar dari tenggat asli.</p>
+<p>Antarmuka.</p>
+<p>Form tugas (dosen): bagian "Keterlambatan" dengan pilihan kebijakan, besaran, batas, dan tanggal penutupan. Ringkasan satu kalimat di bawahnya, misalnya "Terlambat dikenai pengurangan 10% per hari, maksimal 50%. Pengumpulan ditutup 20 Okt 23.59."</p>
+<p>Halaman tugas (dosen): tab "Perpanjangan" berisi daftar dan tombol "Beri Perpanjangan" (pilih mahasiswa atau kelompok, tanggal baru, alasan).</p>
+<p>Halaman tugas (mahasiswa): hitung mundur, status (Belum dikumpulkan, Dikumpulkan tepat waktu, Dikumpulkan terlambat 2 jam, Ditutup), dan aturan keterlambatan terbaca jelas sebelum tenggat. Kalau mahasiswa punya perpanjangan, tampilkan "Tenggat kamu diperpanjang sampai …".</p>
+<p>Layar koreksi: tampilkan skor mentah, penalti, dan skor akhir; tombol "Hapus Penalti" dengan alasan wajib.</p>
+<p>Kasus tepi. Tenggat jatuh saat jam berubah (WIB tidak ada DST, tetap uji konversi). Pengumpulan tepat pada detik tenggat dianggap tepat waktu. Pengumpulan dua tab bersamaan: gunakan attempt_no dengan kunci unik (submission_id, attempt_no) dan percobaan ulang yang aman.</p>
+<p>Selesai bila: semua jenis penalti terhitung benar pada unit test (minimal 12 kasus termasuk batas); perpanjangan individu dan kelompok bekerja; pengumpulan setelah penutupan ditolak di server (bukan hanya disembunyikan di klien); riwayat versi tampil bagi dosen.</p>
+<h3 class='subsec-title'>9.2 Tugas kelompok</h3>
+<p>Tujuan. Tugas dikumpulkan per kelompok dengan satu pengumpulan, nilai kelompok, dan penyesuaian kontribusi per anggota.</p>
+<p>Hak akses.</p>
+<p>Dosen: buat set kelompok, atur anggota, kunci, nilai.</p>
+<p>Asisten: lihat dan beri skor draf.</p>
+<p>Mahasiswa: buat atau bergabung sesuai mode, kumpulkan atas nama kelompok.</p>
+<p>Skema (sketsa).</p>
+<p>create table group_sets (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>class_id uuid not null references classes(id) on delete cascade,</p>
+<p>name text not null,</p>
+<p>formation text not null check (formation in ('lecturer','random','self')),</p>
+<p>min_size int not null default 2, max_size int not null default 5,</p>
+<p>lock_at timestamptz,</p>
+<p>created_by uuid not null references profiles(id),</p>
+<p>created_at timestamptz not null default now(),</p>
+<p>unique (class_id, name)</p>
+<p>);</p>
+<p>create table groups (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>set_id uuid not null references group_sets(id) on delete cascade,</p>
+<p>name text not null,</p>
+<p>join_code text not null,                       -- 6 karakter, untuk mode 'self'</p>
+<p>unique (set_id, name), unique (set_id, join_code)</p>
+<p>);</p>
+<p>create table group_members (</p>
+<p>group_id uuid not null references groups(id) on delete cascade,</p>
+<p>set_id uuid not null references group_sets(id) on delete cascade,  -- didenormalisasi untuk keunikan</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>role text not null default 'member' check (role in ('leader','member')),</p>
+<p>joined_at timestamptz not null default now(),</p>
+<p>primary key (group_id, student_id),</p>
+<p>unique (set_id, student_id)                    -- satu mahasiswa, satu kelompok per set</p>
+<p>);</p>
+<p>alter table assignments</p>
+<p>add column submission_mode text not null default 'individual' check (submission_mode in ('individual','group')),</p>
+<p>add column group_set_id uuid references group_sets(id);</p>
+<p>alter table submissions</p>
+<p>add column group_id uuid references groups(id),</p>
+<p>add column submitted_by uuid references profiles(id);</p>
+<p>-- unik: satu pengumpulan per kelompok per tugas</p>
+<p>create unique index on submissions (assignment_id, group_id) where group_id is not null;</p>
+<p>create table submission_member_adjustments (</p>
+<p>submission_id uuid not null references submissions(id) on delete cascade,</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>contribution_percent numeric(5,2) not null default 100 check (contribution_percent between 0 and 100),</p>
+<p>note text,</p>
+<p>primary key (submission_id, student_id)</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Mode lecturer: dosen menyusun kelompok manual (seret dan lepas) atau impor CSV (NIM, nama kelompok). Mode random: dosen menentukan ukuran, sistem membuat pratinjau acak (dengan seed yang disimpan), dosen menekan "Terapkan". Mode self: mahasiswa membuat kelompok (menjadi ketua) dan mengundang lewat kode 6 karakter atau NIM sampai lock_at.</p>
+<p>Operasi gabung, keluar, dan pindah dilakukan lewat RPC dengan penguncian baris (select ... for update) supaya batas max_size tidak terlampaui saat banyak mahasiswa bergabung bersamaan.</p>
+<p>Setelah lock_at, hanya dosen yang bisa mengubah anggota. Memindahkan anggota dari kelompok yang sudah mengumpulkan menampilkan peringatan dan masuk audit log.</p>
+<p>Mahasiswa yang belum punya kelompok saat penguncian muncul di daftar "Belum berkelompok" milik dosen, dengan tombol "Tempatkan Secara Acak".</p>
+<p>Pengumpulan: anggota mana pun boleh mengumpulkan. Halaman menampilkan siapa yang terakhir mengumpulkan dan kapan.</p>
+<p>Penilaian: dosen memberi skor kelompok. Skor tiap anggota = skor kelompok × contribution_percent/100 (bawaan 100). Perubahan persen wajib disertai catatan bila di bawah 100.</p>
+<p>Keterlambatan dan perpanjangan (9.1) berlaku per kelompok.</p>
+<p>Anggota yang keluar dari kelas (mengundurkan diri) otomatis dilepas dari kelompok dan ditandai di daftar dosen.</p>
+<p>Antarmuka.</p>
+<p>Tab Kelompok di kelas (dosen): daftar set, pembuat set (nama, mode, ukuran, kunci), papan kelompok dengan seret dan lepas, indikator kelompok di bawah ukuran minimum.</p>
+<p>Tab Kelompok di kelas (mahasiswa): kelompok saya, anggota, kode undangan, tombol keluar (sebelum kunci).</p>
+<p>Layar koreksi: skor kelompok di atas, daftar anggota dengan kolom persen kontribusi dan skor akhir tiap anggota.</p>
+<p>Kasus tepi. Dua mahasiswa menerima kode yang sama pada detik yang sama untuk slot terakhir; ketua keluar (ketua pindah ke anggota tertua); set dihapus saat sudah ada pengumpulan (ditolak).</p>
+<p>Selesai bila: tiga mode pembentukan bekerja; uji balapan gabung kelompok tidak melampaui max_size; satu pengumpulan per kelompok ditegakkan oleh database; skor per anggota terhitung benar.</p>
+<h3 class='subsec-title'>9.3 Rubrik dan umpan balik</h3>
+<p>Tujuan. Penilaian berbasis rubrik yang konsisten antara dosen dan asisten, dengan komentar pada berkas.</p>
+<p>Hak akses.</p>
+<p>Dosen: buat, ubah, dan pakai rubrik; finalisasi.</p>
+<p>Asisten: mengisi rubrik sebagai draf sesuai aturan lama (tidak boleh finalisasi).</p>
+<p>Mahasiswa: melihat rubrik sebelum mengumpulkan; melihat skor rubrik dan komentar setelah nilai dipublikasikan.</p>
+<p>Skema (sketsa).</p>
+<p>create table rubrics (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>owner_id uuid not null references profiles(id),</p>
+<p>title text not null, description text,</p>
+<p>is_template boolean not null default false,</p>
+<p>created_at timestamptz not null default now()</p>
+<p>);</p>
+<p>create table rubric_criteria (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>rubric_id uuid not null references rubrics(id) on delete cascade,</p>
+<p>position int not null, title text not null, description text,</p>
+<p>max_points numeric(6,2) not null check (max_points &gt; 0)</p>
+<p>);</p>
+<p>create table rubric_levels (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>criterion_id uuid not null references rubric_criteria(id) on delete cascade,</p>
+<p>position int not null, label text not null, description text,</p>
+<p>points numeric(6,2) not null</p>
+<p>);</p>
+<p>alter table assignments add column rubric_snapshot jsonb;      -- salinan rubrik saat dipasang</p>
+<p>create table rubric_scores (</p>
+<p>submission_id uuid not null references submissions(id) on delete cascade,</p>
+<p>criterion_id uuid not null,                                   -- id kriteria pada snapshot</p>
+<p>level_label text, points numeric(6,2) not null, comment text,</p>
+<p>graded_by uuid not null references profiles(id),</p>
+<p>primary key (submission_id, criterion_id)</p>
+<p>);</p>
+<p>create table feedback_comments (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>submission_id uuid not null references submissions(id) on delete cascade,</p>
+<p>author_id uuid not null references profiles(id),</p>
+<p>file_path text,</p>
+<p>anchor jsonb,                                                  -- {type:'lines',from:3,to:7} atau {type:'page',page:2,x:0.4,y:0.3}</p>
+<p>body text not null check (char_length(body) between 1 and 2000),</p>
+<p>created_at timestamptz not null default now()</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Rubrik dipasang ke tugas dengan menyalin isinya ke rubric_snapshot. Mengubah rubrik asli tidak mengubah tugas yang sudah memakainya. Setelah skor pertama masuk, snapshot tidak bisa diubah.</p>
+<p>Skor total = jumlah poin kriteria, dinormalkan ke bobot tugas. Dosen boleh menimpa total dengan alasan wajib yang tercatat.</p>
+<p>Skor dan komentar berstatus draf tidak terlihat mahasiswa sampai nilai dipublikasikan. Skor dari Asisten selalu draf.</p>
+<p>Komentar pada berkas: untuk berkas teks dan kode, komentar menempel ke rentang baris; untuk PDF, komentar menempel ke halaman dan titik. Jenis berkas lain hanya mendapat komentar umum.</p>
+<p>Antarmuka.</p>
+<p>Rubrik (dosen): daftar rubrik milik sendiri dan templat; pembuat berbentuk grid (kriteria sebagai baris, tingkat capaian sebagai kolom) dengan tambah dan hapus baris atau kolom, pratinjau total poin, tombol "Gandakan".</p>
+<p>Layar koreksi: dua panel. Kiri: penampil berkas (teks atau kode dengan nomor baris, atau PDF). Kanan: rubrik berupa kartu per kriteria dengan pilihan tingkat, kolom komentar, total berjalan, dan komentar umum. Tombol "Berikutnya" dan "Sebelumnya" untuk berpindah antarpengumpulan, simpan draf otomatis tiap beberapa detik, pintasan keyboard yang dijelaskan di bantuan kecil.</p>
+<p>Mahasiswa: setelah publikasi, halaman tugas menampilkan rubrik terisi dan komentar yang tertaut ke berkasnya.</p>
+<p>Selesai bila: rubrik bisa dibuat, digandakan, dan dipasang; asisten hanya bisa menyimpan draf (diuji RLS); mahasiswa tidak bisa membaca draf (diuji RLS); komentar baris dan halaman tampil benar.</p>
+<h3 class='subsec-title'>9.4 Sanggah nilai oleh mahasiswa</h3>
+<p>Tujuan. Jalur resmi bagi mahasiswa untuk mempertanyakan nilai, dengan batas waktu dan jejak lengkap.</p>
+<p>Hak akses.</p>
+<p>Mahasiswa: mengajukan, menambah keterangan, menarik sanggahan miliknya.</p>
+<p>Dosen pengampu: meninjau dan memutuskan.</p>
+<p>Kaprodi: hanya melihat ringkasan jumlah per kelas (tanpa isi) di Laporan.</p>
+<p>Staf dan admin: tidak ada akses ke isi.</p>
+<p>Skema (sketsa).</p>
+<p>create table grade_disputes (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>class_id uuid not null references classes(id),</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>target_type text not null check (target_type in ('submission','exam_attempt','exam_question','attendance')),</p>
+<p>target_id uuid not null,</p>
+<p>reason text not null check (char_length(reason) &gt;= 30),</p>
+<p>evidence_path text,</p>
+<p>status text not null default 'diajukan'</p>
+<p>check (status in ('diajukan','ditinjau','diterima','ditolak','ditarik')),</p>
+<p>response text,</p>
+<p>old_score numeric(6,2), new_score numeric(6,2),</p>
+<p>resolved_by uuid references profiles(id), resolved_at timestamptz,</p>
+<p>linked_change_request_id uuid references grade_change_requests(id),</p>
+<p>created_at timestamptz not null default now()</p>
+<p>);</p>
+<p>create unique index on grade_disputes (student_id, target_type, target_id)</p>
+<p>where status in ('diajukan','ditinjau');</p>
+<p>create table grade_dispute_messages (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>dispute_id uuid not null references grade_disputes(id) on delete cascade,</p>
+<p>author_id uuid not null references profiles(id),</p>
+<p>body text not null, created_at timestamptz not null default now()</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Batas pengajuan: dispute_window_days (bawaan 7) sejak nilai dipublikasikan. Setelah itu tombol nonaktif dengan keterangan "Batas pengajuan sanggahan sudah lewat."</p>
+<p>Satu sanggahan aktif per butir nilai per mahasiswa.</p>
+<p>Dosen memilih: Terima (isi skor baru), Tolak (alasan minimal 20 karakter), atau Minta Penjelasan (status ditinjau, membuka percakapan singkat dengan mahasiswa di dalam sanggahan itu).</p>
+<p>Jika buku nilai belum final: skor baru langsung diterapkan dan diaudit.</p>
+<p>Jika buku nilai sudah final: sistem membuat draf grade_change_requests yang sudah terisi dari sanggahan, dosen memeriksanya lalu mengajukannya ke Kaprodi lewat alur yang ada. Status sanggahan menjadi diterima dan menyimpan linked_change_request_id. Nilai baru berlaku setelah alur Kaprodi dan BAAK selesai.</p>
+<p>Mahasiswa bisa menarik sanggahan selama masih diajukan.</p>
+<p>Berkas bukti: privat, maksimal 5 MB, PDF atau gambar.</p>
+<p>Batasi laju pengajuan (maksimal 5 per jam per mahasiswa).</p>
+<p>Antarmuka.</p>
+<p>Nilai Saya: tiap butir nilai yang sudah dipublikasikan punya tombol "Ajukan Sanggahan" dan, bila ada, chip status. Dialog: ringkasan butir, kolom alasan dengan penghitung karakter, unggah bukti opsional.</p>
+<p>Sanggahan (dosen): antrean dengan filter status dan kelas, badge disputeCount; detail menampilkan butir nilai, jawaban atau pengumpulan, alasan mahasiswa, riwayat percakapan, dan tombol keputusan.</p>
+<p>Notifikasi. Dosen: sanggahan baru. Mahasiswa: keputusan dan permintaan penjelasan.</p>
+<p>Selesai bila: batas waktu ditegakkan di server; sanggahan pada nilai final menghasilkan draf permintaan revisi yang tertaut; mahasiswa lain tidak bisa membaca sanggahan orang lain (diuji RLS); semua keputusan terekam di audit log.</p>
+<p>10. Fase 3 — Kehadiran dan perkuliahan</p>
+<h3 class='subsec-title'>10.1 Izin dan sakit dari sisi mahasiswa</h3>
+<p>Tujuan. Mahasiswa mengajukan izin atau sakit lengkap dengan bukti, tiap dosen menyetujui untuk kelasnya sendiri, dan presensi terisi otomatis setelah disetujui.</p>
+<p>Hak akses.</p>
+<p>Mahasiswa: mengajukan, membatalkan yang masih menunggu, melihat riwayat miliknya.</p>
+<p>Dosen pengampu: meninjau permohonan yang menyangkut kelasnya saja, melihat bukti kelasnya saja.</p>
+<p>Asisten, Kaprodi, Staf, admin: tidak bisa melihat isi maupun bukti.</p>
+<p>Skema (sketsa).</p>
+<p>create table absence_requests (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>type text not null check (type in ('izin','sakit')),</p>
+<p>start_date date not null, end_date date not null check (end_date &gt;= start_date),</p>
+<p>reason text not null check (char_length(reason) &gt;= 10),</p>
+<p>attachment_path text,</p>
+<p>cancelled_at timestamptz,</p>
+<p>created_at timestamptz not null default now()</p>
+<p>);</p>
+<p>create table absence_request_items (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>request_id uuid not null references absence_requests(id) on delete cascade,</p>
+<p>class_id uuid not null references classes(id),</p>
+<p>session_id uuid not null references class_sessions(id),</p>
+<p>status text not null default 'menunggu' check (status in ('menunggu','disetujui','ditolak')),</p>
+<p>reviewed_by uuid references profiles(id), reviewed_at timestamptz, review_note text,</p>
+<p>unique (request_id, session_id)</p>
+<p>);</p>
+<p>alter table attendance_records</p>
+<p>add column source text not null default 'manual',          -- 'manual' | 'qr' | 'kode' | 'izin_sakit'</p>
+<p>add column absence_item_id uuid references absence_request_items(id);</p>
+<p>Aturan bisnis.</p>
+<p>Rentang tanggal maksimal 14 hari. Tanggal mulai tidak boleh lebih lama dari absence_request_max_backdate_days (bawaan 7) ke belakang.</p>
+<p>Setelah mahasiswa memilih tanggal, sistem mencari semua pertemuan di kelas yang ia ikuti dalam rentang itu. Mahasiswa bisa mencabut centang pertemuan tertentu. Satu pertemuan hanya boleh punya satu butir aktif.</p>
+<p>Bukti: PDF, JPG, atau PNG, maksimal 5 MB, disimpan di bucket absence-proofs dengan path {student_id}/{request_id}/{uuid}.{ext}. Bukti wajib untuk jenis sakit bila kebijakan sick_requires_attachment aktif (bawaan aktif).</p>
+<p>Tulis petunjuk di bawah kolom alasan: "Cukup tulis alasan singkat. Tidak perlu menyebut diagnosis."</p>
+<p>Persetujuan lewat RPC review_absence_item(item_id, decision, note): mengubah status butir, lalu membuat atau memperbarui attendance_records untuk pertemuan itu dengan status izin atau sakit dan source = 'izin_sakit'. Jika presensi pertemuan itu sudah hadir, permohonan butir itu ditolak otomatis dengan catatan sistem.</p>
+<p>Penolakan wajib catatan. Dosen dapat membatalkan persetujuan sebelumnya (presensi dikembalikan ke alpa), dan itu tercatat di audit log.</p>
+<p>Perhitungan persentase kehadiran mengikuti kebijakan attendance_excused_mode: exclude (bawaan; izin dan sakit disetujui dikeluarkan dari penyebut), present (dihitung hadir), atau absent (dihitung tidak hadir). Satu fungsi SQL attendance_percent(student_id, class_id) dipakai di semua tempat (Mahasiswa, Dosen, Kaprodi, EWS).</p>
+<p>Setiap kali dosen membuka bukti, tulis audit log lihat_bukti_izin.</p>
+<p>Pekerjaan purge_absence_proofs menghapus berkas bukti setelah absence_proof_retention_days (bawaan 180) sejak semester berakhir; baris tetap ada, attachment_path dikosongkan.</p>
+<p>Antarmuka.</p>
+<p>Mahasiswa, Presensi tab Izin dan Sakit: formulir (jenis, tanggal mulai dan selesai, daftar pertemuan terdeteksi dengan kotak centang, alasan, unggah bukti), lalu daftar riwayat dengan status per kelas.</p>
+<p>Dosen, Presensi tab Permohonan Izin: antrean per kelas, filter status, setujui massal (dengan konfirmasi jumlah), tolak dengan catatan. Pratinjau bukti di panel samping dengan tautan bertanda waktu.</p>
+<p>Notifikasi. Dosen: permohonan baru (digabung per mahasiswa, bukan per pertemuan). Mahasiswa: keputusan per kelas.</p>
+<p>Selesai bila: permohonan lintas beberapa kelas membuat butir per kelas; dosen A tidak bisa membaca butir atau bukti milik kelas dosen B (uji RLS dan uji storage); presensi berubah setelah persetujuan dan kembali setelah dibatalkan; persentase kehadiran sama di semua halaman.</p>
+<h3 class='subsec-title'>10.2 Berita acara perkuliahan</h3>
+<p>Tujuan. Dosen mencatat materi yang benar-benar disampaikan di setiap pertemuan. Kaprodi memantau kepatuhan dan bisa mengekspor rekapnya untuk akreditasi.</p>
+<p>Hak akses. Dosen pengampu (termasuk dosen tim) menulis dan memfinalkan; Asisten hanya membaca; Kaprodi membaca dan mengekspor untuk prodinya; Staf membaca; Mahasiswa tidak ada akses.</p>
+<p>Skema (sketsa).</p>
+<p>create table class_session_journals (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>class_id uuid not null references classes(id) on delete cascade,</p>
+<p>session_id uuid not null unique references class_sessions(id) on delete cascade,</p>
+<p>held_on date not null,</p>
+<p>mode text not null check (mode in ('luring','daring','hibrida')),</p>
+<p>topic text not null,</p>
+<p>summary text, method text, obstacles text,</p>
+<p>status text not null default 'draf' check (status in ('draf','final')),</p>
+<p>is_late boolean not null default false,</p>
+<p>finalized_by uuid references profiles(id), finalized_at timestamptz,</p>
+<p>revision_count int not null default 0,</p>
+<p>created_at timestamptz not null default now(), updated_at timestamptz not null default now()</p>
+<p>);</p>
+<p>create table journal_materials (</p>
+<p>journal_id uuid references class_session_journals(id) on delete cascade,</p>
+<p>material_id uuid references materials(id) on delete cascade,</p>
+<p>primary key (journal_id, material_id)</p>
+<p>);</p>
+<p>(Tautan ke CPMK ditambahkan di 11.5 setelah tabel CPMK ada.)</p>
+<p>Aturan bisnis.</p>
+<p>Satu berita acara per pertemuan. Isian awal (topic) diambil dari judul pertemuan atau materi yang tertaut; ringkasan kehadiran (hadir, izin, sakit, alpa) dihitung saat ditampilkan, tidak disimpan.</p>
+<p>Difinalkan hanya bila tanggal pertemuan sudah tiba. is_late = true bila difinalkan lebih dari journal_deadline_days (bawaan 3) setelah held_on.</p>
+<p>Mengubah berita acara yang sudah final menaikkan revision_count dan menulis audit log dengan isi sebelum dan sesudah.</p>
+<p>Pengingat: pekerjaan journal_reminders mengirim notifikasi ke dosen bila pertemuan kemarin belum punya berita acara final (H+1), dan sekali lagi pada H+3.</p>
+<p>Antarmuka.</p>
+<p>Berita Acara (dosen): pilih kelas, lalu garis waktu pertemuan 1–16 dengan chip status (Belum diisi, Draf, Final, Terlambat). Klik pertemuan membuka editor di panel samping dengan tombol "Isi dari Materi Pertemuan".</p>
+<p>Perkuliahan (Kaprodi): tambahkan bagian kepatuhan berita acara per kelas dan per dosen (persentase final, jumlah terlambat). Tombol "Ekspor" menghasilkan .xlsx per kelas berisi pertemuan ke-, tanggal, moda, materi, metode, kendala, jumlah hadir, dan status; pakai exceljs, kolom diberi lebar dan header beku.</p>
+<p>Selesai bila: dosen A tidak bisa menulis berita acara kelas dosen B; pengingat tidak terkirim dobel; ekspor terbuka rapi di Excel; revisi tercatat.</p>
+<h3 class='subsec-title'>10.3 Tautan kuliah daring dan rekaman</h3>
+<p>Tujuan. Setiap pertemuan bisa memuat tautan kuliah daring dan tautan rekaman, hanya terlihat oleh anggota kelas.</p>
+<p>Skema (sketsa).</p>
+<p>alter table class_sessions</p>
+<p>add column delivery_mode text not null default 'luring' check (delivery_mode in ('luring','daring','hibrida')),</p>
+<p>add column meeting_url text,</p>
+<p>add column recording_url text,</p>
+<p>add column recording_visible_from timestamptz;</p>
+<p>Aturan bisnis.</p>
+<p>Validasi host di server terhadap daftar putih yang dapat diatur di Integrasi (bawaan: meet.google.com, zoom.us dan subdomainnya, teams.microsoft.com, teams.live.com, meet.jit.si; untuk rekaman tambah youtube.com, youtu.be, drive.google.com). Hanya https. Tautan di luar daftar ditolak dengan pesan "Alamat ini belum diizinkan. Minta admin menambahkannya di Integrasi."</p>
+<p>Tautan hanya terbaca anggota kelas lewat RLS. Tombol Gabung aktif mulai meeting_join_window_minutes (bawaan 15) sebelum jam mulai sampai jam selesai. Rekaman tampil mulai recording_visible_from (bawaan: segera setelah diisi).</p>
+<p>Tautan dibuka di tab baru dengan rel="noopener noreferrer".</p>
+<p>Umpan iCal yang sudah ada ikut memuat tautan kuliah (bidang URL).</p>
+<p>Dosen bisa memakai satu tautan untuk semua pertemuan lewat tombol "Pakai untuk Semua Pertemuan" dengan konfirmasi.</p>
+<p>Antarmuka. Editor pertemuan: pilihan moda, kolom tautan kuliah, kolom rekaman. Halaman pertemuan (mahasiswa): kartu dengan tombol Gabung dan keterangan waktu aktifnya, lalu Tonton Rekaman bila tersedia. Kalender menampilkan ikon moda daring.</p>
+<p>Selesai bila: tautan dengan host di luar daftar ditolak di server; mahasiswa non-anggota tidak bisa membaca tautan (uji RLS); tombol Gabung mengikuti jendela waktu.</p>
+<h3 class='subsec-title'>10.4 Progres materi dan penguncian berurutan</h3>
+<p>Tujuan. Mahasiswa menandai materi selesai dan melihat kemajuannya; dosen bisa membuka materi secara berurutan dan melihat siapa yang belum membaca.</p>
+<p>Skema (sketsa).</p>
+<p>create table material_progress (</p>
+<p>material_id uuid not null references materials(id) on delete cascade,</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>status text not null default 'dibuka' check (status in ('dibuka','selesai')),</p>
+<p>first_opened_at timestamptz not null default now(),</p>
+<p>completed_at timestamptz,</p>
+<p>primary key (material_id, student_id)</p>
+<p>);</p>
+<p>alter table materials</p>
+<p>add column unlock_after_material_id uuid references materials(id),</p>
+<p>add column require_completion boolean not null default false;</p>
+<p>Aturan bisnis.</p>
+<p>Membuka materi membuat baris dibuka. Tombol "Tandai Selesai" mengubahnya menjadi selesai dan bisa dibatalkan.</p>
+<p>Bila unlock_after_material_id terisi dan require_completion aktif, materi terkunci bagi mahasiswa sampai materi sebelumnya selesai. Penguncian ditegakkan di server (RLS atau RPC), bukan hanya disembunyikan. Pesan di kartu terkunci: "Selesaikan 'Pengantar Basis Data' dulu untuk membuka materi ini."</p>
+<p>Rilis terjadwal (8.2) dan penguncian berurutan bisa dipakai bersamaan; keduanya harus terpenuhi.</p>
+<p>Di halaman kelas mahasiswa tampil "6 dari 10 materi selesai" dengan bilah progres. Di sisi dosen, setiap materi menampilkan persentase penyelesaian dan daftar mahasiswa yang belum membuka, dengan tombol "Ingatkan" (satu notifikasi, dibatasi sekali per 24 jam per materi).</p>
+<p>Selesai bila: materi terkunci tidak bisa diambil lewat URL langsung (uji dengan akun mahasiswa); daftar belum membuka akurat; ingatkan tidak bisa dipakai berulang dalam 24 jam.</p>
+<p>11. Fase 4 — Ujian</p>
+<h3 class='subsec-title'>11.1 Autosave dan pemulihan saat koneksi putus</h3>
+<p>Tujuan. Jawaban tidak boleh hilang walaupun koneksi putus, tab tertutup, atau peramban memuat ulang. Waktu ujian diatur server, bukan jam perangkat.</p>
+<p>Skema (sketsa).</p>
+<p>alter table exam_attempts</p>
+<p>add column expires_at timestamptz,                         -- batas waktu mengerjakan, dari server</p>
+<p>add column extra_time_seconds int not null default 0,</p>
+<p>add column last_heartbeat_at timestamptz,</p>
+<p>add column active_session_id uuid,</p>
+<p>add column auto_submitted boolean not null default false;</p>
+<p>alter table exam_answers</p>
+<p>add column revision int not null default 0,</p>
+<p>add column updated_at timestamptz not null default now();</p>
+<p>create unique index if not exists exam_answers_attempt_question_uq on exam_answers (attempt_id, question_id);</p>
+<p>create table exam_events (</p>
+<p>id bigint generated always as identity primary key,</p>
+<p>attempt_id uuid not null references exam_attempts(id) on delete cascade,</p>
+<p>kind text not null check (kind in ('offline','online','tab_hidden','tab_visible','fullscreen_exit','sesi_ganda','waktu_ditambah')),</p>
+<p>meta jsonb, client_time timestamptz, server_time timestamptz not null default now()</p>
+<p>);</p>
+<p>create index on exam_events (attempt_id, server_time);</p>
+<p>Fungsi server (RPC).</p>
+<p>claim_attempt_session(attempt_id) menghasilkan session_id baru dan menyimpannya di active_session_id. Sesi lama menjadi tidak aktif.</p>
+<p>save_exam_answers(attempt_id, session_id, items jsonb); items berisi {question_id, answer, revision}. Upsert hanya bila revision lebih besar dari yang tersimpan. Tolak bila percobaan bukan berlangsung, session_id bukan sesi aktif (kode SESI_LAIN), atau waktu server melewati expires_at + extra_time_seconds + exam_grace_seconds (bawaan 20). Kembalikan revisi yang diterima per soal, server_now, dan expires_at.</p>
+<p>exam_heartbeat(attempt_id, session_id) memperbarui last_heartbeat_at.</p>
+<p>submit_exam(attempt_id, session_id, idempotency_key): menutup percobaan sekali saja; pemanggilan ulang dengan kunci yang sama mengembalikan hasil yang sama.</p>
+<p>grant_exam_extra_time(attempt_id, seconds, reason) untuk dosen (bukan Asisten): menambah waktu satu peserta, mencatat exam_events jenis waktu_ditambah, dan menulis audit log.</p>
+<p>Pekerjaan finalize_expired_attempts (tiap menit): menutup percobaan berlangsung yang sudah melewati batas, menandai auto_submitted = true, memakai jawaban yang tersimpan di server.</p>
+<p>Klien. Buat hook useExamAutosave(attemptId):</p>
+<p>State di memori adalah sumber utama; setiap perubahan jawaban menaikkan revision lokal untuk soal itu dan disalin ke IndexedDB (idb-keyval, kunci exam:{attemptId}).</p>
+<p>Kirim perubahan dengan debounce 1,5 detik dalam satu permintaan (batch). Gagal: antre, coba lagi dengan jeda 1, 2, 4, 8 … maksimal 30 detik. Kembali online: kirim semua yang antre.</p>
+<p>Penanda status di pojok layar ujian: "Tersimpan pukul 14.03" / "Menyimpan…" / "Tidak ada koneksi. Jawaban disimpan di perangkat ini dan dikirim otomatis saat tersambung." Teks itu tidak boleh dramatis.</p>
+<p>Muat ulang atau buka kembali: ambil jawaban server, gabungkan dengan IndexedDB per soal dengan aturan "revisi lebih tinggi menang", lalu lanjutkan ke soal terakhir yang dibuka.</p>
+<p>Pencatat waktu: setiap respons server memuat server_now; simpan offset = server_now - Date.now(). Sisa waktu = expires_at - (Date.now() + offset). Jam perangkat tidak pernah menentukan apakah waktu habis.</p>
+<p>Waktu habis saat online: kirim submit_exam. Waktu habis saat offline: tampilkan "Waktu habis. Jawaban akan dikirim otomatis begitu tersambung." Pekerjaan server menutup percobaan walau klien tidak pernah online lagi.</p>
+<p>Dua tab atau dua perangkat: tab yang terakhir memanggil claim_attempt_session menang. Tab lain menerima SESI_LAIN dan berubah menjadi hanya-baca dengan pesan "Ujian ini sedang dibuka di tempat lain. Tutup salah satunya." Kejadian sesi_ganda masuk exam_events.</p>
+<p>Kirim exam_heartbeat tiap 15 detik dan catat offline, online, tab_hidden, tab_visible, fullscreen_exit ke exam_events (dengan batas laju supaya tidak membanjiri).</p>
+<p>Peringatan beforeunload saat masih ada jawaban yang belum terkirim.</p>
+<p>Pemantauan (Dosen dan Asisten). Di Pantau Ujian dan halaman ujian dosen: daftar peserta dengan status (Mengerjakan, Terputus bila heartbeat lebih dari 45 detik, Selesai, Selesai otomatis), jumlah soal terjawab, jumlah kejadian tab keluar, dan tombol "Tambah Waktu" (dosen saja). Perbarui dengan polling 10 detik lewat satu RPC agregat, bukan langganan Realtime per peserta.</p>
+<p>Selesai bila (uji Playwright):</p>
+<p>putus jaringan 2 menit saat mengerjakan, lalu tersambung lagi: tidak ada jawaban hilang;</p>
+<p>tutup peramban saat mengerjakan, buka lagi: jawaban dan sisa waktu benar;</p>
+<p>ubah jam perangkat maju atau mundur: sisa waktu tidak berubah;</p>
+<p>dua tab: tab lama menjadi hanya-baca;</p>
+<p>waktu habis saat offline: percobaan tertutup otomatis oleh server;</p>
+<h2 class='sec-title'>300. peserta simulasi menyimpan jawaban bersamaan tanpa galat (uji beban sederhana dengan skrip).</h2>
+<h3 class='subsec-title'>11.2 Token masuk, ujian susulan, dan remedial</h3>
+<p>Tujuan. Ujian bisa dikunci dengan token yang ditampilkan pengawas, dan dosen bisa membuat ujian susulan atau remedial untuk peserta tertentu.</p>
+<p>Skema (sketsa).</p>
+<p>alter table exams</p>
+<p>add column access_mode text not null default 'open' check (access_mode in ('open','token')),</p>
+<p>add column parent_exam_id uuid references exams(id),</p>
+<p>add column kind text not null default 'utama' check (kind in ('utama','susulan','remedial')),</p>
+<p>add column score_cap numeric(5,2),                                -- batas nilai remedial, null = tanpa batas</p>
+<p>add column combine_policy text not null default 'tertinggi'</p>
+<p>check (combine_policy in ('tertinggi','ganti','rata_rata'));</p>
+<p>create table exam_access_tokens (</p>
+<p>exam_id uuid primary key references exams(id) on delete cascade,</p>
+<p>token text not null,                                              -- 6 karakter, tanpa huruf mirip (0/O, 1/I/L)</p>
+<p>rotated_at timestamptz not null default now(),</p>
+<p>rotate_every_minutes int                                           -- null = tidak diputar</p>
+<p>);</p>
+<p>create table exam_makeup_participants (</p>
+<p>exam_id uuid not null references exams(id) on delete cascade,     -- ujian susulan/remedial</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>reason text not null, approved_by uuid not null references profiles(id),</p>
+<p>primary key (exam_id, student_id)</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Token: dibuat acak, 6 karakter dari alfabet tanpa karakter mirip. Hanya terbaca oleh Dosen dan Asisten yang ditugaskan (RLS). Masuk ruang ujian memanggil RPC enter_exam(exam_id, token) yang membandingkan token di server. Batas laju 5 percobaan per menit per pengguna; lewat itu ditolak sementara 2 menit. Kalau rotate_every_minutes terisi, pekerjaan terjadwal memutar token dan peserta yang sudah masuk tidak terpengaruh.</p>
+<p>Susulan dan remedial membuat baris exams baru dengan parent_exam_id, menyalin pengaturan ujian induk (durasi, pengacakan, proctoring) dengan jadwal baru. Soal: pakai soal yang sama, atau ambil ulang dari bank soal dengan cetak biru yang sama. Hanya mahasiswa di exam_makeup_participants yang bisa masuk (ditegakkan di RPC dan RLS).</p>
+<p>Nilai komponen ujian di buku nilai dihitung sesuai combine_policy, dengan score_cap diterapkan pada skor remedial. Ringkasan kebijakan tampil di halaman ujian: "Nilai remedial maksimal 70. Nilai akhir komponen ini memakai skor tertinggi."</p>
+<p>Semua pembuatan susulan dan remedial, penambahan peserta, dan perubahan kebijakan gabung masuk audit log.</p>
+<p>Antarmuka.</p>
+<p>Layar Pengawas (Dosen dan Asisten): halaman penuh dengan token berukuran besar, hitung mundur putaran berikutnya, daftar peserta yang sudah masuk, dan tombol "Putar Token Sekarang".</p>
+<p>Halaman ujian (dosen): tombol "Buat Susulan" dan "Buat Remedial" dengan pemilih peserta (cari NIM atau nama), alasan, jadwal, dan batas nilai.</p>
+<p>Mahasiswa: kartu ujian susulan hanya muncul untuk yang terdaftar, dengan keterangan jelas bahwa ini susulan atau remedial.</p>
+<p>Selesai bila: token salah ditolak dan dibatasi lajunya; mahasiswa yang tidak terdaftar tidak bisa masuk susulan lewat URL langsung; perhitungan gabung nilai benar untuk ketiga kebijakan (unit test).</p>
+<h3 class='subsec-title'>11.3 Auto-grader soal koding</h3>
+<p>Tujuan. Soal koding dinilai otomatis dengan kasus uji. Kode mahasiswa tidak pernah dijalankan di server Next.js atau Vercel.</p>
+<p>Arsitektur.</p>
+<p>Buat antarmuka CodeRunner di src/lib/judge/ dengan satu adapter awal untuk Judge0 CE yang dijalankan sendiri di server terpisah (Docker). Konfigurasi lewat JUDGE_API_URL, JUDGE_API_KEY, JUDGE_WEBHOOK_SECRET. Adapter lain bisa ditambah nanti tanpa mengubah kode pemanggil.</p>
+<p>Eksekusi memakai antrean di database (coding_submissions) dan hasil kembali lewat webhook yang diverifikasi dengan rahasia, atau polling dari pekerjaan terjadwal bila webhook tidak memungkinkan.</p>
+<p>Kalau JUDGE_API_URL tidak diatur atau kebijakan coding_autograder_enabled mati: soal koding tetap bisa dibuat dan dinilai manual lewat Periksa Jawaban, dan antarmuka dosen menampilkan "Penilaian otomatis belum aktif. Soal koding akan diperiksa manual."</p>
+<p>Skema (sketsa).</p>
+<p>alter table questions</p>
+<p>add column code_language text,                               -- 'python','javascript','java','c','cpp','php'</p>
+<p>add column starter_code text,</p>
+<p>add column time_limit_ms int default 2000,</p>
+<p>add column memory_limit_mb int default 128,</p>
+<p>add column compare_mode text default 'trim' check (compare_mode in ('exact','trim','tokens','float'));</p>
+<p>create table coding_test_cases (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>question_id uuid not null references questions(id) on delete cascade,</p>
+<p>position int not null, stdin text not null default '', expected_stdout text not null,</p>
+<p>is_hidden boolean not null default false, weight int not null default 1 check (weight &gt; 0)</p>
+<p>);</p>
+<p>create table coding_submissions (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>attempt_id uuid not null references exam_attempts(id) on delete cascade,</p>
+<p>question_id uuid not null references questions(id),</p>
+<p>language text not null, source_code text not null check (char_length(source_code) &lt;= 65536),</p>
+<p>purpose text not null check (purpose in ('coba','final')),</p>
+<p>status text not null default 'antre' check (status in ('antre','berjalan','selesai','galat')),</p>
+<p>compile_output text, results jsonb,                          -- [{test_id, ok, time_ms, memory_kb, stdout_excerpt}]</p>
+<p>score numeric(6,2), judged_at timestamptz, created_at timestamptz not null default now()</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>"Coba Jalankan" menjalankan hanya kasus uji tidak tersembunyi. Pengiriman final (saat ujian dikumpulkan atau tombol "Kirim Jawaban Soal Ini") menjalankan semua kasus uji. Kasus tersembunyi hanya menampilkan lulus atau gagal.</p>
+<p>Batas bawaan: waktu 2 detik, memori 128 MB, keluaran 64 KB, kode 64 KB. Tanpa akses jaringan di sandbox. Batas laju "Coba Jalankan": satu kali per 5 detik per mahasiswa.</p>
+<p>Skor = jumlah bobot kasus uji lulus ÷ jumlah bobot × bobot soal. Dosen tetap bisa menimpa skor di Periksa Jawaban (dengan catatan).</p>
+<p>Hasil galat sandbox (bukan kesalahan kode mahasiswa) ditandai galat dan tidak menghukum mahasiswa; dosen diberi tahu dan bisa menjalankan ulang.</p>
+<p>Antarmuka.</p>
+<p>Mahasiswa: editor kode CodeMirror 6 (ringan), pilihan bahasa bila lebih dari satu, tombol Coba Jalankan dan panel hasil per kasus uji. Penyimpanan otomatis ikut jalur autosave 11.1.</p>
+<p>Dosen: editor kasus uji (tambah manual atau tempel banyak sekaligus dari CSV), tombol Uji dengan Kunci Jawaban yang menjalankan solusi dosen terhadap semua kasus uji untuk memastikan soal benar sebelum dipublikasikan.</p>
+<p>Pemantauan (System Admin) di Integrasi: status konektor Judge (hijau bila sehat), panjang antrean, dan kegagalan terakhir.</p>
+<p>Selesai bila: kode berulang tak berhenti, penggunaan memori besar, dan keluaran besar sama-sama berakhir aman; kasus tersembunyi tidak bocor ke klien (cek payload jaringan); fitur mati dengan anggun bila konektor tidak ada; unit test untuk keempat mode perbandingan.</p>
+<h3 class='subsec-title'>11.4 Analisis butir soal</h3>
+<p>Tujuan. Setelah ujian selesai, dosen melihat kualitas tiap soal dan ujian secara keseluruhan.</p>
+<p>Skema (sketsa).</p>
+<p>create table exam_item_stats (</p>
+<p>exam_id uuid not null references exams(id) on delete cascade,</p>
+<p>question_id uuid not null references questions(id),</p>
+<p>n int not null,</p>
+<p>difficulty_p numeric(5,4),                -- proporsi benar, atau rata-rata skor/skor maks untuk esai dan koding</p>
+<p>discrimination_d numeric(5,4),            -- kelompok atas 27% dikurangi bawah 27%</p>
+<p>point_biserial numeric(5,4),</p>
+<p>option_counts jsonb,                      -- {"A":12,"B":40,...} plus kelompok atas/bawah</p>
+<p>avg_time_seconds numeric(8,2),</p>
+<p>omit_rate numeric(5,4),</p>
+<p>computed_at timestamptz not null default now(),</p>
+<p>primary key (exam_id, question_id)</p>
+<p>);</p>
+<p>create table exam_summary_stats (</p>
+<p>exam_id uuid primary key references exams(id) on delete cascade,</p>
+<p>n int, mean numeric, median numeric, stddev numeric, min numeric, max numeric,</p>
+<p>kr20 numeric, histogram jsonb, computed_at timestamptz not null default now()</p>
+<p>);</p>
+<p>alter table questions add column needs_revision boolean not null default false;</p>
+<p>Rumus (tulis sebagai fungsi murni TypeScript dan uji dengan dataset kecil yang hasilnya dihitung tangan).</p>
+<p>Tingkat kesukaran: p = jumlah benar / jumlah peserta. Kategori: p &lt; 0,30 sukar; 0,30 ≤ p ≤ 0,70 sedang; p &gt; 0,70 mudah.</p>
+<p>Daya pembeda: urutkan peserta menurut skor total, ambil 27% teratas dan 27% terbawah, D = p_atas − p_bawah. Kategori: D ≥ 0,40 sangat baik; 0,30–0,39 baik; 0,20–0,29 cukup; &lt; 0,20 perlu direvisi. Bila peserta kurang dari 20, tampilkan "Data belum cukup" dan pakai korelasi point-biserial sebagai pembanding.</p>
+<p>Point-biserial: r_pb = (M1 − M0) / s × √(p × q).</p>
+<p>Reliabilitas KR-20: (k / (k − 1)) × (1 − Σ p_i q_i / σ²); untuk soal esai dan koding pakai Cronbach alpha dengan skor ternormalisasi.</p>
+<p>Pengecoh: tandai pilihan yang dipilih kurang dari 5% peserta, atau yang lebih banyak dipilih kelompok atas daripada kelompok bawah (indikasi kunci salah atau soal ambigu).</p>
+<p>Soal esai dan koding: p = rata-rata skor ÷ skor maksimum; D dihitung dari selisih rata-rata kelompok atas dan bawah.</p>
+<p>Antarmuka. Analisis Soal: pilih ujian, lalu ringkasan (rata-rata, median, sebaran, KR-20) dengan histogram (pakai library chart yang sudah ada), daftar soal yang bisa diurutkan dengan chip kategori kesukaran dan daya pembeda, laci detail per soal berisi sebaran pilihan jawaban dan teks soal. Tombol "Tandai Perlu Revisi" mengisi questions.needs_revision dan menambahkan lencana di Bank Soal. Bank Soal menampilkan riwayat rata-rata kesukaran lintas penggunaan.</p>
+<p>Hitung sebagai pekerjaan asinkron untuk ujian di atas 500 peserta; tampilkan "Sedang dihitung" selama menunggu. Hasil dihitung ulang bila ada skor yang dikoreksi.</p>
+<p>Hanya Dosen pengampu (dan Asisten kelas itu, hanya baca) yang bisa membuka.</p>
+<p>Selesai bila: hasil cocok dengan dataset uji hitung tangan; ujian tanpa jawaban tidak membuat pembagian dengan nol; tanda perlu revisi muncul di Bank Soal.</p>
+<h3 class='subsec-title'>11.5 Pemetaan CPMK ke CPL</h3>
+<p>Tujuan. Grafik CPL pada Nilai Saya dan laporan prodi berasal dari data nyata, bukan angka tetap.</p>
+<p>Skema (sketsa). Periksa dulu tabel CPL yang sudah ada dari audit; pakai bila tersedia.</p>
+<p>create table cpl (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>program_id uuid not null references programs(id),</p>
+<p>code text not null, description text not null, unique (program_id, code)</p>
+<p>);</p>
+<p>create table cpmk (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>course_id uuid not null references courses(id),</p>
+<p>code text not null, description text not null, unique (course_id, code)</p>
+<p>);</p>
+<p>create table cpmk_cpl_map (</p>
+<p>cpmk_id uuid references cpmk(id) on delete cascade,</p>
+<p>cpl_id uuid references cpl(id) on delete cascade,</p>
+<p>weight_percent numeric(5,2) not null default 100 check (weight_percent &gt; 0 and weight_percent &lt;= 100),</p>
+<p>primary key (cpmk_id, cpl_id)</p>
+<p>);</p>
+<p>create table assessment_cpmk_map (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>class_id uuid not null references classes(id) on delete cascade,</p>
+<p>assessment_type text not null check (assessment_type in ('assignment','question')),</p>
+<p>assessment_id uuid not null,</p>
+<p>cpmk_id uuid not null references cpmk(id),</p>
+<p>weight_percent numeric(5,2) not null default 100 check (weight_percent &gt; 0 and weight_percent &lt;= 100),</p>
+<p>unique (assessment_type, assessment_id, cpmk_id)</p>
+<p>);</p>
+<p>create table achievement_snapshots (</p>
+<p>student_id uuid not null, class_id uuid not null, cpmk_id uuid not null,</p>
+<p>score_percent numeric(5,2), computed_at timestamptz not null default now(),</p>
+<p>primary key (student_id, class_id, cpmk_id)</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Kaprodi mengelola CPL, CPMK, dan pemetaan CPMK→CPL di Kurikulum (tab CPL, CPMK, Pemetaan). Pemetaan ditampilkan sebagai grid yang bisa disunting.</p>
+<p>Dosen menandai CPMK pada setiap tugas dan soal saat membuatnya (pilih satu atau beberapa CPMK mata kuliah itu dengan bobot; jumlah bobot per butir = 100%).</p>
+<p>Skor CPMK mahasiswa di satu kelas = rata-rata tertimbang (skor/skor maksimum) × bobot dari semua butir terpetakan yang sudah dipublikasikan atau final. Skor CPL = rata-rata tertimbang skor CPMK menurut cpmk_cpl_map, lintas kelas dan semester. Batas ketercapaian CPMK dari kebijakan cpmk_pass_threshold (bawaan 60).</p>
+<p>Dashboard kelas (dosen) memperingatkan "CPMK 3 belum punya penilaian" bila ada CPMK tanpa butir terpetakan.</p>
+<p>Hitung ulang achievement_snapshots saat nilai dipublikasikan atau dikoreksi, secara terbatas pada kelas yang berubah.</p>
+<p>Tautkan CPMK ke berita acara (10.2): tabel journal_cpmk(journal_id, cpmk_id) dan pemilih CPMK di editor berita acara.</p>
+<p>Antarmuka.</p>
+<p>Nilai Saya: grafik batang atau radar CPL (pakai chart yang sudah ada) dengan keterangan jelas "Dihitung dari penilaian yang sudah dipublikasikan."</p>
+<p>Laporan (Kaprodi): ketercapaian CPL per angkatan dan per mata kuliah, dengan ekspor .xlsx.</p>
+<p>Selesai bila: unit test perhitungan CPMK dan CPL dengan contoh tertulis (minimal tiga mahasiswa, dua CPMK, dua CPL); butir yang belum dipublikasikan tidak ikut terhitung; peringatan CPMK tanpa penilaian tampil.</p>
+<h3 class='subsec-title'>11.6 Cek kemiripan tugas</h3>
+<p>Tujuan. Membantu dosen menemukan pengumpulan yang mirip. Alat ini menunjukkan kemiripan, bukan memvonis plagiarisme.</p>
+<p>Skema (sketsa).</p>
+<p>create table similarity_runs (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>assignment_id uuid not null references assignments(id) on delete cascade,</p>
+<p>started_by uuid not null references profiles(id),</p>
+<p>scope text not null default 'class' check (scope in ('class','course_history')),</p>
+<p>status text not null default 'antre' check (status in ('antre','berjalan','selesai','galat')),</p>
+<p>threshold numeric(4,2) not null default 0.60,</p>
+<p>created_at timestamptz not null default now(), finished_at timestamptz</p>
+<p>);</p>
+<p>create table submission_fingerprints (</p>
+<p>submission_id uuid not null references submissions(id) on delete cascade,</p>
+<p>kind text not null check (kind in ('teks','kode')),</p>
+<p>hashes bigint[] not null,</p>
+<p>primary key (submission_id, kind)</p>
+<p>);</p>
+<p>create table similarity_pairs (</p>
+<p>run_id uuid not null references similarity_runs(id) on delete cascade,</p>
+<p>submission_a uuid not null, submission_b uuid not null,</p>
+<p>score numeric(5,4) not null, matched_segments jsonb,</p>
+<p>review_status text not null default 'baru' check (review_status in ('baru','wajar','perlu_ditinjau')),</p>
+<p>review_note text,</p>
+<p>primary key (run_id, submission_a, submission_b)</p>
+<p>);</p>
+<p>Metode.</p>
+<p>Teks (.docx, .pdf, .txt, .md): ekstrak teks (mammoth untuk docx, pustaka PDF yang sudah ada atau pdfjs-dist), normalkan (huruf kecil, buang tanda baca dan kata henti bahasa Indonesia), bentuk shingle 5 kata, hash, lalu hitung kemiripan Jaccard antar pasangan.</p>
+<p>Kode (.py, .js, .ts, .java, .c, .cpp, .php, dan jawaban koding ujian): token-kan, ganti nama identifier dan literal dengan penanda generik, bentuk k-gram (k = 8), pilih sidik jari dengan winnowing (jendela 4), skor = irisan ÷ ukuran himpunan terkecil.</p>
+<p>Kecualikan: anggota kelompok yang sama (tugas kelompok), serta kode dasar yang diunggah dosen sebagai "Kode Awal" (sidik jarinya dibuang dari semua pengumpulan).</p>
+<p>Skala: kelas sampai 200 pengumpulan berarti ≤ 20 ribu pasangan, aman dikerjakan di pekerjaan latar. Jalankan lewat pekerjaan terjadwal, bukan dalam permintaan HTTP.</p>
+<p>Antarmuka. Di halaman tugas dosen: tombol Cek Kemiripan (dan opsi otomatis setelah tenggat penutupan). Hasil: daftar pasangan terurut skor dengan penggeser ambang (bawaan 60%), tampilan berdampingan dengan segmen yang cocok disorot, tombol "Wajar" dan "Perlu Ditinjau", dan kolom catatan. Di atas hasil selalu ada teks: "Kemiripan tinggi belum tentu plagiarisme. Tinjau isinya sebelum mengambil keputusan." Tidak ada penalti otomatis. Mahasiswa tidak pernah melihat isi pengumpulan orang lain.</p>
+<p>Hak akses. Dosen pengampu penuh; Asisten hanya baca bila diizinkan dosen lewat kolom can_view_similarity boolean not null default false pada class_assistants; setiap pembukaan hasil masuk audit log.</p>
+<p>Selesai bila: unit test dengan sepasang teks yang disalin sebagian, sepasang kode yang hanya diganti nama variabel, dan sepasang yang berbeda (hasil sesuai harapan); kode dasar tidak memicu kemiripan palsu; lari 200 pengumpulan selesai dalam waktu wajar di latar belakang.</p>
+<p>12. Fase 5 — Interaksi</p>
+<h3 class='subsec-title'>12.1 Pesan dan konsultasi</h3>
+<p>Tujuan. Percakapan langsung antara dosen dan mahasiswa yang terkait, serta pemesanan jadwal konsultasi.</p>
+<p>Skema (sketsa).</p>
+<p>create table conversations (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>class_id uuid references classes(id),                 -- konteks kelas, boleh null untuk dosen wali</p>
+<p>created_at timestamptz not null default now(), last_message_at timestamptz</p>
+<p>);</p>
+<p>create table conversation_participants (</p>
+<p>conversation_id uuid references conversations(id) on delete cascade,</p>
+<p>user_id uuid references profiles(id),</p>
+<p>last_read_at timestamptz, muted boolean not null default false,</p>
+<p>primary key (conversation_id, user_id)</p>
+<p>);</p>
+<p>create table messages (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>conversation_id uuid not null references conversations(id) on delete cascade,</p>
+<p>sender_id uuid not null references profiles(id),</p>
+<p>body text not null check (char_length(body) between 1 and 2000),</p>
+<p>attachment_path text, created_at timestamptz not null default now(),</p>
+<p>edited_at timestamptz, deleted_at timestamptz</p>
+<p>);</p>
+<p>create index on messages (conversation_id, created_at desc);</p>
+<p>create table message_reports (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>message_id uuid not null references messages(id), reporter_id uuid not null references profiles(id),</p>
+<p>reason text not null, snapshot jsonb not null,        -- salinan pesan dan 5 pesan sekitarnya saat dilaporkan</p>
+<p>status text not null default 'baru', created_at timestamptz not null default now()</p>
+<p>);</p>
+<p>create table consultation_slots (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>lecturer_id uuid not null references profiles(id),</p>
+<p>starts_at timestamptz not null, ends_at timestamptz not null check (ends_at &gt; starts_at),</p>
+<p>place_or_link text, capacity int not null default 1 check (capacity between 1 and 20),</p>
+<p>status text not null default 'terbuka' check (status in ('terbuka','ditutup','dibatalkan'))</p>
+<p>);</p>
+<p>create table consultation_bookings (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>slot_id uuid not null references consultation_slots(id) on delete cascade,</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>topic text not null check (char_length(topic) &gt;= 5),</p>
+<p>status text not null default 'dipesan' check (status in ('dipesan','selesai','dibatalkan','tidak_hadir')),</p>
+<p>lecturer_note text, created_at timestamptz not null default now(),</p>
+<p>unique (slot_id, student_id)</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Percakapan dibuat lewat RPC start_conversation(target_user_id, class_id). Diizinkan hanya antara: Mahasiswa atau Asisten ↔ Dosen atau Asisten yang berbagi kelas aktif; Dosen ↔ mahasiswa bimbingannya. Tidak ada pesan Mahasiswa ↔ Mahasiswa (itu tempatnya Komunitas). Peran admin tidak membaca percakapan. Kaprodi dan Staf tidak punya akses.</p>
+<p>Pesan baru tampil real-time lewat Supabase Realtime pada percakapan yang sedang terbuka; daftar percakapan dan badge unreadMessages diperbarui lewat polling ringan atau langganan terfilter pengguna. Paginasi keyset, 30 pesan per halaman.</p>
+<p>Lampiran: PDF atau gambar, maksimal 5 MB, bucket message-attachments.</p>
+<p>Batas laju: 30 pesan per menit per pengguna.</p>
+<p>Dosen dapat mengatur "jam tenang" (misalnya 20.00–07.00). Di luar jam itu pengirim melihat catatan "Dosen biasanya membalas pada jam kerja." Pesan tetap terkirim, tidak diblokir.</p>
+<p>Pelaporan: tombol "Laporkan" pada pesan menyimpan salinan konteks ke message_reports dan memunculkannya di Moderasi (Staf). Hanya salinan itu yang bisa dibaca Staf, bukan seluruh percakapan.</p>
+<p>Pesan yang dihapus pengirim ditandai deleted_at dan tampil sebagai "Pesan dihapus".</p>
+<p>Konsultasi: dosen membuat slot (tunggal atau berulang mingguan sampai tanggal tertentu). Mahasiswa dari kelas dosen itu atau bimbingannya memesan slot dengan topik singkat. Pembatalan oleh mahasiswa hanya sampai consultation_cancel_min_hours (bawaan 2) sebelum mulai. Pemesanan maksimal consultation_max_future_days (bawaan 30) ke depan. Pemesanan ganda dicegah oleh kunci unik dan RPC dengan penguncian baris untuk kapasitas.</p>
+<p>Slot dan pemesanan muncul di Kalender. Pemesanan berstatus selesai ikut tampil di riwayat konsultasi pada Mahasiswa Bimbingan (fitur yang sudah ada).</p>
+<p>Antarmuka.</p>
+<p>Pesan: dua kolom (daftar percakapan, isi percakapan) di layar lebar; satu kolom bertingkat di ponsel. Tab Percakapan dan Konsultasi.</p>
+<p>Konsultasi (mahasiswa): daftar dosen, kalender slot terbuka, tombol "Pesan Slot". Konsultasi (dosen): pembuat slot, daftar pemesanan, tombol "Tandai Selesai" dengan catatan.</p>
+<p>Pesan baru dari halaman kelas atau daftar peserta lewat tombol "Kirim Pesan".</p>
+<p>Selesai bila: mahasiswa tidak bisa memulai percakapan dengan mahasiswa lain atau dosen di luar kelasnya (uji RLS dan RPC); Staf hanya melihat salinan laporan; pemesanan serentak tidak melampaui kapasitas; batas laju bekerja.</p>
+<h3 class='subsec-title'>12.2 Polling dan kuis cepat saat kuliah</h3>
+<p>Tujuan. Dosen melempar pertanyaan singkat saat kuliah dan melihat jawaban masuk secara langsung.</p>
+<p>Skema (sketsa).</p>
+<p>create table live_polls (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>class_id uuid not null references classes(id) on delete cascade,</p>
+<p>session_id uuid references class_sessions(id),</p>
+<p>created_by uuid not null references profiles(id),</p>
+<p>question text not null,</p>
+<p>kind text not null check (kind in ('single','multiple','scale','text')),</p>
+<p>options jsonb,                                         -- [{id,label}]</p>
+<p>is_anonymous boolean not null default true,</p>
+<p>is_quiz boolean not null default false, correct_option_ids text[],</p>
+<p>status text not null default 'draf' check (status in ('draf','buka','tutup')),</p>
+<p>opened_at timestamptz, closed_at timestamptz</p>
+<p>);</p>
+<p>create table live_poll_votes (</p>
+<p>poll_id uuid not null references live_polls(id) on delete cascade,</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>answer jsonb not null, created_at timestamptz not null default now(),</p>
+<p>primary key (poll_id, student_id)</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Dosen menekan "Buka" dan mahasiswa kelas itu yang sedang membuka SIAJAR menerima kartu pertanyaan lewat Realtime pada kanal class:{id}; kartu juga muncul bila mahasiswa membuka halaman kelas setelahnya selama polling masih buka.</p>
+<p>Satu suara per mahasiswa. Mahasiswa boleh mengubah jawaban selama polling buka.</p>
+<p>Jika is_anonymous = true: dosen tidak pernah menerima student_id. Hasil diambil lewat RPC agregat; kebijakan RLS pada live_poll_votes tidak mengizinkan dosen membaca baris mentah.</p>
+<p>Hasil ke mahasiswa hanya setelah ditutup (bila is_quiz, jawaban benar ikut tampil). Hasil langsung ke dosen diperbarui tiap 2 detik lewat RPC agregat (bukan menyiarkan tiap suara).</p>
+<p>Kuis cepat tidak memengaruhi nilai. Jawaban yang benar hanya memberi poin pencapaian (12.3).</p>
+<p>Batas laju pengiriman suara; hanya mahasiswa yang terdaftar di kelas yang bisa memilih.</p>
+<p>Antarmuka. Dosen: tombol "Polling Baru" di halaman kelas dan pertemuan, pembuat cepat, mode presentasi (layar penuh, bar hasil besar) yang bisa dibuka di jendela terpisah. Mahasiswa: kartu pertanyaan di bagian atas halaman kelas dengan tombol jawab, penanda "Jawaban terkirim", lalu hasil setelah ditutup. Riwayat polling per kelas dengan ekspor .csv agregat.</p>
+<p>Selesai bila: 300 mahasiswa menjawab bersamaan tanpa galat; anonimitas terjaga (uji RLS); mahasiswa non-anggota tidak bisa memilih.</p>
+<h3 class='subsec-title'>12.3 Pencapaian (gamifikasi ringan)</h3>
+<p>Tujuan. Penghargaan kecil untuk kebiasaan baik. Tidak memengaruhi nilai dan tidak menekan.</p>
+<p>Skema (sketsa).</p>
+<p>create table xp_events (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>class_id uuid references classes(id),</p>
+<p>kind text not null, points int not null,</p>
+<p>ref_type text not null, ref_id uuid not null,</p>
+<p>created_at timestamptz not null default now(),</p>
+<p>unique (student_id, kind, ref_type, ref_id)            -- idempoten</p>
+<p>);</p>
+<p>create table badges (code text primary key, name text not null, description text not null, icon text not null);</p>
+<p>create table student_badges (</p>
+<p>student_id uuid references profiles(id), badge_code text references badges(code),</p>
+<p>class_id uuid, earned_at timestamptz not null default now(),</p>
+<p>primary key (student_id, badge_code, class_id)</p>
+<p>);</p>
+<p>create table study_streaks (</p>
+<p>student_id uuid primary key references profiles(id),</p>
+<p>current_days int not null default 0, best_days int not null default 0, last_active_on date</p>
+<p>);</p>
+<p>create table class_gamification_settings (</p>
+<p>class_id uuid primary key references classes(id) on delete cascade,</p>
+<p>enabled boolean not null default true, leaderboard_enabled boolean not null default false</p>
+<p>);</p>
+<p>create table student_gamification_prefs (</p>
+<p>student_id uuid primary key references profiles(id),</p>
+<p>show_on_leaderboard boolean not null default false, display_alias text</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Poin hanya diberikan oleh fungsi server award_xp(...) (SECURITY DEFINER), dipanggil dari kejadian: tugas dikumpulkan tepat waktu, presensi hadir, materi diselesaikan, polling dijawab, kuis cepat benar. Mahasiswa tidak bisa menulis tabel ini langsung (RLS: hanya baca milik sendiri). Kunci unik membuat pemberian poin aman diulang.</p>
+<p>Besaran poin ada di satu berkas konfigurasi (bukan tersebar), mudah diubah. Awal: tugas tepat waktu 10, hadir 5, materi selesai 3, jawab polling 2, kuis cepat benar 3.</p>
+<p>Kebiasaan harian (streak) dihitung dari hari dengan sedikitnya satu aktivitas belajar (hadir, membuka materi, mengumpulkan tugas), zona WIB. Streak yang putus kembali ke 0 tanpa pesan menakut-nakuti.</p>
+<p>Papan peringkat per kelas opt-in dua lapis: dosen mengaktifkan untuk kelas, mahasiswa memilih ikut. Tampil dengan nama alias, 10 teratas ditambah posisi sendiri, direset mingguan. Peringkat tidak pernah berdasarkan nilai ujian atau tugas, hanya poin kebiasaan.</p>
+<p>Lencana awal (nama natural, syarat ditampilkan pada lencana yang belum diraih): "Tepat Waktu" (5 tugas berturut-turut tepat waktu), "Hadir Penuh" (hadir di semua pertemuan satu bulan), "Tuntas Materi" (100% materi satu kelas), "Rajin Membaca" (20 materi selesai), "Penjawab Aktif" (10 polling dijawab), "Seminggu Beruntun" (7 hari kebiasaan), "Sebulan Beruntun" (30 hari).</p>
+<p>Admin dapat mematikan fitur lewat kebijakan gamification_enabled.</p>
+<p>Antarmuka. Pencapaian: ringkasan poin dan kebiasaan harian, kisi lencana (yang belum diraih tampak redup dengan syaratnya), papan peringkat bila aktif dan diikuti, dan sakelar "Tampilkan saya di papan peringkat" beserta alias. Teks netral dan singkat, tanpa seruan.</p>
+<p>Selesai bila: poin tidak bisa ditambah dari klien (uji RLS); pemberian ganda tidak menggandakan poin; papan peringkat hanya memuat mahasiswa yang opt-in.</p>
+<h3 class='subsec-title'>12.4 Pengingat AI yang proaktif</h3>
+<p>Tujuan. Pengingat tugas, ujian, kehadiran, dan keamanan akun yang tepat waktu. Aturan menentukan apa dan kapan; AI hanya merapikan kalimatnya.</p>
+<p>Skema (sketsa).</p>
+<p>create table ai_reminders (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>student_id uuid not null references profiles(id),</p>
+<p>kind text not null check (kind in ('tugas_h1','tugas_3jam','ujian_h1','kehadiran','materi_baru','login_baru','ringkasan_mingguan')),</p>
+<p>ref_type text, ref_id uuid,</p>
+<p>payload jsonb not null,                                -- data terstruktur sumber kalimat</p>
+<p>message text,                                          -- hasil akhir</p>
+<p>status text not null default 'terjadwal' check (status in ('terjadwal','terkirim','dibaca','dibatalkan')),</p>
+<p>scheduled_for timestamptz not null, sent_at timestamptz,</p>
+<p>dedupe_key text not null unique</p>
+<p>);</p>
+<p>create table ai_usage_logs (</p>
+<p>id bigint generated always as identity primary key,</p>
+<p>student_id uuid, kind text, input_tokens int, output_tokens int, ok boolean, created_at timestamptz default now()</p>
+<p>);</p>
+<p>Aturan pemicu (pekerjaan terjadwal tiap 15 menit, idempoten lewat dedupe_key).</p>
+<p>Tugas: H-1 dan 3 jam sebelum tenggat efektif (9.1) bagi yang belum mengumpulkan.</p>
+<p>Ujian: H-1 sebelum jadwal buka.</p>
+<p>Kehadiran: bila persentase kehadiran di sebuah kelas berada dalam jarak satu absen dari ambang min_attendance_percent. Hitung "sisa absen aman" lewat attendance_percent (10.1).</p>
+<p>Materi baru: dirilis dan belum dibuka setelah 3 hari.</p>
+<p>Login baru: segera saat user_devices mendeteksi perangkat atau lokasi baru, dengan tautan "Ini bukan saya" yang sudah ada. Pengingat ini tidak bisa dimatikan dan tidak mengikuti jam tenang.</p>
+<p>Ringkasan mingguan: Senin 07.00 WIB berisi tugas dan ujian minggu ini, tugas yang lewat tenggat, ringkasan kehadiran, dan satu saran singkat.</p>
+<p>Jam tenang untuk pengingat lain: 22.00–06.00 WIB; pengingat yang jatuh di jam itu digeser ke 06.00.</p>
+<p>Peran AI.</p>
+<p>Pakai klien AI yang sudah dipakai fitur Tanya AI; model dan kunci dari variabel lingkungan (AI_MODEL, kunci yang sudah ada). Jangan menulis nama model di kode.</p>
+<p>Masukan ke AI hanya payload terstruktur milik mahasiswa itu sendiri. Keluaran wajib JSON { "pesan": "..." } dengan 1–3 kalimat Bahasa Indonesia, nada sopan dan santai, tanpa emoji, tanpa menambah fakta di luar payload.</p>
+<p>Prompt sistem (simpan sebagai konstanta terpisah): "Kamu menulis pengingat singkat untuk mahasiswa di LMS kampus. Tulis 1 sampai 3 kalimat Bahasa Indonesia yang sopan dan wajar, tanpa emoji dan tanpa tanda seru berlebihan. Gunakan hanya fakta pada data yang diberikan. Jangan menambah angka, nama, atau tanggal. Keluarkan JSON saja dengan satu kunci 'pesan'."</p>
+<p>Batas waktu panggilan 5 detik. Gagal, kosong, atau tidak lolos validasi JSON: pakai kalimat templat statis yang sudah disiapkan per jenis. Cache hasil berdasarkan hash payload. Batasi jumlah panggilan per pengguna per hari dan catat di ai_usage_logs.</p>
+<p>Jangan pernah memasukkan data mahasiswa lain, isi bukti izin atau sakit, atau isi pesan ke prompt.</p>
+<p>Antarmuka. Pengingat muncul sebagai notifikasi biasa (jenis tersendiri) dan sebagai kartu di Beranda. Pengaturan memuat sakelar per jenis pengingat (kecuali login baru). Admin bisa mematikan seluruh fitur lewat ai_reminders_enabled.</p>
+<p>Selesai bila: tidak ada pengingat ganda untuk kejadian yang sama; fallback templat berfungsi saat AI dimatikan; tidak ada data lintas pengguna di payload (uji); jam tenang dihormati; ringkasan mingguan hanya memuat data milik penerima.</p>
+<h3 class='subsec-title'>12.5 Evaluasi dosen oleh mahasiswa</h3>
+<p>Tujuan. Kuesioner evaluasi per dosen per kelas yang anonim bagi dosen, dengan hasil agregat untuk Kaprodi.</p>
+<p>Skema (sketsa).</p>
+<p>create table evaluation_templates (id uuid primary key default gen_random_uuid(), name text not null, created_by uuid references profiles(id));</p>
+<p>create table evaluation_questions (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>template_id uuid not null references evaluation_templates(id) on delete cascade,</p>
+<p>position int not null, category text, text text not null,</p>
+<p>kind text not null check (kind in ('skala','teks')), required boolean not null default true</p>
+<p>);</p>
+<p>create table evaluation_periods (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>semester_id uuid not null references semesters(id), template_id uuid not null references evaluation_templates(id),</p>
+<p>name text not null, opens_at timestamptz not null, closes_at timestamptz not null,</p>
+<p>status text not null default 'draf' check (status in ('draf','buka','tutup')),</p>
+<p>require_before_final_grades boolean not null default false,</p>
+<p>created_by uuid not null references profiles(id)</p>
+<p>);</p>
+<p>create table evaluation_targets (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>period_id uuid not null references evaluation_periods(id) on delete cascade,</p>
+<p>class_id uuid not null references classes(id), lecturer_id uuid not null references profiles(id),</p>
+<p>unique (period_id, class_id, lecturer_id)</p>
+<p>);</p>
+<p>-- Pencatat siapa yang sudah mengisi. TIDAK menyimpan jawaban.</p>
+<p>create table evaluation_completions (</p>
+<p>target_id uuid references evaluation_targets(id) on delete cascade,</p>
+<p>student_id uuid references profiles(id), completed_at timestamptz not null default now(),</p>
+<p>primary key (target_id, student_id)</p>
+<p>);</p>
+<p>-- Jawaban. TIDAK menyimpan student_id dan hanya menyimpan tanggal, bukan jam.</p>
+<p>create table evaluation_responses (</p>
+<p>id uuid primary key default gen_random_uuid(),</p>
+<p>target_id uuid not null references evaluation_targets(id) on delete cascade,</p>
+<p>submitted_on date not null default current_date</p>
+<p>);</p>
+<p>create table evaluation_answers (</p>
+<p>response_id uuid references evaluation_responses(id) on delete cascade,</p>
+<p>question_id uuid references evaluation_questions(id),</p>
+<p>value_int int check (value_int between 1 and 5), value_text text, is_hidden boolean not null default false,</p>
+<p>primary key (response_id, question_id)</p>
+<p>);</p>
+<p>Aturan bisnis.</p>
+<p>Anonimitas: pengiriman hanya lewat RPC submit_evaluation(target_id, answers jsonb) bertipe SECURITY DEFINER yang, dalam satu transaksi, menyisipkan baris evaluation_completions (menolak bila sudah ada) dan satu evaluation_responses beserta evaluation_answers. Tidak ada kolom atau indeks yang menautkan keduanya. Tidak ada peran yang bisa membaca kedua tabel dan menggabungkannya (RLS: evaluation_completions hanya terbaca oleh mahasiswa itu sendiri dan untuk hitungan agregat oleh Kaprodi; evaluation_responses dan evaluation_answers hanya lewat RPC agregat).</p>
+<p>Hasil per dosen hanya ditampilkan bila jumlah responden ≥ evaluation_min_respondents (bawaan 5). Di bawah itu tampil "Responden belum cukup untuk ditampilkan."</p>
+<p>Komentar teks ditampilkan acak urutannya, tanpa tanggal. Kaprodi dapat menyembunyikan komentar yang melanggar tata tertib (is_hidden) dengan alasan yang masuk audit log; dosen tidak melihat komentar tersembunyi.</p>
+<p>Hasil terbuka bagi dosen setelah periode tutup. Kaprodi melihat agregat per dosen dan per kelas serta perbandingan dengan semester sebelumnya.</p>
+<p>Bila require_before_final_grades aktif, Nilai Saya menyembunyikan nilai akhir satu kelas selama periode terbuka dan evaluasi kelas itu belum diisi, dengan kartu "Isi evaluasi dosen untuk melihat nilai akhir kelas ini." Nilai per tugas dan ujian tetap terlihat.</p>
+<p>Kelas dengan beberapa dosen menghasilkan satu target per dosen.</p>
+<p>Antarmuka.</p>
+<p>Mahasiswa, Evaluasi Dosen: daftar kelas yang menunggu evaluasi (dengan badge), form satu halaman per kelompok pertanyaan (skala 1–5 berlabel kata, bukan hanya angka: Sangat kurang … Sangat baik), progres, dan konfirmasi akhir "Jawaban dikirim secara anonim."</p>
+<p>Kaprodi, Evaluasi Dosen: tab Templat (kelola pertanyaan), Periode (buat dari templat, pilih kelas otomatis dari semester, atur buka dan tutup), Kelengkapan (persentase pengisian per kelas), Hasil (per dosen, grafik per kategori, komentar, ekspor .xlsx).</p>
+<p>Dosen, Hasil Evaluasi: hasil kelasnya sendiri setelah periode ditutup.</p>
+<p>Notifikasi. Mahasiswa: periode dibuka, pengingat 3 hari dan 1 hari sebelum tutup bagi yang belum mengisi. Kaprodi: periode ditutup beserta ringkasan kelengkapan.</p>
+<p>Selesai bila: tidak ada query yang bisa menautkan mahasiswa ke jawabannya (uji dengan akun Kaprodi dan akun admin); batas responden minimum ditegakkan di server; pengiriman ganda ditolak; pembatasan nilai akhir bekerja dan bisa dimatikan.</p>
+<p>13. Fase 6 — Alat bantu dosen dan sistem</p>
+<h3 class='subsec-title'>13.1 Salin kelas dan arsip kelas</h3>
+<p>Tujuan. Dosen memakai ulang isi kelas semester lalu, dan kelas lama diarsipkan menjadi hanya-baca.</p>
+<p>Salin kelas.</p>
+<p>RPC clone_class(source_class_id, target_class_id, options jsonb, date_shift_days int) dijalankan sebagai pekerjaan latar dengan tabel clone_jobs(id, status, progress, error, requested_by).</p>
+<p>Yang bisa disalin (dipilih di langkah pratinjau): materi (beserta berkas), tugas (status draf, tanggal digeser), rubrik, kuis dan ujian (status draf), pengaturan bobot nilai, pemetaan CPMK, pengaturan gamifikasi, pengaturan asisten (hanya bila dipilih).</p>
+<p>Yang tidak disalin: pengumpulan, nilai, peserta, presensi, kiriman forum, percakapan, polling lama.</p>
+<p>Berkas storage disalin sebagai objek baru; jangan berbagi path dengan kelas sumber.</p>
+<p>Langkah: pilih kelas sumber (dari kelas milik dosen), pilih kelas tujuan (kelas semester aktif yang sudah dibentuk Staf untuk mata kuliah yang sama), pilih apa yang disalin, atur pergeseran tanggal (otomatis disarankan dari selisih awal semester), pratinjau jumlah per jenis, jalankan. Selama berjalan tampil progres; selesai tampil ringkasan dan tautan ke kelas tujuan.</p>
+<p>Dosen yang mengampu kelas sumber dan tujuan, atau Staf Akademik, boleh menjalankan. Semuanya masuk audit log.</p>
+<p>Arsip.</p>
+<p>Status selesai dan diarsipkan pada classes.status. Kelas diarsipkan bersifat hanya-baca: kebijakan RLS dan server action menolak semua penulisan oleh Dosen, Asisten, dan Mahasiswa (kecuali tindakan administratif Staf dan Super Admin).</p>
+<p>Mahasiswa tetap bisa membuka materi dan nilai kelas arsip selama student_access_archived_days (bawaan 365) sejak diarsipkan.</p>
+<p>Staf memiliki tombol Tutup Semester di Kelas dan Peserta yang mengarsipkan banyak kelas sekaligus dengan pratinjau dan konfirmasi. Pekerjaan auto_archive_classes mengarsipkan kelas otomatis class_archive_after_days (bawaan 30) setelah semester berakhir, bila kebijakan auto_archive_enabled aktif.</p>
+<p>Pembatalan arsip hanya oleh Staf dengan alasan yang masuk audit log.</p>
+<p>Kelas Saya punya filter Aktif dan Arsip; kelas arsip memakai pita informasi "Kelas ini sudah diarsipkan dan hanya bisa dibaca."</p>
+<p>Selesai bila: salinan tidak memuat data mahasiswa; tanggal tergeser benar; penulisan pada kelas arsip ditolak di server untuk setiap peran; pekerjaan salin aman diulang bila gagal di tengah (tidak membuat duplikat).</p>
+<h3 class='subsec-title'>13.2 Impor soal massal dari Excel dan Word</h3>
+<p>Tujuan. Dosen memasukkan banyak soal ke Bank Soal sekaligus, dengan pratinjau dan pesan galat yang jelas.</p>
+<p>Format Excel. Templat .xlsx yang bisa diunduh, dibuat dengan exceljs, berisi validasi daftar pilihan (dropdown) dan dua baris contoh. Kolom: tipe (pilihan_ganda, benar_salah, isian_singkat, esai), pertanyaan, opsi_a … opsi_e, kunci, bobot, tingkat (mudah, sedang, sukar), topik, cpmk (kode), pembahasan.</p>
+<p>Format Word. Dokumen .docx dengan pola: nomor lalu titik lalu teks soal; pilihan a. sampai e.; baris Jawaban: B; baris opsional Pembahasan:; pemisah antarsoal berupa nomor berikutnya. Gambar tersemat didukung (diunggah ke question-assets, maksimal 2 MB per gambar). Gunakan mammoth untuk mengubah ke HTML, lalu parser berbasis pola. Sediakan juga contoh dokumen yang bisa diunduh.</p>
+<p>Alur.</p>
+<p>Unggah (maksimal 10 MB, maksimal 500 soal) ke import-staging.</p>
+<p>Parse di server, hasil berupa daftar baris dengan status: Valid, Peringatan (misalnya bobot kosong, memakai bawaan), Galat (misalnya kunci tidak ada di pilihan).</p>
+<p>Pratinjau yang bisa disunting langsung di tempat; pesan galat natural, misalnya "Baris 14: kunci 'F' tidak ada di pilihan. Pilihan yang tersedia A sampai D."</p>
+<p>Deteksi duplikat dengan hash teks yang dinormalkan, ditandai sebagai peringatan terhadap soal yang sudah ada di bank.</p>
+<p>Konfirmasi. Opsi: "Impor semua yang valid dan lewati yang galat" atau "Batalkan semuanya bila ada galat". Penyisipan dalam transaksi per kelompok 100 soal.</p>
+<p>Ringkasan: berapa soal masuk, berapa dilewati, dan daftar galatnya yang bisa diunduh .csv.</p>
+<p>Keamanan. Bersihkan HTML soal dengan daftar putih tag (teks dasar, tabel, gambar tersemat, rumus bila ada), tolak skrip dan atribut event. Berkas staging dihapus otomatis setelah 24 jam. Ukuran dan tipe MIME diperiksa di server.</p>
+<p>Selesai bila: berkas dengan 500 soal terimpor di bawah 30 detik; setiap jenis galat punya pesan yang jelas; HTML berbahaya dibersihkan (uji dengan muatan XSS); duplikat terdeteksi.</p>
+<h3 class='subsec-title'>13.3 Ekspor dan impor Moodle XML dan QTI</h3>
+<p>Tujuan. Bank soal tidak terkunci di SIAJAR.</p>
+<p>Moodle XML (kerjakan lengkap).</p>
+<p>Ekspor: pilih soal atau folder topik di Bank Soal, hasilkan satu berkas .xml. Jenis yang didukung: multichoice (tunggal dan jamak), truefalse, shortanswer, essay. Topik menjadi &lt;question type="category"&gt;.</p>
+<p>Impor: parse dengan fast-xml-parser, tangani CDATA, questiontext format="html" (bersihkan HTML seperti 13.2), gambar &lt;file encoding="base64"&gt; (unggah ke question-assets), dan nilai fraction (100 = benar; nilai parsial pada pilihan jamak dipetakan ke bobot). Jenis yang tidak didukung dilewati dengan peringatan yang menyebut jenisnya.</p>
+<p>Alur impor memakai pratinjau yang sama dengan 13.2.</p>
+<p>QTI 2.1 (fase akhir, setelah Moodle XML lulus uji).</p>
+<p>Ekspor dan impor paket .zip dengan imsmanifest.xml untuk soal pilihan ganda tunggal dan jamak serta esai. Verifikasi spesifikasi terbaru dan pilih 2.1 sebagai dasar karena paling luas didukung; catat di KEPUTUSAN.md bila memilih versi lain.</p>
+<p>Selesai bila: uji putar-balik (ekspor lalu impor kembali menghasilkan soal yang sama untuk semua jenis yang didukung); berkas contoh dari Moodle terbaca; jenis tak didukung tidak merusak impor.</p>
+<p>14. Fase 7 — Penutup</p>
+<h3 class='subsec-title'>14.1 Matriks otorisasi versi baru</h3>
+<p>Gantikan tabel matriks lama dengan daftar berikut di dokumentasi. Tuliskan sebagai poin, bukan tabel.</p>
+<p>Akses ruang kelas: Mahasiswa dan Asisten (terdaftar), Dosen (pengampu), Kaprodi (pantauan prodi), Staf (administrasi kelas), System Admin (tidak ada), Super Admin (hanya lewat impersonasi hanya-lihat).</p>
+<p>Skor dan koreksi: Mahasiswa tidak ada; Asisten draf; Dosen draf dan final; Kaprodi, Staf, System Admin, Super Admin tidak ada.</p>
+<p>Finalisasi buku nilai: hanya Dosen pemilik kelas.</p>
+<p>Revisi nilai pasca-final: Dosen mengajukan; Kaprodi memutuskan; Staf mengeksekusi; Super Admin hak audit.</p>
+<p>Sanggah nilai: Mahasiswa mengajukan; Dosen memutuskan; Kaprodi melihat jumlah; lainnya tidak ada.</p>
+<p>Buka sesi presensi: Dosen; Asisten bila can_open_attendance diberikan dosen; Kaprodi dan Staf hanya pantau.</p>
+<p>Izin dan sakit: Mahasiswa mengajukan; Dosen kelas terkait memutuskan; lainnya tidak ada akses isi.</p>
+<p>Berita acara: Dosen menulis; Asisten baca; Kaprodi dan Staf baca dan ekspor.</p>
+<p>Kelompok tugas: Dosen mengatur; Mahasiswa bergabung sesuai mode; Asisten baca dan draf skor.</p>
+<p>Rubrik: Dosen mengelola; Asisten memakai; Mahasiswa membaca rubrik tugasnya.</p>
+<p>Ujian: Dosen membuat dan mengatur; Asisten memantau dan menampilkan token; Dosen menambah waktu peserta.</p>
+<p>Analisis soal: Dosen pengampu; Asisten baca.</p>
+<p>Cek kemiripan: Dosen; Asisten bila diizinkan dosen.</p>
+<p>Kurikulum, CPL, CPMK: Kaprodi mengelola; Dosen memetakan penilaian ke CPMK; Super Admin kebijakan global.</p>
+<p>Penjadwalan dan kuota kelas: Staf.</p>
+<p>Evaluasi dosen: Kaprodi mengelola periode dan melihat agregat; Dosen melihat hasil sendiri; Mahasiswa mengisi anonim.</p>
+<p>Pesan dan konsultasi: Mahasiswa, Asisten, Dosen sesuai aturan 12.1; Staf hanya salinan laporan; admin tidak ada.</p>
+<p>Polling: Dosen membuat; Mahasiswa kelas menjawab.</p>
+<p>Pengajuan surat: Mahasiswa mengajukan; Staf memproses.</p>
+<p>Kelola master pengguna: Staf (mahasiswa dan dosen); Super Admin penuh.</p>
+<p>Infrastruktur dan log audit: System Admin (log disamarkan untuk entitas akademik); Super Admin penuh.</p>
+<p>Impersonasi: hanya Super Admin, hanya-lihat, maksimal 30 menit, dengan alasan.</p>
+<h3 class='subsec-title'>14.2 Dokumentasi</h3>
+<p>Perbarui docs/SIAJAR_Fitur_dan_Menu_Role.md dengan menu baru (bagian 6), fitur tambahan, dan matriks 14.1. Ganti semua tautan file:///c:/Users/... dengan tautan relatif (misalnya ./SIAJAR_Fitur_dan_Menu_Role.pdf). Hapus bagian "Panduan Mengunduh" yang bersifat catatan proses. Tulis angka persentase memakai teks biasa ("kurang dari 75%"), tanpa notasi LaTeX.</p>
+<p>Cari skrip yang menghasilkan PDF, XLSX, CSV, dan HTML dari dokumen itu, lalu jalankan ulang agar semuanya sinkron.</p>
+<p>Perbarui halaman Bantuan per peran dengan alur baru yang relevan, ditulis mengikuti aturan bagian 4.</p>
+<p>Tulis docs/RUNBOOK.md: cara menjalankan konektor Judge, cara memutar CRON_SECRET, cara memulihkan cadangan, dan cara membaca log audit.</p>
+<h3 class='subsec-title'>14.3 Data contoh (seed)</h3>
+<p>Buat atau perbarui supabase/seed/ dengan data demo realistis berbahasa Indonesia: satu prodi, dua semester, 8 dosen, 3 asisten, 120 mahasiswa, 6 kelas dengan 16 pertemuan, tugas individu dan kelompok (sebagian terlambat, sebagian diperpanjang), satu ujian dengan 40 soal beragam termasuk koding, satu periode evaluasi, beberapa sanggahan dan permohonan izin, percakapan, serta polling. Nama dan NIM fiktif. Satu akun per peran dengan kata sandi demo tertulis di README seed.</p>
+<h3 class='subsec-title'>14.4 Pemeriksaan akhir</h3>
+<p>Semua perintah pemeriksaan hijau: typecheck, lint, test unit, test RLS, test e2e, build produksi.</p>
+<p>Jumlah menu per peran dan total (102) sesuai; tidak ada label lama maupun kata terlarang tersisa.</p>
+<p>Setiap tabel baru punya RLS dan minimal satu uji kebijakan.</p>
+<p>Tidak ada rahasia di klien (periksa bundel untuk JUDGE_API_KEY, CRON_SECRET, kunci layanan).</p>
+<p>Lighthouse atau pemeriksaan aksesibilitas dasar untuk halaman baru yang paling sering dipakai (Kelas Saya, Ujian, Nilai Saya, Pesan).</p>
+<p>Tulis docs/PROGRESS.md akhir: fase selesai, fase ditunda, keputusan, dan temuan.</p>
+<p>Lampiran A — Kunci kebijakan akademik (seed awal)</p>
+<p>Semua dapat diubah Super Admin di Aturan Akademik.</p>
+<p>min_attendance_percent = 75</p>
+<p>attendance_excused_mode = exclude</p>
+<p>dispute_window_days = 7</p>
+<p>absence_request_max_backdate_days = 7</p>
+<p>sick_requires_attachment = true</p>
+<p>absence_proof_retention_days = 180</p>
+<p>journal_deadline_days = 3</p>
+<p>exam_grace_seconds = 20</p>
+<p>evaluation_min_respondents = 5</p>
+<p>consultation_cancel_min_hours = 2</p>
+<p>consultation_max_future_days = 30</p>
+<p>meeting_join_window_minutes = 15</p>
+<p>meeting_allowed_hosts = daftar di 10.3</p>
+<p>class_archive_after_days = 30</p>
+<p>auto_archive_enabled = false</p>
+<p>student_access_archived_days = 365</p>
+<p>gamification_enabled = true</p>
+<p>coding_autograder_enabled = false (aktifkan setelah konektor Judge siap)</p>
+<p>similarity_default_threshold = 0.60</p>
+<p>cpmk_pass_threshold = 60</p>
+<p>ai_reminders_enabled = true</p>
+<p>Lampiran B — Jenis notifikasi baru</p>
+<p>Teks contoh harus mengikuti aturan bagian 4.</p>
+<p>Tenggat tugas diperpanjang → mahasiswa: "Tenggat Tugas Basis Data Bab 3 diperpanjang sampai 22 Okt pukul 23.59."</p>
+<p>Sanggahan baru → dosen: "Ada sanggahan baru untuk Kuis 2 di kelas Algoritma A."</p>
+<p>Keputusan sanggahan → mahasiswa: "Sanggahanmu untuk Kuis 2 diterima. Nilai baru: 82."</p>
+<p>Permohonan izin baru → dosen: "Rina Putri mengajukan izin 3 pertemuan di kelas Anda."</p>
+<p>Keputusan izin → mahasiswa: "Izinmu untuk Algoritma A pertemuan 5 disetujui."</p>
+<p>Berita acara belum diisi → dosen: "Berita acara Pertemuan 6 Algoritma A belum diisi."</p>
+<p>Ditambahkan ke kelompok → mahasiswa: "Kamu ditambahkan ke Kelompok 3 untuk Proyek Web."</p>
+<p>Pesan baru → penerima: "Pesan baru dari Dr. Andi."</p>
+<p>Konsultasi dipesan atau dibatalkan → dosen dan mahasiswa.</p>
+<p>Polling dibuka → mahasiswa: "Ada pertanyaan dari dosen di kelas Algoritma A."</p>
+<p>Periode evaluasi dibuka dan pengingat → mahasiswa.</p>
+<p>Ujian susulan atau remedial dijadwalkan → peserta.</p>
+<p>Materi terbuka (rilis terjadwal) → mahasiswa.</p>
+<p>Tugas dikoreksi dan nilai dipublikasikan → mahasiswa (yang sudah ada, pastikan teksnya mengikuti aturan baru).</p>
+<p>Pengingat dari bagian 12.4 → mahasiswa.</p>
+<p>Lampiran C — Pekerjaan terjadwal</p>
+<p>Semua lewat /api/cron/&lt;nama&gt; dengan CRON_SECRET, idempoten.</p>
+<p>scheduled_notifications (tiap 5 menit)</p>
+<p>finalize_expired_attempts (tiap menit)</p>
+<p>rotate_exam_tokens (tiap menit; hanya memutar yang jatuh tempo)</p>
+<p>ai_reminders (tiap 15 menit) dan ai_weekly_summary (Senin 07.00 WIB)</p>
+<p>journal_reminders (harian 08.00 WIB)</p>
+<p>purge_absence_proofs (harian)</p>
+<p>purge_import_staging (tiap jam)</p>
+<p>auto_archive_classes (harian)</p>
+<p>judge_poll (tiap menit, hanya bila webhook tidak dipakai)</p>
+<p>similarity_runs (tiap menit, mengambil antrean)</p>
+<p>item_analysis (tiap 5 menit, mengambil ujian yang baru selesai)</p>
+<p>end_impersonation_sessions (tiap menit)</p>
+<p>Lampiran D — Variabel lingkungan dan dependensi</p>
+<p>Variabel lingkungan baru (tambahkan ke .env.example tanpa nilai):</p>
+<p>CRON_SECRET</p>
+<p>JUDGE_API_URL, JUDGE_API_KEY, JUDGE_WEBHOOK_SECRET</p>
+<p>AI_MODEL (kunci AI memakai yang sudah dipakai Tanya AI)</p>
+<p>Dependensi yang mungkin diperlukan (periksa dulu apakah repo sudah punya padanannya; pasang hanya bila perlu, cek versi stabil dan dokumentasi sebelum memakai): zod, exceljs, mammoth, fast-xml-parser, jszip, idb-keyval, date-fns dan date-fns-tz, CodeMirror 6 (@codemirror/*), penampil PDF (react-pdf atau pdfjs-dist), pembersih HTML (sanitize-html atau isomorphic-dompurify), library chart yang sudah dipakai repo.</p>
+<p>Akhir dokumen.</p>
+
+    <div class="footer">
+        Dokumen Instruksi Antigravity LMS SIAJAR • Arsip Resmi Spesifikasi Sistem
+    </div>
+</body>
+</html>
