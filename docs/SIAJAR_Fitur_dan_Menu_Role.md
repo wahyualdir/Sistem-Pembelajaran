@@ -1,6 +1,6 @@
 # SIAJAR — Spesifikasi Lengkap Fitur dan Menu Setiap Role
 
-> **Status Dokumen**: Terverifikasi Sesuai Basis Kode Aktif (`src/lib/config/menu-config.ts` dan Fase 0 sampai Fase 7)  
+> **Status Dokumen**: Terverifikasi Sesuai Basis Kode Aktif (`src/lib/config/menu-config.ts` dan Fase P0 - Tahap 3 Peta Pulau)  
 > **Berkas Terkait**: 
 > - [SIAJAR_Fitur_dan_Menu_Role.pdf](./SIAJAR_Fitur_dan_Menu_Role.pdf)
 > - [SIAJAR_Fitur_dan_Menu_Role.xlsx](./SIAJAR_Fitur_dan_Menu_Role.xlsx)
@@ -13,7 +13,7 @@
 
 Sistem **SIAJAR (Sistem Informasi Ajar Terpadu)** mengimplementasikan arsitektur otorisasi bertingkat berbasis *Role-Based Access Control* (RBAC) dan *PostgreSQL Row-Level Security* (RLS) dengan pemisahan wewenang ketat. Seluruh navigasi antarmuka dikendalikan secara deklaratif melalui konfigurasi tunggal terpusat di `src/lib/config/menu-config.ts`.
 
-Total terdapat **102 butir menu dan fungsionalitas terdefinisi** yang tersebar di **7 peran utama** dan **1 grup menu bersama**:
+Total terdapat **107 butir menu dan fungsionalitas terdefinisi** yang tersebar di **7 peran utama** dan **1 grup menu bersama**:
 
 ```
                        ┌───────────────────────────────┐
@@ -58,6 +58,8 @@ Pengguna sentral aktivitas pembelajaran mandiri dan kolaboratif.
 | Belajar | **Perpustakaan** | `/library` | `Library` | - | Katalog repositori modul ajar digital, buku referensi perkuliahan, panduan praktikum laboratorium, dan karya ilmiah pendukung belajar. |
 | Belajar | **Tanya AI** | `/ai-assistant` | `Sparkles` | - | Asisten belajar berbasis Retrieval-Augmented Generation yang menjawab pertanyaan konsep materi mata kuliah berdasarkan modul ajar resmi kelas; akses diblokir secara otomatis saat mahasiswa sedang menempuh sesi ujian CBT aktif. |
 | Belajar | **Pesan** | `/messages` | `MessageCircle` | `unreadMessages` | Komunikasi terarah perkuliahan: percakapan privat dengan dosen dan asisten kelas, pemesanan sesi konsultasi akademik pada slot waktu luang dosen, serta penegakan jam tenang malam hari (21.00 sampai 06.00 WIB) untuk menjaga kenyamanan komunikasi akademik. |
+| Belajar | **Flashcard** | `/flashcards` | `Brain` | `flashcardsDue` | Modul belajar mandiri menggunakan sistem pengulangan berkala (spaced repetition) 5 kotak Leitner: kartu pintar otomatis dibuat dari butir materi modul dan bank soal, pembatasan 20 kartu baru per hari, antarmuka ulasan ramah ponsel, dan pelacakan retensi daya ingat mahasiswa tanpa tekanan nilai. |
+| Belajar | **Tukar Keahlian** | `/skill-exchange` | `HandHelping` | `openHelpRequests` | Ruang kolaborasi tanya jawab terstruktur antarmahasiswa sekelas berbasis kekuatan topik: mahasiswa dengan level topik kuat membantu teman yang memerlukan latihan, penandaan jawaban terbantu (+50 XP), tanpa pesan pribadi, pembersihan otomatis tautan eksternal, dan penonaktifan sementara saat ujian/kuis berlangsung (blackout). |
 | Nilai | **Nilai Saya** | `/grades` | `CheckSquare` | - | Lembar nilai komprehensif per mata kuliah: rincian skor tugas, kuis, UTS, dan UAS, skor penalti keterlambatan, visualisasi capaian pembelajaran lulusan (CPL dan CPMK), serta formulir pengajuan sanggahan nilai resmi dalam batas waktu 7 hari sejak nilai dipublikasikan. |
 | Nilai | **Pencapaian** | `/achievements` | `Trophy` | - | Riwayat gamifikasi akademik: akumulasi poin pengalaman (XP) dari ketepatan waktu pengumpulan tugas dan penyelesaian materi, lencana prestasi belajar, serta rekor streak keaktifan belajar mingguan. |
 | Nilai | **Sertifikat** | `/certificates` | `Award` | - | Portofolio akademik digital yang memuat sertifikat kompetensi, keikutsertaan kepanitiaan, atau asisten laboratorium terverifikasi dengan kode verifikasi publik. |
@@ -85,6 +87,8 @@ Peran hibrida: mahasiswa yang mengemban tugas asistensi praktikum di bawah super
 | Belajar | **Perpustakaan** | `/library` | `Library` | - | Akses repositori buku referensi dan modul praktikum kampus. |
 | Belajar | **Tanya AI** | `/ai-assistant` | `Sparkles` | - | Asisten studi interaktif berbasis dokumen materi perkuliahan. |
 | Belajar | **Pesan** | `/messages` | `MessageCircle` | `unreadMessages` | Komunikasi dengan dosen pembina asistensi dan mahasiswa praktikan pada kelas binaan. |
+| Belajar | **Flashcard** | `/flashcards` | `Brain` | `flashcardsDue` | Akses modul pengulangan berkala Leitner untuk memperdalam pemahaman materi praktikum dan mendampingi mahasiswa di laboratorium. |
+| Belajar | **Tukar Keahlian** | `/skill-exchange` | `HandHelping` | `openHelpRequests` | Pemantauan forum tanya jawab topik materi praktikum, pendampingan penjelasan konsep, dan moderasi diskusi bantuan antarmahasiswa. |
 | Nilai | **Nilai Saya** | `/grades` | `CheckSquare` | - | Buku nilai akademik pribadi mahasiswa beserta capaian CPL dan opsi sanggahan nilai. |
 | Nilai | **Pencapaian** | `/achievements` | `Trophy` | - | Perolehan poin XP, streak belajar harian, dan lencana kompetensi akademik pribadi. |
 | Nilai | **Sertifikat** | `/certificates` | `Award` | - | Sertifikat digital surat keputusan asisten laboratorium dan keikutsertaan kegiatan akademik. |
@@ -106,6 +110,7 @@ Pengelola utama ruang perkuliahan, penyusun materi ajar, penguji evaluasi, dan p
 | Mengajar | **Kelas Saya** | `/classes` | `Layers` | - | Pengelolaan ruang perkuliahan: unggah materi dengan rilis terjadwal dan pelacakan progres, pembuatan tugas individu dan kelompok, pengaturan penalti keterlambatan dan perpanjangan tenggat, penyalinan isi kelas antarsemeester (cloning dengan pergeseran tanggal), serta pengarsipan kelas menjadi hanya-baca. |
 | Mengajar | **Presensi** | `/attendance` | `CalendarCheck2` | - | Pengelolaan presensi tatap muka pertemuan 1 sampai 16: pembukaan sesi dengan QR dinamis atau kode sesi berbatas waktu, penetapan radius lokasi GPS, validasi permohonan izin dan sakit mahasiswa dengan lampiran surat, serta pemantauan syarat batas kehadiran minimal 75%. |
 | Mengajar | **Berita Acara** | `/lecturer/journals` | `NotebookPen` | - | Pengisian berita acara perkuliahan harian per pertemuan: materi yang diajarkan, kesesuaian dengan Rencana Pembelajaran Semester, metode pembelajaran, catatan kendala kelas, serta pemetaan CPMK dalam tenggat 3 hari pasca-tatap muka. |
+| Mengajar | **Tinjau Konten** | `/lecturer/content-review` | `BadgeCheck` | `contentPendingReview` | Dasbor peninjauan dan persetujuan materi hasil olahan AI (Flashcard & Podcast Audio): verifikasi skor keterikatan sumber (grounding score), penyuntingan kartu draf, persetujuan naskah narasi podcast 450-900 kata, antarmuka navigasi cepat papan tombol (A/E/R/J/K), dan persetujuan kebijakan kepatuhan sebelum penerbitan konten ke mahasiswa. |
 | Mengajar | **Perpustakaan** | `/library` | `Library` | - | Publikasi dan pengelolaan modul kuliah, buku ajar, diktat praktikum, dan materi referensi ilmiah institusi. |
 | Ujian dan Nilai | **Ujian dan Kuis** | `/exams` | `PlusCircle` | - | Perancangan dan penyelenggaraan evaluasi CBT: konfigurasi durasi, jadwal buka-tutup, token akses dinamis, pengacakan soal, aturan proctoring, serta penambahan waktu khusus bagi peserta ujian remedial atau susulan. |
 | Ujian dan Nilai | **Bank Soal** | `/exams/question-bank` | `FolderArchive` | - | Repositori butir soal dosen (pilihan ganda, benar salah, isian singkat, esai, dan koding dengan unit test), fitur impor massal dari templat Excel dengan validasi dropdown dan Word DOCX berbasis pola pembersihan HTML (anti-XSS), deteksi duplikasi hash teks, serta ekspor-impor format standar Moodle XML dan paket QTI 2.1 zip. |
@@ -212,8 +217,16 @@ Grup menu akun di bagian bawah bilah sisi yang selalu dapat diakses oleh seluruh
 
 ## 3. Matriks Otorisasi Sistem
 
-Berikut adalah ketetapan otorisasi definitif untuk setiap wewenang dan fungsionalitas di lingkungan SIAJAR:
+Berikut adalah ketetapan otorisasi definitif untuk setiap wewenang dan fungsionalitas di lingkungan SIAJAR (termasuk Matriks Hak Akses Peta Pulau Bagian 10.1):
 
+- **Peta Pulau**: Dosen/TA mengatur bab dan prasyarat; Mahasiswa melihat peta visual/daftar & mengerjakan kuis bab; Kaprodi melihat agregat per kelas (K-Anonymity N ≥ 5).
+- **Flashcard Leitner**: Dosen/AI membuat kartu & dosen meninjau; Mahasiswa mengulas kartu berstatus terbit; Kaprodi melihat adopsi.
+- **Podcast Audio**: Dosen menerbitkan naskah dan suara; Mahasiswa memutar pada pulau yang terbuka dengan transkrip.
+- **Tukar Keahlian**: Mahasiswa ikut serta per kelas (opt-in); Dosen memantau/moderasi; Staf menangani laporan; terblokir selama asesmen aktif (blackout).
+- **Log aktivitas mentah**: hanya pemilik data (mahasiswa); tidak ada peran lain.
+- **Rekap Semester**: hanya pemilik data (mahasiswa); bersifat pribadi, tenang, tanpa perbandingan.
+- **Laporan penggunaan & adopsi**: Kaprodi (prodinya, agregat dengan masking < 5), Super Admin (seluruh kampus, agregat).
+- **Sakelar fitur**: Dosen per kelas; Super Admin global.
 - **Akses ruang kelas**: Mahasiswa dan Asisten (terdaftar), Dosen (pengampu), Kaprodi (pantauan prodi), Staf (administrasi kelas), System Admin (tidak ada), Super Admin (hanya lewat impersonasi hanya-lihat).
 - **Skor dan koreksi**: Mahasiswa tidak ada; Asisten draf; Dosen draf dan final; Kaprodi, Staf, System Admin, Super Admin tidak ada.
 - **Finalisasi buku nilai**: hanya Dosen pemilik kelas.

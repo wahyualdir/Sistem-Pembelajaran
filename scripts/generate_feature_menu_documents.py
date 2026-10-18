@@ -143,6 +143,32 @@ DATA = [
         "No": 11,
         "Role_Code": "STUDENT",
         "Role_Name": "Mahasiswa",
+        "Menu_Group": "Belajar",
+        "Menu_Item": "Flashcard",
+        "Route_Path": "/flashcards",
+        "Icon": "Brain",
+        "Is_Shortcut": False,
+        "Badge_Counter": "flashcardsDue",
+        "Deskripsi_Fitur": "Modul belajar mandiri menggunakan sistem pengulangan berkala (spaced repetition) 5 kotak Leitner: kartu pintar otomatis dibuat dari butir materi modul dan bank soal, pembatasan 20 kartu baru per hari, antarmuka ulasan ramah ponsel, dan pelacakan retensi daya ingat mahasiswa tanpa tekanan nilai.",
+        "Batasan_Wewenang": "Hanya dapat mengakses deck dan kartu yang telah diterbitkan dosen pada kelas yang terdaftar."
+    },
+    {
+        "No": 12,
+        "Role_Code": "STUDENT",
+        "Role_Name": "Mahasiswa",
+        "Menu_Group": "Belajar",
+        "Menu_Item": "Tukar Keahlian",
+        "Route_Path": "/skill-exchange",
+        "Icon": "HandHelping",
+        "Is_Shortcut": False,
+        "Badge_Counter": "openHelpRequests",
+        "Deskripsi_Fitur": "Ruang kolaborasi tanya jawab terstruktur antarmahasiswa sekelas berbasis kekuatan topik: mahasiswa dengan level topik kuat membantu teman yang memerlukan latihan, penandaan jawaban terbantu (+50 XP), tanpa pesan pribadi, pembersihan otomatis tautan eksternal, dan penonaktifan sementara saat ujian/kuis berlangsung (blackout).",
+        "Batasan_Wewenang": "Hanya dapat mengajukan pertanyaan dan membantu rekan pada kelas yang sama; fitur terkunci saat asesmen aktif."
+    },
+    {
+        "No": 13,
+        "Role_Code": "STUDENT",
+        "Role_Name": "Mahasiswa",
         "Menu_Group": "Nilai",
         "Menu_Item": "Nilai Saya",
         "Route_Path": "/grades",
@@ -394,6 +420,32 @@ DATA = [
         "No": 30,
         "Role_Code": "TEACHING_ASSISTANT",
         "Role_Name": "Asisten Dosen",
+        "Menu_Group": "Belajar",
+        "Menu_Item": "Flashcard",
+        "Route_Path": "/flashcards",
+        "Icon": "Brain",
+        "Is_Shortcut": False,
+        "Badge_Counter": "flashcardsDue",
+        "Deskripsi_Fitur": "Akses modul pengulangan berkala Leitner untuk memperdalam pemahaman materi praktikum dan mendampingi mahasiswa di laboratorium.",
+        "Batasan_Wewenang": "Mengakses flashcard pada kelas asistensi yang ditugaskan."
+    },
+    {
+        "No": 31,
+        "Role_Code": "TEACHING_ASSISTANT",
+        "Role_Name": "Asisten Dosen",
+        "Menu_Group": "Belajar",
+        "Menu_Item": "Tukar Keahlian",
+        "Route_Path": "/skill-exchange",
+        "Icon": "HandHelping",
+        "Is_Shortcut": False,
+        "Badge_Counter": "openHelpRequests",
+        "Deskripsi_Fitur": "Pemantauan forum tanya jawab topik materi praktikum, pendampingan penjelasan konsep, dan moderasi diskusi bantuan antarmahasiswa.",
+        "Batasan_Wewenang": "Dapat memberikan tanggapan bantuan dan menandai laporan pelanggaran di forum Tukar Keahlian kelas asistensi."
+    },
+    {
+        "No": 32,
+        "Role_Code": "TEACHING_ASSISTANT",
+        "Role_Name": "Asisten Dosen",
         "Menu_Group": "Nilai",
         "Menu_Item": "Nilai Saya",
         "Route_Path": "/grades",
@@ -565,6 +617,19 @@ DATA = [
     },
     {
         "No": 43,
+        "Role_Code": "LECTURER",
+        "Role_Name": "Dosen Pengampu",
+        "Menu_Group": "Mengajar",
+        "Menu_Item": "Tinjau Konten",
+        "Route_Path": "/lecturer/content-review",
+        "Icon": "BadgeCheck",
+        "Is_Shortcut": False,
+        "Badge_Counter": "contentPendingReview",
+        "Deskripsi_Fitur": "Dasbor peninjauan dan persetujuan materi hasil olahan AI (Flashcard & Podcast Audio): verifikasi skor keterikatan sumber (grounding score), penyuntingan kartu draf, persetujuan naskah narasi podcast 450-900 kata, antarmuka navigasi cepat papan tombol (A/E/R/J/K), dan persetujuan kebijakan kepatuhan sebelum penerbitan konten ke mahasiswa.",
+        "Batasan_Wewenang": "Hanya dosen pengampu yang berwenang meninjau, menyetujui, menyunting, atau menolak draf flashcard dan naskah podcast di kelasnya."
+    },
+    {
+        "No": 44,
         "Role_Code": "LECTURER",
         "Role_Name": "Dosen Pengampu",
         "Menu_Group": "Mengajar",
@@ -1366,6 +1431,8 @@ DATA = [
 ]
 
 def main():
+    for idx, item in enumerate(DATA, start=1):
+        item["No"] = idx
     print(f"Menyiapkan data spesifikasi menu ({len(DATA)} butir)...")
     df = pd.DataFrame(DATA)
     
@@ -1423,7 +1490,7 @@ def main():
     # 5. Salin ke artifact directory jika tersedia
     brain_dir = r"C:\Users\ACER\.gemini\antigravity\brain\12de0f7a-953f-4f1e-be2b-cc4638dd80a3"
     if os.path.exists(brain_dir):
-        for fname in ["SIAJAR_Fitur_dan_Menu_Role.csv", "SIAJAR_Fitur_dan_Menu_Role.xlsx", "SIAJAR_Fitur_dan_Menu_Role.pdf"]:
+        for fname in ["SIAJAR_Fitur_dan_Menu_Role.csv", "SIAJAR_Fitur_dan_Menu_Role.xlsx", "SIAJAR_Fitur_dan_Menu_Role.pdf", "SIAJAR_Fitur_dan_Menu_Role.html"]:
             src = os.path.join(docs_dir, fname)
             dst = os.path.join(brain_dir, fname)
             if os.path.exists(src):
@@ -1465,7 +1532,7 @@ def generate_markdown(df):
 
     md = f"""# SIAJAR — Spesifikasi Lengkap Fitur dan Menu Setiap Role
 
-> **Status Dokumen**: Terverifikasi Sesuai Basis Kode Aktif (`src/lib/config/menu-config.ts` dan Fase 0 sampai Fase 7)  
+> **Status Dokumen**: Terverifikasi Sesuai Basis Kode Aktif (`src/lib/config/menu-config.ts` dan Fase P0 - Tahap 3 Peta Pulau)  
 > **Berkas Terkait**: 
 > - [SIAJAR_Fitur_dan_Menu_Role.pdf](./SIAJAR_Fitur_dan_Menu_Role.pdf)
 > - [SIAJAR_Fitur_dan_Menu_Role.xlsx](./SIAJAR_Fitur_dan_Menu_Role.xlsx)
@@ -1478,7 +1545,7 @@ def generate_markdown(df):
 
 Sistem **SIAJAR (Sistem Informasi Ajar Terpadu)** mengimplementasikan arsitektur otorisasi bertingkat berbasis *Role-Based Access Control* (RBAC) dan *PostgreSQL Row-Level Security* (RLS) dengan pemisahan wewenang ketat. Seluruh navigasi antarmuka dikendalikan secara deklaratif melalui konfigurasi tunggal terpusat di `src/lib/config/menu-config.ts`.
 
-Total terdapat **102 butir menu dan fungsionalitas terdefinisi** yang tersebar di **7 peran utama** dan **1 grup menu bersama**:
+Total terdapat **107 butir menu dan fungsionalitas terdefinisi** yang tersebar di **7 peran utama** dan **1 grup menu bersama**:
 
 ```
                        ┌───────────────────────────────┐
@@ -1511,8 +1578,16 @@ Total terdapat **102 butir menu dan fungsionalitas terdefinisi** yang tersebar d
 {sections_md}
 ## 3. Matriks Otorisasi Sistem
 
-Berikut adalah ketetapan otorisasi definitif untuk setiap wewenang dan fungsionalitas di lingkungan SIAJAR:
+Berikut adalah ketetapan otorisasi definitif untuk setiap wewenang dan fungsionalitas di lingkungan SIAJAR (termasuk Matriks Hak Akses Peta Pulau Bagian 10.1):
 
+- **Peta Pulau**: Dosen/TA mengatur bab dan prasyarat; Mahasiswa melihat peta visual/daftar & mengerjakan kuis bab; Kaprodi melihat agregat per kelas (K-Anonymity N ≥ 5).
+- **Flashcard Leitner**: Dosen/AI membuat kartu & dosen meninjau; Mahasiswa mengulas kartu berstatus terbit; Kaprodi melihat adopsi.
+- **Podcast Audio**: Dosen menerbitkan naskah dan suara; Mahasiswa memutar pada pulau yang terbuka dengan transkrip.
+- **Tukar Keahlian**: Mahasiswa ikut serta per kelas (opt-in); Dosen memantau/moderasi; Staf menangani laporan; terblokir selama asesmen aktif (blackout).
+- **Log aktivitas mentah**: hanya pemilik data (mahasiswa); tidak ada peran lain.
+- **Rekap Semester**: hanya pemilik data (mahasiswa); bersifat pribadi, tenang, tanpa perbandingan.
+- **Laporan penggunaan & adopsi**: Kaprodi (prodinya, agregat dengan masking < 5), Super Admin (seluruh kampus, agregat).
+- **Sakelar fitur**: Dosen per kelas; Super Admin global.
 - **Akses ruang kelas**: Mahasiswa dan Asisten (terdaftar), Dosen (pengampu), Kaprodi (pantauan prodi), Staf (administrasi kelas), System Admin (tidak ada), Super Admin (hanya lewat impersonasi hanya-lihat).
 - **Skor dan koreksi**: Mahasiswa tidak ada; Asisten draf; Dosen draf dan final; Kaprodi, Staf, System Admin, Super Admin tidak ada.
 - **Finalisasi buku nilai**: hanya Dosen pemilik kelas.
@@ -1540,12 +1615,11 @@ Berikut adalah ketetapan otorisasi definitif untuk setiap wewenang dan fungsiona
 
 def generate_html(df):
     role_titles = {
-        "STUDENT": "1. Mahasiswa (STUDENT) — 16 Menu",
-        "TEACHING_ASSISTANT": "2. Asisten Dosen (TEACHING_ASSISTANT) — 19 Menu",
-        "LECTURER": "3. Dosen Pengampu (LECTURER) — 19 Menu",
+        "STUDENT": "1. Mahasiswa (STUDENT) — 18 Menu",
+        "TEACHING_ASSISTANT": "2. Asisten Dosen (TEACHING_ASSISTANT) — 21 Menu",
+        "LECTURER": "3. Dosen Pengampu (LECTURER) — 20 Menu",
         "PROGRAM_COORDINATOR": "4. Koordinator Program Studi (PROGRAM_COORDINATOR) — 12 Menu",
         "ACADEMIC_STAFF": "5. Staf Akademik (ACADEMIC_STAFF) — 13 Menu",
-        "SYSTEM_ADMIN": "6. System Administrator (SYSTEM_ADMIN) — 8 Menu",
         "SUPER_ADMIN": "7. Super Administrator (SUPER_ADMIN) — 12 Menu",
         "ALL_ROLES": "8. Menu Bersama Seluruh Role (Akun) — 3 Menu"
     }

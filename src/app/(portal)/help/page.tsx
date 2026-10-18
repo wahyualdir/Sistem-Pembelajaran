@@ -106,6 +106,16 @@ const WORKFLOWS_PER_ROLE: Record<string, { peran: string; ikon: React.ElementTyp
           'Periksa nilai pada menu Nilai Saya; jika terdapat kekeliruan penilaian, klik tombol Ajukan Sanggahan dalam batas waktu 7 hari.',
         ],
       },
+      {
+        judul: 'Alur Peta Pulau, Flashcard, dan Rekap Semester',
+        langkah: [
+          'Buka Kelas Saya lalu pilih tab Peta (atau sakelar Tampilan Daftar) untuk memantau perjalanan belajar per bab.',
+          'Kerjakan kuis bab untuk meraih skor ambang (standar 70) agar bab pulau berikutnya terbuka; percobaan ulang tidak dibatasi.',
+          'Buka menu Flashcard untuk mengulas konsep materi dengan metode pengulangan berkala 5 kotak Leitner (maksimal 20 kartu baru per hari).',
+          'Buka menu Tukar Keahlian untuk bertanya konsep materi kepada rekan sekelas; jawaban yang terbantu mendapatkan +50 XP (forum otomatis terkunci saat ujian aktif).',
+          'Buka menu Pencapaian tab Rekap Semester untuk melihat rangkuman autentik aktivitas belajar Anda secara tenang dan privat.',
+        ],
+      },
     ],
   },
   asisten: {
@@ -136,6 +146,13 @@ const WORKFLOWS_PER_ROLE: Record<string, { peran: string; ikon: React.ElementTyp
           'Pantau status peserta ujian dan catat mahasiswa yang memerlukan penambahan waktu khusus.',
         ],
       },
+      {
+        judul: 'Alur Pendampingan Belajar dan Moderasi Tukar Keahlian',
+        langkah: [
+          'Akses menu Flashcard untuk memeriksa butir kartu konsep praktikum yang aktif di kelas asistensi.',
+          'Pantau ruang Tukar Keahlian untuk memberikan petunjuk konsep materi dan memoderasi pertanyaan atau jawaban mahasiswa.',
+        ],
+      },
     ],
   },
   dosen: {
@@ -149,6 +166,16 @@ const WORKFLOWS_PER_ROLE: Record<string, { peran: string; ikon: React.ElementTyp
           'Tentukan jumlah hari pergeseran tanggal agar jadwal tugas dan kuis otomatis menyesuaikan kalender akademik aktif.',
           'Unggah materi baru dengan opsi rilis terjadwal agar terbuka otomatis pada jam perkuliahan yang ditentukan.',
           'Setelah perkuliahan selesai, gunakan tombol Arsipkan Kelas agar ruang kelas beralih ke status hanya-baca.',
+        ],
+      },
+      {
+        judul: 'Alur Peta Pulau dan Tinjau Konten AI',
+        langkah: [
+          'Aktifkan sakelar Peta Pulau, Flashcard, Podcast, dan Tukar Keahlian pada tab Pengaturan Fitur di kelas Anda.',
+          'Kelola urutan bab pembelajaran, tautkan materi kuliah, dan atur ambang batas kelulusan kuis bab (bawaan 70) pada tab Bab.',
+          'Buka menu Tinjau Konten untuk memverifikasi draf flashcard dan naskah podcast (450 sampai 900 kata) hasil kurasi kecerdasan buatan.',
+          'Periksa skor keterikatan sumber (grounding score) dan gunakan pintasan tombol (A untuk Setuju, E untuk Sunting, R untuk Tolak, J/K untuk Navigasi).',
+          'Setujui pernyataan kepatuhan kebijakan sebelum menerbitkan konten flashcard dan suara podcast ke mahasiswa.',
         ],
       },
       {
@@ -181,6 +208,14 @@ const WORKFLOWS_PER_ROLE: Record<string, { peran: string; ikon: React.ElementTyp
           'Buka menu Kurikulum untuk mengelola struktur mata kuliah program studi berbasis Outcome-Based Education.',
           'Tetapkan matriks Capaian Pembelajaran Lulusan (CPL) dan Capaian Pembelajaran Mata Kuliah (CPMK).',
           'Atur prasyarat mata kuliah dengan validasi otomatis pencegahan dependensi melingkar.',
+        ],
+      },
+      {
+        judul: 'Alur Laporan Adopsi Peta Pulau dan Pembelajaran',
+        langkah: [
+          'Buka menu Laporan & Evaluasi lalu pilih tab Adopsi Peta Pulau untuk meninjau keterpakaian fitur per kelas di program studi.',
+          'Pantau rasio kelas yang mengaktifkan Peta, Flashcard, Podcast, dan Tukar Keahlian.',
+          'Untuk menjaga kepatuhan privasi (K-Anonymity), persentase kelulusan kelas dengan jumlah mahasiswa kurang dari 5 otomatis disamarkan (< 5 (Privasi Terjaga)).',
         ],
       },
       {

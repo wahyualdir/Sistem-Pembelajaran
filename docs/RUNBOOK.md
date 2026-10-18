@@ -298,3 +298,68 @@ Administrator dapat mengatur parameter ini pada lingkungan yang sah:
 > 2. Jangan pernah menyetel nilai `'local'` atau `'staging'` pada server produksi.
 > 3. Jika operator atau skrip otomasi secara tidak sengaja mencoba mengeksekusi `demo_seed.sql` pada basis data produksi, transaksi akan **gagal seketika** tanpa menyentuh atau merusak satu baris data riil pun.
 
+---
+
+## 6. Operasional Fitur Pembelajaran Peta Pulau, Konten AI, dan Podcast
+
+Sub-sistem Peta Pulau melengkapi SIAJAR dengan modul pembelajaran terstruktur (pulau materi), flashcard pengulangan berkala (Leitner), podcast audio materi, kolaborasi bantuan sejawat (Tukar Keahlian), dan rekapitulasi semester autentik.
+
+### 6.1. Kebijakan Batas dan Persetujuan Konten AI
+1. **Prinsip Gagal-Tertutup (*Fail-Closed*)**:
+   - Jika kredensial API AI (`GEMINI_API_KEY`, `OPENAI_API_KEY`, atau `ANTHROPIC_API_KEY`) tidak terpasang di environment variable, tombol pembuatan konten AI secara otomatis dinonaktifkan dengan banner peringatan yang jelas: *"Fitur AI tidak tersedia: Kunci API AI belum dikonfigurasi di server."*
+   - Sistem menolak beroperasi menggunakan nilai tebakan (*guessing values*).
+2. **Keterikatan Sumber (*Grounding Score*)**:
+   - Setiap kartu flashcard dan segmen podcast yang dibuat oleh AI diverifikasi keterikatannya dengan materi sumber (teks modul bab).
+   - Kartu dengan skor keterikatan di bawah ambang minimal (60%) diberi tanda peringatan khusus *"Keterikatan Rendah"* agar dosen meneliti ulang atau menyuntingnya.
+3. **Persetujuan Dosen Pengampu (*Human-in-the-Loop*)**:
+   - Seluruh konten buatan AI berstatus awal `'draf'`.
+   - Konten draf **TIDAK PERNAH** dapat diakses oleh mahasiswa (dilindungi RLS PostgreSQL).
+   - Dosen pengampu wajib meninjau, menyunting, dan menyetujui pernyataan kebijakan kepatuhan sebelum konten dipublikasikan (`'terbit'`).
+
+### 6.2. Konfigurasi Suara dan Sintesis Audio Podcast
+1. **Parameter Lingkungan Suara**:
+   ```bash
+   # Penyedia sintesis suara (ElevenLabs, Google Cloud TTS, atau Edge TTS)
+   TTS_PROVIDER=elevenlabs
+   TTS_API_KEY=kunci-api-tts-institusi
+   TTS_VOICE_ID=voice-id-narator-tenang
+   ```
+2. **Spesifikasi Naskah Podcast**:
+   - Format: Satu narator tunggal (*single narrator*).
+   - Panjang: 450 hingga 900 kata (durasi audio berkisar 3 sampai 6 menit).
+   - Dosen wajib menyetujui naskah sebelum audio disintesis. Transkrip selalu ditampilkan berdampingan dengan pemutar audio.
+   - Fitur podcast bawaan dinonaktifkan (`feature_podcast_enabled = false`) hingga konfigurasi suara selesai diuji dan disetujui.
+
+### 6.3. Pekerjaan Terjadwal (*Cron Jobs*) Peta Pulau
+Seluruh cron jobs dipanggil melalui `GET /api/cron/<nama>` dengan proteksi header `Authorization: Bearer $CRON_SECRET` dan bersifat idempoten:
+1. `content_stale_check` (Eksekusi: Tiap 1 Jam):
+   - Memeriksa materi kuliah yang mengalami pembaruan revisi konten.
+   - Kartu flashcard dan podcast yang terkait otomatis ditandai statusnya menjadi `'perlu_tinjau_ulang'` agar dosen pengampu dapat memverifikasi relevansinya kembali.
+2. `activity_purge` (Eksekusi: Harian Pukul 02.00 WIB):
+   - Menghapus rekaman log aktivitas (`activity_events`) yang telah melampaui masa simpan institusi (`activity_retention_days`, bawaan 365 hari / 1 tahun).
+   - Mahasiswa juga memiliki hak hapus mandiri melalui menu **Privasi** > **Hapus Riwayat Saya**.
+3. `recap_generate` (Eksekusi: Harian Pukul 03.00 WIB):
+   - Menghasilkan ringkasan `semester_recaps` untuk semester yang telah berakhir pada kelas-kelas yang mengaktifkan fitur.
+   - Bersifat idempoten (tidak menduplikasi rekapitulasi yang sudah ada).
+   - Mahasiswa dapat memicu pembuatan ulang secara mandiri melalui tombol **Muat Ulang** di tab Rekap Semester (dibatasi 1x per hari).
+
+### 6.4. Sakelar Penonaktifan Fitur Global (*Kill Switches*)
+Super Administrator dapat menonaktifkan fitur secara global tanpa deploy ulang melalui tabel kebijakan institusi (`institution_policies`):
+- Mematikan Peta Pulau secara global:
+  ```sql
+  UPDATE public.institution_policies SET value = 'false'::jsonb WHERE key = 'feature_peta_pulau_enabled';
+  ```
+- Mematikan Flashcard secara global:
+  ```sql
+  UPDATE public.institution_policies SET value = 'false'::jsonb WHERE key = 'feature_flashcard_enabled';
+  ```
+- Mematikan Podcast secara global:
+  ```sql
+  UPDATE public.institution_policies SET value = 'false'::jsonb WHERE key = 'feature_podcast_enabled';
+  ```
+- Mematikan Tukar Keahlian secara global:
+  ```sql
+  UPDATE public.institution_policies SET value = 'false'::jsonb WHERE key = 'feature_tukar_keahlian_enabled';
+  ```
+
+
