@@ -8,6 +8,7 @@ import {
   getHomeAgendaAction,
 } from '@/modules/academic/home-actions';
 import { getStudentAcademicStatusAction } from '@/modules/early-warning/actions';
+import { getDailyPrioritiesAction } from '@/modules/academic/peta-pulau-actions';
 import { StudentDashboardClient } from './student-dashboard-client';
 
 export default async function StudentPortalPage() {
@@ -20,6 +21,7 @@ export default async function StudentPortalPage() {
     summaryRes,
     agendaRes,
     academicStatusRes,
+    dailyPrioritiesRes,
   ] = await Promise.allSettled([
     getHomeBannerAction(),
     getHomeDeadlinesAction(),
@@ -28,6 +30,7 @@ export default async function StudentPortalPage() {
     getHomeSummaryAction(),
     getHomeAgendaAction(),
     getStudentAcademicStatusAction(),
+    getDailyPrioritiesAction(),
   ]);
 
   const bannerData = bannerRes.status === 'fulfilled' ? bannerRes.value : undefined;
@@ -37,6 +40,7 @@ export default async function StudentPortalPage() {
   const summaryData = summaryRes.status === 'fulfilled' ? summaryRes.value : undefined;
   const agendaItems = agendaRes.status === 'fulfilled' ? agendaRes.value : [];
   const academicStatus = academicStatusRes.status === 'fulfilled' ? academicStatusRes.value : [];
+  const dailyPriorities = dailyPrioritiesRes.status === 'fulfilled' ? dailyPrioritiesRes.value : [];
 
   return (
     <StudentDashboardClient
@@ -47,6 +51,7 @@ export default async function StudentPortalPage() {
       summaryData={summaryData}
       agendaItems={agendaItems}
       academicStatus={academicStatus}
+      dailyPriorities={dailyPriorities}
     />
   );
 }

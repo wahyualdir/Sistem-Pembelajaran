@@ -6,6 +6,14 @@ import { listClassQuizzesAction } from '@/modules/academic/quiz-actions';
 import { listAttendanceSessionsAction, getClassAttendanceSummaryAction } from '@/modules/academic/attendance-actions';
 import { getClassRiskSummaryAction } from '@/modules/early-warning/actions';
 import { listClassForumTopicsAction } from '@/modules/academic/forum-actions';
+import {
+  getClassFeatureFlagsAction,
+  getClassMapAction,
+  listClassChaptersAction,
+  getClassChapterDistributionAction,
+  getHardestTopicsAction,
+  getLaggingStudentsAction,
+} from '@/modules/academic/peta-pulau-actions';
 import { ClassHubTabs } from '@/modules/academic/class-hub-tabs';
 
 export default async function ClassDetailPage({ params }: { params: { id: string } }) {
@@ -13,12 +21,33 @@ export default async function ClassDetailPage({ params }: { params: { id: string
   const detail = await getClassDetailAction(params.id);
   if (!detail) notFound();
 
-  const quizzes = await listClassQuizzesAction(params.id).catch(() => []);
-  const attendanceSessions = await listAttendanceSessionsAction(params.id).catch(() => []);
-  const summaries = await getClassAttendanceSummaryAction(params.id, detail.members || []).catch(() => []);
+  const [
+    quizzes,
+    attendanceSessions,
+    summaries,
+    riskEvaluations,
+    forumData,
+    flags,
+    mapItems,
+    chapters,
+    distribution,
+    hardestTopics,
+    laggingStudents,
+  ] = await Promise.all([
+    listClassQuizzesAction(params.id).catch(() => []),
+    listAttendanceSessionsAction(params.id).catch(() => []),
+    getClassAttendanceSummaryAction(params.id, detail.members || []).catch(() => []),
+    getClassRiskSummaryAction(params.id).catch(() => []),
+    listClassForumTopicsAction(params.id).catch(() => ({ ok: false, topics: [], tags: [] })),
+    getClassFeatureFlagsAction(params.id).catch(() => ({})),
+    getClassMapAction(params.id).catch(() => []),
+    listClassChaptersAction(params.id).catch(() => []),
+    getClassChapterDistributionAction(params.id).catch(() => []),
+    getHardestTopicsAction(params.id).catch(() => []),
+    getLaggingStudentsAction(params.id).catch(() => []),
+  ]);
+
   const mySummary = ctx ? summaries.find((s) => s.student_id === ctx.user.id) ?? null : null;
-  const riskEvaluations = await getClassRiskSummaryAction(params.id).catch(() => []);
-  const forumData = await listClassForumTopicsAction(params.id).catch(() => ({ ok: false, topics: [], tags: [] }));
 
   return (
     <div className="w-full">
@@ -32,6 +61,14 @@ export default async function ClassDetailPage({ params }: { params: { id: string
           riskEvaluations,
           forumTopics: forumData.topics || [],
           forumTags: forumData.tags || [],
+          petaPulauData: {
+            flags,
+            mapItems,
+            chapters,
+            distribution,
+            hardestTopics,
+            laggingStudents,
+          },
         }}
       />
     </div>

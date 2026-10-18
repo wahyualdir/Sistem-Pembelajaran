@@ -41,10 +41,24 @@ import {
   Video,
   Lock,
   Play,
+  Map,
+  BarChart3,
+  Sliders,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { MarkdownViewer } from '@/components/shared/markdown-viewer';
+import { ClassIslandMap } from './class-island-map';
+import { ClassChaptersTab } from './class-chapters-tab';
+import { ClassProgressTab } from './class-progress-tab';
+import { ClassFeatureSettingsTab } from './class-feature-settings-tab';
+import type {
+  ClassMapItem,
+  ClassChapterItem,
+  ChapterDistributionItem,
+  HardestTopicItem,
+  LaggingStudentItem,
+} from './peta-pulau-actions';
 import { CreateAnnouncementForm, CreateAssignmentForm, CreateMaterialForm, SubmitForm } from './assignment-forms';
 import { AssistantForm, RevokeAssistant } from './assistant-forms';
 import { CreateQuizModal } from './quiz-components';
@@ -133,6 +147,14 @@ export interface ClassDetailData {
   riskEvaluations?: StudentRiskEvaluation[];
   forumTopics?: ForumTopic[];
   forumTags?: string[];
+  petaPulauData?: {
+    flags: Record<string, boolean>;
+    mapItems: ClassMapItem[];
+    chapters: ClassChapterItem[];
+    distribution: ChapterDistributionItem[];
+    hardestTopics: HardestTopicItem[];
+    laggingStudents: LaggingStudentItem[];
+  };
 }
 
 // 4 TAB IKONIK GOOGLE CLASSROOM
@@ -145,6 +167,8 @@ export const TA_CLASSROOM_TABS = [
 
 export const LECTURER_CLASSROOM_TABS = [
   { id: 'materi', label: 'Materi', icon: BookOpen, badgeLabel: 'Materi' },
+  { id: 'bab', label: 'Bab', icon: Layers, badgeLabel: 'Bab' },
+  { id: 'progres', label: 'Progres', icon: BarChart3, badgeLabel: 'Progres' },
   { id: 'tugas', label: 'Tugas & Penilaian', icon: ClipboardList, badgeLabel: 'Classwork' },
   { id: 'kelompok', label: 'Kelompok', icon: Users, badgeLabel: 'Kelompok' },
   { id: 'peserta', label: 'Peserta', icon: Users, badgeLabel: 'Peserta' },
@@ -152,9 +176,11 @@ export const LECTURER_CLASSROOM_TABS = [
   { id: 'forum', label: 'Forum & Pengumuman', icon: MessagesSquare, badgeLabel: 'Stream' },
   { id: 'presensi', label: 'Presensi', icon: CalendarCheck2, badgeLabel: 'Presensi' },
   { id: 'nilai', label: 'Nilai', icon: GraduationCap, badgeLabel: 'Grades' },
+  { id: 'fitur', label: 'Pengaturan Fitur', icon: Sliders, badgeLabel: 'Fitur' },
 ] as const;
 
 export const STUDENT_CLASSROOM_TABS = [
+  { id: 'peta', label: 'Peta Belajar', icon: Map, badgeLabel: 'Peta' },
   { id: 'forum', label: 'Forum', icon: MessagesSquare, badgeLabel: 'Stream' },
   { id: 'tugas', label: 'Tugas Kelas', icon: ClipboardList, badgeLabel: 'Classwork' },
   { id: 'kelompok', label: 'Kelompok', icon: Users, badgeLabel: 'Kelompok' },
@@ -214,11 +240,13 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
   const student = viewer === 'STUDENT';
   const can = (p: string) => !!perms?.includes(p);
 
+  const petaEnabled = data.petaPulauData?.flags?.peta_pulau ?? false;
+
   const roleTabs = ta
     ? TA_CLASSROOM_TABS
     : lecturer
     ? LECTURER_CLASSROOM_TABS
-    : STUDENT_CLASSROOM_TABS;
+    : (petaEnabled ? STUDENT_CLASSROOM_TABS : STUDENT_CLASSROOM_TABS.filter((t) => t.id !== 'peta'));
 
   const tabParam = searchParams?.get('tab');
   const validTabIds = roleTabs.map((t) => t.id as string);
@@ -1467,6 +1495,49 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           classId={cls.id}
           isLecturer={lecturer}
           currentUserId={currentUserId}
+        />
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: PETA (PETA PULAU UNTUK MAHASISWA)                  */}
+      {/* ======================================================== */}
+      {activeTab === 'peta' && (
+        <ClassIslandMap
+          classId={cls.id}
+          chapters={data.petaPulauData?.mapItems || []}
+          isSkillExchangeEnabled={data.petaPulauData?.flags?.tukar_keahlian ?? false}
+        />
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: BAB (MANAJEMEN BAB & TOPIK DOSEN)                   */}
+      {/* ======================================================== */}
+      {activeTab === 'bab' && (
+        <ClassChaptersTab
+          classId={cls.id}
+          initialChapters={data.petaPulauData?.chapters || []}
+        />
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: PROGRES (SEBARAN MAHASISWA & TOPIK SULIT DOSEN)     */}
+      {/* ======================================================== */}
+      {activeTab === 'progres' && (
+        <ClassProgressTab
+          classId={cls.id}
+          distribution={data.petaPulauData?.distribution || []}
+          hardestTopics={data.petaPulauData?.hardestTopics || []}
+          laggingStudents={data.petaPulauData?.laggingStudents || []}
+        />
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: PENGATURAN FITUR (PENANDA FITUR PETA PULAU)         */}
+      {/* ======================================================== */}
+      {activeTab === 'fitur' && (
+        <ClassFeatureSettingsTab
+          classId={cls.id}
+          initialFlags={data.petaPulauData?.flags || {}}
         />
       )}
     </div>

@@ -32,6 +32,8 @@ import {
   getHomeBannerAction,
 } from '@/modules/academic/home-actions';
 import { StudentAcademicStatusCard } from '@/components/home/student-academic-status-card';
+import { DailyPriorityCard } from '@/components/home/daily-priority-card';
+import type { DailyPriorityItem } from '@/lib/akademik/daily-priorities';
 import type { StudentRiskEvaluation } from '@/modules/early-warning/types';
 
 const RECOMMENDED_MATERIALS = [
@@ -80,6 +82,7 @@ export interface StudentDashboardClientProps {
   agendaItems?: AgendaItem[];
   deadlineItems?: Array<{ assignment_id: string; class_id: string; class_title: string; title: string; due_at: string }>;
   academicStatus?: StudentRiskEvaluation[];
+  dailyPriorities?: DailyPriorityItem[];
 }
 
 export function StudentDashboardClient({
@@ -90,6 +93,7 @@ export function StudentDashboardClient({
   summaryData,
   agendaItems = [],
   academicStatus = [],
+  dailyPriorities = [],
 }: StudentDashboardClientProps) {
   const currentBannerData: HomeBannerData = bannerData || {
     primary: {
@@ -225,6 +229,11 @@ export function StudentDashboardClient({
           {/* SECTION STATUS AKADEMIK & PERINGATAN DINI */}
           {(showAll || showKelasSaya) && (
             <StudentAcademicStatusCard evaluations={academicStatus} />
+          )}
+
+          {/* SECTION PRIORITAS HARI INI (PETA PULAU) */}
+          {(showAll || showKelasSaya || showTugasKuis) && (
+            <DailyPriorityCard initialItems={dailyPriorities} />
           )}
 
           {/* SECTION: KARTU LANJUTKAN BELAJAR (Tampil pada Semua, Kelas Saya, Tugas & Kuis) */}
