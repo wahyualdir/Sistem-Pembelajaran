@@ -1,8 +1,7 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
-import { EmptyState } from '@/components/shared/empty-state';
-import { Trophy } from 'lucide-react';
+import { AchievementsView } from '@/modules/academic/achievements-view';
 
 export default async function AchievementsPage() {
   const user = await getCurrentUserWithRoles();
@@ -21,13 +20,8 @@ export default async function AchievementsPage() {
         </p>
       </div>
 
-      <div className="rounded-[12px] border border-border bg-surface p-6">
-        <EmptyState
-          icon={<Trophy className="h-6 w-6" />}
-          title="Belum ada lencana yang diraih"
-          description="Selesaikan materi, kuis, dan tugas tepat waktu untuk mendapatkan lencana."
-        />
-      </div>
+      <AchievementsView />
     </div>
   );
 }
+

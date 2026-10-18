@@ -1878,6 +1878,584 @@ export interface Database {
           review_note?: string | null;
         };
       };
+      conversations: {
+        Row: {
+          id: string;
+          class_id: string | null;
+          created_at: string;
+          last_message_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          class_id?: string | null;
+          created_at?: string;
+          last_message_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          class_id?: string | null;
+          created_at?: string;
+          last_message_at?: string | null;
+        };
+      };
+      conversation_participants: {
+        Row: {
+          conversation_id: string;
+          user_id: string;
+          last_read_at: string | null;
+          muted: boolean;
+        };
+        Insert: {
+          conversation_id: string;
+          user_id: string;
+          last_read_at?: string | null;
+          muted?: boolean;
+        };
+        Update: {
+          conversation_id?: string;
+          user_id?: string;
+          last_read_at?: string | null;
+          muted?: boolean;
+        };
+      };
+      messages: {
+        Row: {
+          id: string;
+          conversation_id: string;
+          sender_id: string;
+          body: string;
+          attachment_path: string | null;
+          created_at: string;
+          edited_at: string | null;
+          deleted_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          conversation_id: string;
+          sender_id: string;
+          body: string;
+          attachment_path?: string | null;
+          created_at?: string;
+          edited_at?: string | null;
+          deleted_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          conversation_id?: string;
+          sender_id?: string;
+          body?: string;
+          attachment_path?: string | null;
+          created_at?: string;
+          edited_at?: string | null;
+          deleted_at?: string | null;
+        };
+      };
+      message_reports: {
+        Row: {
+          id: string;
+          message_id: string;
+          reporter_id: string;
+          reason: string;
+          snapshot: Json;
+          status: 'baru' | 'ditinjau' | 'selesai' | 'ditolak';
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          message_id: string;
+          reporter_id: string;
+          reason: string;
+          snapshot: Json;
+          status?: 'baru' | 'ditinjau' | 'selesai' | 'ditolak';
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          message_id?: string;
+          reporter_id?: string;
+          reason?: string;
+          snapshot?: Json;
+          status?: 'baru' | 'ditinjau' | 'selesai' | 'ditolak';
+          created_at?: string;
+        };
+      };
+      consultation_slots: {
+        Row: {
+          id: string;
+          lecturer_id: string;
+          starts_at: string;
+          ends_at: string;
+          place_or_link: string | null;
+          capacity: number;
+          status: 'terbuka' | 'ditutup' | 'dibatalkan';
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          lecturer_id: string;
+          starts_at: string;
+          ends_at: string;
+          place_or_link?: string | null;
+          capacity?: number;
+          status?: 'terbuka' | 'ditutup' | 'dibatalkan';
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          lecturer_id?: string;
+          starts_at?: string;
+          ends_at?: string;
+          place_or_link?: string | null;
+          capacity?: number;
+          status?: 'terbuka' | 'ditutup' | 'dibatalkan';
+          created_at?: string;
+        };
+      };
+      consultation_bookings: {
+        Row: {
+          id: string;
+          slot_id: string;
+          student_id: string;
+          topic: string;
+          status: 'dipesan' | 'selesai' | 'dibatalkan' | 'tidak_hadir';
+          lecturer_note: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          slot_id: string;
+          student_id: string;
+          topic: string;
+          status?: 'dipesan' | 'selesai' | 'dibatalkan' | 'tidak_hadir';
+          lecturer_note?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          slot_id?: string;
+          student_id?: string;
+          topic?: string;
+          status?: 'dipesan' | 'selesai' | 'dibatalkan' | 'tidak_hadir';
+          lecturer_note?: string | null;
+          created_at?: string;
+        };
+      };
+      live_polls: {
+        Row: {
+          id: string;
+          class_id: string;
+          session_id: string | null;
+          created_by: string;
+          question: string;
+          kind: 'single' | 'multiple' | 'scale' | 'text';
+          options: Json | null;
+          is_anonymous: boolean;
+          is_quiz: boolean;
+          correct_option_ids: string[] | null;
+          status: 'draf' | 'buka' | 'tutup';
+          opened_at: string | null;
+          closed_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          class_id: string;
+          session_id?: string | null;
+          created_by: string;
+          question: string;
+          kind: 'single' | 'multiple' | 'scale' | 'text';
+          options?: Json | null;
+          is_anonymous?: boolean;
+          is_quiz?: boolean;
+          correct_option_ids?: string[] | null;
+          status?: 'draf' | 'buka' | 'tutup';
+          opened_at?: string | null;
+          closed_at?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          class_id?: string;
+          session_id?: string | null;
+          created_by?: string;
+          question?: string;
+          kind?: 'single' | 'multiple' | 'scale' | 'text';
+          options?: Json | null;
+          is_anonymous?: boolean;
+          is_quiz?: boolean;
+          correct_option_ids?: string[] | null;
+          status?: 'draf' | 'buka' | 'tutup';
+          opened_at?: string | null;
+          closed_at?: string | null;
+          created_at?: string;
+        };
+      };
+      live_poll_votes: {
+        Row: {
+          poll_id: string;
+          student_id: string;
+          answer: Json;
+          created_at: string;
+        };
+        Insert: {
+          poll_id: string;
+          student_id: string;
+          answer: Json;
+          created_at?: string;
+        };
+        Update: {
+          poll_id?: string;
+          student_id?: string;
+          answer?: Json;
+          created_at?: string;
+        };
+      };
+      xp_events: {
+        Row: {
+          id: string;
+          student_id: string;
+          class_id: string | null;
+          kind: string;
+          points: number;
+          ref_type: string;
+          ref_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          student_id: string;
+          class_id?: string | null;
+          kind: string;
+          points: number;
+          ref_type: string;
+          ref_id: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          student_id?: string;
+          class_id?: string | null;
+          kind?: string;
+          points?: number;
+          ref_type?: string;
+          ref_id?: string;
+          created_at?: string;
+        };
+      };
+      badges: {
+        Row: {
+          code: string;
+          name: string;
+          description: string;
+          icon: string;
+          created_at: string;
+        };
+        Insert: {
+          code: string;
+          name: string;
+          description: string;
+          icon: string;
+          created_at?: string;
+        };
+        Update: {
+          code?: string;
+          name?: string;
+          description?: string;
+          icon?: string;
+          created_at?: string;
+        };
+      };
+      study_streaks: {
+        Row: {
+          student_id: string;
+          current_days: number;
+          best_days: number;
+          last_active_on: string | null;
+        };
+        Insert: {
+          student_id: string;
+          current_days?: number;
+          best_days?: number;
+          last_active_on?: string | null;
+        };
+        Update: {
+          student_id?: string;
+          current_days?: number;
+          best_days?: number;
+          last_active_on?: string | null;
+        };
+      };
+      class_gamification_settings: {
+        Row: {
+          class_id: string;
+          enabled: boolean;
+          leaderboard_enabled: boolean;
+        };
+        Insert: {
+          class_id: string;
+          enabled?: boolean;
+          leaderboard_enabled?: boolean;
+        };
+        Update: {
+          class_id?: string;
+          enabled?: boolean;
+          leaderboard_enabled?: boolean;
+        };
+      };
+      student_gamification_prefs: {
+        Row: {
+          student_id: string;
+          show_on_leaderboard: boolean;
+          display_alias: string | null;
+        };
+        Insert: {
+          student_id: string;
+          show_on_leaderboard?: boolean;
+          display_alias?: string | null;
+        };
+        Update: {
+          student_id?: string;
+          show_on_leaderboard?: boolean;
+          display_alias?: string | null;
+        };
+      };
+      ai_reminders: {
+        Row: {
+          id: string;
+          student_id: string;
+          kind: 'tugas_h1' | 'tugas_3jam' | 'ujian_h1' | 'kehadiran' | 'materi_baru' | 'login_baru' | 'ringkasan_mingguan';
+          ref_type: string | null;
+          ref_id: string | null;
+          payload: Json;
+          message: string | null;
+          status: 'terjadwal' | 'terkirim' | 'dibaca' | 'dibatalkan';
+          scheduled_for: string;
+          sent_at: string | null;
+          dedupe_key: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          student_id: string;
+          kind: 'tugas_h1' | 'tugas_3jam' | 'ujian_h1' | 'kehadiran' | 'materi_baru' | 'login_baru' | 'ringkasan_mingguan';
+          ref_type?: string | null;
+          ref_id?: string | null;
+          payload: Json;
+          message?: string | null;
+          status?: 'terjadwal' | 'terkirim' | 'dibaca' | 'dibatalkan';
+          scheduled_for: string;
+          sent_at?: string | null;
+          dedupe_key: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          student_id?: string;
+          kind?: 'tugas_h1' | 'tugas_3jam' | 'ujian_h1' | 'kehadiran' | 'materi_baru' | 'login_baru' | 'ringkasan_mingguan';
+          ref_type?: string | null;
+          ref_id?: string | null;
+          payload?: Json;
+          message?: string | null;
+          status?: 'terjadwal' | 'terkirim' | 'dibaca' | 'dibatalkan';
+          scheduled_for?: string;
+          sent_at?: string | null;
+          dedupe_key?: string;
+          created_at?: string;
+        };
+      };
+      ai_usage_logs: {
+        Row: {
+          id: number;
+          student_id: string | null;
+          kind: string | null;
+          input_tokens: number | null;
+          output_tokens: number | null;
+          ok: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: number;
+          student_id?: string | null;
+          kind?: string | null;
+          input_tokens?: number | null;
+          output_tokens?: number | null;
+          ok?: boolean;
+          created_at?: string;
+        };
+        Update: {
+          id?: number;
+          student_id?: string | null;
+          kind?: string | null;
+          input_tokens?: number | null;
+          output_tokens?: number | null;
+          ok?: boolean;
+          created_at?: string;
+        };
+      };
+      evaluation_templates: {
+        Row: {
+          id: string;
+          name: string;
+          created_by: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          created_by?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          created_by?: string | null;
+          created_at?: string;
+        };
+      };
+      evaluation_questions: {
+        Row: {
+          id: string;
+          template_id: string;
+          position: number;
+          category: string | null;
+          text: string;
+          kind: 'skala' | 'teks';
+          required: boolean;
+        };
+        Insert: {
+          id?: string;
+          template_id: string;
+          position: number;
+          category?: string | null;
+          text: string;
+          kind: 'skala' | 'teks';
+          required?: boolean;
+        };
+        Update: {
+          id?: string;
+          template_id?: string;
+          position?: number;
+          category?: string | null;
+          text?: string;
+          kind?: 'skala' | 'teks';
+          required?: boolean;
+        };
+      };
+      evaluation_periods: {
+        Row: {
+          id: string;
+          semester_id: string;
+          template_id: string;
+          name: string;
+          opens_at: string;
+          closes_at: string;
+          status: 'draf' | 'buka' | 'tutup';
+          require_before_final_grades: boolean;
+          created_by: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          semester_id: string;
+          template_id: string;
+          name: string;
+          opens_at: string;
+          closes_at: string;
+          status?: 'draf' | 'buka' | 'tutup';
+          require_before_final_grades?: boolean;
+          created_by: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          semester_id?: string;
+          template_id?: string;
+          name?: string;
+          opens_at?: string;
+          closes_at?: string;
+          status?: 'draf' | 'buka' | 'tutup';
+          require_before_final_grades?: boolean;
+          created_by?: string;
+          created_at?: string;
+        };
+      };
+      evaluation_targets: {
+        Row: {
+          id: string;
+          period_id: string;
+          class_id: string;
+          lecturer_id: string;
+        };
+        Insert: {
+          id?: string;
+          period_id: string;
+          class_id: string;
+          lecturer_id: string;
+        };
+        Update: {
+          id?: string;
+          period_id?: string;
+          class_id?: string;
+          lecturer_id?: string;
+        };
+      };
+      evaluation_completions: {
+        Row: {
+          target_id: string;
+          student_id: string;
+          completed_at: string;
+        };
+        Insert: {
+          target_id: string;
+          student_id: string;
+          completed_at?: string;
+        };
+        Update: {
+          target_id?: string;
+          student_id?: string;
+          completed_at?: string;
+        };
+      };
+      evaluation_responses: {
+        Row: {
+          id: string;
+          target_id: string;
+          submitted_on: string;
+        };
+        Insert: {
+          id?: string;
+          target_id: string;
+          submitted_on?: string;
+        };
+        Update: {
+          id?: string;
+          target_id?: string;
+          submitted_on?: string;
+        };
+      };
+      evaluation_answers: {
+        Row: {
+          response_id: string;
+          question_id: string;
+          value_int: number | null;
+          value_text: string | null;
+          is_hidden: boolean;
+        };
+        Insert: {
+          response_id: string;
+          question_id: string;
+          value_int?: number | null;
+          value_text?: string | null;
+          is_hidden?: boolean;
+        };
+        Update: {
+          response_id?: string;
+          question_id?: string;
+          value_int?: number | null;
+          value_text?: string | null;
+          is_hidden?: boolean;
+        };
+      };
     };
     Views: {
       audit_logs_for_sysadmin: {
@@ -2018,6 +2596,69 @@ export interface Database {
       finalize_expired_attempts: {
         Args: Record<PropertyKey, never>;
         Returns: number;
+      };
+      start_conversation: {
+        Args: {
+          target_user_id: string;
+          p_class_id?: string | null;
+        };
+        Returns: string;
+      };
+      book_consultation_slot: {
+        Args: {
+          p_slot_id: string;
+          p_topic: string;
+        };
+        Returns: Json;
+      };
+      cancel_consultation_booking: {
+        Args: {
+          p_booking_id: string;
+        };
+        Returns: Json;
+      };
+      submit_poll_vote: {
+        Args: {
+          p_poll_id: string;
+          p_answer: Json;
+        };
+        Returns: Json;
+      };
+      get_poll_results: {
+        Args: {
+          p_poll_id: string;
+        };
+        Returns: Json;
+      };
+      award_xp: {
+        Args: {
+          p_student_id: string;
+          p_class_id: string | null;
+          p_kind: string;
+          p_points: number;
+          p_ref_type: string;
+          p_ref_id: string;
+        };
+        Returns: Json;
+      };
+      get_class_leaderboard: {
+        Args: {
+          p_class_id: string;
+        };
+        Returns: Json;
+      };
+      submit_evaluation: {
+        Args: {
+          p_target_id: string;
+          p_answers: Json;
+        };
+        Returns: Json;
+      };
+      get_lecturer_evaluation_summary: {
+        Args: {
+          p_target_id: string;
+        };
+        Returns: Json;
       };
     };
   };

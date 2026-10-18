@@ -1,8 +1,7 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
-import { EmptyState } from '@/components/shared/empty-state';
-import { ClipboardCheck } from 'lucide-react';
+import { StudentEvaluationsView } from '@/modules/academic/student-evaluations-view';
 
 export default async function StudentEvaluationsPage() {
   const user = await getCurrentUserWithRoles();
@@ -21,13 +20,8 @@ export default async function StudentEvaluationsPage() {
         </p>
       </div>
 
-      <div className="rounded-[12px] border border-border bg-surface p-6">
-        <EmptyState
-          icon={<ClipboardCheck className="h-6 w-6" />}
-          title="Tidak ada kuesioner terbuka"
-          description="Periode pengisian evaluasi dosen belum dimulai atau semua kelas sudah diisi."
-        />
-      </div>
+      <StudentEvaluationsView />
     </div>
   );
 }
+

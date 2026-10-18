@@ -12,7 +12,7 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
 | **Fase 2** | Tugas dan Nilai | **Selesai** | Keterlambatan dan perpanjangan, tugas kelompok dan penyesuaian kontribusi, rubrik bertingkat, sanggah nilai dan integrasi perubahan nilai, 34 tes lulus, typecheck, lint, dan build hijau. |
 | **Fase 3** | Kehadiran dan Perkuliahan | **Selesai** | Izin & sakit, berita acara, kuliah daring, progres materi, 36 berkas tes (330 tes) lulus, typecheck, lint, dan build hijau. |
 | **Fase 4** | Ujian | **Selesai** | Autosave CBT, token, auto-grader koding, analisis butir soal, CPMK->CPL, kemiripan, 38 berkas tes (351 tes) lulus, typecheck, lint, dan build hijau. |
-| **Fase 5** | Interaksi | Menunggu | Pesan & konsultasi, polling, pencapaian, pengingat AI, evaluasi dosen. |
+| **Fase 5** | Interaksi | **Selesai** | Pesan & konsultasi, polling, pencapaian, pengingat AI, evaluasi dosen, 39 berkas tes (359 tes) lulus, RLS 120 tabel, typecheck, lint, dan build hijau. |
 | **Fase 6** | Alat Bantu Dosen dan Sistem | Menunggu | Salin kelas, arsip, impor soal Excel/Word, Moodle XML & QTI. |
 | **Fase 7** | Penutup | Menunggu | Matriks baru, dokumentasi akhir, data seed, verifikasi akhir. |
 
@@ -125,8 +125,37 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
 - **Pengujian Unit & Verifikasi Kualitas**:
   - `src/tests/unit/phase4/exam-utils.test.ts`: 21 pengujian murni spesifik Fase 4 lulus 100%.
   - Total pengujian unit: 38 berkas tes, 351 pengujian lulus 100%.
-  - `npm run check:rls`: 98 dari 98 tabel skema public memiliki RLS aktif.
   - `npx tsc --noEmit`: 0 error.
   - `npm run lint`: 0 error.
   - `npm run build`: Kompilasi produksi Next.js hijau dan bersih.
+
+### [17 Oktober 2026] Fase 5 Selesai — Interaksi
+- **Migrasi 27 (Pesan, Konsultasi, Polling, Gamifikasi, Pengingat AI, EDOM)**: Dibuat `supabase/migrations/20261017000027_phase5_interaction.sql` lengkap dengan instruksi rollback di komentar atas berkas:
+  - 22 tabel baru dengan RLS aktif: `conversations`, `conversation_participants`, `messages`, `message_reports`, `consultation_slots`, `consultation_bookings`, `live_polls`, `live_poll_votes`, `xp_events`, `badges` (dengan seed 7 lencana), `study_streaks`, `class_gamification_settings`, `student_gamification_prefs`, `ai_reminders`, `ai_usage_logs`, `evaluation_templates`, `evaluation_questions`, `evaluation_periods`, `evaluation_targets`, `evaluation_completions`, `evaluation_responses`, `evaluation_answers`.
+  - 9 RPC Postgres atomik: `start_conversation`, `book_consultation_slot` (dengan `FOR UPDATE` kunci kapasitas), `cancel_consultation_booking` (syarat H-2 jam), `submit_poll_vote`, `get_poll_results` (100% anonim tanpa `student_id`), `award_xp` (kebiasaan streak WIB), `get_class_leaderboard`, `submit_evaluation` (True Anonymity Decoupling), `get_lecturer_evaluation_summary` (ambang batas $\ge 5$ responden).
+  - Verifikasi RLS: Seluruh 120 tabel pada skema public lolos `npm run check:rls`.
+- **Kalkulator Murni & Server Actions**:
+  - `src/lib/config/gamification.ts`: Konfigurasi poin terpusat (tugas tepat waktu 10, hadir 5, materi 3, polling 2, kuis benar 3) dan kalkulator streak harian deterministik.
+  - `src/lib/ai/prompts.ts` & `src/lib/ai/reminder-templates.ts`: Prompt sistem AI ketat bebas emoji, deteksi jam tenang (22.00–06.00 WIB) dengan pergeseran ke pukul 06.00 pagi (kecuali `login_baru`), dan templat statis alami untuk 7 jenis pengingat.
+  - `src/lib/ai/reminder-service.ts`: Layanan pembuat pengingat cerdas dengan batas waktu 5 detik, pencatatan `ai_usage_logs`, dan fallback fail-safe.
+  - `src/lib/akademik/message-utils.ts`: Utilitas murni jam tenang dosen (20.00–07.00 WIB) dan batas pembatalan konsultasi 2 jam.
+  - `src/modules/academic/message-actions.ts`: Server action pesan langsung dengan rate limit 30 pesan/menit, pelaporan pesan ke moderasi staf, dan manajemen slot konsultasi.
+  - `src/modules/academic/poll-actions.ts`: Pembuatan polling kilat (single, multiple, scale, text), buka/tutup, dan voting mahasiswa.
+  - `src/modules/academic/gamification-actions.ts`: Ringkasan pencapaian mahasiswa, preferensi leaderboard opt-in, dan papan peringkat mingguan.
+- **Antarmuka Pengguna Terpadu**:
+  - Halaman Pesan (`/messages` & `src/modules/academic/messages-hub-view.tsx`): Tampilan dua kolom responsif, tab percakapan dengan indikator jam tenang dosen, pelaporan pesan terproteksi, serta pemesanan dan pembatalan slot konsultasi.
+  - Kartu Polling Kelas (`src/modules/academic/class-live-poll-card.tsx`): Terintegrasi langsung di bagian atas stream perkuliahan (`class-hub-tabs.tsx`).
+  - Halaman Pencapaian (`/achievements` & `src/modules/academic/achievements-view.tsx`): Ringkasan XP, streak harian, kisi 7 lencana dengan syarat terbuka, dan kontrol partisipasi papan peringkat ber-alias.
+  - Evaluasi Dosen Mahasiswa (`/evaluations` & `src/modules/academic/student-evaluations-view.tsx`): Daftar kelas yang menunggu evaluasi, banner anonimitas 100%, dan formulir penilaian.
+  - Hasil Evaluasi Dosen (`/lecturer/evaluations` & `src/modules/academic/lecturer-evaluations-view.tsx`): Ringkasan skor per kompetensi dan komentar mahasiswa acak tanpa tanggal/nama (dengan proteksi periode tutup dan minimal 5 responden).
+  - Evaluasi Mutu Kaprodi (`/coordinator/evaluations` & `src/modules/academic/coordinator-evaluations-view.tsx`): Kontrol buka/tutup periode evaluasi, pengiriman pengingat massal, rekapitulasi mutu dosen, dan ekspor CSV.
+- **Pengujian Unit & Verifikasi Kualitas**:
+  - `src/tests/unit/phase5/phase5-interaction.test.ts`: 8 pengujian spesifik Fase 5 lulus 100%.
+  - `src/tests/unit/evaluation/evaluation.test.ts`: 8 pengujian siklus hidup EDOM dan True Anonymity lulus 100%.
+  - Total pengujian unit: 39 berkas tes, 359 pengujian lulus 100%.
+  - `npm run check:rls`: 120 dari 120 tabel skema public memiliki RLS aktif.
+  - `npx tsc --noEmit`: 0 error.
+  - `npm run lint`: 0 error.
+  - `npm run build`: Kompilasi produksi Next.js hijau dan bersih.
+
 

@@ -397,3 +397,52 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
   3. Analisis kode menggunakan tokenisasi normalisasi identifier/literal, 8-gram, winnowing (jendela 4), dan penyaringan kode dasar dosen (`extractStarterCodeKgrams`) agar kode template tidak memicu kemiripan palsu.
   4. Antarmuka peninjauan mewajibkan penempatan disclaimer: "Kemiripan tinggi belum tentu plagiarisme. Tinjau isinya sebelum mengambil keputusan. Tidak ada penalti otomatis."
 - **Alasan**: Memberikan alat bantu telaah yang adil dan obyektif bagi dosen dalam menjaga integritas akademik mahasiswa.
+
+### Keputusan 46: Isolasi Percakapan Terarah dan Moderasi Pesan (Fase 5)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Percakapan langsung (`conversations`, `messages`) hanya diizinkan antara mahasiswa/asisten dengan dosen/asisten yang berbagi kelas aktif atau dosen wali dengan mahasiswa bimbingannya via RPC `start_conversation`. Tidak ada jalur pesan langsung antarmahasiswa (diarahkan ke forum komunitas).
+  2. Pelaporan pesan (`message_reports`) menyimpan snapshot pesan dan 5 pesan sebelumnya secara aman untuk ditinjau oleh staf akademik pada menu Moderasi, tanpa memberikan staf akses membaca seluruh percakapan privat.
+  3. Pembatasan laju pengiriman pesan 30 pesan per menit per pengguna, paginasi keyset 30 pesan per halaman, dan soft-delete pesan bertanda "Pesan dihapus".
+- **Alasan**: Mencegah spam dan pelecehan antarmahasiswa di kanal privat serta menjamin privasi percakapan akademik sesuai mandat etika kampus.
+
+### Keputusan 47: Slot Konsultasi Akademik, Kunci Baris Kapasitas, dan Pembatalan H-2 Jam (Fase 5)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Dosen membuat slot konsultasi (`consultation_slots`) dengan kapasitas 1 hingga 20 mahasiswa.
+  2. Pemesanan slot (`consultation_bookings`) diproteksi dengan penguncian baris `SELECT ... FOR UPDATE` dalam RPC `book_consultation_slot` guna mencegah pemesanan ganda atau kelebihan kapasitas saat diakses bersamaan.
+  3. Pembatalan oleh mahasiswa hanya diizinkan maksimal 2 jam sebelum waktu pelaksanaan dimulai (`consultation_cancel_min_hours = 2`).
+- **Alasan**: Menghindari jadwal bentrok dan ketidakhadiran mendadak yang merugikan waktu dosen dan mahasiswa lain yang membutuhkan bimbingan.
+
+### Keputusan 48: Polling Interaktif di Kelas dan Anonimitas Penuh Jawaban (Fase 5)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Dosen dapat melempar pertanyaan kilat (`live_polls`) saat perkuliahan tatap muka maupun daring sinkron dengan jenis pilihan tunggal, jamak, skala 1-5, atau teks bebas.
+  2. Anonimitas ditegakkan secara mutlak melalui kebijakan RLS: dosen tidak pernah memiliki izin `SELECT` langsung pada tabel `live_poll_votes` jika polling anonim. Hasil rekapitulasi hanya dapat diambil lewat RPC agregat `get_poll_results` tanpa kolom `student_id`.
+  3. Kuis cepat tidak memengaruhi nilai akhir kelas, namun jawaban benar memberikan poin kebiasaan belajar (XP).
+- **Alasan**: Mendorong partisipasi aktif mahasiswa tanpa rasa takut dihakimi nilainya di ruang kelas.
+
+### Keputusan 49: Poin Gamifikasi, Streak Harian WIB, dan Papan Peringkat Opt-In (Fase 5)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Poin kebiasaan belajar (XP) hanya dapat diberikan melalui server action dan fungsi database `award_xp` (`SECURITY DEFINER`), dengan besaran terpusat pada `src/lib/config/gamification.ts`: tugas tepat waktu 10, hadir 5, materi selesai 3, jawab polling 2, kuis cepat benar 3.
+  2. Kebiasaan harian (streak) dihitung berdasarkan tanggal di zona waktu Asia/Jakarta (WIB). Streak yang putus kembali ke 1 hari tanpa menampilkan pesan menakut-nakuti atau intimidasi.
+  3. Papan peringkat per kelas bersifat opt-in dua lapis: dosen harus mengaktifkannya untuk kelas, dan mahasiswa harus secara sukarela mencentang "Tampilkan saya di papan peringkat" dengan nama alias anonim. Peringkat direset tiap minggu dan tidak pernah berdasarkan nilai ujian.
+- **Alasan**: Memberikan pengakuan positif yang suportif tanpa menimbulkan tekanan psikologis antarmahasiswa.
+
+### Keputusan 50: Pengingat AI Proaktif, Batas Waktu 5 Detik, dan Jam Tenang 22.00-06.00 WIB (Fase 5)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Pengingat proaktif (`ai_reminders`) dipicu oleh aturan bisnis terjadwal (H-1 tugas, 3 jam sebelum tenggat, H-1 ujian, sisa absen aman, materi baru dirilis, dan ringkasan mingguan Senin 07.00 WIB).
+  2. AI hanya bertugas merapikan kalimat dari payload terstruktur tanpa pernah menerima data mahasiswa lain atau berkas diagnosis/izin sakit. Panggilan AI dibatasi batas waktu ketat 5 detik dan otomatis kembali ke templat statis jika terjadi kegagalan atau timeout.
+  3. Jam tenang 22.00–06.00 WIB diterapkan ketat: pengingat yang jatuh di jam istirahat digeser ke pukul 06.00 WIB pagi, kecuali notifikasi keamanan deteksi perangkat baru (`login_baru`) yang dikirim seketika demi keamanan akun.
+- **Alasan**: Menjaga kualitas istirahat mahasiswa dan memastikan efisiensi token AI institusi.
+
+### Keputusan 51: Pemisahan Anonimitas Nyata Kuesioner Evaluasi Dosen (EDOM) dan Batas 5 Responden (Fase 5)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Kuesioner evaluasi dosen (`evaluation_periods`, `evaluation_targets`) menggunakan pola pemisahan sejati (True Anonymity Decoupling): tabel `evaluation_completions` hanya mencatat bahwa mahasiswa telah menyelesaikan kuesioner tanpa memuat jawaban, sedangkan tabel `evaluation_responses` dan `evaluation_answers` menyimpan jawaban tanpa `student_id` dan hanya merekam tanggal pengisian.
+  2. Pengiriman kuesioner dilakukan secara atomik melalui RPC `submit_evaluation` yang mengecek status target dan mencegah pengisian ganda.
+  3. Dosen hanya dapat melihat rekapitulasi setelah periode resmi ditutup dan jumlah responden $\ge 5$ (`evaluation_min_respondents`). Komentar mahasiswa ditampilkan dalam urutan acak tanpa nama atau tanggal.
+- **Alasan**: Melindungi kebebasan berpendapat mahasiswa secara obyektif tanpa risiko de-anonimisasi atau intimidasi akademik.
+

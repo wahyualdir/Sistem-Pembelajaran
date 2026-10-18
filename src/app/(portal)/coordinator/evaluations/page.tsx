@@ -1,8 +1,7 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
-import { EmptyState } from '@/components/shared/empty-state';
-import { ClipboardCheck } from 'lucide-react';
+import { CoordinatorEvaluationsView } from '@/modules/academic/coordinator-evaluations-view';
 
 export default async function CoordinatorEvaluationsPage() {
   const user = await getCurrentUserWithRoles();
@@ -21,13 +20,8 @@ export default async function CoordinatorEvaluationsPage() {
         </p>
       </div>
 
-      <div className="rounded-[12px] border border-border bg-surface p-6">
-        <EmptyState
-          icon={<ClipboardCheck className="h-6 w-6" />}
-          title="Belum ada periode evaluasi"
-          description="Buat periode evaluasi baru untuk semester aktif prodi."
-        />
-      </div>
+      <CoordinatorEvaluationsView />
     </div>
   );
 }
+

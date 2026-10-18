@@ -60,6 +60,7 @@ import { ClassGroupsTabView } from './class-groups-tab-view';
 import { StudentAbsenceModal, LecturerAbsenceTabView } from './absence-modal-and-view';
 import { toggleMaterialCompleteAction, remindUnreadStudentsAction } from './material-progress-actions';
 import { CpmkCplRadarCard } from './cpmk-cpl-radar-card';
+import { ClassLivePollCard } from './class-live-poll-card';
 
 export interface ClassDetailData {
   cls: {
@@ -438,6 +439,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
             {/* Kolom Kanan: Main Stream Feed */}
             <div className="lg:col-span-8 space-y-5">
+              {/* Polling & Kuis Cepat Perkuliahan (Fase 5) */}
+              <ClassLivePollCard classId={cls.id} currentUserRole={viewer} />
+
               {/* Post Box "Umumkan sesuatu ke kelas Anda..." (Khusus Dosen Pengampu; diskusi forum menggunakan ClassForumTabView di bawah) */}
               {lecturer && (
                 <div className="rounded-2xl border-2 border-black bg-white shadow-retro p-4 sm:p-5 space-y-3">

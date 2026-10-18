@@ -1,8 +1,7 @@
 import React from 'react';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
-import { EmptyState } from '@/components/shared/empty-state';
-import { MessageCircle } from 'lucide-react';
+import { MessagesHubView } from '@/modules/academic/messages-hub-view';
 
 export default async function MessagesPage() {
   const user = await getCurrentUserWithRoles();
@@ -21,13 +20,11 @@ export default async function MessagesPage() {
         </p>
       </div>
 
-      <div className="rounded-[12px] border border-border bg-surface p-6">
-        <EmptyState
-          icon={<MessageCircle className="h-6 w-6" />}
-          title="Belum ada pesan aktif"
-          description="Pesan dan jadwal konsultasi akademik akan muncul di sini."
-        />
-      </div>
+      <MessagesHubView
+        currentUserRole={role}
+        currentUserId={user?.user?.id || ''}
+      />
     </div>
   );
 }
+
