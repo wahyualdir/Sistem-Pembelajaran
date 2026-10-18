@@ -420,7 +420,7 @@ export function ContentReviewClient({
                       <BookOpen className="w-3.5 h-3.5 text-primary" />
                       <span>Kutipan Bahan Ajar Rujukan:</span>
                     </div>
-                    <p className="italic leading-relaxed">"{activeCard.source_segment}"</p>
+                    <p className="italic leading-relaxed">&ldquo;{activeCard.source_segment}&rdquo;</p>
                   </div>
                 )}
 

@@ -253,6 +253,13 @@ CREATE TABLE IF NOT EXISTS public.activity_event_kinds (
     allowed_meta_keys TEXT[] NOT NULL DEFAULT '{}'
 );
 
+ALTER TABLE public.activity_event_kinds ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS activity_event_kinds_select ON public.activity_event_kinds;
+CREATE POLICY activity_event_kinds_select ON public.activity_event_kinds
+FOR SELECT TO authenticated
+USING (true);
+
 INSERT INTO public.activity_event_kinds (kind, allowed_meta_keys) VALUES
     ('materi_dibuka', '{}'),
     ('podcast_diputar', '{}'),

@@ -26,7 +26,20 @@ export type NotificationType =
   | 'UJIAN_SUSULAN_DIJADWALKAN'
   | 'MATERI_TERBUKA'
   | 'TUGAS_DIKOREKSI'
-  | 'PENGINGAT_AI';
+  | 'PENGINGAT_AI'
+  // Lampiran B: Jenis Notifikasi Baru Peta Pulau
+  | 'PULAU_TERBUKA'
+  | 'RINGKASAN_PAGI'
+  | 'KONTEN_AI_REVIEW_DIGEST'
+  | 'PEMBUATAN_KONTEN_SELESAI'
+  | 'KONTEN_TERBIT'
+  | 'KONTEN_PERLU_TINJAU_ULANG'
+  | 'PERMINTAAN_BANTUAN'
+  | 'PERMINTAAN_DIJAWAB'
+  | 'JAWABAN_TERBANTU'
+  | 'MAHASISWA_TERTINGGAL'
+  | 'REKAP_SEMESTER_SIAP'
+  | 'LAPORAN_TUKAR_KEAHLIAN';
 
 export type NotificationChannel = 'IN_APP' | 'EMAIL' | 'WHATSAPP';
 
@@ -66,6 +79,11 @@ export interface UserNotificationPreferences {
     announcement: boolean;
     grades: boolean;
     forum_and_early_warning: boolean;
+    peta_pulau?: boolean;
+    ringkasan_pagi?: boolean;
+    flashcard_dan_podcast?: boolean;
+    tukar_keahlian?: boolean;
+    rekap_semester?: boolean;
   };
   updated_at: string;
 }

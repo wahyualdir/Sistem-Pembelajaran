@@ -310,6 +310,36 @@ export function PreferencesView({ initialPreferences }: PreferencesViewProps) {
               desc: 'Balasan diskusi kelas dan notifikasi pemantauan keaktifan akademik.',
               checked: preferences.events.forum_and_early_warning,
             },
+            {
+              key: 'peta_pulau' as const,
+              label: 'Progres Peta Pulau & Bab',
+              desc: 'Notifikasi pembukaan pulau baru dan pengingat kelulusan bab materi.',
+              checked: preferences.events.peta_pulau ?? true,
+            },
+            {
+              key: 'ringkasan_pagi' as const,
+              label: 'Ringkasan Pagi Belajar (07.00 WIB)',
+              desc: 'Ringkasan harian pengingat tenggat tugas, jadwal ujian, dan kartu ulasan hari ini.',
+              checked: preferences.events.ringkasan_pagi ?? true,
+            },
+            {
+              key: 'flashcard_dan_podcast' as const,
+              label: 'Flashcard & Podcast Materi',
+              desc: 'Pemberitahuan tersedianya podcast audio baru dan kartu konsep jatuh tempo.',
+              checked: preferences.events.flashcard_dan_podcast ?? true,
+            },
+            {
+              key: 'tukar_keahlian' as const,
+              label: 'Bantuan Belajar Tukar Keahlian',
+              desc: 'Pemberitahuan pertanyaan rekan sekelas dan konfirmasi jawaban yang terbantu.',
+              checked: preferences.events.tukar_keahlian ?? true,
+            },
+            {
+              key: 'rekap_semester' as const,
+              label: 'Rekapitulasi Semester & Pencapaian',
+              desc: 'Pemberitahuan penerbitan kartu Rekap Semester dan pencapaian kebiasaan belajar.',
+              checked: preferences.events.rekap_semester ?? true,
+            },
           ].map((item) => (
             <label
               key={item.key}

@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { ActivityPrivacyClient } from '@/modules/academic/activity-privacy-client';
 import {
   ShieldCheck,
   ShieldAlert,
@@ -102,7 +103,10 @@ export default function TransparencyPage() {
         </div>
       </div>
 
-      {/* 3. RETENSI DAN HAK PENGGUNA */}
+      {/* 3. DATA AKTIVITAS BELAJAR (PETA PULAU & FLASHCARD) */}
+      <ActivityPrivacyClient />
+
+      {/* 4. RETENSI DAN HAK PENGGUNA */}
       <div className="rounded-[3px] border-2 border-black bg-surface p-6 space-y-4 shadow-retro">
         <h3 className="font-heading font-bold text-lg text-foreground flex items-center gap-2">
           <Clock className="h-5 w-5 text-primary" /> Kebijakan Retensi Data & Hak Mahasiswa

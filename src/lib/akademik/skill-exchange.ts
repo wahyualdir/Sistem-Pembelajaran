@@ -112,3 +112,52 @@ export function calculatePeerHelpXp(
     capped: alreadyEarnedTodayXp + toAward >= dailyCap,
   };
 }
+
+// ----------------------------------------------------------------------------
+// ATURAN POIN & BATAS PASANGAN TUKAR KEAHLIAN (Bagian 9.1 & Lampiran A)
+// ----------------------------------------------------------------------------
+
+export interface PeerHelpRewardInput {
+  requesterId: string;
+  responderId: string;
+  helpfulCountToday: number;
+  pairCountThisWeek: number;
+  dailyCap?: number;      // default: skill_xp_daily_cap = 3
+  pairWeeklyCap?: number;  // default: skill_pair_weekly_cap = 2
+  xpPerHelpful?: number;   // default: skill_xp_per_helpful = 5
+}
+
+export interface PeerHelpRewardResult {
+  awarded: boolean;
+  xp: number;
+  reason: 'success' | 'self_help' | 'daily_cap_exceeded' | 'pair_weekly_cap_exceeded';
+}
+
+/**
+ * Evaluasi pemberian XP bantuan rekan (Terbantu) secara murni:
+ * - Menolak diri sendiri (self-help)
+ * - Membatasi maksimal per hari per pembantu (skill_xp_daily_cap, default 3)
+ * - Membatasi pasangan mahasiswa yang sama per minggu (skill_pair_weekly_cap, default 2)
+ */
+export function evaluatePeerHelpReward(input: PeerHelpRewardInput): PeerHelpRewardResult {
+  const dailyCap = input.dailyCap ?? 3;
+  const pairWeeklyCap = input.pairWeeklyCap ?? 2;
+  const xpPerHelpful = input.xpPerHelpful ?? 5;
+
+  // 1. Pemohon tidak bisa memberi poin pada dirinya sendiri
+  if (input.requesterId === input.responderId) {
+    return { awarded: false, xp: 0, reason: 'self_help' };
+  }
+
+  // 2. Batas harian per pembantu (skill_xp_daily_cap)
+  if (input.helpfulCountToday >= dailyCap) {
+    return { awarded: false, xp: 0, reason: 'daily_cap_exceeded' };
+  }
+
+  // 3. Batas pasangan yang sama per minggu (skill_pair_weekly_cap)
+  if (input.pairCountThisWeek >= pairWeeklyCap) {
+    return { awarded: false, xp: 0, reason: 'pair_weekly_cap_exceeded' };
+  }
+
+  return { awarded: true, xp: xpPerHelpful, reason: 'success' };
+}

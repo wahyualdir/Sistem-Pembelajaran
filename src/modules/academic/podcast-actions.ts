@@ -1,97 +1,97 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
-export interface ChapterPodcastData {
-  id: string;
+export interface PodcastPlaybackData {
+  podcast_id: string;
   chapter_id: string;
+  class_id: string;
   title: string;
-  narrator: 'Pak Dosen' | 'Bu Dosen';
+  narrator: string;
   script_text: string;
-  audio_url?: string | null;
-  audio_duration_seconds: number;
-  transcription_segments?: Array<{ start: number; end: number; text: string }>;
-  my_progress?: {
-    last_position_seconds: number;
-    is_completed: boolean;
-  } | null;
+  transcription_segments: { text: string; materialId?: string; section?: string; wordCount?: number }[];
+  audio_url?: string;
+  audio_chunks?: { chunkIndex: number; audioUrl: string; durationSeconds: number }[];
+  duration_seconds: number;
+  last_position_seconds: number;
+  is_completed: boolean;
 }
 
 /**
- * Mengambil podcast bab untuk mahasiswa / dosen
+ * Mengambil data pemutaran podcast melalui RPC get_podcast_playback
+ * Menegakkan fail-closed bila bab masih terkunci atau podcast belum terbit.
  */
-export async function getChapterPodcastAction(
-  chapterId: string
-): Promise<ChapterPodcastData | null> {
-  const user = await getCurrentUserWithRoles();
-  if (!user) return null;
+export async function getPodcastPlaybackAction(podcastId: string): Promise<{
+  success: boolean;
+  data?: PodcastPlaybackData;
+  error?: string;
+}> {
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc('get_podcast_playback', {
+      p_podcast_id: podcastId,
+    });
 
-  const supabase = await createClient();
+    if (error) {
+      return { success: false, error: error.message };
+    }
 
-  const { data: podcast, error } = await supabase
-    .from('chapter_podcasts')
-    .select(`
-      id,
-      chapter_id,
-      title,
-      narrator,
-      script_text,
-      audio_url,
-      audio_duration_seconds,
-      transcription_segments,
-      podcast_progress (
-        last_position_seconds,
-        is_completed
-      )
-    `)
-    .eq('chapter_id', chapterId)
-    .eq('script_status', 'disetujui')
-    .single();
-
-  if (error || !podcast) return null;
-
-  const prog = Array.isArray(podcast.podcast_progress)
-    ? podcast.podcast_progress[0]
-    : podcast.podcast_progress;
-
-  return {
-    id: podcast.id,
-    chapter_id: podcast.chapter_id,
-    title: podcast.title,
-    narrator: podcast.narrator as any,
-    script_text: podcast.script_text,
-    audio_url: podcast.audio_url,
-    audio_duration_seconds: podcast.audio_duration_seconds || 0,
-    transcription_segments: podcast.transcription_segments as any,
-    my_progress: prog
-      ? {
-          last_position_seconds: prog.last_position_seconds || 0,
-          is_completed: prog.is_completed || false,
-        }
-      : null,
-  };
+    return { success: true, data: data as PodcastPlaybackData };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Gagal memuat pemutar podcast.' };
+  }
 }
 
 /**
- * Menyimpan progres dengar podcast dan menandai selesai bila tuntas
+ * Menyimpan progres putar podcast mahasiswa ke podcast_progress
+ * Menyimpan setiap interval debounce 10 detik dan mencatat kejadian aktivitas.
  */
 export async function savePodcastProgressAction(
   podcastId: string,
+  classId: string,
+  chapterId: string,
   positionSeconds: number,
-  isCompleted: boolean
-): Promise<{ ok: boolean; message?: string }> {
-  const user = await getCurrentUserWithRoles();
-  if (!user) return { ok: false, message: 'Belum login' };
+  totalDurationSeconds: number
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const supabase = await createClient();
+    const {
+      data: { user },
+      error: authErr,
+    } = await supabase.auth.getUser();
 
-  const supabase = await createClient();
+    if (authErr || !user) {
+      return { success: false, error: 'Pengguna belum terautentikasi.' };
+    }
 
-  const { error } = await supabase.rpc('save_podcast_progress', {
-    p_podcast_id: podcastId,
-    p_position_seconds: positionSeconds,
-    p_is_completed: isCompleted,
-  });
+    const isCompleted = totalDurationSeconds > 0 && positionSeconds >= Math.floor(totalDurationSeconds * 0.9);
 
-  if (error) return { ok: false, message: error.message };
-  return { ok: true };
+    const { error: upsertErr } = await supabase.from('podcast_progress').upsert({
+      student_id: user.id,
+      podcast_id: podcastId,
+      last_position_seconds: Math.round(positionSeconds),
+      is_completed: isCompleted,
+      completed_at: isCompleted ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString(),
+    });
+
+    if (upsertErr) {
+      return { success: false, error: upsertErr.message };
+    }
+
+    // Catat log aktivitas belajar mandiri secara aman via RPC log_activity
+    if (isCompleted) {
+      await supabase.rpc('log_activity', {
+        kind: 'podcast_progress',
+        class_id: classId,
+        ref_type: 'podcast',
+        ref_id: podcastId,
+        meta: { event: 'podcast_selesai', duration: Math.round(positionSeconds) },
+      });
+    }
+
+    return { success: true };
+  } catch (err: any) {
+    return { success: false, error: err?.message || 'Gagal menyimpan progres podcast.' };
+  }
 }

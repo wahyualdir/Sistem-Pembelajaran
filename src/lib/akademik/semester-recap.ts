@@ -56,12 +56,16 @@ export function buildSemesterRecap(stats: StudentRawSemesterStats): SemesterReca
 
   // Penentuan lencana kebiasaan belajar autentik
   let learningHabitBadge = 'Penjelajah Mandiri';
-  if (stats.peerHelpAcceptedCount >= 5) {
+  if (completionRatePct === 100) {
+    learningHabitBadge = 'Penjelajah Sempurna';
+  } else if (stats.peerHelpAcceptedCount >= 5) {
     learningHabitBadge = 'Rekan Kolaboratif';
   } else if (stats.flashcardsReviewedCount >= 50) {
     learningHabitBadge = 'Pengulas Konsisten';
   } else if (podcastMinutesListened >= 60) {
     learningHabitBadge = 'Pendengar Konseptual';
+  } else if (stats.totalChaptersPassed === 0 && (stats.totalXp || 0) === 0) {
+    learningHabitBadge = 'Langkah Awal';
   }
 
   // Ringkasan singkat naratif

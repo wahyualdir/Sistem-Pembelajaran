@@ -21,6 +21,7 @@ import {
 import { cn } from '@/lib/utils';
 import type { ClassMapItem } from './peta-pulau-actions';
 import { getTopicMasteryLabel } from '@/lib/akademik/topic-mastery';
+import { PodcastPlayer } from './podcast-player';
 
 export interface ClassIslandMapProps {
   classId: string;
@@ -35,6 +36,7 @@ export function ClassIslandMap({
 }: ClassIslandMapProps) {
   const [viewMode, setViewMode] = useState<'peta' | 'daftar'>('peta');
   const [selectedChapter, setSelectedChapter] = useState<ClassMapItem | null>(null);
+  const [activePodcast, setActivePodcast] = useState<{ id: string; title: string } | null>(null);
 
   if (!chapters || chapters.length === 0) {
     return (
@@ -453,14 +455,30 @@ export function ClassIslandMap({
                     </h4>
                     <div className="p-3 bg-muted/20 border border-border rounded-md text-xs flex items-center justify-between">
                       <span>Dengarkan audio ringkasan bab (~3-6 menit) dengan transkrip.</span>
-                      <Link
-                        href={`/classes/${classId}?tab=materi&podcast=${selectedChapter.id}`}
-                        className="text-primary font-semibold hover:underline inline-flex items-center gap-1"
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setActivePodcast(
+                            activePodcast?.id === selectedChapter.id
+                              ? null
+                              : { id: selectedChapter.id, title: selectedChapter.title }
+                          )
+                        }
+                        className="text-primary font-semibold hover:underline inline-flex items-center gap-1 cursor-pointer"
                       >
                         <Play className="w-3.5 h-3.5" />
-                        <span>Dengarkan</span>
-                      </Link>
+                        <span>{activePodcast?.id === selectedChapter.id ? 'Tutup Pemutar' : 'Dengarkan'}</span>
+                      </button>
                     </div>
+                    {activePodcast?.id === selectedChapter.id && (
+                      <div className="pt-2">
+                        <PodcastPlayer
+                          podcastId={activePodcast.id}
+                          chapterTitle={activePodcast.title}
+                          onClose={() => setActivePodcast(null)}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
 

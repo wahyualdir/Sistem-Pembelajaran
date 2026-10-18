@@ -251,7 +251,7 @@ export function FlashcardsClient({ initialDecks }: { initialDecks: StudentDeckIt
               <Info className="w-3.5 h-3.5 text-primary" />
               <span>Kutipan Materi Sumber:</span>
             </p>
-            <p className="italic leading-relaxed">"{currentCard.source_segment}"</p>
+            <p className="italic leading-relaxed">&ldquo;{currentCard.source_segment}&rdquo;</p>
           </div>
         )}
 

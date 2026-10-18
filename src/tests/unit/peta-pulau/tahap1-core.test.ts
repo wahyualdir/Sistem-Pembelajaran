@@ -12,6 +12,11 @@ import {
   type PriorityChapter,
   type PriorityExam,
 } from '@/lib/akademik/daily-priorities';
+import {
+  computeChapterState,
+  type ChapterInfo,
+  type StudentProgressInfo,
+} from '@/lib/akademik/chapter-state';
 
 describe('Tahap 1: Inti Belajar — Unit Tests', () => {
   describe('1. Kekuatan Topik (computeTopicLevel) - Minimal 10 Kasus', () => {
@@ -446,6 +451,172 @@ describe('Tahap 1: Inti Belajar — Unit Tests', () => {
     it('Fixture 17: Validasi format tanggal zona WIB', () => {
       const utcDate = new Date('2026-10-19T20:00:00Z'); // 20.00 UTC = 03.00 WIB tanggal 20 Oktober
       expect(getWibDateString(utcDate)).toBe('2026-10-20');
+    });
+  });
+
+  describe('3. Penentuan Status Bab (chapter_state) - Minimal 12 Skenario', () => {
+    const chapters: ChapterInfo[] = [
+      {
+        id: 'ch-1',
+        classId: 'c-101',
+        position: 1,
+        title: 'Bab 1: Pengantar Basis Data',
+        isOptional: false,
+        completionRule: 'kuis',
+      },
+      {
+        id: 'ch-2',
+        classId: 'c-101',
+        position: 2,
+        title: 'Bab 2: Desain Relasional (Opsional)',
+        isOptional: true,
+        completionRule: 'kuis',
+      },
+      {
+        id: 'ch-3',
+        classId: 'c-101',
+        position: 3,
+        title: 'Bab 3: Normalisasi Tingkat Lanjut',
+        isOptional: false,
+        completionRule: 'kuis',
+      },
+      {
+        id: 'ch-4',
+        classId: 'c-101',
+        position: 4,
+        title: 'Bab 4: Arsitektur Transaksi ACID',
+        isOptional: false,
+        completionRule: 'materi',
+      },
+      {
+        id: 'ch-archived',
+        classId: 'c-101',
+        position: 5,
+        title: 'Bab Arsip Lampau',
+        isOptional: false,
+        completionRule: 'kuis',
+        archivedAt: '2026-09-01T00:00:00Z',
+      },
+    ];
+
+    it('Skenario 1: Bab pertama di kelas selalu berstatus terbuka meskipun belum ada progres', () => {
+      const state = computeChapterState('ch-1', chapters, {});
+      expect(state).toBe('terbuka');
+    });
+
+    it('Skenario 2: Bab 3 terkunci jika Bab 1 wajib sebelumnya belum selesai', () => {
+      const state = computeChapterState('ch-3', chapters, {});
+      expect(state).toBe('terkunci');
+    });
+
+    it('Skenario 3: Bab 1 menjadi selesai ketika kuis dinyatakan lulus (passedAt ada)', () => {
+      const progress: Record<string, StudentProgressInfo> = {
+        'ch-1': { passedAt: '2026-10-15T10:00:00Z', bestScore: 85 },
+      };
+      const state = computeChapterState('ch-1', chapters, progress);
+      expect(state).toBe('selesai');
+    });
+
+    it('Skenario 4: Bab 2 (opsional) terbuka setelah Bab 1 selesai', () => {
+      const progress: Record<string, StudentProgressInfo> = {
+        'ch-1': { passedAt: '2026-10-15T10:00:00Z', bestScore: 85 },
+      };
+      const state = computeChapterState('ch-2', chapters, progress);
+      expect(state).toBe('terbuka');
+    });
+
+    it('Skenario 5: Bab 3 (wajib) langsung terbuka setelah Bab 1 selesai, tanpa terhalang Bab 2 (opsional)', () => {
+      const progress: Record<string, StudentProgressInfo> = {
+        'ch-1': { passedAt: '2026-10-15T10:00:00Z', bestScore: 85 },
+        // ch-2 opsional dan belum dikerjakan sama sekali
+      };
+      const state = computeChapterState('ch-3', chapters, progress);
+      expect(state).toBe('terbuka');
+    });
+
+    it('Skenario 6: Bab 4 (aturan materi) terkunci jika Bab 3 (wajib) belum selesai', () => {
+      const progress: Record<string, StudentProgressInfo> = {
+        'ch-1': { passedAt: '2026-10-15T10:00:00Z', bestScore: 85 },
+      };
+      const state = computeChapterState('ch-4', chapters, progress);
+      expect(state).toBe('terkunci');
+    });
+
+    it('Skenario 7: Bab 4 terbuka setelah Bab 3 dinyatakan lulus kuis', () => {
+      const progress: Record<string, StudentProgressInfo> = {
+        'ch-1': { passedAt: '2026-10-15T10:00:00Z', bestScore: 85 },
+        'ch-3': { passedAt: '2026-10-16T12:00:00Z', bestScore: 90 },
+      };
+      const state = computeChapterState('ch-4', chapters, progress);
+      expect(state).toBe('terbuka');
+    });
+
+    it('Skenario 8: Bab 4 menjadi selesai ketika seluruh materi dibaca (materialsDoneAt terisi)', () => {
+      const progress: Record<string, StudentProgressInfo> = {
+        'ch-1': { passedAt: '2026-10-15T10:00:00Z' },
+        'ch-3': { passedAt: '2026-10-16T12:00:00Z' },
+        'ch-4': { materialsDoneAt: '2026-10-17T09:00:00Z' },
+      };
+      const state = computeChapterState('ch-4', chapters, progress);
+      expect(state).toBe('selesai');
+    });
+
+    it('Skenario 9: Bab yang diarsipkan selalu mengembalikan status terkunci', () => {
+      const state = computeChapterState('ch-archived', chapters, {});
+      expect(state).toBe('terkunci');
+    });
+
+    it('Skenario 10: Override manual dosen membuka pulau meskipun prasyarat linear belum terpenuhi', () => {
+      // Mahasiswa belum mengerjakan bab apa pun, tetapi dosen memberikan override pada Bab 4
+      const state = computeChapterState('ch-4', chapters, {}, ['ch-4']);
+      expect(state).toBe('terbuka');
+    });
+
+    it('Skenario 11: Bab id yang tidak terdaftar di kelas mengembalikan terkunci', () => {
+      const state = computeChapterState('ch-nonexistent', chapters, {});
+      expect(state).toBe('terkunci');
+    });
+
+    it('Skenario 12: Penambahan bab baru di tengah tidak membatalkan status selesai pada bab yang sudah lulus', () => {
+      const updatedChapters: ChapterInfo[] = [
+        ...chapters.slice(0, 2),
+        {
+          id: 'ch-inserted',
+          classId: 'c-101',
+          position: 2.5,
+          title: 'Bab Sisipan Baru',
+          isOptional: false,
+          completionRule: 'kuis',
+        },
+        ...chapters.slice(2),
+      ];
+
+      const progress: Record<string, StudentProgressInfo> = {
+        'ch-1': { passedAt: '2026-10-15T10:00:00Z' },
+        'ch-3': { passedAt: '2026-10-16T12:00:00Z' }, // Bab 3 sudah lulus sebelum bab sisipan ada
+      };
+
+      // Status Bab 3 tetap selesai
+      expect(computeChapterState('ch-3', updatedChapters, progress)).toBe('selesai');
+      // Bab sisipan baru berstatus terbuka karena Bab 1 sudah selesai
+      expect(computeChapterState('ch-inserted', updatedChapters, progress)).toBe('terbuka');
+    });
+
+    it('Skenario 13: Bila bab pertama diarsipkan, bab aktif berikutnya otomatis menjadi bab pertama dan terbuka', () => {
+      const modifiedChapters: ChapterInfo[] = chapters.map((c) =>
+        c.id === 'ch-1' ? { ...c, archivedAt: '2026-10-18T00:00:00Z' } : c
+      );
+      // Bab 2 sekarang adalah bab pertama aktif
+      const state = computeChapterState('ch-2', modifiedChapters, {});
+      expect(state).toBe('terbuka');
+    });
+
+    it('Skenario 14: Mahasiswa dengan nilai di bawah ambang (belum lulus) tetap berstatus terbuka untuk mencoba ulang', () => {
+      const progress: Record<string, StudentProgressInfo> = {
+        'ch-1': { bestScore: 50 }, // belum passedAt
+      };
+      const state = computeChapterState('ch-1', chapters, progress);
+      expect(state).toBe('terbuka');
     });
   });
 });
