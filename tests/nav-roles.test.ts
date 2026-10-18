@@ -48,7 +48,7 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR - 102 Me
     expect(getRoleLabel('SUPER_ADMIN')).toBe('Super Administrator');
   });
 
-  it('memastikan jumlah menu per peran dan total 102 butir menu sesuai spesifikasi', () => {
+  it('memastikan jumlah menu per peran dan total 107 butir menu sesuai spesifikasi', () => {
     const studentCount = MENU_CONFIG.STUDENT.reduce((acc, g) => acc + g.items.length, 0);
     const taCount = MENU_CONFIG.TEACHING_ASSISTANT.reduce((acc, g) => acc + g.items.length, 0);
     const lecturerCount = MENU_CONFIG.LECTURER.reduce((acc, g) => acc + g.items.length, 0);
@@ -58,9 +58,9 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR - 102 Me
     const superAdminCount = MENU_CONFIG.SUPER_ADMIN.reduce((acc, g) => acc + g.items.length, 0);
     const sharedCount = SHARED_SUPPORT_GROUP.items.length;
 
-    expect(studentCount).toBe(16);
-    expect(taCount).toBe(19);
-    expect(lecturerCount).toBe(19);
+    expect(studentCount).toBe(18);
+    expect(taCount).toBe(21);
+    expect(lecturerCount).toBe(20);
     expect(coordinatorCount).toBe(12);
     expect(staffCount).toBe(13);
     expect(sysAdminCount).toBe(8);
@@ -77,7 +77,7 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR - 102 Me
       superAdminCount +
       sharedCount;
 
-    expect(totalMenu).toBe(102);
+    expect(totalMenu).toBe(107);
   });
 
   it('memastikan tidak ada kata terlarang atau pola terlarang di seluruh nama menu dan judul grup', () => {
@@ -128,7 +128,7 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR - 102 Me
     }
   });
 
-  it('memastikan menu Mahasiswa (16 butir) sesuai spesifikasi final', () => {
+  it('memastikan menu Mahasiswa (18 butir + 3 akun) sesuai spesifikasi final', () => {
     const groups = getNavGroups('STUDENT');
     const allLabels = groups.flatMap((g) => g.items.map((i) => i.label));
 
@@ -143,6 +143,8 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR - 102 Me
       'Perpustakaan',
       'Tanya AI',
       'Pesan',
+      'Flashcard',
+      'Tukar Keahlian',
       'Nilai Saya',
       'Pencapaian',
       'Sertifikat',
@@ -163,7 +165,7 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR - 102 Me
     expect(allLabels).not.toContain('Nilai & Progres');
   });
 
-  it('memastikan menu Asisten Dosen (19 butir + 3 akun) memiliki grup Asistensi', () => {
+  it('memastikan menu Asisten Dosen (21 butir + 3 akun) memiliki grup Asistensi dan Belajar lengkap', () => {
     const groups = getNavGroups('TEACHING_ASSISTANT');
     const groupTitles = groups.map((g) => g.title).filter(Boolean);
     expect(groupTitles).toContain('Asistensi');
@@ -176,11 +178,13 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR - 102 Me
     expect(allLabels).toContain('Kelas Asistensi');
     expect(allLabels).toContain('Koreksi');
     expect(allLabels).toContain('Pantau Ujian');
+    expect(allLabels).toContain('Flashcard');
+    expect(allLabels).toContain('Tukar Keahlian');
     expect(allLabels).not.toContain('Antrean Koreksi');
     expect(allLabels).not.toContain('Kelas Diasistensi');
   });
 
-  it('memastikan menu Dosen Pengampu (19 butir + 3 akun) sesuai spesifikasi final', () => {
+  it('memastikan menu Dosen Pengampu (20 butir + 3 akun) sesuai spesifikasi final', () => {
     const groups = getNavGroups('LECTURER');
     const allLabels = groups.flatMap((g) => g.items.map((i) => i.label));
 
@@ -188,6 +192,7 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR - 102 Me
     expect(allLabels).toContain('Kelas Saya');
     expect(allLabels).toContain('Presensi');
     expect(allLabels).toContain('Berita Acara');
+    expect(allLabels).toContain('Tinjau Konten');
     expect(allLabels).toContain('Perpustakaan');
     expect(allLabels).toContain('Ujian dan Kuis');
     expect(allLabels).toContain('Bank Soal');

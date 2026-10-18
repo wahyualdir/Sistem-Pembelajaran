@@ -46,6 +46,9 @@ import {
   Settings,
   LifeBuoy,
   Eye,
+  Brain,
+  HandHelping,
+  BadgeCheck,
 } from 'lucide-react';
 
 export interface MenuItem {
@@ -77,6 +80,9 @@ export interface DynamicMenuBadges {
   pendingEvaluations?: number;
   coordinatorApprovalsCount?: number;
   requestCount?: number;
+  flashcardsDue?: number;
+  openHelpRequests?: number;
+  contentPendingReview?: number;
 }
 
 export const BERANDA_CHIPS = [
@@ -125,6 +131,8 @@ const STUDENT_GROUPS: MenuGroup[] = [
       { id: 'mhs-perpustakaan', label: 'Perpustakaan', href: '/library', icon: Library, roles: ['STUDENT'] },
       { id: 'mhs-tanya-ai', label: 'Tanya AI', href: '/ai-assistant', icon: Sparkles, roles: ['STUDENT'] },
       { id: 'mhs-pesan', label: 'Pesan', href: '/messages', icon: MessageCircle, roles: ['STUDENT'] },
+      { id: 'mhs-flashcard', label: 'Flashcard', href: '/flashcards', icon: Brain, roles: ['STUDENT'] },
+      { id: 'mhs-tukar-keahlian', label: 'Tukar Keahlian', href: '/skill-exchange', icon: HandHelping, roles: ['STUDENT'] },
     ],
   },
   {
@@ -207,6 +215,7 @@ const LECTURER_GROUPS: MenuGroup[] = [
       { id: 'dsn-kelas', label: 'Kelas Saya', href: '/classes', icon: Layers, roles: ['LECTURER'] },
       { id: 'dsn-presensi', label: 'Presensi', href: '/attendance', icon: CalendarCheck2, roles: ['LECTURER'] },
       { id: 'dsn-berita-acara', label: 'Berita Acara', href: '/lecturer/journals', icon: NotebookPen, roles: ['LECTURER'] },
+      { id: 'dsn-tinjau-konten', label: 'Tinjau Konten', href: '/lecturer/content-review', icon: BadgeCheck, roles: ['LECTURER'] },
       { id: 'dsn-perpustakaan', label: 'Perpustakaan', href: '/library', icon: Library, roles: ['LECTURER'] },
     ],
   },
@@ -497,6 +506,18 @@ export function getMenuGroupsForRole(
       if (item.href === '/staff/services/verification' && badges.requestCount && badges.requestCount > 0) {
         return { ...item, badge: badges.requestCount };
       }
+      // 9. Mahasiswa / Asisten: Flashcard
+      if (item.href === '/flashcards' && badges.flashcardsDue && badges.flashcardsDue > 0) {
+        return { ...item, badge: badges.flashcardsDue };
+      }
+      // 10. Mahasiswa / Asisten: Tukar Keahlian
+      if (item.href === '/skill-exchange' && badges.openHelpRequests && badges.openHelpRequests > 0) {
+        return { ...item, badge: badges.openHelpRequests };
+      }
+      // 11. Dosen: Tinjau Konten
+      if (item.href === '/lecturer/content-review' && badges.contentPendingReview && badges.contentPendingReview > 0) {
+        return { ...item, badge: badges.contentPendingReview };
+      }
       return item;
     }),
   }));
@@ -619,7 +640,9 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
       pathname.startsWith('/messages') ||
       pathname.startsWith('/achievements') ||
       pathname.startsWith('/evaluations') ||
-      pathname.startsWith('/requests');
+      pathname.startsWith('/requests') ||
+      pathname.startsWith('/flashcards') ||
+      pathname.startsWith('/skill-exchange');
     if (isAcademic) return false;
     return true;
   }
@@ -640,7 +663,9 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
       pathname.startsWith('/messages') ||
       pathname.startsWith('/achievements') ||
       pathname.startsWith('/evaluations') ||
-      pathname.startsWith('/requests');
+      pathname.startsWith('/requests') ||
+      pathname.startsWith('/flashcards') ||
+      pathname.startsWith('/skill-exchange');
     if (isAcademicOrRolePortal) return false;
     return true;
   }
@@ -662,6 +687,11 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
     return norm === 'ACADEMIC_STAFF';
   }
 
+  // Proteksi tinjau konten (Dosen, Asisten berizin, Kaprodi)
+  if (pathname.startsWith('/lecturer/content-review')) {
+    return norm === 'LECTURER' || norm === 'TEACHING_ASSISTANT' || norm === 'PROGRAM_COORDINATOR' || norm === 'SUPER_ADMIN';
+  }
+
   // Proteksi dosen
   if (pathname.startsWith('/lecturer')) {
     return norm === 'LECTURER' || norm === 'PROGRAM_COORDINATOR';
@@ -670,6 +700,11 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
   // Proteksi asisten
   if (pathname.startsWith('/ta')) {
     return norm === 'TEACHING_ASSISTANT';
+  }
+
+  // Proteksi flashcard dan tukar keahlian
+  if (pathname.startsWith('/flashcards') || pathname.startsWith('/skill-exchange')) {
+    return norm === 'STUDENT' || norm === 'TEACHING_ASSISTANT' || norm === 'LECTURER' || norm === 'PROGRAM_COORDINATOR' || norm === 'SUPER_ADMIN';
   }
 
   return true;
