@@ -72,17 +72,13 @@ DECLARE
     v_conv_id UUID := 'e4000001-0000-0000-0000-000000000001';
 BEGIN
     -- =================================================================
-    -- PENGAMAN PRODUKSI (Production Safeguard)
-    -- demo_seed.sql hanya boleh dijalankan di lingkungan lokal / staging.
-    -- Ditolak secara tegas jika lingkungan bertanda 'production' / 'prod'.
+    -- PENGAMAN PRODUKSI (FAIL-CLOSED PRODUCTION SAFEGUARD)
+    -- demo_seed.sql hanya boleh dijalankan jika app.environment bernilai tepat 'local' atau 'staging'.
+    -- Kosong, NULL, nilai lain, atau tidak diatur HARUS melempar exception.
     -- =================================================================
-    IF current_setting('app.environment', true) ILIKE '%prod%' 
-       OR current_setting('environment', true) ILIKE '%prod%'
-       OR (
-           EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'system_settings')
-           AND EXISTS (SELECT 1 FROM public.system_settings WHERE key = 'environment' AND value::text ILIKE '%prod%')
-       ) THEN
-        RAISE EXCEPTION 'EKSEKUSI DITOLAK: demo_seed.sql hanya boleh dijalankan pada lingkungan lokal atau staging, dilarang di produksi!';
+    IF COALESCE(current_setting('app.environment', true), '') NOT IN ('local', 'staging') THEN
+        RAISE EXCEPTION 'EKSEKUSI DITOLAK (FAIL-CLOSED): demo_seed.sql hanya boleh dijalankan pada lingkungan lokal atau staging (current_setting(''app.environment'') bernilai tepat ''local'' atau ''staging''). Nilai saat ini: ''%''.',
+            COALESCE(current_setting('app.environment', true), '<tidak diatur>');
     END IF;
 
     -- Ambil referensi peran

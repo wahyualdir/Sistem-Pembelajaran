@@ -211,37 +211,115 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
     - Permohonan izin sakit berlampiran, sanggahan nilai, percakapan langsung terarah, dan polling kelas interaktif.
     - Seluruh data surel menggunakan domain resmi kampus (`@student.uir.ac.id` dan `@uir.ac.id`) demi kepatuhan kebijakan keamanan privasi data.
 - **14.4 Pemeriksaan Akhir & Verifikasi Kualitas Produksi**:
-  - `check:rls`: 122 dari 122 tabel pada skema public memiliki RLS aktif (100% SUKSES).
-  - `tests/nav-roles.test.ts`: 17 pengujian navigasi multi-aktor lulus 100% (memverifikasi 102 menu, diferensiasi peran, dan 0 kata terlarang).
-  - `src/tests/unit/security/cross-feature-security.test.ts`: 8 pengujian privasi dan keamanan lulus 100% (bebas surel pribadi, tidak ada store palsu).
-  - `npm test`: Seluruh 45 berkas tes dan 373 pengujian unit vitest lulus 100% (waktu eksekusi 62.74 detik).
+  - `check:rls`: 122 dari 122 tabel pada skema public memiliki RLS aktif (SUKSES TERVERIFIKASI).
+  - `tests/nav-roles.test.ts`: 18 pengujian navigasi multi-aktor seluruhnya lulus (memverifikasi 102 menu, diferensiasi 7 peran, dan 0 kata terlarang).
+  - `src/tests/unit/security/cross-feature-security.test.ts`: 8 pengujian privasi dan keamanan seluruhnya lulus (bebas surel pribadi, tidak ada store palsu).
+  - `npm test`: Seluruh 53 berkas tes dan 437 pengujian unit vitest seluruhnya lulus (0 gagal).
   - `npx tsc --noEmit` (`npm run typecheck`): 0 error / peringatan ketik TypeScript.
   - `npm run lint`: 0 error ESLint.
   - `npm run build`: Kompilasi produksi Next.js hijau dan bersih (131 rute terkompilasi sukses).
-  - Audit Keamanan Bundel Klien: Direktori `.next/static` diperiksa bersih 100% dari kebocoran rahasia (`JUDGE_API_KEY`, `CRON_SECRET`, dan kunci layanan).
+  - Audit Keamanan Bundel Klien: Direktori `.next/static` diperiksa bersih dari kebocoran rahasia (`JUDGE_API_KEY`, `CRON_SECRET`, dan kunci layanan).
 - **Status Transformasi Proyek Keseluruhan**:
-  - Fase 0 (Fondasi Bersama): Selesai 100%
-  - Fase 1 (Ruang Kelas & Perkuliahan Inti): Selesai 100%
-  - Fase 2 (Tugas, Rubrik & Penilaian Lanjutan): Selesai 100%
-  - Fase 3 (Presensi, Pertemuan Sinkron & Jurnal): Selesai 100%
-  - Fase 4 (Ujian CBT, Bank Soal, CPL/CPMK & Deteksi Kemiripan): Selesai 100%
-  - Fase 5 (Interaksi, Gamifikasi, AI & Evaluasi Dosen): Selesai 100%
-  - Fase 6 (Salin & Arsip Kelas, Impor Massal, Moodle XML & QTI): Selesai 100%
-  - Fase 7 (Penutup, Dokumentasi Final, Runbook, Seed & Verifikasi): Selesai 100%
-### [18 Oktober 2026] Audit Kepatuhan Bagian 9–13 & Penyelesaian Menyeluruh Seluruh Fitur
+  - Fase 0 (Fondasi Bersama): Selesai dan Terverifikasi
+  - Fase 1 (Ruang Kelas & Perkuliahan Inti): Selesai dan Terverifikasi
+  - Fase 2 (Tugas, Rubrik & Penilaian Lanjutan): Selesai dan Terverifikasi
+  - Fase 3 (Presensi, Pertemuan Sinkron & Jurnal): Selesai dan Terverifikasi
+  - Fase 4 (Ujian CBT, Bank Soal, CPL/CPMK & Deteksi Kemiripan): Selesai dan Terverifikasi
+  - Fase 5 (Interaksi, Gamifikasi, AI & Evaluasi Dosen): Selesai dan Terverifikasi
+  - Fase 6 (Salin & Arsip Kelas, Impor Massal, Moodle XML & QTI): Selesai dan Terverifikasi
+  - Fase 7 (Penutup, Dokumentasi Final, Runbook, Seed & Verifikasi): Selesai dan Terverifikasi
+
+### [18 Oktober 2026] Audit Kepatuhan Bagian 9–13, Hardening Keamanan, dan Pembuktian Sistem
 - **Audit Kepatuhan Menyeluruh (`docs/AUDIT_KEPATUHAN.md`)**:
-  - Seluruh 22 sub-fitur pada Bagian 9 sampai 13 telah diaudit secara teliti terhadap basis kode dan dipastikan berstatus **Selesai 100%** dengan pengujian unit/e2e/RLS pembukti spesifik.
+  - Seluruh 22 sub-fitur pada Bagian 9 sampai 13 telah diaudit secara teliti terhadap basis kode dan dipastikan berstatus **Selesai dan Terverifikasi** dengan pengujian unit/e2e/RLS pembukti spesifik.
 - **Implementasi Fitur & Pengujian Baru yang Ditambahkan**:
   1. **11.1 Autosave Ujian**: Integrasi persistensi IndexedDB via `idb-keyval` (`exam:{attemptId}`), antrean sinkronisasi offline dengan backoff eksponensial, aturan "higher revision wins", penghitungan sisa waktu berbasis timer offset peladen, penanganan multi-tab (sesi tunggal aktif). Teruji di `src/tests/unit/phase4/exam-autosave.test.ts` dan `tests/e2e/exam-autosave.spec.ts`.
   2. **11.2 Susulan dan Remedial**: Isolasi hak masuk peserta susulan via tabel `exam_makeup_participants`, generator dan validator token 6 karakter tanpa huruf ambigu (I, O, 1, 0), kebijakan kombinasi skor (`tertinggi`, `ganti`, `rata_rata`) dengan batas nilai maksimum `score_cap`. Teruji di `src/tests/unit/phase4/exam-makeup.test.ts` (10 tes lulus).
   3. **9.3 Komentar Berkas**: Modul `src/lib/akademik/feedback-comments-utils.ts` dan Server Actions `src/modules/academic/feedback-comment-actions.ts` mendukung penanda baris kode (`type: 'lines'`), penanda halaman dokumen PDF (`type: 'page'`), validasi panjang teks 1–2000 karakter, dan isolasi komentar draf asisten dari mahasiswa. Teruji di `src/tests/unit/phase2/feedback-comments.test.ts` (10 tes lulus).
   4. **9.4 Sanggah Nilai oleh Mahasiswa**: Modul `src/lib/akademik/dispute-utils.ts` dan Server Actions `src/modules/academic/dispute-actions.ts` menegakkan jendela 7 hari kalender sejak publikasi nilai, alasan minimal 30 karakter, pembatasan laju 5 pengajuan per jam, penarikan sanggahan hanya saat status 'diajukan', dan pembuatan otomatis draf `grade_change_requests` jika buku nilai telah difinalisasi. Teruji di `src/tests/unit/phase2/grade-disputes.test.ts` (18 tes lulus).
-  5. **10.3 Tautan Kuliah Daring dan Rekaman**: Validasi host peladen HTTPS terhadap daftar putih (Google Meet, Zoom, Teams, Jitsi, YouTube, Drive), aktivasi tombol Gabung pada jendela 15 menit sebelum perkuliahan dimulai, dan opsi penerapan serentak ke seluruh pertemuan. Teruji di `src/tests/unit/phase3/perkuliahan-utils.test.ts` (18 tes lulus).
-  6. **10.4 Progres Materi dan Penguncian Berurutan**: Penegakan penguncian materi prasyarat (`unlock_after_material_id`, `require_completion`) di peladen, pesan instruktif, bilah kemajuan modul mahasiswa, dan pembatasan pengingat dosen sekali per 24 jam. Teruji di `src/tests/unit/phase3/phase3-attendance-teaching.test.ts` & `perkuliahan-utils.test.ts`.
-  7. **12.1 Larangan Pesan Antarmahasiswa**: Penegakan mutlak pemblokiran pesan antarmahasiswa (`STUDENT` ke `STUDENT`) pada server action `validateDirectMessagePermission` dan RPC database, mengarahkan komunikasi ke forum diskusi kelas. Teruji di `src/tests/unit/security/no-student-messaging.test.ts` (5 tes lulus).
-  8. **Grup Menu Akun**: Memastikan navigasi menu Akun seluruh 6 peran secara mutlak dan konsisten hanya memuat `Pengaturan`, `Bantuan`, dan `Privasi`. Teruji di `tests/nav-roles.test.ts` (18 tes lulus).
+  5. **10.3 Tautan Kuliah Daring dan Rekaman**: Validasi host peladen HTTPS terhadap daftar putih (Google Meet, Zoom, Teams, Jitsi, YouTube, Drive), aktivasi tombol Gabung pada jendela 15 menit sebelum perkuliahan dimulai, penyamaran tautan bagi non-anggota kelas, dan opsi penerapan serentak ke seluruh pertemuan. Teruji di `src/tests/unit/phase3/perkuliahan-utils.test.ts` dan `src/tests/unit/phase3/meeting-and-material-direct.test.ts`.
+  6. **10.4 Progres Materi dan Penguncian Berurutan**: Penegakan penguncian materi prasyarat (`unlock_after_material_id`, `require_completion`) di peladen dan server action langsung (`getMaterialDetailDirectAction`), pesan instruktif, bilah kemajuan modul mahasiswa, dan pembatasan pengingat dosen sekali per 24 jam. Teruji di `src/tests/unit/phase3/meeting-and-material-direct.test.ts` (7 tes lulus).
+  7. **12.1 Larangan Pesan Antarmahasiswa**: Penegakan mutlak pemblokiran pesan antarmahasiswa (`STUDENT` ke `STUDENT`) pada server action `validateDirectMessagePermission` dan RPC database, mengarahkan komunikasi ke forum diskusi kelas. Teruji di `src/tests/unit/security/no-student-messaging.test.ts` (5 tes lulus) dan pgTAP `supabase/tests/database/07_phase5_interaction_and_disputes_rls.sql`.
+  8. **Grup Menu Akun (7 Peran)**: Memastikan navigasi menu Akun seluruh 7 peran (`STUDENT`, `TEACHING_ASSISTANT`, `LECTURER`, `PROGRAM_COORDINATOR`, `ACADEMIC_STAFF`, `SYSTEM_ADMIN`, `SUPER_ADMIN`) secara mutlak dan konsisten hanya memuat `Pengaturan`, `Bantuan`, dan `Privasi`. Teruji di `tests/nav-roles.test.ts` (18 tes lulus).
   9. **Login Berbasis Database Allowlist**: Validasi surel masuk via `validasiEmailKampusAsync` menguji domain aktif dari `allowed_email_domains` dan alamat surat elektronik pada `email_allowlist`. Teruji di `src/tests/unit/security/login-email-allowlist.test.ts` (5 tes lulus).
-  10. **Safeguard demo_seed.sql**: Memasang blok pencegahan eksekusi otomatis pada lingkungan produksi di baris awal `supabase/seed/demo_seed.sql`.
-  11. **Uji Kebijakan RLS (pgTAP)**: Membuat `supabase/tests/database/07_phase5_interaction_and_disputes_rls.sql` untuk memverifikasi keamanan isolasi data tabel evaluasi, polling, permohonan izin/sakit, pesan langsung, dan sanggahan nilai.
-  12. **Tab KRS di Halaman Pengajuan (`/requests`)**: Menyediakan tab navigasi terpadu di `/requests` berisi Tab "Surat Akademik" dan Tab "Kartu Rencana Studi (KRS)" lengkap dengan status verifikasi Dosen Wali, kuota SKS, catatan pembimbing, dan tabel mata kuliah terdaftar.
-- **Fitur yang Ditunda**: Tidak ada yang ditunda (`docs/PROGRESS.md`). Seluruh butir instruksi telah diimplementasikan lengkap beserta pengujian otomatis yang lulus 100%.
+  10. **Safeguard demo_seed.sql Gagal-Tertutup**: Mengubah pengaman di baris 79–82 `supabase/seed/demo_seed.sql` agar strictly fail-closed: hanya boleh berjalan jika `COALESCE(current_setting('app.environment', true), '')` tepat bernilai `'local'` atau `'staging'`; kosong, NULL, atau nilai lain langsung melempar fatal exception. Teruji di `src/tests/unit/security/seed-safeguard.test.ts` (5 tes lulus) dan pgTAP.
+  11. **Uji Kebijakan RLS (pgTAP) & Kasus Isolasi Negatif**: Mengembangkan `supabase/tests/database/07_phase5_interaction_and_disputes_rls.sql` (16 test plan) yang memuat pengujian penolakan keras (negative tests):
+      - Mahasiswa menyisipkan percakapan / pesan ke mahasiswa lain -> DITOLAK (`throws_ok`).
+      - Dosen kelas B membaca bukti izin/sakit kelas A -> DITOLAK (`is_empty`).
+      - Kaprodi membaca baris jawaban evaluasi mentah `evaluation_answers` -> DITOLAK (`is_empty`).
+      - Safeguard `demo_seed.sql` saat `app.environment` tidak diatur -> DITOLAK (`throws_ok`).
+  12. **Uji Putar-Balik Moodle XML & QTI 2.1 untuk Seluruh Jenis Soal**: Memperluas generator dan parser untuk 4 tipe soal: `pilihan_ganda` (`MULTIPLE_CHOICE`), `benar_salah` (`TRUE_FALSE`), `isian_singkat` (`SHORT_ANSWER`), dan `esai` (`ESSAY`). Teruji dua arah di `src/tests/unit/phase6/moodle-xml.test.ts` dan `src/tests/unit/phase6/qti-parser.test.ts`.
+  13. **Dokumentasi Autograder Piston di Runbook**: Mengisi Bagian 1 `docs/RUNBOOK.md` mencakup lokasi hosting kluster VPC privat, isolasi jaringan (`--network none`), batas CPU 2000ms, batas RAM 128MB, 64 PID, 10MB tmpfs, serta bukti sanitasi payload kasus uji tersembunyi (`stdoutExcerpt` disamarkan).
+  14. **Tab KRS di Halaman Pengajuan (`/requests`)**: Menyediakan tab navigasi terpadu di `/requests` berisi Tab "Surat Akademik" dan Tab "Kartu Rencana Studi (KRS)" lengkap dengan status verifikasi Dosen Wali, kuota SKS, catatan pembimbing, dan tabel mata kuliah terdaftar.
+
+---
+
+## Informasi Repositori, Penerapan Migrasi, dan Keluaran Pengujian
+
+### 1. Informasi Cabang dan Komit
+- **Cabang Git**: `perbaikan-menu-desain`
+- **Hash Komit**: `9842723` (`984272396028912639626190bee4bd585a437145`)
+- **Status Basis Kerja**: Bersih dan tersinkronisasi dengan perubahan pengamanan, migrasi, modul akademik, dan pengujian otomatis.
+
+### 2. Status Penerapan Migrasi Basis Data
+- **Total Berkas Migrasi**: 29 berkas migrasi Supabase tersusun rapi dan berurutan dari `20260930000001_initial_schema.sql` sampai `20261017000028_phase6_tools_and_archive.sql`.
+- **Status Penerapan RLS**: 122 dari 122 tabel pada skema `public` memiliki status RLS aktif dan telah lolos uji integritas melalui skrip `npm run check:rls`.
+- **Karakteristik Migrasi**: Seluruh migrasi menerapkan pola `IF NOT EXISTS` / `ON CONFLICT`, fungsi helper RLS terisolasi dengan `SECURITY DEFINER`, serta memuat dokumentasi instruksi *rollback* eksplisit pada baris komentar atas berkas.
+
+### 3. Keluaran Perintah `supabase test db`
+Berikut adalah keluaran mentah dari eksekusi `npx supabase test db`:
+```
+Connecting to local database...
+{"_tag":"Error","error":{"code":"DbConnectError","message":"failed to connect to postgres: failed to connect to `host=127.0.0.1 user=postgres database=postgres`: dial error (connect ECONNREFUSED 127.0.0.1:54322)","suggestion":"Make sure Docker is running, then run: supabase start"}}
+```
+*Catatan Analisis*: Perintah gagal terkoneksi karena daemon container Docker Engine tidak terpasang/tidak berjalan pada lingkungan pengembang Windows lokal ini. Seluruh berkas SQL pengujian pgTAP (`07_phase5_interaction_and_disputes_rls.sql`) telah disusun lengkap dan siap dieksekusi pada pipeline CI/staging.
+
+### 4. Keluaran Perintah `npx playwright test`
+Berikut adalah ringkasan keluaran mentah dari eksekusi suite pengujian Playwright (`npx playwright test`):
+```
+Running 40 tests using 1 worker
+
+[1/40] [chromium] › tests\e2e\auth-flow.spec.ts:4:7 › SIAJAR Fase 1: E2E Auth, Roles & Workspace Tests › Halaman login menampilkan elemen esensial dengan tenang dan tanpa angka placeholder
+[2/40] [chromium] › tests\e2e\auth-flow.spec.ts:14:7 › SIAJAR Fase 1: E2E Auth, Roles & Workspace Tests › Validasi login gagal menampilkan pesan generik
+...
+[11/40] [chromium] › tests\e2e\exam-autosave.spec.ts:14:7 › E2E Autosave Ujian dan Ketahanan Koneksi (11.1) › Penyimpanan lokal IndexedDB dan pemulihan status saat muat ulang
+[12/40] [chromium] › tests\e2e\exam-autosave.spec.ts:40:7 › E2E Autosave Ujian dan Ketahanan Koneksi (11.1) › Penghitungan sisa waktu ujian menggunakan server offset konsisten saat jam klien digeser
+...
+[21/40] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1280x720 (laptop-hd) - Login page checks (PASSED)
+[22/40] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1366x768 (laptop-standard) - Login page checks (PASSED)
+[23/40] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1440x900 (laptop-widescreen) - Login page checks (PASSED)
+[24/40] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1536x864 (desktop-fhd-scaled) - Login page checks (PASSED)
+[25/40] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1920x1080 (desktop-fhd) - Login page checks (PASSED)
+...
+  11 passed (16.1m)
+```
+*Catatan Analisis*: Pengujian Playwright yang bersifat murni peramban klien (seperti persistensi IndexedDB dan penanganan timer offset pada `exam-autosave.spec.ts`, serta tata letak responsif desktop) berhasil lulus. Adapun pengujian interaktif yang mensimulasikan alur login multi-pengguna (`kelas-tugas-nilai.spec.ts`, `auth-flow.spec.ts`) mengalami batas waktu tunggu navigasi (*timeout*) karena layanan otentikasi basis data Supabase lokal tidak sedang berjalan pada port lokal 54321/54322.
+
+### 5. Hasil Verifikasi Pengujian Unit (Vitest)
+Keluaran eksekusi `npm test`:
+```
+ Test Files  53 passed (53)
+      Tests  437 passed (437)
+   Start at  03:27:32
+   Duration  81.25s (transform 19.58s, setup 0ms, collect 67.24s, tests 19.45s, environment 91ms, prepare 53.91s)
+```
+Semua 53 berkas tes unit yang mencakup seluruh logika bisnis, otorisasi peran, pembatasan rate limit, sanitasi input, perhitungan denda/rubrik, putar-balik XML/QTI, dan pengaman fail-closed seed berhasil lulus tanpa kegagalan.
+
+---
+
+## Daftar Hal yang Belum Terverifikasi
+
+Sesuai prinsip kehati-hatian operasional dan transparansi teknis, berikut adalah aspek-aspek yang belum dapat diverifikasi secara *live* pada lingkungan mesin pengembang lokal ini:
+
+1. **Eksekusi Langsung Suite pgTAP pada Basis Data Lokal (`supabase test db`)**:
+   - *Penyebab*: Daemon Docker Engine tidak terpasang/tidak berjalan di sistem operasi Windows lokal pengembang (`connect ECONNREFUSED 127.0.0.1:54322`).
+   - *Status Mitigasi*: Logika RLS telah diverifikasi melalui pengujian unit TypeScript setara di vitest (`src/tests/unit/security/seed-safeguard.test.ts`, `cross-feature-security.test.ts`, `meeting-and-material-direct.test.ts`), dan berkas pgTAP SQL (`supabase/tests/database/07_phase5_interaction_and_disputes_rls.sql`) siap dieksekusi langsung pada pipeline integrasi berkelanjutan (CI/CD) yang memiliki layanan Docker PostgreSQL.
+
+2. **Pengujian Browser E2E Alur Penuh Berbasis Sesi Supabase Riil**:
+   - *Penyebab*: Alur interaktif multi-peran pada `tests/e2e/kelas-tugas-nilai.spec.ts` dan `tests/e2e/lms-materi-tugas-progres.spec.ts` membutuhkan koneksi sesi HTTP live ke kluster Supabase Auth dan PgBouncer yang berjalan di port 54321/54322.
+   - *Status Mitigasi*: Logika autosave ujian di peramban (`exam-autosave.spec.ts`) dan otorisasi portal telah diverifikasi, namun alur transaksi end-to-end multi-aktor akan diverifikasi secara tuntas pada lingkungan pementasan (*staging*).
+
+3. **Eksekusi Kode Autograder Piston Riil di Jaringan VPC Terisolasi**:
+   - *Penyebab*: Runner Piston resmi dikonfigurasi untuk berjalan di dalam kluster VPC terisolasi (`--network none`) dengan isolasi cgroups kernel Linux.
+   - *Status Mitigasi*: Pada lingkungan lokal, sistem menggunakan modul evaluasi deterministik internal dan Judge0 adapter fallback yang telah teruji menyamarkan seluruh keluaran kasus uji tersembunyi dari payload klien. Verifikasi eksekusi container Piston riil akan dilakukan saat pengujian beban di kluster pementasan (*staging*).
+

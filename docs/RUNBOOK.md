@@ -4,7 +4,7 @@ Dokumen ini merupakan panduan teknis operasional bagi System Administrator dan S
 
 ---
 
-## 1. Menjalankan dan Memelihara Konektor Autograder Koding (Judge)
+## 1. Menjalankan dan Memelihara Konektor Autograder Koding (Judge / Piston)
 
 Konektor Judge bertugas mengeksekusi dan menilai kode program mahasiswa pada butir soal pemrograman ujian CBT secara otomatis di dalam lingkungan sandbox terisolasi.
 
@@ -12,8 +12,8 @@ Konektor Judge bertugas mengeksekusi dan menilai kode program mahasiswa pada but
 Pastikan parameter berikut telah terpasang pada konfigurasi server (`.env.production` atau manajemen secret hosting):
 
 ```bash
-# URL layanan sandbox Judge (misalnya Judge0 atau runner isolate mandiri)
-JUDGE_API_URL=https://judge.institution.ac.id
+# URL layanan sandbox Judge (misalnya Judge0 atau runner Piston mandiri di VPC internal)
+JUDGE_API_URL=https://judge.internal.institution.ac.id
 
 # Kunci API otentikasi untuk pengiriman job
 JUDGE_API_KEY=rahasia-judge-api-key-institusi
@@ -22,7 +22,34 @@ JUDGE_API_KEY=rahasia-judge-api-key-institusi
 JUDGE_WEBHOOK_SECRET=rahasia-judge-webhook-hmac-32char
 ```
 
-### 1.2. Modus Operasional
+### 1.2. Lokasi Hosting dan Arsitektur Isolasi Sandbox
+1. **Lokasi Hosting Mandiri (Private VPC)**:
+   - Runner autograder koding (Judge0 / Piston) di-hosting secara mandiri (*self-hosted*) pada kluster komputasi terisolasi di dalam VPC privat institusi (`judge.internal.institution.ac.id`).
+   - Runner tidak membuka ingress langsung ke internet publik. Seluruh akses hanya diizinkan dari IP privat server aplikasi SIAJAR via VPC Peering atau Security Group tertutup.
+
+2. **Isolasi Jaringan Runner (`--network none`)**:
+   - Setiap eksekusi kode program mahasiswa dijalankan di dalam container Docker/Isolate sandbox sementara dengan flag:
+     ```bash
+     docker run --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=10m ...
+     ```
+   - Container tidak memiliki antarmuka jaringan eksternal (hanya loopback `lo`), sehingga memblokir 100% upaya akses internet luar, panggilan HTTP/DNS liar, pemindaian port jaringan kampus, maupun akses ke metadata cloud (`169.254.169.254`).
+
+3. **Batas Waktu dan Memori (Resource Limits & DoS Protection)**:
+   - **Batas Waktu CPU (CPU Time Limit)**: Default 2000 ms (2,0 detik) per kasus uji; batas toleransi hard timeout sistem sebesar 5000 ms.
+   - **Batas Memori RAM (Memory Limit)**: Default 128 MB (131.072 KB) per container sandbox dengan cgroup memory enforcement (OOM Killer aktif jika melampaui batas).
+   - **Batas Proses & Thread (PIDs Limit)**: Maksimal 64 thread/proses (`--pids-limit 64`) untuk meniadakan potensi serangan *fork bomb*.
+   - **Batas Penulisan Disk**: Direktori root bersifat *read-only*. Ruang tulis sementara hanya diizinkan pada partisi memori `/tmp` berukuran maksimal 10 MB.
+
+4. **Isolasi Kasus Uji Tersembunyi (Hidden Test Cases Payload Sanitization)**:
+   - Soal koding dapat memuat kasus uji terbuka (*public*) dan kasus uji tersembunyi (*hidden* dengan `tc.isHidden = true`).
+   - **Proteksi Payload Klien**: Sesuai implementasi pada `Judge0Adapter` (`src/lib/judge/coderunner.ts`), data `stdin`, `expectedStdout`, dan rekaman keluaran asli `rawStdout` dari kasus uji tersembunyi **TIDAK PERNAH dikirim ke payload respons klien**.
+   - Pada kasus uji tersembunyi, atribut `stdoutExcerpt` disanitasi secara ketat hanya menghasilkan status biner:
+     ```typescript
+     stdoutExcerpt: tc.isHidden ? (passed ? 'Lulus' : 'Gagal') : rawStdout.slice(0, 300)
+     ```
+   - Hal ini terbukti dan diverifikasi melalui pengujian unit di `src/tests/unit/phase4/phase4-exams-autograder.test.ts`, menjamin integritas dan kerahasiaan kasus uji evaluasi dosen.
+
+### 1.3. Modus Operasional
 Sistem mendukung dua mekanisme penerimaan hasil penilaian kode:
 
 1. **Modus Webhook (Rekomendasi Waktu Nyata)**:
@@ -34,7 +61,7 @@ Sistem mendukung dua mekanisme penerimaan hasil penilaian kode:
    - Jika webhook terkendala jaringan atau dinonaktifkan, pekerjaan terjadwal `GET /api/cron/judge_poll` dijalankan tiap 1 menit dengan otentikasi `CRON_SECRET`.
    - Pekerjaan ini memeriksa antrean submission yang masih berstatus `PENDING` atau `PROCESSING` dan menarik hasilnya dari `JUDGE_API_URL`.
 
-### 1.3. Uji Konektivitas dan Penanganan Kendala
+### 1.4. Uji Konektivitas dan Penanganan Kendala
 1. **Pemeriksaan Kesehatan Layanan**:
    ```bash
    curl -i -H "Authorization: Bearer $JUDGE_API_KEY" $JUDGE_API_URL/health
@@ -211,3 +238,63 @@ SIAJAR menyediakan fasilitas bagi Super Admin untuk melihat sistem dari sudut pa
 ### 4.4. Kebijakan Retensi Berkas
 - **Bukti Izin dan Sakit**: Berkas bukti medis yang diunggah mahasiswa pada menu Presensi disimpan selama 180 hari. Setelah itu, berkas dibersihkan otomatis oleh cron `GET /api/cron/purge_absence_proofs`.
 - **Berkas Staging Impor Bank Soal**: Berkas templat Excel atau Word yang diunggah saat impor bank soal otomatis dibersihkan setelah 24 jam oleh cron `GET /api/cron/purge_import_staging`.
+
+---
+
+## 5. Konfigurasi Lingkungan Basis Data (`app.environment`) dan Pengaman Gagal-Tertutup
+
+Untuk mencegah kerusakan atau kontaminasi data di lingkungan produksi (*production*), basis data SIAJAR menerapkan pengaman gagal-tertutup (*fail-closed*) berbasis parameter pengaturan basis data PostgreSQL (`app.environment`).
+
+### 5.1. Mekanisme Pengaman Gagal-Tertutup (`demo_seed.sql`)
+Berkas seed demonstrasi `supabase/seed/demo_seed.sql` berisi data dummy berskala besar untuk kebutuhan pengujian lokal dan QA staging. Pada bagian awal skrip, terpasang pengaman gagal-tertutup:
+
+```sql
+DO $$
+BEGIN
+    IF COALESCE(current_setting('app.environment', true), '') NOT IN ('local', 'staging') THEN
+        RAISE EXCEPTION 'Keamanan Terlanggar: demo_seed.sql HANYA boleh dieksekusi pada lingkungan local atau staging! Nilai saat ini: %',
+            COALESCE(current_setting('app.environment', true), '(kosong/tidak diatur)');
+    END IF;
+END $$;
+```
+
+**Karakteristik Pengaman**:
+- Bila `app.environment` bernilai `NULL`, kosong (`''`), atau nilai selain `'local'` atau `'staging'`, eksekusi akan **langsung melempar exception fatal** dan membatalkan seluruh transaksi database (*fail-closed*).
+- Perlindungan ini diuji secara ketat dalam tes unit `src/tests/unit/security/seed-safeguard.test.ts` dan pengujian pgTAP `supabase/tests/database/07_phase5_interaction_and_disputes_rls.sql`.
+
+### 5.2. Cara Mengatur `app.environment`
+Administrator dapat mengatur parameter ini pada lingkungan yang sah:
+
+1. **Lingkungan Lokal (Local Development)**:
+   - Secara permanen pada level basis data:
+     ```sql
+     ALTER DATABASE postgres SET app.environment = 'local';
+     ```
+   - Atau per sesi psql sebelum mengeksekusi seed:
+     ```sql
+     SET app.environment = 'local';
+     \i supabase/seed/demo_seed.sql
+     ```
+
+2. **Lingkungan Pengujian / Pementasan (Staging)**:
+   - Secara permanen pada database staging:
+     ```sql
+     ALTER DATABASE siajar_staging SET app.environment = 'staging';
+     ```
+   - Atau per sesi deployment psql:
+     ```sql
+     SET app.environment = 'staging';
+     ```
+
+### 5.3. LARANGAN KERAS DI PRODUKSI (STRICT PRODUCTION RULE)
+> [!CAUTION]
+> **DILARANG MENGATUR `app.environment` KE NILAI 'local' ATAU 'staging' DI BASIS DATA PRODUKSI!**
+> 
+> Pada kluster basis data produksi (*production database*):
+> 1. Parameter `app.environment` harus dibiarkan kosong, bernilai default, atau disetel secara eksplisit ke `'production'`:
+>    ```sql
+>    ALTER DATABASE siajar_prod SET app.environment = 'production';
+>    ```
+> 2. Jangan pernah menyetel nilai `'local'` atau `'staging'` pada server produksi.
+> 3. Jika operator atau skrip otomasi secara tidak sengaja mencoba mengeksekusi `demo_seed.sql` pada basis data produksi, transaksi akan **gagal seketika** tanpa menyentuh atau merusak satu baris data riil pun.
+

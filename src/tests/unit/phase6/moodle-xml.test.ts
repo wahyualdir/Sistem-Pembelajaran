@@ -33,6 +33,13 @@ describe('Moodle XML Bidirectional Roundtrip (13.3)', () => {
         ]
       },
       {
+        question_text: 'Apakah nama struktur data antrian yang menerapkan prinsip First In First Out (FIFO)?',
+        question_type: 'SHORT_ANSWER',
+        points: 10,
+        topic: 'Basis Data',
+        correct_answer: 'Queue'
+      },
+      {
         question_text: 'Jelaskan konsep Polymorphism dalam Pemrograman Berorientasi Objek beserta contoh kodenya.',
         question_type: 'ESSAY',
         points: 25,
@@ -46,13 +53,14 @@ describe('Moodle XML Bidirectional Roundtrip (13.3)', () => {
     expect(xml).toContain('<quiz>');
     expect(xml).toContain('<question type="multichoice">');
     expect(xml).toContain('<question type="truefalse">');
+    expect(xml).toContain('<question type="shortanswer">');
     expect(xml).toContain('<question type="essay">');
     expect(xml).toContain('<question type="category">');
 
     // 2. Impor kembali dari XML
     const parsed = parseMoodleXml(xml);
-    expect(parsed.total_questions).toBe(3);
-    expect(parsed.valid_count).toBe(3);
+    expect(parsed.total_questions).toBe(4);
+    expect(parsed.valid_count).toBe(4);
     expect(parsed.error_count).toBe(0);
 
     // Verifikasi Soal 1: Pilihan Ganda
@@ -70,11 +78,19 @@ describe('Moodle XML Bidirectional Roundtrip (13.3)', () => {
     expect(q2.kunci).toBe('Benar');
     expect(q2.topik).toBe('Jaringan Komputer');
 
-    // Verifikasi Soal 3: Esai
+    // Verifikasi Soal 3: Isian Singkat
     const q3 = parsed.items[2];
-    expect(q3.tipe).toBe('esai');
-    expect(q3.pertanyaan).toContain('Polymorphism');
-    expect(q3.bobot).toBe(25);
+    expect(q3.tipe).toBe('isian_singkat');
+    expect(q3.pertanyaan).toContain('First In First Out');
+    expect(q3.kunci).toBe('Queue');
+    expect(q3.bobot).toBe(10);
+    expect(q3.topik).toBe('Basis Data');
+
+    // Verifikasi Soal 4: Esai
+    const q4 = parsed.items[3];
+    expect(q4.tipe).toBe('esai');
+    expect(q4.pertanyaan).toContain('Polymorphism');
+    expect(q4.bobot).toBe(25);
   });
 
   it('menangani tipe soal Moodle yang tidak didukung dengan pesan peringatan yang jelas tanpa merusak impor', () => {

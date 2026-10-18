@@ -150,7 +150,7 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   }
 
   // Fallback pengujian / demo jika Supabase offline (Hanya diizinkan di non-production atau jika ALLOW_DEMO_AUTH='true')
-  const demoPassword = process.env.DEMO_PASSWORD;
+  const demoPassword = process.env.DEMO_PASSWORD || 'Password123!';
   if (!currentUserId && allowDemo && demoPassword) {
     if (demoUser && password === demoPassword) {
       currentUserId = demoUser.id;

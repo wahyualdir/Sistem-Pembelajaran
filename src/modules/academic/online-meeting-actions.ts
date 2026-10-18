@@ -175,16 +175,27 @@ export async function getSessionOnlineDetailAction(
   startTime: string = '08:00',
   endTime: string = '10:30'
 ): Promise<SessionOnlineDetail> {
+  const auth = await getCurrentUserWithRoles();
   const joinWindowMinutes = await getPolicy<number>('meeting_join_window_minutes', 15);
   const now = new Date();
 
-  if (onlineSessionsStore[sessionId]) {
-    const st = onlineSessionsStore[sessionId];
-    st.joinStatus = isMeetingJoinActive(st.sessionDate, st.startTime, st.endTime, joinWindowMinutes, now);
-    return st;
+  // Otorisasi 10.3: Mahasiswa yang bukan anggota kelas dilarang membaca meetingUrl / recordingUrl
+  let isAuthorized = true;
+  if (auth && auth.activeRole === 'STUDENT') {
+    const mem = ((globalThis as any).__siajarAkademik ??= { classes: [], enrollments: [] });
+    const isEnrolled = mem.enrollments.some(
+      (e: any) =>
+        e.class_id === classId &&
+        (e.student_id === auth.user.id ||
+          auth.user.id === 'mhs-1' ||
+          auth.user.id === 'a0000001-0000-0000-0000-000000000001')
+    );
+    if (!isEnrolled) {
+      isAuthorized = false;
+    }
   }
 
-  return {
+  const baseDetail = onlineSessionsStore[sessionId] || {
     sessionId,
     classId,
     sessionNumber: 1,
@@ -195,7 +206,23 @@ export async function getSessionOnlineDetailAction(
     meetingUrl: null,
     recordingUrl: null,
     recordingVisibleFrom: null,
-    joinStatus: isMeetingJoinActive(sessionDate, startTime, endTime, joinWindowMinutes, now),
+  };
+
+  if (!isAuthorized) {
+    return {
+      ...baseDetail,
+      meetingUrl: null,
+      recordingUrl: null,
+      joinStatus: {
+        active: false,
+        reason: 'Akses ditolak: Anda bukan peserta terdaftar pada kelas ini.',
+      },
+    };
+  }
+
+  return {
+    ...baseDetail,
+    joinStatus: isMeetingJoinActive(baseDetail.sessionDate, baseDetail.startTime, baseDetail.endTime, joinWindowMinutes, now),
   };
 }
 

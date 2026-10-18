@@ -236,6 +236,77 @@ export async function remindUnreadStudentsAction(
   return { ok: true, remindedCount: 5 };
 }
 
+export async function getMaterialDetailDirectAction(
+  materialId: string,
+  classId: string,
+  materialData?: {
+    id: string;
+    title: string;
+    body_md?: string | null;
+    unlock_after_material_id?: string | null;
+    require_completion?: boolean;
+    previous_title?: string;
+  }
+): Promise<{
+  ok: boolean;
+  unlocked: boolean;
+  material?: { id: string; title: string; bodyMd?: string | null };
+  error?: string;
+  lockMessage?: string;
+}> {
+  const auth = await getCurrentUserWithRoles();
+  if (!auth) {
+    return { ok: false, unlocked: false, error: 'Silakan masuk terlebih dahulu.' };
+  }
+
+  // Dosen, Asisten, Kaprodi, Staf, dan Super Admin bebas akses
+  const isStudent = auth.activeRole === 'STUDENT' || auth.roles.includes('STUDENT');
+  if (!isStudent) {
+    return {
+      ok: true,
+      unlocked: true,
+      material: {
+        id: materialId,
+        title: materialData?.title || 'Modul Perkuliahan',
+        bodyMd: materialData?.body_md ?? null,
+      },
+    };
+  }
+
+  // Mahasiswa: periksa apakah materi prasyarat sudah selesai
+  const completedSet = new Set<string>();
+  Object.keys(materialProgressStore).forEach((key) => {
+    if (key.startsWith(`${auth.user.id}:`) && materialProgressStore[key].status === 'selesai') {
+      completedSet.add(key.split(':')[1]);
+    }
+  });
+
+  const lockCheck = isMaterialUnlocked({
+    unlockAfterMaterialId: materialData?.unlock_after_material_id,
+    requireCompletion: materialData?.require_completion ?? false,
+    completedMaterialIds: completedSet,
+    previousMaterialTitle: materialData?.previous_title,
+  });
+
+  if (!lockCheck.unlocked) {
+    return {
+      ok: false,
+      unlocked: false,
+      lockMessage: lockCheck.message || 'Materi ini terkunci sampai materi prasyarat diselesaikan.',
+    };
+  }
+
+  return {
+    ok: true,
+    unlocked: true,
+    material: {
+      id: materialId,
+      title: materialData?.title || 'Modul Perkuliahan',
+      bodyMd: materialData?.body_md ?? null,
+    },
+  };
+}
+
 export async function getMaterialProgressStore(): Promise<Record<string, { status: 'dibuka' | 'selesai'; openedAt: string; completedAt: string | null }>> {
   return materialProgressStore;
 }

@@ -10,7 +10,7 @@ const shot = async (p: Page, nama: string) => {
 async function masuk(page: Page, identifier: string, tujuan: RegExp) {
   await page.goto('/login');
   // Tombol aktif setelah halaman terhidrasi. Pada mode dev, muat pertama bisa bertabrakan dengan kompilasi ulang: muat ulang sekali.
-  const tombolMasuk = page.getByRole('button', { name: 'Masuk', exact: true });
+  const tombolMasuk = page.locator('button[type="submit"]');
   try {
     await expect(tombolMasuk).toBeEnabled({ timeout: 20_000 });
   } catch {
@@ -19,7 +19,7 @@ async function masuk(page: Page, identifier: string, tujuan: RegExp) {
   }
   await page.getByLabel('NIM / NIDN / NIP / Email / Username').fill(identifier);
   await page.locator('#password').fill('Password123!');
-  await page.getByRole('button', { name: 'Masuk', exact: true }).click();
+  await tombolMasuk.click();
   await page.waitForURL(tujuan);
 }
 

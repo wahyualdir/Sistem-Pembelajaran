@@ -20,14 +20,53 @@ export async function exportToQtiZip(questions: QuestionExportItem[]): Promise<B
     manifestResources += `    <resource identifier="${itemId}" type="imsqti_item_xmlv2p1" href="${filename}"/>\n`;
 
     const typeLower = q.question_type.toLowerCase();
-    const isChoice = typeLower.includes('multiple') || typeLower.includes('choice') || typeLower.includes('pilihan');
+    const isTrueFalse = typeLower.includes('true') || typeLower.includes('benar') || typeLower === 'benar_salah';
+    const isShortAnswer = typeLower.includes('short') || typeLower.includes('isian') || typeLower === 'isian_singkat';
+    const isChoice = !isTrueFalse && !isShortAnswer && (typeLower.includes('multiple') || typeLower.includes('choice') || typeLower.includes('pilihan'));
 
     let itemXml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
     itemXml += `<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1" \n`;
     itemXml += `  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \n`;
-    itemXml += `  identifier="${itemId}" title="${escapeXml(q.question_text.slice(0, 40))}" adaptive="false" timeDependent="false">\n`;
 
-    if (isChoice) {
+    if (isTrueFalse) {
+      const isTrue =
+        q.correct_answer?.toLowerCase() === 'benar' ||
+        q.correct_answer?.toLowerCase() === 'true' ||
+        q.options?.find(o => o.is_correct)?.option_text?.toLowerCase() === 'benar';
+      const correctId = isTrue ? 'Choice_Benar' : 'Choice_Salah';
+
+      itemXml += `  identifier="${itemId}" title="${escapeXml(q.question_text.slice(0, 40))}" adaptive="false" timeDependent="false" subtype="true_false">\n`;
+      itemXml += `  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">\n`;
+      itemXml += `    <correctResponse>\n`;
+      itemXml += `      <value>${correctId}</value>\n`;
+      itemXml += `    </correctResponse>\n`;
+      itemXml += `  </responseDeclaration>\n`;
+      itemXml += `  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">\n`;
+      itemXml += `    <defaultValue><value>${q.points || 10}</value></defaultValue>\n`;
+      itemXml += `  </outcomeDeclaration>\n`;
+      itemXml += `  <itemBody>\n`;
+      itemXml += `    <p>${escapeXml(q.question_text)}</p>\n`;
+      itemXml += `    <choiceInteraction responseIdentifier="RESPONSE" shuffle="false" maxChoices="1">\n`;
+      itemXml += `      <simpleChoice identifier="Choice_Benar">Benar</simpleChoice>\n`;
+      itemXml += `      <simpleChoice identifier="Choice_Salah">Salah</simpleChoice>\n`;
+      itemXml += `    </choiceInteraction>\n`;
+      itemXml += `  </itemBody>\n`;
+    } else if (isShortAnswer) {
+      itemXml += `  identifier="${itemId}" title="${escapeXml(q.question_text.slice(0, 40))}" adaptive="false" timeDependent="false" subtype="short_answer">\n`;
+      itemXml += `  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="string">\n`;
+      itemXml += `    <correctResponse>\n`;
+      itemXml += `      <value>${escapeXml(q.correct_answer || '')}</value>\n`;
+      itemXml += `    </correctResponse>\n`;
+      itemXml += `  </responseDeclaration>\n`;
+      itemXml += `  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">\n`;
+      itemXml += `    <defaultValue><value>${q.points || 10}</value></defaultValue>\n`;
+      itemXml += `  </outcomeDeclaration>\n`;
+      itemXml += `  <itemBody>\n`;
+      itemXml += `    <p>${escapeXml(q.question_text)}</p>\n`;
+      itemXml += `    <textEntryInteraction responseIdentifier="RESPONSE" expectedLength="25"/>\n`;
+      itemXml += `  </itemBody>\n`;
+    } else if (isChoice) {
+      itemXml += `  identifier="${itemId}" title="${escapeXml(q.question_text.slice(0, 40))}" adaptive="false" timeDependent="false">\n`;
       // Deklarasi respons
       itemXml += `  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="identifier">\n`;
       const correctOptIndex = q.options?.findIndex(o => o.is_correct);
@@ -41,7 +80,7 @@ export async function exportToQtiZip(questions: QuestionExportItem[]): Promise<B
       itemXml += `  </responseDeclaration>\n`;
 
       itemXml += `  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">\n`;
-      itemXml += `    <defaultValue><value>0</value></defaultValue>\n`;
+      itemXml += `    <defaultValue><value>${q.points || 10}</value></defaultValue>\n`;
       itemXml += `  </outcomeDeclaration>\n`;
 
       itemXml += `  <itemBody>\n`;
@@ -61,8 +100,11 @@ export async function exportToQtiZip(questions: QuestionExportItem[]): Promise<B
       itemXml += `  </itemBody>\n`;
     } else {
       // Essay / Extended Text
+      itemXml += `  identifier="${itemId}" title="${escapeXml(q.question_text.slice(0, 40))}" adaptive="false" timeDependent="false">\n`;
       itemXml += `  <responseDeclaration identifier="RESPONSE" cardinality="single" baseType="string"/>\n`;
-      itemXml += `  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float"/>\n`;
+      itemXml += `  <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">\n`;
+      itemXml += `    <defaultValue><value>${q.points || 10}</value></defaultValue>\n`;
+      itemXml += `  </outcomeDeclaration>\n`;
       itemXml += `  <itemBody>\n`;
       itemXml += `    <p>${escapeXml(q.question_text)}</p>\n`;
       itemXml += `    <extendedTextInteraction responseIdentifier="RESPONSE" expectedLines="5"/>\n`;
@@ -196,6 +238,10 @@ export async function parseQtiZipBuffer(
       status = 'galat';
     }
 
+    const subtype = (item['@_subtype'] || '').toLowerCase();
+    const hasTextEntry = item.itemBody?.textEntryInteraction !== undefined || xmlContent.includes('<textEntryInteraction');
+    const hasChoice = item.itemBody?.choiceInteraction !== undefined || xmlContent.includes('<choiceInteraction');
+
     let tipe: 'pilihan_ganda' | 'benar_salah' | 'isian_singkat' | 'esai' = 'pilihan_ganda';
     const options: Record<string, string> = {};
     let keyAnswer = '';
@@ -204,34 +250,64 @@ export async function parseQtiZipBuffer(
     let correctId = '';
     if (item.responseDeclaration?.correctResponse?.value) {
       const vals = item.responseDeclaration.correctResponse.value;
-      correctId = Array.isArray(vals) ? vals[0] : vals;
+      correctId = Array.isArray(vals) ? String(vals[0]) : String(vals);
     }
 
-    if (item.itemBody?.choiceInteraction) {
-      tipe = 'pilihan_ganda';
-      const choices = item.itemBody.choiceInteraction.simpleChoice;
+    if (hasTextEntry || subtype === 'short_answer') {
+      tipe = 'isian_singkat';
+      keyAnswer = correctId;
+    } else if (hasChoice) {
+      const choices = item.itemBody?.choiceInteraction?.simpleChoice;
       const choiceArr = Array.isArray(choices) ? choices : choices ? [choices] : [];
-      const letters = ['A', 'B', 'C', 'D', 'E'];
+      const choiceTexts = choiceArr.map((ch: any) =>
+        (typeof ch === 'string' ? ch : ch['#text'] || ch['@_identifier'] || '').trim().toLowerCase()
+      );
 
-      choiceArr.forEach((ch: any, idx: number) => {
-        if (idx < letters.length) {
-          const letter = letters[idx];
-          const text = typeof ch === 'string' ? ch : ch['#text'] || ch['@_identifier'] || '';
-          options[letter] = text;
+      const isTrueFalseType =
+        subtype === 'true_false' ||
+        (choiceArr.length === 2 &&
+          choiceTexts.some((t: string) => t === 'benar' || t === 'true') &&
+          choiceTexts.some((t: string) => t === 'salah' || t === 'false'));
 
-          const chId = ch['@_identifier'];
-          if (chId && chId === correctId) {
-            keyAnswer = letter;
-          }
+      if (isTrueFalseType) {
+        tipe = 'benar_salah';
+        if (correctId.toLowerCase().includes('benar') || correctId.toLowerCase().includes('true')) {
+          keyAnswer = 'Benar';
+        } else if (correctId.toLowerCase().includes('salah') || correctId.toLowerCase().includes('false')) {
+          keyAnswer = 'Salah';
+        } else {
+          keyAnswer = 'Benar';
         }
-      });
+      } else {
+        tipe = 'pilihan_ganda';
+        const letters = ['A', 'B', 'C', 'D', 'E'];
 
-      if (!keyAnswer && choiceArr.length > 0) {
-        keyAnswer = 'A';
+        choiceArr.forEach((ch: any, idx: number) => {
+          if (idx < letters.length) {
+            const letter = letters[idx];
+            const text = typeof ch === 'string' ? ch : ch['#text'] || ch['@_identifier'] || '';
+            options[letter] = text;
+
+            const chId = ch['@_identifier'];
+            if (chId && chId === correctId) {
+              keyAnswer = letter;
+            }
+          }
+        });
+
+        if (!keyAnswer && choiceArr.length > 0) {
+          keyAnswer = 'A';
+        }
       }
     } else {
       tipe = 'esai';
-      keyAnswer = 'Penilaian esai';
+      keyAnswer = 'Penilaian manual oleh dosen.';
+    }
+
+    let bobot = 10;
+    if (item.outcomeDeclaration?.defaultValue?.value) {
+      const b = parseFloat(String(item.outcomeDeclaration.defaultValue.value));
+      if (!isNaN(b) && b > 0) bobot = b;
     }
 
     const hash = computeQuestionHash(questionText);
@@ -254,7 +330,7 @@ export async function parseQtiZipBuffer(
       opsi_d: options['D'] ? sanitizeQuestionHtml(options['D']) : undefined,
       opsi_e: options['E'] ? sanitizeQuestionHtml(options['E']) : undefined,
       kunci: keyAnswer,
-      bobot: 10,
+      bobot,
       tingkat: 'sedang',
       topik: 'Umum',
       status,

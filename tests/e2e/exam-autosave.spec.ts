@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('E2E Autosave Ujian dan Ketahanan Koneksi (11.1)', () => {
   test('Halaman ujian menampilkan indikator status autosave dan penanda waktu', async ({ page }) => {
     // Kunjungi halaman ujian (rute /exams)
-    await page.goto('/exams');
+    await page.goto('/exams', { waitUntil: 'domcontentloaded' });
 
     // Pastikan halaman memuat daftar ujian atau status aktif
     await expect(page.locator('body')).toBeVisible();
