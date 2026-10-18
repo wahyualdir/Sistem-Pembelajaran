@@ -17,16 +17,25 @@ import {
   FolderArchive,
 } from 'lucide-react';
 
+import { ClassCloneModal } from '@/modules/academic/class-clone-modal';
+
 export default async function ClassesPage({
   searchParams,
 }: {
-  searchParams?: { q?: string };
+  searchParams?: { q?: string; tab?: 'aktif' | 'arsip' };
 }) {
   const ctx = await getCurrentUserWithRoles();
   const lecturer = ctx?.activeRole === 'LECTURER' || ctx?.activeRole === 'SUPER_ADMIN' || ctx?.activeRole === 'SYSTEM_ADMIN';
   const student = ctx?.activeRole === 'STUDENT';
   const ta = ctx?.activeRole === 'TEACHING_ASSISTANT';
-  const allClasses = await listMyClassesAction();
+  const isStaff = ctx?.activeRole === 'ACADEMIC_STAFF' || ctx?.activeRole === 'SUPER_ADMIN';
+  const currentTab = searchParams?.tab === 'arsip' ? 'arsip' : 'aktif';
+
+  const rawClasses = await listMyClassesAction();
+  const allClasses = rawClasses.filter((c: any) =>
+    currentTab === 'arsip' ? c.status === 'ARCHIVED' : c.status !== 'ARCHIVED'
+  );
+
   const q = searchParams?.q?.toLowerCase().trim();
   const classes = q
     ? allClasses.filter(
@@ -70,9 +79,36 @@ export default async function ClassesPage({
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-xl border-2 border-black bg-gray-soft px-4 py-2 text-xs sm:text-sm font-bold text-black shadow-retro">
-              {classes.length} Kelas Aktif
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <div className="inline-flex rounded-lg border-2 border-black bg-neutral-100 p-0.5">
+              <Link
+                href="/classes?tab=aktif"
+                className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                  currentTab === 'aktif'
+                    ? 'bg-primary text-white shadow-xs'
+                    : 'text-black hover:bg-neutral-200'
+                }`}
+              >
+                Aktif
+              </Link>
+              <Link
+                href="/classes?tab=arsip"
+                className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                  currentTab === 'arsip'
+                    ? 'bg-amber-600 text-white shadow-xs'
+                    : 'text-black hover:bg-neutral-200'
+                }`}
+              >
+                Arsip
+              </Link>
+            </div>
+
+            {(lecturer || isStaff) && (
+              <ClassCloneModal myClasses={rawClasses} />
+            )}
+
+            <span className="rounded-xl border-2 border-black bg-gray-soft px-3 py-2 text-xs font-bold text-black shadow-retro">
+              {classes.length} Kelas
             </span>
           </div>
         </div>
@@ -94,6 +130,14 @@ export default async function ClassesPage({
         />
       )}
 
+      {/* PITA INFORMASI KELAS ARSIP */}
+      {currentTab === 'arsip' && (
+        <div className="p-3.5 rounded-xl border-2 border-amber-600 bg-amber-50 text-amber-900 font-bold text-xs flex items-center gap-2.5 shadow-xs">
+          <FolderArchive className="h-4 w-4 shrink-0 text-amber-700" />
+          <span>Kelas ini sudah diarsipkan dan hanya bisa dibaca.</span>
+        </div>
+      )}
+
       {/* 2. GRID KARTU KELAS */}
       <div className="space-y-4">
         <div className="flex items-center justify-between border-b-2 border-black/25 pb-3">
@@ -102,7 +146,7 @@ export default async function ClassesPage({
             <span>Daftar Kelas Perkuliahan</span>
           </h2>
           <span className="text-xs sm:text-sm font-bold text-black">
-            Semester Ganjil 2026/2027
+            {currentTab === 'arsip' ? 'Arsip Kelas Lampau' : 'Semester Ganjil 2026/2027'}
           </span>
         </div>
 

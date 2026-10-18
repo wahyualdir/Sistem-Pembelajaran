@@ -152,10 +152,37 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
 - **Pengujian Unit & Verifikasi Kualitas**:
   - `src/tests/unit/phase5/phase5-interaction.test.ts`: 8 pengujian spesifik Fase 5 lulus 100%.
   - `src/tests/unit/evaluation/evaluation.test.ts`: 8 pengujian siklus hidup EDOM dan True Anonymity lulus 100%.
-  - Total pengujian unit: 39 berkas tes, 359 pengujian lulus 100%.
-  - `npm run check:rls`: 120 dari 120 tabel skema public memiliki RLS aktif.
+### [18 Oktober 2026] Fase 6 Selesai — Alat Bantu Dosen dan Sistem
+- **Migrasi 28 (Salin & Arsip Kelas, Impor Soal Massal, Moodle XML & QTI)**: Dibuat `supabase/migrations/20261017000028_phase6_tools_and_archive.sql` lengkap dengan instruksi rollback di komentar atas berkas:
+  - Tabel baru dengan RLS aktif: `clone_jobs` dan `question_import_jobs`.
+  - Kolom baru pada tabel `classes`: `archived_at TIMESTAMPTZ`, `archived_by UUID`, `archive_reason TEXT`.
+  - 3 RPC Postgres atomik: `clone_class` (salin materi, tugas bergeser tanggal, kuis bergeser tanggal, rubrik, gamifikasi, CPMK, asisten; mengecualikan 100% data mahasiswa), `archive_class` (mengubah status ke ARCHIVED dengan pencatatan audit log), `unarchive_class` (membuka kembali arsip khusus staf/super admin).
+  - Verifikasi RLS: Seluruh 122 tabel pada skema public lolos `npm run check:rls`.
+- **Modul Murni Parser & Sanitasi**:
+  - `src/lib/akademik/question-sanitizer.ts`: Sanitasi HTML ketat (pembersihan `<script>`, iframe, dan atribut event XSS) serta deteksi duplikat dengan hash teks normalisasi.
+  - `src/lib/akademik/excel-question-parser.ts`: Generator template Excel resmi `.xlsx` (`exceljs`) dengan validasi dropdown pilihan tipe dan tingkat kesulitan, serta parser berkas dengan pesan galat natural.
+  - `src/lib/akademik/word-question-parser.ts`: Ekstraksi dokumen Word `.docx` (`mammoth`) berbasis pola nomor soal, pilihan a–e, `Jawaban: B`, dan `Pembahasan:`.
+  - `src/lib/akademik/moodle-xml-parser.ts`: Generator dan parser dua arah (bidirectional) Moodle XML (`fast-xml-parser`) untuk pilihan ganda, benar/salah, isian singkat, dan esai dengan dukungan kategori dan CDATA.
+  - `src/lib/akademik/qti-parser.ts`: Generator dan parser paket arsip QTI 2.1 `.zip` (`jszip` dan `fast-xml-parser`) dengan `imsmanifest.xml`.
+- **Server Actions & Antarmuka Terpadu**:
+  - `src/modules/academic/class-clone-actions.ts`: Server action penyalinan kelas dengan pergeseran tenggat waktu, pengarsipan kelas tunggal, dan penutupan semester massal.
+  - `src/modules/academic/question-import-actions.ts`: Server action unduh template Excel, parsing berkas unggahan, pratinjau tabel interaktif, dan konfirmasi impor batch per 100 soal ke database.
+  - `src/modules/academic/question-import-modal.tsx`: Modal lengkap impor massal di Bank Soal (`/exams/question-bank`) dengan tabel pratinjau status (Valid, Peringatan, Galat) dan tombol ekspor Moodle XML serta QTI 2.1 zip.
+  - `src/modules/academic/class-clone-modal.tsx`: Modal salin isi kelas untuk Dosen dan Staf pada halaman `/classes`.
+  - `src/modules/academic/staff-archive-semester-modal.tsx`: Tombol dan modal "Tutup Semester" pada halaman `/staff/classes`.
+  - Filter "Aktif" dan "Arsip" pada halaman Kelas Saya (`/classes`) dengan pita peringatan baca-saja pada kelas arsip.
+- **Pengujian Unit & Verifikasi Kualitas**:
+  - `src/tests/unit/phase6/question-sanitizer.test.ts`: Uji sanitasi XSS dan hash duplikat (3 tes lulus).
+  - `src/tests/unit/phase6/excel-parser.test.ts`: Uji generator template Excel dan deteksi galat kunci (3 tes lulus).
+  - `src/tests/unit/phase6/word-parser.test.ts`: Uji ekstraksi pola Word DOCX (2 tes lulus).
+  - `src/tests/unit/phase6/moodle-xml.test.ts`: Uji putar-balik (roundtrip) Moodle XML dan tipe tak didukung (2 tes lulus).
+  - `src/tests/unit/phase6/qti-parser.test.ts`: Uji putar-balik (roundtrip) paket arsip QTI 2.1 zip (1 tes lulus).
+  - `src/tests/unit/phase6/class-clone-archive.test.ts`: Uji aturan bisnis isolasi data mahasiswa dan pergeseran tanggal (3 tes lulus).
+  - Total pengujian unit: 45 berkas tes, 373 pengujian lulus 100%.
+  - `npm run check:rls`: 122 dari 122 tabel skema public memiliki RLS aktif.
   - `npx tsc --noEmit`: 0 error.
   - `npm run lint`: 0 error.
   - `npm run build`: Kompilasi produksi Next.js hijau dan bersih.
+
 
 

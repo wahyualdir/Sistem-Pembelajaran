@@ -446,3 +446,31 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
   3. Dosen hanya dapat melihat rekapitulasi setelah periode resmi ditutup dan jumlah responden $\ge 5$ (`evaluation_min_respondents`). Komentar mahasiswa ditampilkan dalam urutan acak tanpa nama atau tanggal.
 - **Alasan**: Melindungi kebebasan berpendapat mahasiswa secara obyektif tanpa risiko de-anonimisasi atau intimidasi akademik.
 
+### Keputusan 52: Klon dan Arsip Kelas Perkuliahan (Fase 6)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Tabel `clone_jobs` dan RPC `clone_class(p_source_id, p_target_id, p_options, p_date_shift_days)` menangani penyalinan isi kelas secara atomik dan idempoten. Konten yang disalin mencakup materi perkuliahan, tugas (berstatus DRAFT dengan pergeseran tanggal), kuis/ujian (berstatus DRAFT), rubrik penilaian, pengaturan gamifikasi, pemetaan CPMK, dan asisten kelas jika dipilih.
+  2. Data mahasiswa (pengumpulan tugas, lembar jawaban CBT, nilai akhir, kehadiran, diskusi forum, dan percakapan pesan) dikecualikan 100% dari salinan kelas baru.
+  3. Status arsip kelas (`status = 'ARCHIVED'`, `archived_at`, `archived_by`, `archive_reason`) bersifat hanya-baca bagi Dosen, Asisten, dan Mahasiswa (ditolak oleh kebijakan RLS dan server actions). Pembatalan arsip hanya dapat dilakukan oleh Staf Akademik atau Super Admin dengan alasan tercatat di audit log.
+  4. Mahasiswa tetap memiliki hak akses membaca materi dan riwayat nilai kelas arsip selama 365 hari (`student_access_archived_days`).
+- **Alasan**: Memfasilitasi efisiensi persiapan perkuliahan semester baru bagi dosen sekaligus menjamin kepatuhan integritas data historis kelas lampau.
+
+### Keputusan 53: Impor Soal Massal dari Excel dan Word DOCX dengan Sanitasi HTML dan Deteksi Duplikat (Fase 6)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Menyediakan generator template Excel resmi (`exceljs`) yang dilengkapi validasi daftar pilihan dropdown untuk kolom tipe soal (`pilihan_ganda`, `benar_salah`, `isian_singkat`, `esai`) dan tingkat kesulitan (`mudah`, `sedang`, `sukar`).
+  2. Dokumen Word (.docx) diekstraksi menggunakan `mammoth` berbasis pola nomor soal, opsi a–e, baris `Jawaban: B`, dan baris opsional `Pembahasan:`.
+  3. Sanitasi muatan teks/HTML butir soal (`sanitizeQuestionHtml`) menerapkan daftar putih tag aman (tabel, cetak tebal, miring, kode) dan membersihkan seluruh tag `<script>`, iframe, maupun atribut event `onerror`/`onclick` (pencegahan XSS).
+  4. Deteksi duplikat instrumen evaluasi menggunakan hash teks yang dinormalkan terhadap butir soal yang sudah ada di Bank Soal dan memberikan status peringatan yang informatif.
+  5. Penyisipan ke database dilakukan dalam batch transaksi per 100 butir soal dengan opsi konfirmasi "Lewati yang galat" atau "Batalkan semua jika ada galat".
+- **Alasan**: Mempermudah migrasi massal instrumen ujian dosen dari format perkantoran populer secara aman dan cepat tanpa risiko kerentanan keamanan web.
+
+### Keputusan 54: Interoperabilitas Bank Soal via Ekspor-Impor Moodle XML dan QTI 2.1 (Fase 6)
+- **Tanggal**: 17 Oktober 2026
+- **Keputusan**:
+  1. Moodle XML: Implementasi ekspor dan impor dua arah (bidirectional) menggunakan `fast-xml-parser` untuk tipe soal `multichoice` (tunggal/jamak), `truefalse`, `shortanswer`, dan `essay`. Kategori Moodle dipetakan ke topik soal, tag CDATA diekstraksi utuh, dan nilai `fraction` dipetakan ke status kebenaran jawaban. Tipe soal yang tidak didukung dilewati dengan pesan peringatan tanpa menggagalkan impor keseluruhan.
+  2. QTI 2.1: Implementasi ekspor dan impor paket arsip `.zip` berstandar IMS Global (`jszip` dan `fast-xml-parser`) memuat `imsmanifest.xml` dan file XML butir soal untuk pilihan ganda dan uraian (extendedText).
+  3. Uji putar-balik (round-trip test) diverifikasi secara otomatis pada rangkaian unit test untuk menjamin kesetaraan data hasil ekspor dan impor kembali.
+- **Alasan**: Mencegah penguncian vendor (vendor lock-in) dan memudahkan pertukaran bank soal antar-institusi pendidikan tinggi.
+
+

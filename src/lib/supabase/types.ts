@@ -2433,6 +2433,141 @@ export interface Database {
           submitted_on?: string;
         };
       };
+            classes: {
+        Row: {
+          id: string;
+          title: string;
+          section: string;
+          join_code: string;
+          capacity: number | null;
+          status: 'DRAFT' | 'OPEN' | 'ACTIVE' | 'CLOSED' | 'ARCHIVED';
+          created_by: string;
+          created_at: string;
+          updated_at: string;
+          deleted_at: string | null;
+          archived_at: string | null;
+          archived_by: string | null;
+          archive_reason: string | null;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          section?: string;
+          join_code: string;
+          capacity?: number | null;
+          status?: 'DRAFT' | 'OPEN' | 'ACTIVE' | 'CLOSED' | 'ARCHIVED';
+          created_by: string;
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+          archived_at?: string | null;
+          archived_by?: string | null;
+          archive_reason?: string | null;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          section?: string;
+          join_code?: string;
+          capacity?: number | null;
+          status?: 'DRAFT' | 'OPEN' | 'ACTIVE' | 'CLOSED' | 'ARCHIVED';
+          created_by?: string;
+          created_at?: string;
+          updated_at?: string;
+          deleted_at?: string | null;
+          archived_at?: string | null;
+          archived_by?: string | null;
+          archive_reason?: string | null;
+        };
+      };
+      clone_jobs: {
+        Row: {
+          id: string;
+          source_class_id: string;
+          target_class_id: string;
+          status: 'antre' | 'berjalan' | 'selesai' | 'gagal';
+          progress: number;
+          options: Json;
+          date_shift_days: number;
+          error: string | null;
+          result_summary: Json;
+          requested_by: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          source_class_id: string;
+          target_class_id: string;
+          status?: 'antre' | 'berjalan' | 'selesai' | 'gagal';
+          progress?: number;
+          options?: Json;
+          date_shift_days?: number;
+          error?: string | null;
+          result_summary?: Json;
+          requested_by: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          source_class_id?: string;
+          target_class_id?: string;
+          status?: 'antre' | 'berjalan' | 'selesai' | 'gagal';
+          progress?: number;
+          options?: Json;
+          date_shift_days?: number;
+          error?: string | null;
+          result_summary?: Json;
+          requested_by?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      question_import_jobs: {
+        Row: {
+          id: string;
+          format: 'excel' | 'word' | 'moodle_xml' | 'qti';
+          file_path: string | null;
+          total_count: number;
+          valid_count: number;
+          warning_count: number;
+          error_count: number;
+          status: 'draf' | 'selesai' | 'dibatalkan' | 'galat';
+          summary: Json;
+          errors: Json;
+          created_by: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          format: 'excel' | 'word' | 'moodle_xml' | 'qti';
+          file_path?: string | null;
+          total_count?: number;
+          valid_count?: number;
+          warning_count?: number;
+          error_count?: number;
+          status?: 'draf' | 'selesai' | 'dibatalkan' | 'galat';
+          summary?: Json;
+          errors?: Json;
+          created_by: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          format?: 'excel' | 'word' | 'moodle_xml' | 'qti';
+          file_path?: string | null;
+          total_count?: number;
+          valid_count?: number;
+          warning_count?: number;
+          error_count?: number;
+          status?: 'draf' | 'selesai' | 'dibatalkan' | 'galat';
+          summary?: Json;
+          errors?: Json;
+          created_by?: string;
+          created_at?: string;
+        };
+      };
       evaluation_answers: {
         Row: {
           response_id: string;
@@ -2651,6 +2786,29 @@ export interface Database {
         Args: {
           p_target_id: string;
           p_answers: Json;
+        };
+        Returns: Json;
+      };
+            archive_class: {
+        Args: {
+          p_class_id: string;
+          p_reason?: string | null;
+        };
+        Returns: Json;
+      };
+      unarchive_class: {
+        Args: {
+          p_class_id: string;
+          p_reason?: string | null;
+        };
+        Returns: Json;
+      };
+      clone_class: {
+        Args: {
+          p_source_id: string;
+          p_target_id: string;
+          p_options?: Json;
+          p_date_shift_days?: number;
         };
         Returns: Json;
       };

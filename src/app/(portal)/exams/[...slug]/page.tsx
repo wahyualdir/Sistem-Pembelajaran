@@ -28,6 +28,7 @@ import {
 import { listMyClassesAction } from '@/modules/academic/actions';
 import { ExamLiveMonitorPanel, CreateQuizModal } from '@/modules/academic/quiz-components';
 import { AiQuizGeneratorModal } from '@/modules/academic/ai-quiz-generator-modal';
+import { QuestionImportExportModal } from '@/modules/academic/question-import-modal';
 import { cn } from '@/lib/utils';
 
 interface PageProps {
@@ -184,6 +185,7 @@ export default async function ExamSubpage({ params }: PageProps) {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2.5">
+              <QuestionImportExportModal />
               <AiQuizGeneratorModal classes={myClasses} />
               <Link
                 href="/classes"

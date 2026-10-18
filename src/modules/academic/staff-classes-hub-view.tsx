@@ -18,6 +18,7 @@ import {
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
 import { batchEnrollCsvAction } from '@/modules/academic/actions';
+import { StaffArchiveSemesterModal } from './staff-archive-semester-modal';
 
 export const STAFF_CLASSES_TABS = [
   { id: 'enroll-peserta', label: 'Enroll Peserta', icon: Users },
@@ -214,7 +215,8 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <StaffArchiveSemesterModal activeCount={94} />
             <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
               Semester Ganjil 2026/2027
             </span>
