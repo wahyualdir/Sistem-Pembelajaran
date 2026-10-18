@@ -355,22 +355,48 @@ Seluruh cron jobs dipanggil melalui `GET /api/cron/<nama>` dengan proteksi heade
    - Menghapus rekaman log aktivitas (`activity_events`) yang telah melampaui masa simpan institusi (`activity_retention_days`, bawaan 365 hari / 1 tahun).
    - Mahasiswa juga memiliki hak hapus mandiri melalui menu **Privasi** > **Hapus Riwayat Aktivitas**.
 
-### 6.4. Batasan Frekuensi Paket Hosting dan Solusi Pengganti (*Fallbacks*)
+### 6.4. Batasan Frekuensi Paket Hosting dan Pemisahan Jadwal Cron Resmi
 > [!IMPORTANT]
 > **Batasan Layanan Hosting Vercel**:
 > - **Vercel Paket Gratis (Hobby)**: Hanya mendukung frekuensi eksekusi cron **maksimal 1 kali per hari** (frekuensi harian). Panggilan berfrekuensi per menit (`* * * * *`) atau per jam (`0 * * * *`) **TIDAK DIDUKUNG** dan deployment akan ditolak atau dilewati.
-> - **Vercel Paket Berbayar (Pro / Enterprise)**: Mendukung eksekusi hingga frekuensi **1 kali per menit** (`* * * * *`) untuk seluruh 8 endpoint.
+> - **Vercel Paket Berbayar (Pro / Enterprise)**: Mendukung eksekusi hingga frekuensi **1 kali per menit** (`* * * * *`).
 
-Bila institusi menggunakan paket hosting tanpa dukungan sub-harian (misalnya Vercel Hobby atau hosting statis), gunakan salah satu dari dua solusi pengganti resmi berikut:
+#### Strategi Pemisahan Jadwal SIAJAR:
+1. **Jadwal Harian di `vercel.json`**:
+   Hanya 9 rute cron berfrekuensi harian yang didaftarkan di `vercel.json`:
+   - `/api/cron/early-warning` (0 23 * * *)
+   - `/api/cron/journal-reminders` (0 1 * * *)
+   - `/api/cron/auto-archive-classes` (0 3 * * *)
+   - `/api/cron/purge-absence-proofs` (0 2 * * *)
+   - `/api/cron/morning_summary` (0 0 * * *)
+   - `/api/cron/content_review_digest` (0 1 * * *)
+   - `/api/cron/skill_request_expire` (0 2 * * *)
+   - `/api/cron/recap_generate` (0 3 * * *)
+   - `/api/cron/activity_purge` (0 4 * * *)
 
-#### Opsi 1: Penjadwal Database Eksternal (`pg_cron` Supabase) — Sangat Direkomendasikan
-Gunakan ekstensi bawaan PostgreSQL `pg_cron` dan `pg_net` di kluster Supabase untuk memanggil endpoint API secara terjadwal:
+2. **Jadwal Sub-Harian di GitHub Actions (`.github/workflows/cron.yml`)**:
+   Rute per menit dan per jam dipindahkan ke GitHub Actions runner yang berjalan setiap 5 menit (`*/5 * * * *`):
+   - `ai_content_jobs` (antrean pembuatan flashcard/naskah AI)
+   - `tts_jobs` (antrean sintesis audio MP3 podcast)
+   - `finalize-expired-attempts` (finalisasi pengerjaan kuis/ujian kedaluwarsa)
+   - `rotate-exam-tokens` (rotasi token akses ujian)
+   - `end-impersonation-sessions` (penutupan impersonasi)
+   - `scheduled-notifications` (pengiriman notifikasi terjadwal)
+   - `reminders` (pengingat tenggat tugas)
+   - `ai-reminders` (pengingat cerdas AI)
+   - `content_stale_check` (pemeriksaan konten materi basi)
+   - `purge-import-staging` (pembersihan tabel staging impor soal)
+
+   Pengaturan rahasia repositori di GitHub:
+   - `CRON_SECRET`: Kunci rahasia token bearer otentikasi cron.
+   - `SIAJAR_BASE_URL`: URL publik aplikasi (misal `https://siajar.ac.id`).
+
+#### Alternatif: Penjadwal Database Eksternal (`pg_cron` + `pg_net` Supabase)
+Bila institusi mengaktifkan ekstensi `pg_cron` dan `pg_net` pada proyek Supabase, antrean per menit dapat dieksekusi langsung dari basis data tanpa GitHub Actions:
 ```sql
--- 1. Aktifkan ekstensi yang diperlukan
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 CREATE EXTENSION IF NOT EXISTS pg_net;
 
--- 2. Jadwalkan antrean AI dan TTS tiap menit
 SELECT cron.schedule(
     'siajar_ai_content_jobs',
     '* * * * *',
@@ -383,57 +409,6 @@ SELECT cron.schedule(
     );
     $$
 );
-
-SELECT cron.schedule(
-    'siajar_tts_jobs',
-    '* * * * *',
-    $$
-    SELECT net.http_get(
-        url := 'https://siajar.institution.ac.id/api/cron/tts_jobs',
-        headers := jsonb_build_object(
-            'Authorization', 'Bearer ' || coalesce(current_setting('app.cron_secret', true), 'RAHASIA_CRON_ANDA')
-        )
-    );
-    $$
-);
-
--- 3. Jadwalkan pemeriksaan konten basi tiap jam
-SELECT cron.schedule(
-    'siajar_content_stale_check',
-    '0 * * * *',
-    $$
-    SELECT net.http_get(
-        url := 'https://siajar.institution.ac.id/api/cron/content_stale_check',
-        headers := jsonb_build_object(
-            'Authorization', 'Bearer ' || coalesce(current_setting('app.cron_secret', true), 'RAHASIA_CRON_ANDA')
-        )
-    );
-    $$
-);
-```
-
-#### Opsi 2: GitHub Actions Scheduled Runner
-Buat berkas alur kerja `.github/workflows/cron-peta-pulau.yml` dengan rahasia repositori `CRON_SECRET` dan `SIAJAR_BASE_URL`:
-```yaml
-name: SIAJAR Peta Pulau Crons
-on:
-  schedule:
-    # Eksekusi antrean setiap 5 menit (batas minimum gratis GitHub Actions)
-    - cron: '*/5 * * * *'
-  workflow_dispatch:
-
-jobs:
-  run-crons:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger AI Content Jobs
-        run: |
-          curl -f -X GET "${{ secrets.SIAJAR_BASE_URL }}/api/cron/ai_content_jobs" \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
-      - name: Trigger TTS Jobs
-        run: |
-          curl -f -X GET "${{ secrets.SIAJAR_BASE_URL }}/api/cron/tts_jobs" \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
 ```
 
 ### 6.5. Sakelar Penonaktifan Fitur Global (*Kill Switches*)

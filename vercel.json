@@ -2,28 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [
     {
-      "path": "/api/cron/scheduled-notifications",
-      "schedule": "*/5 * * * *"
-    },
-    {
-      "path": "/api/cron/reminders",
-      "schedule": "*/15 * * * *"
-    },
-    {
       "path": "/api/cron/early-warning",
       "schedule": "0 23 * * *"
-    },
-    {
-      "path": "/api/cron/finalize-expired-attempts",
-      "schedule": "* * * * *"
-    },
-    {
-      "path": "/api/cron/rotate-exam-tokens",
-      "schedule": "* * * * *"
-    },
-    {
-      "path": "/api/cron/ai-reminders",
-      "schedule": "*/15 * * * *"
     },
     {
       "path": "/api/cron/journal-reminders",
@@ -36,26 +16,6 @@
     {
       "path": "/api/cron/purge-absence-proofs",
       "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/purge-import-staging",
-      "schedule": "0 * * * *"
-    },
-    {
-      "path": "/api/cron/end-impersonation-sessions",
-      "schedule": "* * * * *"
-    },
-    {
-      "path": "/api/cron/ai_content_jobs",
-      "schedule": "* * * * *"
-    },
-    {
-      "path": "/api/cron/tts_jobs",
-      "schedule": "* * * * *"
-    },
-    {
-      "path": "/api/cron/content_stale_check",
-      "schedule": "0 * * * *"
     },
     {
       "path": "/api/cron/morning_summary",

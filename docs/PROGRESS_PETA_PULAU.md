@@ -62,6 +62,40 @@ Pengubahan berkas `src/tests/unit/peta-pulau/tahap2-content.test.ts` dilakukan s
 
 ---
 
+## 2.1. Penjelasan Revert `next.config.mjs` dan Git Diff
+Pada komit sebelumnya (`b5b3bce`), penonaktifan cache Webpack (`webpack: (config, { dev }) => { if (!dev) config.cache = false; return config; }`) sempat dimasukkan sebagai mitigasi kendala ruang disk lokal sementara pada mesin pengujian Windows (`ENOSPC`). Sesuai arahan, penyiasat lokal ini **telah dikembalikan (reverted) ke konfigurasi semula** agar lingkungan produksi tetap bersih dan efisien.
+
+Berikut bukti `git diff next.config.mjs` aktual:
+```diff
+diff --git a/next.config.mjs b/next.config.mjs
+index ece56b5..e1170fa 100644
+--- a/next.config.mjs
++++ b/next.config.mjs
+@@ -18,12 +18,6 @@ const nextConfig = {
+       bodySizeLimit: "10mb",
+     },
+   },
+-  webpack: (config, { dev }) => {
+-    if (!dev) {
+-      config.cache = false;
+-    }
+-    return config;
+-  },
+   async headers() {
+     return [{ source: '/:path*', headers: securityHeaders }];
+   },
+```
+
+---
+
+## 2.2. Penghapusan Model Bawaan & Penegakan Persetujuan Dosen AI
+Sesuai prinsip gagal-tertutup (*fail-closed*):
+1. **Tidak Ada Nama Model Bawaan**: String `'gemini-2.5-flash'` atau model default hardcoded dihapus seluruhnya dari `GeminiContentGenerator` dan `getContentGenerator`.
+2. **Fail-Closed AI_MODEL**: Jika variabel lingkungan `AI_MODEL` kosong atau tidak disetel, fungsi mengembalikan pesan jelas: `"Pembuatan konten AI belum aktif: AI_MODEL belum disetel. Hubungi admin."` dan konstruktor kelas melempar exception. Telah diverifikasi melalui pengujian unit di `src/tests/unit/peta-pulau/tahap2-content.test.ts`.
+3. **Persetujuan Dosen (`ai_content_consents`)**: Aksi server `requestAiGenerationJobAction` mewajibkan pemeriksaan `getLecturerConsentAction()` sebelum pekerjaan pembuatan konten dimasukkan ke antrean. Tanpa persetujuan eksplisit dosen pengampu di layar kurasi, aksi ditolak dengan pesan: `"Persetujuan dosen belum diberikan. Harap setujui ketentuan pembuatan konten AI terlebih dahulu di layar kurasi."`
+
+---
+
 ## 3. Penyelarasan Kunci Kebijakan (Lampiran A) & Jenis Notifikasi (Lampiran B)
 
 ### 3.1. Kunci Kebijakan Institusi (Tepat 21 Kunci — Lampiran A)
@@ -102,6 +136,66 @@ Didaftarkan pada `src/modules/notifications/types.ts`:
 10. `MAHASISWA_TERTINGGAL`
 11. `REKAP_SEMESTER_SIAP`
 12. `LAPORAN_TUKAR_KEAHLIAN`
+
+---
+
+### 3.3. Penyelarasan Kesepuluh Jenis Kejadian Aktivitas (Lampiran D) & Bukti Panggilan `log_activity`
+
+Tabel `activity_event_kinds` dan fungsi `log_activity` telah diselaraskan 100% dengan Lampiran D:
+1. `materi_dibuka` (tanpa meta) -> dipanggil di `src/modules/academic/material-progress-actions.ts:81`
+2. `podcast_diputar` (tanpa meta) -> dipanggil di `src/modules/academic/podcast-actions.ts:41`
+3. `podcast_selesai` (tanpa meta) -> dipanggil di `src/modules/academic/podcast-actions.ts:95`
+4. `kartu_direview` (`jumlah`, `ingat`, `ragu`, `lupa`) -> dipanggil di `supabase/migrations/20261018000031_peta_pulau_tahap2_content.sql:461`
+5. `kuis_selesai` (`skor`, `lulus`, `durasi_detik`) -> dipanggil di `supabase/migrations/20261018000030_peta_pulau_tahap1_core.sql:274`
+6. `pulau_selesai` (tanpa meta) -> dipanggil di `supabase/migrations/20261018000030_peta_pulau_tahap1_core.sql:288`
+7. `tugas_dikumpulkan` (`tepat_waktu`) -> dipanggil di `src/modules/academic/actions.ts:535`
+8. `bantuan_diminta` (tanpa meta) -> dipanggil di `src/modules/academic/skill-exchange-actions.ts:192`
+9. `bantuan_diberikan` (tanpa meta) -> dipanggil di `src/modules/academic/skill-exchange-actions.ts:238`
+10. `bantuan_terbantu` (tanpa meta) -> dipanggil di `supabase/migrations/20261018000032_peta_pulau_tahap3_social.sql:238`
+
+Label bahasa Indonesia di halaman Privasi (`src/modules/academic/activity-privacy-client.tsx`):
+- `materi_dibuka`: "Membuka Modul Materi"
+- `podcast_diputar`: "Memutar Podcast Materi"
+- `podcast_selesai`: "Menyelesaikan Podcast Materi"
+- `kartu_direview`: "Mengulas Kartu Flashcard"
+- `kuis_selesai`: "Menyelesaikan Kuis Bab"
+- `pulau_selesai`: "Menuntaskan Pulau Belajar"
+- `tugas_dikumpulkan`: "Mengumpulkan Tugas Kuliah"
+- `bantuan_diminta`: "Meminta Bantuan Teman"
+- `bantuan_diberikan`: "Menjawab Permintaan Bantuan"
+- `bantuan_terbantu`: "Bantuan Ditandai Terbantu"
+
+Hasil eksekusi `git grep -n "log_activity"` aktual:
+```text
+src/modules/academic/actions.ts:534:    // Catat log aktivitas belajar mandiri via RPC log_activity (Lampiran D: tugas_dikumpulkan dengan meta: tepat_waktu)
+src/modules/academic/actions.ts:535:    await supabase.rpc('log_activity', {
+src/modules/academic/material-progress-actions.ts:80:    // Catat log aktivitas belajar mandiri via RPC log_activity (Lampiran D: materi_dibuka tanpa meta)
+src/modules/academic/material-progress-actions.ts:81:    await supabase.rpc('log_activity', {
+src/modules/academic/podcast-actions.ts:41:      await supabase.rpc('log_activity', {
+src/modules/academic/podcast-actions.ts:93:    // Catat log aktivitas belajar mandiri secara aman via RPC log_activity (Lampiran D: podcast_selesai tanpa meta)
+src/modules/academic/podcast-actions.ts:95:      await supabase.rpc('log_activity', {
+src/modules/academic/skill-exchange-actions.ts:191:  // Catat log aktivitas belajar mandiri via RPC log_activity (Lampiran D: bantuan_diminta tanpa meta)
+src/modules/academic/skill-exchange-actions.ts:192:  await supabase.rpc('log_activity', {
+src/modules/academic/skill-exchange-actions.ts:237:  // Catat log aktivitas belajar mandiri via RPC log_activity (Lampiran D: bantuan_diberikan tanpa meta)
+src/modules/academic/skill-exchange-actions.ts:238:  await supabase.rpc('log_activity', {
+supabase/migrations/20261018000029_peta_pulau_p0_foundation.sql:505:CREATE OR REPLACE FUNCTION public.log_activity(
+supabase/migrations/20261018000030_peta_pulau_tahap1_core.sql:274:    PERFORM public.log_activity(
+supabase/migrations/20261018000030_peta_pulau_tahap1_core.sql:288:        PERFORM public.log_activity(
+supabase/migrations/20261018000031_peta_pulau_tahap2_content.sql:461:        PERFORM public.log_activity(
+supabase/migrations/20261018000032_peta_pulau_tahap3_social.sql:238:    PERFORM public.log_activity(
+```
+
+Pengujian unit: Dibuat `src/tests/unit/peta-pulau/activity-event-kinds.test.ts` (13 tes, 100% lulus) memverifikasi daftar putih 10 jenis kejadian dan pembuangan kunci meta di luar whitelist.
+
+---
+
+### 3.4. Penyelesaian Peringatan React Hooks (`exhaustive-deps`)
+Tiga berkas dengan peringatan ESLint `react-hooks/exhaustive-deps` telah diperbaiki secara bersih:
+1. `src/modules/academic/achievements-view.tsx`: `handleFetchRecap` dibungkus `useCallback` dengan dependensi lengkap.
+2. `src/modules/academic/class-live-poll-card.tsx`: `loadPolls` dibungkus `useCallback([classId, isStaff])` dan dipasang pada dependensi `useEffect`.
+3. `src/modules/academic/coordinator-reports-hub-view.tsx`: `useEffect` dilengkapi dependensi `[activeTab, adoptionItems.length, isLoadingAdoption]`.
+
+Hasil linting: **0 Error, 0 Warning**.
 
 ---
 

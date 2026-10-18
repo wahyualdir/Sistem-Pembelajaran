@@ -475,7 +475,11 @@ export class GeminiContentGenerator implements ContentGenerator {
 
   constructor(apiKey: string, model?: string) {
     this.apiKey = apiKey;
-    this.model = model || process.env.AI_MODEL || 'gemini-2.5-flash';
+    const chosenModel = (model || process.env.AI_MODEL || '').trim();
+    if (!chosenModel) {
+      throw new Error('Pembuatan konten AI belum aktif: AI_MODEL belum disetel. Hubungi admin.');
+    }
+    this.model = chosenModel;
   }
 
   async generateFlashcards(input: GenerateFlashcardsInput): Promise<GenerateFlashcardsOutput> {
@@ -624,7 +628,7 @@ export function getContentGenerator(options?: { forceReal?: boolean }): {
   error?: string;
 } {
   const apiKey = (process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY)?.trim();
-  const aiModel = process.env.AI_MODEL?.trim() || 'gemini-2.5-flash';
+  const aiModel = process.env.AI_MODEL?.trim();
 
   // Jika lingkungan testing atau tiruan aktif dan tidak meminta instance nyata
   if (!options?.forceReal && (process.env.NODE_ENV === 'test' || process.env.MOCK_AI === 'true')) {
@@ -635,6 +639,13 @@ export function getContentGenerator(options?: { forceReal?: boolean }): {
     return {
       generator: null,
       error: 'Pembuatan konten AI belum aktif. Hubungi admin.',
+    };
+  }
+
+  if (!aiModel) {
+    return {
+      generator: null,
+      error: 'Pembuatan konten AI belum aktif: AI_MODEL belum disetel. Hubungi admin.',
     };
   }
 

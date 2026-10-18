@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   HelpCircle,
   BarChart3,
@@ -50,7 +50,7 @@ export function ClassLivePollCard({ classId, currentUserRole }: ClassLivePollCar
 
   const isStaff = currentUserRole === 'LECTURER' || currentUserRole === 'TEACHING_ASSISTANT';
 
-  const loadPolls = async () => {
+  const loadPolls = useCallback(async () => {
     const res = await listClassPollsAction(classId);
     if (res.ok && res.polls) {
       setPolls(res.polls);
@@ -66,11 +66,11 @@ export function ClassLivePollCard({ classId, currentUserRole }: ClassLivePollCar
         }
       }
     }
-  };
+  }, [classId, isStaff]);
 
   useEffect(() => {
     loadPolls();
-  }, [classId]);
+  }, [loadPolls]);
 
   const handleVote = async (e: React.FormEvent) => {
     e.preventDefault();

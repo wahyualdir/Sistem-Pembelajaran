@@ -1,0 +1,60 @@
+name: SIAJAR Scheduled Crons (Sub-Daily)
+
+on:
+  schedule:
+    # Eksekusi setiap 5 menit untuk memproses rute berfrekuensi tinggi (sub-harian)
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run-sub-daily-crons:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Sub-Daily Cron Endpoints
+        env:
+          BASE_URL: ${{ secrets.SIAJAR_BASE_URL || 'https://siajar.ac.id' }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          echo "Memulai eksekusi rute cron frekuensi tinggi SIAJAR..."
+
+          # 1. Antrean Pembuatan Konten AI Peta Pulau (ai_generation_jobs)
+          curl -s -f -X GET "$BASE_URL/api/cron/ai_content_jobs" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: ai_content_jobs gagal"
+
+          # 2. Antrean Sintesis Suara TTS Podcast (tts_jobs)
+          curl -s -f -X GET "$BASE_URL/api/cron/tts_jobs" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: tts_jobs gagal"
+
+          # 3. Finalisasi Sesi Ujian Kedaluwarsa (finalize-expired-attempts)
+          curl -s -f -X GET "$BASE_URL/api/cron/finalize-expired-attempts" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: finalize-expired-attempts gagal"
+
+          # 4. Rotasi Token Akses Ujian (rotate-exam-tokens)
+          curl -s -f -X GET "$BASE_URL/api/cron/rotate-exam-tokens" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: rotate-exam-tokens gagal"
+
+          # 5. Penutupan Sesi Impersonasi Kedaluwarsa (end-impersonation-sessions)
+          curl -s -f -X GET "$BASE_URL/api/cron/end-impersonation-sessions" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: end-impersonation-sessions gagal"
+
+          # 6. Notifikasi Terjadwal (scheduled-notifications)
+          curl -s -f -X GET "$BASE_URL/api/cron/scheduled-notifications" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: scheduled-notifications gagal"
+
+          # 7. Pengingat Akademik Tenggat Waktu (reminders)
+          curl -s -f -X GET "$BASE_URL/api/cron/reminders" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: reminders gagal"
+
+          # 8. Pengingat Cerdas AI (ai-reminders)
+          curl -s -f -X GET "$BASE_URL/api/cron/ai-reminders" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: ai-reminders gagal"
+
+          # 9. Pemeriksaan Konten Basi Materi Berubah (content_stale_check)
+          curl -s -f -X GET "$BASE_URL/api/cron/content_stale_check" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: content_stale_check gagal"
+
+          # 10. Pembersihan Staging Impor Soal (purge-import-staging)
+          curl -s -f -X GET "$BASE_URL/api/cron/purge-import-staging" \
+            -H "Authorization: Bearer $CRON_SECRET" || echo "Warning: purge-import-staging gagal"
+
+          echo "Seluruh pekerjaan cron sub-harian selesai diproses."

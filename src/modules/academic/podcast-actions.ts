@@ -36,7 +36,22 @@ export async function getPodcastPlaybackAction(podcastId: string): Promise<{
       return { success: false, error: error.message };
     }
 
-    return { success: true, data: data as PodcastPlaybackData };
+    const playbackData = data as PodcastPlaybackData;
+    if (playbackData?.class_id) {
+      try {
+        await supabase.rpc('log_activity', {
+          p_kind: 'podcast_diputar',
+          p_class_id: playbackData.class_id,
+          p_ref_type: 'podcast',
+          p_ref_id: podcastId,
+          p_meta: {},
+        });
+      } catch {
+        // Abaikan
+      }
+    }
+
+    return { success: true, data: playbackData };
   } catch (err: any) {
     return { success: false, error: err?.message || 'Gagal memuat pemutar podcast.' };
   }

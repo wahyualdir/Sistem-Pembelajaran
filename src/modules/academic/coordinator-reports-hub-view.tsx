@@ -94,7 +94,7 @@ export function CoordinatorReportsHubView({
         }
       });
     }
-  }, [activeTab]);
+  }, [activeTab, adoptionItems.length, isLoadingAdoption]);
 
   const handleTogglePeriod = () => {
     if (!edomPeriod) return;

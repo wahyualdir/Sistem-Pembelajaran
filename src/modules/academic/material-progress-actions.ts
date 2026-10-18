@@ -76,6 +76,15 @@ export async function recordMaterialOpenAction(
       first_opened_at: materialProgressStore[key].openedAt,
       completed_at: materialProgressStore[key].completedAt,
     });
+
+    // Catat log aktivitas belajar mandiri via RPC log_activity (Lampiran D: materi_dibuka tanpa meta)
+    await supabase.rpc('log_activity', {
+      p_kind: 'materi_dibuka',
+      p_class_id: classId,
+      p_ref_type: 'materials',
+      p_ref_id: materialId,
+      p_meta: {},
+    });
   } catch {
     // Memory
   }

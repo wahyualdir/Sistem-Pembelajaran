@@ -283,6 +283,14 @@ export async function checkAiAvailabilityAction(): Promise<{
     };
   }
 
+  const aiModel = process.env.AI_MODEL?.trim();
+  if (!aiModel) {
+    return {
+      isAvailable: false,
+      message: 'Pembuatan konten AI belum aktif: AI_MODEL belum disetel. Hubungi admin.',
+    };
+  }
+
   return { isAvailable: true };
 }
 
@@ -298,11 +306,22 @@ export async function requestAiGenerationJobAction(payload: {
   const user = await getCurrentUserWithRoles();
   if (!user) return { ok: false, message: 'Belum terautentikasi' };
 
-  // Fail-closed check
+  // Fail-closed check konfigurasi AI
   const avail = await checkAiAvailabilityAction();
   if (!avail.isAvailable) {
     return { ok: false, message: avail.message };
   }
+
+  // Wajib persetujuan dosen (ai_content_consents)
+  const consent = await getLecturerConsentAction();
+  if (!consent.consented) {
+    return {
+      ok: false,
+      message: 'Persetujuan dosen belum diberikan. Harap setujui ketentuan pembuatan konten AI terlebih dahulu di layar kurasi.',
+    };
+  }
+
+  const modelUsed = process.env.AI_MODEL?.trim() || '';
 
   const supabase = await createClient();
 
@@ -313,7 +332,7 @@ export async function requestAiGenerationJobAction(payload: {
       chapter_id: payload.chapterId,
       kind: payload.kind,
       status: 'pending',
-      model_used: process.env.GEMINI_API_KEY ? 'gemini-1.5-pro' : 'gpt-4o',
+      model_used: modelUsed,
       input_material_ids: payload.materialIds,
       created_by: user.user.id,
     })

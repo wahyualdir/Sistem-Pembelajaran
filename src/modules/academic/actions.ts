@@ -530,6 +530,19 @@ export async function submitAssignmentAction(assignmentId: string, text: unknown
       file_paths: [],
       submitted_at: now.toISOString(),
     });
+
+    // Catat log aktivitas belajar mandiri via RPC log_activity (Lampiran D: tugas_dikumpulkan dengan meta: tepat_waktu)
+    try {
+      await supabase.rpc('log_activity', {
+        p_kind: 'tugas_dikumpulkan',
+        p_class_id: a.class_id,
+        p_ref_type: 'assignments',
+        p_ref_id: id,
+        p_meta: { tepat_waktu: lateMinutes <= 0 },
+      });
+    } catch {
+      // Abaikan kegagalan pencatatan aktivitas non-blocking
+    }
   } else {
     const a = tugas.assignments.find((x) => x.id === id);
     if (!a || !mem.enrollments.some((e) => e.class_id === a.class_id && e.student_id === me.id))

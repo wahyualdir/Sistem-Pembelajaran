@@ -458,7 +458,7 @@ describe('Tahap 2: Grounding Konten, Validator AI, & Pemecah Naskah (ai-content.
     try {
       delete process.env.GEMINI_API_KEY;
       delete process.env.OPENAI_API_KEY;
-      // Tanpa konfigurasi: generator bernilai null
+      // Tanpa konfigurasi API key: generator bernilai null
       const failed = getContentGenerator({ forceReal: true });
       expect(failed.generator).toBeNull();
       expect(failed.error).toBe('Pembuatan konten AI belum aktif. Hubungi admin.');
@@ -472,6 +472,42 @@ describe('Tahap 2: Grounding Konten, Validator AI, & Pemecah Naskah (ai-content.
       const geminiGen = real.generator as GeminiContentGenerator;
       expect(geminiGen.apiKey).toBe('test-gemini-key-12345');
       expect(geminiGen.model).toBe('gemini-1.5-pro');
+    } finally {
+      if (origKey) process.env.GEMINI_API_KEY = origKey;
+      else delete process.env.GEMINI_API_KEY;
+      if (origModel) process.env.AI_MODEL = origModel;
+      else delete process.env.AI_MODEL;
+    }
+  });
+
+  it('GeminiContentGenerator fail-closed jika AI_MODEL kosong atau tidak disetel', () => {
+    const origKey = process.env.GEMINI_API_KEY;
+    const origModel = process.env.AI_MODEL;
+
+    try {
+      process.env.GEMINI_API_KEY = 'test-gemini-key-12345';
+      delete process.env.AI_MODEL;
+
+      // 1. Direct constructor call tanpa model dan tanpa AI_MODEL melempar error
+      expect(() => new GeminiContentGenerator('test-gemini-key-12345')).toThrow(
+        'Pembuatan konten AI belum aktif: AI_MODEL belum disetel. Hubungi admin.'
+      );
+      expect(() => new GeminiContentGenerator('test-gemini-key-12345', '  ')).toThrow(
+        'Pembuatan konten AI belum aktif: AI_MODEL belum disetel. Hubungi admin.'
+      );
+
+      // 2. getContentGenerator({ forceReal: true }) mengembalikan error fail-closed saat AI_MODEL kosong
+      const resultNoModel = getContentGenerator({ forceReal: true });
+      expect(resultNoModel.generator).toBeNull();
+      expect(resultNoModel.error).toBe(
+        'Pembuatan konten AI belum aktif: AI_MODEL belum disetel. Hubungi admin.'
+      );
+
+      // 3. Ketika AI_MODEL disetel kembali, generator berhasil diinisialisasi
+      process.env.AI_MODEL = 'custom-gemini-prod';
+      const resultWithModel = getContentGenerator({ forceReal: true });
+      expect(resultWithModel.generator).toBeInstanceOf(GeminiContentGenerator);
+      expect((resultWithModel.generator as GeminiContentGenerator).model).toBe('custom-gemini-prod');
     } finally {
       if (origKey) process.env.GEMINI_API_KEY = origKey;
       else delete process.env.GEMINI_API_KEY;

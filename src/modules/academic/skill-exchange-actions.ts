@@ -188,6 +188,19 @@ export async function createSkillRequestAction(payload: {
 
   if (error) return { ok: false, message: error.message };
 
+  // Catat log aktivitas belajar mandiri via RPC log_activity (Lampiran D: bantuan_diminta tanpa meta)
+  try {
+    await supabase.rpc('log_activity', {
+      p_kind: 'bantuan_diminta',
+      p_class_id: payload.classId,
+      p_ref_type: 'skill_requests',
+      p_ref_id: data.id,
+      p_meta: {},
+    });
+  } catch {
+    // Abaikan
+  }
+
   revalidatePath('/skill-exchange');
   return { ok: true, requestId: data.id };
 }
@@ -224,6 +237,19 @@ export async function respondToSkillRequestAction(payload: {
   });
 
   if (error) return { ok: false, message: error.message };
+
+  // Catat log aktivitas belajar mandiri via RPC log_activity (Lampiran D: bantuan_diberikan tanpa meta)
+  try {
+    await supabase.rpc('log_activity', {
+      p_kind: 'bantuan_diberikan',
+      p_class_id: payload.classId,
+      p_ref_type: 'skill_requests',
+      p_ref_id: payload.requestId,
+      p_meta: {},
+    });
+  } catch {
+    // Abaikan
+  }
 
   revalidatePath('/skill-exchange');
   return { ok: true };

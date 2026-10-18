@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Trophy,
   Flame,
@@ -58,18 +58,18 @@ export function AchievementsView() {
     });
   }, []);
 
-  const handleFetchRecap = async () => {
+  const handleFetchRecap = useCallback(async () => {
     setIsLoadingRecap(true);
     const res = await getStudentSemesterRecapAction();
     setRecapData(res);
     setIsLoadingRecap(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (activeTab === 'recap' && !recapData && !isLoadingRecap) {
       handleFetchRecap();
     }
-  }, [activeTab]);
+  }, [activeTab, recapData, isLoadingRecap, handleFetchRecap]);
 
   const handleSavePrefs = async (e: React.FormEvent) => {
     e.preventDefault();
