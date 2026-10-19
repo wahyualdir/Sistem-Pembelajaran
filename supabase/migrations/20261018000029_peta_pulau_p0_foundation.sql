@@ -4,8 +4,6 @@
 -- Spesifikasi: docs/INSTRUKSI_PETA_PULAU.md (Bagian 6.2 - 6.6, 7.1, Lampiran A, B, D)
 -- ============================================================================
 
-BEGIN;
-
 -- ----------------------------------------------------------------------------
 -- 1. TABEL CLASS_FEATURE_FLAGS (Bagian 6.2)
 -- ----------------------------------------------------------------------------
@@ -682,5 +680,3 @@ INSERT INTO public.institution_policies (key, value, description) VALUES
     ('skill_pair_weekly_cap', '2'::jsonb, 'Batas maksimal poin bantuan dari pemohon yang sama per minggu.')
 ON CONFLICT (key) DO UPDATE SET
     description = EXCLUDED.description;
-
-COMMIT;
