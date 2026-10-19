@@ -156,36 +156,27 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
   };
 
   return (
-    <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
-      {/* 1. HEADER WINDOW NOTIFIKASI */}
-      <RetroWindow
-        title="pusat_notifikasi_terpadu.app"
-        badge={unreadCount > 0 ? `${unreadCount} BELUM DIBACA` : 'SEMUA TELAH DIBACA'}
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-6 bg-surface"
-      >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
-                <Bell className="h-6 w-6" />
-              </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl text-ink tracking-tight">
-                Pusat Notifikasi & Pengingat
-              </h1>
-            </div>
-            <p className="text-sm sm:text-base text-gray-dark font-medium max-w-2xl leading-relaxed">
-              Pemberitahuan resmi perkuliahan, peringatan tenggat pengumpulan tugas (H-3, H-1, 3 jam), jadwal pelaksanaan ujian, dan sesi presensi aktif di SIAJAR.
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* 1. HEADER HALAMAN BERANDA STANDARD */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <Bell className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Pusat Notifikasi & Pengingat
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Pemberitahuan resmi perkuliahan, peringatan tenggat tugas (H-3, H-1, 3 jam), jadwal ujian, dan presensi aktif
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <Link
               href="/notifications/preferences"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border-2 border-black bg-surface text-ink text-xs sm:text-sm font-bold shadow-retro-sm hover:bg-gray-soft transition-all"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-ink bg-surface text-ink text-xs font-sans font-bold shadow-xs hover:bg-gray-soft transition-all"
             >
-              <span>Atur Preferensi Kanal</span>
-              <ArrowRight className="h-4 w-4 text-primary" />
+              <span>Atur Kanal</span>
+              <ArrowRight className="h-3.5 w-3.5 text-primary" />
             </Link>
 
             {unreadCount > 0 ? (
@@ -193,23 +184,27 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
                 type="button"
                 disabled={isPending}
                 onClick={handleMarkAllAsRead}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-ink text-white text-xs sm:text-sm font-bold shadow-retro-sm hover:bg-gray-dark transition-all disabled:opacity-50 cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-ink bg-ink text-white text-xs font-sans font-bold shadow-retro hover:bg-neutral-800 transition-all disabled:opacity-50 cursor-pointer"
               >
-                <CheckCircle2 className="h-4 w-4" />
+                <CheckCircle2 className="h-3.5 w-3.5" />
                 <span>Tandai Semua Dibaca</span>
               </button>
             ) : (
-              <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border-2 border-black bg-gray-soft text-ink text-xs sm:text-sm font-bold shadow-retro-sm">
-                <CheckCircle2 className="h-4 w-4 text-primary-dark" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-ink bg-gray-soft text-ink text-xs font-sans font-bold shadow-xs">
+                <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
                 Semua Terbaca
               </span>
             )}
+
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              {unreadCount > 0 ? `${unreadCount} BELUM DIBACA` : 'SEMUA TELAH DIBACA'}
+            </span>
           </div>
         </div>
 
         {/* Banner Status Notifikasi / Pesan Aksi */}
         {statusMessage && (
-          <div className="mt-4 p-3 rounded-lg border-2 border-black bg-gray-soft text-xs sm:text-sm font-bold text-ink flex items-center justify-between animate-fade-up">
+          <div className="p-3.5 rounded-xl border-2 border-ink bg-gray-soft text-xs sm:text-sm font-bold text-ink flex items-center justify-between shadow-retro-sm animate-fade-up">
             <span>{statusMessage}</span>
             <button
               type="button"
@@ -222,30 +217,30 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
         )}
 
         {/* Metrik Ringkas & Tombol Uji Cron */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-5 border-t-2 border-black/10 mt-5">
-          <div className="p-4 rounded-xl border-2 border-black bg-surface shadow-retro-sm flex items-center gap-3">
-            <div className="p-2.5 rounded-lg border-2 border-black bg-gray-soft text-ink">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro flex items-center gap-3.5">
+            <div className="p-2.5 rounded-lg border-2 border-ink bg-gray-soft text-ink shadow-xs">
               <Inbox className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-dark uppercase tracking-wider">Total Notifikasi</p>
-              <p className="font-heading font-bold text-2xl text-ink tabular-nums">{items.length}</p>
+              <p className="text-xs font-bold text-gray-dark uppercase tracking-wider font-sans">Total Notifikasi</p>
+              <p className="font-heading font-bold text-2xl sm:text-3xl text-ink tabular-nums">{items.length}</p>
             </div>
           </div>
 
-          <div className="p-4 rounded-xl border-2 border-black bg-surface shadow-retro-sm flex items-center gap-3">
-            <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white">
+          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro flex items-center gap-3.5">
+            <div className="p-2.5 rounded-lg border-2 border-ink bg-primary text-white shadow-xs">
               <Bell className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-xs font-bold text-gray-dark uppercase tracking-wider">Belum Dibaca</p>
-              <p className="font-heading font-bold text-2xl text-ink tabular-nums">{unreadCount}</p>
+              <p className="text-xs font-bold text-gray-dark uppercase tracking-wider font-sans">Belum Dibaca</p>
+              <p className="font-heading font-bold text-2xl sm:text-3xl text-ink tabular-nums">{unreadCount}</p>
             </div>
           </div>
 
-          <div className="p-4 rounded-xl border-2 border-black bg-gray-soft shadow-retro-sm flex items-center justify-between">
+          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro flex items-center justify-between">
             <div>
-              <p className="text-xs font-bold text-gray-dark uppercase tracking-wider">Pengingat Otomatis</p>
+              <p className="text-xs font-bold text-gray-dark uppercase tracking-wider font-sans">Pengingat Otomatis</p>
               <p className="text-xs font-bold text-ink mt-0.5">H-3, H-1, 3 Jam & Presensi</p>
             </div>
             <button
@@ -253,67 +248,69 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
               disabled={isPending}
               onClick={handleTriggerScheduler}
               title="Jalankan pemindaian pengingat otomatis sekarang"
-              className="p-2 rounded-lg border-2 border-black bg-surface hover:bg-gray-soft text-ink font-bold text-xs shadow-retro-sm flex items-center gap-1.5 transition-all disabled:opacity-50 cursor-pointer"
+              className="p-2 rounded-lg border-2 border-ink bg-surface hover:bg-gray-soft text-ink font-bold text-xs shadow-xs flex items-center gap-1.5 transition-all disabled:opacity-50 cursor-pointer"
             >
               <RefreshCw className={`h-4 w-4 text-primary ${isPending ? 'animate-spin' : ''}`} />
               <span className="hidden sm:inline">Pindai</span>
             </button>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 2. FILTER TABEL: SEMUA / BELUM DIBACA */}
-      <div className="flex items-center justify-between flex-wrap gap-4">
-        <div className="inline-flex p-1 rounded-xl border-2 border-black bg-surface shadow-retro-sm">
-          <button
-            type="button"
-            onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all cursor-pointer ${
-              filter === 'all'
-                ? 'bg-ink text-white border-2 border-black shadow-retro-sm'
-                : 'text-ink hover:bg-gray-soft'
-            }`}
-          >
-            Semua ({items.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilter('unread')}
-            className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-              filter === 'unread'
-                ? 'bg-ink text-white border-2 border-black shadow-retro-sm'
-                : 'text-ink hover:bg-gray-soft'
-            }`}
-          >
-            <span>Belum Dibaca</span>
-            {unreadCount > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-primary text-white">
-                {unreadCount}
-              </span>
-            )}
-          </button>
+        {/* 2. FILTER TABEL: SEMUA / BELUM DIBACA */}
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <div className="inline-flex gap-2">
+            <button
+              type="button"
+              onClick={() => setFilter('all')}
+              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all cursor-pointer ${
+                filter === 'all'
+                  ? 'bg-ink text-white border-2 border-ink shadow-retro'
+                  : 'bg-surface text-ink border-2 border-ink hover:bg-gray-soft shadow-xs'
+              }`}
+            >
+              Semua ({items.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setFilter('unread')}
+              className={`px-4 py-2 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                filter === 'unread'
+                  ? 'bg-ink text-white border-2 border-ink shadow-retro'
+                  : 'bg-surface text-ink border-2 border-ink hover:bg-gray-soft shadow-xs'
+              }`}
+            >
+              <span>Belum Dibaca</span>
+              {unreadCount > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full text-xs font-bold bg-primary text-white">
+                  {unreadCount}
+                </span>
+              )}
+            </button>
+          </div>
+
+          <span className="text-xs font-bold text-gray-dark font-sans">
+            Menampilkan {filteredItems.length} pemberitahuan
+          </span>
         </div>
 
-        <span className="text-xs font-bold text-gray-dark">
-          Menampilkan {filteredItems.length} pemberitahuan
-        </span>
-      </div>
-
-      {/* 3. DAFTAR NOTIFIKASI */}
-      <RetroWindow
-        title={`daftar_notifikasi_${filter}.list`}
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-6 space-y-4"
-      >
+        {/* 3. DAFTAR NOTIFIKASI CONTAINER */}
+        <div className="rounded-xl border-2 border-ink bg-surface shadow-retro overflow-hidden">
+          <div className="p-4 sm:p-5 border-b-2 border-ink bg-gray-soft flex items-center justify-between">
+            <h2 className="font-heading font-bold text-base text-ink">
+              Daftar Pemberitahuan {filter === 'unread' ? '(Belum Dibaca)' : ''}
+            </h2>
+            <span className="text-xs font-bold text-gray-dark font-sans">{filteredItems.length} Item</span>
+          </div>
+          <div className="p-4 sm:p-5 space-y-3">
         {filteredItems.length === 0 ? (
-          <div className="p-10 text-center rounded-xl border-2 border-dashed border-black bg-gray-soft/40 space-y-3">
-            <div className="p-3 rounded-full border-2 border-black bg-surface inline-block text-gray-dark">
+          <div className="p-10 text-center rounded-xl border-2 border-dashed border-ink bg-gray-soft/40 space-y-3">
+            <div className="p-3 rounded-full border-2 border-ink bg-surface inline-block text-gray-dark">
               <Inbox className="h-8 w-8" />
             </div>
             <h3 className="text-lg font-heading font-bold text-ink">
               {filter === 'unread' ? 'Seluruh Notifikasi Telah Dibaca' : 'Kotak Notifikasi Bersih'}
             </h3>
-            <p className="text-xs sm:text-sm text-gray-dark font-medium max-w-md mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm text-gray-dark font-bold max-w-md mx-auto leading-relaxed">
               {filter === 'unread'
                 ? 'Bagus sekali! Tidak ada pemberitahuan tertunda. Silakan pilih tab "Semua" untuk melihat riwayat lengkap.'
                 : 'Belum ada notifikasi yang diterima. Pengumuman perkuliahan, pengingat tenggat tugas, dan jadwal ujian akan muncul di sini.'}
@@ -328,7 +325,7 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
               return (
                 <div
                   key={n.id}
-                  className={`p-5 rounded-xl border-2 border-black bg-surface shadow-retro-sm space-y-3 transition-all hover:bg-gray-soft/20 animate-fade-up ${
+                  className={`p-5 rounded-xl border-2 border-ink bg-surface shadow-retro-sm space-y-3 transition-all hover:bg-gray-soft/20 animate-fade-up ${
                     isUnread ? 'border-l-[6px] border-l-primary' : ''
                   }`}
                   style={{ animationDelay: `${idx * 30}ms` }}
@@ -343,7 +340,7 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
                       )}
 
                       <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded border text-xs font-sans ${badge.className}`}
+                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded border-2 border-ink text-xs font-sans font-bold ${badge.className}`}
                       >
                         {getTypeIcon(n.type)}
                         <span>{badge.label}</span>
@@ -356,22 +353,22 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
 
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-dark font-sans font-bold flex items-center gap-1.5">
-                        <Clock className="h-3.5 w-3.5 text-primary-dark" />
+                        <Clock className="h-3.5 w-3.5 text-primary" />
                         {fmt(n.created_at)}
                       </span>
                     </div>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-ink font-medium pl-3 border-l-2 border-black/20 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-ink font-medium pl-3 border-l-2 border-ink/20 leading-relaxed">
                     {n.body}
                   </p>
 
-                  <div className="pt-2 border-t border-black/10 flex flex-wrap items-center justify-between gap-3">
+                  <div className="pt-2 border-t-2 border-ink/10 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       {n.target_url ? (
                         <Link
                           href={n.target_url}
-                          className="inline-flex items-center gap-1.5 text-xs font-heading font-bold text-ink hover:text-primary-dark transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs font-heading font-bold text-ink hover:text-primary transition-colors"
                         >
                           <span>Buka Tautan Tujuan</span>
                           <ArrowRight className="h-3.5 w-3.5 text-primary" />
@@ -379,13 +376,13 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
                       ) : n.class_id ? (
                         <Link
                           href={`/classes/${n.class_id}`}
-                          className="inline-flex items-center gap-1.5 text-xs font-heading font-bold text-ink hover:text-primary-dark transition-colors"
+                          className="inline-flex items-center gap-1.5 text-xs font-heading font-bold text-ink hover:text-primary transition-colors"
                         >
                           <span>Buka Kelas Kuliah</span>
                           <ArrowRight className="h-3.5 w-3.5 text-primary" />
                         </Link>
                       ) : (
-                        <span className="text-xs text-gray font-sans font-medium">
+                        <span className="text-xs text-gray-dark font-sans font-bold">
                           Pemberitahuan Sistem
                         </span>
                       )}
@@ -397,14 +394,14 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
                           type="button"
                           disabled={isPending}
                           onClick={() => handleMarkAsRead(n.id)}
-                          className="inline-flex items-center gap-1 px-3 py-1 rounded border border-black bg-surface hover:bg-gray-soft text-ink text-xs font-bold transition-all shadow-xs cursor-pointer"
+                          className="inline-flex items-center gap-1 px-3 py-1 rounded-lg border-2 border-ink bg-surface hover:bg-gray-soft text-ink text-xs font-bold transition-all shadow-xs cursor-pointer"
                         >
                           <Check className="h-3.5 w-3.5 text-primary" />
                           <span>Tandai Dibaca</span>
                         </button>
                       ) : (
                         <span className="text-xs font-bold text-gray-dark flex items-center gap-1">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-gray" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
                           <span>Telah Dibaca</span>
                         </span>
                       )}
@@ -415,7 +412,9 @@ export function NotificationsView({ initialItems, userRole }: NotificationsViewP
             })}
           </div>
         )}
-      </RetroWindow>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

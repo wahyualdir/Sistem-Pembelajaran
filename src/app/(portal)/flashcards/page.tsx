@@ -20,37 +20,39 @@ export default async function FlashcardsPage() {
   const decks = await listStudentFlashcardDecksAction().catch(() => []);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 w-full space-y-6 sm:space-y-8 animate-fade-up font-sans">
-      <RetroWindow
-        title="Flashcard Belajar"
-        badge="Pengulangan Berjarak"
-        headerClassName="bg-gray-soft"
-      >
-        <div className="p-4 sm:p-6 space-y-6">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-black/15 pb-5">
-            <div>
-              <h1 className="text-xl sm:text-2xl font-heading font-bold tracking-tight text-black flex items-center gap-2">
-                <Brain className="w-6 h-6 text-primary" />
-                <span>Flashcard</span>
-              </h1>
-              <p className="text-xs sm:text-sm text-black/70 mt-1">
-                Latihan mengingat konsep perkuliahan secara bertahap berbasis sistem kotak Leitner (1, 2, 4, 8, 16 hari).
-              </p>
-            </div>
-            <div className="flex items-center gap-3">
-              <Link
-                href="/classes"
-                className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold border-2 border-black rounded-xl bg-white hover:bg-gray-soft transition-all shadow-xs text-black"
-              >
-                <Layers className="w-4 h-4" />
-                <span>Peta Kelas</span>
-              </Link>
-            </div>
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* 1. HEADER BERANDA STYLE */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <Brain className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Flashcard Belajar
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Latihan mengingat konsep perkuliahan secara bertahap berbasis sistem kotak Leitner.
+            </p>
           </div>
 
+          <div className="flex items-center gap-2 shrink-0">
+            <Link
+              href="/classes"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-surface font-bold text-xs sm:text-sm text-ink shadow-retro hover:bg-gray-soft transition-all min-h-[44px]"
+            >
+              <Layers className="h-4 w-4" />
+              <span>Peta Kelas</span>
+            </Link>
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              PENGULANGAN BERJARAK
+            </span>
+          </div>
+        </div>
+
+        {/* 2. KONTEN FLASHCARD CLIENT */}
+        <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-6 shadow-retro">
           <FlashcardsClient initialDecks={decks} />
         </div>
-      </RetroWindow>
+      </div>
     </div>
   );
 }

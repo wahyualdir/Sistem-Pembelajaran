@@ -6,6 +6,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { getWibDateString } from '@/lib/akademik/daily-priorities';
+import { createExecutionGuard } from '@/lib/cron/guard';
 
 export interface CronJobResult {
   job: string;
@@ -47,8 +48,12 @@ export async function processAiContentJobs(): Promise<CronJobResult> {
 
   let processed = 0;
   let errors = 0;
+  const guard = createExecutionGuard({ maxDurationMs: 25000, label: 'ai_content_jobs' });
 
   for (const job of queuedJobs) {
+    if (!guard.hasTimeRemaining()) {
+      break;
+    }
     if (!hasAiKey) {
       await supabase
         .from('ai_generation_jobs')
@@ -113,8 +118,12 @@ export async function processTtsJobs(): Promise<CronJobResult> {
 
   let processed = 0;
   let errors = 0;
+  const guard = createExecutionGuard({ maxDurationMs: 25000, label: 'tts_jobs' });
 
   for (const p of queuedPodcasts) {
+    if (!guard.hasTimeRemaining()) {
+      break;
+    }
     if (!hasTtsKey) {
       await supabase
         .from('chapter_podcasts')
@@ -243,8 +252,12 @@ export async function processMorningSummary(): Promise<CronJobResult> {
   const uniqueStudentIds = Array.from(new Set(activeStudents.map((s: any) => s.student_id)));
   let dispatched = 0;
   let skipped = 0;
+  const guard = createExecutionGuard({ maxDurationMs: 25000, label: 'morning_summary' });
 
   for (const studentId of uniqueStudentIds) {
+    if (!guard.hasTimeRemaining()) {
+      break;
+    }
     const dedupKey = `morning_summary:${studentId}:${wibDate}`;
 
     // Periksa apakah notifikasi hari ini sudah pernah dibuat
@@ -311,8 +324,12 @@ export async function processContentReviewDigest(): Promise<CronJobResult> {
   const uniqueLecturerIds = Array.from(new Set(lecturers.map((l: any) => l.lecturer_id)));
   let dispatched = 0;
   let skipped = 0;
+  const digestGuard = createExecutionGuard({ maxDurationMs: 25000, label: 'content_review_digest' });
 
   for (const lecturerId of uniqueLecturerIds) {
+    if (!digestGuard.hasTimeRemaining()) {
+      break;
+    }
     const dedupKey = `review_digest:${lecturerId}:${wibDate}`;
 
     const { data: existing } = await supabase
@@ -411,8 +428,12 @@ export async function processRecapGenerate(): Promise<CronJobResult> {
 
   const studentIds = Array.from(new Set((enrollments || []).map((e: any) => e.student_id)));
   let count = 0;
+  const recapGuard = createExecutionGuard({ maxDurationMs: 25000, label: 'recap_generate' });
 
   for (const studentId of studentIds) {
+    if (!recapGuard.hasTimeRemaining()) {
+      break;
+    }
     await supabase.from('semester_recaps').upsert({
       student_id: studentId,
       semester_id: semester.name || 'Semester Lampau',

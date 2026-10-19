@@ -391,6 +391,7 @@ export async function executeLiveCodeAction(
               version: '*',
               files: [{ content: runnerScript }],
             }),
+            signal: AbortSignal.timeout(5000),
           });
           if (!res.ok) throw new Error('Piston API error');
           const json = await res.json();

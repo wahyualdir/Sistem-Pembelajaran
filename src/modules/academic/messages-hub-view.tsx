@@ -214,14 +214,14 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
   return (
     <div className="space-y-6">
       {/* Navigasi Tab */}
-      <div className="flex border-b border-border">
+      <div className="flex items-center gap-2 border-b-2 border-ink pb-2 overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab('percakapan')}
-          className={`flex items-center gap-2 px-5 py-3 border-b-2 font-medium text-sm transition-colors ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-ink text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0 ${
             activeTab === 'percakapan'
-              ? 'border-primary text-primary font-semibold'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
+              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
+              : 'bg-surface text-ink hover:bg-gray-soft shadow-xs'
           }`}
         >
           <MessageCircle className="h-4 w-4" />
@@ -230,10 +230,10 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
         <button
           type="button"
           onClick={() => setActiveTab('konsultasi')}
-          className={`flex items-center gap-2 px-5 py-3 border-b-2 font-medium text-sm transition-colors ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-ink text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0 ${
             activeTab === 'konsultasi'
-              ? 'border-primary text-primary font-semibold'
-              : 'border-transparent text-muted-foreground hover:text-foreground'
+              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
+              : 'bg-surface text-ink hover:bg-gray-soft shadow-xs'
           }`}
         >
           <Calendar className="h-4 w-4" />
@@ -242,15 +242,15 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
       </div>
 
       {activeTab === 'percakapan' && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 rounded-[12px] border border-border bg-surface overflow-hidden min-h-[550px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 rounded-xl border-2 border-ink bg-surface shadow-retro overflow-hidden min-h-[550px]">
           {/* Kolom Kiri: Daftar Percakapan */}
-          <div className="border-r border-border flex flex-col h-full bg-surface-subtle/30">
-            <div className="p-4 border-b border-border">
-              <h2 className="text-sm font-semibold text-foreground">Kotak Masuk</h2>
+          <div className="border-r-2 border-ink flex flex-col h-full bg-gray-soft/30">
+            <div className="p-3.5 border-b-2 border-ink bg-gray-soft">
+              <h2 className="text-xs font-heading font-bold uppercase tracking-wider text-gray-dark">Kotak Masuk</h2>
             </div>
-            <div className="flex-1 overflow-y-auto divide-y divide-border">
+            <div className="flex-1 overflow-y-auto divide-y-2 divide-ink/10">
               {conversations.length === 0 ? (
-                <div className="p-6 text-center text-sm text-muted-foreground">
+                <div className="p-6 text-center text-xs font-bold text-gray-dark">
                   Belum ada percakapan aktif.
                 </div>
               ) : (
@@ -370,19 +370,19 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
                 </div>
 
                 {/* Input Pesan */}
-                <form onSubmit={handleSendMessage} className="p-3 border-t border-border flex items-center gap-2 bg-surface">
+                <form onSubmit={handleSendMessage} className="p-3 border-t-2 border-ink flex items-center gap-2 bg-surface">
                   <input
                     type="text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Tulis pesan..."
                     maxLength={2000}
-                    className="flex-1 rounded-[8px] border border-border px-3 py-2 text-xs bg-surface text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                    className="flex-1 rounded-xl border-2 border-ink px-3.5 py-2 text-xs font-bold bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                   <button
                     type="submit"
                     disabled={isSending || !inputText.trim()}
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-[8px] bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 disabled:opacity-50"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border-2 border-ink bg-ink text-white text-xs font-bold hover:bg-ink/90 disabled:opacity-50 shadow-retro cursor-pointer min-h-[40px]"
                   >
                     <Send className="h-3.5 w-3.5" />
                     <span>Kirim</span>

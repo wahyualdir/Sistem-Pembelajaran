@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import {
   User,
-  Mail,
   ShieldCheck,
   GraduationCap,
   Award,
@@ -11,18 +10,14 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
-  Laptop,
   KeyRound,
   Download,
-  ExternalLink,
   Layers,
   ArrowRight,
   Flame,
-  FileText,
   Sparkles,
 } from 'lucide-react';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
-import { RetroWindow } from '@/components/retro/retro-window';
 import { getStudentBadgesAction } from '@/modules/academic/badge-certificate-actions';
 
 export default async function ProfilePage() {
@@ -54,379 +49,382 @@ export default async function ProfilePage() {
   };
 
   return (
-    <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
-      {/* ======================================================== */}
-      {/* 1. HEADER HALAMAN PROFIL DENGAN GAYA RETRO WINDOW (MATCH IMAGES) */}
-      {/* ======================================================== */}
-      <RetroWindow
-        title="identitas_pengguna_uir.card"
-        badge="TERVERIFIKASI"
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-6 bg-retro-surface"
-      >
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-          {/* Avatar Kotak Retro dengan Border & Shadow */}
-          <div className="relative group shrink-0">
-            <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl border-[2px] border-retro-border bg-gray-soft shadow-retro-md flex items-center justify-center text-4xl font-sans font-bold text-primary overflow-hidden">
-              {initials}
-            </div>
-            <div className="absolute -bottom-2 -right-2 p-1.5 rounded-full border border-retro-border bg-retro-mint shadow-retro text-retro-border" title="Status Akun Aktif">
-              <CheckCircle2 className="h-4 w-4 text-black" />
-            </div>
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* OPEN HEADER */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <User className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Profil & Identitas Pengguna
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Informasi akun akademik, riwayat studi terpadu, lencana prestasi belajar, dan konfigurasi multi-peran.
+            </p>
           </div>
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              TERVERIFIKASI
+            </span>
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-primary text-white border-2 border-ink shadow-xs">
+              NIM: 2024001
+            </span>
+          </div>
+        </div>
 
-          {/* Info Utama Pengguna */}
-          <div className="flex-1 text-center sm:text-left space-y-2">
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-foreground">
-                {fullName}
-              </h1>
-              {roles.map((r) => {
-                const code = (r.roles as { code?: string })?.code || '';
-                const isCurrentActive = activeRole === code;
-                const label = ROLE_NAMES[code] || code;
-                return (
-                  <span
-                    key={r.id}
-                    className={`rounded-full border border-retro-border px-3 py-0.5 text-xs font-bold shadow-xs ${
-                      isCurrentActive
-                        ? 'bg-primary text-white'
-                        : 'bg-retro-mint text-black'
-                    }`}
-                  >
-                    {label.toUpperCase()}{isCurrentActive ? ' • AKTIF' : ''}
-                  </span>
-                );
-              })}
+        {/* 1. KARTU IDENTITAS UTAMA */}
+        <div className="rounded-xl border-2 border-ink bg-surface p-5 sm:p-6 shadow-retro">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 sm:gap-6">
+            {/* Avatar Retro */}
+            <div className="relative shrink-0">
+              <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-xl border-2 border-ink bg-gray-soft shadow-retro-sm flex items-center justify-center text-3xl sm:text-4xl font-heading font-bold text-primary overflow-hidden">
+                {initials}
+              </div>
+              <div className="absolute -bottom-1.5 -right-1.5 p-1 rounded-full border-2 border-ink bg-surface shadow-xs text-ink" title="Status Akun Aktif">
+                <CheckCircle2 className="h-4 w-4 text-primary" />
+              </div>
             </div>
 
-            <p className="text-sm font-medium text-black flex items-center justify-center sm:justify-start gap-1.5 font-sans">
-              <ShieldCheck className="h-4 w-4 text-primary" />
-              <span className="font-bold">NIM: 2024001</span>
-              <span className="text-xs text-black/60">&bull; Akun Mahasiswa Terverifikasi</span>
-            </p>
+            {/* Info Utama Pengguna */}
+            <div className="flex-1 text-center sm:text-left space-y-2">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
+                  {fullName}
+                </h2>
+                {roles.map((r) => {
+                  const code = (r.roles as { code?: string })?.code || '';
+                  const isCurrentActive = activeRole === code;
+                  const label = ROLE_NAMES[code] || code;
+                  return (
+                    <span
+                      key={r.id}
+                      className={`rounded-full border-2 border-ink px-3 py-0.5 text-xs font-sans font-bold shadow-xs ${
+                        isCurrentActive
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-soft text-ink'
+                      }`}
+                    >
+                      {label.toUpperCase()}{isCurrentActive ? ' • AKTIF' : ''}
+                    </span>
+                  );
+                })}
+              </div>
 
-            <p className="text-xs text-muted-foreground">
-              Program Studi: <strong className="text-foreground">Teknik Informatika (S1)</strong> &bull; Fakultas Ilmu Komputer &bull; Universitas Islam Riau
-            </p>
+              <p className="text-sm font-bold text-ink flex items-center justify-center sm:justify-start gap-1.5 font-sans">
+                <ShieldCheck className="h-4 w-4 text-primary" />
+                <span>NIM: 2024001</span>
+                <span className="text-xs text-gray-dark font-normal">&bull; Akun Mahasiswa Terverifikasi</span>
+              </p>
 
-            {/* Quick Badges Bar */}
-            <div className="pt-2 flex flex-wrap gap-2 justify-center sm:justify-start">
-              <span className="rounded border border-retro-border bg-gray-soft px-2.5 py-1 text-xs font-semibold text-foreground">
-                Angkatan 2024
-              </span>
-              <span className="rounded border border-retro-border bg-gray-soft px-2.5 py-1 text-xs font-semibold text-foreground">
-                Semester 5 (Ganjil 2026/2027)
-              </span>
-              <span className="rounded border border-retro-border bg-gray-soft px-2.5 py-1 text-xs font-bold text-black shadow-xs">
-                IPK: 3.85
-              </span>
-              <span className="rounded border border-retro-border bg-retro-mint px-2.5 py-1 text-xs font-bold text-black shadow-xs">
-                UKT: LUNAS
-              </span>
+              <p className="text-xs text-gray-dark font-bold">
+                Program Studi: <strong className="text-ink">Teknik Informatika (S1)</strong> &bull; Fakultas Ilmu Komputer &bull; Universitas Islam Riau
+              </p>
+
+              {/* Quick Badges Bar */}
+              <div className="pt-2 flex flex-wrap gap-2 justify-center sm:justify-start">
+                <span className="rounded-full border-2 border-ink bg-gray-soft px-3 py-1 text-xs font-sans font-bold text-ink shadow-xs">
+                  Angkatan 2024
+                </span>
+                <span className="rounded-full border-2 border-ink bg-gray-soft px-3 py-1 text-xs font-sans font-bold text-ink shadow-xs">
+                  Semester 5 (Ganjil 2026/2027)
+                </span>
+                <span className="rounded-full border-2 border-ink bg-surface px-3 py-1 text-xs font-sans font-bold text-ink shadow-xs">
+                  IPK: 3.85
+                </span>
+                <span className="rounded-full border-2 border-ink bg-surface px-3 py-1 text-xs font-sans font-bold text-ink shadow-xs">
+                  UKT: LUNAS
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* ======================================================== */}
-      {/* 2. GRID INFORMASI: AKADEMIK & HAK AKSES */}
-      {/* ======================================================== */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* KOLOM KIRI (2 SPAN): DATA AKADEMIK & PERKULIAHAN */}
-        <div className="lg:col-span-2 space-y-6">
-          <RetroWindow
-            title="ringkasan_akademik.window"
-            headerClassName="bg-gray-soft"
-            bodyClassName="p-5 space-y-4"
-          >
-            <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
-              <GraduationCap className="h-5 w-5 text-primary" />
-              <span>Data Riwayat Akademik Terpadu</span>
-            </h2>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-              <div className="p-3 rounded-lg border border-retro-border bg-gray-soft shadow-retro">
-                <p className="text-xs font-sans font-bold text-muted-foreground uppercase">IPK Kumulatif</p>
-                <p className="font-heading font-bold text-xl text-primary mt-1">3.85</p>
-                <p className="text-xs text-muted-foreground">Skala 4.00</p>
+        {/* 2. GRID INFORMASI: AKADEMIK & HAK AKSES */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
+          {/* KOLOM KIRI (2 SPAN): DATA AKADEMIK & PERKULIAHAN */}
+          <div className="lg:col-span-2 space-y-5 sm:space-y-6">
+            {/* RINGKASAN AKADEMIK */}
+            <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4">
+              <div className="flex items-center justify-between border-b-2 border-ink/20 pb-3">
+                <h3 className="font-heading font-bold text-base sm:text-lg text-ink flex items-center gap-2">
+                  <GraduationCap className="h-5 w-5 text-primary" />
+                  <span>Data Riwayat Akademik Terpadu</span>
+                </h3>
               </div>
 
-              <div className="p-3 rounded-lg border border-retro-border bg-gray-soft shadow-retro">
-                <p className="text-xs font-sans font-bold text-muted-foreground uppercase">SKS Lulus</p>
-                <p className="font-heading font-bold text-xl text-foreground mt-1">72 SKS</p>
-                <p className="text-xs text-muted-foreground">Target: 144 SKS</p>
-              </div>
-
-              <div className="p-3 rounded-lg border border-retro-border bg-gray-soft shadow-retro">
-                <p className="text-xs font-sans font-bold text-muted-foreground uppercase">SKS Semester Ini</p>
-                <p className="font-heading font-bold text-xl text-foreground mt-1">21 SKS</p>
-                <p className="text-xs text-muted-foreground">Maksimal: 24 SKS</p>
-              </div>
-
-              <div className="p-3 rounded-lg border border-retro-border bg-gray-soft shadow-retro">
-                <p className="text-xs font-sans font-bold text-muted-foreground uppercase">Presensi Rata-Rata</p>
-                <p className="font-heading font-bold text-xl text-ink mt-1">94%</p>
-                <p className="text-xs text-muted-foreground">Syarat UAS &ge;75%</p>
-              </div>
-            </div>
-
-            {/* Detail Tabel Data Mahasiswa */}
-            <div className="border border-retro-border rounded-lg overflow-hidden bg-retro-surface divide-y divide-retro-border text-xs">
-              <div className="flex justify-between p-3 bg-retro-bg">
-                <span className="text-muted-foreground font-medium">Nomor Induk Mahasiswa (NIM)</span>
-                <span className="font-sans font-bold text-foreground">2024001</span>
-              </div>
-              <div className="flex justify-between p-3">
-                <span className="text-muted-foreground font-medium">Dosen Pembimbing Akademik (Wali)</span>
-                <span className="font-bold text-foreground">Dr. Ardiansyah, S.T., M.Kom.</span>
-              </div>
-              <div className="flex justify-between p-3 bg-retro-bg">
-                <span className="text-muted-foreground font-medium">Status Keaktifan Kuliah</span>
-                <span className="font-bold text-ink">Aktif Memprogram KRS</span>
-              </div>
-              <div className="flex justify-between p-3">
-                <span className="text-muted-foreground font-medium">Jalur Masuk & Tahun</span>
-                <span className="font-medium text-foreground">Seleksi Mandiri Prestasi (2024)</span>
-              </div>
-            </div>
-
-            {/* Tombol Aksi Cepat ke Fitur Akademik */}
-            <div className="pt-2 flex flex-wrap gap-2">
-              <Link
-                href="/calendar"
-                className="px-3.5 py-2 rounded-md border border-retro-border bg-retro-surface hover:bg-gray-soft shadow-retro text-xs font-bold transition-all"
-              >
-                Jadwal & Kalender &rarr;
-              </Link>
-              <Link
-                href="/grades"
-                className="px-3.5 py-2 rounded-md border border-retro-border bg-retro-surface hover:bg-gray-soft shadow-retro text-xs font-bold transition-all"
-              >
-                Nilai & Progres &rarr;
-              </Link>
-              <Link
-                href="/portfolio"
-                className="px-3.5 py-2 rounded-md border border-retro-border bg-retro-surface hover:bg-gray-soft shadow-retro text-xs font-bold transition-all"
-              >
-                Portofolio Belajar &rarr;
-              </Link>
-            </div>
-          </RetroWindow>
-
-          {/* LENCANA PRESTASI AKADEMIK (MONOCHROME RETRO PALETTE) */}
-          <RetroWindow
-            title="lencana_prestasi_mahasiswa.badge"
-            headerClassName="bg-gray-soft"
-            bodyClassName="p-5 space-y-4"
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
-                <Award className="h-5 w-5 text-primary" />
-                <span>Lencana Prestasi & Pencapaian Belajar</span>
-              </h2>
-              <span className="text-xs font-sans font-bold px-2.5 py-0.5 rounded border border-retro-border bg-surface text-ink shadow-xs">
-                {badges.filter((b) => b.isUnlocked).length} / {badges.length} Terbuka
-              </span>
-            </div>
-
-            <p className="text-xs text-black/70">
-              Pengakuan otomatis atas konsistensi belajar, ketepatan waktu pengumpulan, kehadiran penuh, dan keaktifan forum diskusi.
-            </p>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {badges.map((b) => {
-                const IconComponent =
-                  b.iconName === 'CalendarCheck2'
-                    ? Calendar
-                    : b.iconName === 'Flame'
-                    ? Flame
-                    : b.iconName === 'Clock'
-                    ? Clock
-                    : Sparkles;
-
-                return (
-                  <div
-                    key={b.id}
-                    className="p-4 rounded-xl border-2 border-black bg-white shadow-retro flex items-start gap-3.5 hover:-translate-y-0.5 transition-all"
-                  >
-                    <div className="p-2.5 rounded-lg border-2 border-black bg-gray-soft text-black shrink-0">
-                      <IconComponent className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="space-y-1 flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-1">
-                        <h3 className="font-heading font-bold text-xs sm:text-sm text-black truncate">
-                          {b.title}
-                        </h3>
-                        <span className="px-1.5 py-0.5 rounded border border-black bg-surface text-xs font-bold text-ink font-sans shrink-0">
-                          ✓ Terbuka
-                        </span>
-                      </div>
-                      <p className="text-xs text-black/75 font-sans leading-relaxed">
-                        {b.description}
-                      </p>
-                      <div className="pt-1.5 flex items-center justify-between text-xs font-sans text-black/60 border-t border-black/10 mt-1">
-                        <span className="font-bold text-black">{b.progress}</span>
-                        <span>{b.earnedAt}</span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </RetroWindow>
-
-          {/* DOKUMEN & UNDUHAN MAHASISWA */}
-          <RetroWindow
-            title="dokumen_resmi_mahasiswa.tab"
-            headerClassName="bg-retro-mint/40"
-            bodyClassName="p-5 space-y-3"
-          >
-            <h2 className="font-heading font-bold text-base text-foreground flex items-center gap-2">
-              <Download className="h-5 w-5 text-primary" />
-              <span>Dokumen Akademik Resmi</span>
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="p-3.5 rounded-lg border border-retro-border bg-retro-surface shadow-retro space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-foreground">KTM Digital</span>
-                  <Award className="h-4 w-4 text-primary" />
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+                <div className="p-3 rounded-xl border-2 border-ink bg-surface shadow-retro-sm">
+                  <p className="text-xs font-sans font-bold text-gray-dark uppercase tracking-wider">IPK Kumulatif</p>
+                  <p className="font-heading font-bold text-xl sm:text-2xl text-primary mt-1">3.85</p>
+                  <p className="text-[11px] text-gray-dark font-bold font-sans">Skala 4.00</p>
                 </div>
-                <p className="text-xs text-muted-foreground">Kartu Tanda Mahasiswa aktif ber-barcode resmi.</p>
-                <button
-                  type="button"
-                  className="w-full py-1.5 rounded border border-retro-border bg-gray-soft text-xs font-bold hover:bg-gray-soft transition-colors"
+
+                <div className="p-3 rounded-xl border-2 border-ink bg-surface shadow-retro-sm">
+                  <p className="text-xs font-sans font-bold text-gray-dark uppercase tracking-wider">SKS Lulus</p>
+                  <p className="font-heading font-bold text-xl sm:text-2xl text-ink mt-1">72 SKS</p>
+                  <p className="text-[11px] text-gray-dark font-bold font-sans">Target: 144 SKS</p>
+                </div>
+
+                <div className="p-3 rounded-xl border-2 border-ink bg-surface shadow-retro-sm">
+                  <p className="text-xs font-sans font-bold text-gray-dark uppercase tracking-wider">SKS Semester Ini</p>
+                  <p className="font-heading font-bold text-xl sm:text-2xl text-ink mt-1">21 SKS</p>
+                  <p className="text-[11px] text-gray-dark font-bold font-sans">Maksimal: 24 SKS</p>
+                </div>
+
+                <div className="p-3 rounded-xl border-2 border-ink bg-surface shadow-retro-sm">
+                  <p className="text-xs font-sans font-bold text-gray-dark uppercase tracking-wider">Presensi Rata-Rata</p>
+                  <p className="font-heading font-bold text-xl sm:text-2xl text-ink mt-1">94%</p>
+                  <p className="text-[11px] text-gray-dark font-bold font-sans">Syarat UAS &ge;75%</p>
+                </div>
+              </div>
+
+              {/* Detail Tabel Data Mahasiswa */}
+              <div className="border-2 border-ink rounded-xl overflow-hidden bg-surface divide-y-2 divide-ink/20 text-xs font-sans shadow-xs">
+                <div className="flex justify-between p-3 bg-gray-soft/40">
+                  <span className="text-gray-dark font-bold">Nomor Induk Mahasiswa (NIM)</span>
+                  <span className="font-sans font-bold text-ink">2024001</span>
+                </div>
+                <div className="flex justify-between p-3">
+                  <span className="text-gray-dark font-bold">Dosen Pembimbing Akademik (Wali)</span>
+                  <span className="font-bold text-ink">Dr. Ardiansyah, S.T., M.Kom.</span>
+                </div>
+                <div className="flex justify-between p-3 bg-gray-soft/40">
+                  <span className="text-gray-dark font-bold">Status Keaktifan Kuliah</span>
+                  <span className="font-bold text-ink">Aktif Memprogram KRS</span>
+                </div>
+                <div className="flex justify-between p-3">
+                  <span className="text-gray-dark font-bold">Jalur Masuk & Tahun</span>
+                  <span className="font-bold text-ink">Seleksi Mandiri Prestasi (2024)</span>
+                </div>
+              </div>
+
+              {/* Tombol Aksi Cepat ke Fitur Akademik */}
+              <div className="pt-2 flex flex-wrap gap-2">
+                <Link
+                  href="/calendar"
+                  className="px-3.5 py-2 rounded-lg border-2 border-ink bg-surface hover:bg-gray-soft shadow-xs text-xs font-bold text-ink transition-all"
                 >
-                  Unduh KTM
-                </button>
-              </div>
-
-              <div className="p-3.5 rounded-lg border border-retro-border bg-retro-surface shadow-retro space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-foreground">Transkrip Nilai</span>
-                  <BookOpen className="h-4 w-4 text-primary" />
-                </div>
-                <p className="text-xs text-muted-foreground">Rekap nilai kumulatif dan progres studi.</p>
+                  Jadwal & Kalender &rarr;
+                </Link>
                 <Link
                   href="/grades"
-                  className="block text-center w-full py-1.5 rounded border border-retro-border bg-gray-soft text-xs font-bold hover:bg-gray-soft transition-colors"
+                  className="px-3.5 py-2 rounded-lg border-2 border-ink bg-surface hover:bg-gray-soft shadow-xs text-xs font-bold text-ink transition-all"
                 >
-                  Buka Nilai & Progres
+                  Nilai & Progres &rarr;
                 </Link>
-              </div>
-
-              <div className="p-3.5 rounded-lg border border-retro-border bg-retro-surface shadow-retro space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-foreground">Sertifikat & Prestasi</span>
-                  <Award className="h-4 w-4 text-ink" />
-                </div>
-                <p className="text-xs text-muted-foreground">Daftar sertifikat dan pencapaian akademik.</p>
                 <Link
-                  href="/certificates"
-                  className="block text-center w-full py-1.5 rounded border border-retro-border bg-gray-soft text-xs font-bold hover:bg-gray-soft transition-colors"
+                  href="/portfolio"
+                  className="px-3.5 py-2 rounded-lg border-2 border-ink bg-surface hover:bg-gray-soft shadow-xs text-xs font-bold text-ink transition-all"
                 >
-                  Buka Sertifikat
+                  Portofolio Belajar &rarr;
                 </Link>
               </div>
             </div>
-          </RetroWindow>
-        </div>
 
-        {/* KOLOM KANAN (1 SPAN): HAK AKSES PERAN & KEAMANAN AKUN */}
-        <div className="space-y-6">
-          {/* MULTI-PERAN AKTIF */}
-          <RetroWindow
-            title="peran_akses_rbac.config"
-            headerClassName="bg-gray-soft/40"
-            bodyClassName="p-5 space-y-3.5"
-          >
-            <h2 className="font-heading font-bold text-sm text-foreground flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-primary" />
-              <span>Hak Akses Peran Aktif ({roles.length})</span>
-            </h2>
+            {/* LENCANA PRESTASI AKADEMIK */}
+            <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4">
+              <div className="flex items-center justify-between border-b-2 border-ink/20 pb-3">
+                <h3 className="font-heading font-bold text-base sm:text-lg text-ink flex items-center gap-2">
+                  <Award className="h-5 w-5 text-primary" />
+                  <span>Lencana Prestasi & Pencapaian Belajar</span>
+                </h3>
+                <span className="text-xs font-sans font-bold px-2.5 py-1 rounded-full border-2 border-ink bg-gray-soft text-ink shadow-xs">
+                  {badges.filter((b) => b.isUnlocked).length} / {badges.length} Terbuka
+                </span>
+              </div>
 
-            <p className="text-xs text-muted-foreground">
-              Akun Anda memiliki izin multi-peran (Super Admin). Anda dapat berpindah ruang kerja kapan saja:
-            </p>
+              <p className="text-xs text-gray-dark font-bold">
+                Pengakuan otomatis atas konsistensi belajar, ketepatan waktu pengumpulan, kehadiran penuh, dan keaktifan forum diskusi.
+              </p>
 
-            <div className="space-y-2">
-              {roles.map((r) => {
-                const roleCode = (r.roles as { code?: string })?.code || 'STUDENT';
-                const isCurrent = roleCode === activeRole;
-                return (
-                  <div
-                    key={roleCode}
-                    className="flex items-center justify-between p-2.5 rounded-lg border border-retro-border bg-retro-surface shadow-xs text-xs"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-primary" />
-                      <span className="font-bold text-foreground">{roleCode}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                {badges.map((b) => {
+                  const IconComponent =
+                    b.iconName === 'CalendarCheck2'
+                      ? Calendar
+                      : b.iconName === 'Flame'
+                      ? Flame
+                      : b.iconName === 'Clock'
+                      ? Clock
+                      : Sparkles;
+
+                  return (
+                    <div
+                      key={b.id}
+                      className="p-4 rounded-xl border-2 border-ink bg-surface shadow-retro-sm flex items-start gap-3.5 hover:-translate-y-0.5 transition-all"
+                    >
+                      <div className="p-2.5 rounded-lg border-2 border-ink bg-gray-soft text-ink shrink-0">
+                        <IconComponent className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="space-y-1 flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <h4 className="font-heading font-bold text-xs sm:text-sm text-ink truncate">
+                            {b.title}
+                          </h4>
+                          <span className="px-1.5 py-0.5 rounded-full border-2 border-ink bg-surface text-[11px] font-bold text-ink font-sans shrink-0 shadow-xs">
+                            ✓ Terbuka
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-dark font-bold font-sans leading-relaxed">
+                          {b.description}
+                        </p>
+                        <div className="pt-1.5 flex items-center justify-between text-[11px] font-sans font-bold text-gray-dark border-t-2 border-ink/10 mt-1">
+                          <span className="text-ink">{b.progress}</span>
+                          <span>{b.earnedAt}</span>
+                        </div>
+                      </div>
                     </div>
-                    {isCurrent ? (
-                      <span className="font-bold text-primary bg-primary/10 px-2 py-0.5 rounded text-xs">
-                        Sedang Aktif
-                      </span>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">Tersedia</span>
-                    )}
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* DOKUMEN & UNDUHAN MAHASISWA */}
+            <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4">
+              <div className="flex items-center justify-between border-b-2 border-ink/20 pb-3">
+                <h3 className="font-heading font-bold text-base sm:text-lg text-ink flex items-center gap-2">
+                  <Download className="h-5 w-5 text-primary" />
+                  <span>Dokumen Akademik Resmi</span>
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="p-4 rounded-xl border-2 border-ink bg-surface shadow-retro-sm space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-ink">KTM Digital</span>
+                    <Award className="h-4 w-4 text-primary" />
                   </div>
-                );
-              })}
+                  <p className="text-xs text-gray-dark font-bold font-sans">Kartu Tanda Mahasiswa aktif ber-barcode resmi.</p>
+                  <button
+                    type="button"
+                    className="w-full py-1.5 rounded-lg border-2 border-ink bg-gray-soft text-xs font-bold text-ink hover:bg-gray-soft/80 shadow-xs transition-colors"
+                  >
+                    Unduh KTM
+                  </button>
+                </div>
+
+                <div className="p-4 rounded-xl border-2 border-ink bg-surface shadow-retro-sm space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-ink">Transkrip Nilai</span>
+                    <BookOpen className="h-4 w-4 text-primary" />
+                  </div>
+                  <p className="text-xs text-gray-dark font-bold font-sans">Rekap nilai kumulatif dan progres studi.</p>
+                  <Link
+                    href="/grades"
+                    className="block text-center w-full py-1.5 rounded-lg border-2 border-ink bg-gray-soft text-xs font-bold text-ink hover:bg-gray-soft/80 shadow-xs transition-colors"
+                  >
+                    Buka Nilai & Progres
+                  </Link>
+                </div>
+
+                <div className="p-4 rounded-xl border-2 border-ink bg-surface shadow-retro-sm space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-ink">Sertifikat & Prestasi</span>
+                    <Award className="h-4 w-4 text-primary" />
+                  </div>
+                  <p className="text-xs text-gray-dark font-bold font-sans">Daftar sertifikat dan pencapaian akademik.</p>
+                  <Link
+                    href="/certificates"
+                    className="block text-center w-full py-1.5 rounded-lg border-2 border-ink bg-gray-soft text-xs font-bold text-ink hover:bg-gray-soft/80 shadow-xs transition-colors"
+                  >
+                    Buka Sertifikat
+                  </Link>
+                </div>
+              </div>
             </div>
+          </div>
 
-            <Link
-              href="/workspace"
-              className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-md border-[1.5px] border-retro-border bg-primary text-white font-bold text-xs shadow-retro hover:bg-primary-dark transition-all text-center mt-3"
-            >
-              <Layers className="h-3.5 w-3.5" />
-              <span>Buka Menu Ganti Workspace</span>
-            </Link>
-          </RetroWindow>
-
-          {/* KEAMANAN & SESI LOGIN */}
-          <RetroWindow
-            title="keamanan_sesi.lock"
-            headerClassName="bg-gray-soft"
-            bodyClassName="p-5 space-y-3 text-xs"
-          >
-            <h2 className="font-heading font-bold text-sm text-foreground flex items-center gap-2">
-              <KeyRound className="h-4 w-4 text-primary" />
-              <span>Keamanan & Sesi</span>
-            </h2>
-
-            <div className="space-y-2 text-muted-foreground">
-              <div className="flex justify-between py-1 border-b border-retro-border/40">
-                <span>Status Password</span>
-                <span className="font-bold text-ink">Kuat & Terverifikasi</span>
+          {/* KOLOM KANAN (1 SPAN): HAK AKSES PERAN & KEAMANAN AKUN */}
+          <div className="space-y-5 sm:space-y-6">
+            {/* MULTI-PERAN AKTIF */}
+            <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-3.5">
+              <div className="flex items-center justify-between border-b-2 border-ink/20 pb-2.5">
+                <h3 className="font-heading font-bold text-sm sm:text-base text-ink flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-primary" />
+                  <span>Hak Akses Peran ({roles.length})</span>
+                </h3>
               </div>
-              <div className="flex justify-between py-1 border-b border-retro-border/40">
-                <span>Perangkat Anda</span>
-                <span className="font-medium text-foreground">Windows / Desktop</span>
-              </div>
-              <div className="flex justify-between py-1">
-                <span>Lokasi Terakhir</span>
-                <span className="font-medium text-foreground">Pekanbaru, Riau</span>
-              </div>
-            </div>
 
-            <div className="pt-2 space-y-2">
+              <p className="text-xs text-gray-dark font-bold">
+                Akun Anda memiliki izin multi-peran. Anda dapat berpindah ruang kerja kapan saja:
+              </p>
+
+              <div className="space-y-2">
+                {roles.map((r) => {
+                  const roleCode = (r.roles as { code?: string })?.code || 'STUDENT';
+                  const isCurrent = roleCode === activeRole;
+                  return (
+                    <div
+                      key={roleCode}
+                      className="flex items-center justify-between p-2.5 rounded-lg border-2 border-ink bg-surface shadow-xs text-xs font-sans"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-primary" />
+                        <span className="font-bold text-ink">{roleCode}</span>
+                      </div>
+                      {isCurrent ? (
+                        <span className="font-bold text-white bg-primary px-2.5 py-0.5 rounded-full text-[11px] border-2 border-ink shadow-xs">
+                          Sedang Aktif
+                        </span>
+                      ) : (
+                        <span className="text-xs text-gray-dark font-bold">Tersedia</span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
               <Link
-                href="/devices"
-                className="flex items-center justify-between p-2 rounded border border-retro-border bg-gray-soft hover:bg-gray-soft transition-colors font-bold text-xs"
+                href="/workspace"
+                className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-lg border-2 border-ink bg-primary text-white font-heading font-bold text-xs shadow-retro-sm hover:brightness-105 transition-all text-center mt-3"
               >
-                <span>Kelola Perangkat & Sesi</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-              <Link
-                href="/notifications/preferences"
-                className="flex items-center justify-between p-2 rounded border border-retro-border bg-gray-soft hover:bg-gray-soft transition-colors font-bold text-xs"
-              >
-                <span>Preferensi Notifikasi</span>
-                <ArrowRight className="h-3.5 w-3.5" />
+                <Layers className="h-4 w-4" />
+                <span>Buka Menu Ganti Workspace</span>
               </Link>
             </div>
-          </RetroWindow>
+
+            {/* KEAMANAN & SESI LOGIN */}
+            <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-3 text-xs font-sans">
+              <div className="flex items-center justify-between border-b-2 border-ink/20 pb-2.5">
+                <h3 className="font-heading font-bold text-sm sm:text-base text-ink flex items-center gap-2">
+                  <KeyRound className="h-4 w-4 text-primary" />
+                  <span>Keamanan & Sesi</span>
+                </h3>
+              </div>
+
+              <div className="space-y-2 text-gray-dark font-bold">
+                <div className="flex justify-between py-1 border-b-2 border-ink/10">
+                  <span>Status Password</span>
+                  <span className="text-ink">Kuat & Terverifikasi</span>
+                </div>
+                <div className="flex justify-between py-1 border-b-2 border-ink/10">
+                  <span>Perangkat Anda</span>
+                  <span className="text-ink">Windows / Desktop</span>
+                </div>
+                <div className="flex justify-between py-1">
+                  <span>Lokasi Terakhir</span>
+                  <span className="text-ink">Pekanbaru, Riau</span>
+                </div>
+              </div>
+
+              <div className="pt-2 space-y-2">
+                <Link
+                  href="/devices"
+                  className="flex items-center justify-between p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-gray-soft/80 transition-colors font-bold text-xs text-ink shadow-xs"
+                >
+                  <span>Kelola Perangkat & Sesi</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/settings"
+                  className="flex items-center justify-between p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-gray-soft/80 transition-colors font-bold text-xs text-ink shadow-xs"
+                >
+                  <span>Preferensi Notifikasi</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -100,68 +100,58 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
-      {/* 1. HEADER RETRO */}
-      <RetroWindow
-        title="Perpustakaan dan Referensi Ilmiah"
-        badge={isStaffOrLecturer ? 'Portal Pengajar dan Staf' : 'Koleksi Terbuka'}
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-5 sm:p-7 bg-retro-surface"
-      >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
-                <BookOpen className="h-6 w-6" />
-              </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
-                Perpustakaan dan Modul Terbuka
-              </h1>
-            </div>
-            <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
-              Akses literatur akademik terverifikasi, e-book resmi, diktat perkuliahan, dan jurnal ilmiah untuk mendukung pembelajaran mandiri.
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* 1. HEADER BERANDA STYLE */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <BookOpen className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Perpustakaan & Modul Terbuka
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Akses literatur akademik terverifikasi, e-book resmi, diktat perkuliahan, dan jurnal ilmiah.
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
-              {books.length} Dokumen Tersedia
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              {books.length} DOKUMEN TERSEDIA
             </span>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 2. TAB CONTROLLER (JIKA DOSEN / STAF) */}
-      {isStaffOrLecturer && (
-        <div className="flex items-center gap-2 border-b-2 border-black pb-2 overflow-x-auto">
-          <button
-            type="button"
-            onClick={() => setTab('koleksi')}
-            className={cn(
-              'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
-              activeTab === 'koleksi'
-                ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                : 'bg-white text-black hover:bg-gray-soft shadow-xs'
-            )}
-          >
-            <BookOpen className="h-4 w-4" />
-            <span>Koleksi Pustaka ({filteredBooks.length})</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setTab('kelola')}
-            className={cn(
-              'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
-              activeTab === 'kelola'
-                ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                : 'bg-white text-black hover:bg-gray-soft shadow-xs'
-            )}
-          >
-            <UploadCloud className="h-4 w-4" />
-            <span>Kelola & Unggah Pustaka</span>
-          </button>
-        </div>
-      )}
+        {/* 2. TAB CONTROLLER (JIKA DOSEN / STAF) */}
+        {isStaffOrLecturer && (
+          <div className="flex items-center gap-2 border-b-2 border-ink pb-2 overflow-x-auto">
+            <button
+              type="button"
+              onClick={() => setTab('koleksi')}
+              className={cn(
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-ink text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
+                activeTab === 'koleksi'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
+                  : 'bg-surface text-ink hover:bg-gray-soft shadow-xs'
+              )}
+            >
+              <BookOpen className="h-4 w-4" />
+              <span>Koleksi Pustaka ({filteredBooks.length})</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setTab('kelola')}
+              className={cn(
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-ink text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
+                activeTab === 'kelola'
+                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
+                  : 'bg-surface text-ink hover:bg-gray-soft shadow-xs'
+              )}
+            >
+              <UploadCloud className="h-4 w-4" />
+              <span>Kelola & Unggah Pustaka</span>
+            </button>
+          </div>
+        )}
 
       {/* 3. TAB 1: KOLEKSI PUSTAKA */}
       {activeTab === 'koleksi' && (
@@ -414,6 +404,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
           </form>
         </div>
       )}
+      </div>
     </div>
   );
 }

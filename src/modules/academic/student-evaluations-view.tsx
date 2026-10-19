@@ -37,7 +37,7 @@ export function StudentEvaluationsView() {
 
   if (isLoading) {
     return (
-      <div className="p-8 text-center text-xs text-muted-foreground rounded-[12px] border border-border bg-surface">
+      <div className="p-8 text-center text-xs text-gray-dark font-bold rounded-xl border-2 border-ink bg-surface shadow-retro">
         Memeriksa kuesioner evaluasi dosen...
       </div>
     );
@@ -45,12 +45,12 @@ export function StudentEvaluationsView() {
 
   if (!period || pendingClasses.length === 0) {
     return (
-      <div className="p-8 text-center rounded-[12px] border border-border bg-surface space-y-3">
-        <div className="h-12 w-12 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center mx-auto">
-          <CheckCircle2 className="h-6 w-6" />
+      <div className="p-8 text-center rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
+        <div className="h-12 w-12 rounded-full border-2 border-ink bg-surface text-ink flex items-center justify-center mx-auto shadow-xs">
+          <CheckCircle2 className="h-6 w-6 text-primary" />
         </div>
-        <h3 className="text-sm font-bold text-foreground">Tidak Ada Kuesioner Tertunda</h3>
-        <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+        <h3 className="text-base font-heading font-bold text-ink">Tidak Ada Kuesioner Tertunda</h3>
+        <p className="text-xs sm:text-sm text-gray-dark font-bold max-w-sm mx-auto">
           Semua kelas perkuliahan telah dievaluasi, atau periode evaluasi semester ini belum dibuka.
         </p>
       </div>
@@ -60,41 +60,41 @@ export function StudentEvaluationsView() {
   return (
     <div className="space-y-6">
       {/* Banner Informasi Anonimitas */}
-      <div className="p-4 rounded-[12px] border border-primary/20 bg-primary/5 flex items-start gap-3">
+      <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-gray-soft/50 shadow-retro-sm flex items-start gap-3">
         <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <h3 className="text-xs font-bold text-foreground">Pengisian 100% Anonim</h3>
-          <p className="text-xs text-muted-foreground">
-            Jawaban dan komentar yang kamu kirimkan tidak pernah dikaitkan dengan identitas akun, NIM, atau nama mahasiswa. Dosen hanya melihat ringkasan rata-rata skor setelah periode evaluasi ditutup.
+          <h3 className="text-sm font-heading font-bold text-ink">Pengisian 100% Anonim</h3>
+          <p className="text-xs text-gray-dark font-bold leading-relaxed">
+            Jawaban dan komentar yang Anda kirimkan tidak pernah dikaitkan dengan identitas akun, NIM, atau nama mahasiswa. Dosen hanya melihat ringkasan rata-rata skor setelah periode evaluasi ditutup.
           </p>
         </div>
       </div>
 
       {/* Daftar Kelas yang Perlu Dievaluasi */}
       <div className="space-y-3">
-        <h2 className="text-sm font-bold text-foreground">
+        <h2 className="text-base sm:text-lg font-heading font-bold text-ink">
           Daftar Mata Kuliah ({pendingClasses.length} kelas menunggu evaluasi)
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           {pendingClasses.map((cls) => (
             <div
               key={cls.classId}
-              className="p-5 rounded-[12px] border border-border bg-surface flex flex-col justify-between space-y-4 hover:border-primary/40 transition-colors"
+              className="p-5 rounded-xl border-2 border-ink bg-surface shadow-retro flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-all"
             >
-              <div className="space-y-1.5">
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-muted text-muted-foreground">
+              <div className="space-y-2">
+                <span className="text-xs font-mono font-bold px-2 py-0.5 rounded border border-ink bg-gray-soft text-ink inline-block">
                   {period.semester}
                 </span>
-                <h3 className="text-sm font-bold text-foreground leading-snug">{cls.classTitle}</h3>
-                <p className="text-xs text-muted-foreground">Dosen Pengampu: {cls.lecturerName}</p>
+                <h3 className="text-base font-heading font-bold text-ink leading-snug">{cls.classTitle}</h3>
+                <p className="text-xs text-gray-dark font-bold">Dosen Pengampu: {cls.lecturerName}</p>
               </div>
 
-              <div className="pt-2 border-t border-border flex items-center justify-between">
-                <span className="text-[11px] text-muted-foreground">5 Pertanyaan</span>
+              <div className="pt-3 border-t-2 border-ink/10 flex items-center justify-between">
+                <span className="text-xs font-sans font-bold text-gray-dark">5 Pertanyaan</span>
                 <button
                   type="button"
                   onClick={() => setSelectedClass(cls)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[8px] bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border-2 border-ink bg-ink text-white text-xs font-bold shadow-xs hover:bg-neutral-800 transition-all cursor-pointer"
                 >
                   <span>Isi Evaluasi</span>
                   <ArrowRight className="h-3.5 w-3.5" />

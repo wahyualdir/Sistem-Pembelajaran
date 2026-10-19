@@ -1,15 +1,8 @@
 import React from 'react';
-import Link from 'next/link';
 import {
   FolderArchive,
   Code,
-  Globe,
-  Award,
-  Layers,
-  CheckCircle2,
-  ExternalLink,
 } from 'lucide-react';
-import { RetroWindow } from '@/components/retro/retro-window';
 
 const PROJECTS = [
   {
@@ -56,94 +49,87 @@ const PROJECTS = [
 
 export default function PortfolioPage() {
   return (
-    <div className="p-4 sm:p-6 lg:p-8 w-full space-y-6 sm:space-y-8 animate-fade-up">
-      {/* 1. HEADER WINDOW RETRO */}
-      <RetroWindow
-        title="portofolio_karya_mahasiswa.app"
-        badge="Karya Terverifikasi"
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-5 sm:p-7 bg-retro-surface"
-      >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
-                <FolderArchive className="h-6 w-6" />
-              </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
-                Portofolio Belajar & Proyek
-              </h1>
-            </div>
-            <p className="text-base sm:text-lg text-black font-medium max-w-3xl leading-relaxed">
-              Dokumentasi artefak pengerjaan tugas besar, hasil evaluasi coding, dan luaran pembelajaran yang siap dibagikan untuk kebutuhan rekrutmen profesional.
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* OPEN HEADER */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <FolderArchive className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Portofolio Belajar & Proyek
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Dokumentasi artefak pengerjaan tugas besar, hasil evaluasi coding, dan luaran pembelajaran profesional.
             </p>
           </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-sans font-bold text-black shadow-retro">
-              {PROJECTS.length} Proyek Terpublikasi
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              KARYA TERVERIFIKASI
+            </span>
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-primary text-white border-2 border-ink shadow-xs">
+              {PROJECTS.length} PROYEK TERPUBLIKASI
             </span>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 2. GRID KARTU PROYEK (PROPORSIONAL, LEGA & BOLD) */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-7">
-        {PROJECTS.map((proj) => (
-          <div
-            key={proj.id}
-            className="rounded-xl border-2 border-black bg-white p-5 sm:p-6 shadow-retro flex flex-col justify-between space-y-5 hover:-translate-y-1 hover:shadow-retro-md transition-all"
-          >
-            <div className="space-y-3.5">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-sans text-xs sm:text-sm font-bold px-3 py-1 rounded border-2 border-black bg-gray-soft text-black shadow-xs">
-                  {proj.type}
-                </span>
-                <span className="text-xs sm:text-sm font-sans font-bold px-3 py-1 rounded border-2 border-black bg-surface text-ink shadow-xs">
-                  {proj.status}
-                </span>
-              </div>
-
-              <div>
-                <h2 className="font-heading font-bold text-xl sm:text-2xl text-black leading-snug">
-                  {proj.title}
-                </h2>
-                <p className="text-xs sm:text-sm text-primary font-bold mt-1">
-                  Mata Kuliah: {proj.course}
-                </p>
-              </div>
-
-              <p className="text-sm sm:text-base text-neutral-800 font-medium leading-relaxed">
-                {proj.description}
-              </p>
-
-              {/* Tech Stack Pills */}
-              <div className="flex flex-wrap gap-2 pt-1">
-                {proj.tech.map((t) => (
-                  <span
-                    key={t}
-                    className="text-xs font-sans font-bold px-2.5 py-0.5 rounded border-2 border-black/30 bg-gray-soft text-black"
-                  >
-                    {t}
+        {/* GRID KARTU PROYEK */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+          {PROJECTS.map((proj) => (
+            <div
+              key={proj.id}
+              className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-all"
+            >
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-sans text-xs font-bold px-2.5 py-0.5 rounded-full border-2 border-ink bg-gray-soft text-ink shadow-xs">
+                    {proj.type}
                   </span>
-                ))}
+                  <span className="text-xs font-sans font-bold px-2.5 py-0.5 rounded-full border-2 border-ink bg-surface text-ink shadow-xs">
+                    {proj.status}
+                  </span>
+                </div>
+
+                <div>
+                  <h2 className="font-heading font-bold text-lg sm:text-xl text-ink leading-snug">
+                    {proj.title}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-primary font-bold mt-1">
+                    Mata Kuliah: {proj.course}
+                  </p>
+                </div>
+
+                <p className="text-xs sm:text-sm text-gray-dark font-bold leading-relaxed">
+                  {proj.description}
+                </p>
+
+                {/* Tech Stack Pills */}
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {proj.tech.map((t) => (
+                    <span
+                      key={t}
+                      className="text-[11px] font-sans font-bold px-2 py-0.5 rounded-full border-2 border-ink/40 bg-gray-soft text-ink"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="pt-3 border-t-2 border-ink/10 flex flex-wrap items-center justify-between gap-2 text-xs">
+                <span className="font-sans text-ink font-bold truncate max-w-[220px] sm:max-w-[280px]">
+                  {proj.repo}
+                </span>
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-ink bg-surface text-ink font-heading font-bold text-xs shadow-xs hover:bg-ink hover:text-white transition-all shrink-0 cursor-pointer"
+                >
+                  <Code className="h-3.5 w-3.5" />
+                  <span>Lihat Kode</span>
+                </button>
               </div>
             </div>
-
-            <div className="pt-3.5 border-t-2 border-black/10 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
-              <span className="font-sans text-black font-bold truncate max-w-[240px] sm:max-w-[300px]">
-                {proj.repo}
-              </span>
-              <button
-                type="button"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-gray-soft text-black font-heading font-bold text-xs sm:text-sm shadow-xs hover:bg-black hover:text-white transition-all shrink-0"
-              >
-                <Code className="h-4 w-4" />
-                <span>Lihat Kode & Repositori</span>
-              </button>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

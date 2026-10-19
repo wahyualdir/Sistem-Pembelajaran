@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { cn } from '@/lib/utils';
 import {
   Trophy,
   Flame,
@@ -98,15 +99,16 @@ export function AchievementsView() {
   return (
     <div className="space-y-6">
       {/* Tab Switcher */}
-      <div className="flex items-center gap-2 border-b border-border pb-3">
+      <div className="flex items-center gap-2 border-b-2 border-ink pb-2 overflow-x-auto">
         <button
           type="button"
           onClick={() => setActiveTab('badges')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${
+          className={cn(
+            'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-ink text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
             activeTab === 'badges'
-              ? 'bg-primary text-primary-foreground shadow-xs'
-              : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
-          }`}
+              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
+              : 'bg-surface text-ink hover:bg-gray-soft shadow-xs'
+          )}
         >
           <Award className="h-4 w-4" />
           <span>Lencana & Kebiasaan</span>
@@ -115,67 +117,71 @@ export function AchievementsView() {
         <button
           type="button"
           onClick={() => setActiveTab('recap')}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${
+          className={cn(
+            'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-ink text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
             activeTab === 'recap'
-              ? 'bg-primary text-primary-foreground shadow-xs'
-              : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
-          }`}
+              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
+              : 'bg-surface text-ink hover:bg-gray-soft shadow-xs'
+          )}
         >
           <Calendar className="h-4 w-4" />
           <span>Rekap Semester</span>
         </button>
       </div>
+
       {activeTab === 'badges' && (
         <>
           {/* 1. Ringkasan Poin dan Kebiasaan Belajar */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="p-5 rounded-[12px] border border-border bg-surface space-y-1">
-              <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-xs font-semibold uppercase tracking-wider">Total Poin Kebiasaan</span>
-                <Trophy className="h-4 w-4 text-amber-500" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 sm:gap-4">
+            <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-1">
+              <div className="flex items-center justify-between text-gray-dark">
+                <span className="text-xs font-sans font-medium uppercase tracking-[0.04em]">Total Poin Kebiasaan</span>
+                <Trophy className="h-4 w-4 text-primary" />
               </div>
-              <p className="text-2xl font-bold font-heading text-foreground tabular-nums">
-                {data?.totalXp || 0} <span className="text-xs font-normal text-muted-foreground">XP</span>
+              <p className="text-2xl sm:text-3xl font-bold font-heading text-ink tabular-nums">
+                {data?.totalXp || 0} <span className="text-xs font-bold text-gray-dark">XP</span>
               </p>
-              <p className="text-[11px] text-muted-foreground">
-                Diperoleh dari tugas tepat waktu, kehadiran, dan modul mandiri.
+              <p className="text-xs text-gray-dark font-medium pt-0.5">
+                Diperoleh dari tugas tepat waktu, kehadiran, dan modul.
               </p>
             </div>
 
-            <div className="p-5 rounded-[12px] border border-border bg-surface space-y-1">
-              <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-xs font-semibold uppercase tracking-wider">Kebiasaan Belajar</span>
-                <Flame className="h-4 w-4 text-orange-500" />
+            <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-1">
+              <div className="flex items-center justify-between text-gray-dark">
+                <span className="text-xs font-sans font-medium uppercase tracking-[0.04em]">Kebiasaan Belajar</span>
+                <Flame className="h-4 w-4 text-primary" />
               </div>
-              <p className="text-2xl font-bold font-heading text-foreground tabular-nums">
-                {data?.currentStreak || 0} <span className="text-xs font-normal text-muted-foreground">hari beruntun</span>
+              <p className="text-2xl sm:text-3xl font-bold font-heading text-ink tabular-nums">
+                {data?.currentStreak || 0} <span className="text-xs font-bold text-gray-dark">hari beruntun</span>
               </p>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-xs text-gray-dark font-medium pt-0.5">
                 Pencapaian terbaik: {data?.bestStreak || 0} hari berturut-turut.
               </p>
             </div>
 
-            <div className="p-5 rounded-[12px] border border-border bg-surface space-y-1">
-              <div className="flex items-center justify-between text-muted-foreground">
-                <span className="text-xs font-semibold uppercase tracking-wider">Lencana Akademik</span>
+            <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-1">
+              <div className="flex items-center justify-between text-gray-dark">
+                <span className="text-xs font-sans font-medium uppercase tracking-[0.04em]">Lencana Akademik</span>
                 <Award className="h-4 w-4 text-primary" />
               </div>
-              <p className="text-2xl font-bold font-heading text-foreground tabular-nums">
-                {earnedCount} <span className="text-xs font-normal text-muted-foreground">/ {totalBadges} diraih</span>
+              <p className="text-2xl sm:text-3xl font-bold font-heading text-ink tabular-nums">
+                {earnedCount} <span className="text-xs font-bold text-gray-dark">/ {totalBadges} diraih</span>
               </p>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-xs text-gray-dark font-medium pt-0.5">
                 Pengakuan kebiasaan belajar positif di kampus.
               </p>
             </div>
           </div>
 
           {/* 2. Kisi Lencana Akademik */}
-          <div className="rounded-[12px] border border-border bg-surface p-6 space-y-5">
-            <div>
-              <h2 className="text-base font-bold text-foreground">Daftar Lencana</h2>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Lencana diperoleh secara otomatis melalui konsistensi aktivitas belajar harian.
-              </p>
+          <div className="rounded-xl border-2 border-ink bg-surface p-5 sm:p-6 shadow-retro space-y-4">
+            <div className="border-b-2 border-ink pb-3 flex items-center justify-between">
+              <div>
+                <h2 className="text-lg sm:text-xl font-heading font-bold text-ink">Daftar Lencana</h2>
+                <p className="text-xs text-gray-dark font-medium mt-0.5">
+                  Lencana diperoleh secara otomatis melalui konsistensi aktivitas belajar harian.
+                </p>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

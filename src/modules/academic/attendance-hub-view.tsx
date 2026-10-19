@@ -121,25 +121,16 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
-      {/* 1. HEADER WINDOW RETRO */}
-      <RetroWindow
-        title="Presensi & Perizinan Kuliah"
-        badge={`Kehadiran ${attendanceRate}%`}
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-4 sm:p-6 bg-retro-surface"
-      >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 sm:p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
-                <CalendarCheck2 className="h-5 w-5 sm:h-6 sm:w-6" />
-              </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-foreground">
-                Presensi & Perizinan Kuliah
-              </h1>
-            </div>
-            <p className="text-xs sm:text-sm text-black max-w-xl font-bold">
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* 1. HEADER BERANDA STYLE */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <CalendarCheck2 className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Presensi & Perizinan Kuliah
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
               Log kehadiran mahasiswa berbasis multi-faktor (QR Dinamis, Geolokasi GPS Haversine, Biometrik WebAuthn, dan Kode PIN).
             </p>
           </div>
@@ -148,76 +139,78 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
             <button
               type="button"
               onClick={() => setIsPermitModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-primary text-white font-bold text-xs sm:text-sm shadow-retro hover:bg-black transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-ink text-white font-bold text-xs sm:text-sm shadow-retro hover:bg-ink/90 transition-all cursor-pointer min-h-[44px]"
             >
               <FileText className="h-4 w-4" />
               <span>Ajukan Izin/Sakit</span>
             </button>
             <Link
               href="/classes"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-white font-bold text-xs sm:text-sm text-black shadow-retro hover:bg-gray-soft transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-surface font-bold text-xs sm:text-sm text-ink shadow-retro hover:bg-gray-soft transition-all min-h-[44px]"
             >
               <span>Kelas Kuliah</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              KEHADIRAN {attendanceRate}%
+            </span>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 2. STATS RINGKASAN */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-sans font-bold uppercase text-black">Total Sesi Diikuti</div>
-          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{records.length} Sesi</div>
-          <div className="text-xs text-black font-bold">Semester Berjalan</div>
-        </div>
-
-        <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-sans font-bold uppercase text-black">Tepat Waktu</div>
-          <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
-            {records.filter((r) => r.status === 'HADIR').length} Sesi
+        {/* 2. STATS RINGKASAN */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-1">
+            <div className="text-xs font-sans font-medium uppercase tracking-[0.04em] text-gray-dark">Total Sesi Diikuti</div>
+            <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">{records.length} Sesi</div>
+            <div className="text-xs text-gray-dark font-bold">Semester Berjalan</div>
           </div>
-          <div className="text-xs text-ink font-bold">Presensi Valid</div>
-        </div>
 
-        <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-sans font-bold uppercase text-black">Terlambat / Izin</div>
-          <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
-            {records.filter((r) => r.status === 'TERLAMBAT' || r.status === 'IZIN' || r.status === 'SAKIT').length} Sesi
+          <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-1">
+            <div className="text-xs font-sans font-medium uppercase tracking-[0.04em] text-gray-dark">Tepat Waktu</div>
+            <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
+              {records.filter((r) => r.status === 'HADIR').length} Sesi
+            </div>
+            <div className="text-xs text-gray-dark font-bold">Presensi Valid</div>
           </div>
-          <div className="text-xs text-ink font-bold">Dispensasi Diterima</div>
-        </div>
 
-        <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro space-y-1">
-          <div className="text-xs font-sans font-bold uppercase text-black">Syarat Ujian (&gt;75%)</div>
-          <div className="text-2xl sm:text-3xl font-heading font-bold text-black">{attendanceRate}%</div>
-          <div className="text-xs text-primary font-bold">
-            {records.length === 0
-              ? 'Belum Ada Presensi'
-              : attendanceRate >= 75
-              ? '✓ Memenuhi Syarat'
-              : '⚠️ Terancam Tidak Ikut Ujian'}
+          <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-1">
+            <div className="text-xs font-sans font-medium uppercase tracking-[0.04em] text-gray-dark">Terlambat / Izin</div>
+            <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
+              {records.filter((r) => r.status === 'TERLAMBAT' || r.status === 'IZIN' || r.status === 'SAKIT').length} Sesi
+            </div>
+            <div className="text-xs text-gray-dark font-bold">Dispensasi Diterima</div>
+          </div>
+
+          <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-1">
+            <div className="text-xs font-sans font-medium uppercase tracking-[0.04em] text-gray-dark">Syarat Ujian (&gt;75%)</div>
+            <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">{attendanceRate}%</div>
+            <div className="text-xs text-primary font-bold">
+              {records.length === 0
+                ? 'Belum Ada Presensi'
+                : attendanceRate >= 75
+                ? '✓ Memenuhi Syarat'
+                : '⚠️ Terancam Tidak Ikut Ujian'}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 3. CONTROLLER TAB */}
-      <div className="flex items-center gap-2 border-b-2 border-black pb-2 overflow-x-auto">
-        {ATTENDANCE_TABS.map((tab) => {
-          const Icon = tab.icon;
-          const isSelected = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setTab(tab.id)}
-              className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
-                isSelected
-                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
-              )}
-            >
+        {/* 3. CONTROLLER TAB */}
+        <div className="flex items-center gap-2 border-b-2 border-ink pb-2 overflow-x-auto">
+          {ATTENDANCE_TABS.map((tab) => {
+            const Icon = tab.icon;
+            const isSelected = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setTab(tab.id)}
+                className={cn(
+                  'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-ink text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
+                  isSelected
+                    ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
+                    : 'bg-surface text-ink hover:bg-gray-soft shadow-xs'
+                )}
+              >
               <Icon className="h-4 w-4" />
               <span>{tab.label}</span>
             </button>
@@ -574,6 +567,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

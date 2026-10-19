@@ -121,116 +121,113 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
-      {/* 1. RETRO WINDOW HEADER */}
-      <RetroWindow
-        title="Nilai Saya"
-        headerBadge="Semester Ganjil 2026/2027"
-        headerBadgeVariant="info"
-        bodyClassName="p-4 sm:p-6 lg:p-8"
-      >
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6">
-          <div className="space-y-1.5 sm:space-y-2">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2.5 sm:gap-3">
-              <CheckSquare className="h-6 w-6 sm:h-7 sm:w-7 text-primary shrink-0" />
-              <span>Nilai Saya</span>
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* 1. HEADER BERANDA STYLE */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <CheckSquare className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Nilai Saya
             </h1>
-            <p className="text-sm sm:text-base lg:text-lg text-black font-bold max-w-2xl leading-relaxed">
-              Pantau bobot nilai per komponen (tugas, kuis, ujian, presensi), riwayat evaluasi, dan proyeksi capaian indeks prestasi kumulatif semester ini secara transparan.
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Pantau bobot nilai per komponen, riwayat evaluasi, dan capaian IPK semester berjalan.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <button
               type="button"
               onClick={() => setIsDisputeModalOpen(true)}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-primary text-white font-bold text-xs sm:text-sm shadow-retro hover:bg-black transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-ink text-white font-bold text-xs sm:text-sm shadow-retro hover:bg-ink/90 transition-all cursor-pointer min-h-[44px]"
             >
               <AlertCircle className="h-4 w-4" />
               <span>Ajukan Keberatan Nilai</span>
             </button>
             <Link
               href="/certificates?tab=portofolio"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-gray-soft font-bold text-xs sm:text-sm text-black shadow-retro hover:bg-black hover:text-white transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-surface font-bold text-xs sm:text-sm text-ink shadow-retro hover:bg-gray-soft transition-all min-h-[44px]"
             >
               <Award className="h-4 w-4" />
               <span>Portofolio Belajar</span>
             </Link>
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              SEMESTER GANJIL 2026/2027
+            </span>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 2. STATS METRIC PILLS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
-        <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
-          <div className="text-xs font-sans font-bold uppercase text-black">Indeks Prestasi Semester (IPS)</div>
-          <div className="text-3xl font-heading font-bold text-black">
-            {ipk} <span className="text-xs font-bold text-black">/ 4.00</span>
-          </div>
-          {grades.length === 0 ? (
-            <div className="text-xs font-bold text-black flex items-center gap-1.5 pt-1">
-              <AlertCircle className="h-3.5 w-3.5" />
-              <span>Belum Ada Data Nilai</span>
+        {/* 2. STATS METRIC PILLS */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+          <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-1">
+            <div className="text-xs font-sans font-medium uppercase tracking-[0.04em] text-gray-dark">Indeks Prestasi Semester (IPS)</div>
+            <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
+              {ipk} <span className="text-xs font-bold text-gray-dark">/ 4.00</span>
             </div>
-          ) : (
-            <div className="text-xs font-bold text-primary flex items-center gap-1.5 pt-1">
-              <TrendingUp className="h-3.5 w-3.5" />
-              <span>Predikat Sangat Memuaskan</span>
+            {grades.length === 0 ? (
+              <div className="text-xs font-bold text-gray-dark flex items-center gap-1.5 pt-0.5">
+                <AlertCircle className="h-3.5 w-3.5" />
+                <span>Belum Ada Data Nilai</span>
+              </div>
+            ) : (
+              <div className="text-xs font-bold text-primary flex items-center gap-1.5 pt-0.5">
+                <TrendingUp className="h-3.5 w-3.5" />
+                <span>Predikat Sangat Memuaskan</span>
+              </div>
+            )}
+          </div>
+
+          <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-1">
+            <div className="text-xs font-sans font-medium uppercase tracking-[0.04em] text-gray-dark">Total SKS Semester</div>
+            <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
+              {totalSks} <span className="text-xs font-bold text-gray-dark">SKS</span>
             </div>
-          )}
+            <div className="text-xs font-bold text-gray-dark flex items-center gap-1.5 pt-0.5">
+              <BookOpen className="h-3.5 w-3.5" />
+              <span>{grades.length} Mata Kuliah Terdaftar</span>
+            </div>
+          </div>
+
+          <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-1">
+            <div className="text-xs font-sans font-medium uppercase tracking-[0.04em] text-gray-dark">Ujian Diselesaikan</div>
+            <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
+              {attempts.length} <span className="text-xs font-bold text-gray-dark">Sesi</span>
+            </div>
+            <div className="text-xs font-bold text-ink flex items-center gap-1.5 pt-0.5">
+              <CheckCircle2 className="h-3.5 w-3.5" />
+              <span>{attempts.length === 0 ? 'Belum Ada Ujian' : 'Evaluasi Terverifikasi'}</span>
+            </div>
+          </div>
+
+          <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-1">
+            <div className="text-xs font-sans font-medium uppercase tracking-[0.04em] text-gray-dark">Tingkat Kelulusan</div>
+            <div className="text-2xl sm:text-3xl font-heading font-bold text-ink">
+              {grades.length === 0 ? '0%' : '100%'} <span className="text-xs font-bold text-gray-dark">Lulus</span>
+            </div>
+            <div className="text-xs font-bold text-gray-dark flex items-center gap-1.5 pt-0.5">
+              <Award className="h-3.5 w-3.5" />
+              <span>{grades.length === 0 ? 'Belum Ada Evaluasi' : '0 Mata Kuliah Remedial'}</span>
+            </div>
+          </div>
         </div>
 
-        <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
-          <div className="text-xs font-sans font-bold uppercase text-black">Total SKS Semester</div>
-          <div className="text-3xl font-heading font-bold text-black">
-            {totalSks} <span className="text-xs font-bold text-black">SKS</span>
-          </div>
-          <div className="text-xs font-bold text-black flex items-center gap-1.5 pt-1">
-            <BookOpen className="h-3.5 w-3.5" />
-            <span>{grades.length} Mata Kuliah Terdaftar</span>
-          </div>
-        </div>
-
-        <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
-          <div className="text-xs font-sans font-bold uppercase text-black">Ujian Diselesaikan</div>
-          <div className="text-3xl font-heading font-bold text-black">
-            {attempts.length} <span className="text-xs font-bold text-black">Sesi</span>
-          </div>
-          <div className="text-xs font-bold text-ink flex items-center gap-1.5 pt-1">
-            <CheckCircle2 className="h-3.5 w-3.5" />
-            <span>{attempts.length === 0 ? 'Belum Ada Ujian' : 'Evaluasi Terverifikasi'}</span>
-          </div>
-        </div>
-
-        <div className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-1">
-          <div className="text-xs font-sans font-bold uppercase text-black">Tingkat Kelulusan</div>
-          <div className="text-3xl font-heading font-bold text-black">
-            {grades.length === 0 ? '0%' : '100%'} <span className="text-xs font-bold text-black">Lulus</span>
-          </div>
-          <div className="text-xs font-bold text-black/70 flex items-center gap-1.5 pt-1">
-            <Award className="h-3.5 w-3.5" />
-            <span>{grades.length === 0 ? 'Belum Ada Evaluasi' : '0 Mata Kuliah Remedial'}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. TAB CONTROLLER NEO-BRUTALIST */}
-      <div className="flex items-center gap-2 border-b-2 border-black pb-2 overflow-x-auto">
-        {GRADES_TABS.map((tab) => {
-          const Icon = tab.icon;
-          const isSelected = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setTab(tab.id)}
-              className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
-                isSelected
-                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
-              )}
-            >
+        {/* 3. TAB CONTROLLER */}
+        <div className="flex items-center gap-2 border-b-2 border-ink pb-2 overflow-x-auto">
+          {GRADES_TABS.map((tab) => {
+            const Icon = tab.icon;
+            const isSelected = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setTab(tab.id)}
+                className={cn(
+                  'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-ink text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
+                  isSelected
+                    ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
+                    : 'bg-surface text-ink hover:bg-gray-soft shadow-xs'
+                )}
+              >
               <Icon className="h-4 w-4" />
               <span>{tab.label}</span>
             </button>
@@ -625,6 +622,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

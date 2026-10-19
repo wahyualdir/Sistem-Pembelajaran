@@ -87,29 +87,24 @@ export default async function ExamsPage() {
   }
 
   return (
-    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
-      {/* 1. HEADER WINDOW RETRO */}
-      <RetroWindow
-        title="Pusat Ujian & Evaluasi"
-        headerBadge="Sesi Aktif"
-        headerBadgeVariant="warning"
-        bodyClassName="p-4 sm:p-6 lg:p-8"
-      >
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 sm:gap-6">
-          <div className="space-y-1.5 sm:space-y-2">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-2.5 sm:gap-3">
-              <Award className="h-6 w-6 sm:h-7 sm:w-7 text-primary shrink-0" />
-              <span>Ujian & Kuis Aktif</span>
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* 1. HEADER BERANDA STYLE */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <Award className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Ujian & Kuis Aktif
             </h1>
-            <p className="text-sm sm:text-base lg:text-lg text-black font-bold max-w-3xl leading-relaxed">
-              Daftar sesi kuis, ujian tengah semester (UTS), dan evaluasi mandiri yang sedang dibuka. Pastikan koneksi internet stabil dan patuhi aturan pengawasan proctoring.
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Daftar sesi kuis, ujian tengah semester (UTS), dan evaluasi mandiri yang sedang dibuka.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <Link
               href="/exams/history"
-              className="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-lg border-2 border-black bg-retro-surface font-bold text-xs sm:text-sm shadow-retro hover:bg-gray-soft transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-surface font-bold text-xs sm:text-sm text-ink shadow-retro hover:bg-gray-soft transition-all min-h-[44px]"
             >
               <FileText className="h-4 w-4" />
               <span>Riwayat Ujian & Kuis</span>
@@ -118,91 +113,96 @@ export default async function ExamsPage() {
             {isLecturer && (
               <Link
                 href="/classes"
-                className="inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-lg border-2 border-black bg-black text-white font-bold text-xs sm:text-sm shadow-retro-md hover:bg-neutral-800 transition-all"
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-ink text-white font-bold text-xs sm:text-sm shadow-retro hover:bg-ink/90 transition-all min-h-[44px]"
               >
                 <span>Buka Kelas untuk Buat Ujian &rarr;</span>
               </Link>
             )}
+
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              {quizzes.length} SESI TERSEDIA
+            </span>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 2. PANDUAN PENGAWASAN (PROCTORING BANNER) FULL WIDTH */}
-      <div className="rounded-xl border-2 border-black bg-gray-soft/50 p-4 sm:p-5 shadow-retro space-y-2 sm:space-y-3">
-        <div className="flex items-center gap-2 text-foreground font-heading font-bold text-base">
-          <ShieldAlert className="h-5 w-5 text-primary shrink-0" />
-          <span>Kebijakan Pengawasan Ujian Terpadu</span>
-        </div>
-        <p className="text-xs sm:text-sm text-foreground leading-relaxed font-bold">
-          Sesi ujian menggunakan pemantauan perilaku (append-only events) yang mencatat perpindahan tab (<code>visibilitychange</code>), jendela blur, dan keluar dari mode layar penuh. Browser tidak dapat mengintip isi tab lain. Tetaplah berada di halaman ujian hingga selesai.
-        </p>
-      </div>
-
-      {/* 3. DAFTAR SESI UJIAN AKTIF (GRID 3 KOLOM FULL WIDTH) */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="font-heading font-bold text-lg sm:text-xl text-foreground">
-            Sesi Ujian Tersedia ({quizzes.length})
-          </h2>
-          <span className="text-xs font-sans font-bold uppercase text-foreground">
-            Status: Real-time Terhubung
-          </span>
-        </div>
-
-        {quizzes.length === 0 ? (
-          <div className="p-10 sm:p-14 text-center rounded-2xl border-2 border-dashed border-black bg-white shadow-retro space-y-3">
-            <Award className="h-10 w-10 sm:h-12 sm:w-12 text-black/60 mx-auto" />
-            <h3 className="text-lg font-bold text-black">Belum Ada Sesi Ujian Aktif</h3>
-            <p className="text-xs sm:text-sm text-black font-bold max-w-md mx-auto leading-relaxed">
-              Saat ini belum ada jadwal kuis atau ujian aktif untuk kelas perkuliahan Anda.
-            </p>
+        {/* 2. PANDUAN PENGAWASAN (PROCTORING BANNER) */}
+        <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-2">
+          <div className="flex items-center gap-2 text-ink font-heading font-bold text-sm sm:text-base">
+            <ShieldAlert className="h-5 w-5 text-primary shrink-0" />
+            <span>Kebijakan Pengawasan Ujian Terpadu</span>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {quizzes.map((quiz: any) => (
-              <div
-                key={quiz.id}
-                className="rounded-xl border-2 border-black bg-white p-4 sm:p-6 shadow-retro hover:shadow-retro-md hover:-translate-y-0.5 transition-all flex flex-col justify-between space-y-5"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="px-3 py-1 rounded border-2 border-black bg-gray-soft text-xs sm:text-sm font-sans font-bold uppercase text-black shadow-retro-sm">
-                      {quiz.exam_type ?? 'KUIS'}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 text-sm font-bold text-black font-sans">
-                      <Clock className="h-4 w-4" />
-                      {quiz.duration_minutes} Menit
-                    </span>
+          <p className="text-xs sm:text-sm text-gray-dark leading-relaxed font-medium">
+            Sesi ujian menggunakan pemantauan perilaku (append-only events) yang mencatat perpindahan tab (<code>visibilitychange</code>), jendela blur, dan keluar dari mode layar penuh. Browser tidak dapat mengintip isi tab lain. Tetaplah berada di halaman ujian hingga selesai.
+          </p>
+        </div>
+
+        {/* 3. DAFTAR SESI UJIAN AKTIF */}
+        <section aria-label="Daftar Sesi Ujian" className="space-y-4">
+          <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
+            <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink flex items-center gap-2">
+              <Award className="h-5 w-5 text-primary inline-block" />
+              <span>Sesi Ujian Tersedia ({quizzes.length})</span>
+            </h2>
+            <span className="text-xs font-sans font-bold uppercase text-gray-dark">
+              Status: Real-time Terhubung
+            </span>
+          </div>
+
+          {quizzes.length === 0 ? (
+            <div className="p-10 sm:p-14 text-center rounded-xl border-2 border-dashed border-ink bg-surface/50 shadow-retro space-y-3">
+              <Award className="h-10 w-10 sm:h-12 sm:w-12 text-gray-dark mx-auto" />
+              <h3 className="text-base sm:text-lg font-heading font-bold text-ink">Belum Ada Sesi Ujian Aktif</h3>
+              <p className="text-xs sm:text-sm text-gray-dark font-medium max-w-md mx-auto leading-relaxed">
+                Saat ini belum ada jadwal kuis atau ujian aktif untuk kelas perkuliahan Anda.
+              </p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+              {quizzes.map((quiz: any) => (
+                <div
+                  key={quiz.id}
+                  className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro hover:shadow-retro-md hover:-translate-y-0.5 transition-all flex flex-col justify-between space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft border border-ink text-ink">
+                        {quiz.exam_type ?? 'KUIS'}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-ink font-sans">
+                        <Clock className="h-3.5 w-3.5 text-primary" />
+                        {quiz.duration_minutes} Menit
+                      </span>
+                    </div>
+
+                    <h3 className="font-heading font-bold text-lg sm:text-xl text-ink leading-snug line-clamp-2">
+                      {quiz.title}
+                    </h3>
+
+                    <p className="text-xs sm:text-sm text-gray-dark font-medium line-clamp-3 leading-relaxed">
+                      {quiz.description || 'Tidak ada deskripsi ujian tambahan.'}
+                    </p>
                   </div>
 
-                  <h3 className="font-heading font-bold text-xl text-black leading-snug line-clamp-2">
-                    {quiz.title}
-                  </h3>
+                  <div className="pt-3 border-t-2 border-ink/10 space-y-3">
+                    <div className="flex items-center justify-between text-xs font-sans font-bold text-gray-dark">
+                      <span>Soal: {quiz.questions?.length ?? quiz.questionsCount ?? 10}</span>
+                      <span>KKM: {quiz.kkm ?? 70}</span>
+                      <span className="text-primary font-bold">Proctor: {quiz.proctoring_level ?? 'STANDARD'}</span>
+                    </div>
 
-                  <p className="text-sm sm:text-base text-black font-bold line-clamp-3 leading-relaxed">
-                    {quiz.description || 'Tidak ada deskripsi ujian tambahan.'}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t-2 border-black/10 space-y-4">
-                  <div className="flex items-center justify-between text-sm font-sans font-bold text-black">
-                    <span>Soal: {quiz.questions?.length ?? quiz.questionsCount ?? 10}</span>
-                    <span>KKM: {quiz.kkm ?? 70}</span>
-                    <span className="text-primary font-bold">Proctor: {quiz.proctoring_level ?? 'STANDARD'}</span>
+                    <Link
+                      href={`/classes/${quiz.class_id}/quizzes/${quiz.id}`}
+                      className="flex w-full items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-ink bg-ink text-white font-bold text-xs sm:text-sm shadow-retro hover:bg-ink/90 transition-all text-center min-h-[44px]"
+                    >
+                      <Play className="h-4 w-4 fill-white" />
+                      <span>{isLecturer ? 'Buka Panel Live Ujian' : 'Mulai Kerjakan Ujian'}</span>
+                    </Link>
                   </div>
-
-                  <Link
-                    href={`/classes/${quiz.class_id}/quizzes/${quiz.id}`}
-                    className="flex w-full items-center justify-center gap-2 py-3.5 rounded-lg border-2 border-black bg-black text-white font-heading font-bold text-base shadow-retro hover:bg-neutral-800 transition-all text-center"
-                  >
-                    <Play className="h-5 w-5 fill-white" />
-                    <span>{isLecturer ? 'Buka Panel Live Ujian' : 'Mulai Kerjakan Ujian'}</span>
-                  </Link>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </div>
   );

@@ -114,62 +114,56 @@ export function AiAssistantPageView({ enrolledClasses, initialHistory = [] }: Ai
   ];
 
   return (
-    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
-      {/* 1. HEADER RETRO AI */}
-      <RetroWindow
-        title="Tanya AI Akademik SIAJAR"
-        badge="AI MODEL: ACTIVE (RAG KELAS)"
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-6 sm:p-8 bg-surface space-y-4"
-      >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-retro-sm">
-                <Bot className="h-6 w-6" />
-              </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
-                Tanya AI Akademik SIAJAR
-              </h1>
-            </div>
-            <p className="text-xs sm:text-sm text-gray-dark font-medium max-w-2xl leading-relaxed">
-              Asisten belajar cerdas yang menjawab pertanyaan berdasarkan materi, silabus, dan modul resmi kelas yang Anda ikuti dengan rujukan transparan.
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* 1. HEADER BERANDA STYLE */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <Bot className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Tanya AI Akademik SIAJAR
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Asisten belajar cerdas yang menjawab pertanyaan berdasarkan materi, silabus, dan modul resmi kelas.
             </p>
           </div>
 
-          {/* Konteks Selector Dropdown */}
-          <div className="p-3 rounded-xl border-2 border-black bg-surface shadow-retro-sm space-y-1 min-w-[240px]">
-            <label className="text-xs font-bold text-gray-dark uppercase tracking-wider block">
-              Konteks Materi Kuliah:
-            </label>
-            <select
-              value={selectedClassId}
-              onChange={(e) => setSelectedClassId(e.target.value)}
-              className="w-full text-xs font-bold text-ink bg-transparent outline-none cursor-pointer"
-            >
-              <option value="ALL">Semua Kelas Terdaftar (Umum)</option>
-              {enrolledClasses.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.title}
-                </option>
-              ))}
-            </select>
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <div className="p-2 sm:p-2.5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-1 min-w-[220px]">
+              <label className="text-[10px] font-bold text-gray-dark uppercase tracking-wider block">
+                Konteks Materi Kuliah:
+              </label>
+              <select
+                value={selectedClassId}
+                onChange={(e) => setSelectedClassId(e.target.value)}
+                className="w-full text-xs font-bold text-ink bg-transparent outline-none cursor-pointer"
+              >
+                <option value="ALL">Semua Kelas Terdaftar (Umum)</option>
+                {enrolledClasses.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              AI ACTIVE (RAG)
+            </span>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 2. CHAT STREAM RETRO CONTAINER */}
-      <div className="rounded-2xl border-2 border-black bg-surface shadow-retro overflow-hidden flex flex-col h-[650px]">
-        {/* Sub-header status bar */}
-        <div className="p-3 bg-gray-soft border-b-2 border-black flex items-center justify-between text-xs font-bold text-ink">
-          <span className="flex items-center gap-1.5">
-            <Sparkles className="h-4 w-4 text-primary" />
-            Mode Grounding RAG: Menjawab hanya dari materi kelas resmi (Anti-Halusinasi)
-          </span>
-          <span className="text-xs text-gray-dark">
-            Proteksi Ujian Aktif Otomatis
-          </span>
-        </div>
+        {/* 2. CHAT STREAM RETRO CONTAINER */}
+        <div className="rounded-xl border-2 border-ink bg-surface shadow-retro overflow-hidden flex flex-col h-[650px]">
+          {/* Sub-header status bar */}
+          <div className="p-3 bg-gray-soft border-b-2 border-ink flex items-center justify-between text-xs font-bold text-ink">
+            <span className="flex items-center gap-1.5">
+              <Sparkles className="h-4 w-4 text-primary" />
+              Mode Grounding RAG: Menjawab hanya dari materi kelas resmi (Anti-Halusinasi)
+            </span>
+            <span className="text-xs text-gray-dark">
+              Proteksi Ujian Aktif Otomatis
+            </span>
+          </div>
 
         {/* Messages Scroll Area */}
         <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4 text-xs sm:text-sm">
@@ -276,6 +270,7 @@ export function AiAssistantPageView({ enrolledClasses, initialHistory = [] }: Ai
             <span className="hidden sm:inline">Kirim</span>
           </button>
         </form>
+      </div>
       </div>
     </div>
   );

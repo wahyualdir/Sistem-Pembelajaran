@@ -1,29 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import {
   HelpCircle,
   BookOpen,
   ShieldCheck,
-  Laptop,
-  CheckCircle2,
   FileQuestion,
-  MapPin,
-  KeyRound,
-  FileSpreadsheet,
   Users,
   GraduationCap,
-  CalendarDays,
-  FileCheck2,
-  Layers,
-  Scale,
+  FileSpreadsheet,
   Server,
-  ClipboardCheck,
-  MessageSquare,
-  Sparkles,
-  Search,
 } from 'lucide-react';
-import { RetroWindow } from '@/components/retro/retro-window';
 
 interface FAQItem {
   kategori: string;
@@ -326,107 +314,97 @@ export default function HelpCenterPage() {
   const ActiveRoleIcon = currentRoleData.ikon;
 
   return (
-    <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
-      {/* 1. HEADER WINDOW BANTUAN */}
-      <RetroWindow
-        title="pusat_bantuan_dan_panduan.app"
-        badge="PANDUAN OPERASIONAL RESMI"
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-6 sm:p-8 bg-retro-surface"
-      >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2.5 rounded-lg border-2 border-retro-border bg-primary text-white shadow-xs">
-                <HelpCircle className="h-6 w-6" />
-              </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-foreground">
-                Bantuan dan Panduan Operasional
-              </h1>
-            </div>
-            <p className="text-base sm:text-lg text-black font-medium max-w-2xl mt-1 leading-relaxed">
-              Panduan lengkap operasional sistem akademik SIAJAR untuk seluruh peran: tata cara pembelajaran terstruktur, pelaksanaan evaluasi terstandarisasi, presensi berbasis lokasi GPS, dan transparansi privasi data.
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* OPEN HEADER */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <HelpCircle className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Bantuan dan Panduan Operasional
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Panduan lengkap operasional sistem akademik SIAJAR untuk seluruh peran: pembelajaran terstruktur, CBT, dan privasi.
             </p>
           </div>
-
-          <div className="flex items-center gap-2">
-            <span className="rounded-full border-2 border-black bg-white px-4 py-1.5 text-sm sm:text-base font-sans font-bold text-black shadow-xs">
-              SOP Akademik Aktif
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-primary text-white border-2 border-ink shadow-xs">
+              SOP AKADEMIK AKTIF
             </span>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 2. PANDUAN WORKFLOW ALUR KERJA PER PERAN */}
-      <RetroWindow
-        title="alur_operasional_peran.sop"
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-6 sm:p-8 space-y-6"
-      >
-        <div className="flex items-center justify-between">
-          <h2 className="font-heading font-bold text-xl sm:text-2xl text-black flex items-center gap-2.5">
-            <BookOpen className="h-6 w-6 text-primary" />
-            <span>Alur Operasional Berdasarkan Peran Pengguna</span>
-          </h2>
-          <span className="text-sm font-sans font-bold text-black">6 Kategori Peran</span>
-        </div>
+        {/* 1. PANDUAN WORKFLOW ALUR KERJA PER PERAN */}
+        <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4 sm:space-y-5">
+          <div className="flex items-center justify-between border-b-2 border-ink/20 pb-3">
+            <div className="space-y-0.5">
+              <h2 className="font-heading font-bold text-base sm:text-lg text-ink flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-primary" />
+                <span>Alur Operasional Berdasarkan Peran Pengguna</span>
+              </h2>
+              <p className="text-xs text-gray-dark font-bold">Pilih peran untuk melihat pedoman langkah operasional</p>
+            </div>
+            <span className="text-xs font-sans font-bold px-2.5 py-1 rounded-full border-2 border-ink bg-gray-soft text-ink shadow-xs shrink-0">
+              6 KATEGORI PERAN
+            </span>
+          </div>
 
-        {/* Tab Buttons Peran */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 bg-retro-surface p-1.5 border-2 border-black rounded-lg">
-          {Object.entries(WORKFLOWS_PER_ROLE).map(([key, data]) => {
-            const isActive = activeRole === key;
-            return (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setActiveRole(key)}
-                className={`py-2 px-3 rounded-md font-sans font-bold text-xs sm:text-sm transition-all border-2 ${
-                  isActive
-                    ? 'bg-black text-white border-black shadow-xs'
-                    : 'bg-white text-black border-transparent hover:border-black/30'
-                }`}
-              >
-                {data.peran}
-              </button>
-            );
-          })}
-        </div>
+          {/* Tab Buttons Peran */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none border-b-2 border-ink/20">
+            {Object.entries(WORKFLOWS_PER_ROLE).map(([key, data]) => {
+              const isActive = activeRole === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setActiveRole(key)}
+                  className={`px-3.5 py-1.5 rounded-lg border-2 border-ink font-heading font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
+                    isActive
+                      ? 'bg-ink text-white shadow-retro border-b-4 border-b-primary'
+                      : 'bg-surface text-ink hover:bg-gray-soft shadow-xs'
+                  }`}
+                >
+                  {data.peran}
+                </button>
+              );
+            })}
+          </div>
 
-        {/* Tampilan Alur Kerja untuk Peran Aktif */}
-        <div className="space-y-6 mt-6">
-          <div className="flex items-center gap-3 p-4 bg-white border-2 border-black rounded-lg shadow-xs">
-            <div className="p-2 bg-primary/10 rounded-md border border-primary text-primary">
+          {/* Banner Peran Aktif */}
+          <div className="flex items-center gap-3 p-3.5 bg-gray-soft/40 border-2 border-ink rounded-xl shadow-xs">
+            <div className="p-2 bg-surface rounded-lg border-2 border-ink text-primary shadow-xs">
               <ActiveRoleIcon className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="font-heading font-bold text-lg text-black">
+              <h3 className="font-heading font-bold text-sm sm:text-base text-ink">
                 Pedoman Operasional: {currentRoleData.peran}
               </h3>
-              <p className="text-sm text-black/70">
+              <p className="text-xs text-gray-dark font-bold font-sans">
                 Ikuti langkah-langkah terstruktur di bawah untuk menjalankan aktivitas akademik sesuai wewenang.
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Grid Alur Langkah */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {currentRoleData.alur.map((wf, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border-2 border-black bg-white p-5 shadow-retro flex flex-col justify-between space-y-4"
+                className="rounded-xl border-2 border-ink bg-surface p-4 shadow-retro-sm flex flex-col justify-between space-y-3"
               >
-                <div className="space-y-3">
+                <div className="space-y-2.5">
                   <div className="flex items-center gap-2">
-                    <span className="flex items-center justify-center h-6 w-6 rounded-full bg-black text-white text-xs font-bold font-mono">
+                    <span className="flex items-center justify-center h-6 w-6 rounded-full bg-ink text-white text-xs font-bold font-mono shrink-0">
                       {idx + 1}
                     </span>
-                    <h4 className="font-heading font-bold text-base text-black leading-snug">
+                    <h4 className="font-heading font-bold text-sm text-ink leading-snug">
                       {wf.judul}
                     </h4>
                   </div>
-                  <ul className="space-y-2.5 pt-2 border-t-2 border-black/10">
+                  <ul className="space-y-2 pt-2 border-t-2 border-ink/10">
                     {wf.langkah.map((step, sIdx) => (
-                      <li key={sIdx} className="text-xs sm:text-sm text-black font-medium leading-relaxed flex items-start gap-2">
-                        <span className="text-primary mt-1">•</span>
+                      <li key={sIdx} className="text-xs text-gray-dark font-bold font-sans leading-relaxed flex items-start gap-1.5">
+                        <span className="text-primary mt-0.5">•</span>
                         <span>{step}</span>
                       </li>
                     ))}
@@ -436,68 +414,68 @@ export default function HelpCenterPage() {
             ))}
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 3. TANYA JAWAB UMUM (FAQ) */}
-      <RetroWindow
-        title={`tanya_jawab_populer.faq (${FAQS_UMUM.length})`}
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-6 sm:p-7 space-y-6"
-      >
-        <div className="flex items-center justify-between">
-          <h2 className="font-heading font-bold text-xl sm:text-2xl text-black flex items-center gap-2.5">
-            <FileQuestion className="h-6 w-6 text-primary" />
-            <span>Pertanyaan yang Sering Diajukan</span>
-          </h2>
-          <span className="text-sm font-sans font-bold text-black">Kanal Informasi Resmi</span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FAQS_UMUM.map((faq, i) => (
-            <div
-              key={i}
-              className="rounded-xl border-2 border-black bg-white p-6 shadow-retro flex flex-col justify-between space-y-4 hover:-translate-y-0.5 hover:shadow-retro-md transition-all animate-fade-up"
-              style={{ animationDelay: `${i * 40}ms` }}
-            >
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="px-3 py-1 rounded border-2 border-black text-xs font-sans font-bold shadow-xs bg-gray-soft">
-                    {faq.kategori}
-                  </span>
-                  <HelpCircle className="h-5 w-5 text-primary" />
-                </div>
-
-                <h3 className="font-heading font-bold text-lg text-black leading-snug">
-                  {faq.pertanyaan}
-                </h3>
-
-                <p className="text-sm sm:text-base text-black font-medium leading-relaxed pt-2 border-t-2 border-black/10">
-                  {faq.jawaban}
-                </p>
-              </div>
+        {/* 2. TANYA JAWAB UMUM (FAQ) */}
+        <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4">
+          <div className="flex items-center justify-between border-b-2 border-ink/20 pb-3">
+            <div className="space-y-0.5">
+              <h2 className="font-heading font-bold text-base sm:text-lg text-ink flex items-center gap-2">
+                <FileQuestion className="h-5 w-5 text-primary" />
+                <span>Pertanyaan yang Sering Diajukan (FAQ)</span>
+              </h2>
+              <p className="text-xs text-gray-dark font-bold">Kanal informasi dan panduan teknis umum</p>
             </div>
-          ))}
-        </div>
-      </RetroWindow>
+            <span className="text-xs font-sans font-bold px-2.5 py-1 rounded-full border-2 border-ink bg-gray-soft text-ink shadow-xs">
+              {FAQS_UMUM.length} PANDUAN
+            </span>
+          </div>
 
-      {/* 4. BANNER TRANSPARANSI PRIVASI DAN KEAMANAN DATA */}
-      <div className="rounded-xl border-2 border-black bg-gray-soft p-6 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5 shadow-retro">
-        <div className="space-y-1.5 text-center sm:text-left">
-          <h3 className="font-heading font-bold text-xl text-black flex items-center justify-center sm:justify-start gap-2">
-            <ShieldCheck className="h-6 w-6 text-primary" />
-            <span>Transparansi Privasi dan Pelindungan Data Pribadi</span>
-          </h3>
-          <p className="text-sm sm:text-base text-black font-medium max-w-2xl leading-relaxed">
-            Sistem SIAJAR mematuhi Undang-Undang Pelindungan Data Pribadi (UU PDP). Pelajari parameter telemetri pengerjaan ujian, batas retensi arsip surat izin sakit (180 hari), serta mekanisme anonimitas mutlak pada evaluasi dosen.
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {FAQS_UMUM.map((faq, i) => (
+              <div
+                key={i}
+                className="rounded-xl border-2 border-ink bg-surface p-4 shadow-retro-sm flex flex-col justify-between space-y-3 hover:-translate-y-0.5 transition-all"
+              >
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="px-2.5 py-0.5 rounded-full border-2 border-ink text-[11px] font-sans font-bold shadow-xs bg-gray-soft text-ink">
+                      {faq.kategori}
+                    </span>
+                    <HelpCircle className="h-4 w-4 text-primary" />
+                  </div>
+
+                  <h3 className="font-heading font-bold text-sm sm:text-base text-ink leading-snug">
+                    {faq.pertanyaan}
+                  </h3>
+
+                  <p className="text-xs text-gray-dark font-bold font-sans leading-relaxed pt-2 border-t-2 border-ink/10">
+                    {faq.jawaban}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <a
-          href="/transparency"
-          className="rounded-xl border-2 border-black bg-primary px-6 py-3 font-heading font-bold text-white shadow-retro hover:bg-primary/90 transition-all text-sm shrink-0"
-        >
-          Lihat Lembar Privasi
-        </a>
+        {/* 3. BANNER TRANSPARANSI PRIVASI DAN KEAMANAN DATA */}
+        <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-retro">
+          <div className="space-y-1 text-center sm:text-left">
+            <h3 className="font-heading font-bold text-base sm:text-lg text-ink flex items-center justify-center sm:justify-start gap-2">
+              <ShieldCheck className="h-5 w-5 text-primary" />
+              <span>Transparansi Privasi dan Pelindungan Data Pribadi</span>
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold max-w-2xl leading-relaxed">
+              Sistem SIAJAR mematuhi Undang-Undang Pelindungan Data Pribadi (UU PDP). Pelajari parameter telemetri pengerjaan ujian, batas retensi arsip surat izin sakit (180 hari), serta mekanisme anonimitas mutlak pada evaluasi dosen.
+            </p>
+          </div>
+
+          <Link
+            href="/transparency"
+            className="rounded-xl border-2 border-ink bg-primary px-5 py-2.5 font-heading font-bold text-white shadow-retro-sm hover:brightness-105 transition-all text-xs sm:text-sm shrink-0 whitespace-nowrap"
+          >
+            Lihat Lembar Privasi
+          </Link>
+        </div>
       </div>
     </div>
   );

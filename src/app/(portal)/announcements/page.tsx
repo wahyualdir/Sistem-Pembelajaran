@@ -57,79 +57,70 @@ const ANNOUNCEMENTS = [
 
 export default function AnnouncementsPage() {
   return (
-    <div className="p-4 sm:p-6 lg:p-8 w-full space-y-6 sm:space-y-8 animate-fade-up">
-      {/* 1. HEADER WINDOW RETRO */}
-      <RetroWindow
-        title="pengumuman_dan_warta_kampus.app"
-        badge="Warta Kampus"
-        headerClassName="bg-gray-soft"
-        bodyClassName="p-5 sm:p-7 bg-retro-surface"
-      >
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
-                <Bell className="h-6 w-6" />
-              </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
-                Pengumuman Kampus & Kelas
-              </h1>
-            </div>
-            <p className="text-base sm:text-lg text-black font-medium max-w-3xl leading-relaxed">
-              Warta resmi akademik, edaran jadwal ujian terpadu, agenda seminar teknologi, dan pemberitahuan penting dari rektorat dan dosen pengampu.
+    <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
+        {/* 1. HEADER BERANDA STYLE */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div className="space-y-0.5">
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
+              <Megaphone className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
+              Pengumuman Kampus & Kelas
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-dark font-bold">
+              Warta resmi akademik, edaran jadwal ujian terpadu, agenda seminar teknologi, dan pemberitahuan penting.
             </p>
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-sm sm:text-base font-sans font-bold text-black shadow-retro">
-              {ANNOUNCEMENTS.length} Edaran Aktif
+            <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              {ANNOUNCEMENTS.length} EDARAN AKTIF
             </span>
           </div>
         </div>
-      </RetroWindow>
 
-      {/* 2. GRID KARTU PENGUMUMAN (CRISP, LEGA & BOLD) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-7">
-        {ANNOUNCEMENTS.map((ann) => (
-          <div
-            key={ann.id}
-            className="rounded-xl border-2 border-black bg-white p-5 sm:p-6 shadow-retro flex flex-col justify-between space-y-5 hover:-translate-y-1 hover:shadow-retro-md transition-all"
-          >
-            <div className="space-y-3.5">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="font-sans text-xs sm:text-sm font-bold px-3 py-1 rounded border-2 border-black bg-gray-soft text-black shadow-xs">
-                  {ann.category}
-                </span>
-
-                {ann.isPinned && (
-                  <span className="inline-flex items-center gap-1.5 font-sans text-xs sm:text-sm font-bold text-black bg-gray-soft px-2.5 py-1 rounded border-2 border-black shadow-xs">
-                    <Pin className="h-3.5 w-3.5 fill-black text-black" />
-                    <span>Disematkan</span>
+        {/* 2. GRID KARTU PENGUMUMAN */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+          {ANNOUNCEMENTS.map((ann) => (
+            <div
+              key={ann.id}
+              className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro flex flex-col justify-between space-y-4 hover:-translate-y-0.5 transition-all"
+            >
+              <div className="space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft border border-ink text-ink">
+                    {ann.category}
                   </span>
-                )}
+
+                  {ann.isPinned && (
+                    <span className="inline-flex items-center gap-1.5 font-sans text-xs font-bold text-ink bg-gray-soft px-2.5 py-0.5 rounded-full border border-ink">
+                      <Pin className="h-3 w-3 fill-ink text-ink" />
+                      <span>Disematkan</span>
+                    </span>
+                  )}
+                </div>
+
+                <h2 className="font-heading font-bold text-lg sm:text-xl text-ink leading-snug">
+                  {ann.title}
+                </h2>
+
+                <p className="text-xs sm:text-sm text-gray-dark font-medium leading-relaxed">
+                  {ann.content}
+                </p>
               </div>
 
-              <h2 className="font-heading font-bold text-xl sm:text-2xl text-black leading-snug">
-                {ann.title}
-              </h2>
-
-              <p className="text-sm sm:text-base text-neutral-800 font-medium leading-relaxed">
-                {ann.content}
-              </p>
+              <div className="pt-3 border-t-2 border-ink/10 flex flex-wrap items-center justify-between text-xs font-sans text-gray-dark font-bold gap-2">
+                <span className="truncate max-w-[260px] flex items-center gap-1.5">
+                  <User className="h-3.5 w-3.5 text-primary" />
+                  <span>{ann.author}</span>
+                </span>
+                <span className="flex items-center gap-1.5 shrink-0 text-ink">
+                  <Clock className="h-3.5 w-3.5 text-primary" />
+                  <span>{ann.date}</span>
+                </span>
+              </div>
             </div>
-
-            <div className="pt-3.5 border-t-2 border-black/10 flex flex-wrap items-center justify-between text-xs sm:text-sm font-sans text-neutral-900 font-bold gap-2">
-              <span className="truncate max-w-[260px] flex items-center gap-1.5">
-                <User className="h-3.5 w-3.5 text-primary" />
-                <span>{ann.author}</span>
-              </span>
-              <span className="flex items-center gap-1.5 shrink-0 text-black">
-                <Clock className="h-3.5 w-3.5 text-primary" />
-                <span>{ann.date}</span>
-              </span>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

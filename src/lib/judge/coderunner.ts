@@ -127,10 +127,12 @@ export class Judge0Adapter implements CodeRunner {
           headers['X-Auth-Token'] = this.apiKey;
         }
 
+        const timeoutMs = Math.min(10000, Math.max(3000, (request.timeLimitMs || 2000) + 2000));
         const res = await fetch(`${this.apiUrl}/submissions?wait=true&base64_encoded=true`, {
           method: 'POST',
           headers,
           body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(timeoutMs),
         });
 
         if (!res.ok) {
@@ -160,6 +162,11 @@ export class Judge0Adapter implements CodeRunner {
           error: data.status?.description,
         });
       } catch (err: any) {
+        const isTimeout = err?.name === 'TimeoutError' || err?.name === 'AbortError';
+        const errorMsg = isTimeout
+          ? 'Koneksi ke sandbox eksekusi koding timeout. Soal akan diperiksa manual.'
+          : err?.message || 'Galat eksekusi sandbox';
+
         results.push({
           testId: tc.id,
           ok: false,
@@ -167,7 +174,7 @@ export class Judge0Adapter implements CodeRunner {
           timeMs: 0,
           memoryKb: 0,
           stdoutExcerpt: '',
-          error: err?.message || 'Galat eksekusi sandbox',
+          error: errorMsg,
         });
       }
     }

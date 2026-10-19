@@ -506,22 +506,36 @@ Keluarkan JSON saja, tanpa penjelasan, dengan bentuk:
       this.model
     )}:generateContent?key=${encodeURIComponent(this.apiKey)}`;
 
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-        generationConfig: {
-          temperature: 0.2,
-          maxOutputTokens: 4096,
-          responseMimeType: 'application/json',
-        },
-      }),
-      signal: AbortSignal.timeout(30000),
-    });
+    let res: Response;
+    try {
+      res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+          generationConfig: {
+            temperature: 0.2,
+            maxOutputTokens: 4096,
+            responseMimeType: 'application/json',
+          },
+        }),
+        signal: AbortSignal.timeout(30000),
+      });
+    } catch (err: any) {
+      if (err?.name === 'TimeoutError' || err?.name === 'AbortError') {
+        throw new Error('Permintaan ke layanan AI melebihi batas waktu (timeout 30 detik). Silakan coba lagi.');
+      }
+      throw err;
+    }
 
     if (!res.ok) {
+      if (res.status === 429) {
+        throw new Error('Layanan AI sedang sibuk atau kuota tercapai (HTTP 429). Silakan coba lagi beberapa saat lagi.');
+      }
+      if (res.status === 503) {
+        throw new Error('Layanan AI sedang mengalami kelebihan beban sementara (HTTP 503). Silakan coba lagi.');
+      }
       const errText = await res.text();
       throw new Error(`Gemini API error (${res.status}): ${errText}`);
     }
@@ -576,22 +590,36 @@ Keluarkan JSON saja:
       this.model
     )}:generateContent?key=${encodeURIComponent(this.apiKey)}`;
 
-    const res = await fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: systemPrompt }] },
-        contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 4096,
-          responseMimeType: 'application/json',
-        },
-      }),
-      signal: AbortSignal.timeout(30000),
-    });
+    let res: Response;
+    try {
+      res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          contents: [{ role: 'user', parts: [{ text: userPrompt }] }],
+          generationConfig: {
+            temperature: 0.3,
+            maxOutputTokens: 4096,
+            responseMimeType: 'application/json',
+          },
+        }),
+        signal: AbortSignal.timeout(30000),
+      });
+    } catch (err: any) {
+      if (err?.name === 'TimeoutError' || err?.name === 'AbortError') {
+        throw new Error('Permintaan ke layanan AI melebihi batas waktu (timeout 30 detik). Silakan coba lagi.');
+      }
+      throw err;
+    }
 
     if (!res.ok) {
+      if (res.status === 429) {
+        throw new Error('Layanan AI sedang sibuk atau kuota tercapai (HTTP 429). Silakan coba lagi beberapa saat lagi.');
+      }
+      if (res.status === 503) {
+        throw new Error('Layanan AI sedang mengalami kelebihan beban sementara (HTTP 503). Silakan coba lagi.');
+      }
       const errText = await res.text();
       throw new Error(`Gemini API error (${res.status}): ${errText}`);
     }
