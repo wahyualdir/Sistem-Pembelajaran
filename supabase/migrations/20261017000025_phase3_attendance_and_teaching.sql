@@ -31,10 +31,28 @@ CREATE TABLE IF NOT EXISTS public.absence_requests (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- Detail per pertemuan & per kelas
+CREATE TABLE IF NOT EXISTS public.absence_request_items (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    request_id UUID NOT NULL REFERENCES public.absence_requests(id) ON DELETE CASCADE,
+    class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE RESTRICT,
+    session_id UUID NOT NULL REFERENCES public.attendance_sessions(id) ON DELETE RESTRICT,
+    status TEXT NOT NULL DEFAULT 'menunggu' CHECK (status IN ('menunggu', 'disetujui', 'ditolak')),
+    reviewed_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT,
+    reviewed_at TIMESTAMPTZ,
+    review_note TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    CONSTRAINT uq_absence_request_session UNIQUE (request_id, session_id)
+);
+
 CREATE INDEX IF NOT EXISTS idx_absence_requests_student ON public.absence_requests(student_id);
 CREATE INDEX IF NOT EXISTS idx_absence_requests_dates ON public.absence_requests(start_date, end_date);
+CREATE INDEX IF NOT EXISTS idx_absence_request_items_req ON public.absence_request_items(request_id);
+CREATE INDEX IF NOT EXISTS idx_absence_request_items_class ON public.absence_request_items(class_id);
+CREATE INDEX IF NOT EXISTS idx_absence_request_items_session ON public.absence_request_items(session_id);
 
 ALTER TABLE public.absence_requests ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.absence_request_items ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS absence_requests_select ON public.absence_requests;
 CREATE POLICY absence_requests_select ON public.absence_requests
@@ -61,26 +79,6 @@ CREATE POLICY absence_requests_update ON public.absence_requests
 FOR UPDATE TO authenticated
 USING (student_id = (SELECT auth.uid()))
 WITH CHECK (student_id = (SELECT auth.uid()));
-
--- Detail per pertemuan & per kelas
-CREATE TABLE IF NOT EXISTS public.absence_request_items (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    request_id UUID NOT NULL REFERENCES public.absence_requests(id) ON DELETE CASCADE,
-    class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE RESTRICT,
-    session_id UUID NOT NULL REFERENCES public.attendance_sessions(id) ON DELETE RESTRICT,
-    status TEXT NOT NULL DEFAULT 'menunggu' CHECK (status IN ('menunggu', 'disetujui', 'ditolak')),
-    reviewed_by UUID REFERENCES public.profiles(id) ON DELETE RESTRICT,
-    reviewed_at TIMESTAMPTZ,
-    review_note TEXT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    CONSTRAINT uq_absence_request_session UNIQUE (request_id, session_id)
-);
-
-CREATE INDEX IF NOT EXISTS idx_absence_request_items_req ON public.absence_request_items(request_id);
-CREATE INDEX IF NOT EXISTS idx_absence_request_items_class ON public.absence_request_items(class_id);
-CREATE INDEX IF NOT EXISTS idx_absence_request_items_session ON public.absence_request_items(session_id);
-
-ALTER TABLE public.absence_request_items ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS absence_request_items_select ON public.absence_request_items;
 CREATE POLICY absence_request_items_select ON public.absence_request_items

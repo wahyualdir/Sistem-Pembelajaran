@@ -283,22 +283,22 @@ BEGIN
   IF v_copy_assistants THEN
     INSERT INTO public.class_assistants (
       class_id,
-      assistant_id,
+      user_id,
+      permission,
       can_open_attendance,
-      can_grade_rubric,
       can_view_similarity,
-      assigned_by
+      granted_by
     )
     SELECT
       p_target_id,
-      assistant_id,
+      user_id,
+      permission,
       can_open_attendance,
-      can_grade_rubric,
       can_view_similarity,
       v_caller
     FROM public.class_assistants
     WHERE class_id = p_source_id
-    ON CONFLICT (class_id, assistant_id) DO NOTHING;
+    ON CONFLICT (class_id, user_id, permission) DO NOTHING;
     
     GET DIAGNOSTICS v_count_assistants = ROW_COUNT;
   END IF;

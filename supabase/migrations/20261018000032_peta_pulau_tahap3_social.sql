@@ -226,20 +226,29 @@ BEGIN
     WHERE id = v_request_id;
 
     -- Berikan XP kepada rekan pembantu (50 XP), dengan batasan harian 100 XP
-    PERFORM public.award_xp(
-        v_responder_id,
-        'bantuan_rekan_diterima',
-        50,
-        v_class_id,
-        jsonb_build_object('response_id', p_response_id, 'request_id', v_request_id)
-    );
+    BEGIN
+        PERFORM public.award_xp(
+            v_responder_id,
+            v_class_id,
+            'bantuan_rekan_diterima',
+            50,
+            'skill_response',
+            p_response_id
+        );
+    EXCEPTION WHEN OTHERS THEN NULL;
+    END;
 
     -- Log aktivitas
-    PERFORM public.log_activity(
-        v_responder_id,
-        'bantuan_rekan_diterima',
-        jsonb_build_object('response_id', p_response_id)
-    );
+    BEGIN
+        PERFORM public.log_activity(
+            'bantuan_rekan_diterima',
+            v_class_id,
+            'skill_response',
+            p_response_id,
+            jsonb_build_object('response_id', p_response_id)
+        );
+    EXCEPTION WHEN OTHERS THEN NULL;
+    END;
 
     RETURN jsonb_build_object('ok', true, 'awarded_xp', 50);
 END;

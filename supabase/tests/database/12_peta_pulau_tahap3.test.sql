@@ -16,14 +16,35 @@ DECLARE
     v_student_other_id uuid := 'a3333333-0000-0000-0000-000000000003';
     v_lecturer_id uuid := 'd3333333-0000-0000-0000-000000000001';
     v_chap1_id uuid := 'b3333333-0000-0000-0000-000000000001';
-    v_req1_id uuid := 'r3333333-0000-0000-0000-000000000001';
-    v_resp1_id uuid := 's3333333-0000-0000-0000-000000000001';
+    v_req1_id uuid := 'e3333333-0000-0000-0000-000000000001';
+    v_resp1_id uuid := 'f3333333-0000-0000-0000-000000000001';
 BEGIN
-    INSERT INTO public.classes (id, name, code, status)
-    VALUES 
-        (v_class1_id, 'Pemrograman Web Lanjut A', 'IF-301', 'ACTIVE'),
-        (v_class2_id, 'Kecerdasan Buatan B', 'IF-302', 'ACTIVE')
+    INSERT INTO auth.users (id, email) VALUES
+      (v_lecturer_id, 'lecturer_p3@test.com'),
+      (v_student1_id, 'student1_p3@test.com'),
+      (v_student2_id, 'student2_p3@test.com'),
+      (v_student_other_id, 'student_other_p3@test.com')
     ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.profiles (id, email, full_name, status) VALUES
+      (v_lecturer_id, 'lecturer_p3@test.com', 'Dosen P3', 'ACTIVE'),
+      (v_student1_id, 'student1_p3@test.com', 'Mahasiswa 1 P3', 'ACTIVE'),
+      (v_student2_id, 'student2_p3@test.com', 'Mahasiswa 2 P3', 'ACTIVE'),
+      (v_student_other_id, 'student_other_p3@test.com', 'Mahasiswa Other P3', 'ACTIVE')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.classes (id, title, section, join_code, status, created_by)
+    VALUES 
+        (v_class1_id, 'Pemrograman Web Lanjut A', 'A', 'P3P3P001', 'ACTIVE', v_lecturer_id),
+        (v_class2_id, 'Kecerdasan Buatan B', 'B', 'P3P3P002', 'ACTIVE', v_lecturer_id)
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status) VALUES
+      (v_lecturer_id, (SELECT id FROM public.roles WHERE code = 'LECTURER'), 'CLASS', v_class1_id, 'ACTIVE'),
+      (v_student1_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class1_id, 'ACTIVE'),
+      (v_student2_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class1_id, 'ACTIVE'),
+      (v_student_other_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class2_id, 'ACTIVE')
+    ON CONFLICT DO NOTHING;
 
     INSERT INTO public.class_chapters (id, class_id, position, title)
     VALUES (v_chap1_id, v_class1_id, 1, 'Bab 1: Next.js SSR & CSR')
@@ -36,18 +57,23 @@ BEGIN
         (v_class2_id, v_student_other_id, 'ACTIVE')
     ON CONFLICT DO NOTHING;
 
+    -- Aktifkan fitur tukar_keahlian di kelas 1
+    INSERT INTO public.class_feature_flags (class_id, feature, enabled)
+    VALUES (v_class1_id, 'tukar_keahlian', true)
+    ON CONFLICT (class_id, feature) DO UPDATE SET enabled = true;
+
     -- Mahasiswa 1 opt-in di kelas 1
     INSERT INTO public.skill_exchange_optin (student_id, class_id, is_opted_in)
     VALUES (v_student1_id, v_class1_id, true)
     ON CONFLICT (student_id, class_id) DO NOTHING;
 
     -- Mahasiswa 1 membuat request di kelas 1
-    INSERT INTO public.skill_requests (id, class_id, chapter_id, student_id, title, question_text)
+    INSERT INTO public.skill_requests (id, class_id, chapter_id, student_id, title, description)
     VALUES (v_req1_id, v_class1_id, v_chap1_id, v_student1_id, 'Bingung Hydration Error', 'Bagaimana mengatasi hydration mismatch?')
     ON CONFLICT (id) DO NOTHING;
 
     -- Mahasiswa 2 merespons di kelas 1
-    INSERT INTO public.skill_responses (id, request_id, responder_id, response_text)
+    INSERT INTO public.skill_responses (id, request_id, responder_id, content)
     VALUES (v_resp1_id, v_req1_id, v_student2_id, 'Pastikan waktu render server dan klien sinkron.')
     ON CONFLICT (id) DO NOTHING;
 
@@ -118,9 +144,9 @@ SET LOCAL ROLE authenticated;
 SET LOCAL "request.jwt.claims" = '{"sub": "a3333333-0000-0000-0000-000000000002", "role": "authenticated"}';
 
 SELECT throws_ok(
-    $$SELECT public.accept_skill_response('s3333333-0000-0000-0000-000000000001')$$,
+    $$SELECT public.accept_skill_response('f3333333-0000-0000-0000-000000000001')$$,
     'P0001',
-    'Hanya pemohon yang dapat menandai bantuan sebagai selesai',
+    'Hanya pemohon bantuan yang berhak menerima jawaban ini',
     'Penandaan bantuan oleh bukan pemohon ditolak dengan exception'
 );
 
@@ -128,20 +154,20 @@ SELECT throws_ok(
 SET LOCAL "request.jwt.claims" = '{"sub": "a3333333-0000-0000-0000-000000000001", "role": "authenticated"}';
 
 SELECT lives_ok(
-    $$SELECT public.accept_skill_response('s3333333-0000-0000-0000-000000000001')$$,
+    $$SELECT public.accept_skill_response('f3333333-0000-0000-0000-000000000001')$$,
     'Pemohon berhasil menandai jawaban teman sekelas sebagai terbantu'
 );
 
 SELECT results_eq(
-    'SELECT is_accepted FROM public.skill_responses WHERE id = ''s3333333-0000-0000-0000-000000000001''',
+    'SELECT is_accepted FROM public.skill_responses WHERE id = ''f3333333-0000-0000-0000-000000000001''',
     $$VALUES (true)$$,
     'Status is_accepted pada jawaban teman sekelas berubah menjadi true'
 );
 
 SELECT results_eq(
-    'SELECT status FROM public.skill_requests WHERE id = ''r3333333-0000-0000-0000-000000000001''',
-    $$VALUES ('selesai'::text)$$,
-    'Status skill_requests berubah menjadi selesai setelah jawaban diterima'
+    'SELECT status FROM public.skill_requests WHERE id = ''e3333333-0000-0000-0000-000000000001''',
+    $$VALUES ('terjawab'::text)$$,
+    'Status skill_requests berubah menjadi terjawab setelah jawaban diterima'
 );
 
 RESET ROLE;

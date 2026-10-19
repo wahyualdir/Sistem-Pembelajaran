@@ -12,9 +12,14 @@ jobs:
     steps:
       - name: Trigger Sub-Daily Cron Endpoints
         env:
-          BASE_URL: ${{ secrets.SIAJAR_BASE_URL || 'https://siajar.ac.id' }}
+          BASE_URL: ${{ secrets.SIAJAR_BASE_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
+          if [ -z "$BASE_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "Error: SIAJAR_BASE_URL dan CRON_SECRET wajib disetel dan tidak boleh kosong!"
+            exit 1
+          fi
+
           echo "Memulai eksekusi rute cron frekuensi tinggi SIAJAR..."
 
           # 1. Antrean Pembuatan Konten AI Peta Pulau (ai_generation_jobs)

@@ -4,7 +4,7 @@
 -- ============================================================================
 
 BEGIN;
-SELECT plan(15);
+SELECT plan(20);
 
 -- 1. Setup Data Pengujian
 CREATE OR REPLACE FUNCTION public._test_setup_p0() RETURNS void LANGUAGE plpgsql AS $$
@@ -13,13 +13,40 @@ DECLARE
     v_lecturer_id uuid := 'd0000000-0000-0000-0000-000000000001';
     v_student1_id uuid := 'a0000000-0000-0000-0000-000000000001';
     v_student2_id uuid := 'a0000000-0000-0000-0000-000000000002';
+    v_ta_id uuid := 'a0000000-0000-0000-0000-000000000003';
     v_chap1_id uuid := 'b0000000-0000-0000-0000-000000000001';
     v_chap2_id uuid := 'b0000000-0000-0000-0000-000000000002';
 BEGIN
-    -- Matikan RLS sementara untuk setup
-    INSERT INTO public.classes (id, name, code, status)
-    VALUES (v_class_id, 'Algoritma & Struktur Data', 'TI-101', 'ACTIVE')
+    -- Pastikan user & profile pengujian ada
+    INSERT INTO auth.users (id, email) VALUES
+      (v_lecturer_id, 'lecturer_p0@test.com'),
+      (v_student1_id, 'student1_p0@test.com'),
+      (v_student2_id, 'student2_p0@test.com'),
+      (v_ta_id, 'ta_p0@test.com')
     ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.profiles (id, email, full_name, status) VALUES
+      (v_lecturer_id, 'lecturer_p0@test.com', 'Dosen P0', 'ACTIVE'),
+      (v_student1_id, 'student1_p0@test.com', 'Mahasiswa 1 P0', 'ACTIVE'),
+      (v_student2_id, 'student2_p0@test.com', 'Mahasiswa 2 P0', 'ACTIVE'),
+      (v_ta_id, 'ta_p0@test.com', 'Asisten P0', 'ACTIVE')
+    ON CONFLICT (id) DO NOTHING;
+
+    -- Kolom classes: title, section, join_code, status, created_by
+    INSERT INTO public.classes (id, title, section, join_code, status, created_by)
+    VALUES (v_class_id, 'Algoritma & Struktur Data', 'A', 'P0P0P001', 'ACTIVE', v_lecturer_id)
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status) VALUES
+      (v_lecturer_id, (SELECT id FROM public.roles WHERE code = 'LECTURER'), 'CLASS', v_class_id, 'ACTIVE'),
+      (v_student1_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class_id, 'ACTIVE'),
+      (v_student2_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class_id, 'ACTIVE'),
+      (v_ta_id, (SELECT id FROM public.roles WHERE code = 'TEACHING_ASSISTANT'), 'CLASS', v_class_id, 'ACTIVE')
+    ON CONFLICT DO NOTHING;
+
+    INSERT INTO public.class_assistants (class_id, user_id, permission, granted_by)
+    VALUES (v_class_id, v_ta_id, 'material.manage', v_lecturer_id)
+    ON CONFLICT DO NOTHING;
 
     INSERT INTO public.class_chapters (id, class_id, position, title, completion_rule)
     VALUES 
@@ -158,6 +185,36 @@ SELECT is(
     public.log_activity('materi_dibuka', 'c0000000-0000-0000-0000-000000000001', 'materials', 'e0000000-0000-0000-0000-000000000002', '{}'::jsonb),
     NULL,
     'Log aktivitas mengembalikan NULL dan tidak mencatat saat preferensi logging dimatikan'
+);
+
+-- 9. Uji Otorisasi Asisten Kelas & Anggota Kelas (is_class_ta & is_class_member)
+-- Asisten kelas dikenali
+SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000003', true);
+SELECT ok(
+    public.is_class_ta('c0000000-0000-0000-0000-000000000001'),
+    'Asisten kelas terdaftar benar-benar dikenali oleh is_class_ta'
+);
+SELECT ok(
+    public.is_class_member('c0000000-0000-0000-0000-000000000001'),
+    'Asisten kelas diakui sebagai anggota kelas oleh is_class_member'
+);
+
+-- Mahasiswa terdaftar bukan TA, tapi anggota kelas
+SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000001', true);
+SELECT ok(
+    NOT public.is_class_ta('c0000000-0000-0000-0000-000000000001'),
+    'Mahasiswa biasa bukan asisten kelas (is_class_ta = false)'
+);
+SELECT ok(
+    public.is_class_member('c0000000-0000-0000-0000-000000000001'),
+    'Mahasiswa terdaftar adalah anggota kelas (is_class_member = true)'
+);
+
+-- Pengguna acak di luar kelas bukan anggota
+SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000099', true);
+SELECT ok(
+    NOT public.is_class_member('c0000000-0000-0000-0000-000000000001'),
+    'Pengguna luar kelas ditolak oleh is_class_member'
 );
 
 SELECT * FROM finish();

@@ -81,6 +81,9 @@ BEGIN
             COALESCE(current_setting('app.environment', true), '<tidak diatur>');
     END IF;
 
+    -- Izinkan operasi bypass konteks rpc untuk manipulasi kolom sensitif
+    PERFORM set_config('app.rpc_context', 'on', true);
+
     -- Ambil referensi peran
     SELECT id INTO r_student FROM public.roles WHERE code = 'STUDENT';
 
@@ -227,12 +230,14 @@ BEGIN
         (c_ai,  'c1111111-0000-0000-0000-000000000004', v_sem_act_id, 'Kecerdasan Buatan', 'A', 'AI2026AA', 40, 'ACTIVE', v_dosen_ids[5]),
         (c_rpl, 'c1111111-0000-0000-0000-000000000005', v_sem_act_id, 'Rekayasa Perangkat Lunak', 'B', 'RPL2026B', 40, 'ACTIVE', v_dosen_ids[1]),
         (c_jarkom, 'c1111111-0000-0000-0000-000000000006', v_sem_past_id, 'Jaringan Komputer', 'A', 'JAR2025A', 40, 'ARCHIVED', v_dosen_ids[7])
-    ON CONFLICT (id) DO UPDATE SET status = EXCLUDED.status;
+    ON CONFLICT (id) DO NOTHING;
 
     -- Penetapan Asisten Dosen pada Kelas Pemrograman Web
-    INSERT INTO public.class_assistants (class_id, assistant_id, can_open_attendance, can_grade)
-    VALUES (c_web, u_ta_utama, true, true)
-    ON CONFLICT DO NOTHING;
+    INSERT INTO public.class_assistants (class_id, user_id, permission, granted_by, can_open_attendance)
+    VALUES 
+        (c_web, u_ta_utama, 'submission.review', u_dosen_utama, true),
+        (c_web, u_ta_utama, 'assignment.grade', u_dosen_utama, true)
+    ON CONFLICT (class_id, user_id, permission) DO NOTHING;
 
     -- 9. Enrollments Mahasiswa ke Kelas
     -- Mahasiswa Utama enroll ke Pemrograman Web, Basis Data Lanjut, dan Jaringan Komputer
@@ -261,15 +266,14 @@ BEGIN
     FOR s IN 1..16 LOOP
         -- Sesi Kelas Pemrograman Web
         INSERT INTO public.attendance_sessions (
-            id, class_id, session_number, title, description, session_date, status, code, created_by
+            id, class_id, session_number, title, session_date, is_open, code, created_by
         ) VALUES (
             ('d1000001-0000-0000-0000-' || LPAD(s::text, 12, '0'))::UUID,
             c_web,
             s,
             'Pertemuan ke-' || s::text || ': Konsep dan Praktik Web Modern',
-            'Pembahasan materi kurikulum pertemuan ke-' || s::text,
             (current_date - INTERVAL '7 day' * (16 - s)),
-            CASE WHEN s <= 8 THEN 'CLOSED'::public.attendance_session_status ELSE 'OPEN'::public.attendance_session_status END,
+            (s > 8),
             'WEB' || LPAD(s::text, 3, '0'),
             u_dosen_utama
         ) ON CONFLICT (class_id, session_number) DO NOTHING;
@@ -277,24 +281,30 @@ BEGIN
         -- Berita Acara Perkuliahan untuk Sesi yang sudah selesai
         IF s <= 8 THEN
             INSERT INTO public.class_session_journals (
-                class_id, session_number, lecture_date, material_covered, teaching_method, student_attendance_count, lecturer_id
+                class_id, session_id, held_on, mode, topic, summary, method, status, finalized_by, finalized_at
             ) VALUES (
-                c_web, s, (current_date - INTERVAL '7 day' * (16 - s)),
+                c_web,
+                ('d1000001-0000-0000-0000-' || LPAD(s::text, 12, '0'))::UUID,
+                (current_date - INTERVAL '7 day' * (16 - s)),
+                'luring',
                 'Materi tatap muka sesi ' || s::text || ' sesuai dengan Rencana Pembelajaran Semester.',
+                'Pembahasan kurikulum pertemuan ke-' || s::text,
                 'Ceramah interaktif dan demonstrasi koding langsung di laboratorium.',
-                38, u_dosen_utama
-            ) ON CONFLICT (class_id, session_number) DO NOTHING;
+                'final',
+                u_dosen_utama,
+                now() - INTERVAL '7 day' * (16 - s)
+            ) ON CONFLICT (session_id) DO NOTHING;
         END IF;
     END LOOP;
 
     -- 11. Penugasan Individu & Kelompok
     -- Tugas 1 Individu dengan Penalti Keterlambatan
     INSERT INTO public.assignments (
-        id, class_id, title, description, due_at, late_policy, late_penalty_value, late_penalty_cap, allow_resubmit, submission_mode, created_by
+        id, class_id, title, description, due_at, close_at, late_policy, late_penalty_value, late_penalty_cap, allow_resubmit, submission_mode, created_by
     ) VALUES (
         v_assign1, c_web, 'Tugas 1: Desain Halaman Profil Responsif',
         'Buat halaman profil HTML dan CSS responsif dengan Semantic HTML.',
-        now() + INTERVAL '3 day', 'per_day', 10, 50, true, 'individual', u_dosen_utama
+        now() + INTERVAL '3 day', now() + INTERVAL '7 day', 'per_day', 10, 50, true, 'individual', u_dosen_utama
     ) ON CONFLICT (id) DO NOTHING;
 
     -- Tugas 2 Kelompok dengan Set Kelompok
@@ -312,25 +322,25 @@ BEGIN
     ON CONFLICT DO NOTHING;
 
     INSERT INTO public.assignments (
-        id, class_id, title, description, due_at, submission_mode, group_set_id, created_by
+        id, class_id, title, description, due_at, close_at, submission_mode, group_set_id, created_by
     ) VALUES (
         v_assign2, c_web, 'Tugas Besar: Aplikasi Manajemen Kampus',
         'Bangun sistem web dinamis menggunakan arsitektur MVC secara berkelompok.',
-        now() + INTERVAL '14 day', 'group', v_groupset, u_dosen_utama
+        now() + INTERVAL '14 day', now() + INTERVAL '21 day', 'group', v_groupset, u_dosen_utama
     ) ON CONFLICT (id) DO NOTHING;
 
     -- Perpanjangan Tenggat Tugas untuk Kelompok Alpha
-    INSERT INTO public.assignment_extensions (assignment_id, group_id, new_due_at, reason, granted_by)
-    VALUES (v_assign2, v_group1, now() + INTERVAL '17 day', 'Perpanjangan resmi untuk finalisasi integrasi API', u_dosen_utama)
-    ON CONFLICT DO NOTHING;
+    INSERT INTO public.assignment_extensions (id, assignment_id, group_id, new_due_at, reason, granted_by)
+    VALUES ('f2100001-0000-0000-0000-000000000001', v_assign2, v_group1, now() + INTERVAL '17 day', 'Perpanjangan resmi untuk finalisasi integrasi API', u_dosen_utama)
+    ON CONFLICT (id) DO NOTHING;
 
     -- 12. Ujian CBT Komprehensif (40 Butir Soal Beragam)
     INSERT INTO public.quizzes (
-        id, class_id, title, description, duration_minutes, starts_at, ends_at, is_published, requires_webcam, max_attempts, created_by
+        id, class_id, title, description, exam_type, duration_minutes, start_time, end_time, is_published, strict_proctoring, max_attempts, created_by
     ) VALUES (
         v_quiz_id, c_web, 'Ujian Tengah Semester: Pemrograman Web',
         'Evaluasi komprehensif teori web, logika javascript, dan pengujian koding otomatis.',
-        90, now() - INTERVAL '1 hour', now() + INTERVAL '5 hour', true, true, 1, u_dosen_utama
+        'UTS', 90, now() - INTERVAL '1 hour', now() + INTERVAL '5 hour', true, true, 1, u_dosen_utama
     ) ON CONFLICT (id) DO NOTHING;
 
     -- 40 Butir Soal: 20 Pilihan Ganda, 8 Benar/Salah, 5 Isian, 4 Esai, 3 Koding
@@ -360,10 +370,14 @@ BEGIN
     END LOOP;
 
     -- 13. Periode Evaluasi Dosen (EDOM) dengan True Anonymity Decoupling
+    INSERT INTO public.evaluation_templates (id, name, created_by)
+    VALUES ('e1111111-0000-0000-0000-000000000001', 'Kuesioner Standar Evaluasi Dosen', u_coord)
+    ON CONFLICT (id) DO NOTHING;
+
     INSERT INTO public.evaluation_periods (
-        id, name, opens_at, closes_at, status, require_before_final_grades, created_by
+        id, semester_id, template_id, name, opens_at, closes_at, status, require_before_final_grades, created_by
     ) VALUES (
-        v_edom_period, 'Evaluasi Perkuliahan Semester 2026/2027 Ganjil',
+        v_edom_period, v_sem_act_id, 'e1111111-0000-0000-0000-000000000001', 'Evaluasi Perkuliahan Semester 2026/2027 Ganjil',
         now() - INTERVAL '2 day', now() + INTERVAL '12 day', 'buka', true, u_coord
     ) ON CONFLICT (id) DO NOTHING;
 
@@ -384,54 +398,65 @@ BEGIN
     -- 14. Sanggahan Nilai dan Permohonan Izin
     -- Sanggahan Nilai
     INSERT INTO public.grade_disputes (
-        id, class_id, student_id, title, description, status, requested_at, reviewed_by, resolution_note
+        id, class_id, student_id, target_type, target_id, reason, status, response, old_score, new_score, resolved_by, resolved_at
     ) VALUES (
         'f3000001-0000-0000-0000-000000000001',
-        c_web, u_mhs_utama,
-        'Sanggahan Penilaian Kuis 1: Soal Nomor 4',
-        'Terdapat ketidaksesuaian kunci jawaban pada soal normalisasi tabel.',
-        'resolved', now() - INTERVAL '2 day', u_dosen_utama,
-        'Sanggahan diterima. Skor disesuaikan menjadi 85.'
+        c_web, u_mhs_utama, 'submission', v_assign1,
+        'Terdapat ketidaksesuaian kunci jawaban pada tugas dan nilai belum diperbarui.',
+        'diterima',
+        'Sanggahan diterima. Skor disesuaikan menjadi 85.',
+        70, 85, u_dosen_utama, now() - INTERVAL '2 day'
     ) ON CONFLICT (id) DO NOTHING;
 
     -- Permohonan Izin dengan Berkas Bukti Medis
     INSERT INTO public.absence_requests (
-        id, student_id, class_id, reason_type, notes, proof_attachment_path, status, reviewed_by
+        id, student_id, type, start_date, end_date, reason, attachment_path
     ) VALUES (
         'f4000001-0000-0000-0000-000000000001',
-        u_mhs_utama, c_web, 'sakit',
+        u_mhs_utama, 'sakit',
+        current_date - 3, current_date - 1,
         'Permohonan izin istirahat sakit demam berdasarkan rujukan klinik.',
-        'absence-proofs/2026/surat_dokter_ahmad.pdf', 'disetujui', u_dosen_utama
+        'absence-proofs/2026/surat_dokter_ahmad.pdf'
     ) ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.absence_request_items (
+        id, request_id, class_id, session_id, status, reviewed_by, reviewed_at, review_note
+    ) VALUES (
+        'f4100001-0000-0000-0000-000000000001',
+        'f4000001-0000-0000-0000-000000000001',
+        c_web, ('d1000001-0000-0000-0000-' || LPAD(1::text, 12, '0'))::UUID,
+        'disetujui', u_dosen_utama, now() - INTERVAL '2 day', 'Disetujui berdasarkan surat dokter'
+    ) ON CONFLICT (request_id, session_id) DO NOTHING;
 
     -- 15. Percakapan Pesan & Polling Kelas
     -- Percakapan Privat Dosen dan Mahasiswa
-    INSERT INTO public.conversations (id, type, created_by)
-    VALUES (v_conv_id, 'direct', u_dosen_utama)
+    INSERT INTO public.conversations (id, class_id)
+    VALUES (v_conv_id, c_web)
     ON CONFLICT (id) DO NOTHING;
 
     INSERT INTO public.conversation_participants (conversation_id, user_id) VALUES
         (v_conv_id, u_dosen_utama),
         (v_conv_id, u_mhs_utama)
-    ON CONFLICT DO NOTHING;
+    ON CONFLICT (conversation_id, user_id) DO NOTHING;
 
-    INSERT INTO public.messages (conversation_id, sender_id, content, sent_at) VALUES
-        (v_conv_id, u_dosen_utama, 'Selamat siang Ahmad, silakan siapkan proposal proyek web kelompok Anda.', now() - INTERVAL '4 hour'),
-        (v_conv_id, u_mhs_utama, 'Baik Pak Dokter Budi, proposal sudah kami diskusikan dan siap dikonsultasikan.', now() - INTERVAL '3 hour')
-    ON CONFLICT DO NOTHING;
+    INSERT INTO public.messages (id, conversation_id, sender_id, body, created_at) VALUES
+        ('f5000001-0000-0000-0000-000000000001'::UUID, v_conv_id, u_dosen_utama, 'Selamat siang Ahmad, silakan siapkan proposal proyek web kelompok Anda.', now() - INTERVAL '4 hour'),
+        ('f5000001-0000-0000-0000-000000000002'::UUID, v_conv_id, u_mhs_utama, 'Baik Pak Dokter Budi, proposal sudah kami diskusikan dan siap dikonsultasikan.', now() - INTERVAL '3 hour')
+    ON CONFLICT (id) DO NOTHING;
 
     -- Live Poll Anonim di Kelas Pemrograman Web
     INSERT INTO public.live_polls (
-        id, class_id, question, options, is_active, is_anonymous, created_by
+        id, class_id, question, kind, options, is_anonymous, status, created_by
     ) VALUES (
         v_poll_id, c_web,
         'Framework CSS manakah yang paling Anda kuasai untuk proyek akhir?',
+        'single',
         '[{"id":"opt1","text":"Tailwind CSS"},{"id":"opt2","text":"Bootstrap 5"},{"id":"opt3","text":"Vanilla CSS"}]'::jsonb,
-        true, true, u_dosen_utama
+        true, 'buka', u_dosen_utama
     ) ON CONFLICT (id) DO NOTHING;
 
-    INSERT INTO public.live_poll_votes (poll_id, user_id, option_id)
-    VALUES (v_poll_id, u_mhs_utama, 'opt1')
-    ON CONFLICT DO NOTHING;
+    INSERT INTO public.live_poll_votes (poll_id, student_id, answer)
+    VALUES (v_poll_id, u_mhs_utama, '"opt1"'::jsonb)
+    ON CONFLICT (poll_id, student_id) DO NOTHING;
 
 END $$;

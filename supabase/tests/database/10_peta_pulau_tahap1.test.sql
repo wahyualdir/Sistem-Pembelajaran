@@ -14,11 +14,29 @@ DECLARE
     v_student1_id uuid := 'a1111111-0000-0000-0000-000000000001';
     v_student2_id uuid := 'a1111111-0000-0000-0000-000000000002';
     v_chap1_id uuid := 'b1111111-0000-0000-0000-000000000001';
-    v_topic1_id uuid := 't1111111-0000-0000-0000-000000000001';
+    v_topic1_id uuid := 'e1111111-0000-0000-0000-000000000001';
 BEGIN
-    INSERT INTO public.classes (id, name, code, status)
-    VALUES (v_class_id, 'Basis Data Terdistribusi', 'IF-305', 'ACTIVE')
+    INSERT INTO auth.users (id, email) VALUES
+      (v_lecturer_id, 'lecturer_p1@test.com'),
+      (v_student1_id, 'student1_p1@test.com'),
+      (v_student2_id, 'student2_p1@test.com')
     ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.profiles (id, email, full_name, status) VALUES
+      (v_lecturer_id, 'lecturer_p1@test.com', 'Dosen P1', 'ACTIVE'),
+      (v_student1_id, 'student1_p1@test.com', 'Mahasiswa 1 P1', 'ACTIVE'),
+      (v_student2_id, 'student2_p1@test.com', 'Mahasiswa 2 P1', 'ACTIVE')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.classes (id, title, section, join_code, status, created_by)
+    VALUES (v_class_id, 'Basis Data Terdistribusi', 'A', 'P1P1P001', 'ACTIVE', v_lecturer_id)
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status) VALUES
+      (v_lecturer_id, (SELECT id FROM public.roles WHERE code = 'LECTURER'), 'CLASS', v_class_id, 'ACTIVE'),
+      (v_student1_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class_id, 'ACTIVE'),
+      (v_student2_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class_id, 'ACTIVE')
+    ON CONFLICT DO NOTHING;
 
     INSERT INTO public.class_chapters (id, class_id, position, title, completion_rule, pass_score)
     VALUES (v_chap1_id, v_class_id, 1, 'Bab 1: Arsitektur Shared Nothing', 'kuis', 70)
@@ -41,6 +59,7 @@ SELECT public._test_setup_tahap1();
 -- 2. Verifikasi Keberadaan Tabel & RLS
 SELECT has_table('public', 'quiz_attempt_topic_results', 'Tabel quiz_attempt_topic_results harus ada');
 SELECT has_table('public', 'topic_mastery', 'Tabel topic_mastery harus ada');
+SELECT has_table('public', 'chapter_unlock_overrides', 'Tabel chapter_unlock_overrides harus ada');
 
 SELECT results_eq(
     'SELECT rowsecurity FROM pg_tables WHERE schemaname = ''public'' AND tablename = ''topic_mastery''',
@@ -57,7 +76,7 @@ SELECT results_eq(
 -- 3. Uji RLS topic_mastery: Mahasiswa hanya boleh membaca miliknya sendiri
 -- Sisipkan data penguasaan topik untuk Mahasiswa 1
 INSERT INTO public.topic_mastery (student_id, topic_id, level, attempts, correct_answers, total_questions)
-VALUES ('a1111111-0000-0000-0000-000000000001', 't1111111-0000-0000-0000-000000000001', 'kuat', 3, 9, 10)
+VALUES ('a1111111-0000-0000-0000-000000000001', 'e1111111-0000-0000-0000-000000000001', 'kuat', 3, 9, 10)
 ON CONFLICT (student_id, topic_id) DO NOTHING;
 
 -- Mahasiswa 2 impersonated

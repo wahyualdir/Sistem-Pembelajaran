@@ -1,52 +1,66 @@
 -- SIAJAR Migration: Supabase Storage Buckets & Policies, serta Tabel Progres Belajar Materi
 -- Memenuhi Aturan: Bucket privat (materi & tugas), RLS storage.objects, dan tabel public.materi_progres dengan RLS lengkap.
 
--- 1. Skema dan Tabel Mock untuk Supabase Storage (Kompatibel dengan Lingkungan PGlite CI & Supabase Cloud)
-DO $$ BEGIN
-    CREATE SCHEMA IF NOT EXISTS storage;
-EXCEPTION WHEN OTHERS THEN null; END $$;
-
-CREATE TABLE IF NOT EXISTS storage.buckets (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
-    public BOOLEAN DEFAULT false,
-    created_at TIMESTAMPTZ DEFAULT now(),
-    updated_at TIMESTAMPTZ DEFAULT now()
-);
-
-CREATE TABLE IF NOT EXISTS storage.objects (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    bucket_id TEXT REFERENCES storage.buckets(id),
-    name TEXT,
-    owner UUID,
-    created_at TIMESTAMPTZ DEFAULT now(),
-    updated_at TIMESTAMPTZ DEFAULT now(),
-    last_accessed_at TIMESTAMPTZ DEFAULT now(),
-    metadata JSONB
-);
-
-CREATE OR REPLACE FUNCTION storage.foldername(name text)
-RETURNS text[] LANGUAGE plpgsql AS $$
-DECLARE
-    parts text[];
+-- 1. Skema dan Tabel Mock untuk Supabase Storage (Hanya jika belum ada di lingkungan lokal/CI non-Supabase)
+DO $$ 
 BEGIN
-    parts := string_to_array(name, '/');
-    IF array_length(parts, 1) <= 1 THEN
-        RETURN ARRAY[]::text[];
+    IF NOT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'storage' AND table_name = 'buckets') THEN
+        BEGIN
+            EXECUTE 'CREATE SCHEMA IF NOT EXISTS storage';
+            EXECUTE 'CREATE TABLE IF NOT EXISTS storage.buckets (
+                id TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                public BOOLEAN DEFAULT false,
+                created_at TIMESTAMPTZ DEFAULT now(),
+                updated_at TIMESTAMPTZ DEFAULT now()
+            )';
+            EXECUTE 'CREATE TABLE IF NOT EXISTS storage.objects (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                bucket_id TEXT REFERENCES storage.buckets(id),
+                name TEXT,
+                owner UUID,
+                created_at TIMESTAMPTZ DEFAULT now(),
+                updated_at TIMESTAMPTZ DEFAULT now(),
+                last_accessed_at TIMESTAMPTZ DEFAULT now(),
+                metadata JSONB
+            )';
+        EXCEPTION WHEN OTHERS THEN null;
+        END;
     END IF;
-    RETURN parts[1:array_length(parts, 1)-1];
-END;
-$$;
 
-CREATE OR REPLACE FUNCTION storage.filename(name text)
-RETURNS text LANGUAGE plpgsql AS $$
-DECLARE
-    parts text[];
-BEGIN
-    parts := string_to_array(name, '/');
-    RETURN parts[array_length(parts, 1)];
-END;
-$$;
+    IF NOT EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid WHERE n.nspname = 'storage' AND p.proname = 'foldername') THEN
+        BEGIN
+            EXECUTE $fn$
+                CREATE OR REPLACE FUNCTION storage.foldername(name text)
+                RETURNS text[] LANGUAGE plpgsql AS $f$
+                DECLARE parts text[];
+                BEGIN
+                    parts := string_to_array(name, '/');
+                    IF array_length(parts, 1) <= 1 THEN RETURN ARRAY[]::text[]; END IF;
+                    RETURN parts[1:array_length(parts, 1)-1];
+                END;
+                $f$;
+            $fn$;
+        EXCEPTION WHEN OTHERS THEN null;
+        END;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_proc p JOIN pg_namespace n ON p.pronamespace = n.oid WHERE n.nspname = 'storage' AND p.proname = 'filename') THEN
+        BEGIN
+            EXECUTE $fn$
+                CREATE OR REPLACE FUNCTION storage.filename(name text)
+                RETURNS text LANGUAGE plpgsql AS $f$
+                DECLARE parts text[];
+                BEGIN
+                    parts := string_to_array(name, '/');
+                    RETURN parts[array_length(parts, 1)];
+                END;
+                $f$;
+            $fn$;
+        EXCEPTION WHEN OTHERS THEN null;
+        END;
+    END IF;
+END $$;
 
 -- 2. Registrasi Bucket Privat (materi & tugas)
 INSERT INTO storage.buckets (id, name, public)
@@ -57,7 +71,10 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('tugas', 'tugas', false)
 ON CONFLICT (id) DO UPDATE SET public = false;
 
-ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+DO $$ BEGIN
+    ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
+EXCEPTION WHEN OTHERS THEN null;
+END $$;
 
 -- 3. Fungsi Pembantu untuk Relasi Materi ke Kelas & Cek Administrator
 CREATE OR REPLACE FUNCTION public.is_admin()

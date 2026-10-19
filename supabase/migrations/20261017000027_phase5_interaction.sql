@@ -419,7 +419,7 @@ $$;
 CREATE TABLE IF NOT EXISTS public.live_polls (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     class_id UUID NOT NULL REFERENCES public.classes(id) ON DELETE CASCADE,
-    session_id UUID REFERENCES public.class_sessions(id) ON DELETE SET NULL,
+    session_id UUID REFERENCES public.attendance_sessions(id) ON DELETE SET NULL,
     created_by UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
     question TEXT NOT NULL,
     kind TEXT NOT NULL CHECK (kind IN ('single','multiple','scale','text')),

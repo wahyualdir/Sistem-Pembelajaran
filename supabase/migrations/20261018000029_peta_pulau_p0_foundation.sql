@@ -335,8 +335,49 @@ USING (student_id = (SELECT auth.uid()))
 WITH CHECK (student_id = (SELECT auth.uid()));
 
 -- ----------------------------------------------------------------------------
--- 5. FUNGSI PEMBANTU: FEATURE_ENABLED & CHAPTER_STATE (Bagian 6.2 & 7.1)
+-- 5. FUNGSI PEMBANTU: IS_CLASS_TA, IS_CLASS_MEMBER, FEATURE_ENABLED & CHAPTER_STATE (Bagian 6.2 & 7.1)
 -- ----------------------------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION public.is_class_ta(p_class_id UUID)
+RETURNS BOOLEAN
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+    SELECT EXISTS (
+        SELECT 1
+        FROM public.user_roles ur
+        JOIN public.roles r ON r.id = ur.role_id
+        WHERE ur.user_id = (SELECT auth.uid())
+          AND r.code = 'TEACHING_ASSISTANT'
+          AND ur.status = 'ACTIVE'
+          AND ur.scope_type = 'CLASS'
+          AND ur.scope_id = p_class_id
+          AND (ur.valid_until IS NULL OR ur.valid_until > now())
+    ) OR EXISTS (
+        SELECT 1
+        FROM public.class_assistants ca
+        WHERE ca.class_id = p_class_id
+          AND ca.user_id = (SELECT auth.uid())
+    );
+$$;
+
+CREATE OR REPLACE FUNCTION public.is_class_member(p_class_id UUID)
+RETURNS BOOLEAN
+LANGUAGE sql
+STABLE
+SECURITY DEFINER
+SET search_path = ''
+AS $$
+    SELECT public.is_enrolled(p_class_id)
+        OR public.is_class_lecturer(p_class_id)
+        OR public.is_class_ta(p_class_id)
+        OR public.is_class_staff(p_class_id);
+$$;
+
+GRANT EXECUTE ON FUNCTION public.is_class_ta(UUID) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.is_class_member(UUID) TO authenticated;
 
 CREATE OR REPLACE FUNCTION public.feature_enabled(p_class_id UUID, p_feature TEXT)
 RETURNS BOOLEAN

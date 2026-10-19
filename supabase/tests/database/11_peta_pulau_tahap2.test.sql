@@ -18,9 +18,27 @@ DECLARE
     v_fc_draft_id uuid := 'f2222222-0000-0000-0000-000000000001';
     v_fc_pub_id uuid := 'f2222222-0000-0000-0000-000000000002';
 BEGIN
-    INSERT INTO public.classes (id, name, code, status)
-    VALUES (v_class_id, 'Arsitektur Komputer & Cloud', 'IF-204', 'ACTIVE')
+    INSERT INTO auth.users (id, email) VALUES
+      (v_lecturer_id, 'lecturer_p2@test.com'),
+      (v_student1_id, 'student1_p2@test.com'),
+      (v_student2_id, 'student2_p2@test.com')
     ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.profiles (id, email, full_name, status) VALUES
+      (v_lecturer_id, 'lecturer_p2@test.com', 'Dosen P2', 'ACTIVE'),
+      (v_student1_id, 'student1_p2@test.com', 'Mahasiswa 1 P2', 'ACTIVE'),
+      (v_student2_id, 'student2_p2@test.com', 'Mahasiswa 2 P2', 'ACTIVE')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.classes (id, title, section, join_code, status, created_by)
+    VALUES (v_class_id, 'Arsitektur Komputer & Cloud', 'A', 'P2P2P001', 'ACTIVE', v_lecturer_id)
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status) VALUES
+      (v_lecturer_id, (SELECT id FROM public.roles WHERE code = 'LECTURER'), 'CLASS', v_class_id, 'ACTIVE'),
+      (v_student1_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class_id, 'ACTIVE'),
+      (v_student2_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class_id, 'ACTIVE')
+    ON CONFLICT DO NOTHING;
 
     INSERT INTO public.class_chapters (id, class_id, position, title, completion_rule)
     VALUES (v_chap1_id, v_class_id, 1, 'Bab 1: Set Instruksi RISC', 'kuis')
