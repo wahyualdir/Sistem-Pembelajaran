@@ -15,7 +15,6 @@ import {
   PlusCircle,
   QrCode,
   GraduationCap,
-  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ActiveClassItem, AgendaItem } from '@/modules/academic/home-actions';
@@ -117,23 +116,7 @@ export function LecturerRightPanel({
       {/* ========================================================= */}
       {activeTab === 'hari-ini' && (
         <div className="flex flex-col gap-5 animate-fade-in pb-24">
-          {/* 1. Status Dosen */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-gray-soft flex flex-wrap items-center justify-between gap-2 shadow-retro">
-            <div className="min-w-0">
-              <span className="text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] block">
-                Status Akademik
-              </span>
-              <p className="font-heading font-bold text-sm sm:text-base text-ink mt-0.5 whitespace-nowrap">
-                Semester Ganjil 2026/2027
-              </p>
-            </div>
-            <span className="text-xs font-bold text-white bg-ink px-2.5 py-1 rounded-lg border-2 border-ink shadow-xs shrink-0 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-white" />
-              <span>Dosen Pengampu</span>
-            </span>
-          </div>
-
-          {/* 2. Ringkasan Baris Metrik Dosen (Kelas, Tugas, Submisi) */}
+          {/* 1. Ringkasan Baris Metrik Dosen (Kelas, Tugas, Submisi) */}
           <div className="right-panel-stats-card p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro">
             <div className="stats-responsive-layout">
               {/* Item 1: Kelas Aktif */}
@@ -184,7 +167,7 @@ export function LecturerRightPanel({
             </div>
           </div>
 
-          {/* 3. Aksi Cepat Dosen */}
+          {/* 2. Aksi Cepat Dosen */}
           <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
             <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-gray-dark">
               Aksi Cepat Dosen
@@ -221,7 +204,7 @@ export function LecturerRightPanel({
             </div>
           </div>
 
-          {/* 4. Kalender Mini Bulan Berjalan */}
+          {/* 3. Kalender Mini Bulan Berjalan */}
           <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
             <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
               <div className="flex items-center gap-1.5">
@@ -286,7 +269,7 @@ export function LecturerRightPanel({
             </div>
           </div>
 
-          {/* 5. Agenda 7 Hari ke Depan */}
+          {/* 4. Agenda Mengajar 7 Hari ke Depan */}
           <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
             <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
               <h4 className="font-heading font-bold text-sm text-ink uppercase tracking-wider">

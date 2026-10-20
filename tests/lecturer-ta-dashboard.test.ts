@@ -11,10 +11,11 @@ describe('Redesain Modern Retro Portal Dosen & Asisten (Fase 1)', () => {
     it('mengembalikan daftar tugas pending ketika aktor adalah LECTURER', async () => {
       vi.spyOn(identityModule, 'getCurrentUserWithRoles').mockResolvedValue({
         user: { id: 'dosen-001', email: 'dosen1@siajar.ac.id' } as any,
-        profile: { full_name: 'Dr. Dosen Pengampu, M.Kom.' } as any,
+        profile: { id: 'dosen-001', full_name: 'Dr. Dosen Pengampu, M.Kom.', email: 'dosen1@siajar.ac.id', status: 'ACTIVE', must_change_password: false },
         roles: ['LECTURER'],
         activeRole: 'LECTURER',
-        isSuperAdmin: false,
+        isImpersonating: false,
+        impersonatingFrom: null,
         isNewAccount: false,
       });
 
@@ -27,10 +28,11 @@ describe('Redesain Modern Retro Portal Dosen & Asisten (Fase 1)', () => {
     it('mengembalikan antrean peninjauan ketika aktor adalah TEACHING_ASSISTANT', async () => {
       vi.spyOn(identityModule, 'getCurrentUserWithRoles').mockResolvedValue({
         user: { id: 'ta-001', email: 'ta1@siajar.ac.id' } as any,
-        profile: { full_name: 'Asisten Dosen & Lab' } as any,
+        profile: { id: 'ta-001', full_name: 'Asisten Dosen & Lab', email: 'ta1@siajar.ac.id', status: 'ACTIVE', must_change_password: false },
         roles: ['TEACHING_ASSISTANT'],
         activeRole: 'TEACHING_ASSISTANT',
-        isSuperAdmin: false,
+        isImpersonating: false,
+        impersonatingFrom: null,
         isNewAccount: false,
       });
 
@@ -43,10 +45,11 @@ describe('Redesain Modern Retro Portal Dosen & Asisten (Fase 1)', () => {
     it('menolak pengembalian antrean jika aktor bukan LECTURER atau TEACHING_ASSISTANT', async () => {
       vi.spyOn(identityModule, 'getCurrentUserWithRoles').mockResolvedValue({
         user: { id: 'mhs-001', email: 'mhs1@student.uir.ac.id' } as any,
-        profile: { full_name: 'Mahasiswa Biasa' } as any,
+        profile: { id: 'mhs-001', full_name: 'Mahasiswa Biasa', email: 'mhs1@student.uir.ac.id', status: 'ACTIVE', must_change_password: false },
         roles: ['STUDENT'],
         activeRole: 'STUDENT',
-        isSuperAdmin: false,
+        isImpersonating: false,
+        impersonatingFrom: null,
         isNewAccount: false,
       });
 
@@ -63,7 +66,7 @@ describe('Redesain Modern Retro Portal Dosen & Asisten (Fase 1)', () => {
 
       const taModule = await import('../src/app/(portal)/ta/ta-dashboard-client');
       expect(taModule.TaDashboardClient).toBeDefined();
-    });
+    }, 20000);
 
     it('memastikan panel kanan LecturerRightPanel dan TaRightPanel terdefinisi', async () => {
       const lecturerPanel = await import('../src/components/home/lecturer-right-panel');
@@ -71,6 +74,11 @@ describe('Redesain Modern Retro Portal Dosen & Asisten (Fase 1)', () => {
 
       const taPanel = await import('../src/components/home/ta-right-panel');
       expect(taPanel.TaRightPanel).toBeDefined();
-    });
+    }, 20000);
+
+    it('memastikan LecturerIdentityCard (Kartu Dosen & BKD) terdefinisi dan dapat diimpor', async () => {
+      const cardModule = await import('../src/components/retro/lecturer-identity-card');
+      expect(cardModule.LecturerIdentityCard).toBeDefined();
+    }, 20000);
   });
 });

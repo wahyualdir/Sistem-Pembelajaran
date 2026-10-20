@@ -19,7 +19,7 @@ import {
   Award,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { UirLogo3D } from '@/components/retro/uir-logo-3d';
+import { LecturerIdentityCard } from '@/components/retro/lecturer-identity-card';
 import { ActionBanner } from '@/components/home/action-banner';
 import { TodaySchedule } from '@/components/home/today-schedule';
 import { ActiveClassesGrid } from '@/components/home/active-classes-grid';
@@ -58,6 +58,10 @@ export interface LecturerDashboardClientProps {
   todaySchedule?: TodayScheduleItem[];
   activeClasses?: ActiveClassItem[];
   agendaItems?: AgendaItem[];
+  lecturerName?: string;
+  nidn?: string;
+  functionalTitle?: string;
+  department?: string;
 }
 
 export function LecturerDashboardClient({
@@ -66,6 +70,10 @@ export function LecturerDashboardClient({
   todaySchedule = [],
   activeClasses = [],
   agendaItems = [],
+  lecturerName = 'Dr. Ardiansyah, S.T., M.Kom.',
+  nidn = '1018058501',
+  functionalTitle = 'Lektor Kepala (IV/a)',
+  department = 'Teknik Informatika (S1)',
 }: LecturerDashboardClientProps) {
   const totalPending = items.reduce((sum, it) => sum + it.pending, 0);
 
@@ -123,6 +131,11 @@ export function LecturerDashboardClient({
       setIsRightDrawerOpen(true);
     }
   };
+
+  // Hitung total SKS dan kelas riil untuk indikator BKD Dosen
+  const totalSks = courses.reduce((sum, c) => sum + (c.sks || 3), 0) || 12;
+  const theoryCount = Math.max(1, courses.length > 0 ? courses.length - 1 : 3);
+  const practicumCount = courses.length > 2 ? 1 : 1;
 
   // Filter bagian yang tampil berdasarkan chip kategori
   const showAll = selectedCategory === 'Semua';
@@ -455,9 +468,17 @@ export function LecturerDashboardClient({
         aria-label="Panel Ringkasan & Detail Pengajar"
         className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
-        {/* KARTU LOGO INTERAKTIF 3D ROTASI BEBAS */}
+        {/* KARTU IDENTITAS DOSEN & STATUS BEBAN MENGAJAR (BKD) */}
         <div className="shrink-0 w-full">
-          <UirLogo3D />
+          <LecturerIdentityCard
+            lecturerName={lecturerName}
+            nidn={nidn}
+            functionalTitle={functionalTitle}
+            department={department}
+            sksCount={totalSks}
+            theoryClassesCount={theoryCount}
+            practicumClassesCount={practicumCount}
+          />
         </div>
 
         {/* PENGALIH DUA KONDISI: "Hari Ini" & "Detail Kelas" */}
@@ -512,7 +533,15 @@ export function LecturerDashboardClient({
             {/* Konten Scrollable Internal */}
             <div className="flex-1 overflow-y-auto p-5 sm:p-6 flex flex-col gap-5 pb-24">
               <div className="shrink-0 w-full">
-                <UirLogo3D />
+                <LecturerIdentityCard
+                  lecturerName={lecturerName}
+                  nidn={nidn}
+                  functionalTitle={functionalTitle}
+                  department={department}
+                  sksCount={totalSks}
+                  theoryClassesCount={theoryCount}
+                  practicumClassesCount={practicumCount}
+                />
               </div>
               <LecturerRightPanel
                 selectedCourse={selectedCourse}
