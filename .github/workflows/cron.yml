@@ -1,9 +1,9 @@
 name: SIAJAR Scheduled Crons (Sub-Daily)
 
 on:
-  schedule:
-    # Eksekusi setiap 5 menit untuk memproses rute berfrekuensi tinggi (sub-harian)
-    - cron: '*/5 * * * *'
+  # Nonaktifkan jadwal otomatis 5 menit agar tidak membebani runner & tidak mengirim email gagal sebelum domain di-deploy
+  # schedule:
+  #   - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -16,8 +16,8 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           if [ -z "$BASE_URL" ] || [ -z "$CRON_SECRET" ]; then
-            echo "Error: SIAJAR_BASE_URL dan CRON_SECRET wajib disetel dan tidak boleh kosong!"
-            exit 1
+            echo "::notice ::SIAJAR_BASE_URL dan/atau CRON_SECRET belum disetel di GitHub Secrets. Melewati eksekusi cron dengan aman."
+            exit 0
           fi
 
           echo "Memulai eksekusi rute cron frekuensi tinggi SIAJAR..."
