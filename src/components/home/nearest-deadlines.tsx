@@ -38,13 +38,13 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
           <div className="p-2 rounded-lg border-2 border-ink bg-gray-soft text-primary shadow-xs">
             <Clock className="h-5 w-5 text-primary" />
           </div>
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
+          <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink">
             Tenggat Terdekat
           </h2>
         </div>
         <Link
           href="/calendar"
-          className="text-base sm:text-lg font-bold text-primary-dark hover:text-ink transition-colors"
+          className="text-xs sm:text-sm font-bold text-primary-dark hover:text-ink transition-colors shrink-0"
         >
           more &rarr;
         </Link>
@@ -65,7 +65,7 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
               <div
                 key={item.id}
                 className={cn(
-                  'reveal-on-scroll group p-3.5 sm:p-4 rounded-xl border-2 border-ink bg-surface shadow-retro hover:-translate-y-0.5 hover:shadow-retro-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5',
+                  'group p-3.5 sm:p-4 rounded-xl border-2 border-ink bg-surface shadow-retro hover:-translate-y-0.5 hover:shadow-retro-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 animate-fade-up',
                   item.isUrgent && 'border-ink bg-gray-soft/50'
                 )}
               >

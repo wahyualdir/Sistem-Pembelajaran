@@ -27,13 +27,13 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
           <div className="p-2 rounded-lg border-2 border-ink bg-gray-soft text-black shadow-xs">
             <CalendarDays className="h-5 w-5 text-black" />
           </div>
-          <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
+          <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink">
             Jadwal Hari Ini
           </h2>
         </div>
         <Link
           href="/calendar"
-          className="text-base sm:text-lg font-bold text-black hover:underline transition-colors"
+          className="text-xs sm:text-sm font-bold text-black hover:underline transition-colors shrink-0"
         >
           more &rarr;
         </Link>
@@ -84,7 +84,7 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                 {/* Kartu timeline item */}
                 <div
                   className={cn(
-                    'reveal-on-scroll p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5',
+                    'p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 animate-fade-up',
                     isOngoing && 'bg-gray-soft/60 border-ink shadow-retro-md ring-1 ring-ink'
                   )}
                 >

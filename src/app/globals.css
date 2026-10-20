@@ -611,56 +611,22 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Base fade-up scroll reveal */
-.reveal-on-scroll {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.reveal-on-scroll.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Scale-up scroll reveal (bagus untuk kartu & grid) */
-.reveal-scale {
-  opacity: 0;
-  transform: scale(0.95) translateY(14px);
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.reveal-scale.is-visible {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
-
-/* Slide dari kiri */
-.reveal-slide-left {
-  opacity: 0;
-  transform: translateX(-32px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-
-.reveal-slide-left.is-visible {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Slide dari kanan */
+/* Base fade-up scroll reveal: Selalu opacity 1 secara default agar tidak terjadi blank putih / hilang */
+.reveal-on-scroll,
+.reveal-scale,
+.reveal-slide-left,
 .reveal-slide-right {
-  opacity: 0;
-  transform: translateX(32px);
-  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
 
+.reveal-on-scroll.is-visible,
+.reveal-scale.is-visible,
+.reveal-slide-left.is-visible,
 .reveal-slide-right.is-visible {
   opacity: 1;
-  transform: translateX(0);
+  transform: none;
 }
 
 /* Stagger delay bertahap untuk kumpulan kartu anak */

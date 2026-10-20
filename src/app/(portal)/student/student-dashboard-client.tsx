@@ -285,7 +285,7 @@ export function StudentDashboardClient({
 
           {/* SECTION: KELAS SAYA / KELAS AKTIF */}
           {(showAll || showKelasSaya || showNilai || showPresensi) && (
-            <div className="reveal-on-scroll">
+            <div>
               <ActiveClassesGrid
                 courses={courses}
                 selectedCourse={selectedCourse}
@@ -296,7 +296,7 @@ export function StudentDashboardClient({
 
           {/* SECTION: KARTU LANJUTKAN BELAJAR (HANYA JIKA ADA MATERI AKTIF) */}
           {materiTerakhir && (showAll || showKelasSaya || showTugasKuis) && (
-            <section aria-label="Lanjutkan Belajar" className="reveal-scale space-y-3">
+            <section aria-label="Lanjutkan Belajar" className="space-y-3">
               <div className="flex items-center justify-between">
                 <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary inline-block" />
