@@ -3,13 +3,10 @@
 import React from 'react';
 import {
   GraduationCap,
-  ShieldCheck,
   CheckCircle2,
-  BookOpen,
-  Award,
   Users,
-  Building2,
-  FileBadge,
+  BookOpen,
+  FlaskConical,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -30,117 +27,125 @@ export function LecturerIdentityCard({
   nidn = '1018058501',
   functionalTitle = 'Lektor Kepala (IV/a)',
   department = 'Teknik Informatika (S1)',
-  sksCount = 12,
+  sksCount = 14,
   maxSks = 16,
   totalStudents = 108,
-  theoryClassesCount = 3,
+  theoryClassesCount = 4,
   practicumClassesCount = 1,
 }: LecturerIdentityCardProps) {
   const percentBkd = Math.min(100, Math.round((sksCount / maxSks) * 100));
   const isBkdFulfilled = sksCount >= 12;
 
   return (
-    <div className="w-full rounded-2xl border-2 border-black bg-surface p-4 sm:p-5 shadow-retro space-y-4 font-sans relative overflow-hidden transition-all hover:shadow-retro-md">
-      {/* Background Accent Decorative Line */}
-      <div className="absolute top-0 left-0 right-0 h-1.5 bg-ink" />
-
-      {/* 1. Header Kartu Identitas Akademik */}
-      <div className="flex items-start justify-between gap-2 pt-1 border-b-2 border-black/15 pb-3">
-        <div className="space-y-0.5">
-          <div className="flex items-center gap-1.5">
-            <Building2 className="h-3.5 w-3.5 text-black" />
-            <span className="text-[10px] sm:text-[11px] font-mono font-bold tracking-wider uppercase text-black/75">
+    <div className="w-full rounded-2xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4 font-sans relative overflow-hidden transition-all hover:shadow-retro-md">
+      {/* 1. Header Identitas Kampus (Clean & Ringkas - 1 Baris Sejajar) */}
+      <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-ink">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="h-8 w-8 rounded-lg border-2 border-ink bg-ink text-white flex items-center justify-center shrink-0 shadow-retro-xs">
+            <GraduationCap className="h-4 w-4" />
+          </div>
+          <div className="min-w-0">
+            <span className="text-[10px] font-mono font-bold text-gray-dark uppercase tracking-wider block leading-none truncate">
               UNIVERSITAS ISLAM RIAU
             </span>
+            <h3 className="font-heading font-black text-xs sm:text-sm text-ink leading-tight mt-0.5 truncate">
+              Kartu Dosen Pengampu
+            </h3>
           </div>
-          <p className="font-heading font-black text-xs sm:text-sm text-black tracking-tight">
-            KARTU IDENTITAS DOSEN PENGAMPU
-          </p>
         </div>
 
-        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded border border-black bg-gray-soft text-black text-[10px] font-mono font-bold shrink-0 shadow-retro-sm">
-          <ShieldCheck className="h-3 w-3 text-primary" />
-          <span>TERVERIFIKASI</span>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border-2 border-ink bg-surface text-ink text-[11px] font-mono font-bold shrink-0 shadow-retro-xs">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" />
+          <span>Terverifikasi</span>
         </span>
       </div>
 
       {/* 2. Informasi Utama Dosen & Avatar */}
       <div className="flex items-center gap-3.5">
         {/* Avatar Frame Retro */}
-        <div className="relative shrink-0">
-          <div className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl border-2 border-black bg-gray-soft flex items-center justify-center shadow-retro-sm overflow-hidden">
-            <GraduationCap className="h-8 w-8 text-black" />
-          </div>
-          <span className="absolute -bottom-1 -right-1 h-5 w-5 rounded-full border border-black bg-black flex items-center justify-center text-white" title="Dosen Tetap">
-            <Award className="h-3 w-3" />
-          </span>
+        <div className="h-14 w-14 sm:h-15 sm:w-15 rounded-xl border-2 border-ink bg-gray-soft flex items-center justify-center shrink-0 shadow-retro-sm">
+          <GraduationCap className="h-7 w-7 sm:h-8 sm:w-8 text-ink" />
         </div>
 
-        {/* Biodata */}
-        <div className="min-w-0 space-y-1">
-          <h3 className="font-heading font-black text-sm sm:text-base text-black truncate leading-tight" title={lecturerName}>
+        {/* Biodata Dosen */}
+        <div className="min-w-0 flex-1 space-y-0.5">
+          <h4
+            className="font-heading font-black text-sm sm:text-base text-ink truncate leading-tight"
+            title={lecturerName}
+          >
             {lecturerName}
-          </h3>
-          <div className="space-y-0.5 text-xs">
-            <p className="font-mono font-bold text-black/80 flex items-center gap-1.5">
-              <span>NIDN:</span>
-              <span className="text-black font-black">{nidn}</span>
-            </p>
-            <p className="text-black/80 font-bold truncate">
-              {functionalTitle}
-            </p>
-            <p className="text-[11px] text-black/70 font-semibold truncate">
-              Prodi: {department}
-            </p>
-          </div>
+          </h4>
+          <p className="font-mono text-xs font-bold text-gray-dark flex items-center gap-1">
+            <span>NIDN</span>
+            <span className="text-ink font-black">{nidn}</span>
+          </p>
+          <p className="text-xs font-bold text-ink/85 truncate">
+            {functionalTitle}
+          </p>
+          <p className="text-[11px] font-medium text-gray-dark truncate">
+            Prodi {department}
+          </p>
         </div>
       </div>
 
-      {/* 3. Status Beban Kerja Dosen (BKD Semester Ganjil) */}
-      <div className="p-3 rounded-xl border-2 border-black bg-gray-soft/50 space-y-2">
-        <div className="flex items-center justify-between gap-2 text-xs">
-          <div className="flex items-center gap-1.5">
-            <FileBadge className="h-4 w-4 text-black shrink-0" />
-            <span className="font-heading font-black text-black">Beban Mengajar (BKD)</span>
-          </div>
-          {isBkdFulfilled ? (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-black bg-white text-black text-[10px] font-mono font-bold shadow-retro-sm">
-              <CheckCircle2 className="h-3 w-3 text-black" />
-              <span>Memenuhi BKD ✓</span>
-            </span>
-          ) : (
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-black bg-white text-black text-[10px] font-mono font-bold">
-              <span>{sksCount}/12 SKS Minimal</span>
-            </span>
-          )}
+      {/* 3. Panel Status Beban Kerja Dosen (BKD) */}
+      <div className="rounded-xl border-2 border-ink bg-gray-soft/60 p-3 sm:p-3.5 space-y-3">
+        {/* Baris Status BKD */}
+        <div className="flex items-center justify-between gap-2">
+          <span className="font-heading font-black text-xs text-ink uppercase tracking-wider">
+            Beban Mengajar (BKD)
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-ink bg-surface text-ink text-[11px] font-mono font-bold shadow-retro-xs shrink-0 whitespace-nowrap">
+            <CheckCircle2 className="h-3 w-3 text-emerald-600 shrink-0" />
+            <span>{isBkdFulfilled ? 'Memenuhi BKD ✓' : `${sksCount}/12 SKS`}</span>
+          </span>
         </div>
 
-        {/* Progress Bar BKD */}
-        <div className="space-y-1">
-          <div className="flex justify-between text-[11px] font-mono font-bold text-black/80">
-            <span>Realisasi: {sksCount} SKS</span>
-            <span>Target: {maxSks} SKS</span>
+        {/* Realisasi vs Target & Progress Bar */}
+        <div className="space-y-1.5">
+          <div className="flex justify-between items-center text-xs font-mono font-bold">
+            <span className="text-ink">Realisasi: {sksCount} SKS</span>
+            <span className="text-gray-dark font-medium">Target: {maxSks} SKS</span>
           </div>
-          <div className="w-full h-2 rounded-full border border-black bg-white overflow-hidden">
+          <div className="w-full h-2.5 rounded-full border-2 border-ink bg-surface overflow-hidden p-[1px]">
             <div
-              className="bg-black h-full rounded-full transition-all duration-500"
+              className="bg-ink h-full rounded-full transition-all duration-500"
               style={{ width: `${percentBkd}%` }}
             />
           </div>
         </div>
 
-        {/* Mini Breakdown Tags */}
-        <div className="flex items-center justify-between gap-1.5 pt-1 text-[11px] font-mono font-bold text-black/90">
-          <span className="px-2 py-0.5 rounded border border-black/30 bg-white shadow-xs">
-            {theoryClassesCount} Teori
-          </span>
-          <span className="px-2 py-0.5 rounded border border-black/30 bg-white shadow-xs">
-            {practicumClassesCount} Lab
-          </span>
-          <span className="px-2 py-0.5 rounded border border-black/30 bg-white shadow-xs flex items-center gap-1">
-            <Users className="h-3 w-3 text-black" />
-            <span>{totalStudents} Mhs</span>
-          </span>
+        {/* 3 Metrik Kelas Berbaris Rapi & Simetris */}
+        <div className="grid grid-cols-3 gap-2 pt-1 border-t border-ink/15 text-center">
+          <div className="py-1 px-1 rounded-lg border border-ink bg-surface shadow-xs">
+            <span className="block text-[10px] font-mono font-bold text-gray-dark uppercase flex items-center justify-center gap-1">
+              <BookOpen className="h-3 w-3 text-ink" />
+              <span>Teori</span>
+            </span>
+            <span className="font-heading font-black text-xs sm:text-sm text-ink block mt-0.5">
+              {theoryClassesCount} Kelas
+            </span>
+          </div>
+
+          <div className="py-1 px-1 rounded-lg border border-ink bg-surface shadow-xs">
+            <span className="block text-[10px] font-mono font-bold text-gray-dark uppercase flex items-center justify-center gap-1">
+              <FlaskConical className="h-3 w-3 text-ink" />
+              <span>Praktikum</span>
+            </span>
+            <span className="font-heading font-black text-xs sm:text-sm text-ink block mt-0.5">
+              {practicumClassesCount} Lab
+            </span>
+          </div>
+
+          <div className="py-1 px-1 rounded-lg border border-ink bg-surface shadow-xs">
+            <span className="block text-[10px] font-mono font-bold text-gray-dark uppercase flex items-center justify-center gap-1">
+              <Users className="h-3 w-3 text-ink" />
+              <span>Mhs</span>
+            </span>
+            <span className="font-heading font-black text-xs sm:text-sm text-ink block mt-0.5">
+              {totalStudents} Mhs
+            </span>
+          </div>
         </div>
       </div>
     </div>

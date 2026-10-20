@@ -17,7 +17,9 @@ export default async function LecturerPortalPage() {
     getCurrentUserWithRoles(),
   ]);
 
-  const lecturerName = userContext?.profile?.full_name || 'Dr. Ardiansyah, S.T., M.Kom.';
+  const rawName = userContext?.profile?.full_name;
+  const isGenericAdmin = rawName && (rawName.toLowerCase().includes('administrator') || rawName.toLowerCase().includes('admin'));
+  const lecturerName = rawName && !isGenericAdmin ? rawName : 'Dr. Ardiansyah, S.T., M.Kom.';
 
   return (
     <LecturerDashboardClient
