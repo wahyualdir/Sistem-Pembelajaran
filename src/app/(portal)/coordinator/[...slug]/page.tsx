@@ -19,6 +19,8 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { redirect } from 'next/navigation';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
 interface PageProps {
   params: {
@@ -32,33 +34,30 @@ const COORDINATOR_METRICS = [
     value: '96.2%',
     desc: '24 dari 24 kelas berjalan sesuai silabus',
     badge: 'Tercapai',
-    badgeColor: 'bg-surface text-ink border-ink',
+    badgeColor: 'bg-white text-[#111111] border-2 border-black',
   },
   {
     title: 'Beban Mengajar Dosen (BKD)',
     value: '12 - 16 SKS',
     desc: 'Rata-rata 14.2 SKS per dosen tetap',
     badge: 'Optimal',
-    badgeColor: 'bg-surface text-ink border-ink',
+    badgeColor: 'bg-white text-[#111111] border-2 border-black',
   },
   {
     title: 'Mahasiswa Perlu Perhatian',
     value: '8 Mahasiswa',
     desc: 'Kehadiran <75% atau indeks tugas tertunda',
     badge: 'Perlu Tindakan',
-    badgeColor: 'bg-gray-soft text-ink border-ink',
+    badgeColor: 'bg-[#ED1C24] text-white border-2 border-black',
   },
   {
     title: 'Pengajuan Menunggu Persetujuan',
     value: '3 Berkas',
     desc: 'Soal ujian, revisi nilai, dan kelas baru',
     badge: 'Pending Review',
-    badgeColor: 'bg-gray-soft text-ink border-ink',
+    badgeColor: 'bg-gray-soft text-[#111111] border-2 border-black',
   },
 ];
-
-import { redirect } from 'next/navigation';
-import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
 export default async function CoordinatorSubpage({ params }: PageProps) {
   const user = await getCurrentUserWithRoles();
@@ -233,40 +232,41 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
   const Icon = current.icon;
 
   return (
-    <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
+    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up font-sans">
       <RetroWindow
         title={current.title}
-        headerBadge="Mode Kaprodi"
-        headerBadgeVariant="warning"
+        badge="Mode Kaprodi"
+        headerClassName="bg-gray-soft"
+        bodyClassName="p-5 sm:p-7 bg-white"
       >
-        <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
-            <Icon className="h-7 w-7 text-primary" />
+        <div className="space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-heading font-black tracking-tight text-[#111111] flex items-center gap-3">
+            <Icon className="h-7 w-7 text-[#ED1C24]" />
             <span>{current.title}</span>
           </h1>
-          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-[#111111] font-semibold max-w-3xl leading-relaxed">
             {current.desc}
           </p>
         </div>
       </RetroWindow>
 
       {/* Grid 4 Kartu Metrik Monitoring Prodi Full Width */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {COORDINATOR_METRICS.map((m) => (
           <div
             key={m.title}
-            className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-2 flex flex-col justify-between"
+            className="border-2 border-black bg-white p-5 shadow-retro space-y-2 flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between">
-                <span className="text-xs font-sans font-bold uppercase text-muted-foreground">{m.title}</span>
-                <span className={`text-xs font-sans font-bold px-2 py-0.5 rounded border ${m.badgeColor}`}>
+                <span className="text-xs font-bold uppercase text-[#111111]">{m.title}</span>
+                <span className={`text-xs font-bold px-2.5 py-0.5 shadow-retro-sm ${m.badgeColor}`}>
                   {m.badge}
                 </span>
               </div>
-              <p className="font-heading font-bold text-2xl text-foreground mt-1">{m.value}</p>
+              <p className="font-heading font-black text-3xl text-[#111111] mt-2">{m.value}</p>
             </div>
-            <p className="text-xs text-muted-foreground border-t border-neutral-100 pt-2 font-sans">
+            <p className="text-xs text-[#111111] font-medium border-t-2 border-black/10 pt-2 font-sans">
               {m.desc}
             </p>
           </div>
@@ -274,61 +274,61 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
       </div>
 
       {/* Grid 3 Kartu Tindakan & Status Program Studi Full Width */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+        <div className="border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-bold text-base text-foreground">Pemetaan Kurikulum OBE</h3>
+              <BookOpen className="h-5 w-5 text-[#ED1C24]" />
+              <h3 className="font-heading font-black text-base text-[#111111]">Pemetaan Kurikulum OBE</h3>
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className="text-xs text-[#111111] font-semibold leading-relaxed">
               12 Indikator Capaian Pembelajaran Lulusan (CPL) terhubung dengan 48 mata kuliah wajib program studi.
             </p>
           </div>
           <Link
             href="/coordinator/curriculum"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
+            className="inline-flex items-center justify-between p-2.5 border-2 border-black bg-white hover:bg-gray-soft text-xs font-bold transition-all shadow-retro-sm"
           >
             <span>Buka Matriks CPL</span>
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 text-[#111111]" />
           </Link>
         </div>
 
-        <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
+        <div className="border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <ShieldAlert className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-bold text-base text-foreground">Supervisi Ujian Semester</h3>
+              <ShieldAlert className="h-5 w-5 text-[#ED1C24]" />
+              <h3 className="font-heading font-black text-base text-[#111111]">Supervisi Ujian Semester</h3>
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className="text-xs text-[#111111] font-semibold leading-relaxed">
               Seluruh sesi ujian UTS/UAS dipantau real-time dengan standar proctoring anti-kecurangan prodi.
             </p>
           </div>
           <Link
             href="/coordinator/monitoring/exams"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
+            className="inline-flex items-center justify-between p-2.5 border-2 border-black bg-white hover:bg-gray-soft text-xs font-bold transition-all shadow-retro-sm"
           >
             <span>Pantau Ujian Prodi</span>
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 text-[#111111]" />
           </Link>
         </div>
 
-        <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
+        <div className="border-2 border-black bg-white p-6 shadow-retro space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <CheckSquare className="h-5 w-5 text-primary" />
-              <h3 className="font-heading font-bold text-base text-foreground">Antrean Otorisasi Nilai</h3>
+              <CheckSquare className="h-5 w-5 text-[#ED1C24]" />
+              <h3 className="font-heading font-black text-base text-[#111111]">Antrean Otorisasi Nilai</h3>
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <p className="text-xs text-[#111111] font-semibold leading-relaxed">
               Verifikasi berita acara perubahan nilai dari dosen pengampu sebelum disahkan ke Biro Akademik.
             </p>
           </div>
           <Link
             href="/coordinator/approvals/grades"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
+            className="inline-flex items-center justify-between p-2.5 border-2 border-black bg-white hover:bg-gray-soft text-xs font-bold transition-all shadow-retro-sm"
           >
             <span>Tinjau Pengajuan</span>
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4 text-[#111111]" />
           </Link>
         </div>
       </div>

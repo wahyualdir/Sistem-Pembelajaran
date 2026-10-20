@@ -65,7 +65,7 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
               <div
                 key={item.id}
                 className={cn(
-                  'group p-3.5 sm:p-4 rounded-xl border-2 border-ink bg-surface shadow-retro hover:-translate-y-0.5 hover:shadow-retro-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5',
+                  'reveal-on-scroll group p-3.5 sm:p-4 rounded-xl border-2 border-ink bg-surface shadow-retro hover:-translate-y-0.5 hover:shadow-retro-md transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5',
                   item.isUrgent && 'border-ink bg-gray-soft/50'
                 )}
               >

@@ -84,7 +84,7 @@ export default async function WorkspacePage() {
         fontFamily:
           "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
       }}
-      className="min-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-black flex flex-col justify-between antialiased relative"
+      className="min-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-white flex flex-col justify-between antialiased relative"
     >
       {/* Background Dot-Grid Texture */}
       <div

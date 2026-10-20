@@ -27,7 +27,7 @@ import {
 } from './absence-actions';
 
 // ============================================================================
-// 1. MODAL PENGAJUAN IZIN & SAKIT MAHASISWA
+// 1. MODAL PENGAJUAN IZIN & SAKIT MAHASISWA (RETRO MONOCHROME)
 // ============================================================================
 
 interface StudentAbsenceModalProps {
@@ -89,7 +89,6 @@ export function StudentAbsenceModal({
     }
 
     startTransition(async () => {
-      // Simulasikan upload bukti ke storage bucket absence-proofs
       let attachmentPath: string | null = null;
       if (file) {
         attachmentPath = `proofs/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
@@ -117,208 +116,209 @@ export function StudentAbsenceModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-      <div className="bg-surface border border-border rounded-2xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6 space-y-5">
-        <div className="flex items-center justify-between border-b border-border pb-3">
-          <div>
-            <h3 className="font-bold text-base text-foreground">
-              Formulir Permohonan Izin dan Sakit
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
+      <div className="bg-white border-2 border-black rounded-2xl shadow-retro-lg w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Retro Window Header */}
+        <div className="flex items-center justify-between border-b-2 border-black bg-gray-soft p-4 shrink-0">
+          <div className="flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full border border-black bg-black inline-block" />
+            <span className="h-3 w-3 rounded-full border border-black bg-white inline-block" />
+            <h3 className="font-heading font-black text-sm sm:text-base text-black ml-1">
+              Formulir Permohonan Izin & Sakit
             </h3>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Pengajuan ketidakhadiran resmi perkuliahan dengan verifikasi dosen pengampu.
-            </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg hover:bg-muted text-muted-foreground"
+            className="p-1 rounded-lg border border-black bg-white hover:bg-gray-soft text-black shadow-retro-sm cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {successMessage && (
-          <div className="p-3 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-            {successMessage}
-          </div>
-        )}
-        {errorMessage && (
-          <div className="p-3 rounded-lg text-xs font-medium bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300">
-            {errorMessage}
-          </div>
-        )}
+        <div className="p-5 sm:p-6 overflow-y-auto space-y-4 text-xs">
+          {successMessage && (
+            <div className="p-3.5 rounded-xl border-2 border-black bg-gray-soft text-black font-bold shadow-retro-sm flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-black shrink-0" />
+              <span>{successMessage}</span>
+            </div>
+          )}
+          {errorMessage && (
+            <div className="p-3.5 rounded-xl border-2 border-black bg-white text-black font-bold shadow-retro-sm flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-black shrink-0" />
+              <span>{errorMessage}</span>
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          {/* Pilihan Jenis */}
-          <div>
-            <label className="font-semibold text-foreground block mb-1.5">
-              Jenis Permohonan *
-            </label>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Pilihan Jenis */}
+            <div>
+              <label className="font-mono font-bold text-black uppercase tracking-wider block mb-1.5">
+                Jenis Permohonan *
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <label
+                  className={`flex items-center gap-2.5 p-3 rounded-xl border-2 border-black cursor-pointer transition-all shadow-retro-sm ${
+                    type === 'sakit'
+                      ? 'bg-black text-white font-bold'
+                      : 'bg-white text-black hover:bg-gray-soft font-bold'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="type"
+                    value="sakit"
+                    checked={type === 'sakit'}
+                    onChange={() => setType('sakit')}
+                    className="sr-only"
+                  />
+                  <span className={`w-3 h-3 rounded-full border-2 ${type === 'sakit' ? 'border-white bg-white' : 'border-black bg-white'}`} />
+                  <span>Sakit (Surat Dokter)</span>
+                </label>
+
+                <label
+                  className={`flex items-center gap-2.5 p-3 rounded-xl border-2 border-black cursor-pointer transition-all shadow-retro-sm ${
+                    type === 'izin'
+                      ? 'bg-black text-white font-bold'
+                      : 'bg-white text-black hover:bg-gray-soft font-bold'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    name="type"
+                    value="izin"
+                    checked={type === 'izin'}
+                    onChange={() => setType('izin')}
+                    className="sr-only"
+                  />
+                  <span className={`w-3 h-3 rounded-full border-2 ${type === 'izin' ? 'border-white bg-white' : 'border-black bg-white'}`} />
+                  <span>Izin (Kegiatan Resmi)</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Rentang Tanggal */}
             <div className="grid grid-cols-2 gap-3">
-              <label
-                className={`flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
-                  type === 'sakit'
-                    ? 'border-primary bg-primary/5 font-semibold text-foreground'
-                    : 'border-border bg-surface text-muted-foreground'
-                }`}
-              >
+              <div>
+                <label className="font-mono font-bold text-black uppercase tracking-wider block mb-1">
+                  Tanggal Mulai *
+                </label>
                 <input
-                  type="radio"
-                  name="type"
-                  value="sakit"
-                  checked={type === 'sakit'}
-                  onChange={() => setType('sakit')}
-                  className="sr-only"
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 rounded-lg border-2 border-black bg-white text-black font-mono font-bold text-xs shadow-retro-sm"
                 />
-                <span className="w-2.5 h-2.5 rounded-full border border-primary bg-primary" />
-                <span>Sakit (Wajib Surat Dokter)</span>
-              </label>
-
-              <label
-                className={`flex items-center gap-2.5 p-3 rounded-xl border cursor-pointer transition-all ${
-                  type === 'izin'
-                    ? 'border-primary bg-primary/5 font-semibold text-foreground'
-                    : 'border-border bg-surface text-muted-foreground'
-                }`}
-              >
+              </div>
+              <div>
+                <label className="font-mono font-bold text-black uppercase tracking-wider block mb-1">
+                  Tanggal Selesai *
+                </label>
                 <input
-                  type="radio"
-                  name="type"
-                  value="izin"
-                  checked={type === 'izin'}
-                  onChange={() => setType('izin')}
-                  className="sr-only"
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 rounded-lg border-2 border-black bg-white text-black font-mono font-bold text-xs shadow-retro-sm"
                 />
-                <span className="w-2.5 h-2.5 rounded-full border border-primary bg-primary" />
-                <span>Izin (Keperluan Resmi)</span>
-              </label>
+              </div>
             </div>
-          </div>
 
-          {/* Rentang Tanggal */}
-          <div className="grid grid-cols-2 gap-3">
+            {/* Daftar Pertemuan Terdeteksi */}
             <div>
-              <label className="font-semibold text-foreground block mb-1">
-                Tanggal Mulai *
+              <label className="font-mono font-bold text-black uppercase tracking-wider block mb-1">
+                Pertemuan Terdampak ({selectedSessionIds.length} dipilih) *
               </label>
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+              <div className="rounded-xl border-2 border-black bg-gray-soft/40 p-3 max-h-36 overflow-y-auto space-y-1.5 shadow-retro-sm">
+                {availableSessions.length === 0 ? (
+                  <p className="text-xs text-black/70 py-2 text-center font-bold">
+                    Tidak ada pertemuan perkuliahan pada rentang tanggal ini.
+                  </p>
+                ) : (
+                  availableSessions.map((s) => (
+                    <label
+                      key={s.id}
+                      className="flex items-center gap-2 p-2 rounded-lg border border-black/30 bg-white hover:bg-gray-soft text-xs cursor-pointer font-bold text-black"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedSessionIds.includes(s.id)}
+                        onChange={() => toggleSession(s.id)}
+                        className="rounded border-2 border-black accent-black text-black"
+                      />
+                      <span className="flex-1">
+                        {s.className} &bull; Pertemuan {s.sessionNumber}
+                      </span>
+                      <span className="font-mono text-black/70">
+                        {s.sessionDate}
+                      </span>
+                    </label>
+                  ))
+                )}
+              </div>
+              <p className="text-xs text-black/70 font-medium mt-1">
+                Centang pertemuan yang tidak dapat Anda hadiri.
+              </p>
+            </div>
+
+            {/* Alasan */}
+            <div>
+              <label className="font-mono font-bold text-black uppercase tracking-wider block mb-1">
+                Alasan Permohonan *
+              </label>
+              <textarea
+                rows={3}
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="Contoh: Mengalami demam tinggi dan disarankan istirahat medis 3 hari."
                 required
-                className="field text-xs font-mono"
+                minLength={10}
+                className="w-full px-3 py-2 rounded-lg border-2 border-black bg-white text-black font-sans font-medium text-xs shadow-retro-sm"
               />
             </div>
+
+            {/* Unggah Berkas Bukti */}
             <div>
-              <label className="font-semibold text-foreground block mb-1">
-                Tanggal Selesai *
+              <label className="font-mono font-bold text-black uppercase tracking-wider block mb-1">
+                Berkas Bukti (PDF, JPG, PNG &bull; Maks. 5 MB){' '}
+                {type === 'sakit' ? '*' : '(Opsional)'}
               </label>
               <input
-                type="date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                required
-                className="field text-xs font-mono"
+                type="file"
+                accept=".pdf,.jpg,.jpeg,.png"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                required={type === 'sakit'}
+                className="w-full px-3 py-2 rounded-lg border-2 border-black bg-white text-black font-mono font-bold text-xs shadow-retro-sm"
               />
             </div>
-          </div>
 
-          {/* Daftar Pertemuan Terdeteksi */}
-          <div>
-            <label className="font-semibold text-foreground block mb-1">
-              Pertemuan Perkuliahan Terdampak ({selectedSessionIds.length} dipilih) *
-            </label>
-            <div className="rounded-xl border border-border bg-muted/20 p-2.5 max-h-36 overflow-y-auto space-y-1.5">
-              {availableSessions.length === 0 ? (
-                <p className="text-[11px] text-muted-foreground py-2 text-center">
-                  Tidak ada pertemuan perkuliahan pada rentang tanggal ini.
-                </p>
-              ) : (
-                availableSessions.map((s) => (
-                  <label
-                    key={s.id}
-                    className="flex items-center gap-2 p-1.5 rounded-lg hover:bg-surface text-xs cursor-pointer"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedSessionIds.includes(s.id)}
-                      onChange={() => toggleSession(s.id)}
-                      className="rounded border-border text-primary focus:ring-primary"
-                    />
-                    <span className="text-foreground font-medium flex-1">
-                      {s.className} &bull; Pertemuan {s.sessionNumber}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground font-mono">
-                      {s.sessionDate}
-                    </span>
-                  </label>
-                ))
-              )}
+            <div className="flex items-center justify-end gap-2.5 pt-4 border-t-2 border-black/15">
+              <button
+                type="button"
+                onClick={onClose}
+                disabled={isPending}
+                className="px-4 py-2 rounded-xl border-2 border-black bg-white hover:bg-gray-soft text-black font-bold text-xs shadow-retro-sm cursor-pointer disabled:opacity-50"
+              >
+                Batalkan
+              </button>
+              <button
+                type="submit"
+                disabled={isPending}
+                className="px-5 py-2 rounded-xl border-2 border-black bg-black text-white hover:bg-neutral-800 font-bold text-xs shadow-retro cursor-pointer disabled:opacity-50"
+              >
+                {isPending ? 'Mengirim...' : 'Kirim Permohonan'}
+              </button>
             </div>
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Anda dapat mencabut centang untuk pertemuan yang tetap Anda ikuti.
-            </p>
-          </div>
-
-          {/* Alasan */}
-          <div>
-            <label className="font-semibold text-foreground block mb-1">
-              Alasan Permohonan *
-            </label>
-            <textarea
-              rows={3}
-              value={reason}
-              onChange={(e) => setReason(e.target.value)}
-              placeholder="Contoh: Mengalami demam tinggi dan disarankan dokter beristirahat 3 hari."
-              required
-              minLength={10}
-              className="field text-xs"
-            />
-            <p className="text-[11px] text-muted-foreground mt-1">
-              Cukup tulis alasan singkat. Tidak perlu menyebut diagnosis.
-            </p>
-          </div>
-
-          {/* Unggah Berkas Bukti */}
-          <div>
-            <label className="font-semibold text-foreground block mb-1">
-              Unggah Berkas Bukti (PDF, JPG, PNG &bull; Maks. 5 MB){' '}
-              {type === 'sakit' ? '*' : '(Opsional)'}
-            </label>
-            <input
-              type="file"
-              accept=".pdf,.jpg,.jpeg,.png"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-              required={type === 'sakit'}
-              className="field text-xs"
-            />
-          </div>
-
-          <div className="flex items-center justify-end gap-2 pt-3 border-t border-border">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={isPending}
-              className="btn-outline !w-auto text-xs px-3.5 py-2"
-            >
-              Batalkan
-            </button>
-            <button
-              type="submit"
-              disabled={isPending}
-              className="btn-solid !w-auto text-xs px-4 py-2 font-semibold"
-            >
-              {isPending ? 'Mengirim...' : 'Kirim Permohonan'}
-            </button>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
 }
 
 // ============================================================================
-// 2. TAB PERMOHONAN IZIN DOSEN (LecturerAbsenceTabView)
+// 2. TAB PERMOHONAN IZIN DOSEN (LecturerAbsenceTabView - RETRO MONOCHROME)
 // ============================================================================
 
 interface LecturerAbsenceTabViewProps {
@@ -361,7 +361,7 @@ export function LecturerAbsenceTabView({ classId }: LecturerAbsenceTabViewProps)
     startTransition(async () => {
       const res = await reviewAbsenceItemAction(itemId, decision, note);
       if (res.ok) {
-        setMessageSuccess(`Permohonan telah ${decision}. Presensi diperbarui secara otomatis.`);
+        setMessageSuccess(`Permohonan telah ${decision}. Rekap presensi diperbarui secara otomatis.`);
         loadData();
         setRejectingItemId(null);
         setRejectionNote('');
@@ -414,12 +414,16 @@ export function LecturerAbsenceTabView({ classId }: LecturerAbsenceTabViewProps)
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-6 font-sans">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-black/15 pb-4">
         <div>
-          <h2 className="text-xl font-bold text-foreground">Permohonan Izin dan Sakit</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Verifikasi surat izin atau bukti sakit mahasiswa untuk pembaruan rekaman presensi kelas.
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-black bg-gray-soft text-[11px] font-mono font-bold text-black uppercase mb-1">
+            <ShieldAlert className="h-3.5 w-3.5 text-black" />
+            <span>Verifikasi Kehadiran</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-heading font-black text-black">Permohonan Izin & Sakit Mahasiswa</h2>
+          <p className="text-xs sm:text-sm text-black/75 font-medium mt-0.5 max-w-2xl leading-relaxed">
+            Verifikasi surat izin resmi atau bukti sakit mahasiswa untuk pembaruan status rekaman presensi kelas.
           </p>
         </div>
 
@@ -428,7 +432,7 @@ export function LecturerAbsenceTabView({ classId }: LecturerAbsenceTabViewProps)
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="field text-xs max-w-[150px]"
+            className="px-3 py-2 rounded-xl border-2 border-black bg-white text-black font-mono font-bold text-xs shadow-retro-sm cursor-pointer"
           >
             <option value="all">Semua Status</option>
             <option value="menunggu">Menunggu Verifikasi</option>
@@ -439,115 +443,118 @@ export function LecturerAbsenceTabView({ classId }: LecturerAbsenceTabViewProps)
       </div>
 
       {messageSuccess && (
-        <div className="p-3 rounded-lg text-xs font-medium bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-          {messageSuccess}
+        <div className="p-3.5 rounded-xl border-2 border-black bg-gray-soft text-black font-bold text-xs shadow-retro-sm flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-black shrink-0" />
+          <span>{messageSuccess}</span>
         </div>
       )}
       {messageError && (
-        <div className="p-3 rounded-lg text-xs font-medium bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300">
-          {messageError}
+        <div className="p-3.5 rounded-xl border-2 border-black bg-white text-black font-bold text-xs shadow-retro-sm flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 text-black shrink-0" />
+          <span>{messageError}</span>
         </div>
       )}
 
       {/* Baris Tindakan Massal */}
       {selectedItemIds.length > 0 && (
-        <div className="p-3 rounded-xl border border-primary/30 bg-primary/5 flex items-center justify-between">
-          <span className="text-xs font-semibold text-foreground">
+        <div className="p-4 rounded-xl border-2 border-black bg-gray-soft flex items-center justify-between shadow-retro-sm">
+          <span className="text-xs font-mono font-bold text-black">
             {selectedItemIds.length} permohonan dipilih
           </span>
           <button
             type="button"
             onClick={handleBatchApprove}
             disabled={isPending}
-            className="btn-solid !w-auto text-xs px-3.5 py-1.5 flex items-center gap-1.5"
+            className="px-4 py-2 rounded-xl border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-bold flex items-center gap-2 shadow-retro cursor-pointer disabled:opacity-50"
           >
-            <CheckCircle2 className="w-3.5 h-3.5" />
-            <span>Setujui Terpilih</span>
+            <CheckCircle2 className="w-4 h-4" />
+            <span>Setujui Semua Terpilih</span>
           </button>
         </div>
       )}
 
       {/* Tabel Permohonan */}
-      <div className="rounded-xl border border-border bg-surface overflow-hidden">
+      <div className="rounded-2xl border-2 border-black bg-white shadow-retro overflow-hidden">
         {items.length === 0 ? (
-          <div className="p-8 text-center text-xs text-muted-foreground">
-            Belum ada permohonan izin atau sakit pada status ini.
+          <div className="p-10 text-center text-xs text-black/70 font-bold space-y-2">
+            <Clock className="h-8 w-8 text-black mx-auto" />
+            <p>Belum ada permohonan izin atau sakit pada status ini.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-xs text-left">
-              <thead className="bg-muted/50 border-b border-border text-muted-foreground uppercase font-semibold">
+              <thead className="bg-gray-soft border-b-2 border-black text-black uppercase font-mono font-bold">
                 <tr>
-                  <th className="p-3 w-8">
+                  <th className="p-3.5 w-10 text-center">
                     <input
                       type="checkbox"
                       checked={selectedItemIds.length === items.length && items.length > 0}
                       onChange={toggleSelectAll}
-                      className="rounded border-border text-primary"
+                      className="rounded border-2 border-black accent-black"
                     />
                   </th>
-                  <th className="p-3">Pertemuan</th>
-                  <th className="p-3">Tanggal</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3">Bukti</th>
-                  <th className="p-3 text-right">Tindakan</th>
+                  <th className="p-3.5">Pertemuan</th>
+                  <th className="p-3.5">Tanggal</th>
+                  <th className="p-3.5">Status</th>
+                  <th className="p-3.5">Bukti</th>
+                  <th className="p-3.5 text-right">Tindakan</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border font-medium">
+              <tbody className="divide-y-2 divide-black/10 font-medium text-black">
                 {items.map((it) => (
-                  <tr key={it.id} className="hover:bg-muted/30">
-                    <td className="p-3">
+                  <tr key={it.id} className="hover:bg-gray-soft/40 transition-colors">
+                    <td className="p-3.5 text-center">
                       <input
                         type="checkbox"
                         checked={selectedItemIds.includes(it.id)}
                         onChange={() => toggleSelect(it.id)}
-                        className="rounded border-border text-primary"
+                        className="rounded border-2 border-black accent-black"
                       />
                     </td>
-                    <td className="p-3 font-semibold text-foreground">
+                    <td className="p-3.5 font-bold text-black">
                       Pertemuan {it.sessionNumber}
                     </td>
-                    <td className="p-3 font-mono text-muted-foreground">
+                    <td className="p-3.5 font-mono text-black/80 font-bold">
                       {it.sessionDate || '-'}
                     </td>
-                    <td className="p-3">
+                    <td className="p-3.5">
                       {it.status === 'disetujui' && (
-                        <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full font-semibold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
-                          <CheckCircle2 className="w-3 h-3" />
+                        <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded border-2 border-black bg-white text-black font-mono font-bold shadow-retro-sm">
+                          <CheckCircle2 className="w-3.5 h-3.5" />
                           Disetujui
                         </span>
                       )}
                       {it.status === 'ditolak' && (
-                        <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full font-semibold bg-rose-50 text-rose-700 dark:bg-rose-950/40 dark:text-rose-300">
-                          <XCircle className="w-3 h-3" />
+                        <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded border-2 border-black bg-gray-soft text-black font-mono font-bold shadow-retro-sm">
+                          <XCircle className="w-3.5 h-3.5" />
                           Ditolak
                         </span>
                       )}
                       {it.status === 'menunggu' && (
-                        <span className="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-full font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
-                          <Clock className="w-3 h-3" />
+                        <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded border-2 border-black bg-white text-black font-mono font-bold shadow-retro-sm">
+                          <Clock className="w-3.5 h-3.5" />
                           Menunggu
                         </span>
                       )}
                     </td>
-                    <td className="p-3">
+                    <td className="p-3.5">
                       <button
                         type="button"
                         onClick={() => handleViewProof(it)}
-                        className="inline-flex items-center gap-1 text-primary hover:underline font-semibold"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded border border-black bg-white hover:bg-gray-soft text-black font-bold text-xs shadow-retro-sm cursor-pointer"
                       >
                         <Eye className="w-3.5 h-3.5" />
                         <span>Lihat Bukti</span>
                       </button>
                     </td>
-                    <td className="p-3 text-right">
+                    <td className="p-3.5 text-right">
                       {it.status === 'menunggu' ? (
-                        <div className="flex items-center justify-end gap-1.5">
+                        <div className="flex items-center justify-end gap-2">
                           <button
                             type="button"
                             onClick={() => handleReview(it.id, 'disetujui')}
                             disabled={isPending}
-                            className="px-2.5 py-1 rounded-lg font-semibold bg-emerald-600 text-white hover:bg-emerald-700 text-[11px]"
+                            className="px-3 py-1.5 rounded-lg border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-bold shadow-retro-sm cursor-pointer disabled:opacity-50"
                           >
                             Setujui
                           </button>
@@ -555,13 +562,13 @@ export function LecturerAbsenceTabView({ classId }: LecturerAbsenceTabViewProps)
                             type="button"
                             onClick={() => setRejectingItemId(it.id)}
                             disabled={isPending}
-                            className="px-2.5 py-1 rounded-lg font-semibold bg-rose-600 text-white hover:bg-rose-700 text-[11px]"
+                            className="px-3 py-1.5 rounded-lg border-2 border-black bg-white text-black hover:bg-gray-soft text-xs font-bold shadow-retro-sm cursor-pointer disabled:opacity-50"
                           >
                             Tolak
                           </button>
                         </div>
                       ) : (
-                        <span className="text-[11px] text-muted-foreground">
+                        <span className="text-xs font-mono font-bold text-black/70">
                           {it.reviewNote || 'Selesai ditinjau'}
                         </span>
                       )}
@@ -576,26 +583,35 @@ export function LecturerAbsenceTabView({ classId }: LecturerAbsenceTabViewProps)
 
       {/* Modal Input Alasan Penolakan */}
       {rejectingItemId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-          <div className="bg-surface border border-border rounded-2xl shadow-xl w-full max-w-md p-5 space-y-4">
-            <h3 className="font-bold text-sm text-foreground">
-              Alasan Penolakan Permohonan Izin / Sakit
-            </h3>
-            <p className="text-xs text-muted-foreground">
-              Penolakan wajib menyertakan alasan yang jelas untuk mahasiswa.
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
+          <div className="bg-white border-2 border-black rounded-2xl shadow-retro-lg w-full max-w-md p-5 space-y-4">
+            <div className="flex items-center justify-between border-b-2 border-black pb-2.5">
+              <h3 className="font-heading font-black text-sm text-black">
+                Alasan Penolakan Permohonan Izin / Sakit
+              </h3>
+              <button
+                type="button"
+                onClick={() => setRejectingItemId(null)}
+                className="p-1 rounded border border-black bg-white hover:bg-gray-soft text-black shadow-retro-sm cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <p className="text-xs text-black/75 font-medium leading-relaxed">
+              Penolakan wajib menyertakan alasan yang jelas agar mahasiswa dapat memperbaiki dokumen bukti.
             </p>
             <textarea
               rows={3}
               value={rejectionNote}
               onChange={(e) => setRejectionNote(e.target.value)}
-              placeholder="Contoh: Bukti surat dokter tidak terbaca atau melebihi batas tanggal."
-              className="field text-xs"
+              placeholder="Contoh: Bukti surat dokter buram atau tidak mencantumkan cap resmi fasilitas kesehatan."
+              className="w-full px-3 py-2 rounded-lg border-2 border-black bg-white text-black font-sans font-medium text-xs shadow-retro-sm"
             />
-            <div className="flex items-center justify-end gap-2">
+            <div className="flex items-center justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setRejectingItemId(null)}
-                className="btn-outline !w-auto text-xs px-3 py-1.5"
+                className="px-4 py-2 rounded-xl border-2 border-black bg-white hover:bg-gray-soft text-black text-xs font-bold shadow-retro-sm cursor-pointer"
               >
                 Batal
               </button>
@@ -603,7 +619,7 @@ export function LecturerAbsenceTabView({ classId }: LecturerAbsenceTabViewProps)
                 type="button"
                 onClick={() => handleReview(rejectingItemId, 'ditolak', rejectionNote)}
                 disabled={isPending || !rejectionNote.trim()}
-                className="px-3.5 py-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-700 text-xs font-semibold"
+                className="px-4 py-2 rounded-xl border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-bold shadow-retro cursor-pointer disabled:opacity-50"
               >
                 Tolak Permohonan
               </button>
@@ -614,36 +630,36 @@ export function LecturerAbsenceTabView({ classId }: LecturerAbsenceTabViewProps)
 
       {/* Panel Pratinjau Berkas Bukti (Signed URL) */}
       {activeProofUrl && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="bg-surface border border-border rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
-            <div className="p-4 border-b border-border flex items-center justify-between">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
+          <div className="bg-white border-2 border-black rounded-2xl shadow-retro-lg w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden">
+            <div className="p-4 border-b-2 border-black bg-gray-soft flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <FileText className="w-4 h-4 text-primary" />
-                <span className="font-bold text-xs text-foreground">
-                  Berkas Bukti Permohonan (Tautan Bertanda Waktu 60 Detik)
+                <FileText className="w-4 h-4 text-black" />
+                <span className="font-heading font-black text-xs sm:text-sm text-black">
+                  Berkas Bukti Permohonan (Signed URL 60s)
                 </span>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveProofUrl(null)}
-                className="p-1 rounded-lg hover:bg-muted text-muted-foreground"
+                className="p-1 rounded-lg border border-black bg-white hover:bg-gray-soft text-black shadow-retro-sm cursor-pointer"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
-            <div className="p-4 flex-1 overflow-auto flex items-center justify-center bg-muted/20">
-              <div className="text-center space-y-2 p-6 rounded-xl border border-dashed border-border">
-                <FileText className="w-12 h-12 text-muted-foreground mx-auto" />
-                <p className="text-xs text-foreground font-medium">
-                  Pratinjau Berkas Bukti Izin / Sakit
+            <div className="p-6 flex-1 overflow-auto flex items-center justify-center bg-gray-soft/20">
+              <div className="text-center space-y-3 p-8 rounded-2xl border-2 border-dashed border-black bg-white shadow-retro max-w-md w-full">
+                <FileText className="w-12 h-12 text-black mx-auto" />
+                <p className="text-xs text-black font-bold">
+                  Pratinjau Berkas Bukti Izin / Sakit Mahasiswa
                 </p>
                 <a
                   href={activeProofUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-solid !w-auto text-xs px-3.5 py-1.5 inline-flex items-center gap-1"
+                  className="px-4 py-2 rounded-xl border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-bold inline-flex items-center gap-2 shadow-retro cursor-pointer"
                 >
-                  <Eye className="w-3.5 h-3.5" />
+                  <Eye className="w-4 h-4" />
                   <span>Buka Berkas di Tab Baru</span>
                 </a>
               </div>

@@ -63,8 +63,8 @@ const STATUS_BADGES: Record<
   },
   DITOLAK: {
     label: 'Ditolak',
-    bg: 'bg-red-100',
-    text: 'text-red-800',
+    bg: 'bg-gray-soft',
+    text: 'text-black font-bold',
     icon: XCircle,
   },
 };
@@ -93,8 +93,8 @@ const KRS_STATUS_BADGES: Record<
   },
   DITOLAK: {
     label: 'Perlu Revisi',
-    bg: 'bg-rose-100',
-    text: 'text-rose-900',
+    bg: 'bg-gray-soft',
+    text: 'text-black font-bold',
     icon: XCircle,
   },
 };
@@ -291,8 +291,8 @@ export function RequestsView({ initialRequests, initialKrs }: RequestsViewProps)
               </div>
 
               {formError && (
-                <div className="p-3 rounded-lg border-2 border-ink bg-red-100 text-red-900 text-xs font-bold flex items-center gap-2">
-                  <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
+                <div className="p-3 rounded-lg border-2 border-ink bg-gray-soft text-black text-xs font-bold flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 shrink-0 text-black" />
                   <span>{formError}</span>
                 </div>
               )}

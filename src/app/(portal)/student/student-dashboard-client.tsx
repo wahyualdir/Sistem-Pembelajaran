@@ -20,6 +20,7 @@ import { NearestDeadlines } from '@/components/home/nearest-deadlines';
 import { TodaySchedule } from '@/components/home/today-schedule';
 import { ActiveClassesGrid } from '@/components/home/active-classes-grid';
 import { RightPanelSwitcher } from '@/components/home/right-panel-switcher';
+import { getNextUpcomingCourse } from '@/modules/academic/home-schedule-utils';
 import { usePortalLayout } from '@/app/(portal)/portal-shell';
 import { ambilMateriTerakhirDibukaAction } from '@/features/materi-tugas/progres-actions';
 import {
@@ -124,7 +125,13 @@ export function StudentDashboardClient({
   const [courses] = useState<ActiveClassItem[]>(activeClasses);
 
   const { isRightDrawerOpen, setIsRightDrawerOpen, setHasRightPanel } = usePortalLayout();
-  const [selectedCourse, setSelectedCourse] = useState<ActiveClassItem | undefined>(courses[0]);
+  const [selectedCourse, setSelectedCourse] = useState<ActiveClassItem | undefined>(() => {
+    if (activeClasses && activeClasses.length > 0) {
+      const nearest = getNextUpcomingCourse(activeClasses, new Date());
+      return nearest?.course || activeClasses[0];
+    }
+    return undefined;
+  });
   const [rightPanelTab, setRightPanelTab] = useState<'hari-ini' | 'detail-kelas'>('hari-ini');
   const [materiTerakhir, setMateriTerakhir] = useState<{
     materi: { id: string; judul: string; pathFile: string; deskripsi?: string };
@@ -177,19 +184,42 @@ export function StudentDashboardClient({
       <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
         <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
           {/* HEADER BERANDA: RUANG PEMBELAJARAN MAHASISWA */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
-            <div className="space-y-0.5">
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
-                <BookOpen className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
-                Ruang Pembelajaran Mahasiswa
-              </h1>
-              <p className="text-xs sm:text-sm text-gray-dark font-bold">
+          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pt-1">
+            <div className="space-y-1.5">
+              {/* Kicker / Context Tag */}
+              <div className="flex items-center gap-2">
+                <span className="px-2.5 py-0.5 rounded-md border border-black/15 bg-black/5 text-[11px] font-sans font-bold uppercase tracking-wider text-black">
+                  Portal Mahasiswa
+                </span>
+                <span className="text-black/30 font-bold">•</span>
+                <span className="text-[11px] font-sans font-bold text-black/70 uppercase">
+                  Ganjil 2026/2027
+                </span>
+              </div>
+
+              {/* Baris Judul Utama: Logo & Teks Simetris Sejajar Sempurna */}
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-lg border-2 border-ink bg-surface shadow-xs flex items-center justify-center shrink-0">
+                  <BookOpen className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-ink" />
+                </div>
+                <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-ink leading-none">
+                  Ruang Pembelajaran Mahasiswa
+                </h1>
+              </div>
+
+              {/* Subtitle */}
+              <p className="text-xs sm:text-sm text-ink/80 font-bold leading-relaxed pt-0.5">
                 Pantau perkuliahan aktif, jadwal kuliah hari ini, tenggat tugas, dan ujian Anda.
               </p>
             </div>
-            <div className="hidden sm:flex items-center gap-2 shrink-0">
-              <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
-                SEMESTER AKTIF 2026/2027
+
+            <div className="hidden sm:flex items-center gap-2 shrink-0 pt-1">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-sans font-bold bg-surface border border-black/20 text-ink shadow-xs">
+                <span className="w-2 h-2 rounded-full bg-black/60" />
+                <span>Status: Aktif</span>
+              </span>
+              <span className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-sans font-bold bg-gray-soft/80 border border-black/20 text-ink shadow-xs">
+                2026/2027
               </span>
             </div>
           </div>
@@ -226,19 +256,47 @@ export function StudentDashboardClient({
             onRefresh={async () => getHomeBannerAction()}
           />
 
-          {/* SECTION STATUS AKADEMIK & PERINGATAN DINI */}
-          {(showAll || showKelasSaya) && (
-            <StudentAcademicStatusCard evaluations={academicStatus} />
+          {/* PERINGATAN RISIKO AKADEMIK (HANYA MUNCUL OTOMATIS JIKA ADA KELAS BERISIKO) */}
+          <StudentAcademicStatusCard evaluations={academicStatus} />
+
+          {/* GRID 2 KOLOM: JADWAL HARI INI & TENGGAT TERDEKAT */}
+          {(showAll || showPresensi || showJadwal || showTugasKuis || showUjian) && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 items-start">
+              {/* Kolom Kiri: Jadwal Kuliah Hari Ini */}
+              {(showAll || showPresensi || showJadwal) && (
+                <div className="space-y-4">
+                  <TodaySchedule items={todaySchedule} />
+                </div>
+              )}
+
+              {/* Kolom Kanan: Tenggat Terdekat */}
+              {(showAll || showTugasKuis || showUjian) && (
+                <div className="space-y-4">
+                  <NearestDeadlines initialItems={deadlines} />
+                </div>
+              )}
+            </div>
           )}
 
-          {/* SECTION PRIORITAS HARI INI (PETA PULAU) */}
-          {(showAll || showKelasSaya || showTugasKuis) && (
+          {/* PRIORITAS HARIAN (TAMPIL PADA FILTER TUGAS & KUIS ATAU KELAS SAYA) */}
+          {!showAll && (showKelasSaya || showTugasKuis) && (
             <DailyPriorityCard initialItems={dailyPriorities} />
           )}
 
-          {/* SECTION: KARTU LANJUTKAN BELAJAR (Tampil pada Semua, Kelas Saya, Tugas & Kuis) */}
-          {(showAll || showKelasSaya || showTugasKuis) && (
-            <section aria-label="Lanjutkan Belajar" className="space-y-3">
+          {/* SECTION: KELAS SAYA / KELAS AKTIF */}
+          {(showAll || showKelasSaya || showNilai || showPresensi) && (
+            <div className="reveal-on-scroll">
+              <ActiveClassesGrid
+                courses={courses}
+                selectedCourse={selectedCourse}
+                onSelectCourse={handleSelectCourse}
+              />
+            </div>
+          )}
+
+          {/* SECTION: KARTU LANJUTKAN BELAJAR (HANYA JIKA ADA MATERI AKTIF) */}
+          {materiTerakhir && (showAll || showKelasSaya || showTugasKuis) && (
+            <section aria-label="Lanjutkan Belajar" className="reveal-scale space-y-3">
               <div className="flex items-center justify-between">
                 <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary inline-block" />
@@ -252,82 +310,56 @@ export function StudentDashboardClient({
                 </Link>
               </div>
 
-              {materiTerakhir ? (
-                <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                  <div className="space-y-1.5 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft border border-ink text-ink">
-                        {materiTerakhir.kelas.kode}
+              <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div className="space-y-1.5 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft border border-ink text-ink">
+                      {materiTerakhir.kelas.kode}
+                    </span>
+                    <span className="text-xs font-bold text-gray-dark truncate">
+                      {materiTerakhir.kelas.namaMataKuliah}
+                    </span>
+                    {materiTerakhir.progres.selesai ? (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-surface text-ink border-2 border-ink">
+                        <CheckCircle2 className="h-3 w-3" />
+                        Selesai
                       </span>
-                      <span className="text-xs font-bold text-gray-dark truncate">
-                        {materiTerakhir.kelas.namaMataKuliah}
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft text-ink border border-ink">
+                        <Clock className="h-3 w-3" />
+                        Sedang Dipelajari
                       </span>
-                      {materiTerakhir.progres.selesai ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-surface text-ink border-2 border-ink">
-                          <CheckCircle2 className="h-3 w-3" />
-                          Selesai
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft text-ink border border-ink">
-                          <Clock className="h-3 w-3" />
-                          Sedang Dipelajari
-                        </span>
-                      )}
-                    </div>
-
-                    <h3 className="font-heading font-bold text-lg sm:text-xl text-ink line-clamp-1">
-                      {materiTerakhir.materi.judul}
-                    </h3>
-
-                    <p className="text-xs text-gray-dark font-bold">
-                      Terakhir dibuka:{' '}
-                      {new Date(materiTerakhir.progres.terakhirDibuka).toLocaleDateString('id-ID', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      })}
-                    </p>
+                    )}
                   </div>
 
-                  <Link
-                    href="/mahasiswa/tugas"
-                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-ink text-white hover:bg-ink/90 text-xs sm:text-sm font-bold shadow-retro transition-all shrink-0 min-h-[44px]"
-                  >
-                    <BookOpen className="h-4 w-4" />
-                    <span>Buka Materi</span>
-                    <ChevronRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              ) : (
-                <div className="rounded-xl border-2 border-dashed border-ink bg-surface/50 p-6 text-center space-y-2">
-                  <BookOpen className="h-8 w-8 text-gray-dark mx-auto" />
-                  <p className="text-sm font-bold text-ink">
-                    Belum Ada Materi yang Sedang Dipelajari
+                  <h3 className="font-heading font-bold text-lg sm:text-xl text-ink line-clamp-1">
+                    {materiTerakhir.materi.judul}
+                  </h3>
+
+                  <p className="text-xs text-gray-dark font-bold">
+                    Terakhir dibuka:{' '}
+                    {new Date(materiTerakhir.progres.terakhirDibuka).toLocaleDateString('id-ID', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    })}
                   </p>
-                  <p className="text-xs text-gray-dark max-w-md mx-auto">
-                    Mulai eksplorasi bahan ajar dan modul perkuliahan aktif untuk melacak progres belajar Anda.
-                  </p>
-                  <div className="pt-2">
-                    <Link
-                      href="/mahasiswa/tugas"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-ink bg-surface text-ink hover:bg-gray-soft text-xs font-bold shadow-retro transition-all min-h-[44px]"
-                    >
-                      <span>Buka Daftar Materi Kuliah</span>
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
                 </div>
-              )}
+
+                <Link
+                  href="/mahasiswa/tugas"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-ink text-white hover:bg-ink/90 text-xs sm:text-sm font-bold shadow-retro transition-all shrink-0 min-h-[44px]"
+                >
+                  <BookOpen className="h-4 w-4" />
+                  <span>Buka Materi</span>
+                  <ChevronRight className="h-4 w-4" />
+                </Link>
+              </div>
             </section>
           )}
 
-          {/* SECTION 2: TENGGAT TERDEKAT (Tampil pada Semua, Tugas & Kuis, Ujian) */}
-          {(showAll || showTugasKuis || showUjian) && (
-            <NearestDeadlines initialItems={deadlines} />
-          )}
-
-          {/* SECTION: RINGKASAN PRESENSI PEMBELAJARAN (Tampil saat kategori Presensi atau Semua) */}
-          {(showAll || showPresensi) && (
+          {/* SECTION: RINGKASAN PRESENSI PEMBELAJARAN (HANYA MUNCUL DI TAB PRESENSI AGAR BERANDA BEBAS DARI KARTU DUPLIKAT) */}
+          {showPresensi && !showAll && (
             <section aria-label="Presensi Pembelajaran" className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
@@ -446,22 +478,8 @@ export function StudentDashboardClient({
             </section>
           )}
 
-          {/* SECTION 3: JADWAL HARI INI (Tampil pada Semua, Presensi, Jadwal) */}
-          {(showAll || showPresensi || showJadwal) && (
-            <TodaySchedule items={todaySchedule} />
-          )}
-
-          {/* SECTION 4: KELAS AKTIF (Tampil pada Semua, Kelas Saya, Nilai, Presensi) */}
-          {(showAll || showKelasSaya || showNilai || showPresensi) && (
-            <ActiveClassesGrid
-              courses={courses}
-              selectedCourse={selectedCourse}
-              onSelectCourse={handleSelectCourse}
-            />
-          )}
-
-          {/* SECTION 5: RECOMMENDED / MATERI & TUGAS (Tampil pada Semua, Tugas & Kuis) */}
-          {(showAll || showTugasKuis) && (
+          {/* SECTION 5: RECOMMENDED / MATERI & TUGAS (Tampil pada Filter Tugas & Kuis) */}
+          {showTugasKuis && !showAll && (
             <section aria-label="Materi dan Tugas Kuliah" className="space-y-6">
               <div className="flex items-center justify-between">
                 <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
@@ -546,7 +564,7 @@ export function StudentDashboardClient({
         aria-label="Panel Ringkasan & Detail"
         className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
-        {/* BAGIAN 2 ELEMEN BEKU: KARTU LOGO TEKNOLOGI (BASELINE IDENTIK 402x351) */}
+        {/* KARTU LOGO INTERAKTIF 3D ROTASI BEBAS */}
         <div className="shrink-0 w-full">
           <UirLogo3D />
         </div>
@@ -554,6 +572,8 @@ export function StudentDashboardClient({
         {/* PENGALIH DUA KONDISI: "Hari Ini" & "Detail Kelas" DI BAWAH KARTU LOGO */}
         <RightPanelSwitcher
           selectedCourse={selectedCourse}
+          courses={courses}
+          onSelectCourse={setSelectedCourse}
           summary={currentSummary}
           agenda={agendaItems}
           activeTab={rightPanelTab}
@@ -603,6 +623,8 @@ export function StudentDashboardClient({
               </div>
               <RightPanelSwitcher
                 selectedCourse={selectedCourse}
+                courses={courses}
+                onSelectCourse={setSelectedCourse}
                 summary={currentSummary}
                 agenda={agendaItems}
                 activeTab={rightPanelTab}

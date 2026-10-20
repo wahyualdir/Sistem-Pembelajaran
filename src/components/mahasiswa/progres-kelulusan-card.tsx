@@ -15,12 +15,12 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
       <CardHeader className="pb-3 border-b border-border/50 bg-muted/20">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-semibold flex items-center gap-2 text-foreground font-heading">
-            <GraduationCap className="h-4 w-4 text-primary" />
+            <GraduationCap className="h-4 w-4 text-ink" />
             Progres Kelulusan Program Sarjana (S1)
           </CardTitle>
           <Badge
             variant="outline"
-            className="text-xs bg-primary-soft text-primary font-medium border-primary/20"
+            className="text-xs bg-gray-soft text-ink font-bold border-ink/20"
           >
             Target {progres.totalTargetSks} SKS
           </Badge>
@@ -34,7 +34,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
             <span className="font-semibold text-foreground">
               Total Akumulasi SKS Lulus
             </span>
-            <span className="font-bold text-primary font-heading tabular-nums text-sm">
+            <span className="font-bold text-ink font-heading tabular-nums text-sm">
               {progres.totalSksLulus} / {progres.totalTargetSks} SKS ({progres.persenTotal}%)
             </span>
           </div>
@@ -57,7 +57,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
           <div className="p-3 rounded-[8px] bg-muted/30 border border-border/60 space-y-2">
             <div className="flex items-center justify-between text-xs">
               <span className="font-medium text-foreground flex items-center gap-1.5">
-                <BookOpen className="h-3.5 w-3.5 text-primary" />
+                <BookOpen className="h-3.5 w-3.5 text-ink" />
                 Mata Kuliah Wajib
               </span>
               <span className="font-bold text-foreground font-heading tabular-nums">
@@ -66,7 +66,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
             </div>
             <div className="w-full bg-border rounded-full h-2 overflow-hidden">
               <div
-                className="bg-primary h-2 rounded-full transition-all duration-500 ease-out"
+                className="bg-ink h-2 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${progres.persenWajib}%` }}
               />
             </div>
@@ -101,7 +101,7 @@ export function ProgresKelulusanCard({ progres }: ProgresKelulusanCardProps) {
         {/* Status Perkiraan Semester Tersisa & Kelayakan Skripsi */}
         <div className="p-3.5 rounded-[10px] bg-surface border border-border flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-start gap-2.5">
-            <Clock className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+            <Clock className="h-4 w-4 text-ink mt-0.5 flex-shrink-0" />
             <div>
               <span className="font-semibold text-foreground block">
                 Estimasi Waktu Kelulusan

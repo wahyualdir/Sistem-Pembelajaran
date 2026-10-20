@@ -35,7 +35,7 @@ export function MarkdownViewer({ content, className }: MarkdownViewerProps) {
         tokens.push(
           <code
             key={keyIdx++}
-            className="rounded bg-muted px-1.5 py-0.5 font-sans text-[13px] text-primary"
+            className="rounded bg-gray-soft px-1.5 py-0.5 font-sans font-bold text-[13px] text-ink"
           >
             {codeMatch[1]}
           </code>
@@ -77,7 +77,7 @@ export function MarkdownViewer({ content, className }: MarkdownViewerProps) {
             href={linkMatch[2]}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-primary underline underline-offset-4 hover:opacity-80"
+            className="text-ink font-bold underline underline-offset-4 hover:opacity-80"
           >
             {linkMatch[1]}
           </a>

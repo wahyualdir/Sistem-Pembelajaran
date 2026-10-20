@@ -81,12 +81,12 @@ export function AiAcademicAssistant() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="ai-assistant-btn fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center justify-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full border-2 border-ink bg-primary px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-retro hover:bg-primary-dark transition-all hover:scale-105 active:scale-95 group cursor-pointer"
+          className="ai-assistant-btn fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center justify-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full border-2 border-black bg-black px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-retro hover:bg-neutral-800 transition-all hover:scale-105 active:scale-95 group cursor-pointer"
           aria-label="Buka Asisten AI SIAJAR"
         >
           <div className="relative shrink-0 flex items-center justify-center">
             <Bot className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
-            <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-white ring-2 ring-primary" />
+            <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-white ring-2 ring-black" />
           </div>
           <span className="ai-assistant-btn-text text-xs font-bold tracking-wide text-white whitespace-nowrap">
             Tanya AI
@@ -100,13 +100,13 @@ export function AiAcademicAssistant() {
           {/* Header */}
           <div className="flex items-center justify-between border-b-2 border-ink bg-gray-soft px-4 py-3">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full border border-ink bg-primary text-white">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-black bg-black text-white">
                 <Bot className="h-4 w-4" />
               </div>
               <div>
                 <h3 className="text-xs font-bold text-ink flex items-center gap-1.5">
                   SIAJAR AI Assistant
-                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
+                  <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
                 </h3>
                 <p className="text-xs text-gray-dark">Konsultasi & Panduan Akademik</p>
               </div>
@@ -130,7 +130,7 @@ export function AiAcademicAssistant() {
                 <div
                   className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs ${
                     m.sender === 'user'
-                      ? 'bg-primary text-white rounded-br-none'
+                      ? 'bg-black text-white rounded-br-none'
                       : 'border border-border bg-background text-foreground rounded-bl-none shadow-sm'
                   }`}
                 >
@@ -146,7 +146,7 @@ export function AiAcademicAssistant() {
 
             {pending && (
               <div className="flex items-center gap-2 rounded-2xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground w-fit">
-                <Bot className="h-3.5 w-3.5 animate-spin text-primary" />
+                <Bot className="h-3.5 w-3.5 animate-spin text-black" />
                 <span>AI sedang berpikir...</span>
               </div>
             )}
@@ -187,7 +187,7 @@ export function AiAcademicAssistant() {
             <button
               type="submit"
               disabled={pending || !input.trim()}
-              className="flex h-9 w-9 items-center justify-center rounded-control bg-primary text-white hover:bg-primary/90 disabled:opacity-50 transition-colors shrink-0"
+              className="flex h-9 w-9 items-center justify-center rounded-control bg-black text-white hover:bg-neutral-800 disabled:opacity-50 transition-colors shrink-0"
             >
               <Send className="h-4 w-4" />
             </button>

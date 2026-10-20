@@ -191,10 +191,10 @@ export function Sidebar({
               <Flame className="h-6 w-6 fill-current" />
             </div>
             <div className="flex flex-col text-left">
-              <span className="font-heading font-bold text-base tracking-tight text-black leading-tight">
+              <span className="font-heading font-black text-base tracking-tight text-black leading-tight">
                 SIAJAR
               </span>
-              <span className="text-xs text-gray-600 font-semibold leading-tight mt-0.5">
+              <span className="text-xs text-black font-bold leading-tight mt-0.5">
                 Sistem Akademik
               </span>
             </div>
@@ -219,21 +219,21 @@ export function Sidebar({
               <div key={group.id || group.title} className="space-y-1.5">
                 {group.title ? (
                   <div className="flex items-center justify-between px-2.5 mb-1.5">
-                    <p className="text-xs font-bold tracking-wider text-gray-dark">
+                    <p className="text-xs font-black tracking-wider text-black uppercase">
                       {group.title}
                     </p>
                     {group.collapsible && (
                       <button
                         type="button"
                         onClick={() => toggleGroupCollapse(group.id)}
-                        className="p-1 rounded hover:bg-gray-soft text-gray-dark transition-transform cursor-pointer"
+                        className="p-1 rounded hover:bg-gray-soft text-black transition-transform cursor-pointer"
                         title={`Buka/Tutup grup ${group.title}`}
                         aria-label={`Toggle grup ${group.title}`}
                       >
                         <ChevronDown
                           className={cn(
                             "h-3.5 w-3.5 transition-transform duration-200",
-                            isGroupCollapsed ? "-rotate-90 text-gray" : "rotate-0 text-gray-dark"
+                            isGroupCollapsed ? "-rotate-90 text-gray" : "rotate-0 text-black"
                           )}
                         />
                       </button>
@@ -254,15 +254,15 @@ export function Sidebar({
                           className={cn(
                             "flex items-center justify-between rounded-none sm:rounded-[2px] px-3.5 py-2.5 text-sm sm:text-base font-bold transition-all focus-visible:outline-none",
                             isActive
-                              ? "border-2 border-ink border-l-4 border-l-primary bg-ink text-white shadow-retro font-bold hover:bg-ink/90"
-                              : "text-ink hover:bg-gray-soft hover:text-ink font-bold"
+                              ? "border-2 border-ink border-l-4 border-l-black bg-ink text-white shadow-retro font-bold hover:bg-ink/90"
+                              : "text-black hover:bg-gray-soft hover:text-black font-bold"
                           )}
                         >
                           <span className="flex items-center gap-3 truncate">
                             <Icon
                               className={cn(
                                 "h-5 w-5 shrink-0 transition-transform",
-                                isActive ? "text-white" : "text-ink"
+                                isActive ? "text-white" : "text-black"
                               )}
                             />
                             <span className="truncate">{item.label}</span>
@@ -271,7 +271,7 @@ export function Sidebar({
                             <span
                               className={cn(
                                 "inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold font-sans shrink-0",
-                                isActive ? "bg-surface text-ink" : "bg-primary text-white"
+                                isActive ? "bg-surface text-black font-bold" : "bg-black text-white font-bold"
                               )}
                             >
                               {item.badge}
@@ -308,7 +308,7 @@ export function Sidebar({
                   }}
                   className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-gray-soft text-xs font-semibold text-ink transition-colors group"
                 >
-                  <User className="h-3.5 w-3.5 text-primary group-hover:scale-110 transition-transform" />
+                  <User className="h-3.5 w-3.5 text-black group-hover:scale-110 transition-transform" />
                   <span>Buka Profil Lengkap</span>
                 </Link>
 
@@ -344,7 +344,7 @@ export function Sidebar({
                         setIsProfileMenuOpen(false);
                         onLogout();
                       }}
-                      className="flex items-center gap-2 w-full px-2.5 py-1.5 rounded-md hover:bg-primary/10 text-primary-dark text-xs font-bold transition-colors"
+                      className="flex items-center gap-2 w-full px-2.5 py-1.5 rounded-md hover:bg-gray-soft text-black text-xs font-bold transition-colors"
                     >
                       <LogOut className="h-3.5 w-3.5" />
                       <span>Keluar Akun</span>
@@ -369,10 +369,10 @@ export function Sidebar({
 
                 {/* Nama & Subtitle Role */}
                 <div className="text-left min-w-0 flex-1">
-                  <p className="text-sm font-bold text-ink leading-tight truncate group-hover:text-primary-dark transition-colors">
+                  <p className="text-sm font-bold text-black leading-tight truncate group-hover:underline transition-colors">
                     {displayName}
                   </p>
-                  <p className="text-xs text-gray-dark font-medium leading-tight truncate mt-0.5">
+                  <p className="text-xs text-black/80 font-bold leading-tight truncate mt-0.5">
                     {roleLabel}
                   </p>
                 </div>
@@ -398,7 +398,7 @@ export function Sidebar({
               <button
                 type="button"
                 onClick={onLogout}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-retro-border/60 bg-retro-surface hover:bg-gray-soft text-primary-dark text-xs font-bold transition-colors focus-visible:outline-none"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded border border-retro-border/60 bg-retro-surface hover:bg-gray-soft text-black text-xs font-bold transition-colors focus-visible:outline-none"
                 title="Keluar dari akun"
               >
                 <LogOut className="h-3.5 w-3.5" />

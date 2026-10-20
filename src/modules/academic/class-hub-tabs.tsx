@@ -137,8 +137,10 @@ export interface ClassDetailData {
     nim?: string;
     nidn?: string;
     permissions: string[];
+    assistant_type?: 'ASISTEN_DOSEN' | 'ASISTEN_LAB';
   }>;
   viewer: string;
+  userRole?: string;
   currentUserId?: string;
   perms?: string[];
   quizzes?: QuizItem[];
@@ -238,6 +240,8 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
   const lecturer = viewer === 'LECTURER';
   const ta = viewer === 'TA';
   const student = viewer === 'STUDENT';
+  const isStaff = data.userRole === 'ACADEMIC_STAFF' || data.userRole === 'SUPER_ADMIN';
+  const isActualLecturer = data.userRole === 'LECTURER' || (!data.userRole && lecturer);
   const can = (p: string) => !!perms?.includes(p);
 
   const petaEnabled = data.petaPulauData?.flags?.peta_pulau ?? false;
@@ -297,7 +301,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  'flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shrink-0 cursor-pointer',
+                  'flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer',
                   isActive
                     ? 'border-2 border-black bg-black text-white shadow-retro scale-[1.02]'
                     : 'border-2 border-black bg-white text-black shadow-xs hover:bg-gray-soft'
@@ -319,7 +323,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               className="text-xs font-bold bg-surface text-black border-2 border-black px-3 py-1.5 rounded-lg shadow-xs hover:bg-white transition-all flex items-center gap-1.5"
               title="Salin Kode Kelas"
             >
-              <Key className="h-3.5 w-3.5 text-primary" />
+              <Key className="h-3.5 w-3.5 text-black" />
               <span>{cls.join_code}</span>
               {copiedCode ? (
                 <span className="text-xs bg-black text-white px-1.5 py-0.5 rounded font-bold">Disalin!</span>
@@ -695,7 +699,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                               </span>
                             )}
                             {(lecturer || ta) && (a as any).release_at && new Date((a as any).release_at) > new Date() && (
-                              <span className="text-xs font-semibold px-2.5 py-1 rounded-lg border border-black bg-amber-100 text-amber-900">
+                              <span className="text-xs font-semibold px-2.5 py-1 rounded-lg border-2 border-black bg-gray-soft text-black font-mono font-bold shadow-retro-sm">
                                 Tampil untuk mahasiswa pada {fmt((a as any).release_at)}
                               </span>
                             )}
@@ -784,7 +788,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                               {q.exam_type ?? 'KUIS'}
                             </span>
                             {(lecturer || ta) && (q as any).release_at && new Date((q as any).release_at) > new Date() && (
-                              <span className="text-xs font-semibold px-2 py-0.5 rounded border border-black bg-amber-100 text-amber-900">
+                              <span className="text-xs font-semibold px-2 py-0.5 rounded border-2 border-black bg-gray-soft text-black font-mono font-bold shadow-retro-sm">
                                 Tampil untuk mahasiswa pada {fmt((q as any).release_at)}
                               </span>
                             )}
@@ -838,7 +842,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
                           {(lecturer || ta) && (m as any).release_at && new Date((m as any).release_at) > new Date() && (
-                            <span className="text-xs font-semibold px-2.5 py-1 rounded-lg border border-black bg-amber-100 text-amber-900">
+                            <span className="text-xs font-semibold px-2.5 py-1 rounded-lg border-2 border-black bg-gray-soft text-black font-mono font-bold shadow-retro-sm">
                               Tampil untuk mahasiswa pada {fmt((m as any).release_at)}
                             </span>
                           )}
@@ -982,14 +986,21 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold bg-surface text-ink border border-black px-2.5 py-1 rounded">
-                        Asisten Dosen
-                      </span>
-                      {lecturer && (
+                      {ast.assistant_type === 'ASISTEN_LAB' ? (
+                        <span className="text-xs font-bold bg-sky-100 text-sky-800 border border-sky-600 px-2.5 py-1 rounded">
+                          🔬 Asisten Lab
+                        </span>
+                      ) : (
+                        <span className="text-xs font-bold bg-surface text-ink border border-black px-2.5 py-1 rounded">
+                          🎓 Asisten Dosen
+                        </span>
+                      )}
+                      {(isActualLecturer || (isStaff && ast.assistant_type === 'ASISTEN_LAB')) && (
                         <RevokeAssistant
                           classId={cls.id}
                           identifier={ast.nim || ast.nidn || ast.user_id}
                           name={ast.name}
+                          assistantType={ast.assistant_type}
                         />
                       )}
                     </div>
@@ -998,11 +1009,17 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               </div>
             )}
 
-            {/* Form Tambah Asisten untuk Dosen */}
-            {lecturer && (
+            {/* Form Tambah Asisten untuk Dosen & Staf */}
+            {(lecturer || isStaff) && (
               <div className="p-5 rounded-2xl border-2 border-black bg-gray-soft/40 space-y-3">
-                <h4 className="font-bold text-sm text-black">+ Tambah Asisten Dosen Baru</h4>
-                <AssistantForm classId={cls.id} />
+                <h4 className="font-bold text-sm text-black">
+                  + Tambah {isStaff && !isActualLecturer ? 'Asisten Lab' : 'Asisten (Dosen / Lab)'}
+                </h4>
+                <AssistantForm
+                  classId={cls.id}
+                  allowedTypes={isStaff && !isActualLecturer ? ['ASISTEN_LAB'] : ['ASISTEN_DOSEN', 'ASISTEN_LAB']}
+                  defaultType={isStaff && !isActualLecturer ? 'ASISTEN_LAB' : 'ASISTEN_DOSEN'}
+                />
               </div>
             )}
           </div>
@@ -1048,14 +1065,14 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       )}
 
       {/* ======================================================== */}
-      {/* TAB: ASISTEN (KHUSUS DOSEN PENGAMPU)                     */}
+      {/* TAB: ASISTEN (DOSEN PENGAMPU & STAF AKADEMIK)            */}
       {/* ======================================================== */}
       {activeTab === 'asisten' && (
         <div className="space-y-6">
           <div className="p-4 bg-gray-soft border-2 border-black rounded-2xl flex items-center justify-between">
             <div>
-              <h3 className="font-heading font-bold text-lg text-black">Kelola Asisten Dosen & Hak Akses</h3>
-              <p className="text-xs text-black/70 font-medium">Delegasikan izin pengelolaan presensi, koreksi tugas, dan materi kelas kepada asisten resmi.</p>
+              <h3 className="font-heading font-bold text-lg text-black">Kelola Asisten Dosen & Asisten Lab</h3>
+              <p className="text-xs text-black/70 font-medium">Asisten Dosen ditugaskan langsung oleh Dosen Pengampu. Asisten Lab dapat ditugaskan oleh Staf Akademik dan Dosen.</p>
             </div>
             <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
               {assistants?.length ?? 0} Asisten Aktif
@@ -1065,6 +1082,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           {/* Daftar Asisten */}
           {assistants && assistants.length > 0 && (
             <div className="space-y-3">
+              <h4 className="font-bold text-sm text-black">Daftar Asisten Kelas</h4>
               {assistants.map((ast) => (
                 <div key={ast.user_id} className="p-4 rounded-2xl border-2 border-black bg-white shadow-retro flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3.5">
@@ -1079,12 +1097,21 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold bg-retro-mint border border-black px-2.5 py-1 rounded">Asisten Dosen</span>
-                    {lecturer && (
+                    {ast.assistant_type === 'ASISTEN_LAB' ? (
+                      <span className="text-xs font-bold bg-sky-100 text-sky-800 border border-sky-600 px-2.5 py-1 rounded">
+                        🔬 Asisten Lab
+                      </span>
+                    ) : (
+                      <span className="text-xs font-bold bg-retro-mint border border-black px-2.5 py-1 rounded">
+                        🎓 Asisten Dosen
+                      </span>
+                    )}
+                    {(isActualLecturer || (isStaff && ast.assistant_type === 'ASISTEN_LAB')) && (
                       <RevokeAssistant
                         classId={cls.id}
                         identifier={ast.nim || ast.nidn || ast.user_id}
                         name={ast.name}
+                        assistantType={ast.assistant_type}
                       />
                     )}
                   </div>
@@ -1093,11 +1120,17 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             </div>
           )}
 
-          {/* Form Tambah Asisten untuk Dosen */}
-          {lecturer && (
+          {/* Form Tambah Asisten untuk Dosen & Staf */}
+          {(lecturer || isStaff) && (
             <div className="p-5 rounded-2xl border-2 border-black bg-gray-soft/40 space-y-3">
-              <h4 className="font-bold text-sm text-black">+ Tambah Asisten Dosen Baru</h4>
-              <AssistantForm classId={cls.id} />
+              <h4 className="font-bold text-sm text-black">
+                + Tambah {isStaff && !isActualLecturer ? 'Asisten Lab' : 'Asisten Baru (Dosen / Lab)'}
+              </h4>
+              <AssistantForm
+                classId={cls.id}
+                allowedTypes={isStaff && !isActualLecturer ? ['ASISTEN_LAB'] : ['ASISTEN_DOSEN', 'ASISTEN_LAB']}
+                defaultType={isStaff && !isActualLecturer ? 'ASISTEN_LAB' : 'ASISTEN_DOSEN'}
+              />
             </div>
           )}
         </div>
@@ -1121,7 +1154,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           </div>
 
           {remindSuccess && (
-            <div className="p-3 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-300">
+            <div className="p-3.5 rounded-xl bg-gray-soft text-black text-xs font-bold border-2 border-black shadow-retro-sm">
               {remindSuccess}
             </div>
           )}
@@ -1185,7 +1218,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                       </div>
                       <div className="flex items-center gap-2">
                         {isLocked && (
-                          <span className="text-xs font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-300 flex items-center gap-1">
+                          <span className="text-xs font-semibold px-2 py-0.5 rounded bg-gray-soft text-black border-2 border-black font-mono font-bold shadow-retro-sm flex items-center gap-1">
                             <Lock className="w-3 h-3" /> Terkunci
                           </span>
                         )}
@@ -1197,8 +1230,8 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
                     {/* Penguncian Berurutan (10.4) */}
                     {isLocked ? (
-                      <div className="p-3.5 rounded-xl border border-amber-300 bg-amber-50 text-amber-900 flex items-center gap-2 text-xs">
-                        <Lock className="w-4 h-4 text-amber-700 shrink-0" />
+                      <div className="p-3.5 rounded-xl border-2 border-black bg-gray-soft text-black font-bold shadow-retro-sm flex items-center gap-2 text-xs">
+                        <Lock className="w-4 h-4 text-black shrink-0" />
                         <span>Selesaikan &apos;{prevMat?.title || 'materi sebelumnya'}&apos; dulu untuk membuka materi ini.</span>
                       </div>
                     ) : (
@@ -1220,7 +1253,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                               }}
                               className={cn(
                                 'btn-outline !w-auto text-xs px-3.5 py-1.5 flex items-center gap-1.5 font-bold',
-                                completedMaterials[m.id] && 'bg-emerald-50 text-emerald-700 border-emerald-500'
+                                completedMaterials[m.id] && 'bg-black text-white border-black'
                               )}
                             >
                               <Check className="w-3.5 h-3.5" />
@@ -1377,7 +1410,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                             href={s.meeting_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-1.5 rounded-xl border-2 border-emerald-700 bg-emerald-600 text-white hover:bg-emerald-700 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
+                            className="px-3 py-1.5 rounded-xl border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-bold inline-flex items-center gap-1.5 shadow-retro-sm cursor-pointer"
                           >
                             <Video className="w-3.5 h-3.5" />
                             <span>Gabung Kuliah Daring</span>
@@ -1390,7 +1423,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                             href={s.recording_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-1.5 rounded-xl border-2 border-red-700 bg-red-50 text-red-700 hover:bg-red-100 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
+                            className="px-3 py-1.5 rounded-xl border-2 border-black bg-gray-soft text-black hover:bg-neutral-200 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
                           >
                             <Play className="w-3.5 h-3.5" />
                             <span>Tonton Rekaman</span>

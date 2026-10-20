@@ -235,7 +235,7 @@ export function FlashcardsClient({ initialDecks }: { initialDecks: StudentDeckIt
                   e.stopPropagation();
                   setShowSource((prev) => !prev);
                 }}
-                className="font-bold text-primary hover:underline inline-flex items-center gap-1 cursor-pointer"
+                className="font-bold text-black hover:underline inline-flex items-center gap-1 cursor-pointer"
               >
                 <BookOpen className="w-3.5 h-3.5" />
                 <span>{showSource ? 'Sembunyikan Sitasi' : 'Lihat Sitasi Materi'}</span>
@@ -248,7 +248,7 @@ export function FlashcardsClient({ initialDecks }: { initialDecks: StudentDeckIt
         {showSource && currentCard.source_segment && (
           <div className="p-4 rounded-xl border border-black/20 bg-gray-soft/50 text-xs text-black/80 space-y-1 animate-fade-in">
             <p className="font-bold text-black flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5 text-primary" />
+              <Info className="w-3.5 h-3.5 text-black" />
               <span>Kutipan Materi Sumber:</span>
             </p>
             <p className="italic leading-relaxed">&ldquo;{currentCard.source_segment}&rdquo;</p>
@@ -266,10 +266,10 @@ export function FlashcardsClient({ initialDecks }: { initialDecks: StudentDeckIt
                 type="button"
                 disabled={isSubmitting}
                 onClick={() => handleRate(1)}
-                className="p-3 rounded-xl border-2 border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-900 font-bold text-xs sm:text-sm text-center shadow-xs transition-all cursor-pointer flex flex-col items-center gap-1"
+                className="p-3 rounded-xl border-2 border-black/40 bg-gray-soft hover:bg-neutral-200 text-black font-bold text-xs sm:text-sm text-center shadow-xs transition-all cursor-pointer flex flex-col items-center gap-1"
               >
                 <span>1 · Gagal</span>
-                <span className="text-[10px] font-medium text-rose-700">Kembali ke Kotak 1 (+1h)</span>
+                <span className="text-[10px] font-medium text-black">Kembali ke Kotak 1 (+1h)</span>
               </button>
 
               <button

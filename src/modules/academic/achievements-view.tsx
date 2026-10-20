@@ -210,7 +210,7 @@ export function AchievementsView() {
                         <div className="flex items-center justify-between">
                           <h3 className="text-sm font-bold text-foreground truncate">{badge.name}</h3>
                           {badge.isEarned ? (
-                            <span className="text-[10px] font-semibold text-emerald-600 bg-emerald-100 px-1.5 py-0.5 rounded">
+                            <span className="text-[10px] font-mono font-bold text-white bg-black px-2 py-0.5 rounded border border-black shadow-xs">
                               Diraih
                             </span>
                           ) : (
@@ -283,7 +283,7 @@ export function AchievementsView() {
                   Simpan Pengaturan
                 </button>
                 {savedSuccess && (
-                  <span className="text-xs text-emerald-600 font-medium">Pengaturan tersimpan.</span>
+                  <span className="text-xs text-black font-bold">Pengaturan tersimpan.</span>
                 )}
               </div>
             </form>
@@ -407,8 +407,8 @@ export function AchievementsView() {
                   Penguasaan Topik Perkuliahan
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="p-3.5 rounded-lg border border-emerald-500/30 bg-emerald-500/5 space-y-2">
-                    <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
+                  <div className="p-4 rounded-xl border-2 border-black bg-white shadow-retro-sm space-y-2">
+                    <span className="text-xs font-mono font-bold text-black uppercase">
                       Topik Dikuasai ({recapData.strongTopics.length})
                     </span>
                     {recapData.strongTopics.length === 0 ? (
@@ -418,7 +418,7 @@ export function AchievementsView() {
                         {recapData.strongTopics.map((topik: string, i: number) => (
                           <span
                             key={i}
-                            className="px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300"
+                            className="px-2 py-0.5 rounded text-[11px] font-mono font-bold border border-black bg-gray-soft text-black"
                           >
                             {topik}
                           </span>
@@ -427,8 +427,8 @@ export function AchievementsView() {
                     )}
                   </div>
 
-                  <div className="p-3.5 rounded-lg border border-amber-500/30 bg-amber-500/5 space-y-2">
-                    <span className="text-xs font-bold text-amber-700 dark:text-amber-400">
+                  <div className="p-3.5 rounded-lg border-2 border-black bg-white shadow-retro-sm space-y-2">
+                    <span className="text-xs font-mono font-bold text-black uppercase">
                       Perlu Latihan Tambahan ({recapData.growthTopics.length})
                     </span>
                     {recapData.growthTopics.length === 0 ? (
@@ -438,7 +438,7 @@ export function AchievementsView() {
                         {recapData.growthTopics.map((topik: string, i: number) => (
                           <span
                             key={i}
-                            className="px-2 py-0.5 rounded text-[11px] font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300"
+                            className="px-2 py-0.5 rounded text-[11px] font-mono font-bold border border-black bg-white text-black"
                           >
                             {topik}
                           </span>

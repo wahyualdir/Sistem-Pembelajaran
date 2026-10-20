@@ -10,48 +10,80 @@ interface UirLogo3DProps {
 }
 
 // -------------------------------------------------------------
-// Data Bahasa Pemrograman Resmi (Official Devicon 128x128 SVGs)
+// Data Bahasa Pemrograman Resmi dengan Warna Identitas Brand Asli
 // -------------------------------------------------------------
 const PROGRAMMING_LANGUAGES = [
   {
     id: 'python',
     name: 'Python',
     svgPath: '/tech-logos/python.svg',
+    brandColor: '#3776AB',
+    badgeBg: '#3776AB',
+    badgeText: '#FFFFFF',
+    glowColor: 'rgba(55, 118, 171, 0.22)',
   },
   {
     id: 'javascript',
     name: 'JavaScript',
     svgPath: '/tech-logos/javascript.svg',
+    brandColor: '#F7DF1E',
+    badgeBg: '#F7DF1E',
+    badgeText: '#000000',
+    glowColor: 'rgba(247, 223, 30, 0.22)',
   },
   {
     id: 'typescript',
     name: 'TypeScript',
     svgPath: '/tech-logos/typescript.svg',
+    brandColor: '#3178C6',
+    badgeBg: '#3178C6',
+    badgeText: '#FFFFFF',
+    glowColor: 'rgba(49, 120, 198, 0.22)',
   },
   {
     id: 'react',
     name: 'React.js',
     svgPath: '/tech-logos/react.svg',
+    brandColor: '#61DAFB',
+    badgeBg: '#20232A',
+    badgeText: '#61DAFB',
+    glowColor: 'rgba(97, 218, 251, 0.22)',
   },
   {
     id: 'cplusplus',
     name: 'C++',
     svgPath: '/tech-logos/cplusplus.svg',
+    brandColor: '#00599C',
+    badgeBg: '#00599C',
+    badgeText: '#FFFFFF',
+    glowColor: 'rgba(0, 89, 156, 0.22)',
   },
   {
     id: 'java',
     name: 'Java',
     svgPath: '/tech-logos/java.svg',
+    brandColor: '#EA2D2E',
+    badgeBg: '#EA2D2E',
+    badgeText: '#FFFFFF',
+    glowColor: 'rgba(234, 45, 46, 0.22)',
   },
   {
     id: 'rust',
     name: 'Rust',
     svgPath: '/tech-logos/rust.svg',
+    brandColor: '#CE412B',
+    badgeBg: '#CE412B',
+    badgeText: '#FFFFFF',
+    glowColor: 'rgba(206, 65, 43, 0.22)',
   },
   {
     id: 'php',
     name: 'PHP',
     svgPath: '/tech-logos/php.svg',
+    brandColor: '#777BB4',
+    badgeBg: '#777BB4',
+    badgeText: '#FFFFFF',
+    glowColor: 'rgba(119, 123, 180, 0.22)',
   },
 ];
 
@@ -115,23 +147,31 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
       }}
       title={`Logo 3D ${currentLang.name} - Klik untuk ganti bahasa pemrograman`}
     >
-      {/* Background Pola Titik Abu-Abu (--gray-soft) Netral */}
+      {/* Background Pola Titik Netral */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-60"
+        className="absolute inset-0 pointer-events-none opacity-50"
         style={{
           backgroundImage: 'radial-gradient(var(--gray-soft) 1.5px, transparent 1.5px)',
           backgroundSize: '12px 12px',
         }}
       />
 
+      {/* Ambient Glow Sesuai Warna Brand Logo Aktif */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-40 transition-all duration-700 rounded-2xl"
+        style={{
+          background: `radial-gradient(circle at center, ${currentLang.glowColor} 0%, transparent 70%)`,
+        }}
+      />
+
       {/* Panggung Perspektif 3D Utama */}
       <div
-        className="relative w-full flex-1 flex flex-col items-center justify-center my-auto"
+        className="relative w-full flex-1 flex flex-col items-center justify-center my-auto z-10"
         style={{
           transformStyle: 'preserve-3d',
         }}
       >
-        {/* Kontainer Logo Melayang 3D (Animasi Perspektif Mengambang Halus & Grayscale) */}
+        {/* Kontainer Logo Melayang 3D dengan Warna Asli Brand yang Hidup */}
         <div
           className={cn(
             'relative w-[150px] h-[150px] sm:w-[170px] sm:h-[170px] flex items-center justify-center transition-transform duration-300 ease-out',
@@ -142,15 +182,14 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
               ? `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg) scale3d(1.1, 1.1, 1.1)`
               : undefined,
             transformStyle: 'preserve-3d',
-            filter: 'grayscale(1)',
           }}
         >
           {/* Efek Kilau Cahaya 3D Menyapu Logo */}
-          <div className="absolute -inset-4 overflow-hidden pointer-events-none z-30 rounded-3xl opacity-75 mix-blend-screen">
+          <div className="absolute -inset-4 overflow-hidden pointer-events-none z-30 rounded-3xl opacity-60 mix-blend-screen">
             <div className="w-full h-full animate-uir-shine bg-gradient-to-r from-transparent via-white/80 to-transparent" />
           </div>
 
-          {/* Seluruh Logo Resmi Ditumpuk dengan Warna Asli Devicon yang Hidup */}
+          {/* Seluruh Logo Resmi Ditumpuk dengan Warna Asli Brand yang Hidup */}
           {PROGRAMMING_LANGUAGES.map((lang, idx) => {
             const isActive = idx === currentIndex;
             return (
@@ -159,7 +198,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
                 className={cn(
                   'absolute inset-0 flex items-center justify-center pointer-events-none transition-all duration-700',
                   isActive
-                    ? 'opacity-100 scale-100 translate-y-0 rotate-0 filter drop-shadow-[0_16px_24px_rgba(0,0,0,0.25)]'
+                    ? 'opacity-100 scale-100 translate-y-0 rotate-0 filter drop-shadow-[0_16px_24px_rgba(0,0,0,0.22)]'
                     : 'opacity-0 scale-90 translate-y-4 pointer-events-none'
                 )}
                 style={{
@@ -173,7 +212,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
                     src={lang.svgPath}
                     alt={`Logo Resmi ${lang.name}`}
                     fill
-                    className="object-contain filter contrast-105 drop-shadow-[0_4px_12px_rgba(0,0,0,0.18)]"
+                    className="object-contain filter contrast-105 drop-shadow-[0_4px_12px_rgba(0,0,0,0.15)]"
                     priority={idx === 0}
                     sizes="(max-width: 640px) 150px, 170px"
                   />
@@ -186,7 +225,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
         {/* Bayangan Lantai 3D Dinamis */}
         <div
           className={cn(
-            'absolute bottom-1 w-[130px] sm:w-[155px] h-[16px] rounded-full bg-ink/45 blur-[4px] pointer-events-none transition-all',
+            'absolute bottom-1 w-[130px] sm:w-[155px] h-[16px] rounded-full bg-ink/40 blur-[4px] pointer-events-none transition-all',
             !isHovered && 'animate-uir-perspective-shadow'
           )}
           style={{
@@ -197,9 +236,15 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
         />
       </div>
 
-      {/* Pill Indikator Nama Bahasa Pemrograman (Monokrom Neo-Brutalism) */}
-      <div className="relative z-20 flex items-center px-4 py-1.5 rounded-full border-2 border-ink bg-gray-soft shadow-retro mt-2">
-        <span className="font-sans text-xs font-bold uppercase tracking-wider text-ink">
+      {/* Pill Indikator Nama Bahasa Pemrograman Sesuai Warna Asli Logo */}
+      <div
+        className="relative z-20 flex items-center px-4 py-1.5 rounded-full border-2 border-ink shadow-retro mt-2 transition-all duration-500"
+        style={{
+          backgroundColor: currentLang.badgeBg,
+          color: currentLang.badgeText,
+        }}
+      >
+        <span className="font-heading font-bold text-xs uppercase tracking-wider">
           {currentLang.name}
         </span>
       </div>

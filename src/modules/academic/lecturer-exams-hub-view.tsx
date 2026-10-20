@@ -23,6 +23,7 @@ import {
   Shield,
   Laptop,
   Flame,
+  X,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
@@ -62,8 +63,6 @@ export function LecturerExamsHubView({
 
   const [selectedExamId, setSelectedExamId] = useState<string>(quizzes[0]?.id || '');
   const [isPending, startTransition] = useTransition();
-  const [warningMessage, setWarningMessage] = useState('');
-  const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
 
   // Demo active students in live proctoring if real live telemetry is empty
   const [liveStudents, setLiveStudents] = useState([
@@ -168,7 +167,7 @@ export function LecturerExamsHubView({
     },
   ]);
 
-  // In-App Neo-Brutalist Modal State (Gantikan window.confirm / prompt / alert)
+  // In-App Retro Modal State
   const [modalData, setModalData] = useState<{
     isOpen: boolean;
     studentId: string;
@@ -255,7 +254,7 @@ export function LecturerExamsHubView({
           valAfter = reason.trim();
         }
 
-        // Catat ke log intervensi dosen tersendiri (TIDAK menyatu dan tidak menambah pelanggaran mahasiswa)
+        // Catat ke log intervensi dosen tersendiri
         setInterventionsLog((prev) => [
           {
             id: `int-${Date.now()}`,
@@ -283,25 +282,25 @@ export function LecturerExamsHubView({
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
+    <div className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto space-y-6 sm:space-y-8 animate-fade-up font-sans">
       {/* 1. HEADER WINDOW RETRO DOSEN */}
       <RetroWindow
         title="manajemen_dan_monitoring_ujian_dosen.app"
         badge="Portal Dosen Pengampu"
         headerClassName="bg-gray-soft"
-        bodyClassName="p-5 sm:p-7 bg-retro-surface"
+        bodyClassName="p-5 sm:p-7 bg-white"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
-                <Award className="h-6 w-6" />
+              <div className="p-2.5 rounded-lg border-2 border-black bg-white text-black shadow-retro-sm">
+                <Award className="h-6 w-6 text-black" />
               </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-black">
                 Pusat Evaluasi & Proctoring Ujian
               </h1>
             </div>
-            <p className="text-sm sm:text-base text-black font-medium max-w-3xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-black/75 font-medium max-w-3xl leading-relaxed">
               Kelola lembar ujian CBT, pantau aktivitas mahasiswa secara langsung dengan telemetri anti-curang, dan tindak lanjuti log pelanggaran integritas akademik.
             </p>
           </div>
@@ -309,14 +308,14 @@ export function LecturerExamsHubView({
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <Link
               href="/exams/question-bank"
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-white text-xs sm:text-sm font-bold shadow-xs hover:bg-neutral-100"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 border-black bg-white hover:bg-black hover:text-white text-black text-xs sm:text-sm font-bold shadow-retro-sm transition-all"
             >
               <Database className="h-4 w-4" />
               <span>Bank Soal</span>
             </Link>
             <Link
               href="/exams/review"
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-white text-xs sm:text-sm font-bold shadow-xs hover:bg-neutral-100"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 border-black bg-white hover:bg-black hover:text-white text-black text-xs sm:text-sm font-bold shadow-retro-sm transition-all"
             >
               <FileCheck className="h-4 w-4" />
               <span>Periksa Jawaban</span>
@@ -336,10 +335,10 @@ export function LecturerExamsHubView({
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
                 isSelected
-                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
+                  ? 'bg-black text-white shadow-retro'
+                  : 'bg-white text-black hover:bg-gray-soft shadow-retro-sm'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -354,16 +353,16 @@ export function LecturerExamsHubView({
         <div className="space-y-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h2 className="font-heading font-bold text-lg text-black">
+              <h2 className="font-heading font-black text-lg sm:text-xl text-black">
                 Daftar Sesi Ujian dan Terjadwal ({quizzes.length})
               </h2>
-              <p className="text-xs text-black/70">
+              <p className="text-xs text-black/70 font-medium">
                 Pilih sesi ujian untuk memantau pengerjaan secara langsung atau membuat paket soal baru.
               </p>
             </div>
             <Link
               href="/classes"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-black text-white text-xs sm:text-sm font-bold shadow-retro hover:bg-neutral-800 transition-all shrink-0"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-black bg-black text-white text-xs sm:text-sm font-bold shadow-retro hover:bg-neutral-800 transition-all shrink-0 cursor-pointer"
             >
               <PlusCircle className="h-4 w-4" />
               <span>+ Buat Ujian di Kelas &rarr;</span>
@@ -374,30 +373,30 @@ export function LecturerExamsHubView({
             {quizzes.map((q) => (
               <div
                 key={q.id}
-                className="rounded-xl border-2 border-black bg-white p-5 shadow-retro hover:-translate-y-1 transition-all flex flex-col justify-between space-y-4"
+                className="rounded-2xl border-2 border-black bg-white p-5 shadow-retro hover:-translate-y-0.5 transition-transform flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="px-2.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-sans font-bold">
+                    <span className="px-2.5 py-0.5 rounded border-2 border-black bg-gray-soft text-xs font-mono font-bold text-black shadow-retro-sm">
                       {q.exam_type ?? 'KUIS'}
                     </span>
-                    <span className="text-xs font-sans font-bold flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" />
+                    <span className="text-xs font-mono font-bold flex items-center gap-1 text-black">
+                      <Clock className="h-3.5 w-3.5 text-black" />
                       {q.duration_minutes} Menit
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-bold text-base sm:text-lg text-black leading-snug line-clamp-2">
+                  <h3 className="font-heading font-black text-base sm:text-lg text-black leading-snug line-clamp-2">
                     {q.title}
                   </h3>
 
-                  <p className="text-xs text-black/70 line-clamp-2">
+                  <p className="text-xs text-black/75 line-clamp-2 font-medium">
                     {q.description || 'Tidak ada deskripsi tambahan.'}
                   </p>
 
-                  <div className="pt-2 border-t border-black/10 flex items-center justify-between text-xs font-sans">
+                  <div className="pt-2 border-t-2 border-black/10 flex items-center justify-between text-xs font-mono font-bold text-black">
                     <span>KKM: {q.kkm ?? 70}</span>
-                    <span className="font-bold text-primary">
+                    <span className="px-2 py-0.5 rounded border border-black bg-gray-soft">
                       Proctor: {q.proctoring_level ?? 'STANDARD'}
                     </span>
                   </div>
@@ -410,14 +409,14 @@ export function LecturerExamsHubView({
                       setSelectedExamId(q.id);
                       setTab('live');
                     }}
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border-2 border-black bg-primary text-white text-xs font-bold shadow-xs hover:bg-black transition-all cursor-pointer"
+                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border-2 border-black bg-black text-white text-xs font-bold shadow-retro-sm hover:bg-neutral-800 transition-all cursor-pointer"
                   >
                     <Activity className="h-3.5 w-3.5" />
                     <span>Panel Live</span>
                   </button>
                   <Link
                     href={`/classes/${q.class_id}/quizzes/${q.id}`}
-                    className="px-3 py-2 rounded-lg border-2 border-black bg-white text-black text-xs font-bold hover:bg-gray-soft shadow-xs"
+                    className="px-3 py-2 rounded-xl border-2 border-black bg-white text-black text-xs font-bold hover:bg-gray-soft shadow-retro-sm"
                     title="Buka Lembar Soal"
                   >
                     <Eye className="h-4 w-4" />
@@ -433,28 +432,28 @@ export function LecturerExamsHubView({
       {activeTab === 'live' && (
         <div className="space-y-6">
           {/* Header Kontrol Live */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <span className="relative flex h-3.5 w-3.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-gray-dark opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-gray-dark"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-black"></span>
               </span>
               <div>
-                <h3 className="font-heading font-bold text-base text-black">
+                <h3 className="font-heading font-black text-base text-black">
                   Live Proctoring Monitor ({liveStudents.filter((s) => s.status === 'IN_PROGRESS').length} Sedang Mengerjakan)
                 </h3>
-                <p className="text-xs text-black/60 font-medium">
+                <p className="text-xs text-black/70 font-medium">
                   Telemetri pengerjaan real-time dengan append-only event stream anti-curang.
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <label className="text-xs font-bold font-sans">Pilih Ujian:</label>
+              <label className="text-xs font-mono font-bold text-black">Pilih Ujian:</label>
               <select
                 value={selectedExamId}
                 onChange={(e) => setSelectedExamId(e.target.value)}
-                className="px-3 py-1.5 rounded-lg border-2 border-black text-xs font-bold bg-white"
+                className="px-3 py-1.5 rounded-xl border-2 border-black text-xs font-bold bg-white text-black shadow-retro-sm cursor-pointer"
               >
                 {quizzes.map((q) => (
                   <option key={q.id} value={q.id}>
@@ -471,31 +470,31 @@ export function LecturerExamsHubView({
               <div
                 key={st.student_id}
                 className={cn(
-                  'rounded-xl border-2 border-black p-5 shadow-retro space-y-4 transition-all',
+                  'rounded-2xl border-2 border-black p-5 shadow-retro space-y-4 transition-all',
                   st.status === 'TERMINATED'
-                    ? 'bg-surface border-ink'
+                    ? 'bg-gray-soft border-black'
                     : st.violations_count > 0
-                    ? 'bg-gray-soft/70 border-black'
+                    ? 'bg-gray-soft/60 border-black'
                     : 'bg-white'
                 )}
               >
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <h4 className="font-heading font-bold text-base text-black">
+                    <h4 className="font-heading font-black text-base text-black">
                       {st.student_name}
                     </h4>
-                    <p className="text-xs text-black/60 font-sans mt-0.5">
+                    <p className="text-xs text-black/70 font-sans mt-0.5">
                       {st.last_event}
                     </p>
                   </div>
                   <span
                     className={cn(
-                      'text-xs font-sans font-bold px-2.5 py-0.5 rounded border border-black',
+                      'text-xs font-mono font-bold px-2.5 py-0.5 rounded border-2 border-black shadow-retro-sm',
                       st.status === 'IN_PROGRESS'
-                        ? 'bg-surface text-ink'
+                        ? 'bg-black text-white'
                         : st.status === 'SUBMITTED'
-                        ? 'bg-gray-soft text-ink'
-                        : 'bg-surface text-primary-dark'
+                        ? 'bg-white text-black'
+                        : 'bg-gray-soft text-black'
                     )}
                   >
                     {st.status}
@@ -504,7 +503,7 @@ export function LecturerExamsHubView({
 
                 {/* Progress Bar & Sisa Waktu */}
                 <div className="space-y-1.5">
-                  <div className="flex justify-between text-xs font-sans font-bold text-black/80">
+                  <div className="flex justify-between text-xs font-mono font-bold text-black">
                     <span>
                       Soal {st.answered_count}/{st.total_questions} ({st.progress_percent}%)
                     </span>
@@ -514,7 +513,7 @@ export function LecturerExamsHubView({
                   </div>
                   <div className="w-full h-3 rounded-full border-2 border-black bg-neutral-200 overflow-hidden">
                     <div
-                      className="h-full bg-primary transition-all duration-300"
+                      className="h-full bg-black transition-all duration-300"
                       style={{ width: `${st.progress_percent}%` }}
                     />
                   </div>
@@ -522,8 +521,8 @@ export function LecturerExamsHubView({
 
                 {/* Pelanggaran Badge */}
                 {st.violations_count > 0 && (
-                  <div className="p-2.5 rounded-lg border border-ink bg-gray-soft/70 flex items-center gap-2 text-xs font-bold text-ink font-sans">
-                    <AlertTriangle className="h-4 w-4 text-ink shrink-0" />
+                  <div className="p-2.5 rounded-xl border-2 border-black bg-gray-soft flex items-center gap-2 text-xs font-bold text-black shadow-retro-sm">
+                    <AlertTriangle className="h-4 w-4 text-black shrink-0" />
                     <span>Terdeteksi {st.violations_count} Pelanggaran Pengawasan</span>
                   </div>
                 )}
@@ -534,21 +533,21 @@ export function LecturerExamsHubView({
                     <button
                       type="button"
                       onClick={() => openInterventionModal(st.student_id, 'WARN')}
-                      className="px-3 py-1.5 rounded-lg border-2 border-black bg-gray-soft text-black text-xs font-bold hover:bg-gray-dark transition-all cursor-pointer"
+                      className="px-3 py-1.5 rounded-xl border-2 border-black bg-gray-soft text-black text-xs font-bold hover:bg-neutral-300 transition-all cursor-pointer shadow-retro-sm"
                     >
                       Beri Peringatan
                     </button>
                     <button
                       type="button"
                       onClick={() => openInterventionModal(st.student_id, 'ADD_TIME')}
-                      className="px-3 py-1.5 rounded-lg border-2 border-black bg-white text-black text-xs font-bold hover:bg-neutral-100 transition-all cursor-pointer"
+                      className="px-3 py-1.5 rounded-xl border-2 border-black bg-white text-black text-xs font-bold hover:bg-gray-soft transition-all cursor-pointer shadow-retro-sm"
                     >
                       +10 Menit
                     </button>
                     <button
                       type="button"
                       onClick={() => openInterventionModal(st.student_id, 'TERMINATE')}
-                      className="px-3 py-1.5 rounded-lg border-2 border-ink bg-surface text-primary-dark text-xs font-bold hover:bg-surface transition-all cursor-pointer ml-auto"
+                      className="px-3 py-1.5 rounded-xl border-2 border-black bg-black text-white text-xs font-bold hover:bg-neutral-800 transition-all cursor-pointer ml-auto shadow-retro-sm"
                     >
                       Diskualifikasi
                     </button>
@@ -560,30 +559,30 @@ export function LecturerExamsHubView({
         </div>
       )}
 
-      {/* 5. TAB 3: LOG PELANGGARAN PROCTORING & INTERVENSI DOSEN (TERPISAH BERLABEL JELAS) */}
+      {/* 5. TAB 3: LOG PELANGGARAN PROCTORING & INTERVENSI DOSEN */}
       {activeTab === 'pelanggaran' && (
         <div className="space-y-8">
           {/* BAGIAN 1: LOG PELANGGARAN MAHASISWA */}
           <div className="space-y-4">
-            <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="p-4 bg-gray-soft border-2 border-black rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-retro-sm">
               <div>
-                <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
-                  <ShieldAlert className="h-5 w-5 text-primary" />
+                <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+                  <ShieldAlert className="h-5 w-5 text-black" />
                   <span>Log Pelanggaran Mahasiswa (Proctoring Telemetry) ({violationsLog.length})</span>
                 </h2>
-                <p className="text-xs text-black/70">
+                <p className="text-xs text-black/70 font-medium">
                   Data anomali integritas otomatis: fokus layar hilang (blur), perpindahan tab, atau keluar fullscreen.
                 </p>
               </div>
-              <span className="text-xs font-sans font-bold px-3 py-1 rounded border border-black bg-white shrink-0">
-                Immutable Telemetry Stream
+              <span className="text-xs font-mono font-bold px-3 py-1 rounded border-2 border-black bg-white text-black shrink-0 shadow-retro-sm">
+                Immutable Stream
               </span>
             </div>
 
-            <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
+            <div className="rounded-2xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Mahasiswa</th>
                       <th className="p-3.5 sm:p-4">Sesi Ujian</th>
@@ -595,28 +594,28 @@ export function LecturerExamsHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {violationsLog.map((v) => (
-                      <tr key={v.id} className="hover:bg-gray-soft/30 transition-colors">
+                      <tr key={v.id} className="hover:bg-gray-soft/40 transition-colors">
                         <td className="p-3.5 sm:p-4 font-bold text-black">{v.student_name}</td>
                         <td className="p-3.5 sm:p-4 text-black/80 font-sans">{v.exam_title}</td>
                         <td className="p-3.5 sm:p-4">
-                          <span className="px-2 py-0.5 rounded border border-black bg-gray-soft font-sans text-xs font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-gray-soft font-mono text-xs font-bold text-black">
                             {v.event_type}
                           </span>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-black/80">{v.details}</td>
+                        <td className="p-3.5 sm:p-4 text-black/85">{v.details}</td>
                         <td className="p-3.5 sm:p-4 text-center">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border text-xs font-sans font-bold',
+                              'px-2 py-0.5 rounded border-2 border-black text-xs font-mono font-bold shadow-retro-sm',
                               v.severity === 'CRITICAL'
-                                ? 'border-ink bg-surface text-primary-dark'
-                                : 'border-ink bg-gray-soft text-ink'
+                                ? 'bg-black text-white'
+                                : 'bg-gray-soft text-black'
                             )}
                           >
                             {v.severity}
                           </span>
                         </td>
-                        <td className="p-3.5 sm:p-4 font-sans text-xs text-black/60">{v.time}</td>
+                        <td className="p-3.5 sm:p-4 font-mono text-xs text-black/70">{v.time}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -627,25 +626,25 @@ export function LecturerExamsHubView({
 
           {/* BAGIAN 2: LOG INTERVENSI PENGAWAS / DOSEN (TERPISAH) */}
           <div className="space-y-4">
-            <div className="p-4 bg-gray-soft/40 border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div className="p-4 bg-gray-soft/60 border-2 border-black rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-retro-sm">
               <div>
-                <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
-                  <Activity className="h-5 w-5 text-primary" />
+                <h2 className="font-heading font-black text-base text-black flex items-center gap-2">
+                  <Activity className="h-5 w-5 text-black" />
                   <span>Log Intervensi Pengawas & Dosen ({interventionsLog.length})</span>
                 </h2>
-                <p className="text-xs text-black/70">
+                <p className="text-xs text-black/70 font-medium">
                   Riwayat tindakan pengawas: penambahan waktu (+mnt), peringatan langsung, dan diskualifikasi sesi.
                 </p>
               </div>
-              <span className="text-xs font-sans font-bold px-3 py-1 rounded border border-black bg-white shrink-0">
+              <span className="text-xs font-mono font-bold px-3 py-1 rounded border-2 border-black bg-white text-black shrink-0 shadow-retro-sm">
                 Log Audit
               </span>
             </div>
 
-            <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
+            <div className="rounded-2xl border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-mono font-bold uppercase text-black">
                     <tr>
                       <th className="p-3.5 sm:p-4">Waktu</th>
                       <th className="p-3.5 sm:p-4">Pengawas / Dosen</th>
@@ -658,19 +657,19 @@ export function LecturerExamsHubView({
                   </thead>
                   <tbody className="divide-y-2 divide-black/10 font-medium">
                     {interventionsLog.map((item) => (
-                      <tr key={item.id} className="hover:bg-gray-soft/30 transition-colors">
-                        <td className="p-3.5 sm:p-4 font-sans text-xs text-black/60">{item.time}</td>
+                      <tr key={item.id} className="hover:bg-gray-soft/40 transition-colors">
+                        <td className="p-3.5 sm:p-4 font-mono text-xs text-black/70">{item.time}</td>
                         <td className="p-3.5 sm:p-4 font-bold text-black">{item.actor_name}</td>
                         <td className="p-3.5 sm:p-4 text-black font-medium">{item.student_name}</td>
                         <td className="p-3.5 sm:p-4">
                           <span
                             className={cn(
-                              'px-2 py-0.5 rounded border border-black font-sans text-xs font-bold',
+                              'px-2 py-0.5 rounded border-2 border-black font-mono text-xs font-bold shadow-retro-sm',
                               item.subtype === 'ADD_TIME'
-                                ? 'bg-retro-mint text-black'
+                                ? 'bg-white text-black'
                                 : item.subtype === 'WARN'
                                 ? 'bg-gray-soft text-black'
-                                : 'bg-surface text-primary-dark'
+                                : 'bg-black text-white'
                             )}
                           >
                             {item.subtype === 'ADD_TIME'
@@ -681,7 +680,7 @@ export function LecturerExamsHubView({
                           </span>
                         </td>
                         <td className="p-3.5 sm:p-4 text-black/80 max-w-xs">{item.reason}</td>
-                        <td className="p-3.5 sm:p-4 font-sans text-xs text-black/70">
+                        <td className="p-3.5 sm:p-4 font-mono text-xs text-black/70">
                           <div>
                             <span className="text-black/50">Sebelum:</span> {item.value_before}
                           </div>
@@ -690,7 +689,7 @@ export function LecturerExamsHubView({
                           </div>
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-sans font-bold">
+                          <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-mono font-bold">
                             RECORDED
                           </span>
                         </td>
@@ -704,20 +703,15 @@ export function LecturerExamsHubView({
         </div>
       )}
 
-      {/* TOAST NOTIFIKASI IN-APP NEO-BRUTALIST */}
+      {/* TOAST NOTIFIKASI IN-APP RETRO */}
       {toastNotification && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-md animate-bounce">
-          <div
-            className={cn(
-              'p-4 rounded-xl border-2 border-black shadow-retro flex items-center justify-between gap-3',
-              toastNotification.type === 'success' ? 'bg-retro-mint text-black' : 'bg-surface text-primary-dark'
-            )}
-          >
+        <div className="fixed bottom-6 right-6 z-50 max-w-md animate-fade-in">
+          <div className="p-4 rounded-xl border-2 border-black bg-white text-black shadow-retro flex items-center justify-between gap-3">
             <p className="text-xs sm:text-sm font-bold">{toastNotification.message}</p>
             <button
               type="button"
               onClick={() => setToastNotification(null)}
-              className="text-xs font-sans font-bold px-2 py-0.5 border border-black rounded bg-white hover:bg-neutral-100"
+              className="text-xs font-mono font-bold px-2 py-0.5 border border-black rounded bg-gray-soft hover:bg-neutral-200 cursor-pointer"
             >
               Tutup
             </button>
@@ -725,33 +719,37 @@ export function LecturerExamsHubView({
         </div>
       )}
 
-      {/* MODAL IN-APP NEO-BRUTALIST INTERVENSI PENGAWAS (Gantikan window.prompt/confirm) */}
+      {/* MODAL IN-APP RETRO INTERVENSI PENGAWAS */}
       {modalData && modalData.isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="w-full max-w-md rounded-2xl border-4 border-black bg-white p-6 shadow-retro space-y-4 animate-scale-in">
+          <div className="w-full max-w-md rounded-2xl border-2 border-black bg-white p-6 shadow-retro-window space-y-4 animate-scale-in font-sans">
             <div className="flex items-center justify-between border-b-2 border-black pb-3">
-              <h3 className="font-heading font-bold text-lg text-black flex items-center gap-2">
-                <AlertTriangle className="h-5 w-5 text-primary" />
-                <span>Konfirmasi Tindakan Pengawas</span>
-              </h3>
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full border border-black bg-black inline-block" />
+                <span className="h-3 w-3 rounded-full border border-black bg-white inline-block" />
+                <h3 className="font-heading font-black text-lg text-black ml-1 flex items-center gap-2">
+                  <AlertTriangle className="h-5 w-5 text-black" />
+                  <span>Konfirmasi Tindakan Pengawas</span>
+                </h3>
+              </div>
               <button
                 type="button"
                 onClick={() => setModalData(null)}
-                className="text-xs font-sans font-bold px-2 py-1 border-2 border-black rounded bg-gray-soft hover:bg-neutral-200"
+                className="p-1 rounded-lg hover:bg-gray-soft text-black cursor-pointer"
               >
-                TUTUP
+                <X className="w-5 h-5 text-black" />
               </button>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="p-3 bg-neutral-50 rounded-lg border border-black/20 space-y-1">
+              <div className="p-3 bg-gray-soft rounded-xl border-2 border-black space-y-1 shadow-retro-sm">
                 <p>
-                  <span className="text-black/60 font-sans">Mahasiswa Sasaran:</span>{' '}
+                  <span className="text-black/70 font-mono">Mahasiswa Sasaran:</span>{' '}
                   <strong className="text-black text-sm">{modalData.studentName}</strong>
                 </p>
                 <p>
-                  <span className="text-black/60 font-sans">Jenis Tindakan:</span>{' '}
-                  <span className="font-bold text-primary uppercase">
+                  <span className="text-black/70 font-mono">Jenis Tindakan:</span>{' '}
+                  <span className="font-mono font-bold text-black uppercase">
                     {modalData.action === 'WARN'
                       ? 'Peringatan Pelanggaran'
                       : modalData.action === 'ADD_TIME'
@@ -763,7 +761,7 @@ export function LecturerExamsHubView({
 
               {modalData.action === 'ADD_TIME' && (
                 <div className="space-y-1">
-                  <label className="font-bold text-black block">Durasi Tambahan (Menit):</label>
+                  <label className="font-mono font-bold text-black block uppercase text-[11px]">Durasi Tambahan (Menit):</label>
                   <input
                     type="number"
                     min="1"
@@ -772,13 +770,13 @@ export function LecturerExamsHubView({
                     onChange={(e) =>
                       setModalData((prev) => (prev ? { ...prev, value: Number(e.target.value) || 10 } : null))
                     }
-                    className="w-full px-3 py-2 rounded-lg border-2 border-black bg-white font-sans text-sm font-bold"
+                    className="w-full px-3 py-2 rounded-xl border-2 border-black bg-white font-mono text-sm font-bold"
                   />
                 </div>
               )}
 
               <div className="space-y-1">
-                <label className="font-bold text-black block">
+                <label className="font-mono font-bold text-black block uppercase text-[11px]">
                   Alasan Intervensi (Wajib Dicatat ke Audit Log):
                 </label>
                 <textarea
@@ -788,12 +786,12 @@ export function LecturerExamsHubView({
                     setModalData((prev) => (prev ? { ...prev, reason: e.target.value, error: undefined } : null))
                   }
                   placeholder="Masukkan alasan intervensi pengawas secara objektif..."
-                  className="w-full p-2.5 rounded-lg border-2 border-black bg-white font-medium text-xs resize-none"
+                  className="w-full p-2.5 rounded-xl border-2 border-black bg-white font-medium text-xs resize-none"
                 />
               </div>
 
               {modalData.error && (
-                <p className="text-primary-dark font-bold font-sans text-xs">{modalData.error}</p>
+                <p className="text-black font-bold font-mono text-xs bg-gray-soft p-2 rounded border border-black">{modalData.error}</p>
               )}
             </div>
 
@@ -801,7 +799,7 @@ export function LecturerExamsHubView({
               <button
                 type="button"
                 onClick={() => setModalData(null)}
-                className="px-4 py-2 rounded-lg border-2 border-black bg-neutral-100 text-black text-xs font-bold hover:bg-neutral-200"
+                className="px-4 py-2 rounded-xl border-2 border-black bg-white hover:bg-gray-soft text-black text-xs font-bold cursor-pointer shadow-retro-sm"
               >
                 Batalkan
               </button>
@@ -809,7 +807,7 @@ export function LecturerExamsHubView({
                 type="button"
                 disabled={isPending}
                 onClick={handleConfirmIntervention}
-                className="px-4 py-2 rounded-lg border-2 border-black bg-primary text-white text-xs font-bold shadow-retro hover:bg-primary-dark cursor-pointer disabled:opacity-50"
+                className="px-4 py-2 rounded-xl border-2 border-black bg-black text-white text-xs font-bold shadow-retro hover:bg-neutral-800 cursor-pointer disabled:opacity-50"
               >
                 {isPending ? 'Menyimpan...' : 'Eksekusi & Catat Audit'}
               </button>

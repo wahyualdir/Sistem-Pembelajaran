@@ -75,7 +75,7 @@ function RegisterFormContent() {
   return (
     <div
       style={{ fontFamily: "'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif" }}
-      className="min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-black flex flex-col overflow-x-hidden lg:overflow-hidden antialiased"
+      className="min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-white flex flex-col overflow-x-hidden lg:overflow-hidden antialiased"
     >
       {/* Top Bar Navigasi Sistem Retro */}
       <header className="h-14 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 sm:border-b-3 border-black bg-gray-soft shrink-0 select-none shadow-retro-sm pt-[env(safe-area-inset-top,0px)]">

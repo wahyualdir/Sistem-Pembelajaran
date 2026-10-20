@@ -369,7 +369,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
                               l.status === 'DISETUJUI'
                                 ? 'border-ink bg-surface text-ink'
                                 : l.status === 'DITOLAK'
-                                ? 'border-red-500 bg-red-100 text-red-950'
+                                ? 'border-ink bg-gray-soft text-black'
                                 : 'border-ink bg-gray-soft text-ink'
                             )}
                           >

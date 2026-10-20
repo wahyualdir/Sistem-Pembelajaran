@@ -7,14 +7,12 @@ import {
   Flame,
   LogOut,
   Search,
-  Bell,
   ChevronDown,
   Menu,
   PanelLeft,
   ChevronLeft,
   ChevronRight,
   Lock,
-  HelpCircle,
   PanelRightOpen,
   User,
   Settings,
@@ -91,12 +89,30 @@ export function PortalShell({
   const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
   const [hasRightPanel, setHasRightPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isScrolled, setIsScrolled] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const burgerButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
   const router = useRouter();
+
+  // Deteksi scroll untuk bayangan aktif header
+  useEffect(() => {
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 15);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Shortcut Cmd/Ctrl + K untuk fokus ke search bar
   useEffect(() => {
@@ -288,7 +304,7 @@ export function PortalShell({
           setHasRightPanel,
         }}
       >
-        <div className="min-h-screen bg-retro-bg text-foreground font-sans flex flex-col md:flex-row antialiased selection:bg-ink selection:text-black">
+        <div className="min-h-screen bg-retro-bg text-foreground font-sans flex flex-col md:flex-row antialiased selection:bg-ink selection:text-white">
           {/* Drawer Backdrop Overlay (scrim) untuk < 1280px */}
           {isDrawerOpen && (
             <div
@@ -369,21 +385,21 @@ export function PortalShell({
                   <div key={group.id || group.title} className="space-y-1">
                     {!isRailActive && group.title ? (
                       <div className="flex items-center justify-between px-3 py-1 mb-1">
-                        <p className="text-xs font-bold tracking-wider text-gray-dark font-sans">
+                        <p className="text-xs font-black tracking-wider text-black font-sans uppercase">
                           {group.title}
                         </p>
                         {group.collapsible && (
                           <button
                             type="button"
                             onClick={() => toggleGroupCollapse(group.id)}
-                            className="p-1 rounded hover:bg-gray-soft text-gray-dark transition-transform cursor-pointer"
+                            className="p-1 rounded hover:bg-gray-soft text-black transition-transform cursor-pointer"
                             title={`Buka/Tutup grup ${group.title}`}
                             aria-label={`Toggle grup ${group.title}`}
                           >
                             <ChevronDown
                               className={cn(
                                 'h-3.5 w-3.5 transition-transform duration-200',
-                                isGroupCollapsed ? '-rotate-90 text-gray' : 'rotate-0 text-gray-dark'
+                                isGroupCollapsed ? '-rotate-90 text-gray' : 'rotate-0 text-black'
                               )}
                             />
                           </button>
@@ -410,15 +426,15 @@ export function PortalShell({
                                     ? 'justify-center w-12 h-10 mx-auto'
                                     : 'px-3 py-2 gap-2.5 text-sm sm:text-base font-bold min-h-[42px]',
                                   isActive
-                                    ? 'border-2 border-ink border-l-4 border-l-primary bg-ink text-white shadow-retro font-bold hover:bg-ink/90'
-                                    : 'text-ink hover:bg-gray-soft hover:text-ink font-bold'
+                                    ? 'border-2 border-ink border-l-4 border-l-black bg-ink text-white shadow-retro font-bold hover:bg-ink/90'
+                                    : 'text-black hover:bg-gray-soft hover:text-black font-bold'
                                 )}
                               >
                                 <span className="flex items-center gap-2.5 truncate">
                                   <Icon
                                     className={cn(
                                       'h-5 w-5 shrink-0 transition-transform',
-                                      isActive ? 'text-white' : 'text-ink'
+                                      isActive ? 'text-white' : 'text-black'
                                     )}
                                   />
                                   {!isRailActive && <span className="truncate">{item.label}</span>}
@@ -427,7 +443,7 @@ export function PortalShell({
                                   <span
                                     className={cn(
                                       'inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold font-sans shrink-0',
-                                      isActive ? 'bg-surface text-ink' : 'bg-ink text-white'
+                                      isActive ? 'bg-surface text-black' : 'bg-black text-white'
                                     )}
                                   >
                                     {item.badge}
@@ -551,7 +567,7 @@ export function PortalShell({
                       <form action={logoutAction}>
                         <button
                           type="submit"
-                          className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg hover:bg-primary/10 text-primary-dark text-sm font-bold transition-colors"
+                          className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg hover:bg-gray-soft text-black text-sm font-bold transition-colors"
                         >
                           <LogOut className="h-4 w-4" />
                           <span>Keluar Akun</span>
@@ -606,7 +622,7 @@ export function PortalShell({
                   <form action={logoutAction} className="w-full">
                     <button
                       type="submit"
-                      className="flex items-center justify-center gap-2 w-full py-1.5 sm:py-2 px-3 rounded-lg border-2 border-retro-border bg-retro-surface hover:bg-primary/10 text-primary-dark text-xs sm:text-sm font-bold transition-colors focus-visible:outline-none"
+                      className="flex items-center justify-center gap-2 w-full py-1.5 sm:py-2 px-3 rounded-lg border-2 border-retro-border bg-retro-surface hover:bg-gray-soft text-black text-xs sm:text-sm font-bold transition-colors focus-visible:outline-none"
                     >
                       <LogOut className="h-3.5 w-3.5" />
                       <span>Keluar Akun</span>
@@ -618,7 +634,7 @@ export function PortalShell({
                   <button
                     type="submit"
                     title="Keluar / Logout"
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-primary-dark hover:bg-primary/10 transition-colors focus-visible:outline-none"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black hover:bg-gray-soft transition-colors focus-visible:outline-none"
                   >
                     <LogOut className="h-4 w-4" />
                   </button>
@@ -658,7 +674,12 @@ export function PortalShell({
             {/* ======================================================== */}
             {/* HEADER ATAS: TAMPILAN RETRO KAMPUS                       */}
             {/* ======================================================== */}
-            <header className="sticky top-0 z-30 flex items-center justify-between border-b-2 border-retro-border bg-surface px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border">
+            <header
+              className={cn(
+                'sticky top-0 z-30 flex items-center justify-between border-b-2 border-retro-border bg-surface px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
+                isScrolled && 'shadow-retro-md border-b-ink'
+              )}
+            >
               {/* SISI KIRI: TOMBOL TOGGLE BILAH SAMPING */}
               <div className="flex items-center shrink-0">
                 <button
@@ -719,12 +740,12 @@ export function PortalShell({
                 {availableRoles && availableRoles.length > 1 && (
                   <Link
                     href="/workspace"
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border-2 border-black bg-surface hover:bg-gray-soft text-xs font-bold text-foreground transition-all shadow-xs"
+                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border-2 border-black bg-surface hover:bg-gray-soft text-xs font-bold text-black transition-all shadow-xs"
                     title="Beralih peran pengguna"
                   >
-                    <Layers className="h-3.5 w-3.5 text-primary" />
+                    <Layers className="h-3.5 w-3.5 text-black" />
                     <span className="hidden sm:inline">{roleName}</span>
-                    <ChevronDown className="h-3 w-3 text-muted-foreground" />
+                    <ChevronDown className="h-3 w-3 text-black/60" />
                   </Link>
                 )}
 
@@ -740,31 +761,6 @@ export function PortalShell({
                     <PanelRightOpen className="h-5 w-5 text-black" />
                   </button>
                 )}
-
-                {/* Lonceng Notifikasi */}
-                <Link
-                  href="/notifications"
-                  className="relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro-sm hover:bg-gray-soft active:translate-y-0.5 transition-all focus-visible:outline-none"
-                  title="Notifikasi Kuliah dan Tugas"
-                  aria-label="Notifikasi"
-                >
-                  <Bell className="h-5 w-5 text-black" />
-                  {unread > 0 && (
-                    <span className="absolute -top-1.5 -right-1.5 flex h-4.5 w-4.5 items-center justify-center rounded-full border-2 border-retro-border bg-black text-xs font-bold text-white tabular-nums shadow-xs">
-                      {unread}
-                    </span>
-                  )}
-                </Link>
-
-                {/* Tombol Bantuan / Help Circle (?) PERSIS GAMBAR 2 */}
-                <Link
-                  href="/ai-assistant"
-                  className="flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black shadow-retro-sm hover:bg-gray-soft active:translate-y-0.5 transition-all focus-visible:outline-none"
-                  title="Bantuan dan Tanya AI"
-                  aria-label="Bantuan dan AI"
-                >
-                  <HelpCircle className="h-5 w-5 text-black" />
-                </Link>
               </div>
             </header>
 

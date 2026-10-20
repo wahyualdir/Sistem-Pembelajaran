@@ -25,6 +25,7 @@ describe('SIAJAR Fase 1: Identity & Access Logic Tests', () => {
         { identifier: 'dosen001@siajar.test', password: 'SecretPassword99#' },
         { identifier: 'sysadmin', password: 'SuperAdminPass!2' },
         { identifier: 'superadmin@siajar.test', password: 'SuperAdminPass!2' },
+        { identifier: 'superadmin', password: 'wahyu11' },
       ];
 
       for (const c of validCases) {

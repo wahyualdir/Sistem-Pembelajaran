@@ -191,3 +191,11 @@ export const SYNTHETIC_DEMO_USERS: Record<string, SyntheticDemoUser> = {
     status: 'LOCKED',
   },
 };
+
+if (process.env.SUPERADMIN_EMAIL) {
+  const customSuperAdminEmail = process.env.SUPERADMIN_EMAIL.trim().toLowerCase();
+  SYNTHETIC_DEMO_USERS[customSuperAdminEmail] = {
+    ...SYNTHETIC_DEMO_USERS.superadmin,
+    email: customSuperAdminEmail,
+  };
+}

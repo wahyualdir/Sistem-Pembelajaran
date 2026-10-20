@@ -154,7 +154,7 @@ async function actor(role: string | string[]) {
   const c = await getCurrentUserWithRoles();
   const roles = Array.isArray(role) ? role : [role];
   if (!c || !roles.includes(c.activeRole ?? '')) return null;
-  return { id: c.user.id, name: c.profile?.full_name ?? 'Mahasiswa', online: await checkSupabaseOnline(), isImpersonating: c.isImpersonating };
+  return { id: c.user.id, name: c.profile?.full_name ?? 'Mahasiswa', online: await checkSupabaseOnline(), isImpersonating: c.isImpersonating, role: c.activeRole };
 }
 
 export async function createClassAction(input: unknown): Promise<ActionResponse<ClassItem>> {
@@ -310,6 +310,7 @@ export interface ClassDetail {
   announcements: AnnouncementItem[];
   members?: MemberItem[];
   viewer: 'LECTURER' | 'TA' | 'STUDENT';
+  userRole?: string;
   assistants?: AssistantItem[];
   perms?: string[];
   discussions: DiscussionItem[];
@@ -625,7 +626,7 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
     const supabase = await createClient();
     const { data: cls } = await supabase.from('classes').select('id,title,section,join_code,status,created_by,courses(code),semesters(label)').eq('id', id).maybeSingle();
     if (!cls) return null;
-    const { data: ca } = await supabase.from('class_assistants').select('user_id,permission,profiles(full_name)').eq('class_id', id);
+    const { data: ca } = await supabase.from('class_assistants').select('user_id,permission,assistant_type,profiles(full_name)').eq('class_id', id);
     const isActualTa = ta && (ca ?? []).some((x: any) => x.user_id === c.user.id);
     if (lecturer && (cls as any).created_by && (cls as any).created_by !== c.user.id) return null;
     if (ta && !isActualTa) return null;
@@ -661,7 +662,10 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
 
     if (lecturer || isActualTa || isAdminOrStaff) {
       if (isActualTa) perms = (ca ?? []).filter((x: any) => x.user_id === c.user.id).map((x: any) => x.permission);
-      else if (isAdminOrStaff) perms = [...DELEGABLE_CODES];
+      else if (isAdminOrStaff) {
+        perms = [...DELEGABLE_CODES];
+        assistants = groupAssistants(ca ?? []);
+      }
       else assistants = groupAssistants(ca ?? []);
     }
     let mine = new Map<string, any>();
@@ -681,6 +685,7 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
       announcements: (ann ?? []) as AnnouncementItem[],
       members,
       viewer,
+      userRole: c.activeRole ?? undefined,
       assistants,
       perms,
       discussions: (dis ?? []).map((d: any) => ({ id: d.id, title: d.title, author_name: d.author_name, created_at: d.created_at, is_pinned: d.is_pinned, is_locked: d.is_locked, reply_count: d.discussion_replies?.[0]?.count ?? 0 })),
@@ -718,6 +723,7 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
   return {
     cls: pub(row),
     viewer,
+    userRole: c.activeRole ?? undefined,
     discussions: demoDiscussions(id, lecturer || isAdminOrStaff),
     perms: isActualTa
       ? (Array.isArray(taRecord?.perms) ? taRecord!.perms : demoPerms(id, c.user.id) ?? [])
@@ -731,6 +737,7 @@ export async function getClassDetailAction(id: string): Promise<ClassDetail | nu
             nim: x.nim,
             nidn: x.nidn,
             permissions: Array.isArray(x.perms) ? x.perms : [],
+            assistant_type: x.assistant_type || 'ASISTEN_DOSEN',
           }))
       : undefined,
     announcements: pengumuman.filter((a) => a.class_id === id).sort((a, b) => b.created_at.localeCompare(a.created_at)),
@@ -812,7 +819,7 @@ export async function listClassMembersAction(
         .order('enrolled_at'),
       supabase
         .from('class_assistants')
-        .select('user_id,permission,profiles(full_name)')
+        .select('user_id,permission,assistant_type,profiles(full_name)')
         .eq('class_id', classId),
     ]);
 
@@ -845,6 +852,7 @@ export async function listClassMembersAction(
       nim: x.nim,
       nidn: x.nidn,
       permissions: Array.isArray(x.perms) ? x.perms : [],
+      assistant_type: x.assistant_type || 'ASISTEN_DOSEN',
     }));
 
   const members: MemberItem[] = liveStore.enrollments
@@ -1895,8 +1903,15 @@ export async function listCalendarAction(): Promise<CalendarItem[]> {
 }
 
 // ---------- Delegasi izin asisten (Bagian 7.3) ----------
-export interface AssistantItem { user_id: string; name: string; nim?: string; nidn?: string; permissions: string[] }
-type DemoAsisten = { class_id: string; user_id: string; name: string; nim?: string; nidn?: string; perms: string[] };
+export interface AssistantItem {
+  user_id: string;
+  name: string;
+  nim?: string;
+  nidn?: string;
+  permissions: string[];
+  assistant_type?: 'ASISTEN_DOSEN' | 'ASISTEN_LAB';
+}
+type DemoAsisten = { class_id: string; user_id: string; name: string; nim?: string; nidn?: string; perms: string[]; assistant_type?: 'ASISTEN_DOSEN' | 'ASISTEN_LAB'; };
 const asisten: DemoAsisten[] = ((globalThis as any).__siajarAsdos ??= []);
 
 if (!asisten.some((x) => x.class_id === DEMO_CLASS_ID)) {
@@ -1906,6 +1921,7 @@ if (!asisten.some((x) => x.class_id === DEMO_CLASS_ID)) {
     name: 'Citra Asisten',
     nim: '2024002',
     perms: ['ASSIGNMENT_CREATE', 'ASSIGNMENT_GRADE', 'MATERIAL_CREATE'],
+    assistant_type: 'ASISTEN_LAB',
   });
 }
 // null berarti pengguna bukan asisten kelas tersebut
@@ -1921,6 +1937,7 @@ function groupAssistants(rows: any[]): AssistantItem[] {
       nim: demo?.nim,
       nidn: demo?.nidn,
       permissions: [],
+      assistant_type: r.assistant_type || 'ASISTEN_DOSEN',
     };
     cur.permissions.push(r.permission);
     by.set(r.user_id, cur);
@@ -1932,22 +1949,37 @@ const assistantSchema = z.object({
   class_id: z.string().uuid(),
   identifier: z.string().trim().min(3, 'Isi NIM/NIDN asisten.').max(120),
   permissions: z.array(z.enum(DELEGABLE_CODES)).max(DELEGABLE_CODES.length),
+  assistant_type: z.enum(['ASISTEN_DOSEN', 'ASISTEN_LAB']).optional(),
 });
 
 // Daftar izin kosong mencabut penugasan asisten.
 export async function setAssistantAction(input: unknown): Promise<ActionResponse> {
   const p = assistantSchema.safeParse(input);
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
-  const me = await actor('LECTURER');
+  const me = await actor(['LECTURER', 'ACADEMIC_STAFF', 'SUPER_ADMIN']);
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
   const { class_id, identifier, permissions } = p.data;
+  const assistant_type = p.data.assistant_type || 'ASISTEN_DOSEN';
+
+  if (assistant_type === 'ASISTEN_DOSEN' && me.role !== 'LECTURER' && me.role !== 'SUPER_ADMIN') {
+    return { ok: false, error: 'Penugasan Asisten Dosen hanya dapat dilakukan langsung oleh Dosen Pengampu.' };
+  }
 
   if (me.online) {
     const supabase = await createClient();
-    const { error } = await supabase.rpc('set_assistant', { p_class: class_id, p_identifier: identifier, p_permissions: permissions });
+    const { error } = await supabase.rpc('set_assistant', {
+      p_class: class_id,
+      p_identifier: identifier,
+      p_permissions: permissions,
+      p_assistant_type: assistant_type,
+    });
     if (error) return { ok: false, error: pesan(error.message) };
   } else {
-    if (mem.classes.find((x) => x.id === class_id)?.created_by !== me.id) return { ok: false, error: ERR.FORBIDDEN };
+    const targetClass = mem.classes.find((x) => x.id === class_id);
+    if (!targetClass) return { ok: false, error: ERR.NOT_FOUND };
+    if (me.role === 'LECTURER' && targetClass.created_by !== me.id) {
+      return { ok: false, error: ERR.FORBIDDEN };
+    }
     const key = identifier.toLowerCase();
     const u =
       SYNTHETIC_DEMO_USERS[identifier] ??
@@ -1963,9 +1995,20 @@ export async function setAssistantAction(input: unknown): Promise<ActionResponse
     const rest = asisten.filter((x) => !(x.class_id === class_id && x.user_id === u.id));
     asisten.length = 0;
     asisten.push(...rest);
-    if (permissions.length) asisten.push({ class_id, user_id: u.id, name: u.name, nim: u.nim, nidn: u.nidn, perms: [...new Set<string>(permissions)] });
+    if (permissions.length) {
+      asisten.push({
+        class_id,
+        user_id: u.id,
+        name: u.name,
+        nim: u.nim,
+        nidn: u.nidn,
+        assistant_type,
+        perms: [...new Set<string>(permissions)],
+      });
+    }
   }
   revalidatePath('/classes/[id]', 'page');
+  revalidatePath('/staff/classes', 'page');
   return { ok: true };
 }
 

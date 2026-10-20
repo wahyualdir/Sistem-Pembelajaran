@@ -164,9 +164,9 @@ export function CalendarViewSwitcher({ items }: { items: CalendarItem[] }) {
         <div className="space-y-6">
           {/* Kelompok: Lewat */}
           {buckets.lewat.length > 0 && (
-            <div className="rounded-2xl border-2 border-rose-300 bg-rose-50/70 p-5 space-y-3">
-              <div className="flex items-center gap-2 text-rose-900 font-bold text-sm sm:text-base">
-                <AlertTriangle className="h-5 w-5 text-rose-600" />
+            <div className="rounded-2xl border-2 border-black/40 bg-gray-soft p-5 space-y-3">
+              <div className="flex items-center gap-2 text-black font-bold text-sm sm:text-base">
+                <AlertTriangle className="h-5 w-5 text-black" />
                 <span>Lewat Tenggat ({buckets.lewat.length})</span>
               </div>
               <div className="space-y-2">
@@ -178,13 +178,13 @@ export function CalendarViewSwitcher({ items }: { items: CalendarItem[] }) {
           )}
 
           {/* Kelompok: Hari Ini */}
-          <div className="rounded-2xl border-2 border-amber-300 bg-amber-50/70 p-5 space-y-3">
-            <div className="flex items-center gap-2 text-amber-900 font-bold text-sm sm:text-base">
-              <Clock className="h-5 w-5 text-amber-600" />
+          <div className="rounded-2xl border-2 border-black bg-white shadow-retro p-5 space-y-3">
+            <div className="flex items-center gap-2 text-black font-bold text-sm sm:text-base">
+              <Clock className="h-5 w-5 text-black" />
               <span>Hari Ini ({buckets.hariIni.length})</span>
             </div>
             {buckets.hariIni.length === 0 ? (
-              <p className="text-xs text-amber-800 font-medium italic">Tidak ada tenggat hari ini.</p>
+              <p className="text-xs text-black/70 font-medium italic">Tidak ada tenggat hari ini.</p>
             ) : (
               <div className="space-y-2">
                 {buckets.hariIni.map((r) => (
@@ -300,8 +300,8 @@ function DeadlineCard({
     <div
       className={cn(
         'p-3.5 sm:p-4 rounded-xl border-2 border-black bg-white shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 hover:bg-gray-soft/20 transition-all',
-        badgeVariant === 'lewat' && 'border-rose-300',
-        badgeVariant === 'hari_ini' && 'border-amber-300'
+        badgeVariant === 'lewat' && 'border-black bg-gray-soft/20',
+        badgeVariant === 'hari_ini' && 'border-black shadow-retro-sm'
       )}
     >
       <div className="space-y-1 flex-1 min-w-0 w-full">
@@ -332,18 +332,18 @@ function DeadlineCard({
             Selesai
           </span>
         ) : isClosed ? (
-          <span className="px-2.5 py-1 rounded-lg border-2 border-black bg-rose-600 text-white font-bold text-xs flex items-center gap-1.5 shadow-xs">
+          <span className="px-2.5 py-1 rounded-lg border-2 border-black bg-black text-white font-bold text-xs flex items-center gap-1.5 shadow-retro-sm">
             <AlertCircle className="h-3.5 w-3.5" />
             Ditutup
           </span>
         ) : badgeVariant === 'lewat' ? (
-          <span className="px-2.5 py-1 rounded-lg border-2 border-rose-600 bg-rose-100 text-rose-900 font-bold text-xs flex items-center gap-1.5">
-            <AlertTriangle className="h-3.5 w-3.5 text-rose-600" />
+          <span className="px-2.5 py-1 rounded-lg border-2 border-black bg-gray-soft text-black font-bold text-xs flex items-center gap-1.5">
+            <AlertTriangle className="h-3.5 w-3.5 text-black" />
             Terlambat
           </span>
         ) : (
           <span className="px-2.5 py-1 rounded-lg border border-black/30 bg-gray-soft text-black font-semibold text-xs flex items-center gap-1.5">
-            <Clock className="h-3.5 w-3.5 text-primary" />
+            <Clock className="h-3.5 w-3.5 text-black" />
             Tenggat
           </span>
         )}

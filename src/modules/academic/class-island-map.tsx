@@ -40,66 +40,69 @@ export function ClassIslandMap({
 
   if (!chapters || chapters.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-border p-8 text-center space-y-3 bg-muted/10">
-        <Compass className="w-10 h-10 text-muted-foreground mx-auto" />
-        <h3 className="text-base font-semibold text-foreground">Peta Belajar Belum Diatur</h3>
-        <p className="text-sm text-muted-foreground max-w-md mx-auto">
-          Dosen pengampu belum menyusun bab pada kelas ini. Silakan cek tab Materi dan Tugas untuk modul perkuliahan umum.
+      <div className="rounded-2xl border-2 border-dashed border-black p-8 text-center space-y-3 bg-gray-soft/40 shadow-retro font-sans">
+        <Compass className="w-10 h-10 text-black mx-auto" />
+        <h3 className="text-base font-heading font-black text-black">Peta Belajar Belum Diatur</h3>
+        <p className="text-xs text-black/75 font-medium max-w-md mx-auto">
+          Dosen pengampu belum menyusun bab pada kelas ini. Silakan buka tab Materi dan Tugas untuk modul perkuliahan umum.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* 1. Header Toolbar & Sakelar Tampilan */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-card border border-border p-4 rounded-lg">
-        <div>
-          <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-            <Compass className="w-5 h-5 text-primary" />
-            Alur Belajar Kelas
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border-2 border-black p-5 rounded-2xl shadow-retro">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-black bg-gray-soft text-[11px] font-mono font-bold text-black uppercase">
+            <Compass className="w-3.5 h-3.5 text-black" />
+            <span>Peta Perkuliahan</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-heading font-black text-black">
+            Alur Belajar & Peta Bab
           </h2>
-          <p className="text-xs text-muted-foreground">
-            Selesaikan bab secara berurutan untuk membuka pulau materi dan kuis berikutnya.
+          <p className="text-xs sm:text-sm text-black/75 font-medium leading-relaxed">
+            Selesaikan bab secara bertahap untuk membuka pulau materi berikutnya dan menuntaskan syarat kuis.
           </p>
         </div>
 
         {/* Sakelar Peta / Daftar */}
-        <div className="flex items-center gap-1 bg-muted p-1 rounded-md self-start sm:self-auto">
+        <div className="flex items-center gap-1.5 border-2 border-black bg-gray-soft p-1.5 rounded-xl shadow-retro-sm self-start sm:self-auto">
           <button
             type="button"
             onClick={() => setViewMode('peta')}
             className={cn(
-              'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded transition-colors',
+              'flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-bold rounded-lg border-2 transition-all cursor-pointer',
               viewMode === 'peta'
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-black text-white border-black shadow-retro-sm'
+                : 'bg-white text-black border-transparent hover:border-black'
             )}
             aria-pressed={viewMode === 'peta'}
           >
             <Compass className="w-3.5 h-3.5" />
-            Peta
+            <span>Peta</span>
           </button>
           <button
             type="button"
             onClick={() => setViewMode('daftar')}
             className={cn(
-              'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded transition-colors',
+              'flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono font-bold rounded-lg border-2 transition-all cursor-pointer',
               viewMode === 'daftar'
-                ? 'bg-background text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-black text-white border-black shadow-retro-sm'
+                : 'bg-white text-black border-transparent hover:border-black'
             )}
             aria-pressed={viewMode === 'daftar'}
           >
             <List className="w-3.5 h-3.5" />
-            Daftar
+            <span>Daftar</span>
           </button>
         </div>
       </div>
 
-      {/* 2. Mode Tampilan Peta Visual (SVG) */}
+      {/* 2. Mode Tampilan Peta Visual (SVG Monochrome Retro) */}
       {viewMode === 'peta' ? (
-        <div className="relative w-full bg-card border border-border rounded-lg p-6 overflow-hidden">
+        <div className="relative w-full bg-white border-2 border-black rounded-2xl p-6 overflow-hidden shadow-retro">
           <div className="max-w-md mx-auto relative py-6">
             <svg
               className="w-full"
@@ -125,12 +128,12 @@ export function ClassIslandMap({
                   <path
                     key={`path-${chap.id}`}
                     d={`M ${x1} ${y1} C ${cx} ${y1 + 50}, ${cx} ${y2 - 50}, ${x2} ${y2}`}
-                    stroke="currentColor"
+                    stroke="black"
                     strokeWidth="3"
                     strokeDasharray={chap.is_optional ? '6 6' : isPathActive ? 'none' : '4 4'}
                     className={cn(
                       'transition-colors duration-200',
-                      isPathActive ? 'text-primary' : 'text-muted-foreground/40'
+                      isPathActive ? 'stroke-black' : 'stroke-black/30'
                     )}
                   />
                 );
@@ -159,7 +162,7 @@ export function ClassIslandMap({
                     tabIndex={0}
                     role="button"
                     aria-label={`Pulau ${chap.position}: ${chap.title}. Status: ${chap.status}.`}
-                    className="cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-full"
+                    className="cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-black rounded-full"
                     onClick={() => setSelectedChapter(chap)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
@@ -174,12 +177,12 @@ export function ClassIslandMap({
                         cx={cx}
                         cy={cy}
                         r={r + 4}
-                        stroke="currentColor"
+                        stroke="black"
                         strokeWidth="3"
                         strokeDasharray={circumference}
                         strokeDashoffset={strokeDashoffset}
                         strokeLinecap="round"
-                        className="text-primary transition-all duration-300 transform -rotate-90 origin-center"
+                        className="transition-all duration-300 transform -rotate-90 origin-center"
                         style={{ transformOrigin: `${cx}px ${cy}px` }}
                       />
                     )}
@@ -191,12 +194,12 @@ export function ClassIslandMap({
                       r={r}
                       className={cn(
                         'transition-all duration-200',
-                        isCompleted && 'fill-emerald-500 text-white',
-                        isOpen && 'fill-primary text-primary-foreground group-hover:scale-105',
-                        isLocked && 'fill-muted text-muted-foreground'
+                        isCompleted && 'fill-black stroke-black',
+                        isOpen && 'fill-white stroke-black group-hover:scale-105',
+                        isLocked && 'fill-gray-200 stroke-black'
                       )}
-                      stroke="currentColor"
-                      strokeWidth={chap.is_optional ? 2 : 1}
+                      stroke="black"
+                      strokeWidth={chap.is_optional ? 3 : 2}
                       strokeDasharray={chap.is_optional ? '4 4' : 'none'}
                     />
 
@@ -205,10 +208,10 @@ export function ClassIslandMap({
                       <CheckCircle2 x={cx - 12} y={cy - 12} width={24} height={24} className="text-white" />
                     )}
                     {isOpen && (
-                      <Play x={cx - 10} y={cy - 10} width={20} height={20} className="fill-current" />
+                      <Play x={cx - 10} y={cy - 10} width={20} height={20} className="fill-black text-black" />
                     )}
                     {isLocked && (
-                      <Lock x={cx - 10} y={cy - 10} width={20} height={20} />
+                      <Lock x={cx - 10} y={cy - 10} width={20} height={20} className="text-black" />
                     )}
 
                     {/* Label Teks di Bawah Pulau */}
@@ -216,7 +219,7 @@ export function ClassIslandMap({
                       x={cx}
                       y={cy + r + 18}
                       textAnchor="middle"
-                      className="text-[11px] font-bold fill-foreground tracking-wide"
+                      className="text-[11px] font-mono font-bold fill-black tracking-wide"
                     >
                       Pulau {chap.position}
                     </text>
@@ -224,7 +227,7 @@ export function ClassIslandMap({
                       x={cx}
                       y={cy + r + 32}
                       textAnchor="middle"
-                      className="text-[10px] fill-muted-foreground font-medium"
+                      className="text-[10px] fill-black/75 font-bold"
                     >
                       {chap.title.length > 20 ? `${chap.title.slice(0, 18)}…` : chap.title}
                     </text>
@@ -233,9 +236,9 @@ export function ClassIslandMap({
                         x={cx}
                         y={cy + r + 45}
                         textAnchor="middle"
-                        className="text-[9px] fill-amber-600 font-semibold uppercase tracking-wider"
+                        className="text-[9px] fill-black font-mono font-bold uppercase tracking-wider"
                       >
-                        Opsional
+                        [Opsional]
                       </text>
                     )}
                   </g>
@@ -245,8 +248,8 @@ export function ClassIslandMap({
           </div>
         </div>
       ) : (
-        /* 3. Mode Tampilan Daftar (Fallback Aksesibel) */
-        <div className="space-y-3">
+        /* 3. Mode Tampilan Daftar (Retro Cards) */
+        <div className="space-y-4">
           {chapters.map((chap) => {
             const isLocked = chap.status === 'terkunci';
             const isCompleted = chap.status === 'selesai';
@@ -265,65 +268,65 @@ export function ClassIslandMap({
                   }
                 }}
                 className={cn(
-                  'flex items-center justify-between p-4 rounded-lg border transition-all cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-primary',
-                  isCompleted && 'bg-emerald-50/40 border-emerald-200 hover:bg-emerald-50/70',
-                  isOpen && 'bg-card border-primary/40 hover:border-primary shadow-sm',
-                  isLocked && 'bg-muted/30 border-border text-muted-foreground opacity-80'
+                  'flex items-center justify-between p-5 rounded-2xl border-2 border-black bg-white transition-all cursor-pointer shadow-retro hover:-translate-y-0.5',
+                  isCompleted && 'bg-gray-soft/40',
+                  isOpen && 'bg-white',
+                  isLocked && 'bg-gray-soft/20 opacity-80'
                 )}
               >
-                <div className="flex items-center gap-3.5">
+                <div className="flex items-center gap-4">
                   <div
                     className={cn(
-                      'w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm shrink-0',
-                      isCompleted && 'bg-emerald-600 text-white',
-                      isOpen && 'bg-primary text-primary-foreground',
-                      isLocked && 'bg-muted text-muted-foreground'
+                      'w-10 h-10 rounded-xl border-2 border-black flex items-center justify-center font-mono font-bold text-sm shrink-0 shadow-retro-sm',
+                      isCompleted && 'bg-black text-white',
+                      isOpen && 'bg-white text-black',
+                      isLocked && 'bg-gray-soft text-black'
                     )}
                   >
                     {isCompleted ? (
-                      <Check className="w-5 h-5" />
+                      <Check className="w-5 h-5 text-white" />
                     ) : isLocked ? (
-                      <Lock className="w-4 h-4" />
+                      <Lock className="w-4 h-4 text-black" />
                     ) : (
                       chap.position
                     )}
                   </div>
-                  <div className="space-y-0.5">
+                  <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-semibold text-muted-foreground">
+                      <span className="text-xs font-mono font-bold text-black/70">
                         Bab {chap.position}
                       </span>
                       {chap.is_optional && (
-                        <span className="text-[10px] font-medium bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded">
+                        <span className="text-[10px] font-mono font-bold bg-white text-black px-2 py-0.5 rounded border border-black shadow-xs">
                           Opsional
                         </span>
                       )}
                       <span
                         className={cn(
-                          'text-[10px] font-medium px-2 py-0.5 rounded-full',
-                          isCompleted && 'bg-emerald-100 text-emerald-800',
-                          isOpen && 'bg-blue-100 text-blue-800',
-                          isLocked && 'bg-gray-100 text-gray-700'
+                          'text-xs font-mono font-bold px-2 py-0.5 rounded border-2 border-black shadow-retro-sm',
+                          isCompleted && 'bg-black text-white',
+                          isOpen && 'bg-white text-black',
+                          isLocked && 'bg-gray-soft text-black'
                         )}
                       >
                         {isCompleted ? 'Selesai' : isOpen ? 'Terbuka' : 'Terkunci'}
                       </span>
                     </div>
-                    <h3 className="text-sm font-bold text-foreground">{chap.title}</h3>
+                    <h3 className="text-base font-heading font-black text-black">{chap.title}</h3>
                     {chap.summary && (
-                      <p className="text-xs text-muted-foreground line-clamp-1">{chap.summary}</p>
+                      <p className="text-xs text-black/75 line-clamp-1 font-medium">{chap.summary}</p>
                     )}
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 text-xs font-medium text-muted-foreground">
+                <div className="flex items-center gap-4 text-xs font-mono font-bold text-black">
                   <div className="hidden sm:block text-right">
                     <div>Materi: {chap.materials_completed}/{chap.materials_count}</div>
                     {chap.quiz && (
                       <div>Kuis: {chap.quiz.best_score ?? '-'} / {chap.pass_score}</div>
                     )}
                   </div>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  <ChevronRight className="w-5 h-5 text-black" />
                 </div>
               </div>
             );
@@ -331,203 +334,128 @@ export function ClassIslandMap({
         </div>
       )}
 
-      {/* 4. Dialog / Panel Isi Pulau */}
+      {/* 4. Dialog / Panel Isi Pulau (Retro Window) */}
       {selectedChapter && (
-        <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-background border border-border rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto space-y-5 p-6 animate-scale-in">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-fade-in font-sans">
+          <div className="bg-white border-2 border-black rounded-2xl shadow-retro-lg max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col animate-scale-in">
             {/* Header Panel */}
-            <div className="flex items-start justify-between gap-3 border-b border-border pb-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-primary">
-                    Pulau {selectedChapter.position}
-                  </span>
-                  {selectedChapter.is_optional && (
-                    <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded">
-                      Opsional
-                    </span>
+            <div className="flex items-center justify-between border-b-2 border-black bg-gray-soft p-4 shrink-0">
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full border border-black bg-black inline-block" />
+                <span className="h-3 w-3 rounded-full border border-black bg-white inline-block" />
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-black ml-1">
+                  Pulau {selectedChapter.position}
+                </span>
+                <span
+                  className={cn(
+                    'text-[10px] font-mono font-bold px-2 py-0.5 rounded border border-black',
+                    selectedChapter.status === 'selesai' && 'bg-black text-white',
+                    selectedChapter.status === 'terbuka' && 'bg-white text-black',
+                    selectedChapter.status === 'terkunci' && 'bg-gray-soft text-black'
                   )}
-                  <span
-                    className={cn(
-                      'text-[10px] font-medium px-2 py-0.5 rounded-full',
-                      selectedChapter.status === 'selesai' && 'bg-emerald-100 text-emerald-800',
-                      selectedChapter.status === 'terbuka' && 'bg-blue-100 text-blue-800',
-                      selectedChapter.status === 'terkunci' && 'bg-gray-100 text-gray-700'
-                    )}
-                  >
-                    {selectedChapter.status === 'selesai'
-                      ? 'Selesai'
-                      : selectedChapter.status === 'terbuka'
-                      ? 'Terbuka'
-                      : 'Terkunci'}
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-foreground mt-1">
-                  {selectedChapter.title}
-                </h3>
+                >
+                  {selectedChapter.status === 'selesai'
+                    ? 'Selesai'
+                    : selectedChapter.status === 'terbuka'
+                    ? 'Terbuka'
+                    : 'Terkunci'}
+                </span>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedChapter(null)}
-                className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
+                className="p-1 rounded border border-black bg-white hover:bg-gray-soft text-black shadow-retro-sm cursor-pointer"
                 aria-label="Tutup panel pulau"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Jika Pulau Terkunci */}
-            {selectedChapter.status === 'terkunci' ? (
-              <div className="p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 space-y-2">
-                <div className="flex items-center gap-2 font-semibold text-sm">
-                  <Lock className="w-4 h-4 text-amber-700" />
-                  Pulau Masih Terkunci
-                </div>
-                <p className="text-xs text-amber-800">
-                  Selesaikan Pulau {Math.max(1, selectedChapter.position - 1)} dengan skor minimal{' '}
-                  {selectedChapter.pass_score} untuk membuka pulau ini.
-                </p>
-              </div>
-            ) : (
-              /* Jika Pulau Terbuka / Selesai */
-              <div className="space-y-5 text-sm">
+            <div className="p-5 sm:p-6 overflow-y-auto space-y-5 text-xs">
+              <div>
+                <h3 className="text-lg font-heading font-black text-black">
+                  {selectedChapter.title}
+                </h3>
                 {selectedChapter.summary && (
-                  <p className="text-muted-foreground text-xs leading-relaxed">
+                  <p className="text-black/75 text-xs mt-1 leading-relaxed font-medium">
                     {selectedChapter.summary}
                   </p>
                 )}
-
-                {/* 1. Modul Materi */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                    <FileText className="w-3.5 h-3.5 text-primary" />
-                    Materi Bab ({selectedChapter.materials_completed}/{selectedChapter.materials_count} Selesai)
-                  </h4>
-                  <div className="p-3 bg-muted/20 border border-border rounded-md text-xs flex items-center justify-between">
-                    <span>Lihat dan pelajari dokumen materi untuk bab ini.</span>
-                    <Link
-                      href={`/classes/${classId}?tab=materi`}
-                      className="text-primary font-semibold hover:underline"
-                    >
-                      Buka Materi
-                    </Link>
-                  </div>
-                </div>
-
-                {/* 2. Kuis Bab */}
-                <div className="space-y-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                    <HelpCircle className="w-3.5 h-3.5 text-primary" />
-                    Kuis Bab (Syarat Nilai: {selectedChapter.pass_score})
-                  </h4>
-                  <div className="p-3 bg-muted/20 border border-border rounded-md space-y-2">
-                    {selectedChapter.quiz ? (
-                      <div className="flex items-center justify-between text-xs">
-                        <div>
-                          <div className="font-semibold text-foreground">
-                            {selectedChapter.quiz.title}
-                          </div>
-                          <div className="text-muted-foreground">
-                            Skor Terbaik: {selectedChapter.quiz.best_score ?? 'Belum ada'} • Percobaan: {selectedChapter.quiz.attempts}
-                          </div>
-                        </div>
-                        <Link
-                          href={`/exams`}
-                          className="px-3 py-1.5 bg-primary text-primary-foreground font-semibold rounded text-xs hover:bg-primary/90 transition-colors"
-                        >
-                          Mulai Kuis
-                        </Link>
-                      </div>
-                    ) : (
-                      <p className="text-xs text-muted-foreground italic">
-                        Kuis bab belum tersedia dari pengajar.
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                {/* 2.5 Podcast Bab */}
-                {selectedChapter.has_podcast && (
-                  <div className="space-y-2">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
-                      <Headphones className="w-3.5 h-3.5 text-primary" />
-                      Podcast Ringkasan Bab
-                    </h4>
-                    <div className="p-3 bg-muted/20 border border-border rounded-md text-xs flex items-center justify-between">
-                      <span>Dengarkan audio ringkasan bab (~3-6 menit) dengan transkrip.</span>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setActivePodcast(
-                            activePodcast?.id === selectedChapter.id
-                              ? null
-                              : { id: selectedChapter.id, title: selectedChapter.title }
-                          )
-                        }
-                        className="text-primary font-semibold hover:underline inline-flex items-center gap-1 cursor-pointer"
-                      >
-                        <Play className="w-3.5 h-3.5" />
-                        <span>{activePodcast?.id === selectedChapter.id ? 'Tutup Pemutar' : 'Dengarkan'}</span>
-                      </button>
-                    </div>
-                    {activePodcast?.id === selectedChapter.id && (
-                      <div className="pt-2">
-                        <PodcastPlayer
-                          podcastId={activePodcast.id}
-                          chapterTitle={activePodcast.title}
-                          onClose={() => setActivePodcast(null)}
-                        />
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* 3. Topik Bab */}
-                {selectedChapter.topics && selectedChapter.topics.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      Kekuatan Topik Anda
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {selectedChapter.topics.map((t) => (
-                        <span
-                          key={t.id}
-                          className={cn(
-                            'text-xs px-2.5 py-1 rounded-full font-medium border',
-                            t.level === 'kuat' && 'bg-emerald-50 text-emerald-800 border-emerald-300',
-                            t.level === 'cukup' && 'bg-blue-50 text-blue-800 border-blue-300',
-                            t.level === 'perlu_latihan' && 'bg-amber-50 text-amber-800 border-amber-300',
-                            t.level === 'belum_cukup_data' && 'bg-muted text-muted-foreground border-border'
-                          )}
-                        >
-                          {t.name}: {getTopicMasteryLabel(t.level)}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 4. Fitur Pendukung: Flashcard & Tukar Keahlian */}
-                <div className="pt-2 border-t border-border flex flex-col sm:flex-row gap-2">
-                  <Link
-                    href="/flashcards"
-                    className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold border border-border rounded-md hover:bg-muted transition-colors text-foreground"
-                  >
-                    <Brain className="w-4 h-4 text-primary" />
-                    Latihan Flashcard
-                  </Link>
-                  {isSkillExchangeEnabled && (
-                    <Link
-                      href={`/skill-exchange`}
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-semibold border border-border rounded-md hover:bg-muted transition-colors text-foreground"
-                    >
-                      <HandHelping className="w-4 h-4 text-emerald-600" />
-                      Cari Bantuan
-                    </Link>
-                  )}
-                </div>
               </div>
-            )}
+
+              {/* Jika Pulau Terkunci */}
+              {selectedChapter.status === 'terkunci' ? (
+                <div className="p-4 rounded-xl border-2 border-black bg-gray-soft text-black space-y-2 shadow-retro-sm">
+                  <div className="flex items-center gap-2 font-mono font-bold text-sm">
+                    <Lock className="w-4 h-4 text-black" />
+                    <span>Pulau Masih Terkunci</span>
+                  </div>
+                  <p className="text-xs text-black/80 font-medium leading-relaxed">
+                    Selesaikan Pulau {Math.max(1, selectedChapter.position - 1)} dengan nilai ambang batas minimal{' '}
+                    <strong className="text-black">{selectedChapter.pass_score}</strong> untuk membuka modul pulau ini.
+                  </p>
+                </div>
+              ) : (
+                /* Jika Pulau Terbuka / Selesai */
+                <div className="space-y-4">
+                  {/* 1. Modul Materi */}
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-black flex items-center gap-1.5">
+                      <FileText className="w-4 h-4 text-black" />
+                      <span>Materi Bab ({selectedChapter.materials_completed}/{selectedChapter.materials_count} Selesai)</span>
+                    </h4>
+                    <div className="p-3.5 bg-gray-soft/40 border-2 border-black rounded-xl text-xs flex items-center justify-between shadow-retro-sm">
+                      <span className="font-medium text-black">Pelajari dokumen materi bab ini.</span>
+                      <Link
+                        href={`/classes/${classId}?tab=materi`}
+                        className="px-3 py-1.5 rounded-lg border-2 border-black bg-white hover:bg-gray-soft text-black font-bold text-xs shadow-retro-sm"
+                      >
+                        Buka Materi &rarr;
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* 2. Topik Bab */}
+                  {selectedChapter.topics && selectedChapter.topics.length > 0 && (
+                    <div className="space-y-2">
+                      <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-black">
+                        Penguasaan Topik Pembahasan
+                      </h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedChapter.topics.map((t) => (
+                          <span
+                            key={t.id}
+                            className="text-xs px-2.5 py-1 rounded-lg font-mono font-bold border-2 border-black bg-white text-black shadow-retro-sm"
+                          >
+                            {t.name}: {getTopicMasteryLabel(t.level)}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 3. Fitur Pendukung: Flashcard & Tukar Keahlian */}
+                  <div className="pt-3 border-t-2 border-black/15 flex flex-col sm:flex-row gap-2.5">
+                    <Link
+                      href="/flashcards"
+                      className="flex-1 inline-flex items-center justify-center gap-2 px-3.5 py-2.5 text-xs font-bold border-2 border-black rounded-xl bg-white hover:bg-gray-soft transition-all text-black shadow-retro-sm"
+                    >
+                      <Brain className="w-4 h-4 text-black" />
+                      <span>Latihan Flashcard</span>
+                    </Link>
+                    {isSkillExchangeEnabled && (
+                      <Link
+                        href="/skill-exchange"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-3.5 py-2.5 text-xs font-bold border-2 border-black rounded-xl bg-black hover:bg-neutral-800 transition-all text-white shadow-retro"
+                      >
+                        <HandHelping className="w-4 h-4 text-white" />
+                        <span>Tukar Keahlian</span>
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

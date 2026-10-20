@@ -119,7 +119,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
   const getJenisIcon = (jenis: JenisNotifikasi) => {
     switch (jenis) {
       case "TUGAS_TENGGAT":
-        return <AlertCircle className="h-4 w-4 text-primary-dark" />;
+        return <AlertCircle className="h-4 w-4 text-ink" />;
       case "KEHADIRAN":
         return <Clock className="h-4 w-4 text-ink" />;
       case "KRS":
@@ -131,7 +131,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
       case "JADWAL":
         return <Calendar className="h-4 w-4 text-ink" />;
       case "KEAMANAN":
-        return <ShieldAlert className="h-4 w-4 text-primary-dark" />;
+        return <ShieldAlert className="h-4 w-4 text-ink" />;
       case "BRIEFING":
         return <Info className="h-4 w-4 text-ink" />;
       case "PENGUMUMAN":
@@ -197,7 +197,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
                 Notifikasi
               </span>
               {unreadCount > 0 && (
-                <span className="rounded-full bg-primary-soft text-primary px-2 py-0.5 text-xs font-bold">
+                <span className="rounded-full bg-black text-white px-2 py-0.5 text-xs font-bold">
                   {unreadCount} Baru
                 </span>
               )}
@@ -207,7 +207,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
               <button
                 onClick={handleTandaiSemuaDibaca}
                 disabled={loading}
-                className="text-xs text-primary hover:underline font-medium flex items-center gap-1 disabled:opacity-50"
+                className="text-xs text-ink hover:underline font-bold flex items-center gap-1 disabled:opacity-50"
               >
                 <CheckCheck className="h-3 w-3" />
                 Tandai semua dibaca
@@ -282,7 +282,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
                             {isUnread && (
                               <button
                                 onClick={(e) => handleTandaiDibaca(item.id, e)}
-                                className="text-primary hover:underline font-medium"
+                                className="text-ink hover:underline font-bold"
                               >
                                 Dibaca
                               </button>
@@ -293,7 +293,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
                               <Link
                                 href={item.tautan}
                                 onClick={() => setIsOpen(false)}
-                                className="text-primary hover:underline font-medium"
+                                className="text-ink hover:underline font-bold"
                               >
                                 Rincian
                               </Link>
@@ -307,13 +307,13 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
                             <span className="text-muted-foreground">Tunda selama:</span>
                             <button
                               onClick={(e) => handleTunda(item.id, 60, e)}
-                              className="rounded-control bg-surface border border-border px-2 py-0.5 font-medium text-foreground hover:bg-primary-soft hover:text-primary transition-colors"
+                              className="rounded-control bg-surface border border-border px-2 py-0.5 font-bold text-ink hover:bg-gray-soft transition-colors"
                             >
                               1 Jam
                             </button>
                             <button
                               onClick={(e) => handleTunda(item.id, 1440, e)}
-                              className="rounded-control bg-surface border border-border px-2 py-0.5 font-medium text-foreground hover:bg-primary-soft hover:text-primary transition-colors"
+                              className="rounded-control bg-surface border border-border px-2 py-0.5 font-bold text-ink hover:bg-gray-soft transition-colors"
                             >
                               1 Hari
                             </button>
@@ -335,7 +335,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
             <Link
               href="/mahasiswa/preferensi-notifikasi"
               onClick={() => setIsOpen(false)}
-              className="text-primary hover:underline font-medium flex items-center gap-1 text-xs"
+              className="text-ink hover:underline font-bold flex items-center gap-1 text-xs"
             >
               <Settings className="h-3 w-3" />
               Preferensi

@@ -85,47 +85,43 @@ export function CoordinatorEvaluationsView() {
 
   if (isLoading) {
     return (
-      <div className="p-8 text-center text-xs text-muted-foreground rounded-[12px] border border-border bg-surface">
+      <div className="p-8 text-center text-xs font-bold text-[#111111] border-2 border-black bg-white shadow-retro-sm font-sans">
         Memuat rekapitulasi evaluasi mutu perkuliahan...
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Kartu Status Periode Aktif */}
-      <div className="p-5 rounded-[12px] border border-border bg-surface flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="p-5 border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <h2 className="text-sm font-bold text-foreground">
+          <div className="flex items-center gap-2.5">
+            <h2 className="text-base font-heading font-black text-[#111111]">
               {period?.title || 'Periode Evaluasi Semester'}
             </h2>
             <span
-              className={`text-[10px] font-mono px-2 py-0.5 rounded font-semibold ${
+              className={`text-xs px-3 py-1 rounded-full border-2 border-black font-bold shadow-retro-sm ${
                 period?.status === 'OPEN'
-                  ? 'bg-emerald-500/10 text-emerald-600'
-                  : 'bg-muted text-muted-foreground'
+                  ? 'bg-[#ED1C24] text-white'
+                  : 'bg-gray-soft text-[#111111]'
               }`}
             >
               {period?.status === 'OPEN' ? 'Terbuka (Aktif)' : 'Ditutup'}
             </span>
           </div>
-          <p className="text-xs text-muted-foreground">
-            Semester: {period?.semester || 'Semester Aktif'} · Pertanyaan Kuesioner: {period?.questions?.length || 5} butir
+          <p className="text-xs text-[#111111] font-medium">
+            Semester: {period?.semester || 'Semester Aktif'} &bull; Pertanyaan Kuesioner: {period?.questions?.length || 5} butir
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5">
           {period && (
             <button
               type="button"
               disabled={isTogglingStatus}
               onClick={handleToggleStatus}
-              className={`px-3 py-1.5 rounded-[8px] text-xs font-semibold border ${
-                period.status === 'OPEN'
-                  ? 'border-rose-500/40 text-rose-600 hover:bg-rose-50'
-                  : 'border-emerald-500/40 text-emerald-600 hover:bg-emerald-50'
-              }`}
+              className="px-3.5 py-1.5 border-2 border-black bg-white text-[#111111] hover:bg-gray-soft text-xs font-bold shadow-retro-sm cursor-pointer transition-all active:translate-x-0.5 active:translate-y-0.5"
             >
               {period.status === 'OPEN' ? 'Tutup Periode' : 'Buka Periode'}
             </button>
@@ -135,47 +131,47 @@ export function CoordinatorEvaluationsView() {
             type="button"
             disabled={isSendingReminders}
             onClick={handleSendReminders}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] border border-border bg-surface text-xs font-semibold text-foreground hover:bg-muted"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border-2 border-black bg-white text-[#111111] hover:bg-gray-soft text-xs font-bold shadow-retro-sm cursor-pointer transition-all active:translate-x-0.5 active:translate-y-0.5"
           >
-            <Bell className="h-3.5 w-3.5" />
+            <Bell className="h-3.5 w-3.5 text-[#ED1C24]" />
             <span>Kirim Pengingat</span>
           </button>
 
           <button
             type="button"
             onClick={handleExportCsv}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-[8px] bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border-2 border-black bg-[#ED1C24] text-white hover:bg-[#c9141b] text-xs font-bold shadow-retro-sm cursor-pointer transition-all active:translate-x-0.5 active:translate-y-0.5"
           >
-            <Download className="h-3.5 w-3.5" />
+            <Download className="h-3.5 w-3.5 text-white" />
             <span>Ekspor CSV</span>
           </button>
         </div>
       </div>
 
       {reminderMessage && (
-        <div className="p-3 rounded-[8px] bg-emerald-500/10 text-emerald-700 text-xs flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
+        <div className="p-3.5 border-2 border-black bg-neutral-100 text-[#111111] text-xs font-bold flex items-center gap-2 shadow-retro-sm">
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#111111]" />
           <span>{reminderMessage}</span>
         </div>
       )}
 
       {/* Tabel Rekapitulasi per Dosen & Mata Kuliah */}
-      <div className="rounded-[12px] border border-border bg-surface overflow-hidden space-y-4">
-        <div className="p-4 border-b border-border flex items-center justify-between">
-          <h3 className="text-sm font-bold text-foreground">
+      <div className="border-2 border-black bg-white shadow-retro overflow-hidden">
+        <div className="p-4 border-b-2 border-black bg-gray-soft flex items-center justify-between">
+          <h3 className="text-sm font-heading font-black text-[#111111]">
             Rekapitulasi Mutu per Dosen Pengampu & Mata Kuliah
           </h3>
-          <span className="text-xs text-muted-foreground">{recap.length} baris kelas</span>
+          <span className="text-xs font-bold text-[#111111]">{recap.length} baris kelas</span>
         </div>
 
         {recap.length === 0 ? (
-          <div className="p-8 text-center text-xs text-muted-foreground">
+          <div className="p-8 text-center text-xs text-[#111111] font-semibold">
             Belum ada rekapitulasi evaluasi dosen untuk periode ini.
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-muted/50 border-b border-border font-medium text-muted-foreground uppercase text-[10px]">
+            <table className="w-full text-left text-xs font-sans">
+              <thead className="bg-gray-soft border-b-2 border-black font-bold uppercase text-[#111111]">
                 <tr>
                   <th className="px-4 py-3">No</th>
                   <th className="px-4 py-3">Nama Dosen</th>
@@ -188,31 +184,21 @@ export function CoordinatorEvaluationsView() {
                   <th className="px-4 py-3 text-center">Kategori</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border">
+              <tbody className="divide-y-2 divide-black/10">
                 {recap.map((row, idx) => (
-                  <tr key={row.id} className="hover:bg-muted/30 transition-colors">
-                    <td className="px-4 py-3 text-muted-foreground font-mono">{idx + 1}</td>
-                    <td className="px-4 py-3 font-semibold text-foreground">{row.lecturerName}</td>
-                    <td className="px-4 py-3 text-muted-foreground">{row.subjectTitle}</td>
-                    <td className="px-4 py-3 text-center tabular-nums">{row.respondentsCount}</td>
-                    <td className="px-4 py-3 text-center tabular-nums">{row.pedagogyScore}</td>
-                    <td className="px-4 py-3 text-center tabular-nums">{row.professionalScore}</td>
-                    <td className="px-4 py-3 text-center tabular-nums">{row.socialScore}</td>
-                    <td className="px-4 py-3 text-center font-bold text-foreground tabular-nums">
+                  <tr key={row.id} className="hover:bg-gray-soft/30 transition-colors">
+                    <td className="px-4 py-3 text-[#111111] font-bold">{idx + 1}</td>
+                    <td className="px-4 py-3 font-bold text-[#111111]">{row.lecturerName}</td>
+                    <td className="px-4 py-3 text-[#111111] font-medium">{row.subjectTitle}</td>
+                    <td className="px-4 py-3 text-center tabular-nums font-bold text-[#111111]">{row.respondentsCount}</td>
+                    <td className="px-4 py-3 text-center tabular-nums font-bold text-[#111111]">{row.pedagogyScore}</td>
+                    <td className="px-4 py-3 text-center tabular-nums font-bold text-[#111111]">{row.professionalScore}</td>
+                    <td className="px-4 py-3 text-center tabular-nums font-bold text-[#111111]">{row.socialScore}</td>
+                    <td className="px-4 py-3 text-center font-black text-[#111111] tabular-nums text-sm">
                       {row.totalScore}
                     </td>
                     <td className="px-4 py-3 text-center">
-                      <span
-                        className={`text-[10px] font-semibold px-2 py-0.5 rounded ${
-                          row.category === 'Sangat Baik'
-                            ? 'bg-emerald-100 text-emerald-700'
-                            : row.category === 'Baik'
-                            ? 'bg-blue-100 text-blue-700'
-                            : row.category === 'Cukup'
-                            ? 'bg-amber-100 text-amber-700'
-                            : 'bg-rose-100 text-rose-700'
-                        }`}
-                      >
+                      <span className="text-[11px] font-bold px-2.5 py-0.5 border-2 border-black bg-white text-[#111111] shadow-retro-sm">
                         {row.category}
                       </span>
                     </td>

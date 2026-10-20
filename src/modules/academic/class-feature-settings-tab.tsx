@@ -19,24 +19,21 @@ export function ClassFeatureSettingsTab({ classId, initialFlags }: ClassFeatureS
     {
       key: 'peta_pulau' as const,
       title: 'Peta Pulau Belajar',
-      description: 'Aktifkan alur belajar berbasis peta pulau bertahap dan kuis bab.',
+      description: 'Aktifkan alur belajar berbasis peta pulau bertahap dan kuis bab terstruktur.',
       icon: Compass,
-      color: 'text-primary',
     },
     {
       key: 'flashcard' as const,
-      title: 'Flashcard Pengulangan Berjarak',
-      description: 'Aktifkan latihan kartu mengingat konsep bab harian berbasis sistem kotak Leitner.',
+      title: 'Flashcard Pengulangan Berjarak (SRS)',
+      description: 'Aktifkan latihan kartu mengingat konsep bab harian berbasis algoritma kotak Leitner.',
       icon: Brain,
-      color: 'text-purple-600',
       dependsOn: 'peta_pulau',
     },
     {
       key: 'podcast' as const,
       title: 'Podcast Ringkasan Bab',
-      description: 'Aktifkan ringkasan audio narator untuk materi bab setelah naskah disetujui.',
+      description: 'Aktifkan audio narasi rangkuman materi perkuliahan setelah naskah disetujui dosen.',
       icon: Headphones,
-      color: 'text-blue-600',
       dependsOn: 'peta_pulau',
     },
     {
@@ -44,7 +41,6 @@ export function ClassFeatureSettingsTab({ classId, initialFlags }: ClassFeatureS
       title: 'Tukar Keahlian Antarteman',
       description: 'Aktifkan bantuan belajar terstruktur antarmahasiswa sekelas pada topik yang dikuasai.',
       icon: HandHelping,
-      color: 'text-emerald-600',
       dependsOn: 'peta_pulau',
     },
     {
@@ -52,7 +48,6 @@ export function ClassFeatureSettingsTab({ classId, initialFlags }: ClassFeatureS
       title: 'Rekap Semester Reflektif',
       description: 'Sertakan capaian kelas ini dalam lembar refleksi belajar semester pribadi mahasiswa.',
       icon: Trophy,
-      color: 'text-amber-600',
     },
   ];
 
@@ -75,25 +70,30 @@ export function ClassFeatureSettingsTab({ classId, initialFlags }: ClassFeatureS
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-card border border-border p-4 rounded-lg">
-        <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-          <Sliders className="w-5 h-5 text-primary" />
-          Pengaturan Fitur Pembelajaran Kelas
-        </h2>
-        <p className="text-xs text-muted-foreground mt-0.5">
-          Pilih fitur pembelajaran yang ingin diaktifkan pada kelas ini. Mematikan fitur menyembunyikannya dari mahasiswa tanpa menghapus data yang tersimpan.
-        </p>
+    <div className="space-y-6 font-sans">
+      <div className="bg-white border-2 border-black p-5 sm:p-6 rounded-2xl shadow-retro">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-black bg-gray-soft text-[11px] font-mono font-bold text-black uppercase">
+            <Sliders className="w-3.5 h-3.5 text-black" />
+            <span>Konfigurasi Pedagogik</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-heading font-black text-black">
+            Pengaturan Fitur Pembelajaran Kelas
+          </h2>
+          <p className="text-xs sm:text-sm text-black/75 font-medium leading-relaxed">
+            Pilih fitur pembelajaran yang ingin diaktifkan pada kelas ini. Mematikan fitur menyembunyikannya dari mahasiswa tanpa menghapus rekaman data yang tersimpan.
+          </p>
+        </div>
       </div>
 
       {statusMessage && (
-        <div className="p-3 text-xs bg-muted border border-border rounded-md text-foreground flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-          {statusMessage}
+        <div className="p-3.5 text-xs bg-gray-soft border-2 border-black rounded-xl text-black font-bold shadow-retro-sm flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-black shrink-0" />
+          <span>{statusMessage}</span>
         </div>
       )}
 
-      <div className="divide-y divide-border border border-border bg-card rounded-lg">
+      <div className="divide-y-2 divide-black/10 border-2 border-black bg-white rounded-2xl shadow-retro overflow-hidden">
         {features.map((feat) => {
           const isEnabled = flags[feat.key] ?? false;
           const isParentDisabled = feat.dependsOn && !flags[feat.dependsOn];
@@ -102,42 +102,42 @@ export function ClassFeatureSettingsTab({ classId, initialFlags }: ClassFeatureS
             <div
               key={feat.key}
               className={cn(
-                'p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors',
-                isParentDisabled && 'opacity-50 bg-muted/20'
+                'p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors',
+                isParentDisabled && 'opacity-50 bg-gray-soft/30'
               )}
             >
-              <div className="flex items-start gap-3">
-                <div className={cn('p-2 rounded-md bg-muted shrink-0', feat.color)}>
-                  <feat.icon className="w-5 h-5" />
+              <div className="flex items-start gap-4">
+                <div className="p-2.5 rounded-xl border-2 border-black bg-gray-soft text-black shadow-retro-sm shrink-0">
+                  <feat.icon className="w-5 h-5 text-black" />
                 </div>
-                <div className="space-y-0.5">
-                  <h4 className="text-sm font-bold text-foreground">{feat.title}</h4>
-                  <p className="text-xs text-muted-foreground">{feat.description}</p>
+                <div className="space-y-1">
+                  <h4 className="text-base font-heading font-black text-black">{feat.title}</h4>
+                  <p className="text-xs text-black/75 font-medium max-w-2xl leading-relaxed">{feat.description}</p>
                   {isParentDisabled && (
-                    <span className="text-[11px] text-amber-600 block mt-1">
+                    <span className="text-[11px] font-mono font-bold text-black bg-gray-soft px-2 py-0.5 rounded border border-black inline-block mt-1">
                       Mensyaratkan fitur Peta Pulau diaktifkan terlebih dahulu.
                     </span>
                   )}
                 </div>
               </div>
 
-              {/* Sakelar Toggle */}
-              <div className="self-end sm:self-auto">
+              {/* Sakelar Toggle Retro */}
+              <div className="self-end sm:self-auto shrink-0">
                 <button
                   type="button"
                   disabled={Boolean(isParentDisabled || isUpdating === feat.key)}
                   onClick={() => handleToggle(feat.key, isEnabled)}
                   aria-pressed={isEnabled}
                   className={cn(
-                    'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2',
-                    isEnabled ? 'bg-primary' : 'bg-muted-foreground/30',
+                    'relative inline-flex h-7 w-14 items-center rounded-full border-2 border-black transition-colors focus:outline-none shadow-retro-sm cursor-pointer',
+                    isEnabled ? 'bg-black' : 'bg-gray-soft',
                     (isParentDisabled || isUpdating === feat.key) && 'cursor-not-allowed opacity-50'
                   )}
                 >
                   <span
                     className={cn(
-                      'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
-                      isEnabled ? 'translate-x-6' : 'translate-x-1'
+                      'inline-block h-5 w-5 transform rounded-full border-2 border-black bg-white transition-transform shadow-xs',
+                      isEnabled ? 'translate-x-7' : 'translate-x-1'
                     )}
                   />
                 </button>

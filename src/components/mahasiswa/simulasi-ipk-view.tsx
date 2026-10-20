@@ -97,10 +97,10 @@ export function SimulasiIpkView({
   return (
     <div className="space-y-6">
       {/* Banner Penafian / Catatan Resmi */}
-      <div className="rounded-[12px] border border-primary/20 bg-primary-soft/30 p-4 flex items-start gap-3">
-        <Info className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+      <div className="rounded-[12px] border border-black/20 bg-gray-soft/40 p-4 flex items-start gap-3">
+        <Info className="h-5 w-5 text-ink flex-shrink-0 mt-0.5" />
         <div className="space-y-0.5">
-          <h4 className="text-xs font-semibold text-primary">
+          <h4 className="text-xs font-bold text-ink">
             Perhatian: Simulasi Akademik Mandiri
           </h4>
           <p className="text-xs text-muted-foreground leading-relaxed">
@@ -118,7 +118,7 @@ export function SimulasiIpkView({
           <CardHeader className="pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground flex items-center justify-between">
               <span>Proyeksi IPK Kumulatif</span>
-              <GraduationCap className="h-4 w-4 text-primary" />
+              <GraduationCap className="h-4 w-4 text-ink" />
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-1.5">
@@ -131,7 +131,7 @@ export function SimulasiIpkView({
                   hasil.selisihIpk > 0
                     ? "bg-surface text-ink border-2 border-ink"
                     : hasil.selisihIpk < 0
-                    ? "bg-primary text-white font-bold border border-ink"
+                    ? "bg-black text-white font-bold border border-ink"
                     : "bg-gray-soft text-ink border border-ink"
                 }`}
               >
@@ -149,11 +149,11 @@ export function SimulasiIpkView({
           <CardHeader className="pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground flex items-center justify-between">
               <span>Proyeksi IPS Semester Berjalan</span>
-              <TrendingUp className="h-4 w-4 text-primary" />
+              <TrendingUp className="h-4 w-4 text-ink" />
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-1.5">
-            <div className="text-3xl font-bold text-primary font-heading tabular-nums">
+            <div className="text-3xl font-bold text-ink font-heading tabular-nums">
               {hasil.ipsProyeksi.toFixed(2)}
             </div>
             <p className="text-xs text-muted-foreground">
@@ -167,7 +167,7 @@ export function SimulasiIpkView({
           <CardHeader className="pb-2">
             <CardTitle className="text-xs font-medium text-muted-foreground flex items-center justify-between">
               <span>Total SKS Lulus Baru</span>
-              <Award className="h-4 w-4 text-primary" />
+              <Award className="h-4 w-4 text-ink" />
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-1.5">
@@ -189,7 +189,7 @@ export function SimulasiIpkView({
         <CardHeader className="p-4 sm:p-5 border-b border-border/50 bg-muted/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <CardTitle className="text-base font-semibold text-foreground font-heading flex items-center gap-2">
-              <Calculator className="h-4 w-4 text-primary" />
+              <Calculator className="h-4 w-4 text-ink" />
               Target Nilai Mata Kuliah Semester Berjalan
             </CardTitle>
             <p className="text-xs text-muted-foreground mt-0.5">
@@ -203,9 +203,9 @@ export function SimulasiIpkView({
               variant="outline"
               size="sm"
               onClick={() => setSemuaNilai("A")}
-              className="text-xs h-8 gap-1.5 border-border hover:bg-primary-soft hover:text-primary"
+              className="text-xs h-8 gap-1.5 border-border hover:bg-gray-soft hover:text-ink font-bold"
             >
-              <Award className="h-3.5 w-3.5 text-primary" />
+              <Award className="h-3.5 w-3.5 text-ink" />
               Semua A
             </Button>
             <Button
@@ -297,7 +297,7 @@ export function SimulasiIpkView({
                           </select>
                         </td>
                         <td className="py-3 px-4 text-center">
-                          <span className="inline-flex items-center justify-center font-bold text-primary font-heading tabular-nums bg-primary-soft/50 px-2.5 py-0.5 rounded-[6px] border border-primary/20">
+                          <span className="inline-flex items-center justify-center font-bold text-ink font-heading tabular-nums bg-gray-soft px-2.5 py-0.5 rounded-[6px] border border-ink/20">
                             {bobot.toFixed(1)}
                           </span>
                         </td>

@@ -40,7 +40,7 @@ export default function MustChangePasswordPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-retro-bg font-sans text-foreground selection:bg-ink selection:text-black flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 antialiased">
+    <div className="min-h-[100dvh] bg-retro-bg font-sans text-foreground selection:bg-ink selection:text-white flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 antialiased">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         {/* Retro Window Card */}
         <div className="rounded-xl border-[1.5px] border-retro-border bg-retro-surface shadow-retro-lg overflow-hidden transition-all">

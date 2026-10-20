@@ -13,14 +13,14 @@ import {
   FolderArchive,
   X,
   Sparkles,
-  Layers
+  Layers,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import {
   getQuestionTemplateBase64Action,
   parseUploadedQuestionFileAction,
   confirmQuestionImportAction,
-  exportQuestionBankAction
+  exportQuestionBankAction,
 } from './question-import-actions';
 import { ParsedQuestionItem } from '@/lib/akademik/excel-question-parser';
 
@@ -94,7 +94,7 @@ export function QuestionImportExportModal() {
       const res = await confirmQuestionImportAction({
         format: parsedData.format,
         items: parsedData.items,
-        mode
+        mode,
       });
 
       if (!res.ok || !res.data) {
@@ -104,7 +104,7 @@ export function QuestionImportExportModal() {
 
       setImportSummary({
         imported: res.data.importedCount,
-        skipped: res.data.skippedCount
+        skipped: res.data.skippedCount,
       });
       setActiveStep('summary');
       setMessage({ type: 'sukses', text: res.pesan });
@@ -150,30 +150,33 @@ export function QuestionImportExportModal() {
     <>
       <div className="flex flex-wrap items-center gap-2">
         <button
+          type="button"
           onClick={() => {
             setIsOpen(true);
             setActiveStep('upload');
             setMessage(null);
           }}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black bg-primary text-white font-bold text-xs shadow-retro hover:bg-emerald-700 transition-all"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border-2 border-black bg-white hover:bg-black hover:text-white text-black font-bold text-xs shadow-retro-sm transition-all cursor-pointer"
         >
           <UploadCloud className="h-4 w-4" />
           <span>Impor Soal Massal</span>
         </button>
 
         <button
+          type="button"
           onClick={() => handleExport('moodle_xml')}
           disabled={isPending}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black bg-white text-black font-bold text-xs shadow-retro hover:bg-neutral-100 transition-all"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border-2 border-black bg-white text-black font-bold text-xs shadow-retro-sm hover:bg-gray-soft transition-all cursor-pointer"
         >
           <Download className="h-4 w-4" />
           <span>Ekspor Moodle XML</span>
         </button>
 
         <button
+          type="button"
           onClick={() => handleExport('qti')}
           disabled={isPending}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border-2 border-black bg-white text-black font-bold text-xs shadow-retro hover:bg-neutral-100 transition-all"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border-2 border-black bg-white text-black font-bold text-xs shadow-retro-sm hover:bg-gray-soft transition-all cursor-pointer"
         >
           <FileArchive className="h-4 w-4" />
           <span>Ekspor QTI 2.1 (.zip)</span>
@@ -181,25 +184,25 @@ export function QuestionImportExportModal() {
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
           <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
             <RetroWindow
               title="Pusat Impor & Ekspor Bank Soal"
               badge="Standar Mutu"
-              headerBadgeVariant="warning"
               headerClassName="bg-gray-soft"
               bodyClassName="p-6 bg-white space-y-6"
             >
-              <div className="flex items-center justify-between border-b pb-4">
+              <div className="flex items-center justify-between border-b-2 border-black/10 pb-4">
                 <div>
-                  <h3 className="font-bold text-xl text-black">Impor Soal Massal</h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">
+                  <h3 className="font-heading font-black text-xl text-black">Impor Soal Massal</h3>
+                  <p className="text-xs text-black/70 font-medium mt-0.5">
                     Mendukung berkas Excel (.xlsx), Word (.docx), Moodle XML (.xml), dan IMS QTI 2.1 (.zip)
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setIsOpen(false)}
-                  className="p-1 rounded-md hover:bg-neutral-100 text-black border border-black"
+                  className="p-1 rounded-lg hover:bg-gray-soft text-black border border-black cursor-pointer"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -207,10 +210,10 @@ export function QuestionImportExportModal() {
 
               {message && (
                 <div
-                  className={`p-3.5 rounded-lg border-2 text-xs font-bold ${
+                  className={`p-3.5 rounded-xl border-2 border-black text-xs font-bold shadow-retro-sm ${
                     message.type === 'sukses'
-                      ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
-                      : 'border-red-600 bg-red-50 text-red-900'
+                      ? 'bg-white text-black'
+                      : 'bg-gray-soft text-black'
                   }`}
                 >
                   {message.text}
@@ -222,20 +225,21 @@ export function QuestionImportExportModal() {
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Kotak Unduh Template */}
-                    <div className="p-5 rounded-xl border-2 border-dashed border-black bg-neutral-50 flex flex-col justify-between space-y-4">
+                    <div className="p-5 rounded-2xl border-2 border-dashed border-black bg-white shadow-retro-sm flex flex-col justify-between space-y-4">
                       <div>
                         <div className="flex items-center gap-2 text-black font-bold mb-1">
-                          <FileSpreadsheet className="h-5 w-5 text-emerald-600" />
-                          <span>Format Excel Baku</span>
+                          <FileSpreadsheet className="h-5 w-5 text-black" />
+                          <span className="font-heading">Format Excel Baku</span>
                         </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed">
+                        <p className="text-xs text-black/75 font-medium leading-relaxed">
                           Gunakan template resmi SIAJAR dengan dropdown pilihan tipe soal dan tingkat kesulitan untuk menghindari kesalahan format.
                         </p>
                       </div>
                       <button
+                        type="button"
                         onClick={handleDownloadTemplate}
                         disabled={isPending}
-                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black bg-white text-black font-bold text-xs shadow-retro hover:bg-neutral-100 transition-all"
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black bg-white hover:bg-gray-soft text-black font-bold text-xs shadow-retro-sm transition-all cursor-pointer"
                       >
                         <Download className="h-4 w-4" />
                         <span>Unduh Template Excel</span>
@@ -243,13 +247,13 @@ export function QuestionImportExportModal() {
                     </div>
 
                     {/* Area Unggah Berkas */}
-                    <div className="p-5 rounded-xl border-2 border-dashed border-black bg-primary/5 flex flex-col items-center justify-center text-center space-y-3">
-                      <UploadCloud className="h-8 w-8 text-primary" />
+                    <div className="p-5 rounded-2xl border-2 border-dashed border-black bg-gray-soft/40 shadow-retro-sm flex flex-col items-center justify-center text-center space-y-3">
+                      <UploadCloud className="h-8 w-8 text-black" />
                       <div>
-                        <span className="font-bold text-sm text-black block">Pilih Berkas Soal</span>
-                        <span className="text-xs text-muted-foreground">Maksimal 10 MB atau 500 butir soal</span>
+                        <span className="font-heading font-black text-sm text-black block">Pilih Berkas Soal</span>
+                        <span className="text-xs text-black/70 font-mono">Maksimal 10 MB atau 500 butir soal</span>
                       </div>
-                      <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-primary text-white font-bold text-xs shadow-retro hover:bg-emerald-700 transition-all">
+                      <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-black bg-black text-white font-bold text-xs shadow-retro hover:bg-neutral-800 transition-all">
                         <span>Pilih Berkas Komputer</span>
                         <input
                           type="file"
@@ -262,9 +266,9 @@ export function QuestionImportExportModal() {
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-black/20 bg-neutral-50 p-4 text-xs space-y-2">
-                    <span className="font-bold text-black block">Aturan Pola Dokumen:</span>
-                    <ul className="list-disc pl-5 space-y-1 text-muted-foreground">
+                  <div className="rounded-xl border-2 border-black bg-gray-soft/60 p-4 text-xs space-y-2 shadow-retro-sm">
+                    <span className="font-mono font-bold text-black uppercase block">Aturan Pola Dokumen:</span>
+                    <ul className="list-disc pl-5 space-y-1 text-black/80 font-medium">
                       <li><strong>Excel:</strong> Isi kolom tipe, pertanyaan, opsi_a sampai opsi_e, kunci, dan bobot.</li>
                       <li><strong>Word (.docx):</strong> Awali nomor soal (1.), baris pilihan (a. sampai e.), dan baris <code>Jawaban: B</code>.</li>
                       <li><strong>Moodle XML:</strong> Mendukung pilihan ganda, benar/salah, isian singkat, dan uraian.</li>
@@ -277,21 +281,21 @@ export function QuestionImportExportModal() {
               {/* TAHAP 2: PRATINJAU */}
               {activeStep === 'preview' && parsedData && (
                 <div className="space-y-4">
-                  <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-lg border-2 border-black bg-neutral-100">
-                    <div className="flex items-center gap-4 text-xs font-bold">
+                  <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl border-2 border-black bg-white shadow-retro-sm">
+                    <div className="flex items-center gap-4 text-xs font-mono font-bold">
                       <span className="flex items-center gap-1.5 text-black">
                         <Layers className="h-4 w-4" />
                         Total: {parsedData.total}
                       </span>
-                      <span className="flex items-center gap-1 text-emerald-700">
+                      <span className="flex items-center gap-1 text-black">
                         <CheckCircle2 className="h-4 w-4" />
                         Valid: {parsedData.validCount}
                       </span>
-                      <span className="flex items-center gap-1 text-amber-700">
+                      <span className="flex items-center gap-1 text-black/80">
                         <AlertTriangle className="h-4 w-4" />
                         Peringatan: {parsedData.warningCount}
                       </span>
-                      <span className="flex items-center gap-1 text-red-700">
+                      <span className="flex items-center gap-1 text-black">
                         <XCircle className="h-4 w-4" />
                         Galat: {parsedData.errorCount}
                       </span>
@@ -299,8 +303,9 @@ export function QuestionImportExportModal() {
 
                     <div className="flex items-center gap-2">
                       <button
+                        type="button"
                         onClick={() => setActiveStep('upload')}
-                        className="px-3 py-1.5 text-xs font-bold border border-black rounded bg-white hover:bg-neutral-50"
+                        className="px-3 py-1.5 text-xs font-bold border-2 border-black rounded-xl bg-white hover:bg-gray-soft shadow-retro-sm cursor-pointer"
                       >
                         Ganti Berkas
                       </button>
@@ -308,64 +313,64 @@ export function QuestionImportExportModal() {
                   </div>
 
                   {/* Tabel Pratinjau Soal */}
-                  <div className="border-2 border-black rounded-lg overflow-x-auto max-h-72">
+                  <div className="border-2 border-black rounded-2xl overflow-x-auto max-h-72 shadow-retro">
                     <table className="w-full text-left text-xs border-collapse">
-                      <thead className="bg-neutral-200 sticky top-0 border-b border-black font-bold">
+                      <thead className="bg-neutral-100 sticky top-0 border-b-2 border-black font-mono font-bold uppercase text-black">
                         <tr>
-                          <th className="p-2 border-r border-black w-12 text-center">No</th>
-                          <th className="p-2 border-r border-black w-24">Tipe</th>
-                          <th className="p-2 border-r border-black">Pertanyaan</th>
-                          <th className="p-2 border-r border-black w-24">Kunci</th>
-                          <th className="p-2 border-r border-black w-16 text-center">Poin</th>
-                          <th className="p-2 border-r border-black w-24 text-center">Status</th>
-                          <th className="p-2">Catatan Validasi</th>
+                          <th className="p-2.5 border-r-2 border-black w-12 text-center">No</th>
+                          <th className="p-2.5 border-r-2 border-black w-24">Tipe</th>
+                          <th className="p-2.5 border-r-2 border-black">Pertanyaan</th>
+                          <th className="p-2.5 border-r-2 border-black w-24">Kunci</th>
+                          <th className="p-2.5 border-r-2 border-black w-16 text-center">Poin</th>
+                          <th className="p-2.5 border-r-2 border-black w-24 text-center">Status</th>
+                          <th className="p-2.5">Catatan Validasi</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-black/20">
+                      <tbody className="divide-y-2 divide-black/10">
                         {parsedData.items.map((item, idx) => (
                           <tr
                             key={idx}
                             className={
                               item.status === 'galat'
-                                ? 'bg-red-50/60'
+                                ? 'bg-gray-soft/80'
                                 : item.status === 'peringatan'
-                                ? 'bg-amber-50/60'
-                                : 'hover:bg-neutral-50'
+                                ? 'bg-gray-soft/40'
+                                : 'hover:bg-gray-soft/20'
                             }
                           >
-                            <td className="p-2 border-r border-black/20 text-center font-bold">
+                            <td className="p-2.5 border-r-2 border-black/10 text-center font-bold font-mono">
                               {item.row_number}
                             </td>
-                            <td className="p-2 border-r border-black/20 font-medium">
+                            <td className="p-2.5 border-r-2 border-black/10 font-medium">
                               {item.tipe}
                             </td>
-                            <td className="p-2 border-r border-black/20 max-w-xs truncate" title={item.pertanyaan}>
+                            <td className="p-2.5 border-r-2 border-black/10 max-w-xs truncate font-medium" title={item.pertanyaan}>
                               {item.pertanyaan}
                             </td>
-                            <td className="p-2 border-r border-black/20 font-bold">
+                            <td className="p-2.5 border-r-2 border-black/10 font-bold font-mono">
                               {item.kunci || '-'}
                             </td>
-                            <td className="p-2 border-r border-black/20 text-center">
+                            <td className="p-2.5 border-r-2 border-black/10 text-center font-mono font-bold">
                               {item.bobot}
                             </td>
-                            <td className="p-2 border-r border-black/20 text-center">
+                            <td className="p-2.5 border-r-2 border-black/10 text-center">
                               {item.status === 'valid' && (
-                                <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">
+                                <span className="px-2 py-0.5 rounded border border-black bg-white text-black font-mono font-bold shadow-xs">
                                   Valid
                                 </span>
                               )}
                               {item.status === 'peringatan' && (
-                                <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold">
+                                <span className="px-2 py-0.5 rounded border border-black bg-gray-soft text-black font-mono font-bold">
                                   Peringatan
                                 </span>
                               )}
                               {item.status === 'galat' && (
-                                <span className="px-2 py-0.5 rounded bg-red-100 text-red-800 font-bold">
+                                <span className="px-2 py-0.5 rounded border border-black bg-black text-white font-mono font-bold">
                                   Galat
                                 </span>
                               )}
                             </td>
-                            <td className="p-2 text-xs text-muted-foreground">
+                            <td className="p-2.5 text-xs text-black/75 font-medium">
                               {item.issues.length > 0 ? item.issues.join('; ') : 'Siap diimpor'}
                             </td>
                           </tr>
@@ -375,24 +380,26 @@ export function QuestionImportExportModal() {
                   </div>
 
                   {/* Tombol Aksi Impor */}
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t">
-                    <span className="text-xs text-muted-foreground">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t-2 border-black/10">
+                    <span className="text-xs text-black/70 font-medium">
                       Pilih metode penanganan jika terdapat soal berstatus galat.
                     </span>
 
                     <div className="flex items-center gap-2">
                       <button
+                        type="button"
                         onClick={() => handleConfirmImport('skip_errors')}
                         disabled={isPending || parsedData.validCount + parsedData.warningCount === 0}
-                        className="px-4 py-2 rounded-lg border-2 border-black bg-primary text-white font-bold text-xs shadow-retro hover:bg-emerald-700 transition-all disabled:opacity-50"
+                        className="px-4 py-2 rounded-xl border-2 border-black bg-white hover:bg-black hover:text-white text-black font-bold text-xs shadow-retro-sm transition-all disabled:opacity-50 cursor-pointer"
                       >
                         Impor yang Valid & Lewati Galat
                       </button>
 
                       <button
+                        type="button"
                         onClick={() => handleConfirmImport('cancel_on_error')}
                         disabled={isPending || parsedData.errorCount > 0}
-                        className="px-4 py-2 rounded-lg border-2 border-black bg-ink text-white font-bold text-xs shadow-retro hover:bg-neutral-800 transition-all disabled:opacity-50"
+                        className="px-4 py-2 rounded-xl border-2 border-black bg-black text-white font-bold text-xs shadow-retro hover:bg-neutral-800 transition-all disabled:opacity-50 cursor-pointer"
                       >
                         Impor Semua (Batal Jika Ada Galat)
                       </button>
@@ -403,11 +410,11 @@ export function QuestionImportExportModal() {
 
               {/* TAHAP 3: RINGKASAN */}
               {activeStep === 'summary' && importSummary && (
-                <div className="p-6 rounded-xl border-2 border-black bg-neutral-50 text-center space-y-4">
-                  <CheckCircle2 className="h-12 w-12 text-primary mx-auto" />
+                <div className="p-6 rounded-2xl border-2 border-black bg-white text-center space-y-4 shadow-retro">
+                  <CheckCircle2 className="h-12 w-12 text-black mx-auto" />
                   <div className="space-y-1">
-                    <h4 className="font-bold text-xl text-black">Impor Soal Selesai</h4>
-                    <p className="text-xs text-muted-foreground">
+                    <h4 className="font-heading font-black text-xl text-black">Impor Soal Selesai</h4>
+                    <p className="text-xs text-black/75 font-medium">
                       {importSummary.imported} butir soal berhasil ditambahkan ke Bank Soal.
                       {importSummary.skipped > 0 && ` ${importSummary.skipped} butir dilewati.`}
                     </p>
@@ -415,8 +422,9 @@ export function QuestionImportExportModal() {
 
                   <div className="pt-3">
                     <button
+                      type="button"
                       onClick={() => setIsOpen(false)}
-                      className="px-5 py-2.5 rounded-lg border-2 border-black bg-primary text-white font-bold text-xs shadow-retro hover:bg-emerald-700 transition-all"
+                      className="px-5 py-2.5 rounded-xl border-2 border-black bg-black text-white font-bold text-xs shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
                     >
                       Tutup dan Segarkan Halaman
                     </button>

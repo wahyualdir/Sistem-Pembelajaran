@@ -28,8 +28,13 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
     || evaluations[0];
 
   const riskLevel = highestRisk?.riskLevel || 'AMAN';
-
   const atRiskClasses = evaluations.filter((e) => e.riskLevel !== 'AMAN');
+
+  // Sembunyikan kartu jika status aman (tidak ada kelas yang terindikasi berisiko)
+  // Informasi status aman diletakkan secara ringkas pada badge header agar beranda rapi
+  if (riskLevel === 'AMAN' || atRiskClasses.length === 0) {
+    return null;
+  }
 
   const getRiskHeader = () => {
     switch (riskLevel) {
@@ -42,21 +47,13 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
           desc: 'Terdapat indikator kehadiran atau tugas yang memerlukan tindak lanjut segera untuk menjaga kelayakan akademik.',
         };
       case 'PERHATIAN':
+      default:
         return {
           title: 'Status Akademik Memerlukan Perhatian',
           badgeText: 'STATUS: PERHATIAN',
           badgeClass: 'bg-gray-dark text-white border-black font-bold',
           icon: AlertTriangle,
           desc: 'Beberapa parameter perkuliahan mendekati batas minimal. Tingkatkan kehadiran dan pastikan seluruh tugas diserahkan tepat waktu.',
-        };
-      case 'AMAN':
-      default:
-        return {
-          title: 'Performa Akademik Berjalan Baik',
-          badgeText: 'STATUS: AMAN',
-          badgeClass: 'bg-surface text-ink border-ink font-bold',
-          icon: ShieldCheck,
-          desc: 'Seluruh parameter kehadiran, tugas, dan aktivitas belajar Anda memenuhi standar baku perkuliahan.',
         };
     }
   };
@@ -139,7 +136,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
                       key={idx}
                       className="text-xs font-medium text-ink flex items-start gap-2 bg-gray-soft/30 p-2 rounded border border-black/10"
                     >
-                      <AlertTriangle className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
+                      <AlertTriangle className="h-3.5 w-3.5 text-black shrink-0 mt-0.5" />
                       <div>
                         <span className="font-bold text-ink block">{ind.label}</span>
                         <span className="text-gray-dark text-xs font-sans">{ind.reason}</span>
@@ -152,7 +149,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
                 {item.recommendations.length > 0 && (
                   <div className="p-2.5 rounded-lg border border-black/20 bg-surface text-xs space-y-1">
                     <span className="font-bold text-ink flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5 text-primary" />
+                      <Sparkles className="h-3.5 w-3.5 text-black" />
                       Saran Tindakan:
                     </span>
                     <p className="text-xs text-gray-dark leading-relaxed font-sans">
@@ -164,10 +161,10 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
                 <div className="pt-1 flex justify-end">
                   <Link
                     href={`/classes/${item.classId}`}
-                    className="inline-flex items-center gap-1 text-xs font-bold text-ink hover:text-primary-dark transition-colors"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-ink hover:underline transition-colors"
                   >
                     <span>Buka Kelas Kuliah</span>
-                    <ArrowRight className="h-3.5 w-3.5 text-primary" />
+                    <ArrowRight className="h-3.5 w-3.5 text-black" />
                   </Link>
                 </div>
               </div>

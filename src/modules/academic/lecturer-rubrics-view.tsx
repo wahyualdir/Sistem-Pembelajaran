@@ -102,21 +102,20 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
 
     startTransition(async () => {
       const res = await createRubricAction({
-        title: title.trim(),
-        description: description.trim() || null,
-        isTemplate: false,
+        title,
+        description,
         criteria,
       });
 
       if (res.ok && res.data) {
-        setActionSuccess(`Rubrik '${res.data.title}' berhasil dibuat.`);
+        setActionSuccess('Rubrik berhasil dibuat.');
         setRubrics((prev) => [res.data!, ...prev]);
         setSelectedRubricId(res.data.id);
         setIsCreating(false);
         setTitle('');
         setDescription('');
       } else {
-        setActionError(res.error || 'Gagal membuat rubrik.');
+        setActionError(res.error || 'Gagal membuat rubrik baru.');
       }
     });
   };
@@ -128,7 +127,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
     startTransition(async () => {
       const res = await duplicateRubricAction(rubricId);
       if (res.ok && res.data) {
-        setActionSuccess(`Rubrik berhasil digandakan.`);
+        setActionSuccess('Rubrik berhasil digandakan.');
         setRubrics((prev) => [res.data!, ...prev]);
         setSelectedRubricId(res.data.id);
       } else {
@@ -138,13 +137,16 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground">Rubrik Penilaian</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Standarisasi penilaian tugas kuliah berbasis kriteria berjenjang.
-          </p>
+    <div className="space-y-6 font-sans">
+      {/* 1. BARIS ATAS: KONTROL DAN TOMBOL AKSI RETRO */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border-2 border-black bg-white shadow-retro rounded-xl">
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-xs font-black uppercase text-black px-2.5 py-1 rounded border border-black bg-gray-soft shadow-retro-sm">
+            {rubrics.length} RUBRIK TERSEDIA
+          </span>
+          <span className="text-xs font-bold text-black/75">
+            Digunakan pada evaluasi tugas & kuis
+          </span>
         </div>
 
         <button
@@ -154,7 +156,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
             setActionError(null);
             setActionSuccess(null);
           }}
-          className="btn-solid !w-auto px-4 flex items-center gap-1.5"
+          className="px-4 py-2 border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-black rounded-lg shadow-retro flex items-center gap-1.5 transition-all cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>{isCreating ? 'Tutup Pembuat' : 'Buat Rubrik Baru'}</span>
@@ -162,62 +164,62 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
       </div>
 
       {actionError && (
-        <div className="p-3 bg-danger/10 text-danger text-sm rounded-lg border border-danger/20">
-          {actionError}
+        <div className="p-3 bg-gray-soft text-black text-xs rounded-xl border-2 border-black font-black shadow-retro-sm">
+          ⚠️ {actionError}
         </div>
       )}
       {actionSuccess && (
-        <div className="p-3 bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 text-sm rounded-lg border border-emerald-200">
-          {actionSuccess}
+        <div className="p-3 bg-white text-black text-xs rounded-xl border-2 border-black font-black shadow-retro-sm">
+          ✓ {actionSuccess}
         </div>
       )}
 
-      {/* Form Pembuatan Rubrik Baru (Grid Editor) */}
+      {/* 2. FORM PEMBUATAN RUBRIK BARU RETRO */}
       {isCreating && (
-        <div className="rounded-[12px] border border-border bg-surface p-6 space-y-6">
-          <div className="border-b border-border pb-4">
-            <h2 className="text-lg font-bold text-foreground">Pembuat Rubrik Penilaian</h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
+        <div className="rounded-xl border-2 border-black bg-white p-5 sm:p-6 shadow-retro-md space-y-6">
+          <div className="border-b-2 border-black/10 pb-4">
+            <h2 className="text-lg font-heading font-black text-black">Pembuat Rubrik Penilaian</h2>
+            <p className="text-xs text-black/70 font-medium mt-0.5">
               Tentukan kriteria dan tingkatan capaian untuk penilaian objektif.
             </p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <label className="block text-xs font-medium">Judul Rubrik</label>
+              <label className="block text-xs font-heading font-black text-black">Judul Rubrik</label>
               <input
                 type="text"
                 placeholder="Contoh: Rubrik Laporan Praktikum Jaringan"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 disabled={isPending}
-                className="field text-sm"
+                className="w-full border-2 border-black bg-white text-black text-xs font-medium p-2.5 rounded-lg shadow-retro-sm focus:outline-none focus:ring-2 focus:ring-black"
               />
             </div>
             <div className="space-y-1.5">
-              <label className="block text-xs font-medium">Deskripsi Singkat (opsional)</label>
+              <label className="block text-xs font-heading font-black text-black">Deskripsi Singkat (opsional)</label>
               <input
                 type="text"
                 placeholder="Petunjuk penggunaan rubrik..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 disabled={isPending}
-                className="field text-sm"
+                className="w-full border-2 border-black bg-white text-black text-xs font-medium p-2.5 rounded-lg shadow-retro-sm focus:outline-none focus:ring-2 focus:ring-black"
               />
             </div>
           </div>
 
           {/* Grid Kriteria */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-foreground">
-                Kriteria Penilaian ({criteria.length}) — Total Bobot: {calculateTotalMaxPoints()} poin
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <span className="text-xs font-heading font-black text-black uppercase tracking-wider">
+                Kriteria Penilaian ({criteria.length}) &bull; Total Bobot: {calculateTotalMaxPoints()} poin
               </span>
               <button
                 type="button"
                 onClick={handleAddCriterion}
                 disabled={isPending}
-                className="btn-outline !w-auto text-xs px-3 py-1 flex items-center gap-1"
+                className="px-3 py-1.5 border-2 border-black bg-white hover:bg-gray-soft text-black text-xs font-bold rounded-lg shadow-retro-sm flex items-center gap-1 cursor-pointer"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Tambah Baris Kriteria</span>
@@ -226,7 +228,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
 
             <div className="space-y-4">
               {criteria.map((c, cIdx) => (
-                <div key={cIdx} className="p-4 rounded-lg border border-border bg-muted/20 space-y-3">
+                <div key={cIdx} className="p-4 rounded-xl border-2 border-black bg-gray-soft/50 space-y-3 shadow-retro-sm">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex-1 grid gap-2 sm:grid-cols-3">
                       <input
@@ -239,10 +241,10 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                             prev.map((item, i) => (i === cIdx ? { ...item, title: val } : item))
                           );
                         }}
-                        className="field text-xs sm:col-span-2"
+                        className="border-2 border-black bg-white text-black text-xs font-bold p-2 rounded shadow-retro-sm sm:col-span-2"
                       />
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-muted-foreground">Maks:</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-xs font-mono font-bold text-black/70">Maks:</span>
                         <input
                           type="number"
                           min="1"
@@ -254,7 +256,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                               prev.map((item, i) => (i === cIdx ? { ...item, maxPoints: val } : item))
                             );
                           }}
-                          className="field text-xs"
+                          className="w-20 border-2 border-black bg-white text-black text-xs font-mono font-bold p-2 rounded shadow-retro-sm"
                         />
                       </div>
                     </div>
@@ -263,7 +265,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                       <button
                         type="button"
                         onClick={() => handleRemoveCriterion(cIdx)}
-                        className="text-danger hover:text-danger/80 p-1"
+                        className="text-black hover:opacity-75 p-1 cursor-pointer"
                         title="Hapus Kriteria"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -272,10 +274,10 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                   </div>
 
                   {/* Level Capaian */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-border/40">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 border-t-2 border-black/10">
                     {c.levels.map((lvl, lIdx) => (
-                      <div key={lIdx} className="p-2.5 rounded bg-surface border border-border/60 space-y-1.5">
-                        <div className="flex items-center justify-between">
+                      <div key={lIdx} className="p-3 rounded-lg bg-white border-2 border-black space-y-1.5 shadow-retro-sm">
+                        <div className="flex items-center justify-between border-b border-black/15 pb-1">
                           <input
                             type="text"
                             value={lvl.label}
@@ -294,7 +296,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                                 )
                               );
                             }}
-                            className="text-xs font-semibold bg-transparent border-b border-border/40 w-full focus:outline-none"
+                            className="text-xs font-heading font-black text-black bg-transparent w-full focus:outline-none"
                           />
                           <input
                             type="number"
@@ -314,7 +316,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                                 )
                               );
                             }}
-                            className="text-xs font-bold text-right w-12 bg-transparent focus:outline-none"
+                            className="text-xs font-mono font-black text-right w-12 bg-transparent focus:outline-none text-black"
                           />
                         </div>
                         <textarea
@@ -336,7 +338,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                               )
                             );
                           }}
-                          className="field !h-auto text-[11px] py-1 text-muted-foreground"
+                          className="w-full text-xs font-medium bg-transparent focus:outline-none text-black/80 resize-none"
                         />
                       </div>
                     ))}
@@ -346,12 +348,12 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
             </div>
           </div>
 
-          <div className="flex justify-end gap-2 pt-2">
+          <div className="flex justify-end gap-2 pt-2 border-t-2 border-black/10">
             <button
               type="button"
               onClick={() => setIsCreating(false)}
               disabled={isPending}
-              className="btn-outline !w-auto px-4"
+              className="px-4 py-2 border-2 border-black bg-white hover:bg-gray-soft text-black font-bold text-xs shadow-retro rounded-lg cursor-pointer disabled:opacity-50"
             >
               Batal
             </button>
@@ -359,7 +361,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
               type="button"
               onClick={handleCreateRubric}
               disabled={isPending || !title.trim()}
-              className="btn-solid !w-auto px-5"
+              className="px-5 py-2 border-2 border-black bg-black text-white hover:bg-neutral-800 font-black text-xs shadow-retro rounded-lg cursor-pointer disabled:opacity-50"
             >
               {isPending ? 'Menyimpan...' : 'Simpan Rubrik'}
             </button>
@@ -367,17 +369,17 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
         </div>
       )}
 
-      {/* Daftar Rubrik */}
+      {/* 3. DAFTAR RUBRIK TERSEDIA */}
       {rubrics.length === 0 ? (
-        <div className="rounded-[12px] border border-border bg-surface p-12 text-center">
-          <ListChecks className="mx-auto h-10 w-10 text-muted-foreground/60 mb-3" />
-          <h3 className="font-semibold text-foreground text-base">Belum ada rubrik</h3>
-          <p className="text-sm text-muted-foreground mt-1">
+        <div className="rounded-xl border-2 border-dashed border-black bg-gray-soft/40 p-12 text-center space-y-2">
+          <ListChecks className="mx-auto h-10 w-10 text-black mb-2" />
+          <h3 className="font-heading font-black text-black text-base">Belum ada rubrik</h3>
+          <p className="text-xs text-black/75 font-medium max-w-sm mx-auto">
             Buat rubrik pertama Anda untuk memudahkan dan menstandarkan penilaian tugas mahasiswa.
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
           <div className="lg:col-span-1 space-y-3">
             {rubrics.map((r) => {
               const isSelected = r.id === selectedRubricId;
@@ -386,14 +388,14 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                 <div
                   key={r.id}
                   onClick={() => setSelectedRubricId(r.id)}
-                  className={`p-4 rounded-[12px] border cursor-pointer transition-all ${
+                  className={`p-4 rounded-xl border-2 border-black cursor-pointer transition-all ${
                     isSelected
-                      ? 'border-primary bg-primary/5 shadow-sm'
-                      : 'border-border bg-surface hover:border-foreground/20'
+                      ? 'bg-gray-soft shadow-retro ring-2 ring-black'
+                      : 'bg-white shadow-retro-sm hover:bg-gray-soft/40'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-semibold text-sm text-foreground">{r.title}</span>
+                    <span className="font-heading font-black text-sm text-black">{r.title}</span>
                     <button
                       type="button"
                       onClick={(e) => {
@@ -401,19 +403,19 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                         handleDuplicate(r.id);
                       }}
                       title="Gandakan Rubrik"
-                      className="text-muted-foreground hover:text-foreground p-1"
+                      className="text-black hover:opacity-75 p-1 cursor-pointer"
                     >
                       <Copy className="w-3.5 h-3.5" />
                     </button>
                   </div>
                   {r.description && (
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-1">
+                    <p className="text-xs text-black/70 mt-1 line-clamp-1 font-medium">
                       {r.description}
                     </p>
                   )}
-                  <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground border-t border-border/50 pt-2">
+                  <div className="mt-3 flex items-center justify-between text-xs text-black/70 border-t border-black/10 pt-2 font-mono font-bold">
                     <span>{r.criteria.length} kriteria</span>
-                    <span className="font-semibold text-foreground">{totalPoints} poin total</span>
+                    <span className="font-black text-black">{totalPoints} poin total</span>
                   </div>
                 </div>
               );
@@ -423,12 +425,12 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
           {/* Kolom Kanan: Pratinjau Rubrik Terpilih */}
           <div className="lg:col-span-2">
             {selectedRubric ? (
-              <div className="rounded-[12px] border border-border bg-surface p-6 space-y-6">
-                <div className="border-b border-border pb-4 flex items-center justify-between">
+              <div className="rounded-xl border-2 border-black bg-white shadow-retro-md p-5 sm:p-6 space-y-5">
+                <div className="border-b-2 border-black/10 pb-4 flex items-center justify-between flex-wrap gap-2">
                   <div>
-                    <h2 className="text-lg font-bold text-foreground">{selectedRubric.title}</h2>
+                    <h2 className="text-lg sm:text-xl font-heading font-black text-black">{selectedRubric.title}</h2>
                     {selectedRubric.description && (
-                      <p className="text-xs text-muted-foreground mt-0.5">
+                      <p className="text-xs text-black/75 mt-0.5 font-medium">
                         {selectedRubric.description}
                       </p>
                     )}
@@ -437,7 +439,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                     type="button"
                     onClick={() => handleDuplicate(selectedRubric.id)}
                     disabled={isPending}
-                    className="btn-outline !w-auto text-xs px-3 py-1.5 flex items-center gap-1.5"
+                    className="px-3 py-1.5 border-2 border-black bg-white hover:bg-black hover:text-white text-black font-bold text-xs shadow-retro-sm rounded-lg flex items-center gap-1.5 transition-all cursor-pointer"
                   >
                     <Copy className="w-3.5 h-3.5" />
                     <span>Gandakan</span>
@@ -446,28 +448,28 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
 
                 <div className="space-y-4">
                   {selectedRubric.criteria.map((c) => (
-                    <div key={c.id} className="p-4 rounded-lg border border-border bg-muted/20 space-y-3">
-                      <div className="flex items-center justify-between">
+                    <div key={c.id} className="p-4 rounded-xl border-2 border-black bg-gray-soft/40 space-y-3 shadow-retro-sm">
+                      <div className="flex items-center justify-between flex-wrap gap-2">
                         <div>
-                          <h4 className="font-semibold text-sm text-foreground">{c.title}</h4>
+                          <h4 className="font-heading font-black text-sm text-black">{c.title}</h4>
                           {c.description && (
-                            <p className="text-xs text-muted-foreground">{c.description}</p>
+                            <p className="text-xs text-black/70 font-medium">{c.description}</p>
                           )}
                         </div>
-                        <span className="text-xs font-bold px-2 py-0.5 bg-surface border rounded">
+                        <span className="text-xs font-mono font-black px-2.5 py-0.5 bg-white border border-black rounded shadow-retro-sm text-black">
                           Maks: {c.max_points} poin
                         </span>
                       </div>
 
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2">
                         {c.levels.map((lvl) => (
-                          <div key={lvl.id} className="p-3 rounded bg-surface border border-border/60 space-y-1">
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold text-foreground">{lvl.label}</span>
-                              <span className="text-xs font-semibold text-primary">{lvl.points} pt</span>
+                          <div key={lvl.id} className="p-3 rounded-lg bg-white border-2 border-black space-y-1 shadow-retro-sm">
+                            <div className="flex items-center justify-between border-b border-black/15 pb-1">
+                              <span className="text-xs font-heading font-black text-black">{lvl.label}</span>
+                              <span className="text-xs font-mono font-black text-black">{lvl.points} pt</span>
                             </div>
                             {lvl.description && (
-                              <p className="text-[11px] text-muted-foreground leading-snug">
+                              <p className="text-[11px] text-black/75 leading-snug font-medium pt-0.5">
                                 {lvl.description}
                               </p>
                             )}
@@ -479,7 +481,7 @@ export function LecturerRubricsView({ initialRubrics }: LecturerRubricsViewProps
                 </div>
               </div>
             ) : (
-              <div className="rounded-[12px] border border-border bg-surface p-12 text-center text-muted-foreground">
+              <div className="rounded-xl border-2 border-black bg-white shadow-retro p-12 text-center text-xs font-bold text-black/70">
                 Pilih salah satu rubrik untuk melihat detail kriteria dan tingkat capaian.
               </div>
             )}

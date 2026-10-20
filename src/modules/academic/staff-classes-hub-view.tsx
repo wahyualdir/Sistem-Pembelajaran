@@ -14,14 +14,19 @@ import {
   AlertTriangle,
   Plus,
   RefreshCw,
+  FlaskConical,
+  ExternalLink,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { cn } from '@/lib/utils';
-import { batchEnrollCsvAction } from '@/modules/academic/actions';
+import { batchEnrollCsvAction, listClassMembersAction, type AssistantItem } from '@/modules/academic/actions';
+import { AssistantForm, RevokeAssistant } from './assistant-forms';
+import { DELEGABLE_LABELS } from './permissions';
 import { StaffArchiveSemesterModal } from './staff-archive-semester-modal';
 
 export const STAFF_CLASSES_TABS = [
   { id: 'enroll-peserta', label: 'Enroll Peserta', icon: Users },
+  { id: 'asisten-lab', label: 'Asisten Lab', icon: FlaskConical },
   { id: 'impor-csv', label: 'Impor CSV', icon: Download },
   { id: 'pindah-kelas', label: 'Pindah Kelas', icon: ArrowRight },
 ] as const;
@@ -50,12 +55,62 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
   const tabParam = searchParams.get('tab') as StaffClassesTabId;
   const validTabs: StaffClassesTabId[] = [
     'enroll-peserta',
+    'asisten-lab',
     'impor-csv',
     'pindah-kelas',
   ];
   const activeTab: StaffClassesTabId = validTabs.includes(tabParam)
     ? tabParam
     : 'enroll-peserta';
+
+  const LAB_CLASSES = [
+    {
+      id: 'c0000000-0000-0000-0000-000000000001',
+      code: 'IF-301-A',
+      name: 'Pemrograman Web (Kelas A)',
+      room: 'Lab Komputasi Terpadu 1',
+      schedule: 'Senin, 08:00 - 10:30 WIB',
+      lecturer: 'Dr. Budi Santoso, M.Kom.',
+    },
+    {
+      id: 'c0000000-0000-0000-0000-000000000002',
+      code: 'IF-302-B',
+      name: 'Basis Data (Kelas B)',
+      room: 'Lab Basis Data & AI',
+      schedule: 'Rabu, 13:00 - 15:30 WIB',
+      lecturer: 'Dr. Eng. Ir. Hendra Gunawan, S.Kom., M.T.',
+    },
+    {
+      id: 'c0000000-0000-0000-0000-000000000003',
+      code: 'IF-201-C',
+      name: 'Algoritma & Struktur Data (Kelas C)',
+      room: 'Lab Jaringan & Sistem',
+      schedule: 'Jumat, 08:00 - 10:30 WIB',
+      lecturer: 'Siti Nurhaliza, M.Cs.',
+    },
+  ];
+
+  const [selectedClassId, setSelectedClassId] = useState(LAB_CLASSES[0].id);
+  const [labAssistants, setLabAssistants] = useState<AssistantItem[]>([]);
+  const [isLoadingAssistants, setIsLoadingAssistants] = useState(false);
+
+  const loadAssistantsForClass = React.useCallback(async (classId: string) => {
+    setIsLoadingAssistants(true);
+    try {
+      const res = await listClassMembersAction(classId);
+      if (res.ok && res.data) {
+        setLabAssistants(res.data.assistants || []);
+      }
+    } catch (err) {
+      console.error('Gagal memuat asisten kelas:', err);
+    } finally {
+      setIsLoadingAssistants(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    loadAssistantsForClass(selectedClassId);
+  }, [selectedClassId, loadAssistantsForClass]);
 
   const setTab = (tab: StaffClassesTabId) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -346,6 +401,190 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB: ASISTEN LAB */}
+      {activeTab === 'asisten-lab' && (
+        <div className="space-y-6">
+          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
+                <FlaskConical className="h-5 w-5 text-sky-600" />
+                <span>Penugasan Asisten Laboratorium (Praktikum)</span>
+              </h2>
+              <p className="text-xs text-black/70 mt-1">
+                Sesuai kebijakan akademik: Staf Akademik dan Dosen Pengampu berwenang menugaskan atau mencabut Asisten Lab untuk mendampingi sesi praktikum.
+              </p>
+            </div>
+            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg self-start sm:self-auto">
+              Wewenang: Staf Akademik & Dosen
+            </span>
+          </div>
+
+          {/* Pemilih Kelas Praktikum */}
+          <div className="p-4 bg-white border-2 border-black rounded-xl shadow-retro space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <label className="text-xs font-bold uppercase tracking-wider text-black/70">
+                Pilih Kelas Perkuliahan / Praktikum:
+              </label>
+              <a
+                href={`/classes/${selectedClassId}?tab=asisten`}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-primary-dark hover:underline"
+              >
+                <span>Buka Hub Kelas Ini</span>
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {LAB_CLASSES.map((c) => {
+                const isSelected = selectedClassId === c.id;
+                return (
+                  <button
+                    key={c.id}
+                    type="button"
+                    onClick={() => setSelectedClassId(c.id)}
+                    className={cn(
+                      'p-3.5 text-left rounded-xl border-2 transition-all flex flex-col justify-between gap-2 cursor-pointer',
+                      isSelected
+                        ? 'border-black bg-surface text-ink shadow-retro font-bold'
+                        : 'border-black/30 bg-white hover:border-black text-black/80'
+                    )}
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-white border border-black/30 text-black">
+                          {c.code}
+                        </span>
+                        {isSelected && (
+                          <span className="text-[10px] bg-black text-white px-1.5 py-0.5 rounded uppercase font-sans">
+                            Terpilih
+                          </span>
+                        )}
+                      </div>
+                      <h4 className="font-bold text-sm text-black mt-1.5 leading-snug">{c.name}</h4>
+                    </div>
+                    <div className="text-xs text-black/60 font-sans space-y-0.5 pt-1 border-t border-black/10">
+                      <div>📍 {c.room}</div>
+                      <div>⏰ {c.schedule}</div>
+                      <div>👤 {c.lecturer}</div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Daftar Asisten Saat Ini untuk Kelas Terpilih */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="font-heading font-bold text-base text-black flex items-center gap-2">
+                <span>Daftar Asisten ({labAssistants.length} Ditugaskan)</span>
+              </h3>
+              <button
+                type="button"
+                onClick={() => loadAssistantsForClass(selectedClassId)}
+                disabled={isLoadingAssistants}
+                className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded border border-black bg-white hover:bg-gray-soft cursor-pointer"
+              >
+                <RefreshCw className={cn('h-3.5 w-3.5', isLoadingAssistants && 'animate-spin')} />
+                <span>Segarkan</span>
+              </button>
+            </div>
+
+            <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs sm:text-sm">
+                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
+                    <tr>
+                      <th className="p-3.5 sm:p-4">Nama Asisten & Identitas</th>
+                      <th className="p-3.5 sm:p-4">Kategori Asisten</th>
+                      <th className="p-3.5 sm:p-4">Hak Izin Didelegasikan</th>
+                      <th className="p-3.5 sm:p-4 text-center">Wewenang Staf</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y-2 divide-black/10 font-medium">
+                    {labAssistants.length === 0 ? (
+                      <tr>
+                        <td colSpan={4} className="p-8 text-center text-black/60 font-sans text-xs">
+                          Belum ada asisten (Dosen atau Lab) yang ditugaskan pada kelas ini.
+                        </td>
+                      </tr>
+                    ) : (
+                      labAssistants.map((ast) => {
+                        const isLab = ast.assistant_type === 'ASISTEN_LAB';
+                        return (
+                          <tr key={ast.user_id} className="hover:bg-gray-soft/30 transition-colors">
+                            <td className="p-3.5 sm:p-4 font-bold text-black">
+                              <div>{ast.name}</div>
+                              <span className="text-xs font-sans text-black/60">
+                                {ast.nidn ? `NIDN: ${ast.nidn}` : `NIM: ${ast.nim || '2024002'}`}
+                              </span>
+                            </td>
+                            <td className="p-3.5 sm:p-4">
+                              {isLab ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded border border-sky-600 bg-sky-100 text-sky-800 font-sans text-xs font-bold">
+                                  🔬 Asisten Lab (Praktikum)
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded border border-black bg-retro-mint text-black font-sans text-xs font-bold">
+                                  🎓 Asisten Dosen (Teori)
+                                </span>
+                              )}
+                            </td>
+                            <td className="p-3.5 sm:p-4 text-xs text-black/80">
+                              <div className="flex flex-wrap gap-1">
+                                {ast.permissions.map((p) => (
+                                  <span key={p} className="px-1.5 py-0.5 rounded bg-gray-soft border border-black/20 text-[11px]">
+                                    {(DELEGABLE_LABELS as Record<string, string>)[p] ?? p}
+                                  </span>
+                                ))}
+                              </div>
+                            </td>
+                            <td className="p-3.5 sm:p-4 text-center">
+                              {isLab ? (
+                                <RevokeAssistant
+                                  classId={selectedClassId}
+                                  identifier={ast.nim || ast.nidn || ast.user_id}
+                                  name={ast.name}
+                                  assistantType="ASISTEN_LAB"
+                                  onSuccess={() => loadAssistantsForClass(selectedClassId)}
+                                />
+                              ) : (
+                                <span className="text-xs text-black/50 font-sans italic" title="Asisten Dosen hanya dapat dicabut oleh Dosen Pengampu">
+                                  Khusus Dosen
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          {/* Form Tambah Asisten Lab untuk Staf Akademik */}
+          <div className="p-5 rounded-2xl border-2 border-black bg-gray-soft/40 shadow-retro space-y-3">
+            <div>
+              <h4 className="font-bold text-sm text-black flex items-center gap-2">
+                <Plus className="h-4 w-4 text-primary" />
+                <span>+ Tugaskan Asisten Lab Baru ke Kelas Ini</span>
+              </h4>
+              <p className="text-xs text-black/70 mt-0.5">
+                Staf Akademik menugaskan mahasiswa/laboran sebagai Asisten Lab untuk mendampingi modul praktikum dan presensi mahasiswa di lab.
+              </p>
+            </div>
+            <AssistantForm
+              classId={selectedClassId}
+              allowedTypes={['ASISTEN_LAB']}
+              defaultType="ASISTEN_LAB"
+              onSuccess={() => loadAssistantsForClass(selectedClassId)}
+            />
           </div>
         </div>
       )}

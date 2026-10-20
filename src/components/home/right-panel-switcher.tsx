@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Play,
@@ -8,9 +8,6 @@ import {
   Bookmark,
   ListPlus,
   Calendar,
-  Clock,
-  MapPin,
-  CheckCircle2,
   ChevronRight,
   Flame,
   Award,
@@ -23,9 +20,16 @@ import type {
   HomeSummaryData,
   AgendaItem,
 } from '@/modules/academic/home-actions';
+import {
+  getJakartaTime,
+  getCourseRealtimeScheduleStatus,
+  getNextUpcomingCourse,
+} from '@/modules/academic/home-schedule-utils';
 
 interface RightPanelSwitcherProps {
   selectedCourse?: ActiveClassItem;
+  courses?: ActiveClassItem[];
+  onSelectCourse?: (course: ActiveClassItem) => void;
   summary: HomeSummaryData;
   agenda: AgendaItem[];
   activeTab: 'hari-ini' | 'detail-kelas';
@@ -34,12 +38,48 @@ interface RightPanelSwitcherProps {
 
 export function RightPanelSwitcher({
   selectedCourse,
+  courses = [],
+  onSelectCourse,
   summary,
   agenda,
   activeTab,
   onTabChange,
 }: RightPanelSwitcherProps) {
   const [saved, setSaved] = useState(false);
+  const [currentTime, setCurrentTime] = useState<Date>(() => new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const jakarta = getJakartaTime(currentTime);
+
+  // Ambil kelas yang sedang berlangsung atau jadwal mendatang berikutnya secara realtime
+  const nextUpcoming = courses.length > 0 ? getNextUpcomingCourse(courses, currentTime) : null;
+  const effectiveCourse = selectedCourse || nextUpcoming?.course || courses[0];
+  const realtimeInfo = effectiveCourse
+    ? getCourseRealtimeScheduleStatus(effectiveCourse.schedule, currentTime)
+    : null;
+
+  // Format jadwal realtime ringkas dan rapi tanpa merusak tata letak
+  const getDisplaySchedule = () => {
+    if (!effectiveCourse) return '';
+    if (!realtimeInfo) return effectiveCourse.schedule;
+
+    if (realtimeInfo.status === 'SEDANG_BERLANGSUNG') {
+      return `${effectiveCourse.schedule} (Sedang Berlangsung)`;
+    }
+    if (realtimeInfo.status === 'SEGERA_DIMULAI') {
+      return `${effectiveCourse.schedule} (${realtimeInfo.countdownText})`;
+    }
+    if (realtimeInfo.status === 'BESOK') {
+      return `${effectiveCourse.schedule} (Besok)`;
+    }
+    return effectiveCourse.schedule;
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -49,7 +89,7 @@ export function RightPanelSwitcher({
           type="button"
           onClick={() => onTabChange('hari-ini')}
           className={cn(
-            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center',
+            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'hari-ini'
               ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
               : 'text-ink hover:bg-ink/5'
@@ -61,7 +101,7 @@ export function RightPanelSwitcher({
           type="button"
           onClick={() => onTabChange('detail-kelas')}
           className={cn(
-            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center',
+            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'detail-kelas'
               ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
               : 'text-ink hover:bg-ink/5'
@@ -149,17 +189,17 @@ export function RightPanelSwitcher({
             </div>
           </div>
 
-          {/* 3. Kalender Mini Bulan Berjalan (Oktober 2026 Lengkap) */}
+          {/* 3. Kalender Mini Bulan Berjalan */}
           <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
             <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
               <div className="flex items-center gap-1.5">
-                <CalendarDays className="h-4 w-4 text-primary-dark" />
+                <CalendarDays className="h-4 w-4 text-ink" />
                 <span className="font-heading font-bold text-sm text-ink">
-                  Oktober 2026
+                  {jakarta.monthName} {jakarta.year}
                 </span>
               </div>
               <span className="text-xs font-sans font-bold bg-gray-soft px-1.5 py-0.5 rounded border border-ink text-gray-dark">
-                WIB
+                {jakarta.shortTimeString}
               </span>
             </div>
 
@@ -171,16 +211,14 @@ export function RightPanelSwitcher({
                 </span>
               ))}
 
-              {/* 4 kotak kosong sebelum Kamis 1 Oktober 2026 */}
               <div />
               <div />
               <div />
               <div />
 
-              {/* Tanggal 1 - 31 Oktober 2026 */}
               {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => {
-                const isToday = day === 8;
-                const hasEvent = [8, 9, 15, 22, 28].includes(day);
+                const isToday = day === jakarta.dateNum;
+                const hasEvent = [8, 9, 15, 19, 22, 28].includes(day);
 
                 return (
                   <div
@@ -216,7 +254,7 @@ export function RightPanelSwitcher({
             </div>
           </div>
 
-          {/* 4. Agenda 7 Hari ke Depan (Dengan Teks Penuh Tanpa Truncate) */}
+          {/* 4. Agenda 7 Hari ke Depan */}
           <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
             <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
               <h4 className="font-heading font-bold text-sm text-ink uppercase tracking-wider">
@@ -224,7 +262,7 @@ export function RightPanelSwitcher({
               </h4>
               <Link
                 href="/calendar"
-                className="text-xs font-bold text-primary-dark hover:underline transition-all"
+                className="text-xs font-bold text-ink hover:underline transition-all"
               >
                 Kalender &rarr;
               </Link>
@@ -287,23 +325,23 @@ export function RightPanelSwitcher({
       )}
 
       {/* ========================================================= */}
-      {/* KONDISI B: DETAIL KELAS                                   */}
+      {/* KONDISI B: DETAIL KELAS (RAPAT, BERSIH, SESUAI SCREENSHOT) */}
       {/* ========================================================= */}
       {activeTab === 'detail-kelas' && (
-        <div className="flex flex-col gap-5 animate-fade-in pb-24">
-          {!selectedCourse ? (
-            <div className="p-5 sm:p-6 rounded-xl border-2 border-dashed border-retro-border bg-white text-center space-y-3 shadow-retro">
-              <CalendarDays className="h-8 w-8 text-muted-foreground/60 mx-auto" />
-              <p className="font-heading font-bold text-sm text-foreground">
+        <div className="flex flex-col gap-4 animate-fade-in pb-24">
+          {!effectiveCourse ? (
+            <div className="p-5 sm:p-6 rounded-xl border-2 border-dashed border-ink/30 bg-white text-center space-y-3 shadow-retro">
+              <CalendarDays className="h-8 w-8 text-gray-dark mx-auto" />
+              <p className="font-heading font-bold text-sm text-ink">
                 Belum Ada Kelas Terpilih
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-gray-dark font-medium">
                 Anda belum terdaftar pada kelas mata kuliah apa pun. Buka menu Kelas Saya untuk bergabung ke rombongan belajar dosen Anda.
               </p>
               <div className="pt-2">
                 <Link
                   href="/classes"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-black bg-gray-soft hover:bg-gray-soft text-xs font-bold text-black transition-colors shadow-xs"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold text-ink transition-all shadow-xs"
                 >
                   <span>Buka Kelas Saya</span>
                   <ChevronRight className="h-3.5 w-3.5" />
@@ -315,15 +353,15 @@ export function RightPanelSwitcher({
               {/* TWO MAIN ACTION BUTTONS */}
               <div className="flex flex-col gap-3">
                 <Link
-                  href={`/classes`}
-                  className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border-2 border-retro-border bg-retro-surface text-foreground font-heading font-bold text-sm shadow-retro hover:bg-gray-soft hover:-translate-y-0.5 transition-all text-center focus-visible:outline-none"
+                  href="/classes"
+                  className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border-2 border-ink bg-white text-ink font-heading font-bold text-sm shadow-[3px_3px_0px_#000] hover:bg-gray-soft hover:-translate-y-0.5 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
                 >
                   Buka Silabus & Modul Kuliah
                 </Link>
 
                 <Link
-                  href={`/classes`}
-                  className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-retro-border bg-black text-white font-heading font-bold text-base shadow-retro-md hover:bg-black/90 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
+                  href="/classes"
+                  className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-ink bg-black text-white font-heading font-bold text-base shadow-[3px_3px_0px_#000] hover:bg-black/90 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
                 >
                   <Play className="h-5 w-5 fill-white" />
                   <span>Masuk Kelas / Presensi Aktif</span>
@@ -331,10 +369,11 @@ export function RightPanelSwitcher({
               </div>
 
               {/* THREE QUICK ACTIONS (DOWNLOAD, SAVE, ADD TO LIST) */}
-              <div className="grid grid-cols-3 gap-2 border-y-2 border-retro-border py-3">
+              <div className="grid grid-cols-3 gap-2 border-y-2 border-ink py-3">
                 <button
                   type="button"
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-foreground focus-visible:outline-none"
+                  onClick={() => alert(`Silabus & RPS ${effectiveCourse.code} (${effectiveCourse.title}) siap diunduh.`)}
+                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-ink focus-visible:outline-none cursor-pointer"
                   title="Unduh RPS & Silabus"
                 >
                   <Download className="h-5 w-5 mb-1" />
@@ -344,16 +383,16 @@ export function RightPanelSwitcher({
                 <button
                   type="button"
                   onClick={() => setSaved(!saved)}
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-foreground focus-visible:outline-none"
+                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-ink focus-visible:outline-none cursor-pointer"
                   title="Simpan ke favorit"
                 >
                   <Bookmark className={cn('h-5 w-5 mb-1', saved ? 'fill-current' : '')} />
-                  <span className="text-xs font-bold">Save</span>
+                  <span className="text-xs font-bold">{saved ? 'Saved' : 'Save'}</span>
                 </button>
 
                 <Link
                   href="/calendar"
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-foreground focus-visible:outline-none"
+                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-ink focus-visible:outline-none"
                   title="Cek Jadwal Kuliah"
                 >
                   <ListPlus className="h-5 w-5 mb-1" />
@@ -361,42 +400,36 @@ export function RightPanelSwitcher({
                 </Link>
               </div>
 
-              {/* METADATA INFO TABLE */}
-              <div className="p-4 sm:p-5 rounded-xl border-2 border-retro-border bg-surface shadow-retro space-y-2 text-xs sm:text-sm">
-                <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
+              {/* METADATA INFO TABLE (IDENTIK SCREENSHOT DENGAN DATA REALTIME) */}
+              <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-white shadow-[4px_4px_0px_#000] space-y-2 text-xs sm:text-sm">
+                <div className="flex justify-between items-center py-1.5 border-b border-ink/40">
                   <span className="text-black font-medium">Kode MK</span>
-                  <span className="font-sans font-semibold text-black">{selectedCourse.code}</span>
+                  <span className="font-sans font-semibold text-black">{effectiveCourse.code}</span>
                 </div>
-                <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
+                <div className="flex justify-between items-center py-1.5 border-b border-ink/40">
                   <span className="text-black font-medium">Progres Belajar</span>
-                  <span className="font-semibold text-black tabular-nums">{selectedCourse.progressPercent}% Selesai</span>
+                  <span className="font-semibold text-black tabular-nums">{effectiveCourse.progressPercent}% Selesai</span>
                 </div>
-                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-retro-border/60">
+                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-ink/40">
                   <span className="text-black font-medium shrink-0">Jadwal Kuliah</span>
-                  <span className="font-medium text-black text-right text-xs">{selectedCourse.schedule}</span>
+                  <span className="font-medium text-black text-right text-xs">
+                    {getDisplaySchedule()}
+                  </span>
                 </div>
-                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-retro-border/60">
+                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-ink/40">
                   <span className="text-black font-medium shrink-0">Ruang Kelas</span>
-                  <span className="font-medium text-black text-right">{selectedCourse.room}</span>
+                  <span className="font-medium text-black text-right">{effectiveCourse.room}</span>
                 </div>
-                <div className="flex justify-between items-center py-1.5 border-b border-retro-border/60">
+                <div className="flex justify-between items-center py-1.5 border-b border-ink/40">
                   <span className="text-black font-medium">Kehadiran</span>
-                  <span className="font-semibold text-black underline decoration-2 tabular-nums">{selectedCourse.attendance}</span>
+                  <span className="font-semibold text-black underline decoration-2 tabular-nums">
+                    {effectiveCourse.attendance}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center py-1.5">
                   <span className="text-black font-medium">Bobot SKS</span>
-                  <span className="font-semibold text-black tabular-nums">{selectedCourse.sks} SKS</span>
+                  <span className="font-semibold text-black tabular-nums">{effectiveCourse.sks} SKS</span>
                 </div>
-              </div>
-
-              {/* EDITORIAL DESCRIPTION */}
-              <div className="p-4 sm:p-5 rounded-xl border-2 border-retro-border bg-white text-xs leading-relaxed text-black space-y-2 shadow-retro">
-                <p className="font-heading font-bold text-black text-xs uppercase tracking-wider">
-                  Deskripsi & Silabus Kuliah
-                </p>
-                <p className="text-xs text-black leading-relaxed font-medium">
-                  {selectedCourse.description}
-                </p>
               </div>
             </>
           )}

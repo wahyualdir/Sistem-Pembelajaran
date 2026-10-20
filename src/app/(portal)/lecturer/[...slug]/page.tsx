@@ -117,20 +117,20 @@ export default async function LecturerSubpage({ params }: PageProps) {
     const advisees = await getMentoringRiskListAction();
 
     return (
-      <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
+      <div className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto space-y-6 sm:space-y-8 animate-fade-up font-sans">
         <RetroWindow
           title={current.title}
           badge="DOSEN WALI :: MENTORING"
           headerClassName="bg-gray-soft"
-          bodyClassName="p-6 sm:p-8 space-y-2 bg-surface"
+          bodyClassName="p-5 sm:p-6 space-y-2 bg-white"
         >
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="space-y-1">
-              <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-ink flex items-center gap-3">
-                <Icon className="h-7 w-7 text-primary" />
+              <h1 className="text-xl sm:text-2xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+                <Icon className="h-6 w-6 text-black" />
                 <span>{current.title}</span>
               </h1>
-              <p className="text-xs sm:text-sm text-gray-dark font-medium max-w-3xl leading-relaxed">
+              <p className="text-xs sm:text-sm text-black/75 font-medium max-w-3xl leading-relaxed">
                 {current.desc}
               </p>
             </div>
@@ -143,20 +143,20 @@ export default async function LecturerSubpage({ params }: PageProps) {
   }
 
   return (
-    <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
+    <div className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto space-y-6 sm:space-y-8 animate-fade-up font-sans">
       <RetroWindow
         title={current.title}
         badge="MODE DOSEN"
         headerClassName="bg-gray-soft"
-        bodyClassName="p-6 sm:p-8 space-y-2 bg-surface"
+        bodyClassName="p-5 sm:p-6 space-y-2 bg-white"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-ink flex items-center gap-3">
-              <Icon className="h-7 w-7 text-primary" />
+            <h1 className="text-xl sm:text-2xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+              <Icon className="h-6 w-6 text-black" />
               <span>{current.title}</span>
             </h1>
-            <p className="text-xs sm:text-sm text-gray-dark font-medium max-w-3xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-black/75 font-medium max-w-3xl leading-relaxed">
               {current.desc}
             </p>
           </div>
@@ -167,12 +167,12 @@ export default async function LecturerSubpage({ params }: PageProps) {
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h2 className="font-heading font-bold text-xl text-ink">Daftar Kelas Perkuliahan Diampu</h2>
-            <p className="text-xs text-gray-dark font-bold">Pilih kelas kuliah untuk mengelola {current.title.toLowerCase()}.</p>
+            <h2 className="font-heading font-black text-xl text-black">Daftar Kelas Perkuliahan Diampu</h2>
+            <p className="text-xs text-black/70 font-bold">Pilih kelas kuliah untuk mengelola {current.title.toLowerCase()}.</p>
           </div>
           <Link
             href="/classes"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-black bg-ink text-white font-bold text-xs shadow-retro hover:bg-gray-dark transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-black bg-black text-white font-bold text-xs shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
           >
             <span>Buka Hub Kelas &rarr;</span>
           </Link>
@@ -182,34 +182,34 @@ export default async function LecturerSubpage({ params }: PageProps) {
           {LECTURER_CLASSES.map((cls) => (
             <div
               key={cls.id}
-              className="rounded-xl border-2 border-black bg-surface p-6 shadow-retro flex flex-col justify-between space-y-5 hover:-translate-y-0.5 transition-transform"
+              className="rounded-2xl border-2 border-black bg-white p-6 shadow-retro flex flex-col justify-between space-y-5 hover:-translate-y-0.5 transition-transform"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-sans text-xs font-bold px-2.5 py-1 rounded border border-black bg-gray-soft text-ink">
+                  <span className="font-mono text-xs font-bold px-2.5 py-1 rounded border-2 border-black bg-gray-soft text-black shadow-retro-sm">
                     {cls.code}
                   </span>
-                  <span className="text-xs font-sans font-bold px-2 py-0.5 rounded bg-surface text-ink border border-ink">
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-white text-black border-2 border-black shadow-retro-sm">
                     {cls.status}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-heading font-bold text-lg text-ink leading-snug">
+                  <h3 className="font-heading font-black text-lg text-black leading-snug">
                     {cls.title}
                   </h3>
-                  <p className="text-xs text-gray-dark mt-1 font-sans">
-                    Asisten Dosen: <strong className="text-ink">{cls.assistant}</strong>
+                  <p className="text-xs text-black/75 mt-1 font-sans">
+                    Asisten Dosen: <strong className="text-black">{cls.assistant}</strong>
                   </p>
                 </div>
 
-                <div className="space-y-1.5 pt-2 border-t border-black/10 text-xs font-sans">
-                  <p className="text-gray-dark flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-gray-dark" />
+                <div className="space-y-1.5 pt-2 border-t-2 border-black/10 text-xs font-sans">
+                  <p className="text-black/70 flex items-center gap-1.5 font-medium">
+                    <Clock className="h-3.5 w-3.5 text-black" />
                     <span>{cls.schedule}</span>
                   </p>
-                  <p className="text-gray-dark flex items-center gap-1.5">
-                    <Users className="h-3.5 w-3.5 text-gray-dark" />
+                  <p className="text-black/70 flex items-center gap-1.5 font-medium">
+                    <Users className="h-3.5 w-3.5 text-black" />
                     <span>{cls.studentsCount} Mahasiswa Terdaftar</span>
                   </p>
                 </div>
@@ -217,18 +217,18 @@ export default async function LecturerSubpage({ params }: PageProps) {
 
               <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
                 {cls.pendingGrading > 0 ? (
-                  <span className="text-xs font-sans font-bold text-ink bg-gray-soft px-2.5 py-1 rounded border border-ink">
+                  <span className="text-xs font-mono font-bold text-black bg-gray-soft px-2.5 py-1 rounded border border-black shadow-retro-sm">
                     {cls.pendingGrading} Tugas Perlu Nilai
                   </span>
                 ) : (
-                  <span className="text-xs font-sans font-bold text-ink bg-surface px-2.5 py-1 rounded border border-ink">
+                  <span className="text-xs font-mono font-bold text-black bg-white px-2.5 py-1 rounded border border-black shadow-retro-sm">
                     Nilai Lengkap
                   </span>
                 )}
 
                 <Link
                   href="/classes"
-                  className="inline-flex items-center gap-1 px-3.5 py-2 rounded-lg border-2 border-black bg-ink text-white font-bold text-xs shadow-xs hover:bg-gray-dark transition-all"
+                  className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl border-2 border-black bg-black text-white font-bold text-xs shadow-retro-sm hover:bg-neutral-800 transition-all cursor-pointer"
                 >
                   <span>Kelola</span>
                   <ArrowRight className="h-3.5 w-3.5" />

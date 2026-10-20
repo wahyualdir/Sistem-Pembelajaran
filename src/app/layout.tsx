@@ -21,13 +21,15 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
+import { ScrollAnimationProvider } from "@/components/ui/scroll-animation-provider";
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="id" className={inter.variable}>
-      <body className="min-h-[100dvh] overflow-x-hidden bg-background font-sans font-medium text-foreground antialiased">
-        {children}
+      <body className="min-h-[100dvh] overflow-x-hidden bg-background font-sans font-bold text-ink antialiased">
+        <ScrollAnimationProvider>{children}</ScrollAnimationProvider>
       </body>
     </html>
   );

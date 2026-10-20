@@ -114,10 +114,11 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
+          '"SF Pro Display"',
+          '"SF Pro"',
+          '"SF Pro Text"',
           "-apple-system",
           "BlinkMacSystemFont",
-          '"SF Pro Text"',
-          '"SF Pro Display"',
           "var(--font-inter)",
           '"Inter"',
           '"Segoe UI"',
@@ -125,10 +126,11 @@ const config: Config = {
           "sans-serif",
         ],
         heading: [
+          '"SF Pro Display"',
+          '"SF Pro"',
+          '"SF Pro Text"',
           "-apple-system",
           "BlinkMacSystemFont",
-          '"SF Pro Text"',
-          '"SF Pro Display"',
           "var(--font-inter)",
           '"Inter"',
           '"Segoe UI"',

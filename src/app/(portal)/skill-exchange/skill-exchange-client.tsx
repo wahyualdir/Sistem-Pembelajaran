@@ -134,12 +134,12 @@ export function SkillExchangeClient({
     <div className="space-y-6">
       {/* Alert Banner Blackout jika ada Ujian Bernilai Aktif */}
       {isBlackedOut && (
-        <div className="p-4 rounded-xl border-2 border-rose-300 bg-rose-50 text-rose-950 text-xs sm:text-sm space-y-1">
-          <div className="font-bold flex items-center gap-2 text-rose-900">
-            <Lock className="w-4 h-4 text-rose-600 shrink-0" />
+        <div className="p-4 rounded-xl border-2 border-black/40 bg-gray-soft text-black text-xs sm:text-sm space-y-1">
+          <div className="font-bold flex items-center gap-2 text-black">
+            <Lock className="w-4 h-4 text-black shrink-0" />
             <span>Tukar Keahlian Dibekukan Sementara (Periode Penilaian Aktif)</span>
           </div>
-          <p className="text-xs text-rose-800 leading-relaxed">
+          <p className="text-xs text-black/80 leading-relaxed">
             {blackoutReason || 'Fitur permohonan dan jawaban bantuan dibekukan sementara karena ada ujian/kuis bernilai yang sedang berlangsung pada kelas ini.'}
           </p>
         </div>
@@ -152,7 +152,7 @@ export function SkillExchangeClient({
             'p-3.5 rounded-xl border-2 text-xs sm:text-sm font-bold flex items-center justify-between gap-3 animate-fade-in',
             statusMessage.type === 'success'
               ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
-              : 'border-rose-300 bg-rose-50 text-rose-900'
+              : 'border-black/40 bg-gray-soft text-black'
           )}
         >
           <span>{statusMessage.text}</span>
@@ -299,7 +299,7 @@ export function SkillExchangeClient({
                               <button
                                 type="button"
                                 onClick={() => handleReport(undefined, resp.id)}
-                                className="text-black/40 hover:text-rose-600 transition-colors p-1"
+                                className="text-black/40 hover:text-black transition-colors p-1"
                                 title="Laporkan pelanggaran"
                               >
                                 <Flag className="w-3.5 h-3.5" />

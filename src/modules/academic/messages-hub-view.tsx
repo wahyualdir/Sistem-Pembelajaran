@@ -345,7 +345,7 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
                               <button
                                 type="button"
                                 onClick={() => handleDeleteMessage(m.id)}
-                                className="opacity-0 group-hover:opacity-100 transition-opacity ml-1 hover:text-red-300"
+                                className="opacity-0 group-hover:opacity-100 transition-opacity ml-1 hover:opacity-75"
                                 title="Hapus pesan"
                               >
                                 <Trash2 className="h-3 w-3" />

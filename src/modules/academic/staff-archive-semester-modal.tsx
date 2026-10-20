@@ -76,7 +76,7 @@ export function StaffArchiveSemesterModal({ activeCount }: StaffArchiveSemesterM
                   className={`p-3 rounded-lg border-2 text-xs font-bold ${
                     message.type === 'sukses'
                       ? 'border-emerald-600 bg-emerald-50 text-emerald-900'
-                      : 'border-red-600 bg-red-50 text-red-900'
+                      : 'border-black bg-gray-soft text-black'
                   }`}
                 >
                   {message.text}

@@ -11,16 +11,17 @@ import {
   LogIn,
   Volume2,
   VolumeX,
+  Sparkles,
 } from 'lucide-react';
 
 const DEMO = [
-  ['Super Admin', 'superadmin@siajar.test', 'superadmin@siajar.test'],
-  ['Mahasiswa', 'NIM 2024001 (mhs2024001@siajar.test)', '2024001'],
+  ['Super Admin', 'superadmin (sandi: wahyu11)', 'superadmin'],
+  ['Mahasiswa', 'NIM 2024001', '2024001'],
   ['Dosen', 'NIDN 0012345678', '0012345678'],
   ['Mahasiswa + Asisten', 'NIM 2024002', '2024002'],
   ['Kaprodi', 'NIDN 0087654321', '0087654321'],
-  ['Staf Akademik', 'NIP 19850101…', '198501012010121001'],
-  ['System Admin', 'sysadmin@siajar.test', 'sysadmin'],
+  ['Staf Akademik', 'NIP 198501012010121001', '198501012010121001'],
+  ['System Admin', 'sysadmin', 'sysadmin'],
 ] as const;
 
 function RetroLoginVideoPlayer() {
@@ -203,14 +204,18 @@ function LoginFormContent() {
 
   const handleDemoFill = (id: string) => {
     setIdentifier(id);
-    setPassword('');
+    if (id === 'superadmin') {
+      setPassword('wahyu11');
+    } else {
+      setPassword('password123');
+    }
     setErrorMessage('');
   };
 
   return (
     <div
       style={{ fontFamily: "'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif" }}
-      className="min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-black flex flex-col overflow-x-hidden lg:overflow-hidden antialiased"
+      className="min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-white flex flex-col overflow-x-hidden lg:overflow-hidden antialiased"
     >
       {/* Top Bar Navigasi Sistem Retro Konsisten dengan Dashboard */}
       <header className="h-14 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 sm:border-b-3 border-black bg-gray-soft shrink-0 select-none shadow-retro-sm pt-[env(safe-area-inset-top,0px)]">
@@ -233,6 +238,14 @@ function LoginFormContent() {
         </div>
 
         <div className="flex items-center gap-2.5">
+          <Link
+            href="/"
+            className="px-3 py-1 border-2 border-black bg-white text-black text-xs font-bold shadow-retro-sm hover:bg-black hover:text-white transition-all flex items-center gap-1.5"
+            title="Buka Halaman Perkenalan Web SIAJAR"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>Perkenalan Web ↗</span>
+          </Link>
           <span className="hidden sm:inline-flex items-center px-3 py-1 border-2 border-black bg-black text-xs font-sans font-bold text-white shadow-retro-sm">
             TA 2026/2027 GANJIL
           </span>

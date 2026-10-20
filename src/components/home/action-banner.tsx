@@ -48,19 +48,20 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
   const isUrgent = primary.priority <= 3;
   const isIdle = primary.priority === 5;
 
-  const getCategoryIcon = (cat: BannerConditionItem['category']) => {
+  const getCategoryIcon = (cat: BannerConditionItem['category'], isLightBg = false) => {
+    const iconClass = cn('h-6 w-6 sm:h-7 sm:w-7', isLightBg ? 'text-ink' : 'text-white');
     switch (cat) {
       case 'EXAM':
-        return <Award className="h-6 w-6 sm:h-7 sm:w-7 text-white" />;
+        return <Award className={iconClass} />;
       case 'ATTENDANCE':
-        return <CalendarCheck2 className="h-6 w-6 sm:h-7 sm:w-7 text-white" />;
+        return <CalendarCheck2 className={iconClass} />;
       case 'ASSIGNMENT':
-        return <FileText className="h-6 w-6 sm:h-7 sm:w-7 text-white" />;
+        return <FileText className={iconClass} />;
       case 'CLASS_UPCOMING':
-        return <Layers className="h-6 w-6 sm:h-7 sm:w-7 text-white" />;
+        return <Layers className={iconClass} />;
       case 'IDLE':
       default:
-        return <BookOpen className="h-6 w-6 sm:h-7 sm:w-7 text-white" />;
+        return <BookOpen className={iconClass} />;
     }
   };
 
@@ -69,18 +70,13 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
       <section
         aria-label="Banner Aksi Utama"
         className={cn(
-          'relative w-full rounded-2xl border-2 border-ink p-4 sm:p-5 lg:p-6 transition-all flex flex-col justify-between overflow-hidden',
-          isUrgent
-            ? 'bg-gray-soft text-ink shadow-retro-md sm:shadow-retro-lg'
-            : 'bg-ink text-white shadow-retro-md sm:shadow-retro-lg'
+          'relative w-full rounded-2xl border-2 border-ink p-4 sm:p-5 lg:p-6 transition-all flex flex-col justify-between overflow-hidden shadow-retro',
+          isUrgent ? 'bg-gray-soft text-ink' : 'bg-surface text-ink'
         )}
       >
         {/* Dekorasi Bingkai Retro Subtle */}
         <div
-          className={cn(
-            'absolute inset-2 border-2 rounded-xl pointer-events-none opacity-15',
-            isUrgent ? 'border-ink' : 'border-surface'
-          )}
+          className="absolute inset-2 border-2 border-ink rounded-xl pointer-events-none opacity-5"
         />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5">
@@ -88,11 +84,11 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
           <div className="flex items-start gap-3.5 sm:gap-4 min-w-0">
             <div
               className={cn(
-                'shrink-0 p-2.5 sm:p-3 rounded-xl border-2 border-ink flex items-center justify-center',
-                isUrgent ? 'bg-ink text-white shadow-retro' : 'bg-surface/15 text-white shadow-retro'
+                'shrink-0 p-2.5 sm:p-3 rounded-xl border-2 border-ink flex items-center justify-center shadow-xs',
+                isUrgent ? 'bg-ink text-white' : 'bg-gray-soft text-ink'
               )}
             >
-              {getCategoryIcon(primary.category)}
+              {getCategoryIcon(primary.category, !isUrgent)}
             </div>
 
             <div className="space-y-1 min-w-0">
@@ -102,7 +98,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                     className={cn(
                       'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-bold border-2 border-ink uppercase tracking-wider',
                       isUrgent
-                        ? 'bg-primary-dark text-white'
+                        ? 'bg-ink text-white'
                         : 'bg-gray-soft text-ink'
                     )}
                   >
@@ -115,12 +111,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                   <button
                     type="button"
                     onClick={() => setShowOthersModal(true)}
-                    className={cn(
-                      'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-bold border-2 border-ink transition-all hover:scale-105 focus-visible:outline-none cursor-pointer',
-                      isUrgent
-                        ? 'bg-surface text-ink hover:bg-surface shadow-xs'
-                        : 'bg-surface/20 text-white hover:bg-surface/30 shadow-xs'
-                    )}
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-bold border-2 border-ink transition-all hover:scale-105 focus-visible:outline-none cursor-pointer bg-surface text-ink hover:bg-gray-soft shadow-xs"
                     title="Buka daftar hal mendesak lainnya"
                   >
                     <span>+{others.length} lainnya</span>
@@ -129,21 +120,11 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
                 )}
               </div>
 
-              <h2
-                className={cn(
-                  'font-heading font-bold text-base sm:text-lg lg:text-xl tracking-tight leading-snug break-words line-clamp-2',
-                  isUrgent ? 'text-ink' : 'text-white'
-                )}
-              >
+              <h2 className="font-heading font-bold text-base sm:text-lg lg:text-xl tracking-tight leading-snug break-words line-clamp-2 text-ink">
                 {primary.title}
               </h2>
 
-              <p
-                className={cn(
-                  'text-xs sm:text-sm font-bold leading-normal break-words max-w-2xl line-clamp-2',
-                  isUrgent ? 'text-gray-dark' : 'text-white/80'
-                )}
-              >
+              <p className="text-xs sm:text-sm font-bold leading-normal break-words max-w-2xl line-clamp-2 text-ink/80">
                 {primary.subtitle}
               </p>
             </div>
@@ -153,12 +134,7 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
           <div className="shrink-0 pt-2 md:pt-0">
             <Link
               href={primary.buttonHref}
-              className={cn(
-                'inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl border-2 border-ink font-heading font-bold text-sm sm:text-base transition-all focus-visible:outline-none active:translate-y-0.5 shadow-retro w-full md:w-auto text-center',
-                isUrgent
-                  ? 'bg-ink text-white hover:bg-ink/90 hover:scale-[1.02]'
-                  : 'bg-gray-soft text-ink hover:bg-surface hover:scale-[1.02]'
-              )}
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl border-2 border-ink font-heading font-bold text-sm sm:text-base transition-all focus-visible:outline-none active:translate-y-0.5 shadow-retro w-full md:w-auto text-center bg-ink text-white hover:bg-ink/90 hover:scale-[1.02]"
             >
               <span>{primary.buttonLabel}</span>
               <ArrowRight className="h-4.5 w-4.5" />

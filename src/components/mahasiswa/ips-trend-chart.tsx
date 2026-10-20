@@ -59,7 +59,7 @@ export function IpsTrendChart({ data }: IpsTrendChartProps) {
     <div className="w-full">
       <div className="flex items-center justify-between text-xs mb-1.5">
         <span className="font-medium text-muted-foreground">Tren IPS Semester</span>
-        <span className="text-xs font-semibold text-primary">
+        <span className="text-xs font-bold text-ink">
           Terakhir: {data[data.length - 1].ips.toFixed(2)}
         </span>
       </div>
@@ -142,7 +142,7 @@ export function IpsTrendChart({ data }: IpsTrendChartProps) {
             <span
               key={d.semester}
               className={`transition-colors ${
-                hoveredIdx === i ? "text-primary font-bold" : ""
+                hoveredIdx === i ? "text-ink font-bold" : ""
               }`}
             >
               Sm.{d.semester} ({d.ips.toFixed(2)})
@@ -154,7 +154,7 @@ export function IpsTrendChart({ data }: IpsTrendChartProps) {
         {hoveredIdx !== null && data[hoveredIdx] && (
           <div className="absolute top-1 right-2 bg-popover text-popover-foreground border border-border rounded-[6px] px-2 py-0.5 text-xs shadow-sm animate-fade-up pointer-events-none">
             <span className="font-semibold">Semester {data[hoveredIdx].semester}:</span>{" "}
-            IPS <strong className="text-primary">{data[hoveredIdx].ips.toFixed(2)}</strong> ({data[hoveredIdx].sks} SKS)
+            IPS <strong className="text-ink">{data[hoveredIdx].ips.toFixed(2)}</strong> ({data[hoveredIdx].sks} SKS)
           </div>
         )}
       </div>

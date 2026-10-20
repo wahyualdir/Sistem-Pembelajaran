@@ -156,8 +156,8 @@ export function ActivityPrivacyClient() {
           <div
             className={`p-3 rounded border text-xs flex items-center gap-2 ${
               feedback.type === 'success'
-                ? 'bg-green-50 text-green-800 border-green-300'
-                : 'bg-red-50 text-red-800 border-red-300'
+                ? 'bg-gray-soft text-black border-black'
+                : 'bg-gray-soft text-black border-black/40'
             }`}
           >
             {feedback.type === 'success' ? (
@@ -268,7 +268,7 @@ export function ActivityPrivacyClient() {
                   variant="outline"
                   onClick={() => setShowConfirmResetFlashcards(true)}
                   disabled={resettingCards || deleting || loading}
-                  className="border-2 border-amber-600 text-amber-800 hover:bg-amber-50 shadow-retro font-bold text-xs gap-2"
+                  className="border-2 border-black bg-white text-black hover:bg-gray-soft shadow-retro font-bold text-xs gap-2"
                 >
                   <RefreshCw className="h-4 w-4" />
                   Reset Kemajuan Flashcard
@@ -291,10 +291,10 @@ export function ActivityPrivacyClient() {
 
           {/* DIALOG KONFIRMASI HAPUS RIWAYAT AKTIVITAS */}
           {showConfirmDeleteActivity && (
-            <div className="p-4 rounded border-2 border-red-500 bg-red-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div className="text-xs text-red-900 leading-snug space-y-1">
-                <span className="font-bold flex items-center gap-1.5 text-sm text-red-700">
-                  <ShieldAlert className="h-4 w-4 text-red-600 inline shrink-0" />
+            <div className="p-4 rounded border-2 border-black bg-gray-soft flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="text-xs text-black leading-snug space-y-1">
+                <span className="font-bold flex items-center gap-1.5 text-sm text-black">
+                  <ShieldAlert className="h-4 w-4 text-black inline shrink-0" />
                   Konfirmasi Hapus Riwayat Aktivitas
                 </span>
                 <p>
@@ -328,10 +328,10 @@ export function ActivityPrivacyClient() {
 
           {/* DIALOG KONFIRMASI RESET KEMAJUAN FLASHCARD */}
           {showConfirmResetFlashcards && (
-            <div className="p-4 rounded border-2 border-amber-500 bg-amber-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-              <div className="text-xs text-amber-900 leading-snug space-y-1">
-                <span className="font-bold flex items-center gap-1.5 text-sm text-amber-800">
-                  <AlertTriangle className="h-4 w-4 text-amber-600 inline shrink-0" />
+            <div className="p-4 rounded border-2 border-black bg-gray-soft shadow-retro-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div className="text-xs text-black leading-snug space-y-1">
+                <span className="font-bold flex items-center gap-1.5 text-sm text-black font-heading font-black">
+                  <AlertTriangle className="h-4 w-4 text-black inline shrink-0" />
                   Konfirmasi Reset Kemajuan Flashcard
                 </span>
                 <p>
@@ -345,7 +345,7 @@ export function ActivityPrivacyClient() {
                   size="sm"
                   onClick={handleResetFlashcardProgress}
                   disabled={resettingCards}
-                  className="text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white"
+                  className="text-xs font-bold bg-black hover:bg-neutral-800 text-white border-2 border-black shadow-retro-sm cursor-pointer"
                 >
                   {resettingCards ? 'Mereset...' : 'Ya, Reset Kartu'}
                 </Button>

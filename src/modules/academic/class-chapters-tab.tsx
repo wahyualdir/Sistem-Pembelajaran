@@ -12,6 +12,7 @@ import {
   Calendar,
   Layers,
   HelpCircle,
+  X,
 } from 'lucide-react';
 import {
   createClassChapterAction,
@@ -123,30 +124,33 @@ export function ClassChaptersTab({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-sans">
       {/* Header Tab Bab */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-card border border-border p-4 rounded-lg">
-        <div>
-          <h2 className="text-lg font-bold text-foreground flex items-center gap-2">
-            <Layers className="w-5 h-5 text-primary" />
-            Susunan Bab Perkuliahan
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border-2 border-black p-5 rounded-2xl shadow-retro">
+        <div className="space-y-1">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded border border-black bg-gray-soft text-[11px] font-mono font-bold text-black uppercase">
+            <Layers className="w-3.5 h-3.5 text-black" />
+            <span>Kurikulum Perkuliahan</span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-heading font-black text-black">
+            Susunan Bab & Alur Belajar
           </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Atur urutan bab, topik materi, syarat kelulusan, dan batas waktu target pembelajaran.
+          <p className="text-xs sm:text-sm text-black/75 font-medium leading-relaxed">
+            Atur urutan bab, topik materi, syarat kelulusan kuis, dan target tanggal pembelajaran mahasiswa.
           </p>
         </div>
         <button
           type="button"
           onClick={() => setIsCreating(!isCreating)}
-          className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors self-start sm:self-auto"
+          className="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-bold bg-black text-white border-2 border-black rounded-xl hover:bg-neutral-800 transition-all shadow-retro self-start sm:self-auto cursor-pointer"
         >
           <PlusCircle className="w-4 h-4" />
-          Tambah Bab Baru
+          <span>Tambah Bab Baru</span>
         </button>
       </div>
 
       {errorMessage && (
-        <div className="p-3 text-xs bg-destructive/10 text-destructive border border-destructive/20 rounded-md">
+        <div className="p-3.5 text-xs bg-white text-black font-bold border-2 border-black rounded-xl shadow-retro-sm">
           {errorMessage}
         </div>
       )}
@@ -155,12 +159,22 @@ export function ClassChaptersTab({
       {isCreating && (
         <form
           onSubmit={handleCreateChapter}
-          className="bg-card border border-border p-5 rounded-lg space-y-4 animate-scale-in"
+          className="bg-white border-2 border-black p-6 rounded-2xl shadow-retro-md space-y-4 animate-scale-in"
         >
-          <h3 className="text-sm font-bold text-foreground">Form Bab Perkuliahan Baru</h3>
+          <div className="flex items-center justify-between border-b-2 border-black pb-3">
+            <h3 className="text-base font-heading font-black text-black">Formulir Bab Perkuliahan Baru</h3>
+            <button
+              type="button"
+              onClick={() => setIsCreating(false)}
+              className="p-1 rounded border border-black bg-white hover:bg-gray-soft text-black shadow-retro-sm cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div className="space-y-1 sm:col-span-2">
-              <label className="font-semibold text-foreground">Judul Bab *</label>
+              <label className="font-mono font-bold text-black uppercase tracking-wider">Judul Bab *</label>
               <input
                 type="text"
                 required
@@ -169,74 +183,75 @@ export function ClassChaptersTab({
                 placeholder="Contoh: Normalisasi Basis Data & Bentuk Boyce-Codd"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:ring-1 focus:ring-primary outline-none"
+                className="w-full px-3 py-2 bg-white border-2 border-black rounded-lg text-black font-sans font-bold shadow-retro-sm outline-none"
               />
             </div>
             <div className="space-y-1 sm:col-span-2">
-              <label className="font-semibold text-foreground">Ringkasan Materi (Opsional)</label>
+              <label className="font-mono font-bold text-black uppercase tracking-wider">Ringkasan Materi (Opsional)</label>
               <textarea
                 rows={2}
                 placeholder="Penjelasan ringkas konsep penting yang dipelajari pada bab ini..."
                 value={newSummary}
                 onChange={(e) => setNewSummary(e.target.value)}
-                className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:ring-1 focus:ring-primary outline-none"
+                className="w-full px-3 py-2 bg-white border-2 border-black rounded-lg text-black font-sans font-medium shadow-retro-sm outline-none"
               />
             </div>
             <div className="space-y-1">
-              <label className="font-semibold text-foreground">Aturan Penyelesaian Bab</label>
+              <label className="font-mono font-bold text-black uppercase tracking-wider">Aturan Penyelesaian Bab</label>
               <select
                 value={completionRule}
                 onChange={(e) => setCompletionRule(e.target.value as 'kuis' | 'materi')}
-                className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:ring-1 focus:ring-primary outline-none"
+                className="w-full px-3 py-2 bg-white border-2 border-black rounded-lg text-black font-mono font-bold shadow-retro-sm outline-none cursor-pointer"
               >
                 <option value="kuis">Kuis Bab (Skor Minimal)</option>
                 <option value="materi">Selesai Membaca Seluruh Materi</option>
               </select>
             </div>
             <div className="space-y-1">
-              <label className="font-semibold text-foreground">Nilai Ambang Kelulusan (0-100)</label>
+              <label className="font-mono font-bold text-black uppercase tracking-wider">Nilai Ambang Kelulusan (0-100)</label>
               <input
                 type="number"
                 min={0}
                 max={100}
                 value={passScore}
                 onChange={(e) => setPassScore(Number(e.target.value))}
-                className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:ring-1 focus:ring-primary outline-none"
+                className="w-full px-3 py-2 bg-white border-2 border-black rounded-lg text-black font-mono font-bold shadow-retro-sm outline-none"
               />
             </div>
             <div className="space-y-1">
-              <label className="font-semibold text-foreground">Target Tanggal Penyelesaian</label>
+              <label className="font-mono font-bold text-black uppercase tracking-wider">Target Tanggal Penyelesaian</label>
               <input
                 type="date"
                 value={targetDate}
                 onChange={(e) => setTargetDate(e.target.value)}
-                className="w-full px-3 py-2 bg-background border border-border rounded-md text-foreground focus:ring-1 focus:ring-primary outline-none"
+                className="w-full px-3 py-2 bg-white border-2 border-black rounded-lg text-black font-mono font-bold shadow-retro-sm outline-none"
               />
             </div>
-            <div className="flex items-center gap-2 pt-5">
+            <div className="flex items-center gap-2 pt-6">
               <input
                 type="checkbox"
                 id="is_optional_check"
                 checked={isOptional}
                 onChange={(e) => setIsOptional(e.target.checked)}
-                className="rounded border-border"
+                className="rounded border-2 border-black accent-black"
               />
-              <label htmlFor="is_optional_check" className="font-medium text-foreground cursor-pointer">
+              <label htmlFor="is_optional_check" className="font-bold text-black cursor-pointer text-xs">
                 Tandai sebagai Bab Opsional (Tidak menghalangi bab berikutnya)
               </label>
             </div>
           </div>
-          <div className="flex justify-end gap-2 pt-2 border-t border-border">
+
+          <div className="flex justify-end gap-2.5 pt-4 border-t-2 border-black">
             <button
               type="button"
               onClick={() => setIsCreating(false)}
-              className="px-3 py-1.5 text-xs border border-border rounded-md hover:bg-muted"
+              className="px-4 py-2 text-xs border-2 border-black rounded-xl bg-white hover:bg-gray-soft text-black font-bold shadow-retro-sm cursor-pointer"
             >
               Batal
             </button>
             <button
               type="submit"
-              className="px-4 py-1.5 text-xs bg-primary text-primary-foreground font-semibold rounded-md hover:bg-primary/90"
+              className="px-5 py-2 text-xs bg-black text-white font-bold border-2 border-black rounded-xl hover:bg-neutral-800 shadow-retro cursor-pointer"
             >
               Simpan Bab
             </button>
@@ -246,11 +261,11 @@ export function ClassChaptersTab({
 
       {/* Daftar Bab yang Sudah Ada */}
       {chapters.length === 0 ? (
-        <div className="p-8 border border-dashed border-border rounded-lg text-center space-y-2 bg-muted/10">
-          <Layers className="w-8 h-8 text-muted-foreground mx-auto" />
-          <h4 className="text-sm font-semibold text-foreground">Belum ada bab yang disusun</h4>
-          <p className="text-xs text-muted-foreground">
-            Mulai susun bab untuk memetakan alur belajar terstruktur bagi mahasiswa Anda.
+        <div className="p-10 border-2 border-dashed border-black rounded-2xl text-center space-y-2 bg-gray-soft/40 shadow-retro">
+          <Layers className="w-8 h-8 text-black mx-auto" />
+          <h4 className="text-base font-heading font-black text-black">Belum ada bab yang disusun</h4>
+          <p className="text-xs text-black/75 font-medium max-w-md mx-auto">
+            Mulai susun bab perkuliahan untuk memetakan alur belajar terstruktur bagi mahasiswa Anda.
           </p>
         </div>
       ) : (
@@ -258,74 +273,74 @@ export function ClassChaptersTab({
           {chapters.map((chap, idx) => (
             <div
               key={chap.id}
-              className="bg-card border border-border rounded-lg p-4 space-y-3 shadow-sm hover:border-primary/30 transition-all"
+              className="bg-white border-2 border-black rounded-2xl p-5 space-y-4 shadow-retro hover:-translate-y-0.5 transition-transform"
             >
               {/* Baris Utama: Posisi, Judul, Tombol Urutan */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black pb-3">
                 <div className="flex items-center gap-3">
-                  <span className="w-7 h-7 rounded-full bg-primary/10 text-primary font-bold text-xs flex items-center justify-center shrink-0">
+                  <span className="w-8 h-8 rounded-lg border-2 border-black bg-black text-white font-mono font-bold text-xs flex items-center justify-center shrink-0 shadow-retro-sm">
                     {chap.position}
                   </span>
                   <div>
                     <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-foreground">{chap.title}</h4>
+                      <h4 className="text-base font-heading font-black text-black">{chap.title}</h4>
                       {chap.is_optional && (
-                        <span className="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.2 rounded font-medium">
+                        <span className="text-[11px] font-mono font-bold bg-gray-soft text-black px-2 py-0.5 rounded border border-black shadow-retro-sm">
                           Opsional
                         </span>
                       )}
                     </div>
                     {chap.summary && (
-                      <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{chap.summary}</p>
+                      <p className="text-xs text-black/75 line-clamp-1 mt-0.5 font-medium">{chap.summary}</p>
                     )}
                   </div>
                 </div>
 
                 {/* Tombol Naik / Turun Urutan */}
-                <div className="flex items-center gap-1 self-end sm:self-auto">
+                <div className="flex items-center gap-1.5 self-end sm:self-auto">
                   <button
                     type="button"
                     disabled={idx === 0}
                     onClick={() => handleReorder(chap.id, 'up')}
                     aria-label={`Pindahkan ${chap.title} ke atas`}
-                    className="p-1 rounded border border-border hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="p-1.5 rounded-lg border-2 border-black bg-white hover:bg-gray-soft text-black shadow-retro-sm disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                   >
-                    <ArrowUp className="w-3.5 h-3.5" />
+                    <ArrowUp className="w-4 h-4" />
                   </button>
                   <button
                     type="button"
                     disabled={idx === chapters.length - 1}
                     onClick={() => handleReorder(chap.id, 'down')}
                     aria-label={`Pindahkan ${chap.title} ke bawah`}
-                    className="p-1 rounded border border-border hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="p-1.5 rounded-lg border-2 border-black bg-white hover:bg-gray-soft text-black shadow-retro-sm disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
                   >
-                    <ArrowDown className="w-3.5 h-3.5" />
+                    <ArrowDown className="w-4 h-4" />
                   </button>
                 </div>
               </div>
 
               {/* Detail Indikator Bab */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-muted-foreground bg-muted/20 p-2.5 rounded-md">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs text-black bg-gray-soft/40 p-3 rounded-xl border border-black/20 font-bold">
                 <div>
-                  <span className="font-semibold text-foreground">Syarat: </span>
+                  <span className="text-black/70">Syarat: </span>
                   {chap.completion_rule === 'kuis' ? `Kuis (≥ ${chap.pass_score ?? 70})` : 'Tuntas Materi'}
                 </div>
                 <div>
-                  <span className="font-semibold text-foreground">Target: </span>
+                  <span className="text-black/70">Target: </span>
                   {chap.target_date ? new Date(chap.target_date).toLocaleDateString('id-ID') : 'Tidak diatur'}
                 </div>
                 <div>
-                  <span className="font-semibold text-foreground">Topik: </span>
+                  <span className="text-black/70">Topik: </span>
                   {(chap.topics || []).length} topik
                 </div>
                 <div className="flex items-center gap-1">
                   {chap.completion_rule === 'kuis' && !chap.has_quiz ? (
-                    <span className="text-amber-600 flex items-center gap-1 text-[11px] font-medium" title="Bab ini belum punya kuis">
-                      <AlertTriangle className="w-3.5 h-3.5" /> Belum ada kuis
+                    <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold bg-white px-2 py-0.5 rounded border border-black text-black">
+                      <AlertTriangle className="w-3 h-3 text-black" /> Belum ada kuis
                     </span>
                   ) : (
-                    <span className="text-emerald-600 flex items-center gap-1 text-[11px] font-medium">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Kuis siap
+                    <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold bg-black text-white px-2 py-0.5 rounded border border-black">
+                      <CheckCircle2 className="w-3 h-3 text-white" /> Kuis siap
                     </span>
                   )}
                 </div>
@@ -334,8 +349,8 @@ export function ClassChaptersTab({
               {/* Manajemen Topik Bab */}
               <div className="space-y-2 pt-1">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-                    <Tag className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs font-mono font-bold text-black uppercase tracking-wider flex items-center gap-1.5">
+                    <Tag className="w-3.5 h-3.5 text-black" />
                     Topik Pembahasan:
                   </span>
                   <button
@@ -347,7 +362,7 @@ export function ClassChaptersTab({
                           : { chapterId: chap.id, text: '' }
                       )
                     }
-                    className="text-[11px] text-primary hover:underline font-semibold"
+                    className="text-xs font-bold text-black hover:underline cursor-pointer"
                   >
                     + Tambah Topik
                   </button>
@@ -363,12 +378,12 @@ export function ClassChaptersTab({
                       onChange={(e) =>
                         setActiveTopicInput({ chapterId: chap.id, text: e.target.value })
                       }
-                      className="px-2.5 py-1 text-xs bg-background border border-border rounded-md text-foreground flex-1 outline-none"
+                      className="px-3 py-1.5 text-xs bg-white border-2 border-black rounded-lg text-black font-sans font-bold flex-1 shadow-retro-sm outline-none"
                     />
                     <button
                       type="button"
                       onClick={() => handleAddTopic(chap.id)}
-                      className="px-3 py-1 text-xs bg-primary text-primary-foreground font-semibold rounded-md"
+                      className="px-4 py-1.5 text-xs bg-black text-white font-bold border-2 border-black rounded-lg hover:bg-neutral-800 shadow-retro-sm cursor-pointer"
                     >
                       Simpan
                     </button>
@@ -376,22 +391,22 @@ export function ClassChaptersTab({
                 )}
 
                 {/* Daftar Chip Topik */}
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-2">
                   {(chap.topics || []).length === 0 ? (
-                    <span className="text-xs text-muted-foreground italic">
+                    <span className="text-xs text-black/60 italic font-medium">
                       Belum ada topik yang ditambahkan.
                     </span>
                   ) : (
                     chap.topics?.map((topic) => (
                       <span
                         key={topic.id}
-                        className="inline-flex items-center gap-1 px-2 py-0.5 text-xs bg-muted border border-border rounded-md text-foreground"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs bg-white border-2 border-black rounded-lg text-black font-bold shadow-retro-sm"
                       >
-                        {topic.name}
+                        <span>{topic.name}</span>
                         <button
                           type="button"
                           onClick={() => handleDeleteTopic(chap.id, topic.id)}
-                          className="hover:text-destructive text-muted-foreground ml-1"
+                          className="hover:text-black text-black/60 font-bold ml-1 cursor-pointer"
                           aria-label={`Hapus topik ${topic.name}`}
                         >
                           ×

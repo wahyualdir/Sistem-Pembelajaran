@@ -164,44 +164,6 @@ export function CoordinatorReportsHubView({
       ]
     : [];
 
-  const LECTURER_EVALUATIONS = isDemo
-    ? [
-        {
-          id: 'eval-1',
-          name: 'Dr. Budi Santoso, M.Kom.',
-          subject: 'Pemrograman Web Lanjut (IF-3A)',
-          respondents: '36 dari 38 Mahasiswa (94.7%)',
-          pedagogy: 4.8,
-          professional: 4.9,
-          social: 4.7,
-          scoreTotal: '4.80 / 5.00',
-          category: 'SANGAT BAIK',
-        },
-        {
-          id: 'eval-2',
-          name: 'Prof. Dewi Lestari, Ph.D.',
-          subject: 'Basis Data Terdistribusi (IF-3B)',
-          respondents: '39 dari 40 Mahasiswa (97.5%)',
-          pedagogy: 4.9,
-          professional: 5.0,
-          social: 4.8,
-          scoreTotal: '4.90 / 5.00',
-          category: 'SANGAT BAIK',
-        },
-        {
-          id: 'eval-3',
-          name: 'Ir. Hendra Wijaya, M.T.',
-          subject: 'Jaringan Komputer & Cloud (IF-3C)',
-          respondents: '30 dari 36 Mahasiswa (83.3%)',
-          pedagogy: 4.1,
-          professional: 4.2,
-          social: 4.0,
-          scoreTotal: '4.10 / 5.00',
-          category: 'BAIK',
-        },
-      ]
-    : [];
-
   const CPL_ACHIEVEMENTS = isDemo
     ? [
         {
@@ -236,31 +198,31 @@ export function CoordinatorReportsHubView({
     : [];
 
   return (
-    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">
+    <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up font-sans">
       {/* 1. HEADER RETRO */}
       <RetroWindow
         title="laporan_dan_evaluasi_prodi.app"
         badge="Evaluasi Mutu Prodi"
         headerClassName="bg-gray-soft"
-        bodyClassName="p-5 sm:p-7 bg-retro-surface"
+        bodyClassName="p-5 sm:p-7 bg-white"
       >
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-primary text-white shadow-xs">
+              <div className="p-2.5 border-2 border-black bg-[#ED1C24] text-white shadow-retro-sm">
                 <FileSpreadsheet className="h-6 w-6" />
               </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl lg:text-4xl tracking-tight text-foreground">
+              <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl tracking-tight text-[#111111]">
                 Laporan & Evaluasi Mutu Prodi
               </h1>
             </div>
-            <p className="text-sm sm:text-base text-black font-medium max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-base text-[#111111] font-semibold max-w-3xl leading-relaxed">
               Agregasi performa akademik program studi, hasil kuesioner evaluasi dosen oleh mahasiswa (EDOM), dan ketercapaian butir Capaian Pembelajaran Lulusan (CPL OBE).
             </p>
           </div>
 
           <div className="flex items-center gap-2.5 shrink-0">
-            <span className="rounded-lg border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-sans font-bold text-black shadow-retro">
+            <span className="border-2 border-black bg-white px-4 py-2 text-xs sm:text-sm font-bold text-[#111111] shadow-retro-sm">
               Akreditasi Unggul (LAM-INFOKOM)
             </span>
           </div>
@@ -278,10 +240,10 @@ export function CoordinatorReportsHubView({
               type="button"
               onClick={() => setTab(tab.id)}
               className={cn(
-                'inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0',
+                'inline-flex items-center gap-2 px-4 py-2.5 border-2 border-black text-xs sm:text-sm font-bold transition-all cursor-pointer shrink-0 font-sans',
                 isSelected
-                  ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-                  : 'bg-white text-black hover:bg-gray-soft shadow-xs'
+                  ? 'bg-black text-white border-b-4 border-b-[#ED1C24] shadow-retro-sm'
+                  : 'bg-white text-[#111111] hover:bg-gray-soft shadow-retro-sm'
               )}
             >
               <Icon className="h-4 w-4" />
@@ -294,45 +256,45 @@ export function CoordinatorReportsHubView({
       {/* 3. TAB 1: LAPORAN PRODI */}
       {activeTab === 'laporan-prodi' && (
         <div className="space-y-5">
-          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-retro-sm">
             <div>
-              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
-                <FileSpreadsheet className="h-5 w-5 text-primary" />
+              <h2 className="font-heading font-black text-base text-[#111111] flex items-center gap-2">
+                <FileSpreadsheet className="h-5 w-5 text-[#ED1C24]" />
                 <span>Dokumen Laporan Kinerja Akademik Program Studi</span>
               </h2>
-              <p className="text-xs text-black/70 mt-1">
+              <p className="text-xs text-[#111111] font-semibold mt-1">
                 Unduh berkas laporan berkala untuk keperluan rapat dekanat, SPMI, dan akreditasi prodi.
               </p>
             </div>
           </div>
 
           {PRODI_REPORTS.length === 0 ? (
-            <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
-              <FileSpreadsheet className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Dokumen Laporan</h3>
-              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+            <div className="p-10 text-center space-y-3 border-2 border-dashed border-black/30 bg-white">
+              <FileSpreadsheet className="h-10 w-10 text-[#111111]/40 mx-auto" />
+              <h3 className="font-heading font-black text-base sm:text-lg text-[#111111]">Belum Ada Dokumen Laporan</h3>
+              <p className="text-xs sm:text-sm text-[#111111] font-semibold max-w-md mx-auto">
                 Laporan kinerja semesteran belum digenerate untuk program studi ini.
               </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {PRODI_REPORTS.map((rep) => (
-                <div key={rep.id} className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-3 flex flex-col justify-between">
+                <div key={rep.id} className="border-2 border-black bg-white p-5 shadow-retro space-y-3 flex flex-col justify-between">
                   <div className="space-y-2">
-                    <span className="px-2 py-0.5 rounded border border-black bg-neutral-100 text-xs font-sans font-bold">
+                    <span className="px-2.5 py-0.5 border-2 border-black bg-gray-soft text-xs font-bold shadow-retro-sm">
                       {rep.period}
                     </span>
-                    <h3 className="font-heading font-bold text-base text-black">{rep.title}</h3>
-                    <p className="text-xs text-black/70">{rep.metrics}</p>
+                    <h3 className="font-heading font-black text-base text-[#111111]">{rep.title}</h3>
+                    <p className="text-xs text-[#111111] font-medium">{rep.metrics}</p>
                   </div>
-                  <div className="pt-3 border-t border-black/10 flex items-center justify-between">
-                    <span className="text-xs font-sans text-black/60">{rep.date}</span>
+                  <div className="pt-3 border-t-2 border-black/10 flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#111111]">{rep.date}</span>
                     <button
                       type="button"
                       onClick={() => alert(`Mengunduh dokumen: ${rep.title}`)}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-gray-soft text-black text-xs font-bold hover:bg-gray-soft transition-all cursor-pointer shadow-xs"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-black bg-white text-[#111111] text-xs font-bold hover:bg-gray-soft transition-all cursor-pointer shadow-retro-sm"
                     >
-                      <Download className="h-3.5 w-3.5" />
+                      <Download className="h-3.5 w-3.5 text-[#ED1C24]" />
                       <span>{rep.fileFormat}</span>
                     </button>
                   </div>
@@ -347,21 +309,21 @@ export function CoordinatorReportsHubView({
       {activeTab === 'evaluasi-dosen' && (
         <div className="space-y-5">
           {edomToast && (
-            <div className="p-3 bg-surface border-2 border-black rounded-lg text-xs font-sans font-bold text-ink flex items-center justify-between">
+            <div className="p-3.5 bg-neutral-100 border-2 border-black text-xs font-bold text-[#111111] flex items-center justify-between shadow-retro-sm">
               <span>{edomToast}</span>
-              <button type="button" onClick={() => setEdomToast(null)} className="cursor-pointer">
+              <button type="button" onClick={() => setEdomToast(null)} className="cursor-pointer font-bold">
                 &times;
               </button>
             </div>
           )}
 
-          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-retro-sm">
             <div>
-              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
-                <Award className="h-5 w-5 text-primary" />
+              <h2 className="font-heading font-black text-base text-[#111111] flex items-center gap-2">
+                <Award className="h-5 w-5 text-[#ED1C24]" />
                 <span>Hasil Evaluasi Dosen Oleh Mahasiswa (EDOM)</span>
               </h2>
-              <p className="text-xs text-black/70 mt-1">
+              <p className="text-xs text-[#111111] font-semibold mt-1">
                 Kuesioner evaluasi kompetensi pedagogik, profesionalitas, dan kepuasan mahasiswa per kelas kuliah.
               </p>
             </div>
@@ -374,10 +336,10 @@ export function CoordinatorReportsHubView({
                   onClick={handleTogglePeriod}
                   disabled={isPending}
                   className={cn(
-                    'px-3 py-1.5 rounded-lg border-2 border-black text-xs font-bold transition-all shadow-xs cursor-pointer',
+                    'px-3.5 py-1.5 border-2 border-black text-xs font-bold transition-all shadow-retro-sm cursor-pointer active:translate-x-0.5 active:translate-y-0.5',
                     edomPeriod.status === 'OPEN'
-                      ? 'bg-surface text-ink hover:bg-neutral-100'
-                      : 'bg-primary text-white hover:bg-primary-dark'
+                      ? 'bg-white text-[#111111] hover:bg-gray-soft'
+                      : 'bg-[#ED1C24] text-white hover:bg-[#c9141b]'
                   )}
                 >
                   {edomPeriod.status === 'OPEN' ? 'Tutup Periode' : 'Buka Periode'}
@@ -388,9 +350,9 @@ export function CoordinatorReportsHubView({
                 type="button"
                 onClick={handleSendReminders}
                 disabled={isPending || edomPeriod?.status !== 'OPEN'}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-white text-xs font-bold hover:bg-neutral-100 transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border-2 border-black bg-white text-[#111111] text-xs font-bold hover:bg-gray-soft transition-all shadow-retro-sm cursor-pointer disabled:opacity-50 active:translate-x-0.5 active:translate-y-0.5"
               >
-                <Bell className="h-3.5 w-3.5 text-primary" />
+                <Bell className="h-3.5 w-3.5 text-[#ED1C24]" />
                 <span>Kirim Pengingat</span>
               </button>
 
@@ -398,7 +360,7 @@ export function CoordinatorReportsHubView({
                 type="button"
                 onClick={handleExportCsv}
                 disabled={isPending}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-ink text-white text-xs font-bold hover:bg-black transition-all shadow-xs cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border-2 border-black bg-[#ED1C24] text-white text-xs font-bold hover:bg-[#c9141b] transition-all shadow-retro-sm cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
               >
                 <Download className="h-3.5 w-3.5 text-white" />
                 <span>Ekspor Akreditasi (CSV)</span>
@@ -408,32 +370,32 @@ export function CoordinatorReportsHubView({
 
           {/* Banner Status Periode */}
           {edomPeriod && (
-            <div className="p-3 bg-white border-2 border-black rounded-lg flex items-center justify-between text-xs font-sans">
+            <div className="p-3.5 bg-white border-2 border-black flex items-center justify-between text-xs shadow-retro-sm font-sans">
               <div>
-                <span className="font-bold text-black">{edomPeriod.title}</span>
-                <span className="text-black/60 block sm:inline sm:ml-2">
-                  Status: <strong className={edomPeriod.status === 'OPEN' ? 'text-primary' : 'text-black/70'}>{edomPeriod.status === 'OPEN' ? 'SEDANG DIBUKA' : 'DITUTUP'}</strong>
+                <span className="font-bold text-[#111111]">{edomPeriod.title}</span>
+                <span className="text-[#111111] block sm:inline sm:ml-2">
+                  Status: <strong className={edomPeriod.status === 'OPEN' ? 'text-[#ED1C24] font-black uppercase' : 'text-[#111111] font-bold uppercase'}>{edomPeriod.status === 'OPEN' ? 'SEDANG DIBUKA' : 'DITUTUP'}</strong>
                 </span>
               </div>
-              <span className="text-xs text-black/50">
+              <span className="text-xs text-[#111111] font-medium">
                 Responden Minimal untuk Akses Dosen: 5 Mahasiswa
               </span>
             </div>
           )}
 
           {edomRecap.length === 0 ? (
-            <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
-              <Award className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Rekap Kuesioner EDOM</h3>
-              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+            <div className="p-10 text-center space-y-3 border-2 border-dashed border-black/30 bg-white">
+              <Award className="h-10 w-10 text-[#111111]/40 mx-auto" />
+              <h3 className="font-heading font-black text-base sm:text-lg text-[#111111]">Belum Ada Rekap Kuesioner EDOM</h3>
+              <p className="text-xs sm:text-sm text-[#111111] font-semibold max-w-md mx-auto">
                 Pengisian kuesioner evaluasi dosen oleh mahasiswa belum memiliki data responden untuk semester ini.
               </p>
             </div>
           ) : (
-            <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
+            <div className="border-2 border-black bg-white shadow-retro overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full text-left text-xs sm:text-sm">
-                  <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
+                <table className="w-full text-left text-xs sm:text-sm font-sans">
+                  <thead className="border-b-2 border-black bg-gray-soft font-bold uppercase text-[#111111]">
                     <tr>
                       <th className="p-3.5 sm:p-4">Dosen & Mata Kuliah</th>
                       <th className="p-3.5 sm:p-4 text-center">Tingkat Respons Mhs</th>
@@ -444,22 +406,22 @@ export function CoordinatorReportsHubView({
                       <th className="p-3.5 sm:p-4 text-center">Kategori Mutu</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y-2 divide-black/10 font-medium">
+                  <tbody className="divide-y-2 divide-black/10">
                     {edomRecap.map((ev) => (
                       <tr key={ev.id} className="hover:bg-gray-soft/30 transition-colors">
                         <td className="p-3.5 sm:p-4">
-                          <span className="font-bold text-black block">{ev.lecturerName}</span>
-                          <span className="text-xs text-black/60 font-sans">{ev.subjectTitle}</span>
+                          <span className="font-bold text-[#111111] block">{ev.lecturerName}</span>
+                          <span className="text-xs text-[#111111] font-medium">{ev.subjectTitle}</span>
                         </td>
-                        <td className="p-3.5 sm:p-4 text-center font-sans text-xs font-bold">{ev.respondentsCount} Mahasiswa</td>
-                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{ev.pedagogyScore.toFixed(2)}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{ev.professionalScore.toFixed(2)}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold">{ev.socialScore.toFixed(2)}</td>
-                        <td className="p-3.5 sm:p-4 text-center font-sans font-bold text-sm text-ink">
+                        <td className="p-3.5 sm:p-4 text-center font-bold text-[#111111]">{ev.respondentsCount} Mahasiswa</td>
+                        <td className="p-3.5 sm:p-4 text-center font-bold text-[#111111]">{ev.pedagogyScore.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-bold text-[#111111]">{ev.professionalScore.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-bold text-[#111111]">{ev.socialScore.toFixed(2)}</td>
+                        <td className="p-3.5 sm:p-4 text-center font-black text-sm text-[#111111]">
                           {ev.totalScore.toFixed(2)}
                         </td>
                         <td className="p-3.5 sm:p-4 text-center">
-                          <span className="px-2.5 py-0.5 rounded border border-ink bg-surface text-ink text-xs font-sans font-bold">
+                          <span className="px-2.5 py-1 border-2 border-black bg-white text-[#111111] text-xs font-bold shadow-retro-sm">
                             {ev.category}
                           </span>
                         </td>
@@ -476,65 +438,65 @@ export function CoordinatorReportsHubView({
       {/* 5. TAB 3: CAPAIAN CPL OBE */}
       {activeTab === 'capaian-cpl' && (
         <div className="space-y-5">
-          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-retro-sm">
             <div>
-              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
+              <h2 className="font-heading font-black text-base text-[#111111] flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-[#ED1C24]" />
                 <span>Ketercapaian Capaian Pembelajaran Lulusan (CPL Kurikulum OBE)</span>
               </h2>
-              <p className="text-xs text-black/70 mt-1">
+              <p className="text-xs text-[#111111] font-semibold mt-1">
                 Agregasi penilaian berbasis portofolio dan asesmen ketercapaian kompetensi lulusan program studi.
               </p>
             </div>
-            <span className="text-xs font-sans font-bold px-3 py-1 bg-retro-mint border border-black rounded-lg">
+            <span className="text-xs font-bold px-3 py-1 bg-white border-2 border-black shadow-retro-sm">
               Kurikulum OBE 2024
             </span>
           </div>
 
           {CPL_ACHIEVEMENTS.length === 0 ? (
-            <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
-              <TrendingUp className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Pemetaan CPL</h3>
-              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+            <div className="p-10 text-center space-y-3 border-2 border-dashed border-black/30 bg-white">
+              <TrendingUp className="h-10 w-10 text-[#111111]/40 mx-auto" />
+              <h3 className="font-heading font-black text-base sm:text-lg text-[#111111]">Belum Ada Pemetaan CPL</h3>
+              <p className="text-xs sm:text-sm text-[#111111] font-semibold max-w-md mx-auto">
                 Data ketercapaian CPL belum dihitung untuk angkatan aktif semester ini.
               </p>
             </div>
           ) : (
             <div className="space-y-4">
               {CPL_ACHIEVEMENTS.map((cpl) => (
-                <div key={cpl.code} className="rounded-xl border-2 border-black bg-white p-5 shadow-retro space-y-3">
+                <div key={cpl.code} className="border-2 border-black bg-white p-5 shadow-retro space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">
-                      <span className="px-2.5 py-1 rounded border-2 border-black bg-primary text-white font-sans font-bold text-xs">
+                      <span className="px-2.5 py-1 border-2 border-black bg-[#ED1C24] text-white font-bold text-xs shadow-retro-sm">
                         {cpl.code}
                       </span>
-                      <h3 className="font-heading font-bold text-sm sm:text-base text-black">{cpl.name}</h3>
+                      <h3 className="font-heading font-black text-sm sm:text-base text-[#111111]">{cpl.name}</h3>
                     </div>
                     <span
                       className={cn(
-                        'px-2.5 py-0.5 rounded border text-xs font-sans font-bold shrink-0 self-start sm:self-auto',
+                        'px-2.5 py-1 border-2 border-black text-xs font-bold shrink-0 self-start sm:self-auto shadow-retro-sm',
                         cpl.status === 'TERCAPAI'
-                          ? 'border-ink bg-surface text-ink'
-                          : 'border-ink bg-gray-soft text-ink'
+                          ? 'bg-white text-[#111111]'
+                          : 'bg-gray-soft text-[#111111]'
                       )}
                     >
                       {cpl.status === 'TERCAPAI' ? 'Target Tercapai' : 'Mendekati Target'}
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t border-black/10 font-sans text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 pt-2 border-t-2 border-black/10 text-xs">
                     <div>
-                      <span className="text-black/60 text-xs block">Target Minimum:</span>
-                      <span className="font-bold">{cpl.target}</span>
+                      <span className="text-[#111111] text-xs font-medium block">Target Minimum:</span>
+                      <span className="font-bold text-[#111111]">{cpl.target}</span>
                     </div>
                     <div>
-                      <span className="text-black/60 text-xs block">Realisasi Capaian:</span>
-                      <span className="font-bold text-ink text-sm">{cpl.achievement}</span>
+                      <span className="text-[#111111] text-xs font-medium block">Realisasi Capaian:</span>
+                      <span className="font-black text-[#ED1C24] text-sm">{cpl.achievement}</span>
                     </div>
                     <div className="sm:col-span-2 flex items-center">
-                      <div className="h-3 w-full bg-neutral-200 rounded-full overflow-hidden border border-black/20">
+                      <div className="h-3 w-full bg-neutral-200 overflow-hidden border border-black">
                         <div
-                          className="h-full bg-gray-dark rounded-full"
+                          className="h-full bg-[#ED1C24]"
                           style={{ width: cpl.achievement }}
                         />
                       </div>
@@ -550,39 +512,39 @@ export function CoordinatorReportsHubView({
       {/* 6. TAB 4: ADOPSI PETA PULAU & FITUR BELAJAR */}
       {activeTab === 'adopsi-peta-pulau' && (
         <div className="space-y-5">
-          <div className="p-4 bg-gray-soft border-2 border-black rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="p-4 bg-gray-soft border-2 border-black flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-retro-sm">
             <div>
-              <h2 className="font-heading font-bold text-base text-black flex items-center gap-2">
-                <Compass className="h-5 w-5 text-primary" />
+              <h2 className="font-heading font-black text-base text-[#111111] flex items-center gap-2">
+                <Compass className="h-5 w-5 text-[#ED1C24]" />
                 <span>Laporan Penggunaan & Adopsi Fitur Peta Pulau</span>
               </h2>
-              <p className="text-xs text-black/70 mt-1">
+              <p className="text-xs text-[#111111] font-semibold mt-1">
                 Agregasi adopsi fitur pembelajaran mandiri per kelas mata kuliah di program studi.
               </p>
             </div>
-            <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg">
+            <span className="text-xs font-bold px-3 py-1 bg-white border-2 border-black shadow-retro-sm">
               Privasi K-Anonymity (N ≥ 5)
             </span>
           </div>
 
           {isLoadingAdoption ? (
-            <div className="p-10 text-center text-xs font-sans text-black/60 rounded-xl border-2 border-black bg-white">
+            <div className="p-10 text-center text-xs font-bold text-[#111111] border-2 border-black bg-white shadow-retro-sm">
               Memuat data adopsi fitur program studi...
             </div>
           ) : adoptionItems.length === 0 ? (
-            <div className="p-10 text-center space-y-3 rounded-xl border-2 border-dashed border-black bg-white">
-              <Compass className="h-10 w-10 text-black/40 mx-auto" />
-              <h3 className="font-heading font-bold text-base sm:text-lg text-black">Belum Ada Kelas Mengaktifkan Fitur</h3>
-              <p className="text-xs sm:text-sm text-black/70 max-w-md mx-auto">
+            <div className="p-10 text-center space-y-3 border-2 border-dashed border-black/30 bg-white">
+              <Compass className="h-10 w-10 text-[#111111]/40 mx-auto" />
+              <h3 className="font-heading font-black text-base sm:text-lg text-[#111111]">Belum Ada Kelas Mengaktifkan Fitur</h3>
+              <p className="text-xs sm:text-sm text-[#111111] font-semibold max-w-md mx-auto">
                 Dosen pengampu dapat mengaktifkan fitur Peta Pulau, Flashcard, Podcast, dan Tukar Keahlian melalui tab Pengaturan Fitur di kelas masing-masing.
               </p>
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="rounded-xl border-2 border-black bg-white overflow-hidden shadow-retro">
+              <div className="border-2 border-black bg-white overflow-hidden shadow-retro">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left font-sans text-xs">
-                    <thead className="bg-gray-soft border-b-2 border-black text-black uppercase font-bold text-[11px]">
+                    <thead className="bg-gray-soft border-b-2 border-black text-[#111111] uppercase font-bold text-xs">
                       <tr>
                         <th className="p-3.5">Mata Kuliah / Kelas</th>
                         <th className="p-3.5">Dosen Pengampu</th>
@@ -592,55 +554,55 @@ export function CoordinatorReportsHubView({
                         <th className="p-3.5 text-right">Rata-rata Kelulusan Bab</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-black/10">
+                    <tbody className="divide-y-2 divide-black/10">
                       {adoptionItems.map((item) => (
-                        <tr key={item.class_id} className="hover:bg-retro-surface/50 transition-colors">
-                          <td className="p-3.5 font-bold text-foreground">
+                        <tr key={item.class_id} className="hover:bg-gray-soft/30 transition-colors">
+                          <td className="p-3.5 font-bold text-[#111111]">
                             {item.class_title}
                           </td>
-                          <td className="p-3.5 text-muted-foreground">
+                          <td className="p-3.5 text-[#111111] font-medium">
                             {item.lecturer_name}
                           </td>
                           <td className="p-3.5">
-                            <div className="flex flex-wrap gap-1">
+                            <div className="flex flex-wrap gap-1.5">
                               {item.is_peta_enabled && (
-                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary/10 text-primary border border-primary/20">
+                                <span className="px-2 py-0.5 border-2 border-black text-[10px] font-bold bg-[#ED1C24] text-white shadow-retro-sm">
                                   Peta
                                 </span>
                               )}
                               {item.is_flashcard_enabled && (
-                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300">
+                                <span className="px-2 py-0.5 border-2 border-black text-[10px] font-bold bg-white text-[#111111] shadow-retro-sm">
                                   Flashcard
                                 </span>
                               )}
                               {item.is_podcast_enabled && (
-                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300">
+                                <span className="px-2 py-0.5 border-2 border-black text-[10px] font-bold bg-gray-soft text-[#111111] shadow-retro-sm">
                                   Podcast
                                 </span>
                               )}
                               {item.is_tukar_keahlian_enabled && (
-                                <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300">
+                                <span className="px-2 py-0.5 border-2 border-black text-[10px] font-bold bg-white text-[#111111] shadow-retro-sm">
                                   Tukar Keahlian
                                 </span>
                               )}
                               {!item.is_peta_enabled && !item.is_flashcard_enabled && !item.is_podcast_enabled && !item.is_tukar_keahlian_enabled && (
-                                <span className="text-[10px] text-muted-foreground">Tidak aktif</span>
+                                <span className="text-[10px] text-[#111111] font-bold">Tidak aktif</span>
                               )}
                             </div>
                           </td>
-                          <td className="p-3.5 text-center tabular-nums">
+                          <td className="p-3.5 text-center tabular-nums font-bold text-[#111111]">
                             {item.total_chapters}
                           </td>
-                          <td className="p-3.5 text-center tabular-nums">
+                          <td className="p-3.5 text-center tabular-nums font-bold text-[#111111]">
                             {item.total_students}
                           </td>
                           <td className="p-3.5 text-right font-bold tabular-nums">
                             {item.is_masked ? (
-                              <span className="text-muted-foreground text-[11px] font-normal italic">
+                              <span className="text-[#111111] text-xs font-normal italic">
                                 {item.avg_completion_pct}
                               </span>
                             ) : (
-                              <span className="text-emerald-700 dark:text-emerald-400">
+                              <span className="text-[#111111] font-black">
                                 {item.avg_completion_pct}
                               </span>
                             )}
@@ -653,9 +615,9 @@ export function CoordinatorReportsHubView({
               </div>
 
               {/* Catatan Privasi K-Anonymity */}
-              <div className="p-4 rounded-xl border-2 border-black bg-retro-surface text-xs text-black/80 leading-relaxed font-sans shadow-xs">
-                <span className="font-bold text-black block mb-0.5">Penjelasan Perlindungan Privasi K-Anonymity:</span>
-                Sesuai dengan ketentuan perlindungan data pembelajaran, kelas yang memiliki jumlah mahasiswa terdaftar di bawah 5 disamarkan nilainya (<span className="font-semibold">&lt; 5 (Privasi Terjaga)</span>). Kebijakan ini memastikan bahwa pimpinan program studi dapat meninjau adopsi kurikulum secara sehat tanpa risiko de-anonimisasi terhadap mahasiswa perseorangan.
+              <div className="p-4 border-2 border-black bg-white text-xs text-[#111111] leading-relaxed font-sans shadow-retro-sm">
+                <span className="font-bold text-[#111111] block mb-0.5">Penjelasan Perlindungan Privasi K-Anonymity:</span>
+                Sesuai dengan ketentuan perlindungan data pembelajaran, kelas yang memiliki jumlah mahasiswa terdaftar di bawah 5 disamarkan nilainya (<span className="font-bold">&lt; 5 (Privasi Terjaga)</span>). Kebijakan ini memastikan bahwa pimpinan program studi dapat meninjau adopsi kurikulum secara sehat tanpa risiko de-anonimisasi terhadap mahasiswa perseorangan.
               </div>
             </div>
           )}

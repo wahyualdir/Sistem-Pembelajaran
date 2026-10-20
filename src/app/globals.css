@@ -1,9 +1,38 @@
+@import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+
+@font-face {
+  font-family: 'SF Pro';
+  src: local('SF Pro Display'), local('SF Pro Text'), local('SF Pro'), local('-apple-system'),
+       url('https://fonts.cdnfonts.com/s/59278/SFPRODISPLAYBOLD.woff') format('woff');
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro';
+  src: local('SF Pro Display'), local('SF Pro Text'), local('SF Pro'), local('-apple-system'),
+       url('https://fonts.cdnfonts.com/s/59278/SFPRODISPLAYMEDIUM.woff') format('woff');
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro';
+  src: local('SF Pro Display'), local('SF Pro Text'), local('SF Pro'), local('-apple-system'),
+       url('https://fonts.cdnfonts.com/s/59278/SFPRODISPLAYREGULAR.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", var(--font-inter), "Inter", "Segoe UI", system-ui, sans-serif;
+  --font-sans: 'SF Pro Display', 'SF Pro', 'SF Pro Text', -apple-system, BlinkMacSystemFont, var(--font-inter), "Inter", "Segoe UI", system-ui, sans-serif;
 
   /* Dasar Identitas Kampus (HANYA merah, abu-abu, putih, dan hitam netral) */
   --bg: #F3F3F4;
@@ -13,8 +42,8 @@
   /* Identitas kampus */
   --primary: #ED1C24;
   --primary-dark: #A91117;
-  --gray: #808285;
-  --gray-dark: #58595B;
+  --gray: #111111;
+  --gray-dark: #111111;
   --gray-soft: #E2E3E4;
   --shadow: 4px 4px 0 var(--ink);
 
@@ -27,8 +56,8 @@
 
   /* Teks Kontras */
   --text-primary: var(--ink);
-  --text-secondary: var(--gray-dark);
-  --text-subtle: var(--gray);
+  --text-secondary: var(--ink);
+  --text-subtle: var(--ink);
 
   /* Aksen Utama */
   --primary-hover: var(--primary-dark);
@@ -38,8 +67,8 @@
   --panel: var(--ink);
   --panel-accent: var(--primary);
 
-  /* Status Berkontras Jelas Berbasis Logo Kampus */
-  --status-danger: var(--primary-dark);
+  /* Status Berkontras Jelas (Teks dan Border Hitam Pekat) */
+  --status-danger: var(--ink);
   --status-danger-soft: var(--gray-soft);
   --status-danger-border: var(--ink);
   --status-danger-foreground: #FFFFFF;
@@ -573,4 +602,586 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
     min-height: 44px !important;
   }
 }
+
+/* ========================================================= */
+/* SCROLL REVEAL & SCROLL ANIMATION SUITE                    */
+/* ========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Base fade-up scroll reveal */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scale-up scroll reveal (bagus untuk kartu & grid) */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.95) translateY(14px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Slide dari kiri */
+.reveal-slide-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-slide-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Slide dari kanan */
+.reveal-slide-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-slide-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger delay bertahap untuk kumpulan kartu anak */
+.reveal-stagger > *:nth-child(1) { transition-delay: 40ms; }
+.reveal-stagger > *:nth-child(2) { transition-delay: 90ms; }
+.reveal-stagger > *:nth-child(3) { transition-delay: 140ms; }
+.reveal-stagger > *:nth-child(4) { transition-delay: 190ms; }
+.reveal-stagger > *:nth-child(5) { transition-delay: 240ms; }
+.reveal-stagger > *:nth-child(6) { transition-delay: 290ms; }
+.reveal-stagger > *:nth-child(n+7) { transition-delay: 340ms; }
+
+/* Delay utilitas khusus */
+.reveal-delay-100 { transition-delay: 100ms !important; }
+.reveal-delay-200 { transition-delay: 200ms !important; }
+.reveal-delay-300 { transition-delay: 300ms !important; }
+.reveal-delay-400 { transition-delay: 400ms !important; }
+
+/* Indikator Progres Scroll di atas */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3.5px;
+  background: var(--primary);
+  z-index: 9999;
+  transition: width 0.12s ease-out;
+  box-shadow: 0 1px 0 var(--ink);
+}
+
+/* Tombol Melayang Kembali ke Atas */
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 45;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Aksesibilitas: Matikan transisi jika pengguna meminta reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal-on-scroll,
+  .reveal-scale,
+  .reveal-slide-left,
+  .reveal-slide-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ======================================================== */
+/* TIPOGRAFI SF PRO TEBAL & BERANI UNTUK SEMUA MENU         */
+/* ======================================================== */
+nav,
+[role="navigation"],
+[role="tablist"],
+[role="tab"],
+.nav-link,
+.menu-item,
+header,
+.portal-header,
+.portal-sidebar,
+.sidebar-compact-user-card {
+  font-family: 'SF Pro Display', 'SF Pro', 'SF Pro Text', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Navigasi menu link, button, dan tabs: Tebal dan Berani */
+nav a,
+nav button,
+nav [role="button"],
+[role="tab"],
+.portal-sidebar a,
+.portal-sidebar button,
+.portal-header button {
+  font-weight: 700 !important;
+  letter-spacing: -0.015em;
+}
+
+/* Judul grup menu (uppercase tebal & berani) */
+nav p,
+.portal-sidebar p {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #111111 !important;
+}
+
+/* ======================================================== */
+/* ATURAN TEGAS: TULISAN TIDAK BOLEH BERWARNA MERAH         */
+/* SELURUH TULISAN/TEKS HARUS HITAM SEMUA                   */
+/* ======================================================== */
+
+/* Override tegas: seluruh class text-red, text-rose, text-danger, text-primary pada teks wajib HITAM */
+.text-primary,
+.text-primary-dark,
+.text-danger,
+.text-red-50,
+.text-red-100,
+.text-red-200,
+.text-red-300,
+.text-red-400,
+.text-red-500,
+.text-red-600,
+.text-red-700,
+.text-red-800,
+.text-red-900,
+.text-red-950,
+.text-rose-50,
+.text-rose-100,
+.text-rose-200,
+.text-rose-300,
+.text-rose-400,
+.text-rose-500,
+.text-rose-600,
+.text-rose-700,
+.text-rose-800,
+.text-rose-900,
+.text-rose-950 {
+  color: #111111 !important;
+}
+
+/* Hover state pada teks merah wajib tetap hitam/underline */
+.hover\:text-primary:hover,
+.hover\:text-primary-dark:hover,
+.hover\:text-red-600:hover,
+.hover\:text-red-700:hover,
+.hover\:text-rose-600:hover,
+.hover\:text-rose-700:hover,
+.group-hover\:text-primary:hover,
+.group-hover\:text-primary-dark:hover,
+.group:hover .group-hover\:text-primary,
+.group:hover .group-hover\:text-primary-dark {
+  color: #111111 !important;
+}
+
+/* ======================================================== */
+/* ATURAN TEGAS: SELURUH TULISAN WAJIB GELAP, TEBAL & JELAS */
+/* TERAPKAN KE SELURUH MENU DAN HALAMAN                     */
+/* ======================================================== */
+
+/* 1. Gelapkan seluruh kelas warna teks sekunder, abu-abu, pudar, dan muted menjadi hitam pekat */
+.text-gray-dark,
+.text-gray,
+.text-muted-foreground,
+.text-subtle,
+.text-text-secondary,
+.text-text-subtle,
+.text-black\/40,
+.text-black\/50,
+.text-black\/60,
+.text-black\/70,
+.text-black\/80,
+.text-black\/90,
+.text-gray-400,
+.text-gray-500,
+.text-gray-600,
+.text-gray-700,
+.text-gray-800,
+.text-gray-900,
+.text-slate-400,
+.text-slate-500,
+.text-slate-600,
+.text-slate-700,
+.text-slate-800,
+.text-slate-900,
+.text-zinc-400,
+.text-zinc-500,
+.text-zinc-600,
+.text-zinc-700,
+.text-zinc-800,
+.text-zinc-900,
+.text-neutral-400,
+.text-neutral-500,
+.text-neutral-600,
+.text-neutral-700,
+.text-neutral-800,
+.text-neutral-900 {
+  color: #111111 !important;
+}
+
+/* 2. Seluruh tipografi body, paragraf, deskripsi, dan elemen teks wajib gelap dan jelas */
+body,
+main,
+section,
+article,
+p,
+span:not(.text-white):not([class*="text-white"]):not(.text-primary-foreground),
+label,
+td,
+th,
+li,
+input,
+select,
+textarea {
+  color: #111111;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 3. Pertebal bobot font untuk semua teks agar tidak ada tulisan tipis atau pudar */
+.font-normal {
+  font-weight: 600 !important;
+}
+
+.font-medium {
+  font-weight: 600 !important;
+}
+
+.font-semibold {
+  font-weight: 700 !important;
+}
+
+.font-bold,
+.font-extrabold,
+.font-black,
+.font-heading {
+  font-weight: 800 !important;
+}
+
+/* Paragraph dan deskripsi teks dibuat lebih tebal dan jelas */
+p,
+.text-xs,
+.text-sm {
+  font-weight: 600;
+  color: #111111;
+}
+
+/* Judul dan header selalu hitam pekat & extra bold */
+h1, h2, h3, h4, h5, h6 {
+  color: #111111 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+}
+
+/* Placeholder input yang terbaca jelas */
+input::placeholder,
+textarea::placeholder,
+::placeholder {
+  color: #444444 !important;
+  font-weight: 500;
+}
+
+/* 4. Pertahankan teks putih pada elemen latar belakang gelap seperti tombol & badge aktif */
+.text-white,
+.text-white *,
+.text-slate-100,
+.text-neutral-100,
+.text-primary-foreground,
+.bg-black .text-white,
+.bg-ink .text-white,
+.bg-primary .text-white,
+.btn-solid,
+.btn-solid *,
+[class*="text-white"],
+[class*="text-primary-foreground"] {
+  color: #ffffff !important;
+}
+
+/* ======================================================== */
+/* ATURAN TEGAS: SELEKSI / BLOK TEKS SAAT USER MAU NYALIN   */
+/* Latar seleksi hitam dengan teks putih terang & kontras   */
+/* ======================================================== */
+::selection,
+*::selection {
+  background-color: #111111 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+::-moz-selection,
+*::-moz-selection {
+  background-color: #111111 !important;
+  color: #ffffff !important;
+}
+
+/* ======================================================== */
+/* ANIMASI LANGIT DINAMIS & JAM (SKY CLOCK WIDGET)          */
+/* ======================================================== */
+@keyframes sky-celestial-float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.02);
+  }
+}
+
+@keyframes sky-mist-drift {
+  0% {
+    transform: translateX(-35%);
+  }
+  50% {
+    transform: translateX(15%);
+  }
+  100% {
+    transform: translateX(-35%);
+  }
+}
+
+@keyframes sky-cloud-drift-soft {
+  0% {
+    transform: translateX(-160%);
+  }
+  100% {
+    transform: translateX(360%);
+  }
+}
+
+@keyframes sky-star-scintillate {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes sky-shooting-star {
+  0% {
+    transform: translateX(0) translateY(0) scale(0);
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  12% {
+    transform: translateX(-150px) translateY(110px) scale(0.3);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-150px) translateY(110px) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-sky-celestial-float {
+  animation: sky-celestial-float 6s ease-in-out infinite;
+}
+
+.animate-sky-mist-slow {
+  animation: sky-mist-drift 32s ease-in-out infinite;
+}
+
+.animate-sky-cloud-drift-1 {
+  animation: sky-cloud-drift-soft 34s linear infinite;
+}
+
+.animate-sky-cloud-drift-2 {
+  animation: sky-cloud-drift-soft 46s linear infinite;
+}
+
+.animate-sky-star-twinkle {
+  animation: sky-star-scintillate 2.8s ease-in-out infinite;
+}
+
+.animate-sky-shooting-star {
+  animation: sky-shooting-star 11s ease-in infinite;
+}
+
+@keyframes sky-bird-soar {
+  0% {
+    transform: translateX(-60px) translateY(0px);
+  }
+  30% {
+    transform: translateX(110px) translateY(-10px);
+  }
+  60% {
+    transform: translateX(250px) translateY(6px);
+  }
+  100% {
+    transform: translateX(460px) translateY(-4px);
+  }
+}
+
+@keyframes sky-sunbeam-pulse {
+  0%, 100% {
+    opacity: 0.12;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.28;
+    transform: scaleY(1.05);
+  }
+}
+
+.animate-sky-bird-1 {
+  animation: sky-bird-soar 20s linear infinite;
+}
+
+.animate-sky-bird-2 {
+  animation: sky-bird-soar 26s linear infinite;
+  animation-delay: -8s;
+}
+
+.animate-sky-sunbeam {
+  animation: sky-sunbeam-pulse 7s ease-in-out infinite;
+}
+
+@keyframes sky-aurora-wave {
+  0%, 100% {
+    transform: translateY(0px) scaleY(1) rotate(-10deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-8px) scaleY(1.2) rotate(-5deg);
+    opacity: 0.55;
+  }
+}
+
+.animate-sky-aurora {
+  animation: sky-aurora-wave 12s ease-in-out infinite;
+}
+
+@keyframes sky-particle-drift {
+  0% {
+    transform: translateY(20px) translateX(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.75;
+  }
+  75% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-70px) translateX(30px);
+    opacity: 0;
+  }
+}
+
+.animate-sky-particle-1 {
+  animation: sky-particle-drift 8s ease-in-out infinite;
+}
+
+.animate-sky-particle-2 {
+  animation: sky-particle-drift 11s ease-in-out infinite 2.5s;
+}
+
+.animate-sky-particle-3 {
+  animation: sky-particle-drift 9.5s ease-in-out infinite 5s;
+}
+
+.animate-sky-particle-4 {
+  animation: sky-particle-drift 13s ease-in-out infinite 1.2s;
+}
+
+@keyframes sky-beacon-pulse {
+  0%, 75%, 100% {
+    opacity: 0.25;
+    transform: scale(0.9);
+  }
+  85% {
+    opacity: 1;
+    transform: scale(1.35);
+    box-shadow: 0 0 8px #ef4444;
+  }
+}
+
+.animate-sky-beacon {
+  animation: sky-beacon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes sky-lens-flare-pulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.96) rotate(0deg);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.06) rotate(20deg);
+  }
+}
+
+.animate-sky-lens-flare {
+  animation: sky-lens-flare-pulse 9s ease-in-out infinite;
+}
+
+.animate-sky-bird-3 {
+  animation: sky-bird-soar 22s linear infinite;
+  animation-delay: -4s;
+}
+
+@keyframes retro-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-retro-float {
+  animation: retro-float 5s ease-in-out infinite;
+}
+
+@keyframes retro-glow {
+  0%, 100% {
+    box-shadow: 3px 3px 0px #000000;
+  }
+  50% {
+    box-shadow: 5px 5px 0px #000000;
+  }
+}
+
+.animate-retro-glow {
+  animation: retro-glow 3s ease-in-out infinite;
+}
+
+
+
+
+
+
+
+
 

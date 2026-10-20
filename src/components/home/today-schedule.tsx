@@ -24,8 +24,8 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
     <section aria-label="Jadwal Hari Ini" className="space-y-5">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-lg border-2 border-ink bg-gray-soft text-primary shadow-xs">
-            <CalendarDays className="h-5 w-5 text-primary" />
+          <div className="p-2 rounded-lg border-2 border-ink bg-gray-soft text-black shadow-xs">
+            <CalendarDays className="h-5 w-5 text-black" />
           </div>
           <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
             Jadwal Hari Ini
@@ -33,7 +33,7 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
         </div>
         <Link
           href="/calendar"
-          className="text-base sm:text-lg font-bold text-primary-dark hover:text-ink transition-colors"
+          className="text-base sm:text-lg font-bold text-black hover:underline transition-colors"
         >
           more &rarr;
         </Link>
@@ -84,7 +84,7 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                 {/* Kartu timeline item */}
                 <div
                   className={cn(
-                    'p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5',
+                    'reveal-on-scroll p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5',
                     isOngoing && 'bg-gray-soft/60 border-ink shadow-retro-md ring-1 ring-ink'
                   )}
                 >
@@ -124,7 +124,7 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
 
                     <div className="flex items-center gap-4 text-xs sm:text-sm text-gray-dark flex-wrap">
                       <div className="flex items-center gap-1.5 font-bold text-ink">
-                        <MapPin className="h-4 w-4 text-primary shrink-0" />
+                        <MapPin className="h-4 w-4 text-black shrink-0" />
                         <span>{item.room}</span>
                       </div>
                       <span className="text-gray">•</span>

@@ -171,7 +171,7 @@ export function PodcastPlayer({ podcastId, chapterTitle, onClose }: PodcastPlaye
 
   if (error || !podcast) {
     return (
-      <div className="p-5 border-2 border-red-500 bg-red-50 text-red-900 rounded-[3px] text-xs space-y-2">
+      <div className="p-5 border-2 border-black bg-gray-soft text-black rounded-[3px] text-xs space-y-2">
         <div className="font-bold">Akses Pemutar Podcast Ditolak:</div>
         <p>{error || 'Podcast tidak dapat diakses.'}</p>
         {onClose && (

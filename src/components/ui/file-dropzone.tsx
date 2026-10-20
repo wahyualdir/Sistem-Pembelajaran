@@ -175,7 +175,7 @@ export function FileDropzone({
               type="button"
               disabled={disabled}
               onClick={handleRemoveFile}
-              className="h-9 sm:h-10 min-h-[40px] px-3 py-1.5 rounded border-2 border-black bg-white hover:bg-primary hover:text-white text-primary-dark font-heading font-bold text-xs shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
+              className="h-9 sm:h-10 min-h-[40px] px-3 py-1.5 rounded border-2 border-black bg-white hover:bg-black hover:text-white text-black font-heading font-bold text-xs shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5 transition-all flex items-center gap-1.5 cursor-pointer"
               title="Batalkan berkas ini"
             >
               <X className="h-3.5 w-3.5" />
@@ -187,8 +187,8 @@ export function FileDropzone({
 
       {/* Notifikasi Galat Validasi Berkas */}
       {displayError && (
-        <div className="rounded border-2 border-black bg-gray-soft text-primary-dark p-2 sm:p-2.5 text-xs font-bold flex items-center gap-2 shadow-retro-sm animate-in fade-in-50">
-          <AlertCircle className="h-4 w-4 shrink-0 text-primary-dark" />
+        <div className="rounded border-2 border-black bg-gray-soft text-black p-2 sm:p-2.5 text-xs font-bold flex items-center gap-2 shadow-retro-sm animate-in fade-in-50">
+          <AlertCircle className="h-4 w-4 shrink-0 text-black" />
           <span>{displayError}</span>
         </div>
       )}

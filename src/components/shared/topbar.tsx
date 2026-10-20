@@ -124,7 +124,7 @@ export function Topbar({
             {userInitial}
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-sm font-bold text-foreground leading-tight truncate max-w-[130px] group-hover:text-primary-dark transition-colors">
+            <span className="text-sm font-bold text-foreground leading-tight truncate max-w-[130px] group-hover:underline transition-colors">
               {userName}
             </span>
             <span className="text-xs text-black font-bold leading-tight mt-0.5">{roleLabel}</span>
@@ -133,7 +133,7 @@ export function Topbar({
 
         <button
           onClick={onLogout}
-          className="flex h-9 items-center gap-1.5 px-3 rounded-lg border-2 border-black bg-retro-surface text-primary-dark shadow-retro hover:bg-primary/10 text-xs sm:text-sm font-bold transition-all focus:outline-none cursor-pointer"
+          className="flex h-9 items-center gap-1.5 px-3 rounded-lg border-2 border-black bg-retro-surface text-black shadow-retro hover:bg-gray-soft text-xs sm:text-sm font-bold transition-all focus:outline-none cursor-pointer"
           title="Keluar dari sesi"
         >
           <LogOut className="h-4 w-4" />

@@ -71,7 +71,7 @@ export function ActiveClassesGrid({
                 key={course.id}
                 onClick={() => onSelectCourse(course)}
                 className={cn(
-                  'group cursor-pointer rounded-xl border-2 border-ink bg-gray-soft p-4 sm:p-5 transition-all flex flex-col justify-between',
+                  'reveal-scale group cursor-pointer rounded-xl border-2 border-ink bg-gray-soft p-4 sm:p-5 transition-all flex flex-col justify-between',
                   isSelected
                     ? 'shadow-retro-lg ring-2 ring-ink bg-surface border-b-4 border-b-primary'
                     : 'shadow-retro hover:-translate-y-1 hover:shadow-retro-md'
