@@ -337,8 +337,8 @@ export function PortalShell({
                   className="flex items-center justify-center group focus-visible:outline-none"
                   title={`SIAJAR & SIAKAD - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-black text-white shadow-retro-sm group-hover:scale-105 transition-transform shrink-0">
-                    <Flame className="h-5 w-5 fill-white text-white" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-white p-0.5 shadow-retro-sm group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                    <img src="/logo-uir.png" alt="Logo UIR" className="h-full w-full object-contain" />
                   </div>
                 </Link>
               </div>
@@ -349,12 +349,17 @@ export function PortalShell({
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0"
                   title={`SIAJAR & SIAKAD - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-black text-white shadow-retro-sm group-hover:scale-105 transition-transform shrink-0">
-                    <Flame className="h-5 w-5 fill-white text-white" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-white p-0.5 shadow-retro-sm group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                    <img src="/logo-uir.png" alt="Logo UIR" className="h-full w-full object-contain" />
                   </div>
-                  <span className="font-heading font-bold text-lg tracking-tight text-black leading-none whitespace-nowrap">
-                    SIAJAR
-                  </span>
+                  <div className="flex flex-col min-w-0">
+                    <span className="font-heading font-black text-base tracking-tight text-ink leading-none whitespace-nowrap">
+                      SIAJAR UIR
+                    </span>
+                    <span className="text-[9px] font-mono font-bold text-gray-dark uppercase tracking-wider mt-0.5 leading-none truncate">
+                      Univ. Islam Riau
+                    </span>
+                  </div>
                 </Link>
 
                 {/* Tiga titik jendela (merah kampus, abu-abu, abu gelap) sejajar horizontal di kanan */}

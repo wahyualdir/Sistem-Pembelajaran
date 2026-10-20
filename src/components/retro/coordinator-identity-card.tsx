@@ -2,7 +2,6 @@
 
 import React from 'react';
 import {
-  Compass,
   Award,
   Users,
   GraduationCap,
@@ -35,25 +34,29 @@ export function CoordinatorIdentityCard({
 }: CoordinatorIdentityCardProps) {
   return (
     <div className="w-full rounded-2xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4 font-sans relative overflow-hidden transition-all hover:shadow-retro-md">
-      {/* 1. Header Identitas Kampus */}
-      <div className="flex items-center justify-between gap-2 pb-3 border-b-2 border-ink">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <div className="h-8 w-8 rounded-lg border-2 border-ink bg-ink text-white flex items-center justify-center shrink-0 shadow-retro-xs">
-            <Compass className="h-4 w-4" />
+      {/* 1. Header Identitas Kampus & Logo Resmi UIR */}
+      <div className="flex items-center justify-between gap-2.5 pb-3 border-b-2 border-ink">
+        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+          <div className="h-9 w-9 rounded-xl border-2 border-ink bg-white p-0.5 flex items-center justify-center shrink-0 shadow-retro-xs overflow-hidden">
+            <img
+              src="/logo-uir.png"
+              alt="Logo Universitas Islam Riau"
+              className="h-full w-full object-contain"
+            />
           </div>
-          <div className="min-w-0">
-            <span className="text-[10px] font-mono font-bold text-gray-dark uppercase tracking-wider block leading-none truncate">
+          <div className="min-w-0 flex-1">
+            <span className="text-[11px] font-heading font-black text-ink uppercase tracking-tight block leading-tight whitespace-nowrap">
               UNIVERSITAS ISLAM RIAU
             </span>
-            <h3 className="font-heading font-black text-xs sm:text-sm text-ink leading-tight mt-0.5 truncate">
+            <span className="text-[10px] font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
               Ruang Kaprodi Terpadu
-            </h3>
+            </span>
           </div>
         </div>
 
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border-2 border-ink bg-surface text-ink text-[11px] font-mono font-bold shrink-0 shadow-retro-xs">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" />
-          <span>Kaprodi Aktif</span>
+        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border-2 border-ink bg-surface text-ink text-[10px] font-mono font-bold shrink-0 shadow-retro-xs">
+          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
+          <span>Aktif</span>
         </span>
       </div>
 
