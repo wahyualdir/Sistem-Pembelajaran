@@ -140,7 +140,7 @@ export function CoordinatorEvaluationsView() {
           <button
             type="button"
             onClick={handleExportCsv}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border-2 border-black bg-[#ED1C24] text-white hover:bg-[#c9141b] text-xs font-bold shadow-retro-sm cursor-pointer transition-all active:translate-x-0.5 active:translate-y-0.5"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border-2 border-black bg-[#ED1C24] text-white hover:bg-[#A91117] text-xs font-bold shadow-retro-sm cursor-pointer transition-all active:translate-x-0.5 active:translate-y-0.5"
           >
             <Download className="h-3.5 w-3.5 text-white" />
             <span>Ekspor CSV</span>

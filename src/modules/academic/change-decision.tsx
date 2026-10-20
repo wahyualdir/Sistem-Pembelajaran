@@ -43,7 +43,7 @@ export function ChangeDecision({ id }: { id: string }) {
           type="button"
           disabled={pending}
           onClick={() => decide(false)}
-          className="inline-flex items-center gap-1.5 px-4 py-2 border-2 border-black bg-[#ED1C24] text-white hover:bg-[#c9141b] font-sans font-bold text-xs shadow-retro-sm transition-all cursor-pointer disabled:opacity-50 active:translate-x-0.5 active:translate-y-0.5"
+          className="inline-flex items-center gap-1.5 px-4 py-2 border-2 border-black bg-[#ED1C24] text-white hover:bg-[#A91117] font-sans font-bold text-xs shadow-retro-sm transition-all cursor-pointer disabled:opacity-50 active:translate-x-0.5 active:translate-y-0.5"
         >
           <X className="h-4 w-4" />
           <span>Tolak Pengajuan</span>

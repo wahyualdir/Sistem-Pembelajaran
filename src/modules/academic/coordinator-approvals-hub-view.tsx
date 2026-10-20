@@ -389,7 +389,7 @@ export function CoordinatorApprovalsHubView({
                                   type="button"
                                   disabled={isPending}
                                   onClick={() => openDecisionModal(r, false)}
-                                  className="px-3.5 py-1 border-2 border-black bg-[#ED1C24] text-white text-xs font-bold hover:bg-[#c9141b] transition-all cursor-pointer shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5"
+                                  className="px-3.5 py-1 border-2 border-black bg-[#ED1C24] text-white text-xs font-bold hover:bg-[#A91117] transition-all cursor-pointer shadow-retro-sm active:translate-x-0.5 active:translate-y-0.5"
                                 >
                                   Tolak
                                 </button>
@@ -534,7 +534,7 @@ export function CoordinatorApprovalsHubView({
                       'px-4 py-2 border-2 border-black text-white text-xs font-bold shadow-retro-sm transition-all cursor-pointer flex items-center gap-1.5 disabled:opacity-50',
                       modalState.approve
                         ? 'bg-[#111111] hover:bg-black'
-                        : 'bg-[#ED1C24] hover:bg-[#c9141b]'
+                        : 'bg-[#ED1C24] hover:bg-[#A91117]'
                     )}
                   >
                     {isPending ? 'Memproses...' : modalState.approve ? 'Konfirmasi Setujui' : 'Konfirmasi Tolak'}

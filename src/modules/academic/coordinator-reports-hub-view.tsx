@@ -339,7 +339,7 @@ export function CoordinatorReportsHubView({
                     'px-3.5 py-1.5 border-2 border-black text-xs font-bold transition-all shadow-retro-sm cursor-pointer active:translate-x-0.5 active:translate-y-0.5',
                     edomPeriod.status === 'OPEN'
                       ? 'bg-white text-[#111111] hover:bg-gray-soft'
-                      : 'bg-[#ED1C24] text-white hover:bg-[#c9141b]'
+                      : 'bg-[#ED1C24] text-white hover:bg-[#A91117]'
                   )}
                 >
                   {edomPeriod.status === 'OPEN' ? 'Tutup Periode' : 'Buka Periode'}
@@ -360,7 +360,7 @@ export function CoordinatorReportsHubView({
                 type="button"
                 onClick={handleExportCsv}
                 disabled={isPending}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border-2 border-black bg-[#ED1C24] text-white text-xs font-bold hover:bg-[#c9141b] transition-all shadow-retro-sm cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border-2 border-black bg-[#ED1C24] text-white text-xs font-bold hover:bg-[#A91117] transition-all shadow-retro-sm cursor-pointer active:translate-x-0.5 active:translate-y-0.5"
               >
                 <Download className="h-3.5 w-3.5 text-white" />
                 <span>Ekspor Akreditasi (CSV)</span>
