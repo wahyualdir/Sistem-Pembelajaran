@@ -7,7 +7,7 @@ Dokumen ini menjelaskan tata cara eksekusi, variabel lingkungan, daftar akun con
 ## 1. Ringkasan Eksekusi & Keselamatan
 
 Penyemaian data akademik dirancang dengan prinsip **Fail-Closed** dan **Zero Production Leak**:
-- **Tidak menyimpan kata sandi di kode atau repositori**: Kata sandi dibaca secara runtime dari variabel lingkungan `SEED_PASSWORD` (minimal 12 karakter).
+- **Tidak menyimpan kata sandi di kode atau repositori**: Kata sandi dibaca secara runtime dari variabel lingkungan `SEED_PASSWORD` (minimal 6 karakter sesuai batas bawaan Supabase Auth, misal: `123456`).
 - **Guard lingkungan ketat**: Skrip berhenti jika `NODE_ENV=production`, `VERCEL_ENV=production`, atau `SEED_ENV` bukan `local`/`staging`.
 - **Domain email aman**: Seluruh akun menggunakan domain uji terisolasi RFC 2606 (`@mhs.siajar.test`, `@dosen.siajar.test`, `@staf.siajar.test`). Tidak ada akun berdomain `@uir.ac.id` atau `@student.uir.ac.id`.
 - **Cegah pencampuran data pengguna riil**: Memeriksa `auth.users` sebelum menulis. Jika ditemukan pengguna riil di luar domain `.test`, proses berhenti kecuali flag `SEED_ALLOW_EXISTING_USERS=true` diberikan.
@@ -21,7 +21,7 @@ Penyemaian data akademik dirancang dengan prinsip **Fail-Closed** dan **Zero Pro
 | :--- | :---: | :--- | :--- |
 | `SEED_ENV` | **Ya** | `local` atau `staging` | Lingkungan target eksekusi (wajib tepat `local` atau `staging`). |
 | `SEED_CONFIRM_PROJECT_REF` | **Ya** | `local` atau `[ref-project]` | Konfirmasi ref proyek Supabase yang cocok dengan host URL. |
-| `SEED_PASSWORD` | **Ya** | `RahasiaSIAJAR2026!` | Kata sandi untuk seluruh 168 akun login (min. 12 karakter). |
+| `SEED_PASSWORD` | **Ya** | `123456` | Kata sandi untuk seluruh 168 akun login (min. 6 karakter). |
 | `NEXT_PUBLIC_SUPABASE_URL` | **Ya** | `http://127.0.0.1:54321` | Alamat API Supabase instance target. |
 | `SUPABASE_SERVICE_ROLE_KEY` | **Ya** | `eyJh...` | Kunci service role admin Supabase untuk provisi akun auth. |
 | `SEED_ALLOW_EXISTING_USERS`| Tidak | `false` (default) | Izinkan penulisan meski terdapat akun non-`.test` di database. |
@@ -45,19 +45,19 @@ npm run seed:akademik
 ### B. Mode Penulisan Sungguhan (`--apply`)
 Mengeksekusi penyediaan 168 akun login, profil, identitas, peran, data prodi, semester, ruang, mata kuliah, kelas, slot jadwal, KRS, penugasan asisten, serta langsung memverifikasi hasilnya:
 ```bash
-SEED_ENV=local SEED_CONFIRM_PROJECT_REF=local SEED_PASSWORD="RahasiaSIAJAR2026!" npm run seed:akademik -- --apply
+SEED_ENV=local SEED_CONFIRM_PROJECT_REF=local SEED_PASSWORD="123456" npm run seed:akademik -- --apply
 ```
 
 ### C. Mode Reset (`--reset`)
 Menghapus seluruh akun seed berdomain `.test` beserta data turunannya (program studi 351 dan semester Ganjil 2026/2027):
 ```bash
-SEED_ENV=local SEED_CONFIRM_PROJECT_REF=local SEED_PASSWORD="RahasiaSIAJAR2026!" npm run seed:akademik -- --reset
+SEED_ENV=local SEED_CONFIRM_PROJECT_REF=local SEED_PASSWORD="123456" npm run seed:akademik -- --reset
 ```
 
 ### D. Mode Verifikasi Database (`--verify`)
 Menjalankan kueri pengujian verifikasi terhadap database aktif tanpa menulis ulang data:
 ```bash
-SEED_ENV=local SEED_CONFIRM_PROJECT_REF=local SEED_PASSWORD="RahasiaSIAJAR2026!" npm run seed:akademik -- --verify
+SEED_ENV=local SEED_CONFIRM_PROJECT_REF=local SEED_PASSWORD="123456" npm run seed:akademik -- --verify
 ```
 
 ### E. Mode Generator Lapisan Legacy (`--generate-legacy`)

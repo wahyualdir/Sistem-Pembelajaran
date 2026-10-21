@@ -30,3 +30,5 @@ Dokumen ini mencatat keputusan arsitektur, penyesuaian teknis, dan asumsi kerja 
    Tidak mengubah nilai default pada `src/lib/db/seed-data.ts`, `master-store.ts`, `jadwal-store.ts`, atau `krs-store.ts`. Generator statis menghasilkan `seed-data.uir-ti-2026.generated.ts` yang diaktifkan secara selektif jika `SEED_DATASET=uir-ti-2026`, menjamin 100% uji coba dan fitur eksisting tetap lulus tanpa regresi.
 7. **Integrasi Pipeline CI (Fase S6):**
    Menambahkan langkah eksekusi seed dan verifikasi otomatis di `.github/workflows/ci.yml` yang berjalan terhadap mesin lokal Supabase sementara dengan kredensial ephemeral.
+8. **Penyesuaian Batas Panjang Kata Sandi (Opsi B):**
+   Atas permintaan eksplisit pengguna untuk menggunakan kata sandi sederhana seperti `123456`, batas pengaman pada `guard.ts` disesuaikan dari minimal 12 karakter menjadi minimal 6 karakter (batas teknis terendah yang diterima oleh Supabase Auth GoTrue). Nilai 5 karakter (`12345`) tetap ditolak fail-closed agar proses pembuatan akun di Supabase Auth tidak gagal di tengah jalan.

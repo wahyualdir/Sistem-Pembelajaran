@@ -87,16 +87,16 @@ describe('Guard Keselamatan Seed Akademik (Fail-Closed)', () => {
     ).toThrow(/tidak cocok dengan ref proyek basis data target/);
   });
 
-  it('menolak jika SEED_PASSWORD kurang dari 12 karakter atau kosong', () => {
+  it('menolak jika SEED_PASSWORD kurang dari 6 karakter atau kosong', () => {
     expect(() =>
       assertSafetyGuard({
         seedEnv: 'local',
         seedConfirmProjectRef: 'local',
         nodeEnv: 'development',
-        seedPassword: 'pendek',
+        seedPassword: '12345',
         supabaseUrl: 'http://127.0.0.1:54321',
       })
-    ).toThrow(/minimal 12 karakter/);
+    ).toThrow(/minimal 6 karakter/);
 
     expect(() =>
       assertSafetyGuard({
@@ -106,7 +106,19 @@ describe('Guard Keselamatan Seed Akademik (Fail-Closed)', () => {
         seedPassword: '',
         supabaseUrl: 'http://127.0.0.1:54321',
       })
-    ).toThrow(/minimal 12 karakter/);
+    ).toThrow(/minimal 6 karakter/);
+  });
+
+  it('menerima kata sandi 6 karakter seperti 123456', () => {
+    expect(() =>
+      assertSafetyGuard({
+        seedEnv: 'local',
+        seedConfirmProjectRef: 'local',
+        nodeEnv: 'development',
+        seedPassword: '123456',
+        supabaseUrl: 'http://127.0.0.1:54321',
+      })
+    ).not.toThrow();
   });
 
   it('mengekstrak project ref dari berbagai format URL Supabase', () => {
