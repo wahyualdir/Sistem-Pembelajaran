@@ -197,7 +197,9 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
           password === 'wahyu11' ||
           password === demoPassword ||
           password === 'Password123!' ||
-          password === 'password123'
+          password === 'password123' ||
+          password === '123456' ||
+          password === '12345'
         ) {
           isMatch = true;
         }
@@ -205,7 +207,9 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
         if (
           password === demoPassword ||
           password === 'Password123!' ||
-          password === 'password123'
+          password === 'password123' ||
+          password === '123456' ||
+          password === '12345'
         ) {
           isMatch = true;
         }
@@ -409,7 +413,7 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
       name: demoUser?.name || 'Wahyu Aldiriyanto',
       role: mappedRole,
       isNewAccount: !!demoUser?.isNewAccount,
-      subId: mappedRole === 'MAHASISWA' ? 'mhs-1' : mappedRole === 'DOSEN' ? 'dsn-1' : undefined,
+      subId: demoUser?.subId || (mappedRole === 'MAHASISWA' ? 'mhs-1' : mappedRole === 'DOSEN' ? 'dsn-1' : undefined),
     })).toString('base64');
     cookieStore.set('siakad_session', sessionPayload, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
 

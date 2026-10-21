@@ -77,7 +77,7 @@ Semua akun masuk menggunakan **NIM / NIDN / NIP** dan kata sandi yang disetel pa
 | :--- | :--- | :---: | :---: | :--- |
 | `263510001` | Muhammad Farhan Pratama | 2026 | 1A | Mahasiswa Semester 1 (6 kelas inti paket) |
 | `253510001` | Muhammad Rizky Ramadhan | 2025 | 3A | Mahasiswa Semester 3 (6 kelas inti paket) |
-| `243510001` | Ahmad Dani Kurniawan | 2024 | 5A | Mahasiswa Semester 5 (6 kelas inti + 1 kelas pilihan) |
+| `243510001` | Arya Permana Ginting | 2024 | 5A | Mahasiswa Semester 5 (6 kelas inti + 1 kelas pilihan) |
 | `233510001` | Muhammad Aditya Pratama | 2023 | 7A | Mahasiswa Semester 7 + Asisten Dosen (4 kelas asistensi) |
 
 ### B. Asisten Dosen (NIM Mahasiswa yang Ditugaskan)

@@ -82,4 +82,21 @@ describe('SIAJAR Fase S5 - Lapisan Kompatibilitas Legacy Store (SEED_DATASET)', 
     MasterStore.resetStore();
     expect(MasterStore.getMahasiswa().length).toBe(30);
   });
+
+  it('memastikan akun UIR terdaftar di SYNTHETIC_DEMO_USERS untuk login offline di localhost', async () => {
+    const { SYNTHETIC_DEMO_USERS } = await import('@/modules/identity/demo-users');
+    
+    // Mahasiswa
+    expect(SYNTHETIC_DEMO_USERS['243510001']).toBeDefined();
+    expect(SYNTHETIC_DEMO_USERS['243510001'].name).toBe('Arya Permana Ginting');
+    expect(SYNTHETIC_DEMO_USERS['243510001'].roles).toEqual(['STUDENT']);
+
+    // Kaprodi
+    expect(SYNTHETIC_DEMO_USERS['2008000307']).toBeDefined();
+    expect(SYNTHETIC_DEMO_USERS['2008000307'].roles).toContain('PROGRAM_COORDINATOR');
+
+    // Super Admin
+    expect(SYNTHETIC_DEMO_USERS['20120009']).toBeDefined();
+    expect(SYNTHETIC_DEMO_USERS['20120009'].roles).toContain('SUPER_ADMIN');
+  });
 });

@@ -1,4 +1,8 @@
 import type { UserStatus } from '@/lib/supabase/types';
+import {
+  SEED_MAHASISWA_UIR,
+  SEED_DOSEN_UIR,
+} from '@/lib/db/seed-data.uir-ti-2026.generated';
 
 export interface SyntheticDemoUser {
   id: string;
@@ -6,6 +10,7 @@ export interface SyntheticDemoUser {
   name: string;
   nim?: string;
   nidn?: string;
+  subId?: string;
   roles: string[];
   status: UserStatus;
   mustChangePassword?: boolean;
@@ -191,6 +196,69 @@ export const SYNTHETIC_DEMO_USERS: Record<string, SyntheticDemoUser> = {
     status: 'LOCKED',
   },
 };
+
+const ASDOS_NIMS = new Set([
+  '233510001', '233510002', '233510006', '233510007',
+  '233510008', '233510012', '233510013', '233510018',
+  '233510019', '233510024', '233510025', '233510030',
+  '243510006', '243510007', '243510012', '243510024',
+]);
+
+// 1. Registrasikan 120 Mahasiswa UIR
+for (const m of SEED_MAHASISWA_UIR) {
+  const isAsdos = ASDOS_NIMS.has(m.nim);
+  const userObj: SyntheticDemoUser = {
+    id: `u-mhs-${m.nim}`,
+    email: m.email,
+    name: m.nama,
+    nim: m.nim,
+    subId: m.id,
+    roles: isAsdos ? ['STUDENT', 'TEACHING_ASSISTANT'] : ['STUDENT'],
+    status: 'ACTIVE',
+  };
+  SYNTHETIC_DEMO_USERS[m.nim] = userObj;
+  SYNTHETIC_DEMO_USERS[m.email] = userObj;
+}
+
+// 2. Registrasikan 42 Dosen UIR
+for (const d of SEED_DOSEN_UIR) {
+  const isKaprodi = d.penandaKaprodi;
+  const userObj: SyntheticDemoUser = {
+    id: `u-dsn-${d.id}`,
+    email: d.email,
+    name: d.nama,
+    nidn: d.nidn,
+    subId: d.id,
+    roles: isKaprodi ? ['PROGRAM_COORDINATOR', 'LECTURER'] : ['LECTURER'],
+    status: 'ACTIVE',
+  };
+  SYNTHETIC_DEMO_USERS[d.nidn] = userObj;
+  SYNTHETIC_DEMO_USERS[d.email] = userObj;
+  SYNTHETIC_DEMO_USERS[d.id] = userObj;
+}
+
+// 3. Registrasikan 6 Staf & Admin UIR
+const STAF_ADMIN_UIR = [
+  { nip: '20120009', nama: 'Rahmat Hidayat, S.Kom.', email: '20120009@staf.siajar.test', roles: ['SUPER_ADMIN', 'SYSTEM_ADMIN', 'ACADEMIC_STAFF', 'PROGRAM_COORDINATOR', 'LECTURER', 'STUDENT'] },
+  { nip: '20160042', nama: 'Bambang Prasetyo, S.Kom.', email: '20160042@staf.siajar.test', roles: ['SYSTEM_ADMIN'] },
+  { nip: '20180055', nama: 'Agus Setiawan, M.Kom.', email: '20180055@staf.siajar.test', roles: ['SYSTEM_ADMIN'] },
+  { nip: '20110017', nama: 'Siti Nurhaliza, A.Md.', email: '20110017@staf.siajar.test', roles: ['ACADEMIC_STAFF'] },
+  { nip: '20150028', nama: 'Rudi Hartono, S.Sos.', email: '20150028@staf.siajar.test', roles: ['ACADEMIC_STAFF'] },
+  { nip: '20190033', nama: 'Fitri Handayani, S.Ak.', email: '20190033@staf.siajar.test', roles: ['ACADEMIC_STAFF'] },
+];
+
+for (const s of STAF_ADMIN_UIR) {
+  const userObj: SyntheticDemoUser = {
+    id: `u-staf-${s.nip}`,
+    email: s.email,
+    name: s.nama,
+    subId: `staf-${s.nip}`,
+    roles: s.roles,
+    status: 'ACTIVE',
+  };
+  SYNTHETIC_DEMO_USERS[s.nip] = userObj;
+  SYNTHETIC_DEMO_USERS[s.email] = userObj;
+}
 
 if (process.env.SUPERADMIN_EMAIL) {
   const customSuperAdminEmail = process.env.SUPERADMIN_EMAIL.trim().toLowerCase();
