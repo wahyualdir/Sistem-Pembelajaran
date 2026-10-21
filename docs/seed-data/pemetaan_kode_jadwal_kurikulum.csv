@@ -1,0 +1,39 @@
+﻿kode_jadwal,nama_di_jadwal,kode_kurikulum,nama_kurikulum,semester,sks_teori_jadwal,sks_praktik_jadwal,sks_teori_kurikulum,sks_praktik_kurikulum,sks_cocok,kode_sama,kategori,rumpun_pilihan,jenis,rombel_di_jadwal
+STI2543183,Algoritma Dan Pemrograman Ii,STI2543127,Algoritma dan Pemrograman 2,3,2,1,2,1,YA,TIDAK,MKPS,-,wajib,"3A,3B,3C,3D,3E"
+STI2545185,Metodologi Penelitian,STI2545142,Metodologi Penelitian,5,3,0,3,0,YA,TIDAK,MKPS,-,wajib,"5A,5B,5C,5D,5E,5F,5G"
+STI2547148,Pengolahan Citra,STI2547164,Pengolahan Citra,7,2,1,2,1,YA,TIDAK,MKPS,AI,wajib,"7A,7B,7C,7D,7E,7F"
+STI2545173,Pembelajaran Mesin,STI2545144,Pembelajaran Mesin,5,2,1,2,1,YA,TIDAK,MKPS,AI,wajib,"5A,5B,5C,5D,5E,5F,5G"
+STI2541110,Basis Data I,STI2541114,Basis Data 1,1,2,1,2,1,YA,TIDAK,MKPS,-,wajib,"1A,1B,1C,1D,1E"
+STI2545174,Pemrograman Berorientasi Objek,STI2545145,Pemrograman Berorientasi Objek,5,2,1,2,1,YA,TIDAK,MKPS,PLATFORM,wajib,"5A,5B,5C,5D,5E,5F,5G"
+STI2543122,Sistem Operasi,STI2543130,Sistem Operasi,3,2,1,2,1,YA,TIDAK,MKPS,JARINGAN_KEAMANAN,wajib,"3A,3B,3C,3D,3E"
+STI2543123,Struktur Data,STI2543131,Struktur Data,3,2,1,2,1,YA,TIDAK,MKPS,-,wajib,"3A,3B,3C,3D,3E"
+STI2547145,Basis Data Graf,STI2547161,Basis Data Graf,7,2,1,2,1,YA,TIDAK,MKPS,AI,wajib,"7A,7B,7C,7D,7E,7F"
+STI2545132,Keamanan Komputer Jaringan,STI2545140,Keamanan Komputer dan Jaringan,5,2,1,2,1,YA,TIDAK,MKPS,JARINGAN_KEAMANAN,wajib,"5A,5B,5C,5D,5E,5F,5G"
+STI2547175,Komputasi Paralel Dan Sistem Terdistribusi,STI2547160,Komputasi Paralel dan Sistem Terdistribusi,7,2,1,2,1,YA,TIDAK,MKPS,PLATFORM,wajib,"7A,7B,7C,7D,7E,7F"
+STI2547176,Teknologi Imersif,STI2547162,Teknologi Imersif,7,2,1,2,1,YA,TIDAK,MKPS,AI,wajib,"7A,7B,7C,7D,7E,7F"
+STI2543170,Pengenalan Kecerdasan Buatan,STI2543129,Pengenalan Kecerdasan Buatan,3,2,1,2,1,YA,TIDAK,MKPS,AI,wajib,"3A,3B,3C,3D,3E"
+UIR2520106,Islam Dan Keilmuan,STI2523126,Islam dan Keilmuan,4,2,0,2,0,YA,TIDAK,MKWK,-,wajib,"3A,3B,3C,3D,3E"
+STI2543124,Teori Bahasa Dan Automata,STI2543132,Teori Bahasa dan Automata,3,3,0,3,0,YA,TIDAK,MKPS,AI,wajib,"3A,3B,3C,3D,3E"
+STI2545167,Implementasi Dan Pengujian Perangkat Lunak,STI2545143,Implementasi dan Pengujian Perangkat Lunak,5,3,0,3,0,YA,TIDAK,MKPS,PLATFORM,wajib,"5A,5B,5C,5D,5E,5F,5G"
+STI2541113,Pengenalan Pemrograman,STI2541117,Pengenalan Pemrograman,1,2,1,2,1,YA,TIDAK,MKPS,-,wajib,"1A,1B,1C,1D,1E"
+STI2547177,Proyek Capstone,STI2547163,Capstone Project,7,4,0,4,0,YA,TIDAK,MKPS,-,wajib,"7A,7B,7C,7D,7E,7F"
+STI2543171,Probabilitas Dan Statistik,STI2544137,Probabilitas & Statistik,3,2,1,2,1,YA,TIDAK,MKPS,-,wajib,"3A,3B,3C,3D,3E"
+UIR2520107,Literasi Data Dan Teknologi,STI2521111,Literasi Data dan Teknologi,1,2,0,2,0,YA,TIDAK,MKWK,-,wajib,"1A,1B,1C,1D,1E"
+UIR2510101,Pendidikan Agama Islam,STI2511112,Pendidikan Agama Islam,1,2,0,2,0,YA,TIDAK,MKWU,-,wajib,"1A,1B,1C,1D,1E"
+STI2541111,Kalkulus,STI2541115,Kalkulus,1,3,0,3,0,YA,TIDAK,MKPS,-,wajib,"1A,1B,1C,1D,1E"
+UIR2510102,Bahasa Indonesia,STI2511113,Bahasa Indonesia,1,2,0,2,0,YA,TIDAK,MKWU,-,wajib,"1A,1B,1C,1D,1E"
+STI2541112,Matematika Diskrit,STI2541116,Matematika Diskrit,1,3,0,3,0,YA,TIDAK,MKPS,-,wajib,"1A,1B,1C,1D,1E"
+STI2545280,Basis Data Dokumen,STI2545249,Basis Data Dokumen,5,2,1,2,1,YA,TIDAK,MKPS,PLATFORM,pilihan,5A
+STI2545281,Keamanan Siber,STI2545247,Keamanan Siber,5,2,1,2,1,YA,TIDAK,MKPS,JARINGAN_KEAMANAN,pilihan,5A
+STI2545278,Mesin Penerjemah,STI2545246,Mesin Penerjemah,5,2,1,2,1,YA,TIDAK,MKPS,AI,pilihan,"5A,5B"
+UIR2510103,Pendidikan Pancasila,STI2511110,Pendidikan Pancasila,1,2,0,2,0,YA,TIDAK,MKWU,-,wajib,"1A,1B,1C,1D,1E"
+STI2545172,Etika Dan Profesionalisme,STI2545141,Etika dan Profesionalisme,5,2,0,2,0,YA,TIDAK,MKPS,-,wajib,"5A,5B,5C,5D,5E,5F,5G"
+STI2547253,Visi Komputer,STI2547267,Visi Komputer,7,2,1,2,1,YA,TIDAK,MKPS,AI,pilihan,7A
+STI2547146,Internet Of Things,STI2547268,Internet of Things,7,2,1,2,1,YA,TIDAK,MKPS,AI,pilihan,7A
+STI2543169,Pengenalan Pemrograman Platform,STI2543128,Pengenalan Pemrograman Platform,3,2,0,2,0,YA,TIDAK,MKPS,PLATFORM,wajib,"3A,3B,3C,3D,3E"
+STI2545256,Komunikasi Data Dan Sistem Telekomunikasi,STI2545248,Sistem Komunikasi dan Telekomunikasi Data,5,2,1,2,1,YA,TIDAK,MKPS,JARINGAN_KEAMANAN,pilihan,5A
+STI2547254,Pembelajaran Mendalam,STI2547265,Pembelajaran Mendalam,7,2,1,2,1,YA,TIDAK,MKPS,AI,pilihan,7A
+STI2547282,Pemrograman Game,STI2547271,Pemrograman Game,7,2,1,2,1,YA,TIDAK,MKPS,PLATFORM,pilihan,7A
+STI2547260,Jaringan Perusahaan Keamanan Dan Otomasi,STI2547270,"Jaringan Perusahaan, Keamanan dan Otomasi",7,2,1,2,1,YA,TIDAK,MKPS,JARINGAN_KEAMANAN,pilihan,7A
+STI2547265,Desain Pengalaman Pengguna,STI2547272,Desain Pengalaman Pengguna,7,2,1,2,1,YA,TIDAK,MKPS,PLATFORM,pilihan,7A
+STI2545279,Pemograman Berbasis Komponen,STI2545250,Pemrograman Berbasis Komponen,5,2,1,2,1,YA,TIDAK,MKPS,PLATFORM,pilihan,5A

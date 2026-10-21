@@ -43,3 +43,7 @@ next-env.d.ts
 
 # scratch & development screenshots/artifacts
 /scratch/
+
+# seed akademik security
+docs/seed-data/PEMETAAN_RAHASIA_*
+.env.seed*

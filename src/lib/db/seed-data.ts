@@ -1,3 +1,18 @@
+import {
+  SEED_PRODI_UIR,
+  SEED_DOSEN_UIR,
+  SEED_MAHASISWA_UIR,
+  SEED_MATA_KULIAH_UIR,
+  SEED_PRASYARAT_UIR,
+  SEED_RUANG_UIR,
+  SEED_TAHUN_AJARAN_UIR,
+  SEED_USERS_UIR,
+} from "./seed-data.uir-ti-2026.generated";
+
+const isUirDataset =
+  typeof process !== "undefined" &&
+  process.env?.SEED_DATASET === "uir-ti-2026";
+
 // Seed Data SIAKAD - Berisi 3 Prodi, 8 Dosen, 30 Mahasiswa, 20 Mata Kuliah, Jadwal, Konfigurasi Akademik
 
 export interface SeedConfig {
@@ -44,13 +59,22 @@ export const SEED_CONFIGS: SeedConfig[] = [
   },
 ];
 
-export const SEED_PRODI = [
+export const DEFAULT_PRODI = [
   { id: "prodi-ti", kode: "TI", nama: "Teknik Informatika", jenjang: "S1" },
   { id: "prodi-si", kode: "SI", nama: "Sistem Informasi", jenjang: "S1" },
   { id: "prodi-tk", kode: "TK", nama: "Teknik Komputer", jenjang: "S1" },
 ];
+export const SEED_PRODI = isUirDataset ? SEED_PRODI_UIR : DEFAULT_PRODI;
 
-export const SEED_USERS = [
+export interface SeedUserItem {
+  id: string;
+  email: string;
+  peran: "ADMIN" | "DOSEN" | "MAHASISWA";
+  passwordHash: string | null;
+  aktif: boolean;
+}
+
+export const DEFAULT_USERS: SeedUserItem[] = [
   // Admin
   {
     id: "usr-superadmin",
@@ -124,8 +148,9 @@ export const SEED_USERS = [
     aktif: true,
   },
 ];
+export const SEED_USERS = isUirDataset ? SEED_USERS_UIR : DEFAULT_USERS;
 
-export const SEED_DOSEN = [
+export const DEFAULT_DOSEN = [
   {
     id: "dsn-1",
     nidn: "0012058001",
@@ -210,8 +235,9 @@ export const SEED_DOSEN = [
     penggunaId: "usr-dsn-8",
   },
 ];
+export const SEED_DOSEN = isUirDataset ? SEED_DOSEN_UIR : DEFAULT_DOSEN;
 
-export const SEED_MAHASISWA = [
+export const DEFAULT_MAHASISWA = [
   // 30 Mahasiswa Realistis
   { id: "mhs-1", nim: "223510001", nama: "Ahmad Mahasiswa", email: "mhs2024001@student.uir.ac.id", angkatan: 2022, prodiId: "prodi-ti", dosenWaliId: "dsn-1" },
   { id: "mhs-2", nim: "223510002", nama: "Muhammad Rizky Pratama", email: "rizky.pratama@student.uir.ac.id", angkatan: 2022, prodiId: "prodi-ti", dosenWaliId: "dsn-1" },
@@ -248,8 +274,9 @@ export const SEED_MAHASISWA = [
   { id: "mhs-29", nim: "243210009", nama: "Dicky Wahyudi", email: "dicky.w@student.uir.ac.id", angkatan: 2024, prodiId: "prodi-tk", dosenWaliId: "dsn-8" },
   { id: "mhs-30", nim: "243210010", nama: "Cindy Claudia", email: "cindy.c@student.uir.ac.id", angkatan: 2024, prodiId: "prodi-tk", dosenWaliId: "dsn-8" },
 ];
+export const SEED_MAHASISWA = isUirDataset ? SEED_MAHASISWA_UIR : DEFAULT_MAHASISWA;
 
-export const SEED_MATA_KULIAH = [
+export const DEFAULT_MATA_KULIAH = [
   // TI
   { id: "mk-1", kode: "TIF101", nama: "Algoritma & Pemrograman", sks: 3, jenis: "WAJIB" as const, semesterPaket: 1, prodiId: "prodi-ti" },
   { id: "mk-2", kode: "TIF102", nama: "Struktur Data", sks: 3, jenis: "WAJIB" as const, semesterPaket: 2, prodiId: "prodi-ti" },
@@ -276,8 +303,9 @@ export const SEED_MATA_KULIAH = [
   { id: "mk-19", kode: "TKF301", nama: "Sistem Tertanam & IoT", sks: 3, jenis: "WAJIB" as const, semesterPaket: 5, prodiId: "prodi-tk" },
   { id: "mk-20", kode: "TKF302", nama: "Robotika", sks: 3, jenis: "PILIHAN" as const, semesterPaket: 5, prodiId: "prodi-tk" },
 ];
+export const SEED_MATA_KULIAH = isUirDataset ? SEED_MATA_KULIAH_UIR : DEFAULT_MATA_KULIAH;
 
-export const SEED_PRASYARAT = [
+export const DEFAULT_PRASYARAT = [
   { id: "pra-1", mataKuliahId: "mk-2", prasyaratId: "mk-1", nilaiMinimal: "D" }, // Struktur Data butuh Algo (D)
   { id: "pra-2", mataKuliahId: "mk-3", prasyaratId: "mk-1", nilaiMinimal: "D" }, // PBO butuh Algo (D)
   { id: "pra-3", mataKuliahId: "mk-5", prasyaratId: "mk-4", nilaiMinimal: "D" }, // Basis Data Lanjut butuh Basis Data (D)
@@ -286,15 +314,17 @@ export const SEED_PRASYARAT = [
   { id: "pra-6", mataKuliahId: "mk-12", prasyaratId: "mk-11", nilaiMinimal: "D" }, // APSI butuh PSI (D)
   { id: "pra-7", mataKuliahId: "mk-17", prasyaratId: "mk-16", nilaiMinimal: "D" }, // Orkom butuh Rangkaian Digital (D)
 ];
+export const SEED_PRASYARAT = isUirDataset ? SEED_PRASYARAT_UIR : DEFAULT_PRASYARAT;
 
-export const SEED_RUANG = [
+export const DEFAULT_RUANG = [
   { id: "rng-1", kode: "LAB-K1", nama: "Laboratorium Komputer 1", kapasitas: 35, gedung: "Gedung Fakultas Lt. 2" },
   { id: "rng-2", kode: "LAB-K2", nama: "Laboratorium Komputer 2", kapasitas: 35, gedung: "Gedung Fakultas Lt. 2" },
   { id: "rng-3", kode: "RT-201", nama: "Ruang Teori 201", kapasitas: 40, gedung: "Gedung Kuliah Bersama Lt. 2" },
   { id: "rng-4", kode: "RT-202", nama: "Ruang Teori 202", kapasitas: 40, gedung: "Gedung Kuliah Bersama Lt. 2" },
 ];
+export const SEED_RUANG = isUirDataset ? SEED_RUANG_UIR : DEFAULT_RUANG;
 
-export const SEED_TAHUN_AJARAN = {
+export const DEFAULT_TAHUN_AJARAN = {
   id: "ta-2026-ganjil",
   kode: "2026/2027",
   semester: "GANJIL" as const,
@@ -302,6 +332,7 @@ export const SEED_TAHUN_AJARAN = {
   tanggalSelesai: new Date("2027-01-31"),
   aktif: true,
 };
+export const SEED_TAHUN_AJARAN = isUirDataset ? SEED_TAHUN_AJARAN_UIR : DEFAULT_TAHUN_AJARAN;
 
 export const SEED_KALENDER = [
   {

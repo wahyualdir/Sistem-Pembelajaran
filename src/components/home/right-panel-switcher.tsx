@@ -118,29 +118,24 @@ export function RightPanelSwitcher({
         <div className="flex flex-col gap-5 animate-fade-in pb-24">
           {/* 1. Header Identitas Kampus & Status Semester Mahasiswa */}
           <div className="p-4 sm:p-5 rounded-2xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <div className="flex items-center justify-between gap-2.5 pb-2.5 border-b-2 border-ink">
+            <div className="flex items-center gap-2.5 pb-2.5 border-b-2 border-ink">
               <div className="flex items-center gap-2.5 min-w-0 flex-1">
                 <div className="h-9 w-9 rounded-xl border-2 border-ink bg-white p-0.5 flex items-center justify-center shrink-0 shadow-retro-xs overflow-hidden">
                   <img
-                    src="/logo-uir.png"
-                    alt="Logo Universitas Islam Riau"
+                    src="/logo-ruangkampus.png"
+                    alt="Logo RuangKampus"
                     className="h-full w-full object-contain"
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <span className="text-[11px] font-heading font-black text-ink uppercase tracking-tight block leading-tight whitespace-nowrap">
-                    UNIVERSITAS ISLAM RIAU
+                  <span className="text-sm font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
+                    Ruang<span className="text-primary">Kampus</span>
                   </span>
-                  <span className="text-[10px] font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
+                  <span className="text-xs font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
                     Kartu Mahasiswa Aktif
                   </span>
                 </div>
               </div>
-
-              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border-2 border-ink bg-surface text-ink text-[10px] font-mono font-bold shrink-0 shadow-retro-xs">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
-                <span>{summary.semesterStatus || 'Aktif'}</span>
-              </span>
             </div>
 
             <div className="flex items-center justify-between pt-0.5">
@@ -153,7 +148,7 @@ export function RightPanelSwitcher({
                 </p>
               </div>
               <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg border border-ink bg-gray-soft text-ink shadow-2xs">
-                SIAJAR UIR
+                Ruang<span className="text-primary">Kampus</span>
               </span>
             </div>
           </div>

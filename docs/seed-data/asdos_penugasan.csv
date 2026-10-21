@@ -1,0 +1,57 @@
+﻿nim,nama,kode_jadwal,kode_kurikulum,matakuliah,kelas,hari,jam,ruang,izin_class_assistants,can_open_attendance
+233510001,Anugrah Nugraha Ismail,STI2543183,STI2543127,Algoritma Dan Pemrograman Ii,3C,Rabu,10:30-12:10,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510001,Anugrah Nugraha Ismail,STI2545174,STI2545145,Pemrograman Berorientasi Objek,5A,Rabu,14:45-16:25,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510001,Anugrah Nugraha Ismail,STI2543122,STI2543130,Sistem Operasi,3D,Senin,08:45-10:25,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510001,Anugrah Nugraha Ismail,STI2545132,STI2545140,Keamanan Komputer Jaringan,5F,Senin,14:45-16:25,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510002,Raisa Wulandari Sitompul,STI2543170,STI2543129,Pengenalan Kecerdasan Buatan,3E,Jumat,10:30-12:10,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+233510002,Raisa Wulandari Sitompul,STI2545174,STI2545145,Pemrograman Berorientasi Objek,5F,Kamis,15:15-16:55,Mobile Lab - TEKNIK D,submission.review;assignment.grade,YA
+233510006,Lutfiah Handayani Hasibuan,STI2543183,STI2543127,Algoritma Dan Pemrograman Ii,3B,Selasa,10:30-12:10,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510006,Lutfiah Handayani Hasibuan,STI2545132,STI2545140,Keamanan Komputer Jaringan,5D,Selasa,13:00-14:40,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510006,Lutfiah Handayani Hasibuan,STI2545173,STI2545144,Pembelajaran Mesin,5E,Senin,07:00-08:40,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+233510006,Lutfiah Handayani Hasibuan,STI2543183,STI2543127,Algoritma Dan Pemrograman Ii,3E,Senin,13:00-14:40,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510007,Galih Permana Daulay,STI2545174,STI2545145,Pemrograman Berorientasi Objek,5D,Kamis,13:00-14:40,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510007,Galih Permana Daulay,STI2545132,STI2545140,Keamanan Komputer Jaringan,5G,Rabu,08:45-10:25,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510007,Galih Permana Daulay,STI2545174,STI2545145,Pemrograman Berorientasi Objek,5E,Selasa,10:30-12:10,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510007,Galih Permana Daulay,STI2543171,STI2544137,Probabilitas Dan Statistik,3E,Selasa,13:00-14:40,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510008,Okta Safitri Dalimunthe,STI2545173,STI2545144,Pembelajaran Mesin,5F,Jumat,07:00-08:40,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+233510008,Okta Safitri Dalimunthe,STI2543171,STI2544137,Probabilitas Dan Statistik,3A,Jumat,13:00-14:40,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510008,Okta Safitri Dalimunthe,STI2545174,STI2545145,Pemrograman Berorientasi Objek,5G,Kamis,13:00-14:40,Mobile Lab - TEKNIK D,submission.review;assignment.grade,YA
+233510012,Nazwa Puspita Piliang,STI2543183,STI2543127,Algoritma Dan Pemrograman Ii,3A,Rabu,08:45-10:25,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510012,Nazwa Puspita Piliang,STI2543171,STI2544137,Probabilitas Dan Statistik,3C,Rabu,13:00-14:40,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510012,Nazwa Puspita Piliang,STI2545173,STI2545144,Pembelajaran Mesin,5A,Selasa,10:30-12:10,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+233510012,Nazwa Puspita Piliang,STI2541110,STI2541114,Basis Data I,1D,Senin,07:00-08:40,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510013,Anugrah Akbar Aziz,STI2545173,STI2545144,Pembelajaran Mesin,5D,Kamis,14:45-16:25,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+233510013,Anugrah Akbar Aziz,STI2543170,STI2543129,Pengenalan Kecerdasan Buatan,3A,Rabu,13:00-14:40,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+233510013,Anugrah Akbar Aziz,STI2545132,STI2545140,Keamanan Komputer Jaringan,5B,Selasa,10:30-12:10,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510013,Anugrah Akbar Aziz,STI2541110,STI2541114,Basis Data I,1B,Selasa,14:45-16:25,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510018,Nazwa Handayani Ginting,STI2543183,STI2543127,Algoritma Dan Pemrograman Ii,3D,Rabu,13:00-14:40,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510018,Nazwa Handayani Ginting,STI2541113,STI2541117,Pengenalan Pemrograman,1A,Selasa,07:00-08:40,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510018,Nazwa Handayani Ginting,STI2545174,STI2545145,Pemrograman Berorientasi Objek,5C,Senin,07:00-08:40,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510018,Nazwa Handayani Ginting,STI2543123,STI2543131,Struktur Data,3E,Senin,10:30-12:10,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510019,Alvin Hidayat Hamzah,STI2541110,STI2541114,Basis Data I,1A,Jumat,07:00-08:40,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510019,Alvin Hidayat Hamzah,STI2543122,STI2543130,Sistem Operasi,3E,Jumat,13:00-14:40,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510019,Alvin Hidayat Hamzah,STI2545132,STI2545140,Keamanan Komputer Jaringan,5E,Kamis,14:45-16:25,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510024,Alika Handayani Siregar,STI2545132,STI2545140,Keamanan Komputer Jaringan,5A,Selasa,07:00-08:40,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510024,Alika Handayani Siregar,STI2545173,STI2545144,Pembelajaran Mesin,5G,Selasa,08:45-10:25,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+233510024,Alika Handayani Siregar,STI2543122,STI2543130,Sistem Operasi,3C,Senin,07:00-08:40,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510024,Alika Handayani Siregar,STI2541110,STI2541114,Basis Data I,1C,Senin,14:45-16:25,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510025,Alif Syahputra Panjaitan,STI2541113,STI2541117,Pengenalan Pemrograman,1B,Kamis,07:00-08:40,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510025,Alif Syahputra Panjaitan,STI2545173,STI2545144,Pembelajaran Mesin,5B,Rabu,08:45-10:25,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+233510025,Alif Syahputra Panjaitan,STI2543123,STI2543131,Struktur Data,3B,Rabu,10:30-12:10,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510025,Alif Syahputra Panjaitan,STI2545174,STI2545145,Pemrograman Berorientasi Objek,5B,Selasa,08:45-10:25,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510030,Tiara Rahayu Santoso,STI2543123,STI2543131,Struktur Data,3D,Rabu,08:45-10:25,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510030,Tiara Rahayu Santoso,STI2545132,STI2545140,Keamanan Komputer Jaringan,5C,Rabu,13:00-14:40,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+233510030,Tiara Rahayu Santoso,STI2543170,STI2543129,Pengenalan Kecerdasan Buatan,3B,Selasa,13:00-14:40,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+233510030,Tiara Rahayu Santoso,STI2545173,STI2545144,Pembelajaran Mesin,5C,Senin,08:45-10:25,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+243510006,Selvi Novita Pulungan,STI2543170,STI2543129,Pengenalan Kecerdasan Buatan,3C,Kamis,08:45-10:25,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+243510006,Selvi Novita Pulungan,STI2543170,STI2543129,Pengenalan Kecerdasan Buatan,3D,Kamis,13:00-14:40,Artificial Intelligence LAB - TEKNIK D,submission.review;assignment.grade,YA
+243510006,Selvi Novita Pulungan,STI2541113,STI2541117,Pengenalan Pemrograman,1D,Kamis,14:45-16:25,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+243510007,Candra Ardiansyah Batubara,STI2543122,STI2543130,Sistem Operasi,3A,Kamis,13:00-14:40,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+243510007,Candra Ardiansyah Batubara,STI2543123,STI2543131,Struktur Data,3A,Kamis,14:45-16:25,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+243510012,Aisyah Ramadhani Piliang,STI2541113,STI2541117,Pengenalan Pemrograman,1C,Kamis,08:45-10:25,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+243510012,Aisyah Ramadhani Piliang,STI2543171,STI2544137,Probabilitas Dan Statistik,3D,Kamis,10:30-12:10,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+243510012,Aisyah Ramadhani Piliang,STI2541113,STI2541117,Pengenalan Pemrograman,1E,Kamis,13:00-14:40,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+243510024,Cindy Rahayu Ismail,STI2543171,STI2544137,Probabilitas Dan Statistik,3B,Rabu,14:45-16:25,Computer System LAB - TEKNIK C,submission.review;assignment.grade,YA
+243510024,Cindy Rahayu Ismail,STI2541110,STI2541114,Basis Data I,1E,Selasa,07:00-08:40,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+243510024,Cindy Rahayu Ismail,STI2543122,STI2543130,Sistem Operasi,3B,Selasa,08:45-10:25,Network Computer LAB - TEKNIK C,submission.review;assignment.grade,YA
+243510024,Cindy Rahayu Ismail,STI2543123,STI2543131,Struktur Data,3C,Senin,08:45-10:25,Basic Computer LAB - TEKNIK C,submission.review;assignment.grade,YA

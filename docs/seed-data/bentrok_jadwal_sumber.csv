@@ -1,0 +1,42 @@
+﻿jenis,pihak,hari,sesi_a,sesi_b,tumpang_tindih_menit,id_sesi
+DOSEN,"Dr. Ir. Rahmawati Kartika Sari, M.Sc.",Senin,Struktur Data 3A (Teori) 08:45-10:25,Struktur Data 3C (Praktikum) 08:45-10:25,100,J009 / J017
+DOSEN,"Dimas Anggoro Saputra, S.Kom., M.Kom.",Senin,Pembelajaran Mesin 5B (Teori) 08:45-10:25,Pembelajaran Mesin 5C (Praktikum) 08:45-10:25,100,J012 / J016
+DOSEN,"Winda Kusuma Ningrum, S.T., M.Cs., M.Kom.",Senin,Basis Data Graf 7D (Teori) 08:45-10:25,Basis Data Graf 7E (Praktikum) 08:45-10:25,100,J013 / J018
+DOSEN,"Dr. Ir. Rahmawati Kartika Sari, M.Sc.",Senin,Struktur Data 3B (Teori) 10:30-12:10,Struktur Data 3E (Praktikum) 10:30-12:10,100,J021 / J029
+DOSEN,"Dimas Anggoro Saputra, S.Kom., M.Kom.",Senin,Pembelajaran Mesin 5A (Teori) 10:30-12:10,Basis Data Graf 7F (Praktikum) 10:30-12:10,100,J025 / J031
+DOSEN,"Fikri Ramadhan Nugraha, S.Kom., M.T.I.",Senin,Pemrograman Berorientasi Objek 5G (Teori) 13:00-14:40,Teknologi Imersif 7A (Praktikum) 13:00-14:40,100,J032 / J042
+DOSEN,"Arief Maulana Siregar, S.T., M.Sc.",Senin,Algoritma Dan Pemrograman Ii 3D (Teori) 13:00-14:40,Algoritma Dan Pemrograman Ii 3E (Praktikum) 13:00-14:40,100,J033 / J041
+RUANG,3C.1.04 - TEKNIK C,Senin,Metodologi Penelitian 5E (Teori) 13:00-15:30,Pengenalan Kecerdasan Buatan 3D (Teori) 15:15-16:55,15,J035 / J055
+RUANG,3C.2.08 - TEKNIK C,Senin,Metodologi Penelitian 5A (Teori) 13:00-15:30,Islam Dan Keilmuan 3E (Teori) 15:15-16:55,15,J039 / J056
+DOSEN,"Bagas Wicaksono Harahap, S.Kom., M.I.P., M.Kom.",Senin,Teknologi Imersif 7F (Teori) 14:45-16:25,Teknologi Imersif 7D (Praktikum) 14:45-16:25,100,J050 / J052
+DOSEN,"Bagas Wicaksono Harahap, S.Kom., M.I.P., M.Kom.",Senin,Teknologi Imersif 7F (Teori) 14:45-16:25,Teknologi Imersif 7C (Praktikum) 14:45-16:25,100,J050 / J053
+DOSEN,"Irwan Setiabudi Lubis, S.T., M.Eng.",Senin,Basis Data I 1C (Praktikum) 14:45-16:25,Keamanan Komputer Jaringan 5F (Praktikum) 14:45-16:25,100,J051 / J054
+DOSEN,"Bagas Wicaksono Harahap, S.Kom., M.I.P., M.Kom.",Senin,Teknologi Imersif 7D (Praktikum) 14:45-16:25,Teknologi Imersif 7C (Praktikum) 14:45-16:25,100,J052 / J053
+DOSEN,"Nadira Salsabila Putri, S.Kom., M.Sc.",Selasa,Teori Bahasa Dan Automata 3D (Teori) 07:00-09:30,Pembelajaran Mesin 5G (Praktikum) 08:45-10:25,45,J058 / J073
+DOSEN,"Dr. Taufik Hidayatullah, S.Kom., M.Kom.",Selasa,Pemrograman Berorientasi Objek 5A (Teori) 08:45-10:25,Pemrograman Berorientasi Objek 5B (Praktikum) 08:45-10:25,100,J066 / J074
+DOSEN,"Prof. Dr. Ir. Zulkarnain Rangkuti, M.Sc.",Selasa,Proyek Capstone 7A (Teori) 08:45-12:05,Basis Data Graf 7B (Praktikum) 08:45-10:25,100,J069 / J076
+DOSEN,"Nadira Salsabila Putri, S.Kom., M.Sc.",Selasa,Pembelajaran Mesin 5G (Praktikum) 08:45-10:25,Teori Bahasa Dan Automata 3E (Teori) 09:35-12:05,50,J073 / J078
+DOSEN,"Fauzan Alfarizi Damanik, S.T., M.Kom.",Selasa,Keamanan Komputer Jaringan 5D (Teori) 10:30-12:10,Keamanan Komputer Jaringan 5B (Praktikum) 10:30-12:10,100,J083 / J089
+RUANG,3C.2.07 - TEKNIK C,Selasa,Metodologi Penelitian 5B (Teori) 13:00-15:30,Pemrograman Berorientasi Objek 5E (Teori) 15:15-16:55,15,J096 / J112
+ROMBEL,5E,Selasa,Implementasi Dan Pengujian Perangkat Lunak 5E (Teori) 13:00-15:30,Pemrograman Berorientasi Objek 5E (Teori) 15:15-16:55,15,J098 / J112
+DOSEN,"Arief Maulana Siregar, S.T., M.Sc.",Selasa,Implementasi Dan Pengujian Perangkat Lunak 5E (Teori) 13:00-15:30,Literasi Data Dan Teknologi 1C (Teori) 15:15-16:55,15,J098 / J113
+RUANG,3D.3.15 - TEKNIK D,Selasa,Implementasi Dan Pengujian Perangkat Lunak 5E (Teori) 13:00-15:30,Literasi Data Dan Teknologi 1C (Teori) 15:15-16:55,15,J098 / J113
+DOSEN,"Irwan Setiabudi Lubis, S.T., M.Eng.",Selasa,Keamanan Komputer Jaringan 5F (Teori) 14:45-16:25,Basis Data I 1B (Praktikum) 14:45-16:25,100,J105 / J110
+DOSEN,"Bagas Wicaksono Harahap, S.Kom., M.I.P., M.Kom.",Selasa,Literasi Data Dan Teknologi 1E (Teori) 14:45-16:25,Teknologi Imersif 7F (Praktikum) 14:45-16:25,100,J109 / J111
+ROMBEL,1D,Rabu,Pendidikan Agama Islam 1D (Teori) 08:45-10:25,Matematika Diskrit 1D (Teori) 09:35-12:05,50,J123 / J132
+DOSEN,"Dimas Anggoro Saputra, S.Kom., M.Kom.",Rabu,Pembelajaran Mesin 5B (Praktikum) 08:45-10:25,Algoritma Dan Pemrograman Ii 3A (Praktikum) 08:45-10:25,100,J126 / J127
+DOSEN,"Nadira Salsabila Putri, S.Kom., M.Sc.",Kamis,Pengenalan Kecerdasan Buatan 3A (Teori) 08:45-10:25,Pengenalan Kecerdasan Buatan 3C (Praktikum) 08:45-10:25,100,J166 / J172
+DOSEN,"Dr. Hendri Kurniawan Tanjung, S.T., M.Eng.",Kamis,Proyek Capstone 7C (Teori) 08:45-12:05,Komunikasi Data Dan Sistem Telekomunikasi 5A (Praktikum) 08:45-10:25,100,J168 / J175
+DOSEN,"Lestari Maharani Dewi, S.T., M.Kom.",Kamis,Pengolahan Citra 7E (Teori) 08:45-10:25,Pengolahan Citra 7D (Praktikum) 08:45-10:25,100,J171 / J174
+DOSEN,"Winda Kusuma Ningrum, S.T., M.Cs., M.Kom.",Kamis,Pengenalan Kecerdasan Buatan 3E (Teori) 13:00-14:40,Pengenalan Kecerdasan Buatan 3D (Praktikum) 13:00-14:40,100,J187 / J196
+DOSEN,"Dr. Taufik Hidayatullah, S.Kom., M.Kom.",Kamis,Literasi Data Dan Teknologi 1B (Teori) 13:00-14:40,Pemrograman Berorientasi Objek 5D (Praktikum) 13:00-14:40,100,J188 / J197
+DOSEN,"Arief Maulana Siregar, S.T., M.Sc.",Kamis,Implementasi Dan Pengujian Perangkat Lunak 5F (Teori) 13:00-15:30,Desain Pengalaman Pengguna 7A (Teori) 15:15-16:55,15,J190 / J211
+RUANG,3C.1.04 - TEKNIK C,Kamis,Implementasi Dan Pengujian Perangkat Lunak 5F (Teori) 13:00-15:30,Desain Pengalaman Pengguna 7A (Teori) 15:15-16:55,15,J190 / J211
+ROMBEL,5F,Kamis,Implementasi Dan Pengujian Perangkat Lunak 5F (Teori) 13:00-15:30,Pemrograman Berorientasi Objek 5F (Praktikum) 15:15-16:55,15,J190 / J213
+DOSEN,"Yoga Prasetyo Hasibuan, S.Kom., M.Kom.",Kamis,Implementasi Dan Pengujian Perangkat Lunak 5A (Teori) 13:00-15:30,Pengenalan Pemrograman 1E (Praktikum) 13:00-14:40,100,J191 / J198
+DOSEN,"Yoga Prasetyo Hasibuan, S.Kom., M.Kom.",Kamis,Implementasi Dan Pengujian Perangkat Lunak 5A (Teori) 13:00-15:30,Pengenalan Pemrograman 1D (Praktikum) 14:45-16:25,45,J191 / J209
+RUANG,3C.2.05 - TEKNIK C,Kamis,Implementasi Dan Pengujian Perangkat Lunak 5A (Teori) 13:00-15:30,Etika Dan Profesionalisme 5A (Teori) 15:15-16:55,15,J191 / J212
+ROMBEL,5A,Kamis,Implementasi Dan Pengujian Perangkat Lunak 5A (Teori) 13:00-15:30,Etika Dan Profesionalisme 5A (Teori) 15:15-16:55,15,J191 / J212
+DOSEN,"Fikri Ramadhan Nugraha, S.Kom., M.T.I.",Kamis,Pemrograman Game 7A (Teori) 14:45-16:25,Pemrograman Berorientasi Objek 5F (Praktikum) 15:15-16:55,70,J205 / J213
+DOSEN,"Dr. Hasbi Ashiddiqi, S.Kom., M.Kom.",Jumat,Keamanan Siber 5A (Teori) 13:00-14:40,Sistem Operasi 3E (Praktikum) 13:00-14:40,100,J239 / J246
+DOSEN,"Gilang Permana Sakti, S.T., M.Eng.",Jumat,Basis Data Dokumen 5A (Teori) 13:00-14:40,Pemograman Berbasis Komponen 5A (Praktikum) 13:00-14:40,100,J243 / J245

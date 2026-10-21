@@ -6,7 +6,23 @@ import {
   SEED_TAHUN_AJARAN,
   SEED_MATA_KULIAH,
   SEED_PRASYARAT,
+  DEFAULT_MAHASISWA,
+  DEFAULT_DOSEN,
+  DEFAULT_PRODI,
+  DEFAULT_RUANG,
+  DEFAULT_TAHUN_AJARAN,
+  DEFAULT_MATA_KULIAH,
+  DEFAULT_PRASYARAT,
 } from "@/lib/db/seed-data";
+import {
+  SEED_MAHASISWA_UIR,
+  SEED_DOSEN_UIR,
+  SEED_PRODI_UIR,
+  SEED_RUANG_UIR,
+  SEED_TAHUN_AJARAN_UIR,
+  SEED_MATA_KULIAH_UIR,
+  SEED_PRASYARAT_UIR,
+} from "@/lib/db/seed-data.uir-ti-2026.generated";
 import {
   MahasiswaItem,
   DosenItem,
@@ -17,68 +33,91 @@ import {
 } from "./types";
 import { validatePrerequisiteCycle } from "@/lib/akademik/prasyarat";
 
-// In-Memory store yang terinisialisasi dengan data seed untuk akses cepat dan reliabilitas demo
-let mahasiswaStore: MahasiswaItem[] = SEED_MAHASISWA.map((m) => ({
-  ...m,
-  status: "AKTIF" as const,
-}));
+let mahasiswaStore: MahasiswaItem[] = [];
+let dosenStore: DosenItem[] = [];
+let prodiStore: ProgramStudiItem[] = [];
+let ruangStore: RuangItem[] = [];
+let tahunAjaranStore: TahunAjaranItem[] = [];
+let mataKuliahStore: MataKuliahItem[] = [];
 
-let dosenStore: DosenItem[] = SEED_DOSEN.map((d) => ({
-  id: d.id,
-  nidn: d.nidn,
-  nama: d.nama,
-  email: d.email,
-  penandaWali: d.penandaWali,
-  penandaKaprodi: d.penandaKaprodi,
-  statusAktif: d.statusAktif,
-}));
+function initMasterStores(dataset?: string) {
+  const isUir =
+    dataset === "uir-ti-2026" ||
+    (!dataset && process.env.SEED_DATASET === "uir-ti-2026");
 
-let prodiStore: ProgramStudiItem[] = SEED_PRODI.map((p) => {
-  const dsn = SEED_DOSEN.find((d) => d.kaprodiProdiId === p.id);
-  return {
-    ...p,
-    kaprodiId: dsn?.id || null,
-  };
-});
+  const mhsSource = isUir ? SEED_MAHASISWA_UIR : (DEFAULT_MAHASISWA || SEED_MAHASISWA);
+  const dsnSource = isUir ? SEED_DOSEN_UIR : (DEFAULT_DOSEN || SEED_DOSEN);
+  const prodiSource = isUir ? SEED_PRODI_UIR : (DEFAULT_PRODI || SEED_PRODI);
+  const ruangSource = isUir ? SEED_RUANG_UIR : (DEFAULT_RUANG || SEED_RUANG);
+  const taSource = isUir ? SEED_TAHUN_AJARAN_UIR : (DEFAULT_TAHUN_AJARAN || SEED_TAHUN_AJARAN);
+  const mkSource = isUir ? SEED_MATA_KULIAH_UIR : (DEFAULT_MATA_KULIAH || SEED_MATA_KULIAH);
+  const praSource = isUir ? SEED_PRASYARAT_UIR : (DEFAULT_PRASYARAT || SEED_PRASYARAT);
 
-let ruangStore: RuangItem[] = SEED_RUANG.map((r) => ({
-  ...r,
-  statusAktif: true,
-}));
+  mahasiswaStore = mhsSource.map((m: any) => ({
+    ...m,
+    status: "AKTIF" as const,
+  }));
 
-let tahunAjaranStore: TahunAjaranItem[] = [
-  {
-    id: SEED_TAHUN_AJARAN.id,
-    kode: SEED_TAHUN_AJARAN.kode,
-    semester: SEED_TAHUN_AJARAN.semester,
-    tanggalMulai: "2026-09-01",
-    tanggalSelesai: "2027-01-31",
-    aktif: true,
-  },
-];
+  dosenStore = dsnSource.map((d: any) => ({
+    id: d.id,
+    nidn: d.nidn,
+    nama: d.nama,
+    email: d.email,
+    penandaWali: d.penandaWali,
+    penandaKaprodi: d.penandaKaprodi,
+    statusAktif: d.statusAktif,
+  }));
 
-let mataKuliahStore: MataKuliahItem[] = SEED_MATA_KULIAH.map((mk) => {
-  const relatedPrasyarat = SEED_PRASYARAT.filter(
-    (p) => p.mataKuliahId === mk.id
-  ).map((p) => {
-    const parent = SEED_MATA_KULIAH.find((m) => m.id === p.prasyaratId);
+  prodiStore = prodiSource.map((p: any) => {
+    const dsn = dsnSource.find((d: any) => d.kaprodiProdiId === p.id);
     return {
-      id: p.id,
-      prasyaratId: p.prasyaratId,
-      namaPrasyarat: parent?.nama || "Mata Kuliah Prasyarat",
-      kodePrasyarat: parent?.kode || "",
-      nilaiMinimal: p.nilaiMinimal,
+      ...p,
+      kaprodiId: dsn?.id || null,
     };
   });
 
-  return {
-    ...mk,
+  ruangStore = ruangSource.map((r: any) => ({
+    ...r,
     statusAktif: true,
-    prasyarat: relatedPrasyarat,
-  };
-});
+  }));
+
+  tahunAjaranStore = [
+    {
+      id: taSource.id,
+      kode: taSource.kode,
+      semester: taSource.semester,
+      tanggalMulai: "2026-08-31",
+      tanggalSelesai: "2027-01-31",
+      aktif: true,
+    },
+  ];
+
+  mataKuliahStore = mkSource.map((mk: any) => {
+    const relatedPrasyarat = praSource
+      .filter((p: any) => p.mataKuliahId === mk.id)
+      .map((p: any) => {
+        const parent = mkSource.find((m: any) => m.id === p.prasyaratId);
+        return {
+          id: p.id,
+          prasyaratId: p.prasyaratId,
+          namaPrasyarat: parent?.nama || "Mata Kuliah Prasyarat",
+          kodePrasyarat: parent?.kode || "",
+          nilaiMinimal: p.nilaiMinimal,
+        };
+      });
+
+    return {
+      ...mk,
+      statusAktif: true,
+      prasyarat: relatedPrasyarat,
+    };
+  });
+}
+
+initMasterStores();
 
 export const MasterStore = {
+  resetStore: (dataset?: string) => initMasterStores(dataset),
   // Mahasiswa
   getMahasiswa: () => [...mahasiswaStore],
   getMahasiswaById: (id: string) => mahasiswaStore.find((m) => m.id === id),

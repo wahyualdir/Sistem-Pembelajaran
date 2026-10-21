@@ -6,6 +6,7 @@ on:
       - main
       - master
       - 'fitur-*'
+      - 'seed-akademik-*'
   pull_request:
     branches:
       - main
@@ -67,6 +68,15 @@ jobs:
           echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY" >> $GITHUB_ENV
           echo "SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY" >> $GITHUB_ENV
           echo "DATABASE_URL=$DB_URL" >> $GITHUB_ENV
+
+      - name: Seed Academic Data (UIR TI 2026/2027) & Verify
+        run: npm run seed:akademik -- --apply
+        env:
+          SEED_ENV: local
+          SEED_CONFIRM_PROJECT_REF: local
+          SEED_PASSWORD: "ci-temporary-seed-password-2026"
+          NEXT_PUBLIC_SUPABASE_URL: ${{ env.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ env.SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Next.js Production Build
         run: npm run build

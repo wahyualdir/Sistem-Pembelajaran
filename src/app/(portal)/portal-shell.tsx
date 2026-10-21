@@ -335,48 +335,32 @@ export function PortalShell({
                 <Link
                   href={homeHref}
                   className="flex items-center justify-center group focus-visible:outline-none"
-                  title={`SIAJAR & SIAKAD - ${userSubtitle}`}
+                  title={`RuangKampus - ${userSubtitle}`}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-white p-0.5 shadow-retro-sm group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
-                    <img src="/logo-uir.png" alt="Logo UIR" className="h-full w-full object-contain" />
+                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain" />
                   </div>
                 </Link>
               </div>
             ) : (
-              <div className="flex items-center justify-between h-header shrink-0 border-b-2 border-retro-border bg-gray-soft px-4 box-border">
+              <div className="flex items-center h-header shrink-0 border-b-2 border-retro-border bg-gray-soft px-4 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0"
-                  title={`SIAJAR & SIAKAD - ${userSubtitle}`}
+                  title={`RuangKampus - ${userSubtitle}`}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-white p-0.5 shadow-retro-sm group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
-                    <img src="/logo-uir.png" alt="Logo UIR" className="h-full w-full object-contain" />
+                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain" />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="font-heading font-black text-base tracking-tight text-ink leading-none whitespace-nowrap">
-                      SIAJAR UIR
+                      Ruang<span className="text-primary">Kampus</span>
                     </span>
-                    <span className="text-[9px] font-mono font-bold text-gray-dark uppercase tracking-wider mt-0.5 leading-none truncate">
-                      Univ. Islam Riau
+                    <span className="text-[9.5px] font-mono font-bold text-gray-dark uppercase tracking-wider mt-1 leading-none">
+                      Sistem Pembelajaran
                     </span>
                   </div>
                 </Link>
-
-                {/* Tiga titik jendela (merah kampus, abu-abu, abu gelap) sejajar horizontal di kanan */}
-                <div className="flex items-center gap-1.5 shrink-0" title="Retro Window Controls">
-                  <span
-                    className="h-2.5 w-2.5 rounded-full border border-ink bg-primary inline-block shadow-2xs"
-                    title="Tutup"
-                  />
-                  <span
-                    className="h-2.5 w-2.5 rounded-full border border-ink bg-gray inline-block shadow-2xs"
-                    title="Kecilkan"
-                  />
-                  <span
-                    className="h-2.5 w-2.5 rounded-full border border-ink bg-gray-dark inline-block shadow-2xs"
-                    title="Perbesar"
-                  />
-                </div>
               </div>
             )}
 

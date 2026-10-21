@@ -1,9 +1,14 @@
 import { SEED_TAHUN_AJARAN } from "@/lib/db/seed-data";
+import { SEED_KRS_UIR } from "@/lib/db/seed-data.uir-ti-2026.generated";
 import { JadwalStore, KelasItem } from "../jadwal/jadwal-store";
 import { MasterStore } from "../master/master-store";
 import { UktStore } from "../ukt/ukt-store";
 import { hitungBatasSks } from "@/lib/akademik/aturan-sks";
 import { adaBentrok, RentangJadwal } from "@/lib/akademik/bentrok";
+
+const isUirDataset =
+  typeof process !== "undefined" &&
+  process.env?.SEED_DATASET === "uir-ti-2026";
 
 export interface KRSItem {
   id: string;
@@ -27,7 +32,7 @@ export interface KRSItem {
 }
 
 // Inisialisasi KRS default
-let krsStore: KRSItem[] = [
+const DEFAULT_KRS: KRSItem[] = [
   // Mahasiswa Wahyu Aldi (mhs-1) sudah memiliki KRS disetujui (sample)
   {
     id: "krs-mhs-1",
@@ -111,7 +116,18 @@ let krsStore: KRSItem[] = [
   },
 ];
 
+let krsStore: KRSItem[] = isUirDataset
+  ? [...(SEED_KRS_UIR as KRSItem[])]
+  : [...DEFAULT_KRS];
+
 export const KrsStore = {
+  resetStore: (dataset?: string) => {
+    if (dataset === "uir-ti-2026" || (!dataset && process.env.SEED_DATASET === "uir-ti-2026")) {
+      krsStore = [...(SEED_KRS_UIR as KRSItem[])];
+    } else {
+      krsStore = [...DEFAULT_KRS];
+    }
+  },
   getKrsByMahasiswa: (mahasiswaId: string, tahunAjaranId = SEED_TAHUN_AJARAN.id): KRSItem => {
     let existing = krsStore.find(
       (k) =>

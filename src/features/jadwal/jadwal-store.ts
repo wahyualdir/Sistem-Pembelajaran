@@ -1,6 +1,11 @@
 import { SEED_MATA_KULIAH, SEED_DOSEN, SEED_RUANG, SEED_TAHUN_AJARAN } from "@/lib/db/seed-data";
+import { SEED_KELAS_UIR } from "@/lib/db/seed-data.uir-ti-2026.generated";
 import { adaBentrok, RentangJadwal } from "@/lib/akademik/bentrok";
 import { MasterStore } from "../master/master-store";
+
+const isUirDataset =
+  typeof process !== "undefined" &&
+  process.env?.SEED_DATASET === "uir-ti-2026";
 
 export interface KelasItem {
   id: string;
@@ -27,7 +32,7 @@ export interface JadwalItem {
   namaRuang: string;
 }
 
-let kelasStore: KelasItem[] = [
+const DEFAULT_KELAS: KelasItem[] = [
   {
     id: "kls-tif101-a",
     kode: "A",
@@ -222,7 +227,18 @@ let kelasStore: KelasItem[] = [
   },
 ];
 
+let kelasStore: KelasItem[] = isUirDataset
+  ? [...(SEED_KELAS_UIR as KelasItem[])]
+  : [...DEFAULT_KELAS];
+
 export const JadwalStore = {
+  resetStore: (dataset?: string) => {
+    if (dataset === "uir-ti-2026" || (!dataset && process.env.SEED_DATASET === "uir-ti-2026")) {
+      kelasStore = [...(SEED_KELAS_UIR as KelasItem[])];
+    } else {
+      kelasStore = [...DEFAULT_KELAS];
+    }
+  },
   getKelas: () => [...kelasStore],
   getKelasById: (id: string) => kelasStore.find((k) => k.id === id),
   getKelasByDosen: (dosenId: string) => kelasStore.filter((k) => k.dosenId === dosenId),

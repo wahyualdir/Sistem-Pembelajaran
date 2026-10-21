@@ -1,0 +1,64 @@
+﻿semester,kode_kurikulum,nama_id,nama_en,sks_teori,sks_praktik,sks_total,prasyarat,kategori,rumpun_pilihan,jenis,ditawarkan_ganjil_2026
+1,STI2511112,Pendidikan Agama Islam,Islamic education,2,0,2,-,MKWU,-,wajib,YA
+1,STI2511110,Pendidikan Pancasila,Pancasila Education,2,0,2,-,MKWU,-,wajib,YA
+1,STI2511113,Bahasa Indonesia,Indonesian Language,2,0,2,-,MKWU,-,wajib,YA
+1,STI2541116,Matematika Diskrit,Discrete Mathematics,3,0,3,-,MKPS,-,wajib,YA
+1,STI2521111,Literasi Data dan Teknologi,Data and Technology Literacy,2,0,2,-,MKWK,-,wajib,YA
+1,STI2541117,Pengenalan Pemrograman,Introduction to Programming,2,1,3,-,MKPS,-,wajib,YA
+1,STI2541114,Basis Data 1,Database 1,2,1,3,-,MKPS,-,wajib,YA
+1,STI2541115,Kalkulus,Calculus,3,0,3,-,MKPS,-,wajib,YA
+2,STI2512121,Pendidikan Kewarganegaraan,Civil Education,2,0,2,-,MKWU,-,wajib,TIDAK
+2,STI2522120,"Ibadah, Mu'amalah dan Akhlak","Ibadah, Mu'amalah dan Akhlak",2,0,2,-,MKWK,-,wajib,TIDAK
+2,STI2522118,Bahasa Inggris,English,2,0,2,-,MKWK,-,wajib,TIDAK
+2,STI2522119,Dasar-dasar Kewirausahaan,Technopreneurship,2,0,2,-,MKWK,-,wajib,TIDAK
+2,STI2542125,Organisasi dan Arsitektur Komputer,Computer Organization and Architecture,3,0,3,-,MKPS,JARINGAN_KEAMANAN,wajib,TIDAK
+2,STI2542122,Algoritma dan Pemrograman 1,Algorithm and Programming 1,2,1,3,Pengenalan Pemrograman,MKPS,-,wajib,TIDAK
+2,STI2542124,Basis Data 2,Database 2,2,1,3,Basis Data 1,MKPS,-,wajib,TIDAK
+2,STI2542123,Aljabar Linear,Linear Algebra,3,0,3,-,MKPS,-,wajib,TIDAK
+3,STI2543130,Sistem Operasi,Operating System,2,1,3,Organisasi dan Arsitektur Komputer,MKPS,JARINGAN_KEAMANAN,wajib,YA
+3,STI2543127,Algoritma dan Pemrograman 2,Algorithm and Programming 2,2,1,3,Algoritma dan Pemrograman 1,MKPS,-,wajib,YA
+3,STI2543132,Teori Bahasa dan Automata,Automata and Language Theory,3,0,3,-,MKPS,AI,wajib,YA
+3,STI2543131,Struktur Data,Data Structure,2,1,3,Algoritma dan Pemrograman 1,MKPS,-,wajib,YA
+3,STI2543128,Pengenalan Pemrograman Platform,,2,0,2,Pengenalan Pemrograman,MKPS,PLATFORM,wajib,YA
+3,STI2543129,Pengenalan Kecerdasan Buatan,Introduction to Artificial Intelligence,2,1,3,Algoritma dan Pemrograman 1,MKPS,AI,wajib,YA
+3,STI2544137,Probabilitas & Statistik,,2,1,3,"Kalkulus, Matematika Diskrit",MKPS,-,wajib,YA
+4,STI2523126,Islam dan Keilmuan,Islam and Science,2,0,2,Pendidikan Agama Islam,MKWK,-,wajib,YA
+4,STI2544134,Jaringan Komputer,Computer Networking,2,1,3,Sistem Operasi,MKPS,JARINGAN_KEAMANAN,wajib,TIDAK
+4,STI2544135,Sains Data,Data Science,2,1,3,Pengenalan Kecerdasan Buatan,MKPS,AI,wajib,TIDAK
+4,STI2544136,Grafik Komputer,Computer Graphics,2,1,3,Aljabar Linear,MKPS,AI,wajib,TIDAK
+4,STI2544133,Desain dan Analisis Algoritma,Analysis and Design Algorithm,2,1,3,Algoritma dan Pemrograman 2,MKPS,-,wajib,TIDAK
+4,STI2544138,Pemrograman Web,Web Programming,2,1,3,Algoritma dan Pemrograman 2,MKPS,-,wajib,TIDAK
+4,STI2544139,Analisis dan Desain Perangkat Lunak,Software Analysis and Design,3,0,3,Algoritma dan Pemrograman 2,MKPS,PLATFORM,wajib,TIDAK
+5,STI2545140,Keamanan Komputer dan Jaringan,Network and Computer Security,2,1,3,Jaringan Komputer,MKPS,JARINGAN_KEAMANAN,wajib,YA
+5,STI2545145,Pemrograman Berorientasi Objek,Object-Oriented Programming,2,1,3,Struktur Data,MKPS,PLATFORM,wajib,YA
+5,STI2545144,Pembelajaran Mesin,Machine Learning,2,1,3,Pengenalan Kecerdasan Buatan,MKPS,AI,wajib,YA
+5,STI2545142,Metodologi Penelitian,Research Methodology,3,0,3,-,MKPS,-,wajib,YA
+5,STI2545143,Implementasi dan Pengujian Perangkat Lunak,,3,0,3,Analisis dan Desain Perangkat Lunak,MKPS,PLATFORM,wajib,YA
+5,STI2545141,Etika dan Profesionalisme,Ethics and Professionalism,2,0,2,-,MKPS,-,wajib,YA
+6,STI2546156,Routing & Switching,,2,1,3,Jaringan Komputer,MKPS,JARINGAN_KEAMANAN,wajib,TIDAK
+6,STI2546153,Kerja Praktek,Practical work,0,2,2,"Metodologi Penelitian, Min. sudah menyelesaikan 90 sks",MKPS,-,wajib,TIDAK
+6,STI2546152,Interaksi Manusia dan Komputer,Human and Computer Interaction,3,0,3,Analisis dan Desain Perangkat Lunak,MKPS,-,wajib,TIDAK
+6,STI2546154,Big Data,,2,1,3,Pembelajaran Mesin,MKPS,AI,wajib,TIDAK
+6,STI2546155,Pemrograman Mobile,Mobile Programming,2,1,3,Pemrograman Web,MKPS,PLATFORM,wajib,TIDAK
+6,STI2546151,Manajemen Proyek,Project Management,2,0,2,Analisis dan Desain Perangkat Lunak,MKPS,-,wajib,TIDAK
+7,STI2547160,Komputasi Paralel dan Sistem Terdistribusi,Parallel Computing and Distributed Systems,2,1,3,Jaringan Komputer,MKPS,PLATFORM,wajib,YA
+7,STI2547161,Basis Data Graf,,2,1,3,Pemrograman Web,MKPS,AI,wajib,YA
+7,STI2547162,Teknologi Imersif,Immersive Technology,2,1,3,Pemrograman Mobile,MKPS,AI,wajib,YA
+7,STI2547163,Capstone Project,,4,0,4,Manajemen Proyek,MKPS,-,wajib,YA
+7,STI2547164,Pengolahan Citra,Image Processing,2,1,3,Grafika Komputer,MKPS,AI,wajib,YA
+8,STI2548173,Tugas Akhir,Final Year Project,6,0,6,"Kerja Praktek, Minimal sudah menyelesaikan 110 sks",MKPS,-,wajib,TIDAK
+7,STI2547265,Pembelajaran Mendalam,Deep Learning,2,1,3,-,MKPS,AI,pilihan,YA
+6,STI2546257,Pemrosesan Bahasa Alamiah,Natural Language Processing,2,1,3,-,MKPS,AI,pilihan,TIDAK
+5,STI2545246,Mesin Penerjemah,Machine Translation,2,1,3,-,MKPS,AI,pilihan,YA
+7,STI2547267,Visi Komputer,Computer Vision,2,1,3,-,MKPS,AI,pilihan,YA
+7,STI2547268,Internet of Things,,2,1,3,-,MKPS,AI,pilihan,YA
+7,STI2547269,Forensik Digital,Digital forensics,2,1,3,-,MKPS,JARINGAN_KEAMANAN,pilihan,TIDAK
+7,STI2547270,"Jaringan Perusahaan, Keamanan dan Otomasi",,2,1,3,-,MKPS,JARINGAN_KEAMANAN,pilihan,YA
+6,STI2546258,Sensor Jaringan Nirkabel,,2,1,3,-,MKPS,JARINGAN_KEAMANAN,pilihan,TIDAK
+5,STI2545247,Keamanan Siber,Cyber Security,2,1,3,-,MKPS,JARINGAN_KEAMANAN,pilihan,YA
+5,STI2545248,Sistem Komunikasi dan Telekomunikasi Data,Data Communication and Telecommunication System,2,1,3,-,MKPS,JARINGAN_KEAMANAN,pilihan,YA
+6,STI2546259,Komputasi Awan,,2,1,3,-,MKPS,JARINGAN_KEAMANAN,pilihan,TIDAK
+7,STI2547271,Pemrograman Game,Game Programming,2,1,3,-,MKPS,PLATFORM,pilihan,YA
+5,STI2545249,Basis Data Dokumen,Document Database,2,1,3,-,MKPS,PLATFORM,pilihan,YA
+5,STI2545250,Pemrograman Berbasis Komponen,,2,1,3,-,MKPS,PLATFORM,pilihan,YA
+7,STI2547272,Desain Pengalaman Pengguna,,2,1,3,-,MKPS,PLATFORM,pilihan,YA

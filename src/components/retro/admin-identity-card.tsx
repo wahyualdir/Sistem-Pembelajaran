@@ -28,29 +28,24 @@ export function AdminIdentityCard({
   return (
     <div className="w-full rounded-2xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4 font-sans relative overflow-hidden transition-all hover:shadow-retro-md">
       {/* 1. Header Identitas Kampus & Logo Resmi UIR */}
-      <div className="flex items-center justify-between gap-2.5 pb-3 border-b-2 border-ink">
+      <div className="flex items-center gap-2.5 pb-3 border-b-2 border-ink">
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <div className="h-9 w-9 rounded-xl border-2 border-ink bg-white p-0.5 flex items-center justify-center shrink-0 shadow-retro-xs overflow-hidden">
             <img
-              src="/logo-uir.png"
-              alt="Logo Universitas Islam Riau"
+              src="/logo-ruangkampus.png"
+              alt="Logo RuangKampus"
               className="h-full w-full object-contain"
             />
           </div>
           <div className="min-w-0 flex-1">
-            <span className="text-[11px] font-heading font-black text-ink uppercase tracking-tight block leading-tight whitespace-nowrap">
-              UNIVERSITAS ISLAM RIAU
+            <span className="text-sm font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
+              Ruang<span className="text-primary">Kampus</span>
             </span>
-            <h3 className="text-[10px] font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
+            <h3 className="text-xs font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
               Security Operations Center
             </h3>
           </div>
         </div>
-
-        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border-2 border-ink bg-surface text-ink text-[10px] font-mono font-bold shrink-0 shadow-retro-xs">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
-          <span>Online</span>
-        </span>
       </div>
 
       {/* 2. Informasi Utama Admin & Avatar */}

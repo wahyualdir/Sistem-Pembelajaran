@@ -43,51 +43,7 @@ export function ScrollProgressBar() {
 }
 
 export function ScrollToTopButton() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    let ticking = false;
-
-    const checkScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          setIsVisible(window.scrollY > 280);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', checkScroll, { passive: true });
-    checkScroll();
-
-    return () => window.removeEventListener('scroll', checkScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
-
-  return (
-    <button
-      type="button"
-      onClick={scrollToTop}
-      aria-label="Kembali ke atas halaman"
-      title="Kembali ke atas"
-      className={cn(
-        'scroll-to-top-btn flex items-center gap-1.5 px-3 py-2.5 rounded-xl border-2 border-ink bg-surface text-ink font-heading font-bold text-xs shadow-retro hover:bg-ink hover:text-white hover:-translate-y-1 active:translate-y-0.5 focus-visible:outline-none cursor-pointer',
-        isVisible
-          ? 'opacity-100 scale-100 pointer-events-auto'
-          : 'opacity-0 scale-90 pointer-events-none'
-      )}
-    >
-      <ArrowUp className="h-4 w-4" />
-      <span className="hidden sm:inline">Atas</span>
-    </button>
-  );
+  return null;
 }
 
 interface ScrollRevealProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -213,7 +169,6 @@ export function ScrollAnimationProvider({ children }: { children: React.ReactNod
     <>
       <ScrollProgressBar />
       {children}
-      <ScrollToTopButton />
     </>
   );
 }

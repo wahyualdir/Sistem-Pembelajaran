@@ -20,7 +20,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "seed:akademik": "tsx scripts/seed-akademik/index.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
