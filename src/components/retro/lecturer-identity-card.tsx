@@ -52,10 +52,10 @@ export function LecturerIdentityCard({
             />
           </div>
           <div className="min-w-0 flex-1">
-            <span className="text-sm font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
+            <span className="text-base font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
               Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
             </span>
-            <span className="text-xs font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
+            <span className="text-xs sm:text-sm font-mono font-bold text-black uppercase tracking-wider block leading-tight mt-0.5 truncate">
               {isTA ? 'Asisten Dosen & Lab' : 'Kartu Dosen Pengampu'}
             </span>
           </div>
@@ -84,7 +84,7 @@ export function LecturerIdentityCard({
           <p className="text-xs font-bold text-ink/85 truncate">
             {functionalTitle}
           </p>
-          <p className="text-[11px] font-medium text-gray-dark truncate">
+          <p className="text-xs font-bold text-black truncate">
             Prodi {department}
           </p>
         </div>
@@ -97,7 +97,7 @@ export function LecturerIdentityCard({
           <span className="font-heading font-black text-xs text-ink uppercase tracking-wider">
             {isTA ? 'Beban Praktikum & Lab' : 'Beban Mengajar (BKD)'}
           </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-ink bg-surface text-ink text-[11px] font-mono font-bold shadow-retro-xs shrink-0 whitespace-nowrap">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-ink bg-surface text-ink text-xs font-mono font-bold shadow-retro-xs shrink-0 whitespace-nowrap">
             <CheckCircle2 className="h-3 w-3 text-emerald-600 shrink-0" />
             <span>{isBkdFulfilled ? 'Memenuhi BKD ✓' : `${sksCount}/12 SKS`}</span>
           </span>

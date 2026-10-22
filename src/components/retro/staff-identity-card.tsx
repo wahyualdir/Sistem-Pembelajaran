@@ -42,10 +42,10 @@ export function StaffIdentityCard({
             />
           </div>
           <div className="min-w-0 flex-1">
-            <span className="text-sm font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
+            <span className="text-base font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
               Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
             </span>
-            <h3 className="text-xs font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
+            <h3 className="text-xs sm:text-sm font-mono font-bold text-black uppercase tracking-wider block leading-tight mt-0.5 truncate">
               Biro BAAK Terpadu
             </h3>
           </div>
@@ -72,7 +72,7 @@ export function StaffIdentityCard({
           <p className="text-xs font-bold text-ink/85 truncate">
             {unit}
           </p>
-          <p className="text-[11px] font-medium text-gray-dark truncate">
+          <p className="text-xs font-bold text-black truncate">
             {campusOffice}
           </p>
         </div>
@@ -84,7 +84,7 @@ export function StaffIdentityCard({
           <span className="font-heading font-black text-xs text-ink uppercase tracking-wider">
             Status Operasional BAAK
           </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-ink bg-surface text-ink text-[11px] font-mono font-bold shadow-retro-xs shrink-0 whitespace-nowrap">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full border border-ink bg-surface text-ink text-xs font-mono font-bold shadow-retro-xs shrink-0 whitespace-nowrap">
             <CalendarCheck2 className="h-3 w-3 text-emerald-600 shrink-0" />
             <span>Semester Ganjil 2026/2027</span>
           </span>

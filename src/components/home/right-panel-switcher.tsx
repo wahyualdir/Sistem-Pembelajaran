@@ -128,10 +128,10 @@ export function RightPanelSwitcher({
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <span className="text-sm font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
+                  <span className="text-base font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
                     Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
                   </span>
-                  <span className="text-xs font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
+                  <span className="text-xs sm:text-sm font-mono font-bold text-black uppercase tracking-wider block leading-tight mt-0.5 truncate">
                     Kartu Mahasiswa Aktif
                   </span>
                 </div>
@@ -140,14 +140,14 @@ export function RightPanelSwitcher({
 
             <div className="flex items-center justify-between pt-0.5">
               <div className="min-w-0">
-                <span className="text-[10px] font-mono font-bold text-gray-dark uppercase tracking-wider block">
+                <span className="text-xs font-mono font-bold text-black uppercase tracking-wider block">
                   Tahun Akademik
                 </span>
-                <p className="font-heading font-bold text-xs sm:text-sm text-ink truncate mt-0.5">
+                <p className="font-heading font-bold text-sm sm:text-base text-ink truncate mt-0.5">
                   {summary.semesterLabel}
                 </p>
               </div>
-              <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg border border-ink bg-gray-soft text-ink shadow-2xs">
+              <span className="text-xs font-mono font-bold px-3 py-1 rounded-lg border-2 border-ink bg-gray-soft text-ink shadow-2xs">
                 Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
               </span>
             </div>
@@ -158,11 +158,11 @@ export function RightPanelSwitcher({
             <div className="stats-responsive-layout">
               {/* Item 1: Hadir */}
               <div className="stats-responsive-item">
-                <span className="stats-label text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] shrink-0">
+                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
                   Hadir
                 </span>
                 <div className="stats-right-group">
-                  <p className="stats-value font-heading font-bold text-sm sm:text-base text-ink tabular-nums">
+                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink tabular-nums">
                     {summary.averageAttendance}
                   </p>
                   {summary.attendanceQualified ? (
@@ -179,11 +179,11 @@ export function RightPanelSwitcher({
 
               {/* Item 2: IPK */}
               <div className="stats-responsive-item">
-                <span className="stats-label text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] shrink-0">
+                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
                   IPK
                 </span>
                 <div className="stats-right-group">
-                  <p className="stats-value font-heading font-bold text-sm sm:text-base text-ink tabular-nums">
+                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink tabular-nums">
                     {summary.ipk}
                   </p>
                   <span className="text-xs font-medium text-gray-dark whitespace-normal text-center">
@@ -194,12 +194,12 @@ export function RightPanelSwitcher({
 
               {/* Item 3: Streak */}
               <div className="stats-responsive-item">
-                <span className="stats-label text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] shrink-0">
+                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
                   Streak
                 </span>
                 <div className="stats-right-group">
-                  <p className="stats-value font-heading font-bold text-sm sm:text-base text-ink flex items-center justify-center gap-1 tabular-nums">
-                    <Flame className="h-3.5 w-3.5 text-primary-dark fill-primary-dark shrink-0" />
+                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink flex items-center justify-center gap-1 tabular-nums">
+                    <Flame className="h-4 w-4 text-primary-dark fill-primary-dark shrink-0" />
                     <span>{summary.studyStreakDays}h</span>
                   </p>
                   <span className="text-xs font-semibold text-primary-dark whitespace-normal text-center">

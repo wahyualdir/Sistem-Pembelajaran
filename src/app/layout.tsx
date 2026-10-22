@@ -38,6 +38,7 @@ const sfPro = localFont({
   ],
   variable: "--font-sf-pro",
   display: "swap",
+  adjustFontFallback: false,
 });
 
 const inter = Inter({
@@ -72,5 +73,3 @@ export default function RootLayout({
     </html>
   );
 }
-
-

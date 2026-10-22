@@ -121,11 +121,11 @@ export function LecturerRightPanel({
             <div className="stats-responsive-layout">
               {/* Item 1: Kelas Aktif */}
               <div className="stats-responsive-item">
-                <span className="stats-label text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] shrink-0">
+                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
                   Kelas
                 </span>
                 <div className="stats-right-group">
-                  <p className="stats-value font-heading font-bold text-sm sm:text-base text-ink tabular-nums">
+                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink tabular-nums">
                     {classesCount}
                   </p>
                   <span className="text-xs font-semibold text-ink bg-gray-soft px-1.5 py-0.5 rounded border border-ink/20 whitespace-normal text-center">
@@ -136,11 +136,11 @@ export function LecturerRightPanel({
 
               {/* Item 2: Tugas Perlu Koreksi */}
               <div className="stats-responsive-item">
-                <span className="stats-label text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] shrink-0">
+                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
                   Tugas
                 </span>
                 <div className="stats-right-group">
-                  <p className="stats-value font-heading font-bold text-sm sm:text-base text-ink tabular-nums">
+                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink tabular-nums">
                     {pendingReviewsCount}
                   </p>
                   <span className="text-xs font-medium text-gray-dark whitespace-normal text-center">
@@ -151,11 +151,11 @@ export function LecturerRightPanel({
 
               {/* Item 3: Total Submisi */}
               <div className="stats-responsive-item">
-                <span className="stats-label text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] shrink-0">
+                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
                   Submisi
                 </span>
                 <div className="stats-right-group">
-                  <p className="stats-value font-heading font-bold text-sm sm:text-base text-ink flex items-center justify-center gap-1 tabular-nums">
+                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink flex items-center justify-center gap-1 tabular-nums">
                     <FileCheck className="h-3.5 w-3.5 text-ink shrink-0" />
                     <span>{totalPendingSubmissions}</span>
                   </p>
@@ -169,7 +169,7 @@ export function LecturerRightPanel({
 
           {/* 2. Aksi Cepat Dosen */}
           <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-gray-dark">
+            <h4 className="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-black">
               Aksi Cepat Dosen
             </h4>
             <div className="grid grid-cols-2 gap-2">

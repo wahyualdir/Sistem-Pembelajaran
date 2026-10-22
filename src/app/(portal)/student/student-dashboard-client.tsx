@@ -212,17 +212,17 @@ export function StudentDashboardClient({
               </div>
 
               {/* Subtitle */}
-              <p className="text-xs sm:text-sm text-ink/80 font-bold leading-relaxed pt-0.5">
+              <p className="text-sm sm:text-base text-ink font-bold leading-relaxed pt-0.5">
                 Pantau perkuliahan aktif, jadwal kuliah hari ini, tenggat tugas, dan ujian Anda.
               </p>
             </div>
 
             <div className="hidden sm:flex items-center gap-2 shrink-0 pt-1">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-sans font-bold bg-surface border border-black/20 text-ink shadow-xs">
-                <span className="w-2 h-2 rounded-full bg-black/60" />
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm font-sans font-bold bg-surface border-2 border-ink text-ink shadow-xs">
+                <span className="w-2.5 h-2.5 rounded-full bg-black" />
                 <span>Status: Aktif</span>
               </span>
-              <span className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-sans font-bold bg-gray-soft/80 border border-black/20 text-ink shadow-xs">
+              <span className="inline-flex items-center px-3.5 py-1.5 rounded-lg text-sm font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
                 2026/2027
               </span>
             </div>
@@ -230,10 +230,10 @@ export function StudentDashboardClient({
 
           {/* ROW 1: CATEGORIES PILLS (FILTER CHIP) */}
           <section aria-label="Kategori Perkuliahan" className="space-y-2.5 sm:space-y-3">
-            <h2 className="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-gray-dark">
+            <h2 className="font-heading font-black text-sm sm:text-base uppercase tracking-wider text-black">
               Categories
             </h2>
-            <div className="flex flex-wrap items-center gap-2 pb-1.5">
+            <div className="flex flex-wrap items-center gap-2.5 pb-1.5">
               {CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
                 return (
@@ -241,7 +241,7 @@ export function StudentDashboardClient({
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      'px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold tracking-tight shrink-0 transition-all focus-visible:outline-none',
+                      'px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-sm sm:text-base font-bold tracking-normal shrink-0 transition-all focus-visible:outline-none',
                       isActive
                         ? 'border-2 border-ink bg-ink text-white shadow-retro scale-[1.02]'
                         : 'border-2 border-ink bg-surface text-ink shadow-retro hover:bg-gray-soft hover:-translate-y-0.5'

@@ -352,10 +352,10 @@ export function PortalShell({
                     <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="font-heading font-black text-base tracking-tight text-ink leading-none whitespace-nowrap">
+                    <span className="font-heading font-black text-base sm:text-lg tracking-tight text-ink leading-none whitespace-nowrap">
                       Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
                     </span>
-                    <span className="text-[9.5px] font-mono font-bold text-gray-dark uppercase tracking-wider mt-1 leading-none">
+                    <span className="text-xs font-mono font-bold text-black uppercase tracking-wider mt-1 leading-none">
                       Sistem Pembelajaran
                     </span>
                   </div>
@@ -412,7 +412,7 @@ export function PortalShell({
                                   'flex items-center justify-between rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
                                   isRailActive
                                     ? 'justify-center w-12 h-10 mx-auto'
-                                    : 'px-3 py-2 gap-2.5 text-sm sm:text-base font-bold min-h-[42px]',
+                                    : 'px-3.5 py-2.5 gap-3 text-base font-bold min-h-[44px]',
                                   isActive
                                     ? 'border-2 border-ink border-l-4 border-l-black bg-ink text-white shadow-retro font-bold hover:bg-ink/90'
                                     : 'text-black hover:bg-gray-soft hover:text-black font-bold'
@@ -583,10 +583,10 @@ export function PortalShell({
                   {/* Nama dan Subtitle Role */}
                   {!isRailActive && (
                     <div className="text-left min-w-0 flex-1">
-                      <p className="text-base font-bold text-black leading-tight truncate transition-colors">
+                      <p className="text-base font-extrabold text-black leading-tight truncate transition-colors">
                         {userName}
                       </p>
-                      <p className="text-xs text-black/80 font-sans font-bold leading-tight truncate mt-1">
+                      <p className="text-xs sm:text-sm text-black font-sans font-bold leading-tight truncate mt-1">
                         {userSubtitle}
                       </p>
                     </div>
@@ -701,7 +701,7 @@ export function PortalShell({
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       placeholder="Cari mata kuliah, materi, tugas, topik..."
-                      className="w-full bg-transparent text-sm sm:text-base font-bold text-black placeholder:text-neutral-500 placeholder:font-medium focus:outline-none min-w-0"
+                      className="w-full bg-transparent text-base font-bold text-black placeholder:text-neutral-600 placeholder:font-semibold focus:outline-none min-w-0"
                     />
                     <div className="hidden sm:flex items-center gap-1 shrink-0 ml-2 select-none">
                       <kbd className="px-1.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-mono font-bold text-black shadow-2xs">
@@ -719,7 +719,7 @@ export function PortalShell({
               <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
                 {/* Badge Semester Monokrom Elegan */}
                 <div className="hidden lg:flex items-center">
-                  <span className="text-xs sm:text-sm font-sans font-bold text-white uppercase tracking-wider bg-black px-3 py-1.5 rounded-lg border-2 border-retro-border shadow-retro-sm select-none">
+                  <span className="text-sm font-sans font-black text-white uppercase tracking-wider bg-black px-3.5 py-1.5 rounded-lg border-2 border-retro-border shadow-retro-sm select-none">
                     2026/2027 Ganjil
                   </span>
                 </div>

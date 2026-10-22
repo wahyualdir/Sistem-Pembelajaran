@@ -3,8 +3,8 @@
 /* ------------------------------------------------------------- */
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('/sf-pro-bold.woff') format('woff');
-  font-weight: 700 900;
+  src: url('/sf-pro-regular.woff') format('woff');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -19,40 +19,16 @@
 
 @font-face {
   font-family: 'SF Pro Display';
-  src: url('/sf-pro-regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro';
   src: url('/sf-pro-bold.woff') format('woff');
   font-weight: 700 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro';
-  src: url('/sf-pro-medium.woff') format('woff');
-  font-weight: 500 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'SF Pro';
-  src: url('/sf-pro-regular.woff') format('woff');
-  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
   font-family: 'SF Pro Text';
-  src: url('/sf-pro-bold.woff') format('woff');
-  font-weight: 700 900;
+  src: url('/sf-pro-regular.woff') format('woff');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -67,8 +43,32 @@
 
 @font-face {
   font-family: 'SF Pro Text';
+  src: url('/sf-pro-bold.woff') format('woff');
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro';
   src: url('/sf-pro-regular.woff') format('woff');
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro';
+  src: url('/sf-pro-medium.woff') format('woff');
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SF Pro';
+  src: url('/sf-pro-bold.woff') format('woff');
+  font-weight: 700 900;
   font-style: normal;
   font-display: swap;
 }
@@ -78,19 +78,19 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: var(--font-sf-pro), 'SF Pro Display', 'SF Pro', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-heading: var(--font-sf-pro), 'SF Pro Display', 'SF Pro', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
   /* Dasar Identitas Kampus (HANYA merah, abu-abu, putih, dan hitam netral) */
   --bg: #F3F3F4;
   --surface: #FFFFFF;
-  --ink: #111111;
+  --ink: #000000;
 
   /* Identitas kampus */
   --primary: #ED1C24;
   --primary-dark: #A91117;
-  --gray: #111111;
-  --gray-dark: #111111;
+  --gray: #000000;
+  --gray-dark: #000000;
   --gray-soft: #E2E3E4;
   --shadow: 4px 4px 0 var(--ink);
 
@@ -101,10 +101,10 @@
   --border-main: var(--ink);
   --border-strong: var(--ink);
 
-  /* Teks Kontras */
-  --text-primary: var(--ink);
-  --text-secondary: var(--ink);
-  --text-subtle: var(--ink);
+  /* Teks Kontras Tinggi & Gelap Pekat */
+  --text-primary: #000000;
+  --text-secondary: #000000;
+  --text-subtle: #000000;
 
   /* Aksen Utama */
   --primary-hover: var(--primary-dark);
@@ -138,9 +138,9 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   /* Layout Dimension Tokens (Rem-based Responsive Scaling) */
-  --layout-sidebar-width: 15rem;
-  --layout-rail-width: 4.5rem;
-  --layout-right-panel-width: clamp(280px, 24vw, 340px);
+  --layout-sidebar-width: 16.5rem;
+  --layout-rail-width: 4.75rem;
+  --layout-right-panel-width: clamp(310px, 25vw, 360px);
   --layout-header-height: 4.5rem;
   --layout-header-height-mobile: 3.5rem;
 
@@ -207,26 +207,26 @@
     border-color: var(--border-main);
   }
   html {
-    font-size: 15px; /* Mobile & tablet < 1024px */
+    font-size: 16px !important;
     font-family: var(--font-sans);
-    color: var(--text-primary);
+    color: #000000;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   @media (min-width: 1024px) {
     html {
-      font-size: 14px; /* Laptop 1024-1535px & Windows scaling */
+      font-size: 16px !important;
     }
   }
   @media (min-width: 1536px) {
     html {
-      font-size: 15px; /* Desktop 1536-1919px */
+      font-size: 16px !important;
     }
   }
   @media (min-width: 1920px) {
     html {
-      font-size: 16px; /* Ultra-wide >= 1920px */
+      font-size: 16px !important;
     }
   }
 
@@ -235,13 +235,13 @@
     font-optical-sizing: auto;
     font-kerning: normal;
     font-synthesis: none;
-    letter-spacing: -0.01em;
+    letter-spacing: normal;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     background-color: var(--bg-main);
-    color: var(--text-primary);
-    font-size: 0.9375rem;
+    color: #000000;
+    font-size: 1rem;
     line-height: 1.5;
     min-height: 100dvh;
     overflow-x: hidden;
@@ -249,30 +249,30 @@
   }
   h1 {
     font-family: var(--font-sans);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--text-primary);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #000000;
     text-wrap: balance;
   }
   h2 {
     font-family: var(--font-sans);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #000000;
     text-wrap: balance;
   }
   h3 {
     font-family: var(--font-sans);
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: normal;
+    color: #000000;
     text-wrap: balance;
   }
   h4, h5, h6 {
     font-family: var(--font-sans);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    color: var(--text-primary);
+    font-weight: 700;
+    letter-spacing: normal;
+    color: #000000;
     text-wrap: balance;
   }
   p {
@@ -442,11 +442,11 @@
   }
 
   /* Perlindungan Ukuran Teks Minimum (Kriteria Lulus: Tidak ada teks di bawah 12px) */
-  .text-xs,
-  .text-2xs,
-  [class*="text-xs"],
-  [class*="text-2xs"] {
-    font-size: max(0.75rem, 12px) !important;
+  .text-2xs {
+    font-size: max(0.8125rem, 13px);
+  }
+  .text-xs {
+    font-size: max(0.875rem, 14px);
   }
 
   @media (pointer: coarse) {
@@ -526,33 +526,33 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
 
 /* Retro Aesthetics dengan Token --ink */
 .border-retro {
-  border: 2px solid var(--ink, #111111);
+  border: 2px solid var(--ink, #000000);
 }
 .border-retro-sm {
-  border: 1.5px solid var(--ink, #111111);
+  border: 1.5px solid var(--ink, #000000);
 }
 .shadow-retro {
-  box-shadow: 4px 4px 0px var(--ink, #111111);
+  box-shadow: 4px 4px 0px var(--ink, #000000);
 }
 .shadow-retro-md {
-  box-shadow: 5px 5px 0px var(--ink, #111111);
+  box-shadow: 5px 5px 0px var(--ink, #000000);
 }
 .shadow-retro-lg {
-  box-shadow: 7px 7px 0px var(--ink, #111111);
+  box-shadow: 7px 7px 0px var(--ink, #000000);
 }
 .shadow-retro-window {
-  box-shadow: 6px 6px 0px var(--ink, #111111);
+  box-shadow: 6px 6px 0px var(--ink, #000000);
 }
 .retro-window {
   background: var(--surface, #FFFFFF);
-  border: 2px solid var(--ink, #111111);
-  box-shadow: 6px 6px 0px var(--ink, #111111);
+  border: 2px solid var(--ink, #000000);
+  box-shadow: 6px 6px 0px var(--ink, #000000);
   border-radius: 2px;
   overflow: hidden;
 }
 .retro-window-header {
   background: var(--retro-warm);
-  border-bottom: 2px solid var(--ink, #111111);
+  border-bottom: 2px solid var(--ink, #000000);
   padding: 12px 18px;
   display: flex;
   align-items: center;
@@ -728,7 +728,7 @@ html {
 }
 
 /* ======================================================== */
-/* TIPOGRAFI SF PRO TEBAL & BERANI UNTUK SEMUA MENU         */
+/* TIPOGRAFI SF PRO TEBAL & JELAS UNTUK SEMUA MENU          */
 /* ======================================================== */
 nav,
 [role="navigation"],
@@ -740,7 +740,7 @@ header,
 .portal-header,
 .portal-sidebar,
 .sidebar-compact-user-card {
-  font-family: var(--font-sf-pro), 'SF Pro Display', 'SF Pro', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-family: var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -754,15 +754,15 @@ nav [role="button"],
 .portal-sidebar button,
 .portal-header button {
   font-weight: 700 !important;
-  letter-spacing: -0.015em;
+  letter-spacing: normal;
 }
 
 /* Judul grup menu (uppercase tebal & berani) */
 nav p,
 .portal-sidebar p {
   font-weight: 800;
-  letter-spacing: 0.05em;
-  color: #111111 !important;
+  letter-spacing: 0.04em;
+  color: #000000 !important;
 }
 
 /* ======================================================== */
@@ -855,7 +855,8 @@ nav p,
 .text-neutral-700,
 .text-neutral-800,
 .text-neutral-900 {
-  color: #111111 !important;
+  color: #000000 !important;
+  opacity: 1 !important;
 }
 
 /* 2. Seluruh tipografi body, paragraf, deskripsi, dan elemen teks wajib gelap dan jelas */
@@ -872,7 +873,7 @@ li,
 input,
 select,
 textarea {
-  color: #111111;
+  color: #000000;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -880,7 +881,7 @@ textarea {
 
 /* 3. Pertebal bobot font untuk semua teks agar tidak ada tulisan tipis atau pudar */
 .font-normal {
-  font-weight: 600 !important;
+  font-weight: 500 !important;
 }
 
 .font-medium {
@@ -888,37 +889,39 @@ textarea {
 }
 
 .font-semibold {
-  font-weight: 700 !important;
+  font-weight: 600 !important;
 }
 
 .font-bold,
 .font-extrabold,
 .font-black,
 .font-heading {
-  font-weight: 800 !important;
+  font-weight: 700 !important;
 }
 
 /* Paragraph dan deskripsi teks dibuat lebih tebal dan jelas */
 p,
 .text-xs,
 .text-sm {
-  font-weight: 600;
-  color: #111111;
+  font-weight: 500;
+  color: #000000;
+  letter-spacing: normal;
 }
 
 /* Judul dan header selalu hitam pekat & extra bold */
 h1, h2, h3, h4, h5, h6 {
-  color: #111111 !important;
+  color: #000000 !important;
   font-weight: 800 !important;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 /* Placeholder input yang terbaca jelas */
 input::placeholder,
 textarea::placeholder,
 ::placeholder {
-  color: #444444 !important;
-  font-weight: 500;
+  color: #58595B !important;
+  font-weight: 600;
+  opacity: 1 !important;
 }
 
 /* 4. Pertahankan teks putih pada elemen latar belakang gelap seperti tombol & badge aktif */
@@ -943,14 +946,14 @@ textarea::placeholder,
 /* ======================================================== */
 ::selection,
 *::selection {
-  background-color: #111111 !important;
+  background-color: #000000 !important;
   color: #ffffff !important;
   -webkit-text-fill-color: #ffffff !important;
 }
 
 ::-moz-selection,
 *::-moz-selection {
-  background-color: #111111 !important;
+  background-color: #000000 !important;
   color: #ffffff !important;
 }
 
@@ -1136,7 +1139,7 @@ textarea::placeholder,
   85% {
     opacity: 1;
     transform: scale(1.35);
-    box-shadow: 0 0 8px #ef4444;
+    box-shadow: 0 0 8px #ED1C24;
   }
 }
 
