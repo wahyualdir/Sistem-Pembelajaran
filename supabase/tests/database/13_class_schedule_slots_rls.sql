@@ -109,11 +109,13 @@ SELECT throws_ok(
   'Mahasiswa ditolak menulis slot jadwal (INSERT ditolak RLS)'
 );
 
-SELECT throws_ok(
-  $$ DELETE FROM public.class_schedule_slots WHERE class_id = 'c5550000-0000-0000-0000-000000000001' $$,
-  '42501',
-  NULL,
-  'Mahasiswa ditolak menghapus slot jadwal (DELETE ditolak RLS)'
+-- DELETE yang ditolak RLS tidak melempar galat (menghasilkan 0 baris terpengaruh).
+-- Pastikan baris slot jadwal tetap ada setelah mahasiswa mencoba menghapus.
+DELETE FROM public.class_schedule_slots WHERE class_id = 'c5550000-0000-0000-0000-000000000001';
+
+SELECT ok(
+  (SELECT count(*) FROM public.class_schedule_slots WHERE class_id = 'c5550000-0000-0000-0000-000000000001') = 1,
+  'Mahasiswa ditolak menghapus slot jadwal (baris slot tetap ada setelah percobaan delete)'
 );
 
 SELECT ok(
@@ -147,4 +149,5 @@ SELECT ok(
   'Mahasiswa bukan anggota tetap dapat membaca alias kode mata kuliah (katalog terbuka)'
 );
 
+SELECT * FROM finish();
 ROLLBACK;

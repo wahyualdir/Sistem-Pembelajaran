@@ -85,13 +85,33 @@ Command exited with code 0.
 ### E. Seluruh Unit Test Repositori (Vitest)
 Perintah yang dijalankan: `npm test`
 ```
-Test Files  66 passed (66)
-     Tests  613 passed (613)
-  Duration  101.08s
+Test Files  68 passed (68)
+     Tests  621 passed (621)
 ```
-*(Tidak ada kegagalan, tidak ada regresi pada tes eksisting).*
+*(Termasuk unit test baru `ruang.test.ts` dan `demo-login.test.ts`, tidak ada kegagalan, tidak ada regresi).*
 
 ---
 
 ## 3. Status Berkas Rahasia (Git Safeguard)
 Berkas `docs/seed-data/PEMETAAN_RAHASIA_dosen_lama_ke_baru.csv` dan `.env.seed*` dipastikan telah masuk ke `.gitignore` dan **tidak terlacak** oleh git (`git status` bersih dari berkas rahasia).
+
+---
+
+## 4. Status Kejujuran Eksekusi terhadap Basis Data (Database Execution Status)
+
+### A. Yang SUDAH Dijalankan Terhadap Basis Data:
+1. **Eksekusi 38 Migrasi SQL dari Awal (Clean DB)**:
+   - Seluruh 38 berkas migrasi Supabase (`20260930000001` s.d. `20261021000035`) telah dieksekusi dari nol pada mesin PostgreSQL/PGlite dan berhasil 100% tanpa error (`node scripts/test-migrations-pglite.mjs`).
+2. **Uji Kebijakan RLS & Delegasi Asisten (`05_assistants_rls.sql`)**:
+   - Berhasil dieksekusi ulang terhadap skema basis data penuh dengan hasil **29 dari 29 pengujian lolos** (target 29/29 tercapai setelah perbaikan overload fungsi `set_assistant`).
+3. **Uji Kebijakan RLS Slot Jadwal (`13_class_schedule_slots_rls.sql`)**:
+   - Berhasil dieksekusi terhadap skema basis data penuh dengan hasil **12 dari 12 pengujian lolos**. Percobaan `DELETE` oleh mahasiswa ditolak RLS dan baris slot terbukti tetap ada.
+
+### B. Yang BELUM Dijalankan Terhadap Basis Data:
+1. **Fase S3 (Penyediaan 168 Akun Auth Supabase)**:
+   - Pemanggilan Admin API (`auth.admin.createUser`) di `scripts/seed-akademik/accounts.ts` **belum pernah dijalankan** terhadap target instance database Supabase aktif (hanya diverifikasi pada lapisan mock dan dry-run).
+2. **Fase S4 (Penyemaian Data Relasional Akademik)**:
+   - Penulisan tabel relasional (`programs`, `semesters`, `rooms`, `courses`, `classes`, `class_schedule_slots`, `enrollments`, `class_assistants`) via Supabase Client di `scripts/seed-akademik/academic.ts` **belum pernah dijalankan** terhadap target instance database Supabase aktif.
+3. **Langkah CI Seed (`npm run seed:akademik -- --apply`)**:
+   - Langkah penyemaian data sungguhan di GitHub Actions CI **belum dijalankan terhadap database CI** sebelum pipeline CI di GitHub menyelesaikan eksekusi runner-nya.
+

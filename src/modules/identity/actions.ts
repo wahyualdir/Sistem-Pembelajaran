@@ -174,7 +174,8 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   }
 
   // Fallback pengujian / demo jika Supabase offline (Hanya diizinkan di non-production atau jika ALLOW_DEMO_AUTH='true')
-  const demoPassword = process.env.DEMO_PASSWORD || 'Password123!';
+  const demoPassword = process.env.DEMO_PASSWORD;
+  const superAdminPassword = process.env.SUPERADMIN_PASSWORD;
   const customPasswords: Map<string, string> = ((globalThis as any).__siajarCustomPasswords ??= new Map<string, string>());
   const isSuperAdminUser =
     Boolean(
@@ -182,7 +183,6 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
       (demoUser && (demoUser.id === 'a0000010-0000-0000-0000-000000000010' || demoUser.roles.includes('SUPER_ADMIN')))
     );
 
-  const superAdminPassword = process.env.SUPERADMIN_PASSWORD || 'wahyu11';
   const customPass = demoUser ? (customPasswords.get(demoUser.id) || customPasswords.get(normalizedId.toLowerCase())) : null;
 
   if (!currentUserId && allowDemo) {
@@ -193,24 +193,13 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
         isMatch = true;
       } else if (isSuperAdminUser) {
         if (
-          password === superAdminPassword ||
-          password === 'wahyu11' ||
-          password === demoPassword ||
-          password === 'Password123!' ||
-          password === 'password123' ||
-          password === '123456' ||
-          password === '12345'
+          (superAdminPassword && password === superAdminPassword) ||
+          (demoPassword && password === demoPassword)
         ) {
           isMatch = true;
         }
       } else {
-        if (
-          password === demoPassword ||
-          password === 'Password123!' ||
-          password === 'password123' ||
-          password === '123456' ||
-          password === '12345'
-        ) {
+        if (demoPassword && password === demoPassword) {
           isMatch = true;
         }
       }

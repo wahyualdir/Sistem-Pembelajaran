@@ -17,6 +17,7 @@ USING (
 );
 
 -- 3. Perbarui fungsi set_assistant dengan parameter assistant_type dan otorisasi Dosen serta Staf Akademik
+DROP FUNCTION IF EXISTS public.set_assistant(uuid, text, text[]);
 CREATE OR REPLACE FUNCTION public.set_assistant(
     p_class uuid,
     p_identifier text,
@@ -113,14 +114,6 @@ BEGIN
 END;
 $$;
 
--- Backward-compatible overload for 3-argument call
-CREATE OR REPLACE FUNCTION public.set_assistant(p_class uuid, p_identifier text, p_permissions text[])
-RETURNS integer LANGUAGE plpgsql SECURITY DEFINER SET search_path = '' AS $$
-BEGIN
-    RETURN public.set_assistant(p_class, p_identifier, p_permissions, 'ASISTEN_DOSEN');
-END;
-$$;
 
 REVOKE ALL ON FUNCTION public.set_assistant(uuid, text, text[], text) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.set_assistant(uuid, text, text[], text) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.set_assistant(uuid, text, text[]) TO authenticated;

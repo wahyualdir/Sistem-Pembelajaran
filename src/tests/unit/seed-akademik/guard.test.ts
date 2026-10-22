@@ -87,7 +87,8 @@ describe('Guard Keselamatan Seed Akademik (Fail-Closed)', () => {
     ).toThrow(/tidak cocok dengan ref proyek basis data target/);
   });
 
-  it('menolak jika SEED_PASSWORD kurang dari 6 karakter atau kosong', () => {
+  it('menolak jika SEED_PASSWORD kurang dari batas minimal atau kosong', () => {
+    // local: minimal 6 karakter
     expect(() =>
       assertSafetyGuard({
         seedEnv: 'local',
@@ -107,9 +108,21 @@ describe('Guard Keselamatan Seed Akademik (Fail-Closed)', () => {
         supabaseUrl: 'http://127.0.0.1:54321',
       })
     ).toThrow(/minimal 6 karakter/);
+
+    // staging: minimal 12 karakter
+    expect(() =>
+      assertSafetyGuard({
+        seedEnv: 'staging',
+        seedConfirmProjectRef: 'xyz-project',
+        nodeEnv: 'development',
+        seedPassword: '123456',
+        supabaseUrl: 'https://xyz-project.supabase.co',
+      })
+    ).toThrow(/minimal 12 karakter/);
   });
 
-  it('menerima kata sandi 6 karakter seperti 123456', () => {
+  it('menerima kata sandi 6 karakter pada SEED_ENV=local dan minimal 12 karakter pada SEED_ENV=staging', () => {
+    // local: 6 karakter diterima
     expect(() =>
       assertSafetyGuard({
         seedEnv: 'local',
@@ -117,6 +130,17 @@ describe('Guard Keselamatan Seed Akademik (Fail-Closed)', () => {
         nodeEnv: 'development',
         seedPassword: '123456',
         supabaseUrl: 'http://127.0.0.1:54321',
+      })
+    ).not.toThrow();
+
+    // staging: 12 karakter diterima
+    expect(() =>
+      assertSafetyGuard({
+        seedEnv: 'staging',
+        seedConfirmProjectRef: 'xyz-project',
+        nodeEnv: 'development',
+        seedPassword: 'SecretPassword123!',
+        supabaseUrl: 'https://xyz-project.supabase.co',
       })
     ).not.toThrow();
   });

@@ -65,10 +65,13 @@ export function assertSafetyGuard(config: GuardConfig): void {
     );
   }
 
-  // 4. SEED_PASSWORD harus disediakan dan minimal 6 karakter (batas minimum Supabase Auth)
-  if (!seedPassword || seedPassword.length < 6) {
+  // 4. SEED_PASSWORD harus disediakan:
+  // Minimal 12 karakter untuk SEED_ENV=staging.
+  // Minimal 6 karakter hanya untuk SEED_ENV=local (batas minimal Supabase Auth).
+  const minLength = seedEnv === 'staging' ? 12 : 6;
+  if (!seedPassword || seedPassword.length < minLength) {
     throw new Error(
-      'EKSEKUSI DITOLAK (FAIL-CLOSED): SEED_PASSWORD harus disetel pada environment variabel dan memiliki panjang minimal 6 karakter (batas minimum Supabase Auth).'
+      `EKSEKUSI DITOLAK (FAIL-CLOSED): SEED_PASSWORD harus disetel pada environment variabel dan memiliki panjang minimal ${minLength} karakter untuk lingkungan ${seedEnv}.`
     );
   }
 }

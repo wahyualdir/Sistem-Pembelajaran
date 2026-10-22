@@ -1,6 +1,6 @@
 -- pgTAP: delegasi izin asisten dosen (matriks A4, A5, A13, A14) dan izin yang tidak dapat didelegasikan.
 BEGIN;
-SELECT plan(28);
+SELECT plan(29);
 
 INSERT INTO auth.users (id, email) VALUES ('b0000031-0000-0000-0000-000000000031', 'la@uji.test'), ('b0000032-0000-0000-0000-000000000032', 'sa@uji.test'), ('b0000033-0000-0000-0000-000000000033', 'ta1@uji.test'), ('b0000034-0000-0000-0000-000000000034', 'ta2@uji.test'), ('b0000035-0000-0000-0000-000000000035', 'sb@uji.test') ON CONFLICT DO NOTHING;
 INSERT INTO public.profiles (id, email, full_name, status) VALUES
@@ -48,6 +48,7 @@ SELECT throws_ok($$ SELECT public.set_assistant((SELECT class_id FROM public.tap
 SELECT throws_ok($$ SELECT public.set_assistant((SELECT class_id FROM public.tap_ctx5), 'tidak.ada@uji.test', ARRAY['submission.review']) $$, 'USER_NOT_FOUND', 'Pengguna yang tidak ada ditolak');
 SELECT lives_ok($$ SELECT public.set_assistant((SELECT class_id FROM public.tap_ctx5), 'ta1@uji.test', ARRAY['submission.review']) $$, 'Dosen menugaskan asisten dengan izin review');
 SELECT lives_ok($$ SELECT public.set_assistant((SELECT class_id FROM public.tap_ctx5), 'ta2@uji.test', ARRAY['material.manage']) $$, 'Dosen menugaskan asisten kedua dengan izin materi');
+SELECT lives_ok($$ SELECT public.set_assistant((SELECT class_id FROM public.tap_ctx5), 'ta2@uji.test', ARRAY['material.manage'], 'ASISTEN_LAB') $$, 'Dosen menugaskan asisten kedua sebagai asisten lab');
 
 SELECT public.tap_as('b0000033-0000-0000-0000-000000000033');
 SELECT is((SELECT count(*)::int FROM public.classes), 1, 'Asisten melihat kelas tempat ditugaskan');
