@@ -7,7 +7,8 @@
  *   npx tsx scripts/backfill-activities.ts --apply --class-id=<uuid>
  */
 
-import { BOBOT_AKTIVITAS, BATAS_HARIAN_POIN, JenisAktivitas } from '../src/lib/aktivitas/konfigurasi';
+import { JenisAktivitas } from '../src/lib/aktivitas/tipe';
+import { BOBOT_AKTIVITAS, BATAS_HARIAN_POIN } from '../src/lib/aktivitas/konfigurasi';
 import { getTanggalWIB } from '../src/lib/aktivitas/waktu';
 
 interface RowKandidat {
