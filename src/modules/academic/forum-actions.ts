@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { recordSystemAuditLog } from '@/lib/audit';
 import { notify } from '@/modules/notifications';
-import { catatAktivitas } from '@/lib/aktivitas';
+import { catatAktivitas } from '@/lib/aktivitas/pencatat';
 import {
   assertClassMember,
   getAcademicStore,

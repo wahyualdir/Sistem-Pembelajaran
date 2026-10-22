@@ -2,16 +2,18 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import {
   poinKeLevel,
   bangunGridKontribusi,
-  catatAktivitas,
-  ambilAktivitasUser,
-  ambilAktivitasKelasAgregat,
-  resetAktivitasHarianMemori,
   getTanggalWIB,
   tambahHari,
   hariDalamMingguSenin,
   BOBOT_AKTIVITAS,
   BATAS_HARIAN_POIN,
 } from '@/lib/aktivitas';
+import {
+  catatAktivitas,
+  ambilAktivitasUser,
+  ambilAktivitasKelasAgregat,
+  resetAktivitasHarianMemori,
+} from '@/lib/aktivitas/pencatat';
 
 describe('SIAJAR Fitur Grafik Kontribusi: Logika Poin & Level', () => {
   it('memetakan poin harian ke tingkat level 0 sampai 4 dengan benar', () => {

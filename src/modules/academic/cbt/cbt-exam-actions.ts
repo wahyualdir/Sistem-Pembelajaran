@@ -10,7 +10,7 @@ import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 import { createClient } from '@/lib/supabase/server';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { assertClassOwner, ClassAccessError } from '@/lib/auth/class-access';
-import { catatAktivitas } from '@/lib/aktivitas';
+import { catatAktivitas } from '@/lib/aktivitas/pencatat';
 import {
   quizStore,
   getQuizStore,

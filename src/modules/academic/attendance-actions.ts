@@ -10,7 +10,7 @@ import { createClient } from '@/lib/supabase/server';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 import { recordSystemAuditLog } from '@/lib/audit';
-import { catatAktivitas } from '@/lib/aktivitas';
+import { catatAktivitas } from '@/lib/aktivitas/pencatat';
 import { evaluateGpsAttendanceIntegrity } from './attendance-gps-heuristic';
 
 function safeRevalidate(path: string, type?: 'page' | 'layout') {

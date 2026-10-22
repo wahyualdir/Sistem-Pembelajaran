@@ -1,13 +1,13 @@
 'use server';
 
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+import { ItemAktivitasHarian } from '@/lib/aktivitas';
 import {
   ambilAktivitasUser,
   ambilAktivitasKelasAgregat,
   ambilAktivitasAnggotaKelas,
-  ItemAktivitasHarian,
-  pastikanSeedAktivitasDemo,
-} from '@/lib/aktivitas';
+} from '@/lib/aktivitas/pencatat';
+import { pastikanSeedAktivitasDemo } from '@/lib/aktivitas/seed';
 import { assertClassMember, ClassAccessError } from '@/lib/auth/class-access';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { createClient } from '@/lib/supabase/server';

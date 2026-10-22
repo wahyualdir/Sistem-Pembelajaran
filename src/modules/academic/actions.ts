@@ -10,7 +10,7 @@ import type { ActionResponse } from '@/modules/identity/types';
 import { SYNTHETIC_DEMO_USERS } from '@/modules/identity/demo-users';
 import { DELEGABLE_CODES } from './permissions';
 import { recordSystemAuditLog } from '@/lib/audit';
-import { catatAktivitas } from '@/lib/aktivitas';
+import { catatAktivitas } from '@/lib/aktivitas/pencatat';
 import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 import {
   assertClassMember,
