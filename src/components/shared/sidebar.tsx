@@ -25,7 +25,6 @@ import {
   X,
   Layers,
   Laptop,
-  Flame,
   ChevronDown,
   LogOut,
   User,
@@ -180,22 +179,26 @@ export function Sidebar({
             : "-translate-x-full md:-ml-sidebar"
         )}
       >
-        {/* Sidebar Header dengan Logo Retro Mac */}
+        {/* Sidebar Header dengan Logo Retro RuangKampus */}
         <div className="flex h-header shrink-0 items-center justify-between border-b-2 border-black bg-gray-soft px-4">
           <Link
             href={homeHref}
             className="flex items-center gap-2.5 group focus-visible:outline-none"
-            title="SIAJAR & SIAKAD"
+            title="RuangKampus"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-none sm:rounded-[2px] border-2 border-black bg-black text-white shadow-retro group-hover:bg-white group-hover:text-black transition-all">
-              <Flame className="h-6 w-6 fill-current" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-white p-1 shadow-retro group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+              <img
+                src="/logo-ruangkampus.png"
+                alt="Logo RuangKampus"
+                className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
+              />
             </div>
             <div className="flex flex-col text-left">
               <span className="font-heading font-black text-base tracking-tight text-black leading-tight">
-                SIAJAR
+                Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
               </span>
-              <span className="text-xs text-black font-bold leading-tight mt-0.5">
-                Sistem Akademik
+              <span className="text-[10px] font-mono font-bold text-gray-dark uppercase tracking-wider leading-tight mt-0.5">
+                Sistem Pembelajaran
               </span>
             </div>
           </Link>

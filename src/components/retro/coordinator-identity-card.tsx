@@ -46,7 +46,7 @@ export function CoordinatorIdentityCard({
           </div>
           <div className="min-w-0 flex-1">
             <span className="text-sm font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
-              Ruang<span className="text-primary">Kampus</span>
+              Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
             </span>
             <span className="text-xs font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
               Ruang Kaprodi Terpadu

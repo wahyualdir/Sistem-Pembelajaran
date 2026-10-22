@@ -129,7 +129,7 @@ export function RightPanelSwitcher({
                 </div>
                 <div className="min-w-0 flex-1">
                   <span className="text-sm font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
-                    Ruang<span className="text-primary">Kampus</span>
+                    Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
                   </span>
                   <span className="text-xs font-mono font-bold text-gray-dark uppercase tracking-wider block leading-tight mt-0.5 truncate">
                     Kartu Mahasiswa Aktif
@@ -148,7 +148,7 @@ export function RightPanelSwitcher({
                 </p>
               </div>
               <span className="text-[11px] font-mono font-bold px-2.5 py-1 rounded-lg border border-ink bg-gray-soft text-ink shadow-2xs">
-                Ruang<span className="text-primary">Kampus</span>
+                Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
               </span>
             </div>
           </div>

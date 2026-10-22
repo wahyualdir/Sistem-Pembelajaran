@@ -1,4 +1,6 @@
+import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React from 'react';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles, switchWorkspaceAction } from '@/modules/identity/actions';
 import {
@@ -9,7 +11,6 @@ import {
   FileSpreadsheet,
   ShieldAlert,
   ArrowRight,
-  Flame,
   CheckCircle2,
 } from 'lucide-react';
 
@@ -82,7 +83,7 @@ export default async function WorkspacePage() {
     <div
       style={{
         fontFamily:
-          "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+          "var(--font-sf-pro), 'SF Pro Display', 'SF Pro', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif",
       }}
       className="min-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-white flex flex-col justify-between antialiased relative"
     >
@@ -99,20 +100,25 @@ export default async function WorkspacePage() {
       <header className="h-header-mobile md:h-header flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 border-black bg-gray-soft shrink-0 select-none shadow-retro-sm relative z-10 pt-[env(safe-area-inset-top,0px)]">
         <div className="flex items-center gap-3">
           {/* Mac Traffic Light Buttons */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-primary inline-block shadow-retro-sm" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-gray inline-block shadow-retro-sm" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-gray-dark inline-block shadow-retro-sm" />
-          </div>
+          <WindowTrafficLights size="md" />
 
-          <div className="flex items-center gap-2.5 ml-1">
-            <div className="flex h-8 w-8 items-center justify-center rounded border-2 border-black bg-black text-white shadow-retro-sm">
-              <Flame className="h-4.5 w-4.5 fill-primary text-primary" />
+          <Link href="/" className="flex items-center gap-2.5 ml-1 group focus-visible:outline-none">
+            <div className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border-2 border-black bg-white p-1 shadow-retro-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+              <img
+                src="/logo-ruangkampus.png"
+                alt="Logo RuangKampus"
+                className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
+              />
             </div>
-            <span className="font-heading font-bold text-lg sm:text-xl tracking-tight text-black">
-              SIAJAR
-            </span>
-          </div>
+            <div className="flex flex-col min-w-0">
+              <span className="font-heading font-black text-base sm:text-lg tracking-tight text-black leading-none">
+                Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
+              </span>
+              <span className="text-[9.5px] font-mono font-bold text-gray-dark uppercase tracking-wider mt-0.5 leading-none">
+                Sistem Pembelajaran
+              </span>
+            </div>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2.5">
@@ -130,11 +136,9 @@ export default async function WorkspacePage() {
             {/* Header Bar Jendela Retro */}
             <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b-2 border-black bg-gray-soft">
               <div className="flex items-center gap-2.5">
-                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-primary shadow-retro-sm" />
-                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-gray shadow-retro-sm" />
-                <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-black bg-gray-dark shadow-retro-sm" />
+                <WindowTrafficLights size="sm" />
                 <span className="text-xs sm:text-sm font-bold text-black ml-1.5 font-heading">
-                  Pilih Ruang Kerja — SIAJAR
+                  Pilih Ruang Kerja — RuangKampus
                 </span>
               </div>
               <span className="text-xs font-sans font-bold bg-white text-black border border-black px-2.5 py-0.5 rounded shadow-retro-sm">
@@ -220,7 +224,7 @@ export default async function WorkspacePage() {
 
       {/* Footer Minimalis */}
       <footer className="py-4 text-center text-xs text-black/50 relative z-10 border-t border-black/10 bg-gray-soft/30">
-        SIAJAR &copy; 2026 &middot; Sistem Informasi Ajar Terpadu &middot; Hak Cipta Dilindungi
+        RuangKampus &copy; 2026 &middot; Sistem Pembelajaran Terpadu &middot; Hak Cipta Dilindungi
       </footer>
     </div>
   );

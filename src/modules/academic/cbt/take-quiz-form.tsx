@@ -1,5 +1,6 @@
 'use client';
 
+import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState, useEffect, useTransition, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import {
@@ -460,11 +461,7 @@ export function TakeQuizForm({
         {/* Retro Window Header Bar */}
         <div className="flex h-12 sm:h-14 items-center justify-between border-b-2 border-black bg-gray-soft px-4 sm:px-6 py-2.5">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="flex items-center gap-1.5 shrink-0">
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-primary inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-gray inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-gray-dark inline-block shadow-retro-sm" />
-            </div>
+            <WindowTrafficLights size="sm" />
             <span className="text-sm sm:text-base font-bold text-black tracking-tight font-heading ml-1.5 truncate">
               Hasil Evaluasi: {quiz.title}
             </span>
@@ -662,11 +659,7 @@ export function TakeQuizForm({
         {/* Retro Window Header Bar */}
         <div className="flex h-12 sm:h-14 items-center justify-between border-b-2 border-black bg-gray-soft px-4 sm:px-6 py-2.5">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="flex items-center gap-1.5 shrink-0">
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-primary inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-gray inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-retro-border bg-gray-dark inline-block shadow-retro-sm" />
-            </div>
+            <WindowTrafficLights size="sm" />
             <span className="text-sm sm:text-base font-bold text-black tracking-tight font-heading ml-1.5 truncate">
               Lembar Pengerjaan: {quiz.title}
             </span>

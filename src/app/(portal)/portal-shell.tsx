@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  Flame,
   LogOut,
   Search,
   ChevronDown,
@@ -338,7 +337,7 @@ export function PortalShell({
                   title={`RuangKampus - ${userSubtitle}`}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-white p-0.5 shadow-retro-sm group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
-                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain" />
+                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                 </Link>
               </div>
@@ -350,11 +349,11 @@ export function PortalShell({
                   title={`RuangKampus - ${userSubtitle}`}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-white p-0.5 shadow-retro-sm group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
-                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain" />
+                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="font-heading font-black text-base tracking-tight text-ink leading-none whitespace-nowrap">
-                      Ruang<span className="text-primary">Kampus</span>
+                      Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
                     </span>
                     <span className="text-[9.5px] font-mono font-bold text-gray-dark uppercase tracking-wider mt-1 leading-none">
                       Sistem Pembelajaran

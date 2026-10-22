@@ -1,6 +1,44 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import { Inter } from "next/font/google";
 import "./globals.css";
+
+const sfPro = localFont({
+  src: [
+    {
+      path: "../../public/sf-pro-regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/sf-pro-medium.woff",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/sf-pro-medium.woff",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/sf-pro-bold.woff",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/sf-pro-bold.woff",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../../public/sf-pro-bold.woff",
+      weight: "900",
+      style: "normal",
+    },
+  ],
+  variable: "--font-sf-pro",
+  display: "swap",
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -27,7 +65,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="id" className={inter.variable}>
+    <html lang="id" className={`${sfPro.variable} ${inter.variable}`}>
       <body className="min-h-[100dvh] overflow-x-hidden bg-background font-sans font-bold text-ink antialiased">
         <ScrollAnimationProvider>{children}</ScrollAnimationProvider>
       </body>

@@ -1,9 +1,10 @@
 'use client';
 
+import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, CheckCircle2, Mail, Flame } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, Mail } from 'lucide-react';
 
 export default function ResetPasswordPage() {
   const [identifier, setIdentifier] = useState('');
@@ -37,25 +38,27 @@ export default function ResetPasswordPage() {
           {/* Header Bar Jendela Retro */}
           <div className="flex items-center justify-between px-4 py-2.5 border-b-[1.5px] border-retro-border bg-gray-soft/80">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-primary shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-gray shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-black/80 bg-gray-dark shadow-retro-sm" />
+              <WindowTrafficLights size="sm" />
               <span className="text-xs font-sans font-bold text-muted-foreground ml-2">
-                siajar://reset-password
+                ruangkampus://reset-password
               </span>
             </div>
           </div>
 
           <div className="p-6 sm:p-8 space-y-6">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg border-[1.5px] border-retro-border bg-primary text-white shadow-retro">
-                <Flame className="h-5 w-5 fill-white" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-retro-border bg-white p-1 shadow-retro shrink-0 overflow-hidden">
+                <img
+                  src="/logo-ruangkampus.png"
+                  alt="Logo RuangKampus"
+                  className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
+                />
               </div>
               <div className="flex flex-col text-left">
-                <span className="font-heading font-bold text-sm tracking-tight text-foreground leading-tight">
-                  SIAJAR
+                <span className="font-heading font-black text-base tracking-tight text-foreground leading-tight">
+                  Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
                 </span>
-                <span className="text-xs text-muted-foreground font-sans">
+                <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-wider">
                   Pemulihan Akun
                 </span>
               </div>
@@ -95,7 +98,7 @@ export default function ResetPasswordPage() {
                   </label>
                   <input
                     type="text"
-                    placeholder="nama@siajar.ac.id atau 2024001"
+                    placeholder="nama@ruangkampus.ac.id atau 2024001"
                     value={identifier}
                     onChange={(e) => setIdentifier(e.target.value)}
                     disabled={isPending}

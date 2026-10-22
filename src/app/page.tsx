@@ -1,5 +1,6 @@
 'use client';
 
+import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -40,20 +41,26 @@ export default function HomePage() {
           <div className="flex items-center gap-3 sm:gap-4">
             <Link
               href="/"
-              className="flex h-9 w-9 items-center justify-center border-2 border-black bg-white shadow-retro hover:bg-black hover:text-white transition-all group rounded"
-              title="SIAJAR - Beranda"
+              className="flex items-center gap-2.5 group focus-visible:outline-none"
+              title="RuangKampus - Beranda"
             >
-              <GraduationCap className="h-5 w-5 group-hover:scale-110 transition-transform" />
-            </Link>
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl border-2 border-black bg-white p-1 shadow-retro-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                <img
+                  src="/logo-ruangkampus.png"
+                  alt="Logo RuangKampus"
+                  className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
+                />
+              </div>
 
-            <div className="flex flex-col">
-              <span className="font-heading font-black text-base sm:text-lg tracking-tight leading-none text-black">
-                SIAJAR
-              </span>
-              <span className="text-[10px] font-sans font-bold text-black/70 tracking-tight">
-                Portal Akademik & Pembelajaran
-              </span>
-            </div>
+              <div className="flex flex-col">
+                <span className="font-heading font-black text-base sm:text-lg tracking-tight leading-none text-black">
+                  Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
+                </span>
+                <span className="text-[10px] font-mono font-bold text-gray-dark uppercase tracking-wider mt-0.5 leading-none">
+                  Sistem Pembelajaran
+                </span>
+              </div>
+            </Link>
           </div>
 
           {/* Navigation Links */}
@@ -174,8 +181,7 @@ export default function HomePage() {
                 {/* Jendela Header Retro Klasik */}
                 <div className="h-10 flex items-center justify-between border-b-2 border-black bg-gray-soft px-3 select-none">
                   <div className="flex items-center gap-2">
-                    <span className="h-3 w-3 rounded-full border border-black bg-black" />
-                    <span className="h-3 w-3 rounded-full border border-black bg-white" />
+                    <WindowTrafficLights size="sm" />
                     <span className="text-xs font-mono font-black text-black ml-1">
                       siajar://simulasi-interaktif.app
                     </span>
@@ -642,7 +648,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-mono font-bold text-black">
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-emerald-500 inline-block" />
-            <span>SIAJAR System 7.1 • Status: Online & Sinkron</span>
+            <span>RuangKampus System 7.1 • Status: Online & Sinkron</span>
           </div>
           <div className="flex items-center gap-4">
             <Link href="/login" className="hover:underline underline-offset-4">
@@ -677,10 +683,9 @@ export default function HomePage() {
             {/* Modal Header */}
             <div className="flex items-center justify-between px-4 py-2.5 border-b-2 border-black bg-gray-soft">
               <div className="flex items-center gap-1.5">
-                <span className="h-3 w-3 rounded-full border border-black bg-black" />
-                <span className="h-3 w-3 rounded-full border border-black bg-white" />
+                <WindowTrafficLights size="sm" />
                 <span className="font-mono text-xs font-black text-black ml-1.5">
-                  siajar://panduan-cepat.doc
+                  ruangkampus://panduan-cepat.doc
                 </span>
               </div>
               <button
@@ -697,7 +702,7 @@ export default function HomePage() {
             <div className="p-6 space-y-4">
               <div>
                 <h4 className="text-xl font-heading font-black text-black">
-                  Selamat Datang di SIAJAR
+                  Selamat Datang di RuangKampus
                 </h4>
                 <p className="text-xs text-black/75 mt-1 leading-relaxed">
                   Berikut adalah hal-hal penting yang perlu Anda ketahui sebelum masuk ke portal akademik:

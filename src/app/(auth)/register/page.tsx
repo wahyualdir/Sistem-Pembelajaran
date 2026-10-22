@@ -1,10 +1,10 @@
 'use client';
 
+import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState, useTransition, Suspense } from 'react';
 import Link from 'next/link';
 import { registerAction } from '@/modules/identity/actions';
 import {
-  Flame,
   CheckCircle2,
   AlertCircle,
   UserPlus,
@@ -74,26 +74,31 @@ function RegisterFormContent() {
 
   return (
     <div
-      style={{ fontFamily: "'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif" }}
+      style={{ fontFamily: "var(--font-sf-pro), 'SF Pro Display', 'SF Pro', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif" }}
       className="min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-background text-black font-sans selection:bg-ink selection:text-white flex flex-col overflow-x-hidden lg:overflow-hidden antialiased"
     >
       {/* Top Bar Navigasi Sistem Retro */}
       <header className="h-14 flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 sm:border-b-3 border-black bg-gray-soft shrink-0 select-none shadow-retro-sm pt-[env(safe-area-inset-top,0px)]">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 shrink-0">
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-primary inline-block shadow-retro-sm" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-gray inline-block shadow-retro-sm" />
-            <span className="h-3.5 w-3.5 rounded-full border border-black bg-gray-dark inline-block shadow-retro-sm" />
-          </div>
+          <WindowTrafficLights size="md" />
 
-          <div className="flex items-center gap-2.5 ml-1">
-            <div className="flex h-8 w-8 items-center justify-center rounded border-2 border-black bg-black text-white shadow-retro-sm">
-              <Flame className="h-4.5 w-4.5 fill-primary text-primary" />
+          <Link href="/" className="flex items-center gap-2.5 ml-1 group focus-visible:outline-none">
+            <div className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border-2 border-black bg-white p-1 shadow-retro-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+              <img
+                src="/logo-ruangkampus.png"
+                alt="Logo RuangKampus"
+                className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
+              />
             </div>
-            <span className="font-heading font-bold text-lg sm:text-xl tracking-tight text-black">
-              SIAJAR
-            </span>
-          </div>
+            <div className="flex flex-col min-w-0">
+              <span className="font-heading font-black text-base sm:text-lg tracking-tight text-black leading-none">
+                Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
+              </span>
+              <span className="text-[9.5px] font-mono font-bold text-gray-dark uppercase tracking-wider mt-0.5 leading-none">
+                Sistem Pembelajaran
+              </span>
+            </div>
+          </Link>
         </div>
 
         <div className="flex items-center gap-2.5">
@@ -190,7 +195,7 @@ function RegisterFormContent() {
               <div className="p-4 sm:p-5 lg:p-6 flex-1 min-h-0 flex flex-col justify-between overflow-y-auto">
                 <div className="space-y-1 shrink-0">
                   <h1 className="text-xl sm:text-2xl font-heading font-bold tracking-tight text-black leading-tight">
-                    Buat Akun SIAJAR Baru
+                    Buat Akun RuangKampus Baru
                   </h1>
                   <p className="text-xs sm:text-sm text-black/80 font-medium">
                     Lengkapi identitas diri Anda untuk mendaftar ke portal terpadu.
@@ -355,7 +360,7 @@ function RegisterFormContent() {
                     className="w-full h-10 py-2 px-4 rounded border-2 border-black bg-black text-white hover:bg-gray-soft hover:text-black font-heading font-bold text-xs sm:text-sm shadow-retro active:translate-x-0.5 active:translate-y-0.5 transition-all focus:outline-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer mt-2"
                   >
                     <UserPlus className="h-4 w-4" />
-                    <span>{isPending ? 'Mendaftarkan Akun...' : 'Daftar & Masuk ke SIAJAR'}</span>
+                    <span>{isPending ? 'Mendaftarkan Akun...' : 'Daftar & Masuk ke RuangKampus'}</span>
                   </button>
 
                   <div className="pt-1 text-center text-xs font-medium text-black select-none">
@@ -383,7 +388,7 @@ export default function RegisterPage() {
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center p-4 text-sm font-sans text-muted-foreground bg-retro-bg">
-          Memuat halaman pendaftaran SIAJAR...
+          Memuat halaman pendaftaran RuangKampus...
         </div>
       }
     >

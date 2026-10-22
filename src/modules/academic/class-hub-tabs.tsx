@@ -1,5 +1,6 @@
 'use client';
 
+import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -348,9 +349,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             {/* Header Baris & Status */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-primary inline-block shadow-retro-sm" />
-                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-gray inline-block shadow-retro-sm" />
-                <span className="h-3.5 w-3.5 rounded-full border border-retro-border bg-gray-dark inline-block shadow-retro-sm" />
+                <WindowTrafficLights size="md" />
                 <span className="text-xs font-semibold text-black ml-2">
                   Kelas {cls.section}
                 </span>

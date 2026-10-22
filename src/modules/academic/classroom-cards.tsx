@@ -1,5 +1,6 @@
 'use client';
 
+import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -128,9 +129,7 @@ export function GoogleClassroomCard({
           {/* Header Baris & Status */}
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-1.5">
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-primary inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-gray inline-block shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-gray-dark inline-block shadow-retro-sm" />
+              <WindowTrafficLights size="sm" />
               <span className="text-xs font-bold text-black ml-1.5 truncate">
                 Kelas {item.section}
               </span>

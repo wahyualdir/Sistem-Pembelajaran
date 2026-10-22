@@ -1,3 +1,4 @@
+import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
 import { DashboardShell } from "@/components/shared/dashboard-shell";
@@ -108,9 +109,7 @@ export default async function MahasiswaDashboardPage() {
           {/* Header Bar Jendela Retro dengan Titik Sticker */}
           <div className="flex items-center justify-between px-4 py-2 border-b-[1.5px] border-retro-border bg-gray-soft/70">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-primary shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-gray shadow-retro-sm" />
-              <span className="h-3 w-3 rounded-full border border-retro-border bg-gray-dark shadow-retro-sm" />
+              <WindowTrafficLights size="sm" />
               <span className="text-xs font-sans font-bold text-muted-foreground ml-2">
                 siakad://dashboard.mahasiswa
               </span>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { WindowTrafficLights } from './window-traffic-lights';
 
 interface RetroWindowProps {
   title?: string;
@@ -44,11 +45,7 @@ export function RetroWindow({
       >
         <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
           {/* Retro Window Dot Controls (Merah Kampus, Abu-abu, Abu Gelap) */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-            <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-ink bg-primary inline-block shadow-retro-sm" />
-            <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-ink bg-gray inline-block shadow-retro-sm" />
-            <span className="h-3 w-3 sm:h-3.5 sm:w-3.5 rounded-full border border-ink bg-gray-dark inline-block shadow-retro-sm" />
-          </div>
+          <WindowTrafficLights size="sm" />
 
           <div className="ml-1 sm:ml-2 flex items-center gap-2 min-w-0">
             <span className="text-sm sm:text-base font-bold text-black tracking-tight font-heading truncate">
