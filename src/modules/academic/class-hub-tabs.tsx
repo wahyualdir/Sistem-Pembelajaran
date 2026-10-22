@@ -45,6 +45,7 @@ import {
   Map,
   BarChart3,
   Sliders,
+  Activity,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RetroWindow } from '@/components/retro/retro-window';
@@ -53,6 +54,7 @@ import { ClassIslandMap } from './class-island-map';
 import { ClassChaptersTab } from './class-chapters-tab';
 import { ClassProgressTab } from './class-progress-tab';
 import { ClassFeatureSettingsTab } from './class-feature-settings-tab';
+import { TabAktivitasKelas } from '@/components/aktivitas/tab-aktivitas-kelas';
 import type {
   ClassMapItem,
   ClassChapterItem,
@@ -166,6 +168,7 @@ export const TA_CLASSROOM_TABS = [
   { id: 'jawab-forum', label: 'Jawab Forum', icon: MessagesSquare, badgeLabel: 'Forum' },
   { id: 'materi-asisten', label: 'Materi Asisten', icon: BookOpen, badgeLabel: 'Materi' },
   { id: 'peserta', label: 'Peserta', icon: Users, badgeLabel: 'Peserta' },
+  { id: 'aktivitas', label: 'Aktivitas', icon: Activity, badgeLabel: 'Aktivitas' },
 ] as const;
 
 export const LECTURER_CLASSROOM_TABS = [
@@ -179,6 +182,7 @@ export const LECTURER_CLASSROOM_TABS = [
   { id: 'forum', label: 'Forum & Pengumuman', icon: MessagesSquare, badgeLabel: 'Stream' },
   { id: 'presensi', label: 'Presensi', icon: CalendarCheck2, badgeLabel: 'Presensi' },
   { id: 'nilai', label: 'Nilai', icon: GraduationCap, badgeLabel: 'Grades' },
+  { id: 'aktivitas', label: 'Aktivitas', icon: Activity, badgeLabel: 'Aktivitas' },
   { id: 'fitur', label: 'Pengaturan Fitur', icon: Sliders, badgeLabel: 'Fitur' },
 ] as const;
 
@@ -190,6 +194,7 @@ export const STUDENT_CLASSROOM_TABS = [
   { id: 'presensi', label: 'Presensi', icon: CalendarCheck2, badgeLabel: 'Presensi' },
   { id: 'anggota', label: 'Anggota', icon: Users, badgeLabel: 'People' },
   { id: 'nilai', label: 'Nilai', icon: GraduationCap, badgeLabel: 'Grades' },
+  { id: 'aktivitas', label: 'Aktivitas', icon: Activity, badgeLabel: 'Aktivitas' },
 ] as const;
 
 export const CLASSROOM_TABS = STUDENT_CLASSROOM_TABS;
@@ -1570,6 +1575,18 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
         <ClassFeatureSettingsTab
           classId={cls.id}
           initialFlags={data.petaPulauData?.flags || {}}
+        />
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: AKTIVITAS (HEATMAP KONTRIBUSI KELAS)                */}
+      {/* ======================================================== */}
+      {activeTab === 'aktivitas' && (
+        <TabAktivitasKelas
+          classId={cls.id}
+          classTitle={cls.title}
+          isLecturerOrTa={Boolean(lecturer || ta)}
+          members={members}
         />
       )}
     </div>

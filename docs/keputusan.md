@@ -502,5 +502,30 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
   4. Menyediakan panduan masuk akun demo pada `supabase/seed/README.md` dengan kata sandi terstandarisasi untuk mempermudah evaluasi fungsional menyeluruh oleh tim penguji.
 - **Alasan**: Memastikan lingkungan pengujian lokal maupun lingkungan demo pimpinan memiliki data operasional yang hidup, realistis, dan mencerminkan dinamika perkuliahan sesungguhnya di Universitas Islam Riau.
 
+### Keputusan 58: Arsitektur Fitur Grafik Kontribusi SIAJAR (GitHub-Style Heatmap Grid) (Oktober 2026)
+- **Tanggal**: 22 Oktober 2026
+- **Keputusan**:
+  1. Membangun grafik kontribusi visual berbasis kisi kotak matriks per hari gaya GitHub (kolom = minggu kronologis dari kiri ke kanan, 7 baris = hari dimulai hari Senin).
+  2. Mendefinisikan 11 jenis aktivitas terstandar dengan bobot poin dan batas harian (daily cap):
+     - `kumpul_tugas`: 3 poin, tanpa batas
+     - `hadir_presensi`: 1 poin, maks 1 poin per sesi pertemuan
+     - `selesai_kuis`: 3 poin, tanpa batas
+     - `topik_diskusi`: 2 poin, maks 6 poin/hari/kelas (3 topik)
+     - `balas_diskusi`: 1 poin, maks 5 poin/hari/kelas (5 balasan)
+     - `terbit_materi`: 3 poin, tanpa batas
+     - `terbit_pengumuman`: 1 poin, maks 3 poin/hari/kelas (3 pengumuman)
+     - `terbit_tugas`: 3 poin, tanpa batas
+     - `buat_kuis`: 3 poin, tanpa batas
+     - `review_pengumpulan`: 1 poin, maks 10 poin/hari/kelas (10 review)
+     - `finalisasi_nilai`: 3 poin, tanpa batas
+  3. Pemetaan level intensitas kontribusi harian (Level 0: 0 poin, Level 1: 1-2 poin, Level 2: 3-5 poin, Level 3: 6-9 poin, Level 4: 10+ poin).
+  4. Penyimpanan data tunggal pada tabel `public.daily_activities` (migrasi `20261023000037_daily_activities.sql`) dengan RLS aktif, isolasi privat per pengguna, otorisasi pengajar untuk kelas bimbingan, dan mutasi terproteksi melalui RPC `record_daily_activity`.
+  5. Antarmuka terintegrasi:
+     - Hub Profil (`src/app/(portal)/profile/page.tsx`): Tampilan 12 bulan penuh dengan filter kelas.
+     - Dashboard Mahasiswa & Dosen: Kartu ringkas 26 minggu.
+     - Tab Kelas (`src/modules/academic/class-hub-tabs.tsx`): Mahasiswa melihat aktivitas kelas spesifik; Dosen/Asisten melihat heatmap gabungan kelas anonim tanpa nama + rincian per anggota kelas.
+  6. Menyediakan skrip backfill idempoten `scripts/backfill-activities.ts` yang mendukung mode default dry-run dan flag `--apply`.
+- **Alasan**: Mendorong konsistensi akademik mahasiswa dan transparansi pengajaran dosen/asisten secara etis tanpa elemen gamifikasi toksik (dilarang leaderboard, streak, dan lencana).
+
 
 

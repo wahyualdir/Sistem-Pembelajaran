@@ -25,6 +25,7 @@ Implementasi dokumen perencanaan `docs/SIAJAR_Dokumen_Lengkap_v3.md` (Next.js 14
 | Kuis & Bank Soal (pilihan ganda, esai, auto-grading, timer pengerjaan) | Selesai |
 | Format Markdown untuk materi dan pengumuman | Selesai |
 | AI Academic Assistant (asisten akademik pintar terintegrasi) | Selesai |
+| Grafik Kontribusi SIAJAR (Heatmap GitHub-style 11 aktivitas, level 0-4, hub profil, dashboard, tab kelas) | Selesai |
 
 ## Menjalankan
 
