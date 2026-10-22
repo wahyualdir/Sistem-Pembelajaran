@@ -10,6 +10,7 @@ import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 import { createClient } from '@/lib/supabase/server';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { assertClassOwner, ClassAccessError } from '@/lib/auth/class-access';
+import { catatAktivitas } from '@/lib/aktivitas';
 import {
   quizStore,
   getQuizStore,
@@ -205,6 +206,8 @@ export async function createQuizAction(input: unknown): Promise<ActionResponse<Q
     class_id: quiz.class_id,
   }).catch(() => {});
 
+  catatAktivitas({ userId: user.user.id, kind: 'buat_kuis', classId: quiz.class_id }).catch(() => {});
+
   try {
     revalidatePath('/classes/[id]', 'page');
   } catch {
@@ -384,6 +387,8 @@ export async function submitQuizAttemptAction(
   if (examLive[user.user.id]) {
     examLive[user.user.id].status = 'SUBMITTED';
   }
+
+  catatAktivitas({ userId: user.user.id, kind: 'selesai_kuis', classId: quiz.class_id }).catch(() => {});
 
   revalidatePath('/classes/[id]', 'page');
   return { ok: true, data: attempt };

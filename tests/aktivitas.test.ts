@@ -150,6 +150,26 @@ describe('SIAJAR Fitur Grafik Kontribusi: Pencatatan & Batas Harian (Capping)', 
     expect(tugasItem?.count).toBe(2);
     expect(tugasItem?.points).toBe(6);
   });
+
+  it('mendukung pencatatan seluruh 11 jenis aktivitas dengan bobot masing-masing', async () => {
+    const userId = 'dosen-uji-1';
+    const date = '2026-10-22';
+
+    // Dosen actions
+    await catatAktivitas({ userId, kind: 'terbit_materi', date }); // 3 poin
+    await catatAktivitas({ userId, kind: 'terbit_pengumuman', date }); // 1 poin
+    await catatAktivitas({ userId, kind: 'terbit_tugas', date }); // 3 poin
+    await catatAktivitas({ userId, kind: 'buat_kuis', date }); // 3 poin
+    await catatAktivitas({ userId, kind: 'review_pengumpulan', date }); // 1 poin
+    await catatAktivitas({ userId, kind: 'finalisasi_nilai', date }); // 3 poin
+
+    const daftar = await ambilAktivitasUser({ userId, startDate: date, endDate: date });
+    expect(daftar.length).toBe(6);
+    const totalPoin = daftar.reduce((acc, d) => acc + d.points, 0);
+    // 3 + 1 + 3 + 3 + 1 + 3 = 14 poin (Level 4!)
+    expect(totalPoin).toBe(14);
+    expect(poinKeLevel(totalPoin)).toBe(4);
+  });
 });
 
 describe('SIAJAR Fitur Grafik Kontribusi: Pembangun Grid & Waktu', () => {

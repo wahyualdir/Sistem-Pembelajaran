@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { recordSystemAuditLog } from '@/lib/audit';
 import { notify } from '@/modules/notifications';
+import { catatAktivitas } from '@/lib/aktivitas';
 import {
   assertClassMember,
   getAcademicStore,
@@ -342,6 +343,8 @@ export async function createForumTopicAction(input: unknown) {
 
   forumTopicsStore.unshift(newTopic);
 
+  catatAktivitas({ userId: access.viewer.userId, kind: 'topik_diskusi', classId }).catch(() => {});
+
   revalidatePath(`/classes/${classId}`);
   revalidatePath('/ta/forum');
 
@@ -473,6 +476,8 @@ export async function replyForumTopicAction(input: unknown) {
       dedupKey: `${topic.author_id}:FORUM_REPLY:${newReply.id}`,
     });
   }
+
+  catatAktivitas({ userId: access.viewer.userId, kind: 'balas_diskusi', classId: topic.class_id }).catch(() => {});
 
   revalidatePath(`/classes/${topic.class_id}`);
   revalidatePath(`/classes/${topic.class_id}/discussions/${topic.id}`);

@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/server';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 import { recordSystemAuditLog } from '@/lib/audit';
+import { catatAktivitas } from '@/lib/aktivitas';
 import { evaluateGpsAttendanceIntegrity } from './attendance-gps-heuristic';
 
 function safeRevalidate(path: string, type?: 'page' | 'layout') {
@@ -471,6 +472,8 @@ export async function submitStudentAttendanceAction(
     recorded_at: new Date().toISOString(),
   });
 
+  catatAktivitas({ userId: user.user.id, kind: 'hadir_presensi', classId: s.class_id }).catch(() => {});
+
   safeRevalidate('/classes/[id]', 'page');
   return { ok: true };
 }
@@ -688,6 +691,7 @@ export async function submitMultiFactorAttendanceAction(input: {
   }
 
   presensiStore.records.push(record);
+  catatAktivitas({ userId: user.user.id, kind: 'hadir_presensi', classId: s.class_id }).catch(() => {});
   safeRevalidate('/classes/[id]', 'page');
   safeRevalidate('/attendance', 'page');
   return { ok: true, data: record };

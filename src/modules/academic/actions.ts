@@ -10,6 +10,7 @@ import type { ActionResponse } from '@/modules/identity/types';
 import { SYNTHETIC_DEMO_USERS } from '@/modules/identity/demo-users';
 import { DELEGABLE_CODES } from './permissions';
 import { recordSystemAuditLog } from '@/lib/audit';
+import { catatAktivitas } from '@/lib/aktivitas';
 import { isDemoMode, isFeatureFlagActive } from '@/lib/config/features';
 import {
   assertClassMember,
@@ -439,6 +440,7 @@ export async function createAssignmentAction(input: unknown): Promise<ActionResp
     tugas.assignments.push(item);
     mem.enrollments.filter((e) => e.class_id === v.class_id).forEach((e) => notify(e.student_id, 'ASSIGNMENT_NEW', `Tugas baru: ${v.title}`, 'Buka kelas untuk melihat petunjuk dan tenggat.', v.class_id));
   }
+  catatAktivitas({ userId: me.id, kind: 'terbit_tugas', classId: v.class_id }).catch(() => {});
   revalidatePath('/classes/[id]', 'page');
   return { ok: true, data: item };
 }
@@ -457,6 +459,7 @@ export async function submitAssignmentAction(assignmentId: string, text: unknown
   const { listAssignmentExtensionsAction } = await import('./assignment-late-actions');
 
   const now = new Date();
+  let targetClassId: string | null = null;
 
   if (me.online) {
     const supabase = await createClient();
@@ -469,6 +472,7 @@ export async function submitAssignmentAction(assignmentId: string, text: unknown
       .maybeSingle();
 
     if (!a) return { ok: false, error: ERR.NOT_FOUND };
+    targetClassId = a.class_id;
 
     const extensions = await listAssignmentExtensionsAction(id);
     const myExt = extensions.find((e) => e.student_id === me.id);
@@ -548,6 +552,7 @@ export async function submitAssignmentAction(assignmentId: string, text: unknown
     const a = tugas.assignments.find((x) => x.id === id);
     if (!a || !mem.enrollments.some((e) => e.class_id === a.class_id && e.student_id === me.id))
       return { ok: false, error: ERR.NOT_FOUND };
+    targetClassId = a.class_id;
 
     const extensions = await listAssignmentExtensionsAction(id);
     const myExt = extensions.find((e) => e.student_id === me.id);
@@ -607,6 +612,7 @@ export async function submitAssignmentAction(assignmentId: string, text: unknown
       });
     }
   }
+  catatAktivitas({ userId: me.id, kind: 'kumpul_tugas', classId: targetClassId }).catch(() => {});
   revalidatePath('/classes/[id]', 'page');
   return { ok: true };
 }
@@ -924,20 +930,27 @@ export async function saveGradeAction(input: unknown): Promise<ActionResponse> {
   const me = await actor(['LECTURER', 'TEACHING_ASSISTANT']);
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
   const { submission_id: sid, score, comment = '' } = p.data;
+  let gradeClassId: string | null = null;
 
   if (me.online) {
     const supabase = await createClient();
     const { error } = await supabase.rpc('save_grade_draft', { p_submission: sid, p_score: score, p_comment: comment });
     if (error) return { ok: false, error: pesan(error.message) };
+    try {
+      const { data: sub } = await supabase.from('submissions').select('assignments(class_id)').eq('id', sid).maybeSingle();
+      gradeClassId = (sub as any)?.assignments?.class_id ?? null;
+    } catch {}
   } else {
     const o = demoOwned(sid, me.id, 'assignment.grade');
     if (!o) return { ok: false, error: ERR.FORBIDDEN };
     if (o.s.student_id === me.id) return { ok: false, error: ERR.SELF_REVIEW };
+    gradeClassId = o.a.class_id;
     const n = demoGrade(o.a.id, o.s.student_id);
     if (n?.status === 'FINAL') return { ok: false, error: ERR.GRADE_FINAL };
     if (n) Object.assign(n, { score, comment });
     else notas.push({ assignment_id: o.a.id, student_id: o.s.student_id, score, comment, status: 'DRAFT' });
   }
+  catatAktivitas({ userId: me.id, kind: 'review_pengumpulan', classId: gradeClassId }).catch(() => {});
   revalidatePath('/classes/[id]/assignments/[aid]', 'page');
   return { ok: true };
 }
@@ -946,19 +959,26 @@ export async function finalizeGradeAction(submissionId: string): Promise<ActionR
   if (!z.string().uuid().safeParse(submissionId).success) return { ok: false, error: ERR.NOT_FOUND };
   const me = await actor('LECTURER');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
+  let finClassId: string | null = null;
 
   if (me.online) {
     const supabase = await createClient();
     const { error } = await supabase.rpc('finalize_grade', { p_submission: submissionId });
     if (error) return { ok: false, error: pesan(error.message) };
+    try {
+      const { data: sub } = await supabase.from('submissions').select('assignments(class_id)').eq('id', submissionId).maybeSingle();
+      finClassId = (sub as any)?.assignments?.class_id ?? null;
+    } catch {}
   } else {
     const o = demoOwned(submissionId, me.id);
     const n = o && demoGrade(o.a.id, o.s.student_id);
     if (!o) return { ok: false, error: ERR.NOT_FOUND };
     if (!n || n.status !== 'DRAFT') return { ok: false, error: ERR.NO_DRAFT };
+    finClassId = o.a.class_id;
     n.status = 'FINAL';
     notify(o.s.student_id, 'GRADE_PUBLISHED', `Nilai terbit: ${o.a.title}`, 'Nilai dan feedback dapat dilihat di kelas.', o.a.class_id);
   }
+  catatAktivitas({ userId: me.id, kind: 'finalisasi_nilai', classId: finClassId }).catch(() => {});
   revalidatePath('/classes/[id]', 'page');
   revalidatePath('/classes/[id]/assignments/[aid]', 'page');
   return { ok: true };
@@ -1282,6 +1302,7 @@ export async function createMaterialAction(input: unknown): Promise<ActionRespon
     });
     mem.enrollments.filter((e) => e.class_id === class_id).forEach((e) => notify(e.student_id, 'MATERIAL_NEW', `Materi baru: ${title}`, 'Buka kelas untuk membacanya.', class_id));
   }
+  catatAktivitas({ userId: me.id, kind: 'terbit_materi', classId: class_id }).catch(() => {});
   revalidatePath('/classes/[id]', 'page');
   return { ok: true };
 }
@@ -1869,6 +1890,7 @@ export async function createAnnouncementAction(input: unknown): Promise<ActionRe
     pengumuman.push({ id: randomUUID(), class_id, title, body, created_at: new Date().toISOString() });
     mem.enrollments.filter((e) => e.class_id === class_id).forEach((e) => notify(e.student_id, 'ANNOUNCEMENT_NEW', `Pengumuman: ${title}`, 'Buka kelas untuk membacanya.', class_id));
   }
+  catatAktivitas({ userId: me.id, kind: 'terbit_pengumuman', classId: class_id }).catch(() => {});
   revalidatePath('/classes/[id]', 'page');
   return { ok: true };
 }
