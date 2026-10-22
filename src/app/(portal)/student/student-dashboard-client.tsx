@@ -34,6 +34,8 @@ import {
 } from '@/modules/academic/home-actions';
 import { StudentAcademicStatusCard } from '@/components/home/student-academic-status-card';
 import { DailyPriorityCard } from '@/components/home/daily-priority-card';
+import { KartuAktivitasDashboard } from '@/components/aktivitas/kartu-aktivitas-dashboard';
+import type { ItemAktivitasHarian } from '@/lib/aktivitas';
 import type { DailyPriorityItem } from '@/lib/akademik/daily-priorities';
 import type { StudentRiskEvaluation } from '@/modules/early-warning/types';
 
@@ -84,6 +86,7 @@ export interface StudentDashboardClientProps {
   deadlineItems?: Array<{ assignment_id: string; class_id: string; class_title: string; title: string; due_at: string }>;
   academicStatus?: StudentRiskEvaluation[];
   dailyPriorities?: DailyPriorityItem[];
+  aktivitas?: ItemAktivitasHarian[];
 }
 
 export function StudentDashboardClient({
@@ -95,6 +98,7 @@ export function StudentDashboardClient({
   agendaItems = [],
   academicStatus = [],
   dailyPriorities = [],
+  aktivitas = [],
 }: StudentDashboardClientProps) {
   const currentBannerData: HomeBannerData = bannerData || {
     primary: {
@@ -292,6 +296,16 @@ export function StudentDashboardClient({
                 onSelectCourse={handleSelectCourse}
               />
             </div>
+          )}
+
+          {/* GRAFIK KONTRIBUSI BELAJAR MAHASISWA (26 MINGGU) */}
+          {(showAll || showKelasSaya || showTugasKuis) && (
+            <KartuAktivitasDashboard
+              data={aktivitas}
+              judul="Grafik Kontribusi Belajar (26 Minggu)"
+              deskripsi="Aktivitas pengumpulan tugas, kuis CBT, presensi kuliah, dan diskusi Anda selama 6 bulan terakhir."
+              role="mahasiswa"
+            />
           )}
 
           {/* SECTION: KARTU LANJUTKAN BELAJAR (HANYA JIKA ADA MATERI AKTIF) */}

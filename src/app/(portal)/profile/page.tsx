@@ -19,6 +19,8 @@ import {
 } from 'lucide-react';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { getStudentBadgesAction } from '@/modules/academic/badge-certificate-actions';
+import { getAktivitasSayaAction } from '@/modules/academic/aktivitas-actions';
+import { ProfileAktivitasSection } from '@/components/aktivitas/profile-aktivitas-section';
 
 export default async function ProfilePage() {
   const userContext = await getCurrentUserWithRoles();
@@ -30,6 +32,7 @@ export default async function ProfilePage() {
   const { user, profile, roles, activeRole } = userContext;
   const fullName = profile?.full_name || 'Wahyu Aldiriyanto';
   const badges = await getStudentBadgesAction(user.id).catch(() => []);
+  const { aktivitas, daftarKelas } = await getAktivitasSayaAction().catch(() => ({ aktivitas: [], daftarKelas: [] }));
 
   const initials =
     fullName
@@ -220,6 +223,9 @@ export default async function ProfilePage() {
                 </Link>
               </div>
             </div>
+
+            {/* GRAFIK KONTRIBUSI AKTIVITAS (12 BULAN LENGKAP) */}
+            <ProfileAktivitasSection aktivitas={aktivitas} daftarKelas={daftarKelas} />
 
             {/* LENCANA PRESTASI AKADEMIK */}
             <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4">

@@ -6,15 +6,17 @@ import {
   getHomeAgendaAction,
 } from '@/modules/academic/home-actions';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+import { getAktivitasSayaAction } from '@/modules/academic/aktivitas-actions';
 import { LecturerDashboardClient } from './lecturer-dashboard-client';
 
 export default async function LecturerPortalPage() {
-  const [reviewsData, todaySchedule, activeClasses, agendaItems, userContext] = await Promise.all([
+  const [reviewsData, todaySchedule, activeClasses, agendaItems, userContext, aktivitasRes] = await Promise.all([
     listPendingReviewsAction(),
     getHomeTodayScheduleAction(),
     getHomeActiveClassesAction(),
     getHomeAgendaAction(),
     getCurrentUserWithRoles(),
+    getAktivitasSayaAction().catch(() => ({ aktivitas: [], daftarKelas: [] })),
   ]);
 
   const rawName = userContext?.profile?.full_name;
@@ -29,6 +31,7 @@ export default async function LecturerPortalPage() {
       activeClasses={activeClasses}
       agendaItems={agendaItems}
       lecturerName={lecturerName}
+      aktivitas={aktivitasRes.aktivitas}
     />
   );
 }

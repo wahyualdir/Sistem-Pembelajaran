@@ -26,6 +26,8 @@ import { ActiveClassesGrid } from '@/components/home/active-classes-grid';
 import { LecturerRightPanel } from '@/components/home/lecturer-right-panel';
 import { getNextUpcomingCourse } from '@/modules/academic/home-schedule-utils';
 import { usePortalLayout } from '@/app/(portal)/portal-shell';
+import { KartuAktivitasDashboard } from '@/components/aktivitas/kartu-aktivitas-dashboard';
+import type { ItemAktivitasHarian } from '@/lib/aktivitas';
 import type {
   HomeBannerData,
   TodayScheduleItem,
@@ -62,6 +64,7 @@ export interface LecturerDashboardClientProps {
   nidn?: string;
   functionalTitle?: string;
   department?: string;
+  aktivitas?: ItemAktivitasHarian[];
 }
 
 export function LecturerDashboardClient({
@@ -74,6 +77,7 @@ export function LecturerDashboardClient({
   nidn = '1018058501',
   functionalTitle = 'Lektor Kepala (IV/a)',
   department = 'Teknik Informatika (S1)',
+  aktivitas = [],
 }: LecturerDashboardClientProps) {
   const totalPending = items.reduce((sum, it) => sum + it.pending, 0);
 
@@ -364,6 +368,16 @@ export function LecturerDashboardClient({
                 progressLabel="Progres Pertemuan"
               />
             </div>
+          )}
+
+          {/* GRAFIK AKTIVITAS MENGAJAR DOSEN (26 MINGGU) */}
+          {(showAll || showKelasSaya || showKoreksi || showNilai) && (
+            <KartuAktivitasDashboard
+              data={aktivitas}
+              judul="Grafik Aktivitas Mengajar (26 Minggu)"
+              deskripsi="Rekam jejak penerbitan materi, kuis CBT, tugas, dan review penilaian selama 6 bulan terakhir."
+              role="dosen"
+            />
           )}
 
           {/* SECTION SPESIFIK: BANK SOAL CBT (Tampil saat kategori Bank Soal dipilih) */}
