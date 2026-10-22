@@ -10,11 +10,15 @@ Dokumen ini mencatat status verifikasi objektif dan bukti eksekusi per fase seca
 | :--- | :--- | :---: | :--- |
 | **S0** | Audit Skema, Persistensi, dan Login | **SELESAI** | Laporan audit lengkap di `docs/AUDIT_SEED_AKADEMIK.md` dan keputusan teknis di `docs/KEPUTUSAN_SEED_AKADEMIK.md`. |
 | **S1** | Migrasi `class_schedule_slots` & `course_code_aliases` | **SELESAI** | Migrasi `20261021000035_class_schedule_slots_and_aliases.sql` dibuat; tes pgTAP `13_class_schedule_slots_rls.sql`; `npm run check:rls` lolos 149 tabel. |
-| **S2** | Kerangka Skrip Seed TypeScript (`scripts/seed-akademik/`) | **SELESAI** | `guard.ts`, `load.ts`, `index.ts`; 11 unit test lolos (`guard.test.ts` & `load.test.ts`); dry-run CLI memvalidasi 9 CSV tanpa kesalahan. |
-| **S3** | Penyediaan 168 Akun Login dan Penugasan Peran | **SELESAI** | Modul `accounts.ts` menangani pembuatan 120 Mhs, 42 Dosen, 6 Staf/Admin secara batch via Supabase Admin API beserta profil, identitas, dan peran. |
-| **S4** | Penyemaian Data Akademik (Prodi, Sem, Ruang, Kelas, Slot, KRS, Asdos) | **SELESAI** | Modul `academic.ts` menyemai 1 Prodi, 1 Semester, 14 Ruang, 63 MK, 164 Kelas (join_code deterministik 8 karakter), 256 Slot, 870 KRS, 112 Izin Asdos (56 penugasan). |
-| **S5** | Integrasi Lapisan Data Generated (`seed-data.uir-ti-2026.generated.ts`) | **SELESAI** | Generator `generate-legacy.ts` menghasilkan `seed-data.uir-ti-2026.generated.ts`. Store `master-store`, `jadwal-store`, `krs-store` mendukung `SEED_DATASET=uir-ti-2026`. 3 unit test baru di `legacy-layer.test.ts` lolos. |
-| **S6** | Verifikasi Otomatis, Uji Login, dan Dokumentasi Akhir | **SELESAI** | Modul `verify.ts` mengotomatisasi 10 kueri verifikasi bagian 10; langkah CI ditambahkan di `.github/workflows/ci.yml`; dokumentasi lengkap di `docs/SEED_AKADEMIK.md`. Seluruh 613 unit tests & `npm run typecheck` lolos 100%. |
+| **S2** | Kerangka Skrip Seed TypeScript (`scripts/seed-akademik/`) | **SELESAI** | `guard.ts`, `load.ts`, `index.ts`; unit test lolos (`guard.test.ts` & `load.test.ts`); dry-run CLI memvalidasi CSV tanpa kesalahan. |
+| **S3** | Penyediaan 168 Akun Login dan Penugasan Peran | **BELUM DIJALANKAN TERHADAP DATABASE** | Modul `accounts.ts` telah diimplementasikan dan diverifikasi via unit test, namun **belum dijalankan terhadap database** sampai ada keluaran nyata. |
+| **S4** | Penyemaian Data Akademik (Prodi, Sem, Ruang, Kelas, Slot, KRS, Asdos) | **BELUM DIJALANKAN TERHADAP DATABASE** | Modul `academic.ts` telah diimplementasikan dan diverifikasi via unit test, namun **belum dijalankan terhadap database** sampai ada keluaran nyata. |
+| **S5** | Integrasi Lapisan Data Generated (`seed-data.uir-ti-2026.generated.ts`) | **SELESAI** | Generator `generate-legacy.ts` menghasilkan `seed-data.uir-ti-2026.generated.ts`. Store `master-store`, `jadwal-store`, `krs-store` mendukung `SEED_DATASET=uir-ti-2026`. Unit test di `legacy-layer.test.ts` dan `ruang.test.ts` (14 ruang identik dengan `ruang.csv`) lolos. |
+| **S6** | Verifikasi Otomatis, Uji Login, dan Dokumentasi Akhir | **SEBAGIAN (Skrip & Unit Test Siap)** | Modul `verify.ts` selesai; langkah CI seed di `.github/workflows/ci.yml` dan verifikasi database **belum dijalankan terhadap database** sampai ada keluaran nyata. Seluruh unit tests & `npm run typecheck` lolos 100%. |
+
+> [!IMPORTANT]
+> **Catatan Status Eksekusi Database**:
+> Tahapan **S3** (penyediaan 168 akun auth), **S4** (penyemaian data akademik ke Supabase), serta **langkah CI seed** (`npm run seed:akademik -- --apply`) **belum dijalankan terhadap database** sampai ada keluaran nyata dari lingkungan database aktif. Status tidak akan ditandai "SELESAI" sebelum terdapat bukti eksekusi langsung.
 
 ---
 
@@ -52,13 +56,13 @@ Perintah yang dijalankan: `npx vitest run src/tests/unit/seed-akademik/`
 ```
  RUN  v2.1.9 C:/Users/ACER/Downloads/implementasi
 
- ✓ src/tests/unit/seed-akademik/guard.test.ts (8 tests) 30ms
- ✓ src/tests/unit/seed-akademik/load.test.ts (3 tests) 274ms
- ✓ src/tests/unit/seed-akademik/legacy-layer.test.ts (3 tests) 13ms
+ ✓ src/tests/unit/seed-akademik/guard.test.ts (9 tests) 40ms
+ ✓ src/tests/unit/seed-akademik/ruang.test.ts (3 tests) 53ms
+ ✓ src/tests/unit/seed-akademik/load.test.ts (3 tests) 484ms
+ ✓ src/tests/unit/seed-akademik/legacy-layer.test.ts (4 tests) 88ms
 
- Test Files  3 passed (3)
-      Tests  14 passed (14)
-   Duration  4.54s
+ Test Files  4 passed (4)
+      Tests  19 passed (19)
 ```
 
 ### C. Pemeriksaan RLS Seluruh Skema Publik

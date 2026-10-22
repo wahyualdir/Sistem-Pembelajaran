@@ -15,7 +15,7 @@ CREATE INDEX IF NOT EXISTS idx_class_assistants_lookup
 
 -- 2. Indeks Notifikasi (Pengambilan Cepat Unread & Deduplikasi Idempoten)
 CREATE INDEX IF NOT EXISTS idx_notifications_unread_fast 
-    ON public.notifications (recipient_id, is_read, created_at DESC);
+    ON public.notifications (user_id, created_at DESC) WHERE read_at IS NULL;
 
 CREATE INDEX IF NOT EXISTS idx_notifications_dedup 
     ON public.notifications (dedup_key) WHERE dedup_key IS NOT NULL;
@@ -30,9 +30,6 @@ CREATE INDEX IF NOT EXISTS idx_chapter_podcasts_audio_status
 -- 4. Indeks Aktivitas, Flashcards, dan Percobaan CBT
 CREATE INDEX IF NOT EXISTS idx_activity_events_student_class_created 
     ON public.activity_events (student_id, class_id, occurred_at DESC);
-
-CREATE INDEX IF NOT EXISTS idx_quiz_answers_attempt_question 
-    ON public.quiz_answers (attempt_id, question_id);
 
 CREATE INDEX IF NOT EXISTS idx_flashcards_deck_status 
     ON public.flashcards (deck_id, status);
