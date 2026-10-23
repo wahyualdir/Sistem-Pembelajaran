@@ -30,6 +30,7 @@ import {
   type DynamicMenuBadges,
 } from './portal-nav';
 import { ShellContext } from '@/components/shared/dashboard-shell';
+import { TechBackground } from '@/components/ui/tech-background';
 
 export interface PortalLayoutContextValue {
   isSidebarCollapsed: boolean;
@@ -303,7 +304,12 @@ export function PortalShell({
           setHasRightPanel,
         }}
       >
-        <div className="min-h-screen bg-retro-bg text-foreground font-sans flex flex-col md:flex-row antialiased selection:bg-ink selection:text-white">
+        <div className="min-h-screen bg-transparent text-[#1C1917] font-sans flex flex-col md:flex-row antialiased selection:bg-[#C2553A] selection:text-white relative">
+          {/* Tech Background Grid & Gradient khas Velqora */}
+          <TechBackground />
+          {/* CRT Scanlines Overlay */}
+          <div className="fixed inset-0 vt-scanlines pointer-events-none z-30" />
+
           {/* Drawer Backdrop Overlay (scrim) untuk < 1280px */}
           {isDrawerOpen && (
             <div
@@ -320,8 +326,8 @@ export function PortalShell({
             ref={drawerRef}
             tabIndex={-1}
             className={cn(
-              'fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r-2 border-retro-border bg-retro-bg h-[100dvh] shrink-0 outline-none',
-              'xl:sticky xl:top-0 xl:h-[100dvh] xl:z-40',
+              'fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r-2 border-r-[#7A756D] border-l-2 border-l-[#FFFFFF] bg-[#FAF8F5] h-[100dvh] shrink-0 outline-none',
+              'xl:sticky xl:top-0 xl:h-[100dvh] xl:z-40 shadow-xs',
               'transition-all duration-200 ease-in-out motion-reduce:transition-none',
               'pl-[env(safe-area-inset-left,0px)] pb-[env(safe-area-inset-bottom,0px)]',
               isRailActive ? 'w-sidebar xl:w-rail' : 'w-sidebar',
@@ -330,19 +336,19 @@ export function PortalShell({
           >
             {/* Header Sidebar: Brand Block (Full vs Rail) */}
             {isRailActive ? (
-              <div className="flex h-header shrink-0 items-center justify-center border-b-2 border-retro-border bg-gray-soft px-2 box-border">
+              <div className="flex h-header shrink-0 items-center justify-center border-b-2 border-[#7A756D] bg-[#ECE9D8] px-2 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center justify-center group focus-visible:outline-none"
                   title={`RuangKampus - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-white p-0.5 shadow-retro-sm group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-[#7A756D] bg-white p-0.5 shadow-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
                     <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                 </Link>
               </div>
             ) : (
-              <div className="flex items-center h-header shrink-0 border-b-2 border-retro-border bg-gray-soft px-4 box-border">
+              <div className="flex items-center h-header shrink-0 border-b-2 border-[#7A756D] bg-[#ECE9D8] px-4 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0"
@@ -352,11 +358,11 @@ export function PortalShell({
                     <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="font-heading font-black text-base sm:text-lg tracking-tight text-ink leading-none whitespace-nowrap">
-                      Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
+                    <span className="font-heading font-black text-base sm:text-lg tracking-tight text-[#1C1917] leading-none whitespace-nowrap">
+                      Ruang<span className="text-[#C2553A]">Kampus</span>
                     </span>
-                    <span className="text-xs font-mono font-bold text-black uppercase tracking-wider mt-1 leading-none">
-                      Sistem Pembelajaran
+                    <span className="text-[9.5px] font-mono font-bold text-[#853827] uppercase tracking-wider mt-1 leading-none">
+                      Academic Learning OS
                     </span>
                   </div>
                 </Link>
@@ -372,22 +378,22 @@ export function PortalShell({
                 return (
                   <div key={group.id || group.title} className="space-y-1">
                     {!isRailActive && group.title ? (
-                      <div className="flex items-center justify-between px-3 py-1 mb-1">
-                        <p className="text-xs font-black tracking-wider text-black font-sans uppercase">
+                      <div className="flex items-center justify-between px-3 py-1 mb-0.5">
+                        <p className="text-[10px] font-mono font-bold tracking-wider text-[#853827] uppercase">
                           {group.title}
                         </p>
                         {group.collapsible && (
                           <button
                             type="button"
                             onClick={() => toggleGroupCollapse(group.id)}
-                            className="p-1 rounded hover:bg-gray-soft text-black transition-transform cursor-pointer"
+                            className="p-1 rounded hover:bg-[#ECE7DF] text-[#7A756D] hover:text-[#1C1917] transition-transform cursor-pointer"
                             title={`Buka/Tutup grup ${group.title}`}
                             aria-label={`Toggle grup ${group.title}`}
                           >
                             <ChevronDown
                               className={cn(
                                 'h-3.5 w-3.5 transition-transform duration-200',
-                                isGroupCollapsed ? '-rotate-90 text-gray' : 'rotate-0 text-black'
+                                isGroupCollapsed ? '-rotate-90 text-[#7A756D]' : 'rotate-0 text-[#1C1917]'
                               )}
                             />
                           </button>
@@ -395,7 +401,7 @@ export function PortalShell({
                       </div>
                     ) : null}
                     {(!isGroupCollapsed || isRailActive) && (
-                      <div className="space-y-0.5 sm:space-y-1">
+                      <div className="space-y-0.5">
                         {group.items.map((item) => {
                           const Icon = item.icon;
                           const isActive = isNavItemActive(item.href, pathname, allNavHrefs);
@@ -409,20 +415,20 @@ export function PortalShell({
                                   if (!isDesktop) closeDrawer();
                                 }}
                                 className={cn(
-                                  'flex items-center justify-between rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink',
+                                  'flex items-center justify-between rounded-xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A]',
                                   isRailActive
-                                    ? 'justify-center w-12 h-10 mx-auto'
-                                    : 'px-3.5 py-2.5 gap-3 text-base font-bold min-h-[44px]',
+                                    ? 'justify-center w-11 h-9 mx-auto'
+                                    : 'px-3 py-2 gap-2.5 text-xs sm:text-sm min-h-[38px]',
                                   isActive
-                                    ? 'border-2 border-ink border-l-4 border-l-black bg-ink text-white shadow-retro font-bold hover:bg-ink/90'
-                                    : 'text-black hover:bg-gray-soft hover:text-black font-bold'
+                                    ? 'bg-[#C2553A] text-white shadow-xs border-t border-l border-[#EE7257] border-b border-r border-[#6B2D20] font-bold'
+                                    : 'text-[#2D2823] hover:text-[#1A1816] hover:bg-[#ECE7DF] border border-transparent font-medium'
                                 )}
                               >
                                 <span className="flex items-center gap-2.5 truncate">
                                   <Icon
                                     className={cn(
-                                      'h-5 w-5 shrink-0 transition-transform',
-                                      isActive ? 'text-white' : 'text-black'
+                                      'h-4 w-4 shrink-0 transition-transform',
+                                      isActive ? 'text-white' : 'text-[#6E675F] group-hover:text-[#1A1816]'
                                     )}
                                   />
                                   {!isRailActive && <span className="truncate">{item.label}</span>}
@@ -430,8 +436,10 @@ export function PortalShell({
                                 {!isRailActive && item.badge !== undefined && (
                                   <span
                                     className={cn(
-                                      'inline-flex min-w-5 items-center justify-center rounded-full px-2 py-0.5 text-xs font-bold font-sans shrink-0',
-                                      isActive ? 'bg-surface text-black' : 'bg-black text-white'
+                                      'inline-flex min-w-5 items-center justify-center px-1.5 py-0.5 text-[10px] font-mono font-bold shrink-0',
+                                      isActive
+                                        ? 'bg-white/20 text-white border border-white/30'
+                                        : 'bg-[#C2553A]/10 text-[#C2553A] border border-[#C2553A]/30'
                                     )}
                                   >
                                     {item.badge}
@@ -660,12 +668,12 @@ export function PortalShell({
             )}
 
             {/* ======================================================== */}
-            {/* HEADER ATAS: TAMPILAN RETRO KAMPUS                       */}
+            {/* HEADER ATAS: VELQORA ACADEMIC OS TOPBAR                 */}
             {/* ======================================================== */}
             <header
               className={cn(
-                'sticky top-0 z-30 flex items-center justify-between border-b-2 border-retro-border bg-surface px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
-                isScrolled && 'shadow-retro-md border-b-ink'
+                'sticky top-0 z-30 flex items-center justify-between border-b-2 border-[#7A756D] bg-[#ECE9D8] px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
+                isScrolled && 'shadow-md border-b-[#4A463F]'
               )}
             >
               {/* SISI KIRI: TOMBOL TOGGLE BILAH SAMPING */}
@@ -674,11 +682,11 @@ export function PortalShell({
                   ref={burgerButtonRef}
                   type="button"
                   onClick={handleBurgerClick}
-                  className="flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black shadow-retro-sm hover:bg-gray-soft active:translate-y-0.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black shrink-0 cursor-pointer"
+                  className="flex h-9 w-9 min-h-[36px] min-w-[36px] items-center justify-center font-mono font-bold bg-[#ECE9D8] text-[#1C1917] border-t border-l border-white border-b border-r border-[#7A756D] hover:bg-[#F2EFE8] active:border-t-[#7A756D] active:border-l-[#7A756D] active:border-b-white active:border-r-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A] shrink-0 cursor-pointer"
                   title={isCollapsed ? 'Perbesar Bilah Samping' : 'Kecilkan Bilah Samping'}
                   aria-label="Toggle Sidebar"
                 >
-                  <PanelLeft className="h-5 w-5 text-black" />
+                  <PanelLeft className="h-4 w-4 text-[#1C1917]" />
                 </button>
               </div>
 
@@ -693,21 +701,21 @@ export function PortalShell({
                   }}
                   className="relative w-full"
                 >
-                  <div className="flex items-center rounded-lg border-2 border-retro-border bg-retro-surface px-3 sm:px-3.5 py-1.5 sm:py-2 shadow-retro-sm focus-within:shadow-retro focus-within:ring-2 focus-within:ring-black transition-all">
-                    <Search className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-black mr-2.5 shrink-0" />
+                  <div className="flex items-center vt-window-inset px-3 sm:px-3.5 py-1.5 focus-within:ring-2 focus-within:ring-[#C2553A] transition-all bg-white">
+                    <Search className="h-4 w-4 text-[#7A756D] mr-2.5 shrink-0" />
                     <input
                       ref={searchInputRef}
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Cari mata kuliah, materi, tugas, topik..."
-                      className="w-full bg-transparent text-base font-bold text-black placeholder:text-neutral-600 placeholder:font-semibold focus:outline-none min-w-0"
+                      placeholder="Cari mata kuliah, materi, modul komputasi..."
+                      className="w-full bg-transparent text-sm font-medium text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none min-w-0"
                     />
                     <div className="hidden sm:flex items-center gap-1 shrink-0 ml-2 select-none">
-                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-mono font-bold text-black shadow-2xs">
+                      <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-[10px] font-mono font-bold text-[#524B42] shadow-2xs">
                         ⌘
                       </kbd>
-                      <kbd className="px-1.5 py-0.5 rounded border border-black bg-gray-soft text-xs font-mono font-bold text-black shadow-2xs">
+                      <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-[10px] font-mono font-bold text-[#524B42] shadow-2xs">
                         K
                       </kbd>
                     </div>
@@ -717,10 +725,10 @@ export function PortalShell({
 
               {/* SISI KANAN: SEMESTER BADGE, NOTIFIKASI, & TOMBOL BANTUAN (?) */}
               <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
-                {/* Badge Semester Monokrom Elegan */}
+                {/* Badge Semester Velqora Terracotta */}
                 <div className="hidden lg:flex items-center">
-                  <span className="text-sm font-sans font-black text-white uppercase tracking-wider bg-black px-3.5 py-1.5 rounded-lg border-2 border-retro-border shadow-retro-sm select-none">
-                    2026/2027 Ganjil
+                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider bg-[#C2553A] px-3 py-1 border-t border-l border-[#EE7257] border-b border-r border-[#6B2D20] shadow-xs select-none">
+                    TA 2026/2027 GANJIL
                   </span>
                 </div>
 
@@ -728,12 +736,12 @@ export function PortalShell({
                 {availableRoles && availableRoles.length > 1 && (
                   <Link
                     href="/workspace"
-                    className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border-2 border-black bg-surface hover:bg-gray-soft text-xs font-bold text-black transition-all shadow-xs"
+                    className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono font-bold text-[#1C1917] bg-[#ECE9D8] hover:bg-[#F2EFE8] border-t border-l border-white border-b border-r border-[#7A756D] transition-all shadow-2xs"
                     title="Beralih peran pengguna"
                   >
-                    <Layers className="h-3.5 w-3.5 text-black" />
+                    <Layers className="h-3.5 w-3.5 text-[#853827]" />
                     <span className="hidden sm:inline">{roleName}</span>
-                    <ChevronDown className="h-3 w-3 text-black/60" />
+                    <ChevronDown className="h-3 w-3 text-[#7A756D]" />
                   </Link>
                 )}
 
@@ -753,7 +761,7 @@ export function PortalShell({
             </header>
 
             {/* VIEWPORT KONTEN HALAMAN */}
-            <main className="flex-1 bg-retro-bg min-w-0 pb-20 sm:pb-24">
+            <main className="flex-1 bg-transparent min-w-0 pb-20 sm:pb-24 relative z-10">
               {children}
             </main>
           </div>

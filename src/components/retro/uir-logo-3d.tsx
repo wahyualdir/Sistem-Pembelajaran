@@ -138,7 +138,7 @@ export function UirLogo3D({ className, autoPlayInterval = 3200 }: UirLogo3DProps
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
       className={cn(
-        'relative group cursor-pointer select-none flex flex-col items-center justify-between rounded-2xl border-2 border-ink bg-surface shadow-retro transition-all duration-300',
+        'relative group cursor-pointer select-none flex flex-col items-center justify-between rounded-none vt-window bg-[#FFFFFF] shadow-xs transition-all duration-300',
         'w-full h-64 sm:h-72 md:h-80 overflow-hidden p-6',
         className
       )}

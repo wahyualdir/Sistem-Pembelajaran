@@ -1,6 +1,5 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
-import { WindowTrafficLights } from './window-traffic-lights';
 
 interface RetroWindowProps {
   title?: string;
@@ -18,7 +17,7 @@ interface RetroWindowProps {
 export function RetroWindow({
   title = 'ui_window.app',
   badge,
-  subtitle,
+  subtitle: _subtitle,
   headerBadge,
   headerBadgeVariant: _variant,
   className,
@@ -32,38 +31,42 @@ export function RetroWindow({
   return (
     <div
       className={cn(
-        'rounded-none sm:rounded-[3px] border-2 border-black bg-retro-surface shadow-retro-md sm:shadow-retro-window overflow-hidden transition-all',
+        'vt-window rounded-none overflow-hidden transition-all duration-150',
         className
       )}
     >
-      {/* Window Header Bar with Retro Mac Circles */}
+      {/* Window Header Bar with Velqora Signature Terracotta Gradient */}
       <div
         className={cn(
-          'flex h-11 sm:h-12 items-center justify-between border-b-2 border-black bg-gray-soft px-3 sm:px-4',
+          'vt-titlebar flex h-10 items-center justify-between px-3 select-none shrink-0',
           headerClassName
         )}
       >
-        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1">
-          {/* Retro Window Dot Controls (Merah Kampus, Abu-abu, Abu Gelap) */}
-          <WindowTrafficLights size="sm" />
-
-          <div className="ml-1 sm:ml-2 flex items-center gap-2 min-w-0">
-            <span className="text-sm sm:text-base font-bold text-black tracking-tight font-heading truncate">
-              {title}
+        <div className="flex items-center gap-2 min-w-0 flex-1">
+          <span className="font-mono text-xs sm:text-sm font-bold tracking-wide text-white truncate uppercase">
+            {title}
+          </span>
+          {displayBadge && (
+            <span className="font-mono text-[10px] font-bold bg-black/25 text-white border border-white/30 px-1.5 py-0.5 shrink-0">
+              {displayBadge}
             </span>
-            {displayBadge && (
-              <span className="rounded-sm border border-black bg-retro-surface px-2 py-0.5 text-xs font-bold font-sans text-black shadow-retro-sm shrink-0">
-                {displayBadge}
-              </span>
-            )}
-          </div>
+          )}
         </div>
 
-        {actions && <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-black shrink-0 ml-2">{actions}</div>}
+        <div className="flex items-center gap-2 shrink-0">
+          {actions && <div className="flex items-center gap-2 text-xs font-bold text-white shrink-0">{actions}</div>}
+          <div className="flex items-center gap-1 shrink-0 ml-1">
+            <span className="vt-window-btn" title="Minimalkan">_</span>
+            <span className="vt-window-btn" title="Perbesar">□</span>
+            <span className="vt-window-btn vt-window-btn-close" title="Tutup">×</span>
+          </div>
+        </div>
       </div>
 
-      {/* Window Body */}
-      <div className={cn('p-4 sm:p-6 lg:p-7', bodyClassName)}>{children}</div>
+      {/* Window Body with Inset Frame */}
+      <div className={cn('p-4 sm:p-6 bg-surface text-[#1C1917]', bodyClassName)}>
+        {children}
+      </div>
     </div>
   );
 }

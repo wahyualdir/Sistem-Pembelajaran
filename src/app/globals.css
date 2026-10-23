@@ -80,60 +80,62 @@
 :root {
   --font-sans: var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-heading: var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 
-  /* Dasar Identitas Kampus (HANYA merah, abu-abu, putih, dan hitam netral) */
-  --bg: #F3F3F4;
+  /* Velqora Academic Learning OS Palette */
+  --bg: #FAF8F5;
+  --bg-main: var(--bg);
   --surface: #FFFFFF;
-  --ink: #000000;
+  --bg-surface: var(--surface);
+  --bg-surface-raised: #ECE9D8;
+  --ink: #1C1917;
 
-  /* Identitas kampus */
-  --primary: #ED1C24;
-  --primary-dark: #A91117;
-  --gray: #000000;
-  --gray-dark: #000000;
-  --gray-soft: #E2E3E4;
-  --shadow: 4px 4px 0 var(--ink);
+  /* Velqora Signature Terracotta (#C2553A) "Warm Academic Library" */
+  --primary: #C2553A;
+  --primary-hover: #B84A2B;
+  --primary-dark: #853827;
+  --primary-soft: #F4E4DD;
+  --primary-foreground: #FFFFFF;
+
+  --gray: #7A756D;
+  --gray-dark: #4A463F;
+  --gray-soft: #ECE9D8;
+  --shadow: 2px 2px 0px rgba(122, 117, 109, 0.45);
 
   /* Pemetaan Dasar ke Token Sistem */
-  --bg-main: var(--bg);
-  --bg-surface: var(--surface);
-  --bg-surface-raised: var(--gray-soft);
-  --border-main: var(--ink);
-  --border-strong: var(--ink);
+  --border-main: #D6D3CB;
+  --border-strong: #7A756D;
 
-  /* Teks Kontras Tinggi & Gelap Pekat */
-  --text-primary: #000000;
-  --text-secondary: #000000;
-  --text-subtle: #000000;
+  /* Velqora Warm Charcoal & Stone Typography - Kontras Tinggi & Jelas */
+  --text-primary: #1C1917;
+  --text-secondary: #2D2823;
+  --text-subtle: #44403C;
 
   /* Aksen Utama */
-  --primary-hover: var(--primary-dark);
-  --primary-soft: var(--gray-soft);
-  --primary-foreground: #FFFFFF;
-  --ring: rgb(237 28 36 / 0.4);
+  --ring: rgb(194 85 58 / 0.4);
   --panel: var(--ink);
   --panel-accent: var(--primary);
 
-  /* Status Berkontras Jelas (Teks dan Border Hitam Pekat) */
-  --status-danger: var(--ink);
-  --status-danger-soft: var(--gray-soft);
-  --status-danger-border: var(--ink);
+  /* Status Berkontras Jelas */
+  --status-danger: #EF4444;
+  --status-danger-soft: #FEF2F2;
+  --status-danger-border: #DC2626;
   --status-danger-foreground: #FFFFFF;
 
-  /* Bentuk: Sudut tajam / retro 2px, bayangan balok hitam pekat */
-  --radius-sm: 0px;
-  --radius-control: 2px;
-  --radius-container: 2px;
-  --radius-lg: 2px;
-  --shadow-sm: 2px 2px 0px var(--ink);
+  /* Bentuk & Bayangan Tactile Beveled */
+  --radius-sm: 4px;
+  --radius-control: 6px;
+  --radius-container: 10px;
+  --radius-lg: 12px;
+  --shadow-sm: 1px 1px 0px var(--border-strong);
   --shadow-md: var(--shadow);
 
-  /* Palet Retro yang Terhubung ke Identitas Kampus */
-  --retro-bg: var(--bg);
-  --retro-surface: var(--surface);
-  --retro-warm: var(--gray-soft);
-  --retro-border: var(--ink);
-  --retro-dither: var(--gray-soft);
+  /* Palet Retro Velqora OS */
+  --retro-bg: #FAF8F5;
+  --retro-surface: #FFFFFF;
+  --retro-warm: #ECE9D8;
+  --retro-border: #7A756D;
+  --retro-dither: #F4EFEB;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -240,12 +242,12 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     background-color: var(--bg-main);
-    color: #000000;
+    color: #1C1917;
     font-size: 1rem;
     line-height: 1.5;
     min-height: 100dvh;
     overflow-x: hidden;
-    font-weight: 500;
+    font-weight: 700;
   }
   h1 {
     font-family: var(--font-sans);
@@ -276,7 +278,8 @@
     text-wrap: balance;
   }
   p {
-    font-weight: 500;
+    font-weight: 600;
+    color: #1C1917;
   }
   .uppercase, [class*="uppercase"] {
     letter-spacing: 0.04em;
@@ -1226,4 +1229,215 @@ textarea::placeholder,
 @keyframes float-dance-5 {
   0%, 100% { transform: translateY(-18px) rotate(7deg); }
   50% { transform: translateY(10px) rotate(-5deg); }
+}
+
+/* ======================================================== */
+/* VELQORA ACADEMIC LEARNING OS & COMPUTATIONAL NOTEBOOK    */
+/* ======================================================== */
+
+.vt-scanlines {
+  background: linear-gradient(
+    rgba(28, 25, 23, 0) 50%, 
+    rgba(28, 25, 23, 0.03) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+.vt-desktop-bg {
+  background-color: #FAF8F5;
+  background-image: 
+    radial-gradient(ellipse at 50% 10%, rgba(194, 85, 58, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+    linear-gradient(rgba(194, 85, 58, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(194, 85, 58, 0.07) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 28px 28px, 28px 28px;
+}
+
+.bg-tech-grid-light {
+  background-size: 28px 28px;
+  background-image: 
+    linear-gradient(to right, rgba(194, 85, 58, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(194, 85, 58, 0.07) 1px, transparent 1px);
+}
+
+.radial-mask-vignette {
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 60%, transparent 100%);
+}
+
+/* Retro Window Framing (Warm Classic Ivory & Bevel) */
+.vt-window {
+  background-color: #ECE9D8;
+  border-top: 2px solid #FFFFFF;
+  border-left: 2px solid #FFFFFF;
+  border-right: 2px solid #7A756D;
+  border-bottom: 2px solid #7A756D;
+  box-shadow: 2px 6px 20px rgba(28, 25, 23, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.dark .vt-window,
+html.dark .vt-window {
+  background-color: #18181B;
+  border-top: 2px solid #3F3F46;
+  border-left: 2px solid #3F3F46;
+  border-right: 2px solid #09090B;
+  border-bottom: 2px solid #09090B;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.vt-window-inset {
+  border-top: 2px solid #7A756D;
+  border-left: 2px solid #7A756D;
+  border-right: 2px solid #FFFFFF;
+  border-bottom: 2px solid #FFFFFF;
+  background-color: #FFFFFF;
+}
+
+.dark .vt-window-inset,
+html.dark .vt-window-inset {
+  border-top: 2px solid #09090B;
+  border-left: 2px solid #09090B;
+  border-right: 2px solid #3F3F46;
+  border-bottom: 2px solid #3F3F46;
+  background-color: #121214;
+}
+
+/* Window Titlebar (Signature Velqora Terracotta Gradient) */
+.vt-titlebar {
+  background: linear-gradient(90deg, #C2553A 0%, #B84A2B 60%, #853827 100%);
+  color: #FFFFFF;
+}
+
+.dark .vt-titlebar,
+html.dark .vt-titlebar {
+  background: linear-gradient(90deg, #A34530 0%, #853827 60%, #6B2D20 100%);
+  color: #FFFFFF;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.vt-titlebar-inactive {
+  background: linear-gradient(90deg, #9C968D 0%, #7A756D 100%);
+  color: #F4EFEB;
+}
+
+/* Control Buttons (Minimize, Maximize, Close) */
+.vt-window-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 800;
+  background-color: #ECE9D8;
+  color: #1C1917;
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  border-right: 1px solid #4A463F;
+  border-bottom: 1px solid #4A463F;
+  transition: all 0.1s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.vt-window-btn:hover {
+  background-color: #F5EFEB;
+  color: #000000;
+}
+
+.vt-window-btn:active {
+  border-top: 1px solid #4A463F;
+  border-left: 1px solid #4A463F;
+  border-right: 1px solid #FFFFFF;
+  border-bottom: 1px solid #FFFFFF;
+}
+
+.vt-window-btn-close:hover {
+  background-color: #EF4444 !important;
+  color: #FFFFFF !important;
+  border-color: #DC2626 !important;
+}
+
+/* Velqora Terracotta Primary Button */
+.vt-btn-terracotta {
+  background: #C2553A;
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-top: 2px solid #EE7257;
+  border-left: 2px solid #EE7257;
+  border-right: 2px solid #6B2D20;
+  border-bottom: 2px solid #6B2D20;
+  box-shadow: 0 2px 10px rgba(194, 85, 58, 0.35);
+  transition: all 0.12s ease;
+  cursor: pointer;
+}
+
+.vt-btn-terracotta:hover {
+  background: #B84A2B;
+  box-shadow: 0 4px 16px rgba(194, 85, 58, 0.5);
+  transform: translateY(-1px);
+}
+
+.vt-btn-terracotta:active {
+  border-top: 2px solid #6B2D20;
+  border-left: 2px solid #6B2D20;
+  border-right: 2px solid #EE7257;
+  border-bottom: 2px solid #EE7257;
+  transform: translateY(1px);
+}
+
+/* Warm Paper / Chrome Bevel Button */
+.vt-btn-chrome {
+  background: #FFFFFF;
+  color: #1C1917;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  border-top: 2px solid #FFFFFF;
+  border-left: 2px solid #FFFFFF;
+  border-right: 2px solid #8A857D;
+  border-bottom: 2px solid #8A857D;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.12s ease;
+  cursor: pointer;
+}
+
+.vt-btn-chrome:hover {
+  background: #F4EFEB;
+  color: #C2553A;
+  border-color: #B54F2F;
+}
+
+.vt-btn-chrome:active {
+  border-top: 2px solid #8A857D;
+  border-left: 2px solid #8A857D;
+  border-right: 2px solid #FFFFFF;
+  border-bottom: 2px solid #FFFFFF;
+}
+
+/* Taskbar Styling (Retro Windows Cream) */
+.vt-taskbar {
+  background: #ECE9D8;
+  border-top: 2px solid #FFFFFF;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Marquee / Ribbon Animation */
+@keyframes vt-marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-vt-marquee {
+  display: flex;
+  width: max-content;
+  animation: vt-marquee 28s linear infinite;
+}
+
+.animate-vt-marquee:hover {
+  animation-play-state: paused;
 }

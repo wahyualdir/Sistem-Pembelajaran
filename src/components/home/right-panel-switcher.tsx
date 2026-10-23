@@ -84,15 +84,13 @@ export function RightPanelSwitcher({
   return (
     <div className="flex flex-col gap-5">
       {/* 1. Pengalih Dua Kondisi (Tab Chip Retro) */}
-      <div className="flex items-center p-1.5 rounded-xl border-2 border-ink bg-gray-soft shadow-xs">
+      <div className="flex items-center p-1.5 vt-window-inset p-1 bg-[#ECE9D8] rounded-none">
         <button
           type="button"
           onClick={() => onTabChange('hari-ini')}
           className={cn(
             'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
-            activeTab === 'hari-ini'
-              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-              : 'text-ink hover:bg-ink/5'
+            activeTab === 'hari-ini' ? 'vt-btn-terracotta text-white font-mono shadow-xs' : 'vt-btn-chrome text-[#1C1917] font-mono'
           )}
         >
           Hari Ini
@@ -102,9 +100,7 @@ export function RightPanelSwitcher({
           onClick={() => onTabChange('detail-kelas')}
           className={cn(
             'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
-            activeTab === 'detail-kelas'
-              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-              : 'text-ink hover:bg-ink/5'
+            activeTab === 'detail-kelas' ? 'vt-btn-terracotta text-white font-mono shadow-xs' : 'vt-btn-chrome text-[#1C1917] font-mono'
           )}
         >
           Detail Kelas
@@ -117,7 +113,7 @@ export function RightPanelSwitcher({
       {activeTab === 'hari-ini' && (
         <div className="flex flex-col gap-5 animate-fade-in pb-24">
           {/* 1. Header Identitas Kampus & Status Semester Mahasiswa */}
-          <div className="p-4 sm:p-5 rounded-2xl border-2 border-ink bg-surface shadow-retro space-y-3">
+          <div className="p-4 sm:p-5 vt-window rounded-none bg-[#FAF8F5] shadow-xs space-y-3">
             <div className="flex items-center gap-2.5 pb-2.5 border-b-2 border-ink">
               <div className="flex items-center gap-2.5 min-w-0 flex-1">
                 <div className="h-9 w-9 rounded-xl border-2 border-ink bg-white p-0.5 flex items-center justify-center shrink-0 shadow-retro-xs overflow-hidden">
@@ -129,7 +125,7 @@ export function RightPanelSwitcher({
                 </div>
                 <div className="min-w-0 flex-1">
                   <span className="text-base font-heading font-black text-ink tracking-tight block leading-tight whitespace-nowrap">
-                    Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
+                    Ruang<span style={{ color: '#C2553A' }} className="text-[#C2553A]">Kampus</span>
                   </span>
                   <span className="text-xs sm:text-sm font-mono font-bold text-black uppercase tracking-wider block leading-tight mt-0.5 truncate">
                     Kartu Mahasiswa Aktif
@@ -148,7 +144,7 @@ export function RightPanelSwitcher({
                 </p>
               </div>
               <span className="text-xs font-mono font-bold px-3 py-1 rounded-lg border-2 border-ink bg-gray-soft text-ink shadow-2xs">
-                Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
+                Ruang<span style={{ color: '#C2553A' }} className="text-[#C2553A]">Kampus</span>
               </span>
             </div>
           </div>

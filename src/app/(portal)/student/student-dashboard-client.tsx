@@ -245,10 +245,10 @@ export function StudentDashboardClient({
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      'px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-sm sm:text-base font-bold tracking-normal shrink-0 transition-all focus-visible:outline-none',
+                      'px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm font-mono font-bold tracking-normal shrink-0 transition-all focus-visible:outline-none cursor-pointer',
                       isActive
-                        ? 'border-2 border-ink bg-ink text-white shadow-retro scale-[1.02]'
-                        : 'border-2 border-ink bg-surface text-ink shadow-retro hover:bg-gray-soft hover:-translate-y-0.5'
+                        ? 'vt-btn-terracotta text-white shadow-xs'
+                        : 'vt-btn-chrome text-[#1C1917] hover:bg-white hover:text-[#C2553A]'
                     )}
                   >
                     {cat}
