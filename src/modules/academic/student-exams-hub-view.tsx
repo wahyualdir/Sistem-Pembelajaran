@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {
   Award,
   Clock,
-  ShieldAlert,
   Play,
   FileText,
   Search,
@@ -90,21 +89,7 @@ export function StudentExamsHubView({ initialQuizzes }: StudentExamsHubViewProps
           </div>
         </div>
 
-        {/* 2. CATATAN RINGKAS PENGAWASAN */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-3.5 py-2.5 bg-[#FAF8F5] border-2 border-[#7A756D] text-xs font-bold text-[#1C1917]">
-          <div className="flex items-center gap-2">
-            <ShieldAlert className="h-4 w-4 text-[#C2553A] shrink-0" />
-            <span>
-              Sistem proctoring terpadu aktif untuk sesi UTS & UAS. Kuis berkala dan latihan mandiri dapat diakses bebas.
-            </span>
-          </div>
-          <span className="font-black text-[#065F46] shrink-0 uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-[#10B981] inline-block animate-pulse" />
-            Status: Terhubung
-          </span>
-        </div>
-
-        {/* 3. TOOLBAR KATEGORI & PENCARIAN */}
+        {/* 2. TOOLBAR KATEGORI & PENCARIAN */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           {/* Segmented Switcher */}
           <div className="inline-flex items-center p-1 bg-[#ECE9D8] border-2 border-[#7A756D] gap-1 overflow-x-auto">
