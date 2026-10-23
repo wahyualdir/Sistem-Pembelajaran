@@ -55,6 +55,8 @@ import { ClassChaptersTab } from './class-chapters-tab';
 import { ClassProgressTab } from './class-progress-tab';
 import { ClassFeatureSettingsTab } from './class-feature-settings-tab';
 import { TabAktivitasKelas } from '@/components/aktivitas/tab-aktivitas-kelas';
+import { RetroLiveClassroom } from '@/components/retro/retro-live-classroom';
+import { RetroDocViewer } from '@/components/retro/retro-doc-viewer';
 import type {
   ClassMapItem,
   ClassChapterItem,
@@ -224,6 +226,13 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
   const [attendanceSubTab, setAttendanceSubTab] = useState<'sesi' | 'permohonan'>('sesi');
   const [completedMaterials, setCompletedMaterials] = useState<Record<string, boolean>>({});
   const [remindSuccess, setRemindSuccess] = useState<string | null>(null);
+  const [isLiveRoomOpen, setIsLiveRoomOpen] = useState(false);
+  const [selectedMaterialForReading, setSelectedMaterialForReading] = useState<{
+    id: string;
+    title: string;
+    created_at: string;
+    body_md?: string | null;
+  } | null>(null);
 
   const toggleExpand = (id: string) => {
     setExpandedItems((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -326,6 +335,16 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
         {/* Kode Kelas Cepat untuk Pengajar */}
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsLiveRoomOpen(true)}
+            className="text-xs font-bold bg-white text-black border-2 border-black px-3 py-1.5 rounded-lg shadow-retro-xs hover:bg-black hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
+            title="Buka Ruang Tatap Muka Daring (Live WebRTC)"
+          >
+            <Video className="h-3.5 w-3.5 text-primary" />
+            <span className="hidden sm:inline">{lecturer || ta ? 'Buka Tatap Muka' : 'Gabung Tatap Muka'}</span>
+            <span className="sm:hidden">Live</span>
+          </button>
           {lecturer && (
             <button
               type="button"
@@ -849,6 +868,14 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           </div>
                         </div>
                         <div className="flex items-center gap-2 flex-wrap">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedMaterialForReading(m)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg border-2 border-black bg-white hover:bg-black hover:text-white text-xs font-bold shadow-retro-xs transition-colors cursor-pointer"
+                          >
+                            <BookOpen className="h-3.5 w-3.5 text-primary" />
+                            <span>Baca Dokumen</span>
+                          </button>
                           {(lecturer || ta) && (m as any).release_at && new Date((m as any).release_at) > new Date() && (
                             <span className="text-xs font-semibold px-2.5 py-1 rounded-lg border-2 border-black bg-gray-soft text-black font-mono font-bold shadow-retro-sm">
                               Tampil untuk mahasiswa pada {fmt((m as any).release_at)}
@@ -1605,6 +1632,25 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           isStaff={Boolean(isActualLecturer || ta || isStaff)}
         />
       )}
+
+      {/* MODAL TATAP MUKA LANGSUNG RETRO (JITSI WEBRTC) */}
+      <RetroLiveClassroom
+        isOpen={isLiveRoomOpen}
+        onClose={() => setIsLiveRoomOpen(false)}
+        classId={cls.id}
+        classTitle={cls.title}
+        section={cls.section}
+        isHost={Boolean(lecturer || ta)}
+      />
+
+      {/* IN-BROWSER DOCUMENT & PDF READER MODAL */}
+      <RetroDocViewer
+        isOpen={!!selectedMaterialForReading}
+        onClose={() => setSelectedMaterialForReading(null)}
+        title={selectedMaterialForReading?.title || 'Dokumen Modul Perkuliahan'}
+        markdownContent={selectedMaterialForReading?.body_md}
+        authorOrDate={selectedMaterialForReading ? fmt(selectedMaterialForReading.created_at) : undefined}
+      />
     </div>
   );
 }
