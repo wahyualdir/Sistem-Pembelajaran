@@ -39,7 +39,7 @@ Sebelum menyentuh satu baris pun kode fitur:
 | **Fase C** | Feature flag `FF_KAIN_SEMESTER` | ✅ Selesai | `ecc8f37` | Flag server-only ditambahkan ke `features.ts`, `.env.example`, dan 3 tes unit lulus. |
 | **Fase D** | Logika murni kisi & unit test | ✅ Selesai | `ea2bf98`, `6051e8c` | `semester-weave.ts` selesai dengan 18 kasus uji Vitest lulus 100%. |
 | **Fase E** | Server action pemuat kisi | ✅ Selesai | `46944f2` | `semester-weave-actions.ts` (RLS-only, max 5 query paralel) & 4 unit test lulus. |
-| **Fase F** | Komponen UI kisi & sheet detail | ✅ Selesai | *(commit ini)* | `semester-weave.tsx`, `semester-weave-sheet.tsx` selesai & 6 test render lulus. |
-| **Fase G** | Integrasi di beranda mahasiswa | ⏳ Menunggu | - | - |
+| **Fase F** | Komponen UI kisi & sheet detail | ✅ Selesai | `2f944b6` | `semester-weave.tsx`, `semester-weave-sheet.tsx` selesai & 6 test render lulus. |
+| **Fase G** | Integrasi di beranda mahasiswa | ✅ Selesai | *(commit ini)* | Terintegrasi di `student/page.tsx` & `student-dashboard-client.tsx` di belakang flag. |
 | **Fase H** | Verifikasi menyeluruh (aksesibilitas, responsive, flag on/off) | ⏳ Menunggu | - | - |
 | **Fase I** | Dokumentasi & laporan akhir | ⏳ Menunggu | - | - |

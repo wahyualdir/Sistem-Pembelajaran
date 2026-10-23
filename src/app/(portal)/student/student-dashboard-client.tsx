@@ -33,11 +33,13 @@ import {
   getHomeBannerAction,
 } from '@/modules/academic/home-actions';
 import { StudentAcademicStatusCard } from '@/components/home/student-academic-status-card';
+import { SemesterWeave } from '@/components/home/semester-weave';
 import { DailyPriorityCard } from '@/components/home/daily-priority-card';
 import { KartuAktivitasDashboard } from '@/components/aktivitas/kartu-aktivitas-dashboard';
 import type { ItemAktivitasHarian } from '@/lib/aktivitas';
 import type { DailyPriorityItem } from '@/lib/akademik/daily-priorities';
 import type { StudentRiskEvaluation } from '@/modules/early-warning/types';
+import type { SemesterWeaveData } from '@/lib/akademik/semester-weave';
 
 const RECOMMENDED_MATERIALS = [
   {
@@ -87,6 +89,7 @@ export interface StudentDashboardClientProps {
   academicStatus?: StudentRiskEvaluation[];
   dailyPriorities?: DailyPriorityItem[];
   aktivitas?: ItemAktivitasHarian[];
+  semesterWeave?: SemesterWeaveData | null;
 }
 
 export function StudentDashboardClient({
@@ -99,6 +102,7 @@ export function StudentDashboardClient({
   academicStatus = [],
   dailyPriorities = [],
   aktivitas = [],
+  semesterWeave = null,
 }: StudentDashboardClientProps) {
   const currentBannerData: HomeBannerData = bannerData || {
     primary: {
@@ -260,8 +264,15 @@ export function StudentDashboardClient({
             onRefresh={async () => getHomeBannerAction()}
           />
 
-          {/* PERINGATAN RISIKO AKADEMIK (HANYA MUNCUL OTOMATIS JIKA ADA KELAS BERISIKO) */}
-          <StudentAcademicStatusCard evaluations={academicStatus} />
+          {/* PERINGATAN RISIKO AKADEMIK / KAIN SEMESTER */}
+          {semesterWeave ? (
+            <SemesterWeave
+              data={semesterWeave}
+              academicEvaluations={academicStatus}
+            />
+          ) : (
+            <StudentAcademicStatusCard evaluations={academicStatus} />
+          )}
 
           {/* GRID 2 KOLOM: JADWAL HARI INI & TENGGAT TERDEKAT */}
           {(showAll || showPresensi || showJadwal || showTugasKuis || showUjian) && (

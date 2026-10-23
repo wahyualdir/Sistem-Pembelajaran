@@ -10,9 +10,14 @@ import {
 import { getStudentAcademicStatusAction } from '@/modules/early-warning/actions';
 import { getDailyPrioritiesAction } from '@/modules/academic/peta-pulau-actions';
 import { getAktivitasSayaAction } from '@/modules/academic/aktivitas-actions';
+import { isFeatureFlagActive } from '@/lib/config/features';
+import { getSemesterWeaveAction } from '@/modules/academic/semester-weave-actions';
+import type { SemesterWeaveData } from '@/lib/akademik/semester-weave';
 import { StudentDashboardClient } from './student-dashboard-client';
 
 export default async function StudentPortalPage() {
+  const isKainSemesterActive = isFeatureFlagActive('FF_KAIN_SEMESTER');
+
   // Muat data tiap section secara paralel & independen
   const [
     bannerRes,
@@ -24,6 +29,7 @@ export default async function StudentPortalPage() {
     academicStatusRes,
     dailyPrioritiesRes,
     aktivitasRes,
+    kainSemesterRes,
   ] = await Promise.allSettled([
     getHomeBannerAction(),
     getHomeDeadlinesAction(),
@@ -34,6 +40,7 @@ export default async function StudentPortalPage() {
     getStudentAcademicStatusAction(),
     getDailyPrioritiesAction(),
     getAktivitasSayaAction(),
+    ...(isKainSemesterActive ? [getSemesterWeaveAction()] : []),
   ]);
 
   const bannerData = bannerRes.status === 'fulfilled' ? bannerRes.value : undefined;
@@ -46,6 +53,14 @@ export default async function StudentPortalPage() {
   const dailyPriorities = dailyPrioritiesRes.status === 'fulfilled' ? dailyPrioritiesRes.value : [];
   const aktivitas = aktivitasRes.status === 'fulfilled' ? aktivitasRes.value.aktivitas : [];
 
+  let semesterWeave: SemesterWeaveData | null = null;
+  if (isKainSemesterActive && kainSemesterRes && kainSemesterRes.status === 'fulfilled') {
+    const res = kainSemesterRes.value;
+    if (res && res.ok) {
+      semesterWeave = res.data;
+    }
+  }
+
   return (
     <StudentDashboardClient
       bannerData={bannerData}
@@ -57,6 +72,7 @@ export default async function StudentPortalPage() {
       academicStatus={academicStatus}
       dailyPriorities={dailyPriorities}
       aktivitas={aktivitas}
+      semesterWeave={semesterWeave}
     />
   );
 }
