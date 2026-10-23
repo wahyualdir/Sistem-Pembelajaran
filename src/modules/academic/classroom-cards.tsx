@@ -86,6 +86,14 @@ export interface ClassroomCardProps {
   } | null;
   progressPercent?: number;
   index?: number;
+  course_id?: string;
+  course_code?: string;
+  course_title?: string;
+  sks?: number;
+  lecturer_name?: string;
+  lecturer_id?: string;
+  room?: string;
+  schedule?: string;
 }
 
 export function GoogleClassroomCard({
@@ -108,8 +116,11 @@ export function GoogleClassroomCard({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Generate avatar initials from title / lecturer
-  const initials = item.title
+  // Generate avatar initials from lecturer / title
+  const rawInitialsSource = item.lecturer_name
+    ? item.lecturer_name.replace(/^(Dr\.|Prof\.|Ir\.|Drs\.|H\.|Hj\.)\s*/gi, '')
+    : item.title;
+  const initials = rawInitialsSource
     .split(' ')
     .slice(0, 2)
     .map((w) => w[0])
@@ -128,11 +139,16 @@ export function GoogleClassroomCard({
         <div className={`p-4 sm:p-5 ${theme.bg} border-b-2 border-black relative`}>
           {/* Header Baris & Status */}
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <WindowTrafficLights size="sm" />
               <span className="text-xs font-bold text-black ml-1.5 truncate">
                 Kelas {item.section}
               </span>
+              {item.course_code && (
+                <span className="text-[10px] font-mono font-bold bg-white/95 border border-black px-1.5 py-0.5 rounded shadow-retro-xs text-black">
+                  {item.course_code}
+                </span>
+              )}
             </div>
 
             <span className="text-xs font-bold bg-white/95 border border-black px-2 py-0.5 rounded shadow-retro-sm text-black">
@@ -140,7 +156,7 @@ export function GoogleClassroomCard({
             </span>
           </div>
 
-          {/* Judul Mata Kuliah */}
+          {/* Judul Mata Kuliah & Informasi Kurikulum */}
           <div className="pr-12">
             <Link
               href={`/classes/${item.id}`}
@@ -149,20 +165,47 @@ export function GoogleClassroomCard({
               {item.title}
             </Link>
             <p className="text-xs text-black font-bold mt-1 truncate">
-              {item.meta || 'Semester Ganjil 2026/2027 · 3 SKS'}
+              {item.meta || `${item.course_code ? item.course_code + ' · ' : ''}Semester Ganjil 2026/2027 · ${item.sks ?? 3} SKS`}
             </p>
+            {item.lecturer_name && (
+              <p className="text-[11px] text-black font-bold mt-1.5 flex items-center gap-1.5 truncate">
+                <GraduationCap className="h-3.5 w-3.5 text-primary shrink-0" />
+                <span>{item.lecturer_name}</span>
+              </p>
+            )}
           </div>
 
           {/* Dosen Avatar Bulat Tumpang-Tindih */}
-          <div className="absolute right-4 -bottom-6 h-12 w-12 rounded-full border-2 border-black bg-white shadow-retro flex items-center justify-center font-bold text-sm text-black select-none z-10">
+          <div
+            title={item.lecturer_name ? `Dosen: ${item.lecturer_name}` : item.title}
+            className="absolute right-4 -bottom-6 h-12 w-12 rounded-full border-2 border-black bg-white shadow-retro flex items-center justify-center font-bold text-sm text-black select-none z-10"
+          >
             {initials}
           </div>
         </div>
 
         {/* ======================================================== */}
-        {/* 2. BODY KARTU: TENGGAT TUGAS & INFO KELAS                */}
+        {/* 2. BODY KARTU: JADWAL, TENGGAT TUGAS & INFO KELAS         */}
         {/* ======================================================== */}
-        <div className="p-4 sm:p-5 pt-8 space-y-3.5 bg-white">
+        <div className="p-4 sm:p-5 pt-8 space-y-3 bg-white">
+          {/* Jadwal Kuliah & Ruangan */}
+          {(item.schedule || item.room) && (
+            <div className="flex flex-wrap items-center justify-between gap-1.5 p-2 rounded-lg border border-black/25 bg-gray-soft/60 text-xs font-bold text-black">
+              {item.schedule && (
+                <span className="flex items-center gap-1 truncate">
+                  <Calendar className="h-3.5 w-3.5 text-primary shrink-0" />
+                  <span>{item.schedule}</span>
+                </span>
+              )}
+              {item.room && (
+                <span className="flex items-center gap-1 text-black/80 ml-auto truncate">
+                  <MapPin className="h-3 w-3 shrink-0" />
+                  <span>{item.room}</span>
+                </span>
+              )}
+            </div>
+          )}
+
           {/* Tenggat Waktu Mendatang */}
           <div className="p-3 rounded-xl border border-black/30 bg-gray-soft/40 space-y-1">
             <span className="text-xs font-bold text-black block">
@@ -262,34 +305,56 @@ export function ClassroomToolbar({
   student,
   master,
   totalClasses,
+  initialQuery = '',
 }: {
   lecturer: boolean;
   student: boolean;
   master?: { courses?: CourseItem[]; semesters?: SemesterItem[] } | null;
   totalClasses: number;
+  initialQuery?: string;
 }) {
   const [isJoinOpen, setIsJoinOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   return (
     <div className="space-y-4">
-      {/* Top Bar Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-5 rounded-2xl border-2 border-black shadow-retro">
+      {/* Top Bar Actions & Search */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 bg-white p-4 sm:p-5 rounded-2xl border-2 border-black shadow-retro">
         <div className="space-y-0.5">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <span className="font-bold text-base sm:text-lg text-black">
               Daftar Kelas Perkuliahan
             </span>
-            <span className="text-xs font-bold bg-gray-soft border border-black px-2 py-0.5 rounded">
+            <span className="text-xs font-bold bg-gray-soft border border-black px-2 py-0.5 rounded shadow-retro-xs">
               {totalClasses} Kelas Aktif
             </span>
           </div>
           <p className="text-xs text-black font-bold">
-            Pilih kelas untuk mengakses materi, pengumpulan tugas, dan aktivitas kuliah.
+            Pilih kelas untuk mengakses materi, modul baca, tatap muka daring, pengumpulan tugas, dan aktivitas kuliah.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5 flex-wrap">
+        {/* Form Pencarian Cepat Mata Kuliah & Dosen */}
+        <form method="GET" action="/classes" className="flex items-center gap-2 w-full lg:max-w-sm">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-black/60 pointer-events-none" />
+            <input
+              type="search"
+              name="q"
+              defaultValue={initialQuery}
+              placeholder="Cari matkul, kode (STI...), dosen..."
+              className="w-full pl-8 pr-2.5 py-1.5 rounded-xl border-2 border-black bg-white text-xs font-bold text-black placeholder:text-black/50 focus:outline-none focus:ring-1 focus:ring-primary shadow-xs"
+            />
+          </div>
+          <button
+            type="submit"
+            className="px-3 py-1.5 rounded-xl border-2 border-black bg-black text-white text-xs font-bold hover:bg-neutral-800 transition-all shrink-0 cursor-pointer shadow-retro-xs"
+          >
+            Cari
+          </button>
+        </form>
+
+        <div className="flex items-center gap-2.5 flex-wrap shrink-0">
           {student && (
             <button
               type="button"

@@ -20,9 +20,17 @@ export interface AcademicClassRecord {
   status: string;
   created_by: string;
   lecturer_id?: string;
+  lecturer_name?: string;
   prodi_id?: string;
   capacity?: number;
   meta?: string;
+  course_id?: string;
+  course_code?: string;
+  course_title?: string;
+  sks?: number;
+  room?: string;
+  schedule?: string;
+  semester?: string;
 }
 
 export interface AcademicEnrollmentRecord {
@@ -111,9 +119,16 @@ export function getAcademicStore(): CanonicalAcademicStore {
         status: 'OPEN',
         created_by: DEFAULT_LECTURER_ID,
         lecturer_id: DEFAULT_LECTURER_ID,
+        lecturer_name: 'Dr. Budi Santoso, M.Kom.',
         prodi_id: DEFAULT_PRODI_ID,
         capacity: 45,
-        meta: 'IF-301, Semester Ganjil 2026/2027',
+        course_id: 'c0000000-0000-0000-0001-000000000138',
+        course_code: 'STI2544138',
+        course_title: 'Pemrograman Web',
+        sks: 3,
+        room: '3C.2.05 - TEKNIK C',
+        schedule: 'Senin, 08:45 - 11:15 WIB',
+        meta: 'STI2544138 · Semester Ganjil 2026/2027 · 3 SKS',
       });
     }
 
@@ -126,9 +141,16 @@ export function getAcademicStore(): CanonicalAcademicStore {
         status: 'OPEN',
         created_by: DEFAULT_LECTURER_ID,
         lecturer_id: DEFAULT_LECTURER_ID,
+        lecturer_name: 'Dr. Budi Santoso, M.Kom.',
         prodi_id: DEFAULT_PRODI_ID,
         capacity: 40,
-        meta: 'IF-202, Semester Ganjil 2026/2027',
+        course_id: 'c0000000-0000-0000-0001-000000000131',
+        course_code: 'STI2543131',
+        course_title: 'Struktur Data',
+        sks: 3,
+        room: 'Computer System LAB - TEKNIK C',
+        schedule: 'Selasa, 10:30 - 13:00 WIB',
+        meta: 'STI2543131 · Semester Ganjil 2026/2027 · 3 SKS',
       });
     }
 
@@ -141,9 +163,16 @@ export function getAcademicStore(): CanonicalAcademicStore {
         status: 'OPEN',
         created_by: DEFAULT_LECTURER_ID,
         lecturer_id: DEFAULT_LECTURER_ID,
+        lecturer_name: 'Dr. Budi Santoso, M.Kom.',
         prodi_id: DEFAULT_PRODI_ID,
         capacity: 42,
-        meta: 'IF-305, Semester Ganjil 2026/2027',
+        course_id: 'c0000000-0000-0000-0001-000000000114',
+        course_code: 'STI2541114',
+        course_title: 'Basis Data 1',
+        sks: 3,
+        room: 'Mobile Lab - TEKNIK D',
+        schedule: 'Rabu, 13:00 - 15:30 WIB',
+        meta: 'STI2541114 · Semester Ganjil 2026/2027 · 3 SKS',
       });
     }
 

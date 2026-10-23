@@ -111,6 +111,7 @@ export default async function ClassesPage({
             student={student}
             master={master}
             totalClasses={classes.length}
+            initialQuery={searchParams?.q || ''}
           />
         </div>
 
