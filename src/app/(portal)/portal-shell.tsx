@@ -361,7 +361,7 @@ export function PortalShell({
                     <span className="font-heading font-black text-base sm:text-lg tracking-tight text-[#1C1917] leading-none whitespace-nowrap">
                       Ruang<span className="text-[#C2553A]">Kampus</span>
                     </span>
-                    <span className="text-[9.5px] font-mono font-bold text-[#853827] uppercase tracking-wider mt-1 leading-none">
+                    <span className="text-xs font-sans font-extrabold text-[#853827] uppercase tracking-wider mt-1 leading-none">
                       Academic Learning OS
                     </span>
                   </div>
@@ -379,7 +379,7 @@ export function PortalShell({
                   <div key={group.id || group.title} className="space-y-1">
                     {!isRailActive && group.title ? (
                       <div className="flex items-center justify-between px-3 py-1 mb-0.5">
-                        <p className="text-[10px] font-mono font-bold tracking-wider text-[#853827] uppercase">
+                        <p className="text-xs font-sans font-extrabold tracking-wider text-[#1C1917] uppercase">
                           {group.title}
                         </p>
                         {group.collapsible && (
@@ -436,7 +436,7 @@ export function PortalShell({
                                 {!isRailActive && item.badge !== undefined && (
                                   <span
                                     className={cn(
-                                      'inline-flex min-w-5 items-center justify-center px-1.5 py-0.5 text-[10px] font-mono font-bold shrink-0',
+                                      'inline-flex min-w-5 items-center justify-center px-2 py-0.5 text-xs font-sans font-extrabold shrink-0',
                                       isActive
                                         ? 'bg-white/20 text-white border border-white/30'
                                         : 'bg-[#C2553A]/10 text-[#C2553A] border border-[#C2553A]/30'
@@ -539,7 +539,7 @@ export function PortalShell({
                                 )}
                               >
                                 <span>{rLabel}</span>
-                                {isCurrent && <span className="text-[10px] font-mono bg-white/20 px-1 rounded">Aktif</span>}
+                                {isCurrent && <span className="text-xs font-sans font-extrabold bg-white/25 px-1.5 py-0.5 rounded">Aktif</span>}
                               </button>
                             </form>
                           );
@@ -682,7 +682,7 @@ export function PortalShell({
                   ref={burgerButtonRef}
                   type="button"
                   onClick={handleBurgerClick}
-                  className="flex h-9 w-9 min-h-[36px] min-w-[36px] items-center justify-center font-mono font-bold bg-[#ECE9D8] text-[#1C1917] border-t border-l border-white border-b border-r border-[#7A756D] hover:bg-[#F2EFE8] active:border-t-[#7A756D] active:border-l-[#7A756D] active:border-b-white active:border-r-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A] shrink-0 cursor-pointer"
+                  className="flex h-9 w-9 min-h-[36px] min-w-[36px] items-center justify-center font-sans font-extrabold bg-[#ECE9D8] text-[#1C1917] border-t border-l border-white border-b border-r border-[#7A756D] hover:bg-[#F2EFE8] active:border-t-[#7A756D] active:border-l-[#7A756D] active:border-b-white active:border-r-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A] shrink-0 cursor-pointer"
                   title={isCollapsed ? 'Perbesar Bilah Samping' : 'Kecilkan Bilah Samping'}
                   aria-label="Toggle Sidebar"
                 >
@@ -712,10 +712,10 @@ export function PortalShell({
                       className="w-full bg-transparent text-sm font-medium text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none min-w-0"
                     />
                     <div className="hidden sm:flex items-center gap-1 shrink-0 ml-2 select-none">
-                      <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-[10px] font-mono font-bold text-[#524B42] shadow-2xs">
+                      <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-xs font-sans font-extrabold text-[#1C1917] shadow-2xs">
                         ⌘
                       </kbd>
-                      <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-[10px] font-mono font-bold text-[#524B42] shadow-2xs">
+                      <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-xs font-sans font-extrabold text-[#1C1917] shadow-2xs">
                         K
                       </kbd>
                     </div>
@@ -727,7 +727,7 @@ export function PortalShell({
               <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
                 {/* Badge Semester Velqora Terracotta */}
                 <div className="hidden lg:flex items-center">
-                  <span className="text-xs font-mono font-bold text-white uppercase tracking-wider bg-[#C2553A] px-3 py-1 border-t border-l border-[#EE7257] border-b border-r border-[#6B2D20] shadow-xs select-none">
+                  <span className="text-xs font-sans font-extrabold text-white uppercase tracking-wider bg-[#C2553A] px-3.5 py-1.5 border-t border-l border-[#EE7257] border-b border-r border-[#6B2D20] shadow-xs select-none">
                     TA 2026/2027 GANJIL
                   </span>
                 </div>
@@ -736,7 +736,7 @@ export function PortalShell({
                 {availableRoles && availableRoles.length > 1 && (
                   <Link
                     href="/workspace"
-                    className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono font-bold text-[#1C1917] bg-[#ECE9D8] hover:bg-[#F2EFE8] border-t border-l border-white border-b border-r border-[#7A756D] transition-all shadow-2xs"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-sans font-extrabold text-[#1C1917] bg-[#ECE9D8] hover:bg-[#F2EFE8] border-t border-l border-white border-b border-r border-[#7A756D] transition-all shadow-2xs"
                     title="Beralih peran pengguna"
                   >
                     <Layers className="h-3.5 w-3.5 text-[#853827]" />

@@ -196,37 +196,37 @@ export function StudentDashboardClient({
             <div className="space-y-1.5">
               {/* Kicker / Context Tag */}
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-md border border-black/15 bg-black/5 text-[11px] font-sans font-bold uppercase tracking-wider text-black">
+                <span className="px-2.5 py-0.5 rounded-md border border-[#7A756D] bg-[#ECE9D8] text-xs font-sans font-extrabold uppercase tracking-wider text-[#853827]">
                   Portal Mahasiswa
                 </span>
-                <span className="text-black/30 font-bold">•</span>
-                <span className="text-[11px] font-sans font-bold text-black/70 uppercase">
+                <span className="text-[#7A756D] font-bold">•</span>
+                <span className="text-xs font-sans font-extrabold text-[#57534E] uppercase">
                   Ganjil 2026/2027
                 </span>
               </div>
 
               {/* Baris Judul Utama: Logo & Teks Simetris Sejajar Sempurna */}
               <div className="flex items-center gap-3">
-                <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-lg border-2 border-ink bg-surface shadow-xs flex items-center justify-center shrink-0">
-                  <BookOpen className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-ink" />
+                <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-lg border-2 border-[#7A756D] bg-white shadow-xs flex items-center justify-center shrink-0">
+                  <BookOpen className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-[#C2553A]" />
                 </div>
-                <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-ink leading-none">
+                <h1 className="font-heading font-extrabold text-2xl sm:text-3xl tracking-tight text-[#1C1917] leading-none">
                   Ruang Pembelajaran Mahasiswa
                 </h1>
               </div>
 
               {/* Subtitle */}
-              <p className="text-sm sm:text-base text-ink font-bold leading-relaxed pt-0.5">
+              <p className="text-sm sm:text-base text-[#2D2823] font-bold leading-relaxed pt-0.5">
                 Pantau perkuliahan aktif, jadwal kuliah hari ini, tenggat tugas, dan ujian Anda.
               </p>
             </div>
 
             <div className="hidden sm:flex items-center gap-2 shrink-0 pt-1">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-sm font-sans font-bold bg-surface border-2 border-ink text-ink shadow-xs">
-                <span className="w-2.5 h-2.5 rounded-full bg-black" />
+              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-sans font-extrabold bg-white border-2 border-[#7A756D] text-[#1C1917] shadow-xs">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" />
                 <span>Status: Aktif</span>
               </span>
-              <span className="inline-flex items-center px-3.5 py-1.5 rounded-lg text-sm font-sans font-bold bg-gray-soft border-2 border-ink text-ink shadow-xs">
+              <span className="inline-flex items-center px-3.5 py-1.5 rounded-lg text-xs font-sans font-extrabold bg-[#ECE9D8] border-2 border-[#7A756D] text-[#1C1917] shadow-xs">
                 2026/2027
               </span>
             </div>
@@ -234,7 +234,7 @@ export function StudentDashboardClient({
 
           {/* ROW 1: CATEGORIES PILLS (FILTER CHIP) */}
           <section aria-label="Kategori Perkuliahan" className="space-y-2.5 sm:space-y-3">
-            <h2 className="font-heading font-black text-sm sm:text-base uppercase tracking-wider text-black">
+            <h2 className="font-heading font-extrabold text-sm sm:text-base uppercase tracking-wider text-[#1C1917]">
               Categories
             </h2>
             <div className="flex flex-wrap items-center gap-2.5 pb-1.5">
@@ -245,10 +245,10 @@ export function StudentDashboardClient({
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      'px-4 py-1.5 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm font-mono font-bold tracking-normal shrink-0 transition-all focus-visible:outline-none cursor-pointer',
+                      'px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-sm sm:text-base font-sans font-bold tracking-normal shrink-0 transition-all focus-visible:outline-none cursor-pointer',
                       isActive
-                        ? 'vt-btn-terracotta text-white shadow-xs'
-                        : 'vt-btn-chrome text-[#1C1917] hover:bg-white hover:text-[#C2553A]'
+                        ? 'border-2 border-[#853827] bg-[#C2553A] text-white shadow-xs font-extrabold scale-[1.02]'
+                        : 'border-2 border-[#7A756D] bg-white text-[#1C1917] shadow-xs font-bold hover:bg-[#FAF8F5] hover:text-[#C2553A] hover:-translate-y-0.5'
                     )}
                   >
                     {cat}
@@ -587,7 +587,7 @@ export function StudentDashboardClient({
       {/* Mode Desktop (>= 1280px / xl): Sticky dengan scroll internal sendiri */}
       <aside
         aria-label="Panel Ringkasan & Detail"
-        className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
+        className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-[#D6D3CB] bg-[#FAF8F5]/80 backdrop-blur-xs p-5 sm:p-6 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
         {/* KARTU LOGO INTERAKTIF 3D ROTASI BEBAS */}
         <div className="shrink-0 w-full">
@@ -622,18 +622,16 @@ export function StudentDashboardClient({
           />
 
           {/* Drawer Container (Rem-based Responsive Scaling) */}
-          <div className="relative w-full max-w-[22rem] sm:w-right-panel bg-retro-bg border-l-2 border-retro-border h-[100dvh] flex flex-col shadow-2xl z-10 animate-slide-in-right pr-[env(safe-area-inset-right,0px)] pb-[env(safe-area-inset-bottom,0px)]">
+          <div className="relative w-full max-w-[22rem] sm:w-right-panel bg-[#FAF8F5] border-l-2 border-[#D6D3CB] h-[100dvh] flex flex-col shadow-2xl z-10 animate-slide-in-right pr-[env(safe-area-inset-right,0px)] pb-[env(safe-area-inset-bottom,0px)]">
             {/* Header Drawer */}
-            <div className="flex h-header items-center justify-between px-6 border-b-2 border-retro-border bg-gray-soft shrink-0">
+            <div className="flex h-header items-center justify-between px-6 border-b-2 border-[#D6D3CB] bg-[#ECE9D8] shrink-0">
               <div className="flex items-center gap-2">
-                <span className="font-heading font-bold text-base text-foreground tracking-tight">
-                  Ringkasan & Detail
-                </span>
+                <span className="font-heading font-extrabold text-base text-[#1C1917] tracking-tight">Ringkasan & Detail</span>
               </div>
               <button
                 type="button"
                 onClick={() => setIsRightDrawerOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-foreground hover:bg-gray-soft shadow-retro-sm active:translate-y-0.5 transition-all focus-visible:outline-none cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-[#7A756D] bg-white text-[#1C1917] hover:bg-[#FAF8F5] shadow-xs active:translate-y-0.5 transition-all focus-visible:outline-none cursor-pointer"
                 title="Tutup Panel (Esc)"
                 aria-label="Tutup Panel"
               >

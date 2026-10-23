@@ -99,94 +99,58 @@ export function SkyClockWidget({ className, forcedPhase = null }: SkyClockWidget
         return {
           id: 'NIGHT' as SkyPhase,
           greeting: 'Selamat Malam',
-          gradient: 'linear-gradient(180deg, #020617 0%, #050b1a 30%, #0b152d 65%, #182247 100%)',
-          mountainFar: '#0f172a',
-          mountainMid: '#090d16',
-          mountainNear: '#020617',
-          valleyMist: 'rgba(148, 163, 184, 0.12)',
+          gradient: 'linear-gradient(180deg, #020617 0%, #050b1a 25%, #0b152d 55%, #182247 80%, #090d16 100%)',
+          mountainFar: '#0b1329',
+          mountainMid: '#070c1b',
+          mountainNear: '#04070e',
+          valleyMist: 'rgba(56, 189, 248, 0.08)',
         };
     }
   }, [activePhase]);
 
-  // Cycle phase on click for seamless testing
-  const cyclePhase = () => {
-    const phases: SkyPhase[] = ['DAWN', 'DAY', 'SUNSET', 'NIGHT'];
-    const currentIdx = phases.indexOf(activePhase);
-    const nextIdx = (currentIdx + 1) % phases.length;
-    setOverridePhase(phases[nextIdx]);
-  };
-
   return (
     <div
-      onClick={cyclePhase}
       className={cn(
-        'relative group cursor-pointer select-none flex flex-col justify-between rounded-2xl border-2 border-black shadow-retro transition-all duration-700 overflow-hidden',
-        'w-full h-80 sm:h-88 md:h-[350px]',
+        'relative w-full rounded-2xl border-2 border-[#7A756D] overflow-hidden shadow-xs flex flex-col justify-between transition-all select-none',
         className
       )}
-      style={{
-        background: phaseConfig.gradient,
-      }}
-      title="Klik untuk melihat animasi fase langit lainnya"
+      style={{ minHeight: '190px' }}
     >
-      {/* ======================================================== */}
-      {/* 1. AREA LANGIT GLSL SHADER (ANIMASI ATMOSFERIK PER-PIKSEL) */}
-      {/* ======================================================== */}
-      <SkyShaderCanvas phase={activePhase} />
+      {/* 1. Sky Canvas Layer */}
+      <div className="absolute inset-0 z-0">
+        <SkyShaderCanvas phase={activePhase} className="w-full h-full" />
+      </div>
 
-      {/* ======================================================== */}
-      {/* 2. LAYER VEKTOR ELEGAN (BURUNG & SILUET CAKRAWALA KAMPUS) */}
-      {/* ======================================================== */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Burung Melayang Anggun (Hanya di Siang, Fajar, Senja) */}
-        {activePhase !== 'NIGHT' && (
-          <>
-            <div className="absolute top-10 left-0 animate-sky-bird-1 opacity-70">
-              <svg width="20" height="9" viewBox="0 0 24 10" fill="none" className="text-black/70">
-                <path d="M0 6 Q6 0 12 5 Q18 0 24 6 Q18 3 12 8 Q6 3 0 6 Z" fill="currentColor" />
-              </svg>
-            </div>
-            <div className="absolute top-16 left-0 animate-sky-bird-2 opacity-50">
-              <svg width="15" height="7" viewBox="0 0 24 10" fill="none" className="text-black/60">
-                <path d="M0 6 Q6 0 12 5 Q18 0 24 6 Q18 3 12 8 Q6 3 0 6 Z" fill="currentColor" />
-              </svg>
-            </div>
-          </>
-        )}
-
-        {/* ======================================================== */}
-        {/* SILUET CAKRAWALA PEGUNUNGAN & LANDMARK KAMPUS             */}
-        {/* ======================================================== */}
-        {/* Layer 1: Pegunungan Jauh (Alpine Peaks) */}
-        <div className="absolute bottom-16 left-0 right-0 h-28 opacity-50 transition-colors duration-1000">
+      {/* 2. Vector Mountain Silhouette Layer */}
+      <div className="absolute inset-0 z-10 pointer-events-none flex flex-col justify-end">
+        {/* Layer 1: Pegunungan Jauh */}
+        <div className="w-full h-[55%] opacity-40">
           <svg viewBox="0 0 400 120" className="w-full h-full" preserveAspectRatio="none">
             <path
-              d="M0,70 L30,45 L65,60 L105,32 L145,55 L190,26 L235,58 L275,34 L325,60 L365,38 L400,65 L400,120 L0,120 Z"
+              d="M0,75 Q40,35 80,60 T160,45 T240,65 T320,40 T400,70 L400,120 L0,120 Z"
               fill={phaseConfig.mountainFar}
             />
           </svg>
         </div>
 
-        {/* Layer 2: Kabut Lembah Mengambang (Valley Mist) */}
+        {/* Kabut Lembah Tipis */}
         <div
-          className="absolute bottom-14 left-0 right-0 h-8 opacity-75 blur-[1px] transition-colors duration-1000"
-          style={{
-            background: `linear-gradient(180deg, transparent 0%, ${phaseConfig.valleyMist} 50%, transparent 100%)`,
-          }}
+          className="w-full h-[25px] -mt-5 pointer-events-none blur-[6px] opacity-70"
+          style={{ backgroundColor: phaseConfig.valleyMist }}
         />
 
-        {/* Layer 3: Perbukitan Tengah (Rolling Mid Hills) */}
-        <div className="absolute bottom-12 left-0 right-0 h-22 opacity-80 transition-colors duration-1000">
+        {/* Layer 2: Pegunungan Tengah */}
+        <div className="w-full h-[45%] opacity-75 -mt-3">
           <svg viewBox="0 0 400 120" className="w-full h-full" preserveAspectRatio="none">
             <path
-              d="M0,82 Q45,52 95,68 T205,50 T315,64 T400,56 L400,120 L0,120 Z"
+              d="M0,65 L35,45 L70,68 L115,38 L160,72 L210,48 L265,75 L310,42 L360,65 L400,50 L400,120 L0,120 Z"
               fill={phaseConfig.mountainMid}
             />
           </svg>
         </div>
 
-        {/* Layer 4: Siluet Bukit Depan + Hutan Pinus + Menara Kampus & Observatorium */}
-        <div className="absolute bottom-10 left-0 right-0 h-18 opacity-95 transition-colors duration-1000">
+        {/* Layer 3: Siluet Bukit & Menara Kampus Dekat */}
+        <div className="w-full h-[38%] -mt-2">
           <svg viewBox="0 0 400 120" className="w-full h-full" preserveAspectRatio="none">
             <path
               d="M0,90 
@@ -209,8 +173,8 @@ export function SkyClockWidget({ className, forcedPhase = null }: SkyClockWidget
       {/* 3. DOCK JAM DIGITAL BERSIH, SOLID & BEBAS TUMPANG TINDIH  */}
       {/* ======================================================== */}
       <div className="relative z-20 w-full mt-auto p-3 sm:p-3.5">
-        <div className="rounded-xl border-2 border-black bg-surface/95 backdrop-blur-md px-4 py-2.5 shadow-retro text-center flex flex-col items-center justify-center gap-1 transition-all">
-          {/* Baris 1: Live Status Dot + Jam Digital Monospace Tebal + WIB */}
+        <div className="rounded-xl border-2 border-[#7A756D] bg-white/95 backdrop-blur-md px-4 py-2.5 shadow-xs text-center flex flex-col items-center justify-center gap-1 transition-all">
+          {/* Baris 1: Live Status Dot + Jam Digital SF Pro Tebal + WIB */}
           <div className="flex items-center justify-center gap-2">
             <span className="relative flex h-2 w-2">
               <span
@@ -221,26 +185,26 @@ export function SkyClockWidget({ className, forcedPhase = null }: SkyClockWidget
               />
               <span
                 className={cn(
-                  'relative inline-flex rounded-full h-2 w-2 border border-black',
+                  'relative inline-flex rounded-full h-2 w-2 border border-[#7A756D]',
                   overridePhase ? 'bg-amber-500' : 'bg-emerald-500'
                 )}
               />
             </span>
 
-            <span className="font-mono font-black text-2xl sm:text-3xl text-ink tracking-tight tabular-nums leading-none">
+            <span className="font-sans font-black text-2xl sm:text-3xl text-[#1C1917] tracking-tight tabular-nums leading-none">
               {timeString}
             </span>
 
-            <span className="text-[10px] font-mono font-black px-1.5 py-0.5 rounded border border-black/30 bg-gray-soft text-black uppercase">
+            <span className="text-xs font-sans font-extrabold px-1.5 py-0.5 rounded border border-[#7A756D] bg-[#ECE9D8] text-[#1C1917] uppercase">
               WIB
             </span>
           </div>
 
           {/* Baris 2: Hari, Tanggal Lengkap & Sapaan Waktu */}
-          <div className="flex items-center justify-center gap-1.5 text-xs font-sans font-bold text-ink/85 flex-wrap">
+          <div className="flex items-center justify-center gap-1.5 text-xs font-sans font-bold text-[#1C1917] flex-wrap">
             <span>{dateString}</span>
-            <span className="text-black/30 font-bold">•</span>
-            <span className="text-black font-extrabold">{phaseConfig.greeting}</span>
+            <span className="text-[#7A756D] font-bold">•</span>
+            <span className="text-[#853827] font-extrabold">{phaseConfig.greeting}</span>
           </div>
         </div>
       </div>

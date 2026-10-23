@@ -33,7 +33,7 @@ export function SemesterWeave({
         <RetroWindow
           title="kain_semestermu.view"
           badge="MEMUAT..."
-          headerClassName="bg-gray-soft"
+          headerClassName="vt-titlebar"
           bodyClassName="p-4 sm:p-5 bg-surface space-y-4"
         >
           <div className="flex items-center justify-between pb-3 border-b border-black/10">
@@ -66,7 +66,7 @@ export function SemesterWeave({
       <section aria-label="Kain semester" className="w-full">
         <RetroWindow
           title="kain_semestermu.view"
-          headerClassName="bg-gray-soft"
+          headerClassName="vt-titlebar"
           bodyClassName="p-6 bg-surface text-center space-y-3"
         >
           <p className="text-sm font-medium text-ink">
@@ -83,7 +83,7 @@ export function SemesterWeave({
       <section aria-label="Kain semester" className="w-full">
         <RetroWindow
           title="kain_semestermu.view"
-          headerClassName="bg-gray-soft"
+          headerClassName="vt-titlebar"
           bodyClassName="p-6 sm:p-8 bg-surface text-center space-y-4"
         >
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-black/15 bg-gray-soft">
@@ -131,13 +131,13 @@ export function SemesterWeave({
       <RetroWindow
         title="kain_semestermu.view"
         badge={weekLabelText}
-        headerClassName="bg-gray-soft"
+        headerClassName="vt-titlebar"
         bodyClassName="p-4 sm:p-5 bg-surface space-y-4"
       >
         {/* Header Sekunder: Judul & Keterangan Pekan */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 pb-3 border-b border-black/10">
           <div>
-            <h2 className="text-base sm:text-lg font-heading font-bold text-ink">
+            <h2 className="text-base sm:text-lg font-heading font-extrabold text-[#1C1917]">
               Kain semestermu
             </h2>
             {!isSemesterStarted ? (
@@ -146,7 +146,7 @@ export function SemesterWeave({
               </p>
             ) : null}
           </div>
-          <span className="text-xs sm:text-sm font-sans font-bold text-ink self-start sm:self-auto tabular-nums">
+          <span className="text-xs sm:text-sm font-sans font-extrabold text-[#853827] self-start sm:self-auto tabular-nums">
             {weekLabelText}
           </span>
         </div>
@@ -158,7 +158,7 @@ export function SemesterWeave({
               <tr>
                 <th
                   scope="col"
-                  className="w-[84px] sm:w-[110px] pr-2 text-left text-2xs uppercase tracking-wider font-bold text-gray-dark"
+                  className="w-[84px] sm:w-[110px] pr-2 text-left text-xs uppercase tracking-wider font-extrabold text-[#57534E]"
                 >
                   Mata Kuliah
                 </th>
@@ -171,9 +171,7 @@ export function SemesterWeave({
                     <th
                       key={w}
                       scope="col"
-                      className={`h-6 text-center text-2xs font-sans font-bold tabular-nums ${
-                        isCurrent ? 'text-primary' : 'text-gray-dark'
-                      }`}
+                      className={`h-6 text-center text-xs font-sans font-extrabold tabular-nums ${isCurrent ? 'text-[#C2553A]' : 'text-[#7A756D]'}`}
                     >
                       {isVisible ? (
                         <span>{w}</span>
@@ -191,7 +189,7 @@ export function SemesterWeave({
                   {/* Kolom Nama Mata Kuliah */}
                   <th
                     scope="row"
-                    className="w-[84px] sm:w-[110px] max-w-[110px] pr-2 py-1 text-left font-sans text-xs font-semibold text-ink truncate cursor-pointer hover:underline"
+                    className="w-[84px] sm:w-[110px] max-w-[110px] pr-2 py-1 text-left font-sans text-xs font-bold text-[#1C1917] truncate cursor-pointer hover:underline hover:text-[#C2553A]"
                     title={`${row.classTitle}${row.section ? ` (${row.section})` : ''}`}
                   >
                     <Link href={`/classes/${row.classId}`} tabIndex={0}>
@@ -229,7 +227,7 @@ export function SemesterWeave({
 
         {/* Legenda Bentuk & Warna (Tanpa Hex) */}
         <div className="pt-2 border-t border-black/10">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-2xs sm:text-xs text-gray-dark">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-sans font-bold text-[#57534E]">
             <div className="flex items-center gap-1.5">
               <span className="h-3 w-3 rounded-[1px] bg-ink shrink-0" />
               <span>Lengkap</span>
@@ -294,7 +292,7 @@ export function SemesterWeave({
         ) : null}
 
         {/* Catatan Mandiri Sistem */}
-        <p className="text-2xs text-gray-dark italic text-right">
+        <p className="text-xs text-[#57534E] font-sans font-bold italic text-right">
           Sistem ini merupakan alat bantu monitoring mandiri, bukan sanksi atau pengurangan nilai otomatis.
         </p>
       </RetroWindow>
