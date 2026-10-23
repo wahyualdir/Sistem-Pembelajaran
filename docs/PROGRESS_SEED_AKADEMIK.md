@@ -9,7 +9,7 @@ Dokumen ini mencatat status verifikasi objektif dan bukti eksekusi per fase seca
 | Fase | Deskripsi | Status | Bukti / Keluaran Perintah |
 | :--- | :--- | :---: | :--- |
 | **S0** | Audit Skema, Persistensi, dan Login | **SELESAI** | Laporan audit lengkap di `docs/AUDIT_SEED_AKADEMIK.md` dan keputusan teknis di `docs/KEPUTUSAN_SEED_AKADEMIK.md`. |
-| **S1** | Migrasi `class_schedule_slots` & `course_code_aliases` | **SELESAI** | Migrasi `20261021000035_class_schedule_slots_and_aliases.sql` dibuat; tes pgTAP `13_class_schedule_slots_rls.sql`; `npm run check:rls` lolos 149 tabel. |
+| **S1** | Migrasi `class_schedule_slots` & `course_code_aliases` | **SELESAI (Skema & RLS)** | Migrasi `20261021000035_class_schedule_slots_and_aliases.sql` dibuat; `npm run check:rls` lolos 150 tabel; pengujian pgTAP menunggu eksekusi CI resmi. |
 | **S2** | Kerangka Skrip Seed TypeScript (`scripts/seed-akademik/`) | **SELESAI** | `guard.ts`, `load.ts`, `index.ts`; unit test lolos (`guard.test.ts` & `load.test.ts`); dry-run CLI memvalidasi CSV tanpa kesalahan. |
 | **S3** | Penyediaan 168 Akun Login dan Penugasan Peran | **BELUM DIJALANKAN TERHADAP DATABASE** | Modul `accounts.ts` telah diimplementasikan dan diverifikasi via unit test, namun **belum dijalankan terhadap database** sampai ada keluaran nyata. |
 | **S4** | Penyemaian Data Akademik (Prodi, Sem, Ruang, Kelas, Slot, KRS, Asdos) | **BELUM DIJALANKAN TERHADAP DATABASE** | Modul `academic.ts` telah diimplementasikan dan diverifikasi via unit test, namun **belum dijalankan terhadap database** sampai ada keluaran nyata. |
@@ -99,22 +99,22 @@ Berkas `docs/seed-data/PEMETAAN_RAHASIA_dosen_lama_ke_baru.csv` dan `.env.seed*`
 
 ## 4. Status Kejujuran Eksekusi terhadap Basis Data (Database Execution Status)
 
-### A. Yang SUDAH Dijalankan Terhadap Basis Data:
-1. **Eksekusi 38 Migrasi SQL dari Awal (Clean DB)**:
-   - Seluruh 38 berkas migrasi Supabase (`20260930000001` s.d. `20261021000035`) telah dieksekusi dari nol pada mesin PostgreSQL/PGlite dan berhasil 100% tanpa error (`node scripts/test-migrations-pglite.mjs`).
-2. **Uji Kebijakan RLS & Delegasi Asisten (`05_assistants_rls.sql`)**:
-   - Berhasil dieksekusi ulang terhadap skema basis data penuh dengan hasil **29 dari 29 pengujian lolos** (target 29/29 tercapai setelah perbaikan overload fungsi `set_assistant`).
-3. **Uji Kebijakan RLS Slot Jadwal (`13_class_schedule_slots_rls.sql`)**:
-   - Berhasil dieksekusi terhadap skema basis data penuh dengan hasil **12 dari 12 pengujian lolos**. Percobaan `DELETE` oleh mahasiswa ditolak RLS dan baris slot terbukti tetap ada.
+> [!CAUTION]
+> **Kebijakan Keabsahan Uji pgTAP**:
+> Hasil pengujian pgTAP yang **sah dan resmi HANYA berasal dari `supabase test db` di CI GitHub Actions**.
+> Hasil dari `scripts/run-pgtap.mjs` adalah **harness tiruan/emulasi lokal** (PGlite) dan **TIDAK dianggap sebagai bukti kelulusan resmi**. Seluruh suite pgTAP berstatus **MENUNGGU VERIFIKASI CI**.
 
-### B. Yang BELUM Dijalankan Terhadap Basis Data:
-1. **Eksekusi `supabase test db` (pgTAP 05 & Uji DB Lainnya)**:
-   - Perintah resmi `supabase test db` untuk `05_assistants_rls.sql` dan suite pgTAP lainnya **belum dijalankan** di host lokal karena Supabase CLI dan daemon Docker tidak terpasang di lingkungan Windows lokal.
-   - Uji pgTAP 05 dan CI **belum terbukti hijau sampai ada log nyata dari GitHub Actions**. Hasil 29/29 yang diperoleh di lingkungan lokal berasal dari harness uji PGlite (`scripts/run-pgtap.mjs`), bukan dari instance container resmi Supabase.
+### A. Yang SUDAH Dijalankan Terhadap Basis Data:
+1. **Eksekusi 39 Migrasi SQL dari Awal (Clean DB)**:
+   - Seluruh 39 berkas migrasi Supabase (`20260930000001` s.d. `20261023000037`) telah dieksekusi dari nol pada mesin PostgreSQL/PGlite disposable dan berhasil tanpa error sintaks/skema (`node scripts/test-migrations-pglite.mjs`).
+
+### B. Yang BELUM Dijalankan Terhadap Basis Data / Menunggu Verifikasi CI:
+1. **Eksekusi Sah `supabase test db` (Seluruh Suite pgTAP)**:
+   - Perintah resmi `supabase test db` untuk seluruh berkas pengujian (`02_identity_rls.sql`, `03_academic_rls.sql`, `05_assistants_rls.sql`, `09_peta_pulau_p0.test.sql`, `10_peta_pulau_tahap1.test.sql`, `13_class_schedule_slots_rls.sql`, `14_daily_activities_rls.sql`) **belum dijalankan di host lokal** karena Supabase CLI dan Docker daemon tidak terpasang di lingkungan Windows pengembang.
+   - Seluruh pengujian pgTAP basis data **belum terbukti hijau sampai ada log nyata dari GitHub Actions**.
 2. **Fase S3 (Penyediaan 168 Akun Auth Supabase)**:
    - Pemanggilan Admin API (`auth.admin.createUser`) di `scripts/seed-akademik/accounts.ts` **belum pernah dijalankan** terhadap target instance database Supabase aktif (hanya diverifikasi pada lapisan mock dan dry-run).
 3. **Fase S4 (Penyemaian Data Relasional Akademik)**:
    - Penulisan tabel relasional (`programs`, `semesters`, `rooms`, `courses`, `classes`, `class_schedule_slots`, `enrollments`, `class_assistants`) via Supabase Client di `scripts/seed-akademik/academic.ts` **belum pernah dijalankan** terhadap target instance database Supabase aktif.
 4. **Langkah CI Seed (`npm run seed:akademik -- --apply`)**:
    - Langkah penyemaian data sungguhan di GitHub Actions CI **belum dijalankan terhadap database CI** sebelum pipeline CI di GitHub menyelesaikan eksekusi runner-nya.
-

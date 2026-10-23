@@ -62,7 +62,7 @@ SELECT public.record_daily_activity(
 
 -- Uji 1: Tabel daily_activities memiliki RLS aktif
 SELECT has_table('public', 'daily_activities', 'Tabel public.daily_activities harus ada');
-SELECT is_rls_active('public', 'daily_activities', 'RLS harus aktif di daily_activities');
+SELECT ok((SELECT relrowsecurity FROM pg_class WHERE oid = 'public.daily_activities'::regclass), 'RLS aktif');
 
 -- Uji 2: Pengguna mhs 1 membaca datanya sendiri
 SET LOCAL ROLE authenticated;
@@ -108,6 +108,7 @@ SET LOCAL ROLE authenticated;
 SET LOCAL "request.jwt.claims" = '{"sub": "d0000001-0000-0000-0000-000000000001"}';
 SELECT throws_ok(
   $$ INSERT INTO public.daily_activities (user_id, date, kind) VALUES ('d0000001-0000-0000-0000-000000000001', '2026-10-22', 'kumpul_tugas') $$,
+  '42501',
   NULL,
   'Direct insert ditolak oleh RLS policy'
 );

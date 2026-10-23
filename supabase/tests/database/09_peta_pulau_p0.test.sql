@@ -159,6 +159,8 @@ SELECT is(
 -- Jenis aktivitas tidak sah harus melempar exception
 SELECT throws_ok(
     $$ SELECT public.log_activity('jenis_liar_tidak_dikenal', NULL, NULL, NULL, '{}'::jsonb) $$,
+    'P0001',
+    NULL,
     'Jenis kejadian di luar daftar putih ditolak ketat'
 );
 

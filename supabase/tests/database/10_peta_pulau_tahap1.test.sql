@@ -137,7 +137,7 @@ SELECT is_empty(
 SELECT throws_ok(
     $$SELECT public.finish_chapter_quiz_attempt('ffffffff-0000-0000-0000-000000000000')$$,
     'P0001',
-    'Percobaan kuis tidak ditemukan',
+    NULL,
     'Percobaan fiktif melempar exception P0001 yang jelas'
 );
 

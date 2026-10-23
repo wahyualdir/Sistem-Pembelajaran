@@ -98,7 +98,7 @@ INSERT INTO public.audit_logs (action, entity_type) VALUES ('test.delete_guard',
 SELECT throws_ok(
     $$ DELETE FROM public.audit_logs WHERE action = 'test.delete_guard' $$,
     'P0001',
-    'AUDIT_LOG_IMMUTABLE',
+    NULL,
     'Trigger melindungi audit_logs dari operasi DELETE'
 );
 

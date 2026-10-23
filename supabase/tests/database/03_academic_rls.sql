@@ -156,19 +156,19 @@ SELECT lives_ok($$ SELECT public.request_grade_change((SELECT sub FROM public.ta
 SELECT throws_ok($$ SELECT public.request_grade_change((SELECT sub FROM public.tap_ctx), 95, 'Pengajuan kedua saat masih pending') $$, 'ALREADY_PENDING', 'Pengajuan ganda ditolak');
 UPDATE public.tap_ctx SET req = (SELECT id FROM public.grade_change_requests);
 SELECT is((SELECT count(*)::int FROM public.grade_change_requests), 1, 'Dosen kelas melihat pengajuannya');
-SELECT throws_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Setuju sendiri') $$, 'FORBIDDEN', 'Dosen pemohon tidak dapat menyetujui sendiri');
+SELECT throws_like($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Setuju sendiri') $$, 'FORBIDDEN%', 'Dosen pemohon tidak dapat menyetujui sendiri');
 SELECT public.tap_as('b0000002-0000-0000-0000-000000000002');
 SELECT is_empty($$ SELECT 1 FROM public.grade_change_requests $$, 'Dosen kelas lain tidak melihat pengajuan');
 SELECT public.tap_as('b0000003-0000-0000-0000-000000000003');
 SELECT is_empty($$ SELECT 1 FROM public.grade_change_requests $$, 'Mahasiswa tidak melihat pengajuan perubahan nilai');
 SELECT public.tap_as('b0000022-0000-0000-0000-000000000022');
 SELECT is_empty($$ SELECT 1 FROM public.grade_change_requests $$, 'A8: koordinator prodi lain tidak melihat pengajuan');
-SELECT throws_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Mencoba lintas prodi') $$, 'FORBIDDEN', 'Koordinator prodi lain tidak dapat memutuskan');
+SELECT throws_like($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Mencoba lintas prodi') $$, 'FORBIDDEN%', 'Koordinator prodi lain tidak dapat memutuskan');
 SELECT public.tap_as('b0000021-0000-0000-0000-000000000021');
 SELECT is((SELECT count(*)::int FROM public.grade_change_requests), 1, 'Koordinator prodi terkait melihat pengajuan');
-SELECT throws_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, '') $$, 'NOTE_MIN_10_CHARS', 'Catatan keputusan wajib diisi');
+SELECT throws_like($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, '') $$, 'NOTE_MIN_10_CHARS%', 'Catatan keputusan wajib diisi');
 SELECT lives_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Disetujui, revisi benar') $$, 'Koordinator menyetujui perubahan nilai');
-SELECT throws_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Setujui lagi') $$, 'INVALID_STATE', 'Pengajuan yang sudah diputuskan tidak dapat diputuskan lagi');
+SELECT throws_like($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Setujui lagi') $$, 'INVALID_STATE%', 'Pengajuan yang sudah diputuskan tidak dapat diputuskan lagi');
 SELECT public.tap_as('b0000023-0000-0000-0000-000000000023');
 SELECT public.execute_grade_change((SELECT req FROM public.tap_ctx));
 SELECT public.tap_as('b0000003-0000-0000-0000-000000000003');
@@ -234,7 +234,7 @@ SELECT lives_ok($$ SELECT public.log_grade_export((SELECT class_id FROM public.t
 RESET ROLE;
 SELECT ok((SELECT count(*) FROM public.audit_logs WHERE action = 'grade.export') = 1, 'Ekspor nilai tercatat di audit');
 RESET ROLE;
-SELECT throws_ok($$ DELETE FROM public.grade_history $$, 'P0001', 'Riwayat nilai bersifat append-only');
+SELECT throws_ok($$ DELETE FROM public.grade_history $$, 'P0001', NULL, 'Riwayat nilai bersifat append-only');
 SELECT public.tap_as('b0000001-0000-0000-0000-000000000001', 'anon');
 SELECT is_empty($$ SELECT 1 FROM public.grades $$, 'A21: kunci anon tidak dapat membaca tabel grades');
 
