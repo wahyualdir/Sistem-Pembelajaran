@@ -160,7 +160,7 @@ export function StudentExamsHubView({ initialQuizzes }: StudentExamsHubViewProps
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="flex flex-col gap-3.5">
             {filteredQuizzes.map((quiz: any) => {
               const type = (quiz.exam_type ?? 'KUIS') as ExamCategory;
 
@@ -203,62 +203,56 @@ export function StudentExamsHubView({ initialQuizzes }: StudentExamsHubViewProps
               return (
                 <div
                   key={quiz.id}
-                  className="border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm hover:shadow-retro hover:-translate-y-0.5 transition-all flex flex-col justify-between"
+                  className="border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm hover:shadow-retro hover:-translate-y-0.5 transition-all p-4 sm:p-5 flex flex-col xl:flex-row xl:items-center justify-between gap-4"
                 >
-                  {/* Card Titlebar */}
-                  <div className="flex items-center justify-between px-4 py-2.5 border-b-2 border-[#7A756D] bg-[#ECE9D8]">
-                    <div className="flex items-center gap-2">
-                      <span className={cn('px-2 py-0.5 text-xs font-black uppercase tracking-wider border', badgeClass)}>
+                  {/* Sisi Kiri: Badge, Kode, Judul, & Ringkasan */}
+                  <div className="space-y-1.5 flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className={cn('px-2.5 py-0.5 text-xs font-black uppercase tracking-wider border', badgeClass)}>
                         {typeLabel}
                       </span>
-                      <span className="text-xs font-bold text-[#57534E]">
-                        {courseCode}
+                      <span className="text-xs font-extrabold text-[#853827]">
+                        {courseCode} · {courseName}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#1C1917]">
-                      <Clock className="h-3.5 w-3.5 text-[#C2553A]" />
-                      <span>{durationText}</span>
-                    </div>
+                    <h3 className="font-heading font-black text-base sm:text-lg text-[#1C1917] leading-tight">
+                      {quiz.title}
+                    </h3>
+
+                    <p className="text-xs text-[#57534E] font-medium leading-relaxed line-clamp-1">
+                      {quiz.description}
+                    </p>
                   </div>
 
-                  {/* Card Body */}
-                  <div className="p-4 sm:p-5 space-y-4 flex-1 flex flex-col justify-between">
-                    <div className="space-y-1.5">
-                      <span className="text-[11px] font-black uppercase text-[#853827] tracking-wider block">
-                        {courseName}
-                      </span>
-                      <h3 className="font-heading font-black text-lg sm:text-xl text-[#1C1917] leading-snug">
-                        {quiz.title}
-                      </h3>
-                      <p className="text-xs sm:text-sm text-[#57534E] font-medium leading-relaxed line-clamp-2">
-                        {quiz.description}
-                      </p>
+                  {/* Sisi Kanan: Spesifikasi Teknis & Tombol Aksi (Memanjang) */}
+                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
+                    {/* Spesifikasi Inset Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-[#FFFFFF] border border-[#D6D3CB] p-2 text-xs text-center shrink-0">
+                      <div className="px-3">
+                        <span className="block text-[10px] font-bold uppercase text-[#7A756D]">Waktu</span>
+                        <span className="font-black text-[#1C1917] whitespace-nowrap">{durationText}</span>
+                      </div>
+                      <div className="px-3 border-l border-[#D6D3CB]">
+                        <span className="block text-[10px] font-bold uppercase text-[#7A756D]">Soal</span>
+                        <span className="font-black text-[#1C1917] whitespace-nowrap">{questionsCount} Butir</span>
+                      </div>
+                      <div className="px-3 border-l border-[#D6D3CB]">
+                        <span className="block text-[10px] font-bold uppercase text-[#7A756D]">KKM</span>
+                        <span className="font-black text-[#1C1917] whitespace-nowrap">{kkm}</span>
+                      </div>
+                      <div className="px-3 border-l border-[#D6D3CB]">
+                        <span className="block text-[10px] font-bold uppercase text-[#7A756D]">Pengawasan</span>
+                        <span className="font-black text-[#1C1917] whitespace-nowrap">{proctorLabel.split(' ')[0]}</span>
+                      </div>
                     </div>
 
-                    {/* Metadata Specs Strip */}
-                    <div className="pt-3 border-t border-[#D6D3CB] space-y-3">
-                      <div className="grid grid-cols-3 gap-2 p-2.5 bg-[#FFFFFF] border border-[#D6D3CB] text-center text-xs">
-                        <div>
-                          <span className="block text-[10px] font-bold uppercase text-[#7A756D]">Soal</span>
-                          <span className="font-black text-[#1C1917]">{questionsCount} Butir</span>
-                        </div>
-                        <div>
-                          <span className="block text-[10px] font-bold uppercase text-[#7A756D]">KKM</span>
-                          <span className="font-black text-[#1C1917]">{kkm} / 100</span>
-                        </div>
-                        <div>
-                          <span className="block text-[10px] font-bold uppercase text-[#7A756D]">Pengawasan</span>
-                          <span className="font-black text-[#1C1917] truncate block" title={proctorLabel}>
-                            {proctorLabel.split(' ')[0]}
-                          </span>
-                        </div>
-                      </div>
-
+                    {/* Tombol Aksi */}
+                    <div className="w-full sm:w-auto shrink-0">
                       <Link
                         href={`/classes/${quiz.class_id}/quizzes/${quiz.id}`}
                         className={cn(
-                          'w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs sm:text-sm font-extrabold shadow-retro-sm transition-all text-center border-2',
+                          'flex items-center justify-center gap-2 py-2.5 px-5 text-xs sm:text-sm font-extrabold shadow-retro-sm transition-all text-center border-2 whitespace-nowrap min-w-[170px]',
                           buttonClass
                         )}
                       >
