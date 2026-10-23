@@ -8,10 +8,12 @@ import { StudentExamsHubView } from '@/modules/academic/student-exams-hub-view';
 
 const DEFAULT_DEMO_EXAMS = [
   {
-    id: 'quiz-demo-1',
+    id: 'quiz-demo-uts',
     class_id: 'c0000000-0000-0000-0000-000000000001',
+    course_name: 'Pemrograman Lanjut & Algoritma',
+    course_code: 'TIF-301',
     title: 'Ujian Tengah Semester: Pemrograman Lanjut & Algoritma',
-    description: 'UTS Resmi Semester Ganjil. Ujian ini diawasi dengan sistem proctoring standar. Harap aktifkan layar penuh dan hindari membuka tab lain.',
+    description: 'Evaluasi resmi tengah semester. Mencakup live coding JavaScript, analisis Big-O, rekursi, dan manipulasi struktur data pointer.',
     exam_type: 'UTS',
     duration_minutes: 60,
     questionsCount: 15,
@@ -20,10 +22,12 @@ const DEFAULT_DEMO_EXAMS = [
     due_at: '2026-10-28T15:00:00Z',
   },
   {
-    id: 'quiz-demo-2',
+    id: 'quiz-demo-kuis',
     class_id: 'c0000000-0000-0000-0000-000000000002',
-    title: 'Kuis Mingguan 04: Kompleksitas Algoritma & Rekursi',
-    description: 'Kuis pemahaman materi struktur data: analisis kompleksitas Big-O notation, rekursi divide and conquer, serta manipulasi pointer.',
+    course_name: 'Struktur Data & Kompleksitas',
+    course_code: 'TIF-102',
+    title: 'Kuis Mingguan: Algoritma Sorting & Divide-and-Conquer',
+    description: 'Kuis pemahaman materi pekan ke-4: QuickSort, MergeSort, analisis kompleksitas asimptotik, dan studi kasus algoritma rekursif.',
     exam_type: 'KUIS',
     duration_minutes: 30,
     questionsCount: 10,
@@ -32,10 +36,12 @@ const DEFAULT_DEMO_EXAMS = [
     due_at: '2026-10-26T23:59:00Z',
   },
   {
-    id: 'quiz-demo-3',
+    id: 'quiz-demo-latihan',
     class_id: 'c0000000-0000-0000-0000-000000000003',
+    course_name: 'Sistem Basis Data Terdistribusi',
+    course_code: 'TIF-204',
     title: 'Latihan Mandiri: Normalisasi Database & Indexing B-Tree',
-    description: 'Simulasi latihan soal mandiri tanpa batasan waktu dan percobaan. Skor dan pembahasan tampil instan untuk persiapan UTS/UAS.',
+    description: 'Simulasi latihan soal mandiri tanpa batasan waktu dan percobaan. Skor dan pembahasan tampil langsung untuk persiapan ujian.',
     exam_type: 'LATIHAN',
     duration_minutes: 45,
     questionsCount: 12,
@@ -44,10 +50,12 @@ const DEFAULT_DEMO_EXAMS = [
     due_at: '2026-10-31T23:59:00Z',
   },
   {
-    id: 'quiz-demo-4',
+    id: 'quiz-demo-uas',
     class_id: 'c0000000-0000-0000-0000-000000000001',
+    course_name: 'Rekayasa Perangkat Lunak & Cloud',
+    course_code: 'TIF-401',
     title: 'Ujian Akhir Semester: Rekayasa Perangkat Lunak & Sistem Terdistribusi',
-    description: 'Evaluasi akhir komprehensif penentu kelulusan semester. Wajib memenuhi syarat presensi minimal 75% untuk verifikasi dan pembukaan sesi ujian.',
+    description: 'Evaluasi akhir komprehensif semester ganjil. Mencakup perancangan sistem, microservices, database transactions, dan keamanan API.',
     exam_type: 'UAS',
     duration_minutes: 90,
     questionsCount: 20,
@@ -78,21 +86,26 @@ export default async function ExamsPage() {
   const fetchedQuizzes = isNew ? [] : await getAllQuizzesAction().catch(() => []);
   const isLecturer = role === 'LECTURER';
 
-  // Gabungkan DEFAULT_DEMO_EXAMS dan fetchedQuizzes sehingga keempat kategori (Kuis, Latihan, UTS, UAS) selalu terwakili
+  // Memastikan tepat 4 evaluasi representatif (1 Kuis, 1 Latihan, 1 UTS, 1 UAS)
   const itemsMap = new Map<string, any>();
   for (const q of DEFAULT_DEMO_EXAMS) {
-    itemsMap.set(q.exam_type ?? q.id, q);
+    itemsMap.set(q.exam_type, q);
   }
   for (const q of fetchedQuizzes) {
-    itemsMap.set(q.id, q);
+    if (q.exam_type && itemsMap.has(q.exam_type)) {
+      itemsMap.set(q.exam_type, {
+        ...itemsMap.get(q.exam_type),
+        ...q,
+      });
+    }
   }
   const quizzes = isNew ? [] : Array.from(itemsMap.values());
 
-  // Jika Dosen / Admin: Tampilkan Hub Bertab Dosen [Daftar & Buat | Panel Live | Log Pelanggaran]
+  // Jika Dosen / Admin: Tampilkan Hub Dosen
   if (isLecturer) {
     return <LecturerExamsHubView quizzes={quizzes} isDemo={isDemoMode() && !isNew} />;
   }
 
-  // Jika Mahasiswa: Tampilkan Pusat Evaluasi Terpadu [Semua | Kuis | Latihan | UTS | UAS]
+  // Jika Mahasiswa: Tampilkan Antarmuka Evaluasi Terpadu
   return <StudentExamsHubView initialQuizzes={quizzes} />;
 }
