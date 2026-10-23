@@ -529,3 +529,13 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 
 
 
+
+### Keputusan 59: Arsitektur Fitur Kain Semester Mahasiswa (Semester Weave Matrix)
+- **Tanggal**: 23 Oktober 2026
+- **Keputusan**:
+  1. **Algoritma Penentuan Pekan Berjalan (Current Week)**: Karena tabel `semesters` tidak memiliki atribut `start_date`, nomor pekan dihitung dari `semesterStart` = nilai `session_date` paling awal untuk sesi nomor 1 (`session_number = 1`) di antara kelas aktif mahasiswa. `week = Math.floor((hariIniWIB - semesterStart) / 7 hari) + 1`, dijepit ke rentang `[1, 16]`. Bila `hariIniWIB < semesterStart`, `week = 0`. Cadangan jika sesi nomor 1 belum ada: mencari nomor sesi terbesar yang tanggalnya `<= hariIniWIB`; jika tetap tidak ada, `week = null`.
+  2. **Pemetaan Tugas ke Pekan**: `assignWeek(due_at, semesterStart)` menempatkan tenggat tugas ke pekan `[1, 16]` sesuai tanggal kalender WIB. Tugas sebelum semester masuk pekan 1; setelah pekan 16 masuk pekan 16. Tugas berstatus `DRAFT` (milik dosen) diabaikan, dan submission berstatus `DRAFT` milik mahasiswa tidak dihitung sebagai tugas terkirim.
+  3. **Penegakan RLS & Zero Service Role**: Seluruh query data Kain Semester memakai klien `createClient()` yang menghormati RLS dengan filter eksplisit `student_id = user.id`. Tidak menggunakan `service_role` / admin client.
+  4. **Pola Respons & Ketiadaan Data Palsu**: Jika persistensi nonaktif atau Supabase offline, aksi mengembalikan pesan netral atau data kosong jujur tanpa membuat data rekayasa di jalur produksi.
+  5. **Feature Flag**: Dikunci di balik flag server-side `FF_KAIN_SEMESTER` (default `false`). Bila mati, antarmuka beranda mahasiswa 100% identik dengan kondisi sebelumnya.
+- **Alasan**: Memberikan visibilitas terpadu atas progres kehadiran dan tugas tiap pekan bagi mahasiswa secara etis, netral, dan aman tanpa beban migrasi database baru.

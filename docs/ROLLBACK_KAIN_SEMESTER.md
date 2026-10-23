@@ -17,7 +17,7 @@ Dokumen ini memuat prosedur resmi pembatalan fitur "Kain Semester" mahasiswa tan
 
 Daftar hash commit untuk setiap fase (diperbarui seiring fase berjalan):
 
-- **Fase A (Jaring Pengaman)**: *(commit ini)*
+- **Fase A (Jaring Pengaman)**: `5bdf015`
 - **Fase B (Audit Sumber Data)**: -
 - **Fase C (Feature Flag)**: -
 - **Fase D (Logika Murni)**: -
