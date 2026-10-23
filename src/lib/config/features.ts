@@ -48,6 +48,9 @@ export const FEATURE_FLAGS = {
 
   // Domain 7: Konten Pembelajaran, Forum, Notifikasi & Layanan Kampus (Fase 3F)
   FF_PERSISTENCE_CONTENT: process.env.FF_PERSISTENCE_CONTENT === 'true',
+
+  // Kain Semester di beranda mahasiswa. Default mati.
+  FF_KAIN_SEMESTER: process.env.FF_KAIN_SEMESTER === 'true',
 } as const;
 
 export type FeatureFlagKey = keyof typeof FEATURE_FLAGS;
@@ -55,4 +58,3 @@ export type FeatureFlagKey = keyof typeof FEATURE_FLAGS;
 export function isFeatureFlagActive(key: FeatureFlagKey): boolean {
   return Boolean(FEATURE_FLAGS[key]);
 }
-

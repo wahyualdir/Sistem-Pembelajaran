@@ -35,8 +35,8 @@ Sebelum menyentuh satu baris pun kode fitur:
 | Fase | Deskripsi | Status | Commit Hash | Catatan |
 |---|---|---|---|---|
 | **Fase A** | Jaring pengaman rollback | ✅ Selesai | `5bdf015` | Tag `pra-kain-semester` dibuat, cabang `fitur/kain-semester` aktif, baseline tercatat. |
-| **Fase B** | Audit sumber data & RLS | ✅ Selesai | *(commit ini)* | 6 tabel, kolom, indeks, RLS verified aman; pola RLS-only terkonfirmasi. |
-| **Fase C** | Feature flag `FF_KAIN_SEMESTER` | ⏳ Menunggu | - | - |
+| **Fase B** | Audit sumber data & RLS | ✅ Selesai | `426c391` | 6 tabel, kolom, indeks, RLS verified aman; pola RLS-only terkonfirmasi. |
+| **Fase C** | Feature flag `FF_KAIN_SEMESTER` | ✅ Selesai | *(commit ini)* | Flag server-only ditambahkan ke `features.ts`, `.env.example`, dan 3 tes unit lulus. |
 | **Fase D** | Logika murni kisi & unit test | ⏳ Menunggu | - | - |
 | **Fase E** | Server action pemuat kisi | ⏳ Menunggu | - | - |
 | **Fase F** | Komponen UI kisi & sheet detail | ⏳ Menunggu | - | - |
