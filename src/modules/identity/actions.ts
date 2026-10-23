@@ -591,7 +591,12 @@ export async function switchWorkspaceAction(formData: FormData | unknown): Promi
     return code === validatedRole;
   });
 
-  if (!ownsRole) {
+  const isSuperAdmin = userContext.roles.some((r) => {
+    const code = (r.roles as { code?: string })?.code;
+    return code === 'SUPER_ADMIN';
+  });
+
+  if (!ownsRole && !isSuperAdmin) {
     redirect('/workspace');
   }
 

@@ -64,8 +64,40 @@ export default async function WorkspacePage() {
 
   const { profile, roles, activeRole } = userContext;
 
+  const isSuperAdmin = roles.some((r) => {
+    const code = (r.roles as { code?: string })?.code;
+    return code === 'SUPER_ADMIN';
+  });
+
+  const ALL_SYSTEM_ROLES = [
+    'STUDENT',
+    'LECTURER',
+    'TEACHING_ASSISTANT',
+    'PROGRAM_COORDINATOR',
+    'ACADEMIC_STAFF',
+    'SYSTEM_ADMIN',
+    'SUPER_ADMIN',
+  ];
+
+  const existingRoleCodes = new Set(
+    roles.map((r) => (r.roles as { code?: string })?.code).filter(Boolean)
+  );
+
+  const displayRoles = [...roles];
+  if (isSuperAdmin) {
+    for (const code of ALL_SYSTEM_ROLES) {
+      if (!existingRoleCodes.has(code)) {
+        displayRoles.push({
+          id: `superadmin-access-${code}`,
+          role_id: code,
+          roles: { code, name: code, description: 'Akses Global Super Administrator' },
+        } as any);
+      }
+    }
+  }
+
   // Jika pengguna hanya memiliki 1 role, alihkan langsung
-  if (roles.length === 1) {
+  if (!isSuperAdmin && roles.length === 1) {
     const singleRole = (roles[0].roles as { code?: string })?.code as string;
     const portalMap: Record<string, string> = {
       STUDENT: '/student',
@@ -103,7 +135,7 @@ export default async function WorkspacePage() {
           <WindowTrafficLights size="md" />
 
           <Link href="/" className="flex items-center gap-2.5 ml-1 group focus-visible:outline-none">
-            <div className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border-2 border-black bg-white p-1 shadow-retro-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-white p-1 shadow-retro-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
               <img
                 src="/logo-ruangkampus.png"
                 alt="Logo RuangKampus"
@@ -156,8 +188,8 @@ export default async function WorkspacePage() {
                 </p>
               </div>
 
-              <div className="space-y-3.5">
-                {roles.map((r) => {
+              <div className="space-y-3.5 max-h-[55vh] overflow-y-auto pr-1.5">
+                {displayRoles.map((r) => {
                   const roleCode = (r.roles as { code?: string })?.code as string;
                   const meta = ROLE_METADATA[roleCode] || {
                     label: roleCode,

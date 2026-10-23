@@ -83,7 +83,7 @@ function RegisterFormContent() {
           <WindowTrafficLights size="md" />
 
           <Link href="/" className="flex items-center gap-2.5 ml-1 group focus-visible:outline-none">
-            <div className="flex h-8.5 w-8.5 items-center justify-center rounded-lg border-2 border-black bg-white p-1 shadow-retro-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-white p-1 shadow-retro-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
               <img
                 src="/logo-ruangkampus.png"
                 alt="Logo RuangKampus"
