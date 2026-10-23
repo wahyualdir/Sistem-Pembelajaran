@@ -187,7 +187,7 @@ export function StudentExamsHubView({ initialQuizzes }: StudentExamsHubViewProps
               } else if (type === 'UTS') {
                 badgeClass = 'bg-[#FEF2F0] text-[#853827] border-[#C2553A]';
                 borderAccentClass = 'border-l-[#C2553A]';
-                typeLabel = 'UTS RESMI';
+                typeLabel = 'UTS';
                 buttonText = 'Masuk Ruang Ujian';
                 buttonClass = 'bg-[#C2553A] hover:bg-[#853827] text-[#FFFFFF] border-[#6B2D20]';
                 proctorBadge = 'Layar Penuh';
@@ -195,7 +195,7 @@ export function StudentExamsHubView({ initialQuizzes }: StudentExamsHubViewProps
               } else if (type === 'UAS') {
                 badgeClass = 'bg-[#FEF2F2] text-[#991B1B] border-[#DC2626]';
                 borderAccentClass = 'border-l-[#DC2626]';
-                typeLabel = 'UAS RESMI';
+                typeLabel = 'UAS';
                 buttonText = 'Masuk Ruang UAS';
                 buttonClass = 'bg-[#DC2626] hover:bg-[#991B1B] text-[#FFFFFF] border-[#7A2E19]';
                 proctorBadge = 'Ketat';
