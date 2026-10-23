@@ -127,7 +127,7 @@ const STUDENT_GROUPS: MenuGroup[] = [
     items: [
       { id: 'mhs-kelas', label: 'Kelas Saya', href: '/classes', icon: Layers, roles: ['STUDENT'] },
       { id: 'mhs-presensi', label: 'Presensi', href: '/attendance', icon: CalendarCheck2, roles: ['STUDENT'] },
-      { id: 'mhs-ujian', label: 'Ujian & Kuis', href: '/exams', icon: FileCheck2, roles: ['STUDENT'] },
+      { id: 'mhs-ujian', label: 'Ujian', href: '/exams', icon: FileCheck2, roles: ['STUDENT'] },
       { id: 'mhs-perpustakaan', label: 'Perpustakaan', href: '/library', icon: Library, roles: ['STUDENT'] },
       { id: 'mhs-tanya-ai', label: 'Tanya AI', href: '/ai-assistant', icon: Sparkles, roles: ['STUDENT'] },
       { id: 'mhs-pesan', label: 'Pesan', href: '/messages', icon: MessageCircle, roles: ['STUDENT'] },

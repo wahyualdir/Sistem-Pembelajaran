@@ -78,6 +78,7 @@ import { StudentAbsenceModal, LecturerAbsenceTabView } from './absence-modal-and
 import { toggleMaterialCompleteAction, remindUnreadStudentsAction } from './material-progress-actions';
 import { CpmkCplRadarCard } from './cpmk-cpl-radar-card';
 import { ClassLivePollCard } from './class-live-poll-card';
+import { ClassLiveInteractionView } from './class-live-interaction-view';
 
 export interface ClassDetailData {
   cls: {
@@ -165,6 +166,7 @@ export interface ClassDetailData {
 // 4 TAB IKONIK GOOGLE CLASSROOM
 export const TA_CLASSROOM_TABS = [
   { id: 'bantu-presensi', label: 'Bantu Presensi', icon: CalendarCheck2, badgeLabel: 'Presensi' },
+  { id: 'interaksi', label: 'Interaksi Kuliah', icon: MessageSquare, badgeLabel: 'Interaksi' },
   { id: 'jawab-forum', label: 'Jawab Forum', icon: MessagesSquare, badgeLabel: 'Forum' },
   { id: 'materi-asisten', label: 'Materi Asisten', icon: BookOpen, badgeLabel: 'Materi' },
   { id: 'peserta', label: 'Peserta', icon: Users, badgeLabel: 'Peserta' },
@@ -173,6 +175,7 @@ export const TA_CLASSROOM_TABS = [
 
 export const LECTURER_CLASSROOM_TABS = [
   { id: 'materi', label: 'Materi', icon: BookOpen, badgeLabel: 'Materi' },
+  { id: 'interaksi', label: 'Interaksi Kuliah', icon: MessageSquare, badgeLabel: 'Interaksi' },
   { id: 'bab', label: 'Bab', icon: Layers, badgeLabel: 'Bab' },
   { id: 'progres', label: 'Progres', icon: BarChart3, badgeLabel: 'Progres' },
   { id: 'tugas', label: 'Tugas & Penilaian', icon: ClipboardList, badgeLabel: 'Classwork' },
@@ -188,6 +191,7 @@ export const LECTURER_CLASSROOM_TABS = [
 
 export const STUDENT_CLASSROOM_TABS = [
   { id: 'peta', label: 'Peta Belajar', icon: Map, badgeLabel: 'Peta' },
+  { id: 'interaksi', label: 'Interaksi Kuliah', icon: MessageSquare, badgeLabel: 'Interaksi' },
   { id: 'forum', label: 'Forum', icon: MessagesSquare, badgeLabel: 'Stream' },
   { id: 'tugas', label: 'Tugas Kelas', icon: ClipboardList, badgeLabel: 'Classwork' },
   { id: 'kelompok', label: 'Kelompok', icon: Users, badgeLabel: 'Kelompok' },
@@ -1587,6 +1591,18 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           classTitle={cls.title}
           isLecturerOrTa={Boolean(lecturer || ta)}
           members={members}
+        />
+      )}
+
+      {/* ======================================================== */}
+      {/* TAB: INTERAKSI KULIAH (TANYA JAWAB LANGSUNG & KUIS KILAT)*/}
+      {/* ======================================================== */}
+      {activeTab === 'interaksi' && (
+        <ClassLiveInteractionView
+          classId={cls.id}
+          currentUserRole={viewer}
+          currentUserId={currentUserId}
+          isStaff={Boolean(isActualLecturer || ta || isStaff)}
         />
       )}
     </div>
