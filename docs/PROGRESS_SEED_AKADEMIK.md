@@ -111,6 +111,7 @@ Berkas `docs/seed-data/PEMETAAN_RAHASIA_dosen_lama_ke_baru.csv` dan `.env.seed*`
 ### B. Yang BELUM Dijalankan Terhadap Basis Data / Menunggu Verifikasi CI:
 1. **Eksekusi Sah `supabase test db` (Seluruh Suite pgTAP)**:
    - Perintah resmi `supabase test db` untuk seluruh berkas pengujian (`02_identity_rls.sql`, `03_academic_rls.sql`, `05_assistants_rls.sql`, `09_peta_pulau_p0.test.sql`, `10_peta_pulau_tahap1.test.sql`, `13_class_schedule_slots_rls.sql`, `14_daily_activities_rls.sql`) **belum dijalankan di host lokal** karena Supabase CLI dan Docker daemon tidak terpasang di lingkungan Windows pengembang.
+   - **Perbaikan Uji 5 `14_daily_activities_rls.sql`**: Telah diselidiki bahwa kegagalan uji 5 disebabkan data uji kelas belum mendefinisikan peran `LECTURER` dengan `scope_type = 'CLASS'` dan `enrollment` untuk mahasiswa, serta kebijakan RLS `daily_activities_select` diperkuat agar mengenali dosen pengampu langsung (`classes.lecturer_id` / `classes.created_by`).
    - Seluruh pengujian pgTAP basis data **belum terbukti hijau sampai ada log nyata dari GitHub Actions**.
 2. **Fase S3 (Penyediaan 168 Akun Auth Supabase)**:
    - Pemanggilan Admin API (`auth.admin.createUser`) di `scripts/seed-akademik/accounts.ts` **belum pernah dijalankan** terhadap target instance database Supabase aktif (hanya diverifikasi pada lapisan mock dan dry-run).

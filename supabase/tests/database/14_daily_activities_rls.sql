@@ -41,6 +41,28 @@ VALUES (
 )
 ON CONFLICT DO NOTHING;
 
+-- Peran & Penugasan Dosen pada Kelas & Enrollment Mahasiswa
+INSERT INTO public.roles (code, name) VALUES
+  ('LECTURER', 'Dosen'),
+  ('STUDENT', 'Mahasiswa')
+ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status)
+VALUES (
+  'd0000003-0000-0000-0000-000000000003',
+  (SELECT id FROM public.roles WHERE code = 'LECTURER'),
+  'CLASS',
+  'd4440000-0000-0000-0000-000000000001',
+  'ACTIVE'
+) ON CONFLICT DO NOTHING;
+
+INSERT INTO public.enrollments (student_id, class_id, status)
+VALUES (
+  'd0000001-0000-0000-0000-000000000001',
+  'd4440000-0000-0000-0000-000000000001',
+  'ACTIVE'
+) ON CONFLICT DO NOTHING;
+
 -- 3. Catat aktivitas lewat RPC (SECURITY DEFINER)
 SELECT public.record_daily_activity(
   'd0000001-0000-0000-0000-000000000001',

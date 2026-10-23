@@ -39,6 +39,11 @@ USING (
         class_id IS NOT NULL AND (
             public.is_class_lecturer(class_id)
             OR EXISTS (
+                SELECT 1 FROM public.classes c
+                WHERE c.id = daily_activities.class_id
+                  AND (c.lecturer_id = (SELECT auth.uid()) OR c.created_by = (SELECT auth.uid()))
+            )
+            OR EXISTS (
                 SELECT 1 FROM public.class_assistants ca
                 WHERE ca.class_id = daily_activities.class_id
                   AND ca.user_id = (SELECT auth.uid())
@@ -81,6 +86,11 @@ BEGIN
         -- Izinkan jika caller adalah pengajar kelas yang memberikan penilaian/review
         IF p_class_id IS NULL OR NOT (
             public.is_class_lecturer(p_class_id)
+            OR EXISTS (
+                SELECT 1 FROM public.classes c
+                WHERE c.id = p_class_id
+                  AND (c.lecturer_id = auth.uid() OR c.created_by = auth.uid())
+            )
             OR EXISTS (
                 SELECT 1 FROM public.class_assistants ca
                 WHERE ca.class_id = p_class_id AND ca.user_id = auth.uid()
