@@ -36,9 +36,9 @@ Sebelum menyentuh satu baris pun kode fitur:
 |---|---|---|---|---|
 | **Fase A** | Jaring pengaman rollback | ✅ Selesai | `5bdf015` | Tag `pra-kain-semester` dibuat, cabang `fitur/kain-semester` aktif, baseline tercatat. |
 | **Fase B** | Audit sumber data & RLS | ✅ Selesai | `426c391` | 6 tabel, kolom, indeks, RLS verified aman; pola RLS-only terkonfirmasi. |
-| **Fase C** | Feature flag `FF_KAIN_SEMESTER` | ✅ Selesai | *(commit ini)* | Flag server-only ditambahkan ke `features.ts`, `.env.example`, dan 3 tes unit lulus. |
-| **Fase D** | Logika murni kisi & unit test | ⏳ Menunggu | - | - |
-| **Fase E** | Server action pemuat kisi | ⏳ Menunggu | - | - |
+| **Fase C** | Feature flag `FF_KAIN_SEMESTER` | ✅ Selesai | `ecc8f37` | Flag server-only ditambahkan ke `features.ts`, `.env.example`, dan 3 tes unit lulus. |
+| **Fase D** | Logika murni kisi & unit test | ✅ Selesai | `ea2bf98`, `6051e8c` | `semester-weave.ts` selesai dengan 18 kasus uji Vitest lulus 100%. |
+| **Fase E** | Server action pemuat kisi | ✅ Selesai | *(commit ini)* | `semester-weave-actions.ts` (RLS-only, max 5 query paralel) & 4 unit test lulus. |
 | **Fase F** | Komponen UI kisi & sheet detail | ⏳ Menunggu | - | - |
 | **Fase G** | Integrasi di beranda mahasiswa | ⏳ Menunggu | - | - |
 | **Fase H** | Verifikasi menyeluruh (aksesibilitas, responsive, flag on/off) | ⏳ Menunggu | - | - |
