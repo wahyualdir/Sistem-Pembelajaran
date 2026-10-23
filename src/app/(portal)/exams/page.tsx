@@ -13,13 +13,14 @@ const DEFAULT_DEMO_EXAMS = [
     course_name: 'Pemrograman Lanjut & Algoritma',
     course_code: 'TIF-301',
     title: 'Ujian Tengah Semester: Pemrograman Lanjut & Algoritma',
-    description: 'Evaluasi resmi tengah semester. Mencakup live coding JavaScript, analisis Big-O, rekursi, dan manipulasi struktur data pointer.',
+    description: 'Evaluasi resmi tengah semester. Mencakup live coding JavaScript, analisis Big-O, rekursi, dan manipulasi pointer.',
     exam_type: 'UTS',
     duration_minutes: 60,
     questionsCount: 15,
     kkm: 70,
     proctoring_level: 'STANDARD',
     due_at: '2026-10-28T15:00:00Z',
+    schedule_info: '28 Okt 2026 · 15:00 WIB',
   },
   {
     id: 'quiz-demo-kuis',
@@ -27,13 +28,14 @@ const DEFAULT_DEMO_EXAMS = [
     course_name: 'Struktur Data & Kompleksitas',
     course_code: 'TIF-102',
     title: 'Kuis Mingguan: Algoritma Sorting & Divide-and-Conquer',
-    description: 'Kuis pemahaman materi pekan ke-4: QuickSort, MergeSort, analisis kompleksitas asimptotik, dan studi kasus algoritma rekursif.',
+    description: 'Kuis pemahaman materi pekan ke-4: QuickSort, MergeSort, analisis kompleksitas asimptotik, dan studi kasus rekursif.',
     exam_type: 'KUIS',
     duration_minutes: 30,
     questionsCount: 10,
     kkm: 70,
     proctoring_level: 'LIGHT',
     due_at: '2026-10-26T23:59:00Z',
+    schedule_info: 'Tenggat: 26 Okt 2026 · 23:59 WIB',
   },
   {
     id: 'quiz-demo-latihan',
@@ -48,6 +50,7 @@ const DEFAULT_DEMO_EXAMS = [
     kkm: 65,
     proctoring_level: 'OFF',
     due_at: '2026-10-31T23:59:00Z',
+    schedule_info: 'Akses Bebas · Pembahasan Instan',
   },
   {
     id: 'quiz-demo-uas',
@@ -62,6 +65,7 @@ const DEFAULT_DEMO_EXAMS = [
     kkm: 75,
     proctoring_level: 'STRICT',
     due_at: '2027-01-15T10:00:00Z',
+    schedule_info: '15 Jan 2027 · 10:00 WIB',
   },
 ];
 
