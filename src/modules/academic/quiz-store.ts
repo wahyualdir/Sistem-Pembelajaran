@@ -312,6 +312,85 @@ if (quizStore.quizzes.length === 0) {
     status: 'ACTIVE',
     attempts_allowed: 1,
   });
+
+  // KUIS MINGGUAN
+  quizStore.quizzes.push({
+    id: 'exam-demo-kuis-01',
+    class_id: 'c0000000-0000-0000-0000-000000000002',
+    title: 'Kuis Mingguan 04: Kompleksitas Algoritma & Rekursi',
+    description: 'Kuis pemahaman materi struktur data: analisis kompleksitas Big-O notation, rekursi divide and conquer, serta implementasi pointer.',
+    exam_type: 'KUIS',
+    duration_minutes: 30,
+    due_at: new Date(Date.now() + 86400000 * 2).toISOString(),
+    questions: quizStore.questionBank.slice(0, 2),
+    total_points: 35,
+    is_published: true,
+    created_at: new Date(Date.now() - 3600000 * 12).toISOString(),
+    proctoring_level: 'LIGHT',
+    max_violations: 5,
+    shuffle_questions: true,
+    shuffle_options: true,
+    require_fullscreen: false,
+    block_copy_paste: false,
+    require_attendance: false,
+    kkm: 70,
+    result_display: 'IMMEDIATE',
+    status: 'ACTIVE',
+    attempts_allowed: 2,
+  });
+
+  // LATIHAN MANDIRI
+  quizStore.quizzes.push({
+    id: 'exam-demo-latihan-01',
+    class_id: 'c0000000-0000-0000-0000-000000000003',
+    title: 'Latihan Mandiri: Normalisasi Database & Indexing B-Tree',
+    description: 'Simulasi latihan soal mandiri tanpa batasan waktu dan percobaan. Skor dan pembahasan tampil instan untuk persiapan UTS/UAS.',
+    exam_type: 'LATIHAN',
+    duration_minutes: 45,
+    due_at: new Date(Date.now() + 86400000 * 14).toISOString(),
+    questions: quizStore.questionBank.slice(1, 3),
+    total_points: 50,
+    is_published: true,
+    created_at: new Date(Date.now() - 3600000 * 48).toISOString(),
+    proctoring_level: 'OFF',
+    max_violations: 10,
+    shuffle_questions: false,
+    shuffle_options: false,
+    require_fullscreen: false,
+    block_copy_paste: false,
+    require_attendance: false,
+    kkm: 65,
+    result_display: 'IMMEDIATE',
+    status: 'ACTIVE',
+    attempts_allowed: 99,
+  });
+
+  // UAS RESMI
+  quizStore.quizzes.push({
+    id: 'exam-demo-uas-01',
+    class_id: 'c0000000-0000-0000-0000-000000000001',
+    title: 'Ujian Akhir Semester: Rekayasa Perangkat Lunak & Sistem Terdistribusi',
+    description: 'Evaluasi akhir komprehensif semester ganjil. Wajib memenuhi syarat presensi minimal 75% untuk verifikasi dan pembukaan sesi ujian.',
+    exam_type: 'UAS',
+    duration_minutes: 90,
+    due_at: new Date(Date.now() + 86400000 * 20).toISOString(),
+    questions: quizStore.questionBank,
+    total_points: 100,
+    is_published: true,
+    created_at: new Date(Date.now() - 3600000 * 6).toISOString(),
+    proctoring_level: 'STRICT',
+    max_violations: 3,
+    shuffle_questions: true,
+    shuffle_options: true,
+    require_fullscreen: true,
+    block_copy_paste: true,
+    require_attendance: true,
+    passcode: 'UAS2026',
+    kkm: 75,
+    result_display: 'AFTER_CLOSED',
+    status: 'ACTIVE',
+    attempts_allowed: 1,
+  });
 }
 
 export function getQuizStore(): QuizStoreType {
