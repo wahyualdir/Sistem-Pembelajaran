@@ -32,3 +32,6 @@ Dokumen ini mencatat keputusan arsitektur, penyesuaian teknis, dan asumsi kerja 
    Menambahkan langkah eksekusi seed dan verifikasi otomatis di `.github/workflows/ci.yml` yang berjalan terhadap mesin lokal Supabase sementara dengan kredensial ephemeral.
 8. **Penyesuaian Batas Panjang Kata Sandi (Opsi B):**
    Atas permintaan eksplisit pengguna untuk menggunakan kata sandi sederhana seperti `123456`, batas pengaman pada `guard.ts` disesuaikan dari minimal 12 karakter menjadi minimal 6 karakter (batas teknis terendah yang diterima oleh Supabase Auth GoTrue). Nilai 5 karakter (`12345`) tetap ditolak fail-closed agar proses pembuatan akun di Supabase Auth tidak gagal di tengah jalan.
+9. **Penanganan Pesan Galat `set_assistant` (`FORBIDDEN` vs `FORBIDDEN_DOSEN_ONLY`):**
+   Pada migrasi `20261020000036_assistant_types_and_staff_delegation.sql`, pesan eksepsi saat pengguna non-dosen memanggil `set_assistant` dikembalikan ke `'FORBIDDEN'` (bukan `'FORBIDDEN_DOSEN_ONLY'`).
+   - Alasan: Menjaga kompatibilitas penuh dengan pengujian pgTAP eksisting (`05_assistants_rls.sql` tes 1 dan 17) serta seluruh kontrak penanganan izin RLS dan RPC di SIAJAR yang secara konsisten melempar dan menangkap pesan `'FORBIDDEN'`. Menghindari regresi pada antarmuka frontend/klien yang mengandalkan kode galat standar ini.

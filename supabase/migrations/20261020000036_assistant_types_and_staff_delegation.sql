@@ -51,7 +51,7 @@ BEGIN
     -- Asisten Dosen langsung dari Dosen (atau Super Admin).
     -- Asisten Lab dapat ditugaskan oleh Staf Akademik dan Dosen.
     IF v_type = 'ASISTEN_DOSEN' AND NOT (v_is_lecturer OR public.has_active_role('SUPER_ADMIN')) THEN
-        RAISE EXCEPTION 'FORBIDDEN_DOSEN_ONLY';
+        RAISE EXCEPTION 'FORBIDDEN';
     END IF;
 
     IF v_type = 'ASISTEN_LAB' AND NOT (v_is_lecturer OR v_is_staff) THEN

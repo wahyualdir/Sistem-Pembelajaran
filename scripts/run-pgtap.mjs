@@ -28,7 +28,10 @@ export async function runPgTapTest(testRelPath) {
       updated_at TIMESTAMPTZ DEFAULT now()
     );
     CREATE OR REPLACE FUNCTION auth.uid() RETURNS UUID AS $$
-      SELECT NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid;
+      SELECT COALESCE(
+        NULLIF(current_setting('request.jwt.claim.sub', true), '')::uuid,
+        (NULLIF(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub')::uuid
+      );
     $$ LANGUAGE sql STABLE;
     CREATE OR REPLACE FUNCTION auth.role() RETURNS TEXT AS $$
       SELECT COALESCE(NULLIF(current_setting('request.jwt.claim.role', true), ''), 'authenticated');
@@ -45,6 +48,8 @@ export async function runPgTapTest(testRelPath) {
       planned INT DEFAULT 0
     );
     INSERT INTO tap_meta VALUES (0);
+    GRANT ALL ON tap_results, tap_meta TO anon, authenticated, service_role;
+    GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO anon, authenticated, service_role;
 
     CREATE OR REPLACE FUNCTION plan(n INT) RETURNS VOID LANGUAGE plpgsql AS $$
     BEGIN
@@ -94,6 +99,54 @@ export async function runPgTapTest(testRelPath) {
     END;
     $$;
 
+    CREATE OR REPLACE FUNCTION isnt_empty(query TEXT, description TEXT) RETURNS TEXT LANGUAGE plpgsql AS $$
+    DECLARE
+      v_count INT;
+    BEGIN
+      EXECUTE format('SELECT count(*) FROM (%s) q', query) INTO v_count;
+      IF v_count > 0 THEN
+        RETURN ok(true, description);
+      ELSE
+        RETURN ok(false, format('%s (expected not empty, got 0 rows)', description));
+      END IF;
+    END;
+    $$;
+
+    CREATE OR REPLACE FUNCTION has_table(sname TEXT, tname TEXT, description TEXT) RETURNS TEXT LANGUAGE plpgsql AS $$
+    DECLARE
+      v_exists BOOLEAN;
+    BEGIN
+      SELECT EXISTS (
+        SELECT 1 FROM information_schema.tables WHERE table_schema = sname AND table_name = tname
+      ) INTO v_exists;
+      IF v_exists THEN
+        RETURN ok(true, description);
+      ELSE
+        RETURN ok(false, format('%s (table %s.%s does not exist)', description, sname, tname));
+      END IF;
+    END;
+    $$;
+
+    CREATE OR REPLACE FUNCTION results_eq(query1 TEXT, query2 TEXT, description TEXT) RETURNS TEXT LANGUAGE plpgsql AS $$
+    DECLARE
+      v_diff INT;
+    BEGIN
+      EXECUTE format('
+        WITH q1 AS (%s), q2 AS (%s)
+        SELECT count(*) FROM (
+          (SELECT * FROM q1 EXCEPT ALL SELECT * FROM q2)
+          UNION ALL
+          (SELECT * FROM q2 EXCEPT ALL SELECT * FROM q1)
+        ) diff
+      ', query1, query2) INTO v_diff;
+      IF v_diff = 0 THEN
+        RETURN ok(true, description);
+      ELSE
+        RETURN ok(false, format('%s (queries produced different results)', description));
+      END IF;
+    END;
+    $$;
+
     CREATE OR REPLACE FUNCTION lives_ok(query TEXT, description TEXT) RETURNS TEXT LANGUAGE plpgsql AS $$
     BEGIN
       EXECUTE query;
@@ -103,12 +156,21 @@ export async function runPgTapTest(testRelPath) {
     END;
     $$;
 
+    CREATE OR REPLACE FUNCTION throws_ok(query TEXT, description TEXT) RETURNS TEXT LANGUAGE plpgsql AS $$
+    BEGIN
+      EXECUTE query;
+      RETURN ok(false, format('%s (expected exception, but none was thrown)', description));
+    EXCEPTION WHEN OTHERS THEN
+      RETURN ok(true, description);
+    END;
+    $$;
+
     CREATE OR REPLACE FUNCTION throws_ok(query TEXT, expected_err TEXT, description TEXT) RETURNS TEXT LANGUAGE plpgsql AS $$
     BEGIN
       EXECUTE query;
       RETURN ok(false, format('%s (expected exception %s, but none was thrown)', description, expected_err));
     EXCEPTION WHEN OTHERS THEN
-      IF SQLSTATE = expected_err OR SQLERRM ILIKE '%' || expected_err || '%' THEN
+      IF expected_err IS NULL OR SQLSTATE = expected_err OR SQLERRM ILIKE '%' || expected_err || '%' THEN
         RETURN ok(true, description);
       ELSE
         RETURN ok(false, format('%s (wrong error: expected %s, got %s - %s)', description, expected_err, SQLSTATE, SQLERRM));
@@ -121,7 +183,8 @@ export async function runPgTapTest(testRelPath) {
       EXECUTE query;
       RETURN ok(false, format('%s (expected exception %s, but none was thrown)', description, COALESCE(expected_code, expected_err)));
     EXCEPTION WHEN OTHERS THEN
-      IF (expected_code IS NOT NULL AND SQLSTATE = expected_code) OR 
+      IF (expected_code IS NULL AND expected_err IS NULL) OR
+         (expected_code IS NOT NULL AND SQLSTATE = expected_code) OR 
          (expected_err IS NOT NULL AND SQLERRM ILIKE '%' || expected_err || '%') THEN
         RETURN ok(true, description);
       ELSE
@@ -160,8 +223,10 @@ export async function runPgTapTest(testRelPath) {
   await db.exec(`
     GRANT USAGE ON SCHEMA public TO authenticated, anon, service_role;
     GRANT ALL ON ALL TABLES IN SCHEMA public TO authenticated, service_role;
-    GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO authenticated, service_role;
-    GRANT ALL ON ALL ROUTINES IN SCHEMA public TO authenticated, service_role;
+    GRANT SELECT ON ALL TABLES IN SCHEMA public TO anon;
+    GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO authenticated, anon, service_role;
+    GRANT ALL ON tap_results, tap_meta TO authenticated, anon, service_role;
+    GRANT ALL ON ALL ROUTINES IN SCHEMA public TO authenticated, anon, service_role;
   `);
 
   // Read and run test file

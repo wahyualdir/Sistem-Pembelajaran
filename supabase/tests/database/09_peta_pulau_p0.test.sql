@@ -37,6 +37,7 @@ BEGIN
     VALUES (v_class_id, 'Algoritma & Struktur Data', 'A', 'P0P0P001', 'ACTIVE', v_lecturer_id)
     ON CONFLICT (id) DO NOTHING;
 
+    INSERT INTO public.roles (code, name) VALUES ('LECTURER', 'Dosen'), ('STUDENT', 'Mahasiswa'), ('TEACHING_ASSISTANT', 'Asisten Dosen') ON CONFLICT (code) DO NOTHING;
     INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status) VALUES
       (v_lecturer_id, (SELECT id FROM public.roles WHERE code = 'LECTURER'), 'CLASS', v_class_id, 'ACTIVE'),
       (v_student1_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class_id, 'ACTIVE'),
@@ -101,10 +102,18 @@ SELECT is(
     'Bab 2 terkunci karena Bab 1 belum selesai'
 );
 
+
+CREATE OR REPLACE FUNCTION public._tap_as(p_uid text, p_role text DEFAULT 'authenticated') RETURNS void LANGUAGE plpgsql AS $$
+BEGIN
+    RESET ROLE;
+    PERFORM set_config('request.jwt.claim.sub', p_uid, true);
+    PERFORM set_config('request.jwt.claim.role', p_role, true);
+    EXECUTE format('SET LOCAL ROLE %I', p_role);
+END $$;
+
 -- 4. Uji Proteksi RLS Materi Bab Terkunci
 -- Mahasiswa 1 mencoba SELECT materi Bab 2 yang terkunci
-SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000001', true);
-SELECT set_config('request.jwt.claim.role', 'authenticated', true);
+SELECT public._tap_as('a0000000-0000-0000-0000-000000000001');
 
 SELECT is_empty(
     $$ SELECT id FROM public.materials WHERE id = 'e0000000-0000-0000-0000-000000000002' $$,
@@ -112,6 +121,7 @@ SELECT is_empty(
 );
 
 -- Selesaikan Bab 1 untuk Mahasiswa 1
+RESET ROLE;
 SELECT set_config('request.jwt.claim.sub', 'd0000000-0000-0000-0000-000000000001', true);
 INSERT INTO public.chapter_progress (student_id, chapter_id, best_score, passed_at)
 VALUES ('a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000001', 85.00, now())
@@ -124,14 +134,14 @@ SELECT is(
 );
 
 -- Mahasiswa 1 sekarang bisa membaca materi Bab 2
-SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000001', true);
+SELECT public._tap_as('a0000000-0000-0000-0000-000000000001');
 SELECT isnt_empty(
     $$ SELECT id FROM public.materials WHERE id = 'e0000000-0000-0000-0000-000000000002' $$,
     'Mahasiswa dapat membaca materi pada bab setelah terbuka'
 );
 
 -- 5. Uji Log Aktivitas & Daftar Putih
-SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000001', true);
+SELECT public._tap_as('a0000000-0000-0000-0000-000000000001');
 
 -- Log kejadian sah dengan meta yang disanitasi
 SELECT lives_ok(
@@ -154,21 +164,21 @@ SELECT throws_ok(
 
 -- 6. Uji Isolasi Privasi Tabel activity_events
 -- Dosen mencoba SELECT data mentah activity_events -> HARUS KOSONG (RLS tolak)
-SELECT set_config('request.jwt.claim.sub', 'd0000000-0000-0000-0000-000000000001', true);
+SELECT public._tap_as('d0000000-0000-0000-0000-000000000001');
 SELECT is_empty(
     $$ SELECT id FROM public.activity_events $$,
     'Dosen TIDAK BISA membaca tabel mentah activity_events (kebijakan privasi)'
 );
 
 -- Mahasiswa 2 tidak bisa membaca log aktivitas Mahasiswa 1
-SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000002', true);
+SELECT public._tap_as('a0000000-0000-0000-0000-000000000002');
 SELECT is_empty(
     $$ SELECT id FROM public.activity_events WHERE student_id = 'a0000000-0000-0000-0000-000000000001' $$,
     'Mahasiswa lain tidak bisa membaca log aktivitas mahasiswa yang berbeda'
 );
 
 -- 7. Uji Hapus Riwayat Aktivitas Saya
-SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000001', true);
+SELECT public._tap_as('a0000000-0000-0000-0000-000000000001');
 SELECT lives_ok(
     $$ SELECT public.clear_my_activity_log() $$,
     'Mahasiswa berhasil menjalankan fungsi hapus riwayat data aktivitasnya'
@@ -180,7 +190,9 @@ SELECT is_empty(
 );
 
 -- 8. Uji Preferensi Matikan Log Aktivitas
-UPDATE public.activity_logging_prefs SET enabled = false WHERE student_id = 'a0000000-0000-0000-0000-000000000001';
+RESET ROLE;
+INSERT INTO public.activity_logging_prefs (student_id, enabled) VALUES ('a0000000-0000-0000-0000-000000000001', false) ON CONFLICT (student_id) DO UPDATE SET enabled = false;
+SELECT public._tap_as('a0000000-0000-0000-0000-000000000001');
 SELECT is(
     public.log_activity('materi_dibuka', 'c0000000-0000-0000-0000-000000000001', 'materials', 'e0000000-0000-0000-0000-000000000002', '{}'::jsonb),
     NULL,
@@ -189,7 +201,7 @@ SELECT is(
 
 -- 9. Uji Otorisasi Asisten Kelas & Anggota Kelas (is_class_ta & is_class_member)
 -- Asisten kelas dikenali
-SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000003', true);
+SELECT public._tap_as('a0000000-0000-0000-0000-000000000003');
 SELECT ok(
     public.is_class_ta('c0000000-0000-0000-0000-000000000001'),
     'Asisten kelas terdaftar benar-benar dikenali oleh is_class_ta'
@@ -200,7 +212,7 @@ SELECT ok(
 );
 
 -- Mahasiswa terdaftar bukan TA, tapi anggota kelas
-SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000001', true);
+SELECT public._tap_as('a0000000-0000-0000-0000-000000000001');
 SELECT ok(
     NOT public.is_class_ta('c0000000-0000-0000-0000-000000000001'),
     'Mahasiswa biasa bukan asisten kelas (is_class_ta = false)'
@@ -211,11 +223,12 @@ SELECT ok(
 );
 
 -- Pengguna acak di luar kelas bukan anggota
-SELECT set_config('request.jwt.claim.sub', 'a0000000-0000-0000-0000-000000000099', true);
+SELECT public._tap_as('a0000000-0000-0000-0000-000000000099');
 SELECT ok(
     NOT public.is_class_member('c0000000-0000-0000-0000-000000000001'),
     'Pengguna luar kelas ditolak oleh is_class_member'
 );
 
+RESET ROLE;
 SELECT * FROM finish();
 ROLLBACK;

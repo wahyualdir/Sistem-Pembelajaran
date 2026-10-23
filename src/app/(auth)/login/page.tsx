@@ -12,11 +12,11 @@ import {
 } from 'lucide-react';
 
 const DEMO = [
-  ['Mahasiswa UIR', 'NIM 243510001 (sandi: 123456)', '243510001'],
-  ['Kaprodi UIR', 'NIDN 2008000307 (sandi: 123456)', '2008000307'],
-  ['Asisten Dosen UIR', 'NIM 233510001 (sandi: 123456)', '233510001'],
-  ['Super Admin UIR', 'NIP 20120009 (sandi: 123456)', '20120009'],
-  ['Super Admin', 'superadmin (sandi: wahyu11)', 'superadmin'],
+  ['Mahasiswa UIR', 'NIM 243510001', '243510001'],
+  ['Kaprodi UIR', 'NIDN 2008000307', '2008000307'],
+  ['Asisten Dosen UIR', 'NIM 233510001', '233510001'],
+  ['Super Admin UIR', 'NIP 20120009', '20120009'],
+  ['Super Admin', 'superadmin', 'superadmin'],
   ['Mahasiswa', 'NIM 2024001', '2024001'],
   ['Dosen', 'NIDN 0012345678', '0012345678'],
   ['Mahasiswa + Asisten', 'NIM 2024002', '2024002'],
@@ -192,19 +192,7 @@ function LoginFormContent() {
 
   const handleDemoFill = (id: string) => {
     setIdentifier(id);
-    if (id === 'superadmin') {
-      setPassword('wahyu11');
-    } else if (
-      id.startsWith('2335') ||
-      id.startsWith('2435') ||
-      id.startsWith('2535') ||
-      id.startsWith('2635') ||
-      id.startsWith('20')
-    ) {
-      setPassword('123456');
-    } else {
-      setPassword('password123');
-    }
+    setPassword('');
     setErrorMessage('');
   };
 

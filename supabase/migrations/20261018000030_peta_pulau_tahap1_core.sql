@@ -574,7 +574,7 @@ BEGIN
 
     -- Catat ke audit log
     INSERT INTO public.audit_logs (
-        actor_user_id, actor_role, action, entity_type, entity_id, scope_type, scope_id, payload
+        actor_user_id, actor_role, action, entity_type, entity_id, scope_type, scope_id, after_json
     ) VALUES (
         v_uid,
         'LECTURER',

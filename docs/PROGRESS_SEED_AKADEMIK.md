@@ -108,10 +108,13 @@ Berkas `docs/seed-data/PEMETAAN_RAHASIA_dosen_lama_ke_baru.csv` dan `.env.seed*`
    - Berhasil dieksekusi terhadap skema basis data penuh dengan hasil **12 dari 12 pengujian lolos**. Percobaan `DELETE` oleh mahasiswa ditolak RLS dan baris slot terbukti tetap ada.
 
 ### B. Yang BELUM Dijalankan Terhadap Basis Data:
-1. **Fase S3 (Penyediaan 168 Akun Auth Supabase)**:
+1. **Eksekusi `supabase test db` (pgTAP 05 & Uji DB Lainnya)**:
+   - Perintah resmi `supabase test db` untuk `05_assistants_rls.sql` dan suite pgTAP lainnya **belum dijalankan** di host lokal karena Supabase CLI dan daemon Docker tidak terpasang di lingkungan Windows lokal.
+   - Uji pgTAP 05 dan CI **belum terbukti hijau sampai ada log nyata dari GitHub Actions**. Hasil 29/29 yang diperoleh di lingkungan lokal berasal dari harness uji PGlite (`scripts/run-pgtap.mjs`), bukan dari instance container resmi Supabase.
+2. **Fase S3 (Penyediaan 168 Akun Auth Supabase)**:
    - Pemanggilan Admin API (`auth.admin.createUser`) di `scripts/seed-akademik/accounts.ts` **belum pernah dijalankan** terhadap target instance database Supabase aktif (hanya diverifikasi pada lapisan mock dan dry-run).
-2. **Fase S4 (Penyemaian Data Relasional Akademik)**:
+3. **Fase S4 (Penyemaian Data Relasional Akademik)**:
    - Penulisan tabel relasional (`programs`, `semesters`, `rooms`, `courses`, `classes`, `class_schedule_slots`, `enrollments`, `class_assistants`) via Supabase Client di `scripts/seed-akademik/academic.ts` **belum pernah dijalankan** terhadap target instance database Supabase aktif.
-3. **Langkah CI Seed (`npm run seed:akademik -- --apply`)**:
+4. **Langkah CI Seed (`npm run seed:akademik -- --apply`)**:
    - Langkah penyemaian data sungguhan di GitHub Actions CI **belum dijalankan terhadap database CI** sebelum pipeline CI di GitHub menyelesaikan eksekusi runner-nya.
 

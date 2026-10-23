@@ -32,6 +32,12 @@ BEGIN
     VALUES (v_class_id, 'Basis Data Terdistribusi', 'A', 'P1P1P001', 'ACTIVE', v_lecturer_id)
     ON CONFLICT (id) DO NOTHING;
 
+    INSERT INTO public.roles (code, name) VALUES
+      ('LECTURER', 'Dosen'),
+      ('STUDENT', 'Mahasiswa'),
+      ('TEACHING_ASSISTANT', 'Asisten Dosen')
+    ON CONFLICT (code) DO NOTHING;
+
     INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status) VALUES
       (v_lecturer_id, (SELECT id FROM public.roles WHERE code = 'LECTURER'), 'CLASS', v_class_id, 'ACTIVE'),
       (v_student1_id, (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'CLASS', v_class_id, 'ACTIVE'),
@@ -75,7 +81,7 @@ SELECT results_eq(
 
 -- 3. Uji RLS topic_mastery: Mahasiswa hanya boleh membaca miliknya sendiri
 -- Sisipkan data penguasaan topik untuk Mahasiswa 1
-INSERT INTO public.topic_mastery (student_id, topic_id, level, attempts, correct_answers, total_questions)
+INSERT INTO public.topic_mastery (student_id, topic_id, level, attempts_counted, correct, answered)
 VALUES ('a1111111-0000-0000-0000-000000000001', 'e1111111-0000-0000-0000-000000000001', 'kuat', 3, 9, 10)
 ON CONFLICT (student_id, topic_id) DO NOTHING;
 
@@ -97,6 +103,8 @@ SELECT isnt_empty(
 );
 
 RESET ROLE;
+SET LOCAL "request.jwt.claims" = '{"sub": "d1111111-0000-0000-0000-000000000001", "role": "authenticated"}';
+SELECT set_config('request.jwt.claim.sub', 'd1111111-0000-0000-0000-000000000001', true);
 
 -- 4. Uji RPC grant_chapter_unlock_override
 SELECT throws_ok(
@@ -113,7 +121,7 @@ SELECT lives_ok(
 );
 
 SELECT results_eq(
-    'SELECT is_unlocked FROM public.chapter_unlock_overrides WHERE chapter_id = ''b1111111-0000-0000-0000-000000000001'' AND student_id = ''a1111111-0000-0000-0000-000000000001''',
+    'SELECT true FROM public.chapter_unlock_overrides WHERE chapter_id = ''b1111111-0000-0000-0000-000000000001'' AND student_id = ''a1111111-0000-0000-0000-000000000001''',
     $$VALUES (true)$$,
     'Override tercatat aktif di chapter_unlock_overrides'
 );
@@ -121,7 +129,7 @@ SELECT results_eq(
 -- 5. Uji RPC get_hardest_topics (Masking K-Anonymity)
 -- Kurang dari 5 mahasiswa mencoba topik, hasil harus kosong (masking privasi mahasiswa)
 SELECT is_empty(
-    $$SELECT * FROM public.get_hardest_topics('c1111111-0000-0000-0000-000000000001')$$,
+    $$SELECT * FROM jsonb_array_elements(public.get_hardest_topics('c1111111-0000-0000-0000-000000000001'))$$,
     'Topik dengan sampel < 5 mahasiswa di-mask / disembunyikan untuk melindungi privasi individu'
 );
 

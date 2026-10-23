@@ -4,6 +4,41 @@
 BEGIN;
 SELECT plan(8);
 
+-- Setup context test fixture
+CREATE OR REPLACE FUNCTION public._test_setup_identity() RETURNS void LANGUAGE plpgsql AS $$
+BEGIN
+    INSERT INTO auth.users (id, email) VALUES
+      ('a0000001-0000-0000-0000-000000000001', 'mhs_a@uji.test'),
+      ('a0000007-0000-0000-0000-000000000007', 'mhs_b@uji.test'),
+      ('a0000002-0000-0000-0000-000000000002', 'user_b@uji.test'),
+      ('a0000006-0000-0000-0000-000000000006', 'admin@uji.test')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.profiles (id, email, full_name, status) VALUES
+      ('a0000001-0000-0000-0000-000000000001', 'mhs_a@uji.test', 'Mahasiswa A', 'ACTIVE'),
+      ('a0000007-0000-0000-0000-000000000007', 'mhs_b@uji.test', 'Mahasiswa B', 'ACTIVE'),
+      ('a0000002-0000-0000-0000-000000000002', 'user_b@uji.test', 'User B', 'ACTIVE'),
+      ('a0000006-0000-0000-0000-000000000006', 'admin@uji.test', 'Admin Utama', 'ACTIVE')
+    ON CONFLICT (id) DO NOTHING;
+
+    INSERT INTO public.roles (code, name) VALUES
+      ('STUDENT', 'Mahasiswa'),
+      ('SYSTEM_ADMIN', 'System Administrator')
+    ON CONFLICT (code) DO NOTHING;
+
+    INSERT INTO public.user_roles (user_id, role_id, scope_type, status) VALUES
+      ('a0000001-0000-0000-0000-000000000001', (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'GLOBAL', 'ACTIVE'),
+      ('a0000007-0000-0000-0000-000000000007', (SELECT id FROM public.roles WHERE code = 'STUDENT'), 'GLOBAL', 'ACTIVE'),
+      ('a0000006-0000-0000-0000-000000000006', (SELECT id FROM public.roles WHERE code = 'SYSTEM_ADMIN'), 'GLOBAL', 'ACTIVE')
+    ON CONFLICT DO NOTHING;
+
+    INSERT INTO public.user_devices (user_id, device_id_hash, label, trusted) VALUES
+      ('a0000002-0000-0000-0000-000000000002', 'hash_dev_b_001', 'Device B', true)
+    ON CONFLICT DO NOTHING;
+END;
+$$;
+SELECT public._test_setup_identity();
+
 -- Setup context test user A (Mahasiswa)
 -- auth.uid() = 'a0000001-0000-0000-0000-000000000001'
 SET LOCAL ROLE authenticated;
@@ -58,10 +93,12 @@ SELECT is_empty(
 );
 
 -- 8. Aturan Keras 7: audit_logs tidak boleh di-UPDATE atau di-DELETE oleh siapa pun
+RESET ROLE;
+INSERT INTO public.audit_logs (action, entity_type) VALUES ('test.delete_guard', 'test') ON CONFLICT DO NOTHING;
 SELECT throws_ok(
-    $$ DELETE FROM public.audit_logs $$,
+    $$ DELETE FROM public.audit_logs WHERE action = 'test.delete_guard' $$,
     'P0001',
-    'audit_logs is append-only and cannot be modified or deleted',
+    'AUDIT_LOG_IMMUTABLE',
     'Trigger melindungi audit_logs dari operasi DELETE'
 );
 

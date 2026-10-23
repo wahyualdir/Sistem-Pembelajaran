@@ -130,15 +130,18 @@ SELECT public.tap_as('b0000005-0000-0000-0000-000000000005');
 SELECT is((SELECT count(*)::int FROM public.notifications WHERE read_at IS NULL), 3, 'Materi baru menambah notifikasi peserta');
 -- ===== Perubahan nilai FINAL dengan persetujuan koordinator =====
 RESET ROLE;
-INSERT INTO auth.users (id, email) VALUES ('b0000021-0000-0000-0000-000000000021', 'k1@uji.test'), ('b0000022-0000-0000-0000-000000000022', 'k2@uji.test') ON CONFLICT DO NOTHING;
-INSERT INTO public.profiles (id, email, full_name, status) VALUES ('b0000021-0000-0000-0000-000000000021', 'k1@uji.test', 'Koordinator Satu', 'ACTIVE'), ('b0000022-0000-0000-0000-000000000022', 'k2@uji.test', 'Koordinator Dua', 'ACTIVE') ON CONFLICT (id) DO NOTHING;
-INSERT INTO public.roles (code, name) VALUES ('PROGRAM_COORDINATOR', 'Koordinator Prodi') ON CONFLICT (code) DO NOTHING;
+INSERT INTO auth.users (id, email) VALUES ('b0000021-0000-0000-0000-000000000021', 'k1@uji.test'), ('b0000022-0000-0000-0000-000000000022', 'k2@uji.test'), ('b0000023-0000-0000-0000-000000000023', 'staff1@uji.test') ON CONFLICT DO NOTHING;
+INSERT INTO public.profiles (id, email, full_name, status) VALUES ('b0000021-0000-0000-0000-000000000021', 'k1@uji.test', 'Koordinator Satu', 'ACTIVE'), ('b0000022-0000-0000-0000-000000000022', 'k2@uji.test', 'Koordinator Dua', 'ACTIVE'), ('b0000023-0000-0000-0000-000000000023', 'staff1@uji.test', 'Staf Satu', 'ACTIVE') ON CONFLICT (id) DO NOTHING;
+INSERT INTO public.roles (code, name) VALUES ('PROGRAM_COORDINATOR', 'Koordinator Prodi'), ('ACADEMIC_STAFF', 'Staf Akademik') ON CONFLICT (code) DO NOTHING;
 INSERT INTO public.programs (code, name) VALUES ('P1X', 'Prodi Satu'), ('P2X', 'Prodi Dua');
 INSERT INTO public.courses (program_id, code, name, credits) VALUES ((SELECT id FROM public.programs WHERE code = 'P1X'), 'K1X', 'Kuliah Satu', 3);
+SET LOCAL app.rpc_context = 'on';
 UPDATE public.classes SET course_id = (SELECT id FROM public.courses WHERE code = 'K1X') WHERE id = (SELECT class_id FROM public.tap_ctx);
+SET LOCAL app.rpc_context = 'off';
 INSERT INTO public.user_roles (user_id, role_id, scope_type, scope_id, status) VALUES
   ('b0000021-0000-0000-0000-000000000021', (SELECT id FROM public.roles WHERE code = 'PROGRAM_COORDINATOR'), 'PROGRAM', (SELECT id FROM public.programs WHERE code = 'P1X'), 'ACTIVE'),
-  ('b0000022-0000-0000-0000-000000000022', (SELECT id FROM public.roles WHERE code = 'PROGRAM_COORDINATOR'), 'PROGRAM', (SELECT id FROM public.programs WHERE code = 'P2X'), 'ACTIVE');
+  ('b0000022-0000-0000-0000-000000000022', (SELECT id FROM public.roles WHERE code = 'PROGRAM_COORDINATOR'), 'PROGRAM', (SELECT id FROM public.programs WHERE code = 'P2X'), 'ACTIVE'),
+  ('b0000023-0000-0000-0000-000000000023', (SELECT id FROM public.roles WHERE code = 'ACADEMIC_STAFF'), 'GLOBAL', NULL, 'ACTIVE');
 ALTER TABLE public.tap_ctx ADD COLUMN sub uuid, ADD COLUMN req uuid;
 
 SELECT public.tap_as('b0000001-0000-0000-0000-000000000001');
@@ -163,9 +166,11 @@ SELECT is_empty($$ SELECT 1 FROM public.grade_change_requests $$, 'A8: koordinat
 SELECT throws_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Mencoba lintas prodi') $$, 'FORBIDDEN', 'Koordinator prodi lain tidak dapat memutuskan');
 SELECT public.tap_as('b0000021-0000-0000-0000-000000000021');
 SELECT is((SELECT count(*)::int FROM public.grade_change_requests), 1, 'Koordinator prodi terkait melihat pengajuan');
-SELECT throws_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, '') $$, 'NOTE_REQUIRED', 'Catatan keputusan wajib diisi');
+SELECT throws_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, '') $$, 'NOTE_MIN_10_CHARS', 'Catatan keputusan wajib diisi');
 SELECT lives_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Disetujui, revisi benar') $$, 'Koordinator menyetujui perubahan nilai');
-SELECT throws_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Setujui lagi') $$, 'NOT_PENDING', 'Pengajuan yang sudah diputuskan tidak dapat diputuskan lagi');
+SELECT throws_ok($$ SELECT public.decide_grade_change((SELECT req FROM public.tap_ctx), true, 'Setujui lagi') $$, 'INVALID_STATE', 'Pengajuan yang sudah diputuskan tidak dapat diputuskan lagi');
+SELECT public.tap_as('b0000023-0000-0000-0000-000000000023');
+SELECT public.execute_grade_change((SELECT req FROM public.tap_ctx));
 SELECT public.tap_as('b0000003-0000-0000-0000-000000000003');
 SELECT is((SELECT score FROM public.grades), 90.00, 'Nilai mahasiswa berubah setelah persetujuan');
 SELECT is((SELECT count(*)::int FROM public.notifications WHERE type = 'GRADE_UPDATED'), 1, 'Mahasiswa diberi tahu nilainya diperbarui');
@@ -229,7 +234,7 @@ SELECT lives_ok($$ SELECT public.log_grade_export((SELECT class_id FROM public.t
 RESET ROLE;
 SELECT ok((SELECT count(*) FROM public.audit_logs WHERE action = 'grade.export') = 1, 'Ekspor nilai tercatat di audit');
 RESET ROLE;
-SELECT throws_ok($$ DELETE FROM public.grade_history $$, NULL, 'Riwayat nilai bersifat append-only');
+SELECT throws_ok($$ DELETE FROM public.grade_history $$, 'P0001', 'Riwayat nilai bersifat append-only');
 SELECT public.tap_as('b0000001-0000-0000-0000-000000000001', 'anon');
 SELECT is_empty($$ SELECT 1 FROM public.grades $$, 'A21: kunci anon tidak dapat membaca tabel grades');
 
