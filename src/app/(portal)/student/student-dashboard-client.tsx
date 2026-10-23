@@ -264,17 +264,10 @@ export function StudentDashboardClient({
             onRefresh={async () => getHomeBannerAction()}
           />
 
-          {/* PERINGATAN RISIKO AKADEMIK / KAIN SEMESTER */}
-          {semesterWeave ? (
-            <SemesterWeave
-              data={semesterWeave}
-              academicEvaluations={academicStatus}
-            />
-          ) : (
-            <StudentAcademicStatusCard evaluations={academicStatus} />
-          )}
-
-          {/* GRID 2 KOLOM: JADWAL HARI INI & TENGGAT TERDEKAT */}
+          {/* ========================================================= */}
+          {/* ZONA 1: COCKPIT HARI INI & TINDAKAN MENDESAK             */}
+          {/* ========================================================= */}
+          {/* GRID 2 KOLOM: JADWAL HARI INI & TENGGAT TERDEKAT (< 48 JAM) */}
           {(showAll || showPresensi || showJadwal || showTugasKuis || showUjian) && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 items-start">
               {/* Kolom Kiri: Jadwal Kuliah Hari Ini */}
@@ -298,70 +291,53 @@ export function StudentDashboardClient({
             <DailyPriorityCard initialItems={dailyPriorities} />
           )}
 
-          {/* SECTION: KELAS SAYA / KELAS AKTIF */}
-          {(showAll || showKelasSaya || showNilai || showPresensi) && (
-            <div>
-              <ActiveClassesGrid
-                courses={courses}
-                selectedCourse={selectedCourse}
-                onSelectCourse={handleSelectCourse}
-              />
-            </div>
-          )}
-
-          {/* GRAFIK KONTRIBUSI BELAJAR MAHASISWA (26 MINGGU) */}
-          {(showAll || showKelasSaya || showTugasKuis) && (
-            <KartuAktivitasDashboard
-              data={aktivitas}
-              judul="Grafik Kontribusi Belajar (26 Minggu)"
-              deskripsi="Aktivitas pengumpulan tugas, kuis CBT, presensi kuliah, dan diskusi Anda selama 6 bulan terakhir."
-              role="mahasiswa"
-            />
-          )}
-
-          {/* SECTION: KARTU LANJUTKAN BELAJAR (HANYA JIKA ADA MATERI AKTIF) */}
+          {/* ========================================================= */}
+          {/* ZONA 2: AKSELERASI BELAJAR & KELAS PERKULIAHAN AKTIF     */}
+          {/* ========================================================= */}
+          {/* SECTION: KARTU LANJUTKAN BELAJAR (QUICK RESUME MATERI TERAKHIR) */}
           {materiTerakhir && (showAll || showKelasSaya || showTugasKuis) && (
             <section aria-label="Lanjutkan Belajar" className="space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink flex items-center gap-2">
+                <h2 className="font-heading font-black text-lg sm:text-xl tracking-tight text-ink flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary inline-block" />
-                  Lanjutkan Belajar
+                  <span>Lanjutkan Belajar</span>
                 </h2>
                 <Link
                   href="/mahasiswa/tugas"
-                  className="text-xs sm:text-sm font-bold text-primary-dark hover:text-ink transition-colors"
+                  className="text-xs sm:text-sm font-bold text-primary-dark hover:text-ink transition-colors flex items-center gap-1 group"
                 >
-                  Lihat Semua Materi &rarr;
+                  <span>Lihat Semua Materi</span>
+                  <ChevronRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </div>
 
-              <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="rounded-xl border-2 border-ink bg-stone-50/90 p-4 sm:p-5 shadow-retro flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="space-y-1.5 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft border border-ink text-ink">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-[#1C1917] text-white">
                       {materiTerakhir.kelas.kode}
                     </span>
-                    <span className="text-xs font-bold text-gray-dark truncate">
+                    <span className="text-xs font-bold text-stone-600 truncate">
                       {materiTerakhir.kelas.namaMataKuliah}
                     </span>
                     {materiTerakhir.progres.selesai ? (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-surface text-ink border-2 border-ink">
-                        <CheckCircle2 className="h-3 w-3" />
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                        <CheckCircle2 className="h-3 w-3 text-emerald-600" />
                         Selesai
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft text-ink border border-ink">
-                        <Clock className="h-3 w-3" />
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-bold bg-amber-50 text-amber-800 border border-amber-300">
+                        <Clock className="h-3 w-3 text-amber-600" />
                         Sedang Dipelajari
                       </span>
                     )}
                   </div>
 
-                  <h3 className="font-heading font-bold text-lg sm:text-xl text-ink line-clamp-1">
+                  <h3 className="font-heading font-extrabold text-lg sm:text-xl text-ink line-clamp-1">
                     {materiTerakhir.materi.judul}
                   </h3>
 
-                  <p className="text-xs text-gray-dark font-bold">
+                  <p className="text-xs text-stone-500 font-sans font-medium">
                     Terakhir dibuka:{' '}
                     {new Date(materiTerakhir.progres.terakhirDibuka).toLocaleDateString('id-ID', {
                       day: 'numeric',
@@ -373,7 +349,7 @@ export function StudentDashboardClient({
 
                 <Link
                   href="/mahasiswa/tugas"
-                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-ink text-white hover:bg-ink/90 text-xs sm:text-sm font-bold shadow-retro transition-all shrink-0 min-h-[44px]"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-ink text-white hover:bg-ink/90 text-xs sm:text-sm font-bold shadow-retro hover:-translate-y-0.5 transition-all shrink-0 min-h-[44px]"
                 >
                   <BookOpen className="h-4 w-4" />
                   <span>Buka Materi</span>
@@ -381,6 +357,40 @@ export function StudentDashboardClient({
                 </Link>
               </div>
             </section>
+          )}
+
+          {/* SECTION: KELAS SAYA / KELAS AKTIF */}
+          {(showAll || showKelasSaya || showNilai || showPresensi) && (
+            <div>
+              <ActiveClassesGrid
+                courses={courses}
+                selectedCourse={selectedCourse}
+                onSelectCourse={handleSelectCourse}
+              />
+            </div>
+          )}
+
+          {/* ========================================================= */}
+          {/* ZONA 3: REFLEKSI SEMESTER, RITME & KONSISTENSI BELAJAR    */}
+          {/* ========================================================= */}
+          {/* PERINGATAN RISIKO AKADEMIK / KAIN SEMESTER */}
+          {semesterWeave ? (
+            <SemesterWeave
+              data={semesterWeave}
+              academicEvaluations={academicStatus}
+            />
+          ) : (
+            <StudentAcademicStatusCard evaluations={academicStatus} />
+          )}
+
+          {/* GRAFIK KONTRIBUSI BELAJAR MAHASISWA (26 MINGGU) */}
+          {(showAll || showKelasSaya || showTugasKuis) && (
+            <KartuAktivitasDashboard
+              data={aktivitas}
+              judul="Grafik Kontribusi Belajar (26 Minggu)"
+              deskripsi="Aktivitas pengumpulan tugas, kuis CBT, presensi kuliah, dan diskusi Anda selama 6 bulan terakhir."
+              role="mahasiswa"
+            />
           )}
 
           {/* SECTION: RINGKASAN PRESENSI PEMBELAJARAN (HANYA MUNCUL DI TAB PRESENSI AGAR BERANDA BEBAS DARI KARTU DUPLIKAT) */}
