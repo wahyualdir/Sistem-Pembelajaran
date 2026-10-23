@@ -15,17 +15,17 @@ Dokumen ini memuat prosedur resmi pembatalan fitur "Kain Semester" mahasiswa tan
 
 ## Log Commit per Fase
 
-Daftar hash commit untuk setiap fase (diperbarui seiring fase berjalan):
+Daftar hash commit untuk setiap fase (berdasarkan `git log --oneline pra-kain-semester..HEAD`):
 
-- **Fase A (Jaring Pengaman)**: `5bdf015`
-- **Fase B (Audit Sumber Data)**: -
-- **Fase C (Feature Flag)**: -
-- **Fase D (Logika Murni)**: -
-- **Fase E (Server Action)**: -
-- **Fase F (Komponen UI & Sheet)**: -
-- **Fase G (Integrasi Beranda)**: -
-- **Fase H (Verifikasi)**: -
-- **Fase I (Dokumentasi Akhir)**: -
+- **Fase A (Jaring Pengaman Rollback)**: `5bdf015` (`chore(kain-semester): siapkan tag dan catatan rollback`)
+- **Fase B (Audit Sumber Data & RLS)**: `426c391` (`docs(kain-semester): audit sumber data`)
+- **Fase C (Feature Flag Server-Only)**: `ecc8f37` (`feat(kain-semester): tambah feature flag FF_KAIN_SEMESTER`)
+- **Fase D (Logika Murni & Unit Test)**: `ea2bf98` (`feat(kain-semester): logika murni kisi semester`) & `6051e8c` (`test(kain-semester): kasus uji kisi semester`)
+- **Fase E (Server Action RLS)**: `46944f2` (`feat(kain-semester): server action pemuat kisi semester`)
+- **Fase F (Komponen UI & Radix Sheet)**: `2f944b6` (`feat(kain-semester): komponen kisi dan sheet detail`)
+- **Fase G (Integrasi Beranda Mahasiswa)**: `849f8d7` (`feat(kain-semester): integrasi di beranda mahasiswa di belakang flag`)
+- **Fase H (Verifikasi Menyeluruh & Aksesibilitas)**: `d7b8f13` (`test(kain-semester): verifikasi menyeluruh aksesibilitas dan ragam skenario`)
+- **Fase I (Dokumentasi Akhir)**: `b21d985` (`docs(kain-semester): perbarui catatan rollback dan progres akhir`)
 
 ---
 
