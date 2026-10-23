@@ -40,8 +40,9 @@ import {
   listMasterDataAction,
   getClassDetailAction,
   createClassAction,
-  DEMO_CLASS_ID,
 } from '@/modules/academic/actions';
+import { DEFAULT_CLASS_ID_1 } from '@/lib/auth/class-access';
+const DEMO_CLASS_ID = DEFAULT_CLASS_ID_1;
 
 describe('Integrasi Kelas Saya dengan Data Kurikulum & Jadwal UIR', () => {
   beforeEach(() => {

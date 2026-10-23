@@ -114,9 +114,9 @@ const pub = (x: Row): ClassItem => ({
 });
 
 // Cadangan memori saat Supabase tidak aktif (mode demo), setara pola perangkat pada modul identity.
-export const DEMO_CLASS_ID = 'c0000000-0000-0000-0000-000000000001';
-export const DEMO_CLASS_ID_2 = 'c0000000-0000-0000-0000-000000000002';
-export const DEMO_CLASS_ID_3 = 'c0000000-0000-0000-0000-000000000003';
+const DEMO_CLASS_ID = 'c0000000-0000-0000-0000-000000000001';
+const DEMO_CLASS_ID_2 = 'c0000000-0000-0000-0000-000000000002';
+const DEMO_CLASS_ID_3 = 'c0000000-0000-0000-0000-000000000003';
 
 const mem: { classes: Row[]; enrollments: { class_id: string; student_id: string; student_name?: string; enrolled_at?: string }[] } =
   ((globalThis as any).__siajarAkademik ??= { classes: [], enrollments: [] });
