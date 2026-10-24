@@ -234,23 +234,23 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
         </div>
       </RetroWindow>
 
-      {/* Grid 4 Kartu Metrik Monitoring Prodi Full Width */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      {/* Stat Strip Monitoring Prodi (1 Pita Terpadu, Minim Card) */}
+      <div className="rounded-2xl border border-[#E8E5DE] bg-[#FFFFFF] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E8E5DE] overflow-hidden">
         {COORDINATOR_METRICS.map((m) => (
           <div
             key={m.title}
-            className="rounded-xl border border-[#D6D3CB] bg-white p-5 space-y-2 flex flex-col justify-between"
+            className="p-5 space-y-2 flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-bold uppercase text-[#57534E]">{m.title}</span>
-                <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded ${m.badgeColor}`}>
+                <span className="text-xs font-bold uppercase text-[#6B6560]">{m.title}</span>
+                <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${m.badgeColor}`}>
                   {m.badge}
                 </span>
               </div>
               <p className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917] mt-2">{m.value}</p>
             </div>
-            <p className="text-xs text-[#57534E] border-t border-[#E8E5DE] pt-2 font-sans">
+            <p className="text-xs text-[#6B6560] pt-1 font-sans">
               {m.desc}
             </p>
           </div>

@@ -8,11 +8,7 @@ import {
   Bookmark,
   ListPlus,
   CalendarDays,
-  ChevronRight,
   ClipboardList,
-  FileCheck,
-  CheckCircle2,
-  Users,
   QrCode,
   MessagesSquare,
   BookOpen,
@@ -40,7 +36,6 @@ interface TaRightPanelProps {
 export function TaRightPanel({
   selectedCourse,
   courses = [],
-  onSelectCourse,
   classesCount,
   pendingReviewsCount,
   totalPendingSubmissions,
@@ -83,17 +78,17 @@ export function TaRightPanel({
   };
 
   return (
-    <div className="flex flex-col gap-5">
-      {/* 1. Pengalih Dua Kondisi (Tab Chip Retro) */}
-      <div className="flex items-center p-1.5 rounded-xl border-2 border-ink bg-gray-soft shadow-xs">
+    <div className="flex flex-col gap-5 font-sans">
+      {/* 1. Pengalih Dua Kondisi Bersih */}
+      <div className="flex items-center p-1 rounded-xl border border-[#E8E5DE] bg-[#F2EFE8]">
         <button
           type="button"
           onClick={() => onTabChange('hari-ini')}
           className={cn(
-            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
+            'flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'hari-ini'
-              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-              : 'text-ink hover:bg-ink/5'
+              ? 'bg-[#FFFFFF] text-[#1C1917] shadow-2xs'
+              : 'text-[#6B6560] hover:text-[#1C1917]'
           )}
         >
           Hari Ini
@@ -102,10 +97,10 @@ export function TaRightPanel({
           type="button"
           onClick={() => onTabChange('detail-kelas')}
           className={cn(
-            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
+            'flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'detail-kelas'
-              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-              : 'text-ink hover:bg-ink/5'
+              ? 'bg-[#FFFFFF] text-[#1C1917] shadow-2xs'
+              : 'text-[#6B6560] hover:text-[#1C1917]'
           )}
         >
           Detail Kelas
@@ -113,132 +108,86 @@ export function TaRightPanel({
       </div>
 
       {/* ========================================================= */}
-      {/* KONDISI A: HARI INI                                       */}
+      {/* KONDISI A: HARI INI (OPEN DIVIDED SECTIONS)               */}
       {/* ========================================================= */}
       {activeTab === 'hari-ini' && (
-        <div className="flex flex-col gap-5 animate-fade-in pb-24">
-          {/* 1. Status Asisten */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-gray-soft flex flex-wrap items-center justify-between gap-2 shadow-retro">
-            <div className="min-w-0">
-              <span className="text-xs font-sans font-medium text-gray-dark uppercase tracking-[0.04em] block">
-                Status Penugasan
+        <div className="flex flex-col divide-y divide-[#E8E5DE] animate-fade-in pb-24">
+          {/* 1. Stat Strip Asisten */}
+          <div className="pb-5 grid grid-cols-3 divide-x divide-[#E8E5DE] text-center">
+            <div className="px-2">
+              <span className="text-[11px] text-[#6B6560] block">Asistensi</span>
+              <span className="font-heading font-bold text-lg text-[#1C1917] tabular-nums">
+                {classesCount}
               </span>
-              <p className="font-heading font-bold text-sm sm:text-base text-ink mt-0.5 whitespace-nowrap">
-                Semester Ganjil 2026/2027
-              </p>
             </div>
-            <span className="text-xs font-bold text-white bg-ink px-2.5 py-1 rounded-lg border-2 border-ink shadow-xs shrink-0 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-white" />
-              <span>Asisten Dosen & Lab</span>
-            </span>
-          </div>
-
-          {/* 2. Baris Metrik Asisten */}
-          <div className="right-panel-stats-card p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro">
-            <div className="stats-responsive-layout">
-              {/* Item 1: Kelas Asistensi */}
-              <div className="stats-responsive-item">
-                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
-                  Kelas
-                </span>
-                <div className="stats-right-group">
-                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink tabular-nums">
-                    {classesCount}
-                  </p>
-                  <span className="text-xs font-semibold text-ink bg-gray-soft px-1.5 py-0.5 rounded border border-ink/20 whitespace-normal text-center">
-                    Asistensi
-                  </span>
-                </div>
-              </div>
-
-              {/* Item 2: Tugas Review */}
-              <div className="stats-responsive-item">
-                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
-                  Tugas
-                </span>
-                <div className="stats-right-group">
-                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink tabular-nums">
-                    {pendingReviewsCount}
-                  </p>
-                  <span className="text-xs font-medium text-gray-dark whitespace-normal text-center">
-                    Antrean
-                  </span>
-                </div>
-              </div>
-
-              {/* Item 3: Submisi Pending */}
-              <div className="stats-responsive-item">
-                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
-                  Submisi
-                </span>
-                <div className="stats-right-group">
-                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink flex items-center justify-center gap-1 tabular-nums">
-                    <FileCheck className="h-3.5 w-3.5 text-ink shrink-0" />
-                    <span>{totalPendingSubmissions}</span>
-                  </p>
-                  <span className="text-xs font-semibold text-ink whitespace-normal text-center">
-                    Pending
-                  </span>
-                </div>
-              </div>
+            <div className="px-2">
+              <span className="text-[11px] text-[#6B6560] block">Antrean</span>
+              <span className="font-heading font-bold text-lg text-[#C2553A] tabular-nums">
+                {pendingReviewsCount}
+              </span>
+            </div>
+            <div className="px-2">
+              <span className="text-[11px] text-[#6B6560] block">Submisi</span>
+              <span className="font-heading font-bold text-lg text-[#1C1917] tabular-nums">
+                {totalPendingSubmissions}
+              </span>
             </div>
           </div>
 
-          {/* 3. Aksi Cepat Asisten */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <h4 className="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-black">
-              Aksi Cepat Asisten
+          {/* 2. Aksi Cepat Asisten */}
+          <div className="py-5 space-y-2.5">
+            <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-[#6B6560]">
+              Pintasan Asisten
             </h4>
             <div className="grid grid-cols-2 gap-2">
               <Link
                 href="/ta/grading"
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:border-[#1C1917] text-xs font-semibold text-[#1C1917] transition-colors"
               >
-                <ClipboardList className="h-4 w-4 shrink-0 text-primary" />
+                <ClipboardList className="h-4 w-4 shrink-0 text-[#C2553A]" />
                 <span className="truncate">Review Tugas</span>
               </Link>
               <Link
-                href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=presensi`}
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=bantu-presensi`}
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:border-[#1C1917] text-xs font-semibold text-[#1C1917] transition-colors"
               >
-                <QrCode className="h-4 w-4 shrink-0 text-primary" />
+                <QrCode className="h-4 w-4 shrink-0 text-[#C2553A]" />
                 <span className="truncate">Bantu Presensi</span>
               </Link>
               <Link
-                href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=materi`}
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=materi-asisten`}
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:border-[#1C1917] text-xs font-semibold text-[#1C1917] transition-colors"
               >
-                <BookOpen className="h-4 w-4 shrink-0 text-primary" />
+                <BookOpen className="h-4 w-4 shrink-0 text-[#C2553A]" />
                 <span className="truncate">Materi Lab</span>
               </Link>
               <Link
-                href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=diskusi`}
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=forum`}
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:border-[#1C1917] text-xs font-semibold text-[#1C1917] transition-colors"
               >
-                <MessagesSquare className="h-4 w-4 shrink-0 text-primary" />
+                <MessagesSquare className="h-4 w-4 shrink-0 text-[#C2553A]" />
                 <span className="truncate">Forum Q&A</span>
               </Link>
             </div>
           </div>
 
-          {/* 4. Kalender Mini Bulan Berjalan */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
+          {/* 3. Kalender Mini */}
+          <div className="py-5 space-y-3">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <CalendarDays className="h-4 w-4 text-ink" />
-                <span className="font-heading font-bold text-sm text-ink">
+                <CalendarDays className="h-4 w-4 text-[#C2553A]" />
+                <span className="font-heading font-bold text-sm text-[#1C1917]">
                   {jakarta.monthName} {jakarta.year}
                 </span>
               </div>
-              <span className="text-xs font-sans font-bold bg-gray-soft px-1.5 py-0.5 rounded border border-ink text-gray-dark">
+              <span className="text-xs font-mono font-medium text-[#6B6560]">
                 {jakarta.shortTimeString}
               </span>
             </div>
 
-            {/* Grid Hari Kalender Mini */}
-            <div className="grid grid-cols-7 gap-1 text-center text-xs font-sans">
+            <div className="grid grid-cols-7 gap-1 text-center text-xs">
               {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((d) => (
-                <span key={d} className="font-bold text-gray-dark py-0.5 text-xs">
+                <span key={d} className="font-medium text-[#78716C] py-0.5 text-[11px]">
                   {d}
                 </span>
               ))}
@@ -256,77 +205,60 @@ export function TaRightPanel({
                   <div
                     key={day}
                     className={cn(
-                      'h-7 rounded-md flex flex-col items-center justify-center font-bold text-xs relative transition-colors',
+                      'h-7 rounded-lg flex flex-col items-center justify-center text-xs relative transition-colors',
                       isToday
-                        ? 'bg-ink text-white shadow-xs'
+                        ? 'bg-[#C2553A] text-white font-bold'
                         : hasEvent
-                        ? 'bg-gray-soft text-ink border border-ink/40'
-                        : 'text-ink hover:bg-ink/5'
+                        ? 'bg-[#F2EFE8] text-[#1C1917] font-semibold'
+                        : 'text-[#44403C] hover:bg-[#FAF8F5]'
                     )}
                   >
                     <span>{day}</span>
                     {hasEvent && !isToday && (
-                      <span className="w-1 h-1 rounded-full bg-primary-dark absolute bottom-0.5" />
-                    )}
-                    {isToday && (
-                      <span className="w-1 h-1 rounded-full bg-primary absolute bottom-0.5" />
+                      <span className="w-1 h-1 rounded-full bg-[#C2553A] absolute bottom-0.5" />
                     )}
                   </div>
                 );
               })}
             </div>
-
-            <div className="flex items-center gap-2.5 pt-2 text-xs font-sans text-gray-dark border-t border-ink/10">
-              <span className="flex items-center gap-1 font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-ink" /> Hari Ini
-              </span>
-              <span className="flex items-center gap-1 font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary-dark" /> Jadwal Praktikum
-              </span>
-            </div>
           </div>
 
-          {/* 5. Agenda Asistensi 7 Hari ke Depan */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
-              <h4 className="font-heading font-bold text-sm text-ink uppercase tracking-wider">
+          {/* 4. Agenda Asistensi 7 Hari */}
+          <div className="pt-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-[#6B6560]">
                 Agenda Asistensi 7 Hari
               </h4>
               <Link
                 href="/calendar"
-                className="text-xs font-bold text-primary-dark hover:underline flex items-center gap-0.5"
+                className="text-xs font-semibold text-[#C2553A] hover:underline"
               >
-                <span>Kalender</span>
-                <ChevronRight className="h-3 w-3" />
+                Kalender &rarr;
               </Link>
             </div>
 
-            <div className="space-y-2.5">
-              {agenda.length === 0 ? (
-                <p className="text-xs text-gray-dark font-medium py-2">
-                  Tidak ada jadwal sesi asistensi khusus 7 hari ke depan.
-                </p>
-              ) : (
-                agenda.slice(0, 4).map((ag) => (
+            {agenda.length === 0 ? (
+              <p className="text-xs text-[#6B6560] py-2">
+                Tidak ada jadwal sesi asistensi khusus 7 hari ke depan.
+              </p>
+            ) : (
+              <div className="divide-y divide-[#E8E5DE]">
+                {agenda.slice(0, 4).map((ag) => (
                   <Link
                     key={ag.id}
                     href={ag.href}
-                    className="block group p-2.5 rounded-lg border border-ink/20 hover:border-ink bg-gray-soft/40 hover:bg-gray-soft transition-all"
+                    className="block group py-2.5 first:pt-0 last:pb-0"
                   >
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-sans font-bold text-gray-dark">
-                          {ag.dayName} • {ag.time}
-                        </span>
-                      </div>
-                      <p className="font-heading font-bold text-sm text-ink leading-snug break-words group-hover:underline">
-                        {ag.title}
-                      </p>
-                    </div>
+                    <span className="text-[11px] font-medium text-[#6B6560] block">
+                      {ag.dayName} • {ag.time}
+                    </span>
+                    <p className="font-heading font-semibold text-xs sm:text-sm text-[#1C1917] leading-snug group-hover:text-[#C2553A] transition-colors">
+                      {ag.title}
+                    </p>
                   </Link>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -337,105 +269,89 @@ export function TaRightPanel({
       {activeTab === 'detail-kelas' && (
         <div className="flex flex-col gap-4 animate-fade-in pb-24">
           {!effectiveCourse ? (
-            <div className="p-5 sm:p-6 rounded-xl border-2 border-dashed border-ink/30 bg-white text-center space-y-3 shadow-retro">
-              <CalendarDays className="h-8 w-8 text-gray-dark mx-auto" />
-              <p className="font-heading font-bold text-sm text-ink">
+            <div className="py-6 text-center space-y-2">
+              <p className="font-heading font-bold text-sm text-[#1C1917]">
                 Belum Ada Kelas Asistensi Terpilih
               </p>
-              <p className="text-xs text-gray-dark font-medium">
-                Pilih salah satu kelas asistensi untuk melihat rincian penugasan, modul lab, dan antrean koreksi mahasiswa.
+              <p className="text-xs text-[#6B6560]">
+                Pilih salah satu kelas asistensi untuk melihat rincian modul dan antrean koreksi.
               </p>
-              <div className="pt-2">
-                <Link
-                  href="/classes"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold text-ink transition-all shadow-xs"
-                >
-                  <span>Lihat Kelas Asistensi</span>
-                  <ChevronRight className="h-3.5 w-3.5" />
-                </Link>
-              </div>
             </div>
           ) : (
             <>
-              {/* TWO MAIN ACTION BUTTONS */}
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2.5">
+                <Link
+                  href={`/classes/${effectiveCourse.id}?tab=bantu-presensi`}
+                  className="flex w-full items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#C2553A] hover:bg-[#A34530] text-white font-semibold text-xs sm:text-sm transition-colors text-center"
+                >
+                  <Play className="h-4 w-4 fill-white" />
+                  <span>Cek Presensi Praktikum</span>
+                </Link>
+
                 <Link
                   href={`/classes/${effectiveCourse.id}?tab=tugas`}
-                  className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border-2 border-ink bg-white text-ink font-heading font-bold text-sm shadow-[3px_3px_0px_#000] hover:bg-gray-soft hover:-translate-y-0.5 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
+                  className="flex w-full items-center justify-center py-2 px-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-semibold text-xs transition-colors text-center"
                 >
                   Buka Lembar Review Tugas Kelas
                 </Link>
-
-                <Link
-                  href={`/classes/${effectiveCourse.id}?tab=presensi`}
-                  className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-ink bg-black text-white font-heading font-bold text-base shadow-[3px_3px_0px_#000] hover:bg-black/90 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
-                >
-                  <Play className="h-5 w-5 fill-white" />
-                  <span>Cek Presensi Praktikum</span>
-                </Link>
               </div>
 
-              {/* THREE QUICK ACTIONS */}
-              <div className="grid grid-cols-3 gap-2 border-y-2 border-ink py-3">
+              <div className="grid grid-cols-3 gap-2 border-y border-[#E8E5DE] py-2.5">
                 <button
                   type="button"
                   onClick={() => alert(`Modul Praktikum & Panduan Asistensi ${effectiveCourse.code} (${effectiveCourse.title}) siap diunduh.`)}
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-ink focus-visible:outline-none cursor-pointer"
-                  title="Unduh Panduan Praktikum"
+                  className="flex flex-col items-center justify-center py-1 rounded-lg hover:bg-[#FAF8F5] transition-colors text-[#44403C] cursor-pointer"
                 >
-                  <Download className="h-5 w-5 mb-1" />
-                  <span className="text-xs font-bold">Modul</span>
+                  <Download className="h-4 w-4 mb-1 text-[#C2553A]" />
+                  <span className="text-[11px] font-medium">Modul</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setSaved(!saved)}
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-ink focus-visible:outline-none cursor-pointer"
-                  title="Simpan ke favorit"
+                  className="flex flex-col items-center justify-center py-1 rounded-lg hover:bg-[#FAF8F5] transition-colors text-[#44403C] cursor-pointer"
                 >
-                  <Bookmark className={cn('h-5 w-5 mb-1', saved ? 'fill-current' : '')} />
-                  <span className="text-xs font-bold">{saved ? 'Saved' : 'Save'}</span>
+                  <Bookmark className={cn('h-4 w-4 mb-1 text-[#C2553A]', saved ? 'fill-current' : '')} />
+                  <span className="text-[11px] font-medium">{saved ? 'Tersimpan' : 'Simpan'}</span>
                 </button>
 
                 <Link
                   href="/calendar"
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-gray-soft transition-colors text-ink focus-visible:outline-none"
-                  title="Jadwal Praktikum"
+                  className="flex flex-col items-center justify-center py-1 rounded-lg hover:bg-[#FAF8F5] transition-colors text-[#44403C]"
                 >
-                  <ListPlus className="h-5 w-5 mb-1" />
-                  <span className="text-xs font-bold">Jadwal</span>
+                  <ListPlus className="h-4 w-4 mb-1 text-[#C2553A]" />
+                  <span className="text-[11px] font-medium">Jadwal</span>
                 </Link>
               </div>
 
-              {/* METADATA INFO TABLE */}
-              <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-white shadow-[4px_4px_0px_#000] space-y-2 text-xs sm:text-sm">
-                <div className="flex justify-between items-center py-1.5 border-b border-ink/40">
-                  <span className="text-black font-medium">Kode MK</span>
-                  <span className="font-sans font-semibold text-black">{effectiveCourse.code}</span>
+              <div className="divide-y divide-[#E8E5DE] text-xs">
+                <div className="flex justify-between items-center py-2.5">
+                  <span className="text-[#6B6560]">Kode MK</span>
+                  <span className="font-mono font-bold text-[#1C1917]">{effectiveCourse.code}</span>
                 </div>
-                <div className="flex justify-between items-center py-1.5 border-b border-ink/40">
-                  <span className="text-black font-medium">Progres Praktikum</span>
-                  <span className="font-semibold text-black tabular-nums">{effectiveCourse.progressPercent}% Selesai</span>
+                <div className="flex justify-between items-center py-2.5">
+                  <span className="text-[#6B6560]">Progres Praktikum</span>
+                  <span className="font-semibold text-[#1C1917] tabular-nums">{effectiveCourse.progressPercent}% Selesai</span>
                 </div>
-                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-ink/40">
-                  <span className="text-black font-medium shrink-0">Jadwal Asistensi</span>
-                  <span className="font-medium text-black text-right text-xs">
+                <div className="flex justify-between items-center gap-2 py-2.5">
+                  <span className="text-[#6B6560] shrink-0">Jadwal Asistensi</span>
+                  <span className="font-medium text-[#1C1917] text-right">
                     {getDisplaySchedule()}
                   </span>
                 </div>
-                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-ink/40">
-                  <span className="text-black font-medium shrink-0">Ruang Lab</span>
-                  <span className="font-medium text-black text-right">{effectiveCourse.room}</span>
+                <div className="flex justify-between items-center gap-2 py-2.5">
+                  <span className="text-[#6B6560] shrink-0">Ruang Lab</span>
+                  <span className="font-medium text-[#1C1917] text-right">{effectiveCourse.room}</span>
                 </div>
-                <div className="flex justify-between items-center py-1.5 border-b border-ink/40">
-                  <span className="text-black font-medium">Kehadiran Mahasiswa</span>
-                  <span className="font-semibold text-black underline decoration-2 tabular-nums">
+                <div className="flex justify-between items-center py-2.5">
+                  <span className="text-[#6B6560]">Kehadiran Mahasiswa</span>
+                  <span className="font-semibold text-[#065F46] tabular-nums">
                     {effectiveCourse.attendance}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-1.5">
-                  <span className="text-black font-medium">Bobot SKS</span>
-                  <span className="font-semibold text-black tabular-nums">{effectiveCourse.sks} SKS</span>
+                <div className="flex justify-between items-center py-2.5">
+                  <span className="text-[#6B6560]">Bobot SKS</span>
+                  <span className="font-semibold text-[#1C1917] tabular-nums">{effectiveCourse.sks} SKS</span>
                 </div>
               </div>
             </>
