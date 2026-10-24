@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   AlertCircle,
-  Clock,
   Award,
   CalendarCheck2,
   FileText,
@@ -26,7 +25,6 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
   const [data, setData] = useState<HomeBannerData>(initialData);
   const [showOthersModal, setShowOthersModal] = useState(false);
 
-  // Polling ringan 30 detik untuk mendeteksi ujian / presensi yang baru dibuka dosen
   useEffect(() => {
     if (!onRefresh) return;
     const interval = setInterval(async () => {
@@ -34,19 +32,18 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
         const fresh = await onRefresh();
         if (fresh) setData(fresh);
       } catch {
-        // Abaikan error polling agar tidak mengganggu UI
+        // Ignore polling errors
       }
     }, 30000);
 
     return () => clearInterval(interval);
   }, [onRefresh]);
 
-  const { primary, others, totalActive } = data;
-
+  const { primary, others } = data;
   const isUrgent = primary.priority <= 3;
 
-  const getCategoryIcon = (cat: BannerConditionItem['category'], isLightBg = false) => {
-    const iconClass = cn('h-6 w-6 sm:h-7 sm:w-7', isLightBg ? 'text-[#1C1917]' : 'text-white');
+  const getCategoryIcon = (cat: BannerConditionItem['category']) => {
+    const iconClass = 'h-5 w-5 sm:h-6 sm:w-6 text-white';
     switch (cat) {
       case 'EXAM':
         return <Award className={iconClass} />;
@@ -67,136 +64,118 @@ export function ActionBanner({ initialData, onRefresh }: ActionBannerProps) {
       <section
         aria-label="Banner Aksi Utama"
         className={cn(
-          'relative w-full rounded-2xl border-2 border-[#7A756D] p-4 sm:p-5 lg:p-6 transition-all flex flex-col justify-between overflow-hidden shadow-xs',
-          isUrgent ? 'bg-[#ECE9D8]/95 text-[#1C1917]' : 'bg-white text-[#1C1917]'
+          'relative w-full rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] p-5 sm:p-6 transition-all flex flex-col justify-between overflow-hidden shadow-2xs',
+          isUrgent ? 'border-l-4 border-l-[#9F1521]' : 'border-l-4 border-l-[#111111]'
         )}
       >
-        {/* Dekorasi Bingkai Retro Subtle */}
-        <div
-          className="absolute inset-2 border-2 border-[#7A756D] rounded-xl pointer-events-none opacity-10"
-        />
-
-        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-5">
-          {/* Kolom Kiri: Ikon, Badge, Judul & Subtitle */}
-          <div className="flex items-start gap-3.5 sm:gap-4 min-w-0">
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
+          {/* Kiri: Ikon + Kontras Tipografi Besar-Kecil ala Telkom University */}
+          <div className="flex items-start gap-4 min-w-0">
             <div
               className={cn(
-                'shrink-0 p-2.5 sm:p-3 rounded-xl border-2 flex items-center justify-center shadow-xs',
-                isUrgent
-                  ? 'border-[#853827] bg-[#C2553A] text-white'
-                  : 'border-[#7A756D] bg-[#ECE9D8] text-[#1C1917]'
+                'shrink-0 h-12 w-12 rounded-2xl flex items-center justify-center shadow-xs',
+                isUrgent ? 'bg-[#9F1521]' : 'bg-[#111111]'
               )}
             >
-              {getCategoryIcon(primary.category, !isUrgent)}
+              {getCategoryIcon(primary.category)}
             </div>
 
             <div className="space-y-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 {primary.badge && (
-                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-sans font-extrabold border-2 border-[#1C1917] bg-[#1C1917] text-white uppercase tracking-wider">
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-sans font-bold bg-[#FEF2F2] text-[#9F1521] uppercase tracking-wider">
                     {primary.badge}
                   </span>
                 )}
 
-                {/* Penanda "+N lainnya" jika ada lebih dari 1 kondisi aktif */}
                 {others.length > 0 && (
                   <button
                     type="button"
                     onClick={() => setShowOthersModal(true)}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-sans font-extrabold border-2 border-[#7A756D] transition-all hover:scale-105 focus-visible:outline-none cursor-pointer bg-white text-[#1C1917] hover:bg-[#FAF8F5] shadow-xs"
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-sans font-semibold border border-[#E2E3E4] bg-[#F3F3F4] text-[#58595B] hover:text-[#111111] transition-colors cursor-pointer"
                     title="Buka daftar hal mendesak lainnya"
                   >
-                    <span>+{others.length} lainnya</span>
+                    <span>+{others.length} agenda lainnya</span>
                     <ChevronRight className="h-3 w-3" />
                   </button>
                 )}
               </div>
 
-              <h2 className="font-heading font-extrabold text-base sm:text-lg lg:text-xl tracking-tight leading-snug break-words line-clamp-2 text-[#1C1917]">
+              {/* Judul Besar & Tegas */}
+              <h2 className="font-heading font-extrabold text-lg sm:text-xl lg:text-[21px] tracking-tight leading-snug text-[#111111]">
                 {primary.title}
               </h2>
 
-              <p className="text-xs sm:text-sm font-bold leading-normal break-words max-w-2xl line-clamp-2 text-[#44403C]">
+              {/* Deskripsi Kecil & Ringan */}
+              <p className="text-xs sm:text-[13px] font-normal leading-relaxed max-w-2xl text-[#58595B]">
                 {primary.subtitle}
               </p>
             </div>
           </div>
 
-          {/* Kolom Kanan: Tombol Aksi */}
-          <div className="shrink-0 pt-2 md:pt-0">
+          {/* Kanan: Tombol Pill Bulat Khas Telkom University (border-radius: 35px / rounded-full) */}
+          <div className="shrink-0 pt-1 md:pt-0">
             <Link
               href={primary.buttonHref}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl border-2 border-[#853827] font-sans font-extrabold text-sm sm:text-base transition-all focus-visible:outline-none active:translate-y-0.5 shadow-xs w-full md:w-auto text-center bg-[#C2553A] text-white hover:bg-[#B84A2B] hover:scale-[1.02] cursor-pointer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full font-sans font-bold text-xs sm:text-[13px] transition-all w-full md:w-auto text-center bg-[#9F1521] text-white hover:bg-[#8F131E] shadow-xs cursor-pointer"
             >
               <span>{primary.buttonLabel}</span>
-              <ArrowRight className="h-4.5 w-4.5" />
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Modal / Dialog Daftar Ringkas "+N lainnya" */}
+      {/* Modal Daftar Ringkas "+N lainnya" */}
       {showOthersModal && (
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-fade-in backdrop-blur-xs"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fade-in backdrop-blur-xs"
         >
-          <div className="w-full max-w-lg rounded-2xl border-2 border-[#7A756D] bg-white p-6 shadow-2xl space-y-5 animate-scale-up">
-            <div className="flex items-center justify-between border-b-2 border-[#D6D3CB] pb-3">
+          <div className="w-full max-w-lg rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] p-6 shadow-xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#E2E3E4] pb-3">
               <div className="flex items-center gap-2">
-                <span className="inline-block p-1.5 rounded-lg bg-[#C2553A] text-white border border-[#853827]">
-                  <AlertCircle className="h-4 w-4" />
-                </span>
-                <h3 className="font-heading font-extrabold text-lg sm:text-xl text-[#1C1917]">
-                  Aksi Mendesak Lainnya ({others.length})
+                <AlertCircle className="h-5 w-5 text-[#9F1521]" />
+                <h3 className="font-heading font-bold text-base sm:text-lg text-[#111111]">
+                  Agenda Mendesak Lainnya ({others.length})
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowOthersModal(false)}
-                className="p-1 rounded-lg border border-[#7A756D] hover:bg-[#ECE9D8] transition-colors cursor-pointer"
+                className="p-1.5 rounded-full hover:bg-[#F3F3F4] transition-colors cursor-pointer"
                 title="Tutup dialog"
               >
-                <X className="h-5 w-5 text-[#1C1917]" />
+                <X className="h-4 w-4 text-[#58595B]" />
               </button>
             </div>
 
-            <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+            <div className="divide-y divide-[#E2E3E4] max-h-[60vh] overflow-y-auto">
               {others.map((item) => (
                 <div
                   key={item.id}
-                  className="p-4 rounded-xl border-2 border-[#7A756D] bg-[#ECE9D8]/80 shadow-xs flex items-center justify-between gap-3"
+                  className="py-3.5 first:pt-0 last:pb-0 flex items-center justify-between gap-3"
                 >
-                  <div className="space-y-1 min-w-0">
-                    <span className="inline-block px-2 py-0.5 rounded text-xs font-sans font-extrabold bg-[#C2553A] text-white border border-[#853827]">
+                  <div className="space-y-0.5 min-w-0">
+                    <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-[#9F1521]">
                       {item.badge || `Prioritas ${item.priority}`}
                     </span>
-                    <h4 className="font-heading font-extrabold text-base text-[#1C1917] truncate">
+                    <h4 className="font-heading font-bold text-sm text-[#111111] truncate">
                       {item.title}
                     </h4>
-                    <p className="text-xs font-bold text-[#44403C] truncate">{item.subtitle}</p>
+                    <p className="text-xs font-normal text-[#58595B] truncate">{item.subtitle}</p>
                   </div>
 
                   <Link
                     href={item.buttonHref}
                     onClick={() => setShowOthersModal(false)}
-                    className="shrink-0 px-3.5 py-2 rounded-lg border-2 border-[#853827] bg-[#C2553A] text-white font-sans font-extrabold text-xs hover:bg-[#B84A2B] shadow-xs transition-transform hover:scale-105"
+                    className="shrink-0 px-4 py-1.5 rounded-full bg-[#9F1521] text-white font-bold text-xs hover:bg-[#8F131E] transition-colors"
                   >
                     {item.buttonLabel}
                   </Link>
                 </div>
               ))}
-            </div>
-
-            <div className="pt-2 border-t border-[#D6D3CB] flex justify-end">
-              <button
-                type="button"
-                onClick={() => setShowOthersModal(false)}
-                className="px-4 py-2 rounded-xl border-2 border-[#7A756D] bg-[#ECE9D8] font-sans font-extrabold text-sm text-[#1C1917] hover:bg-white transition-colors cursor-pointer"
-              >
-                Tutup
-              </button>
             </div>
           </div>
         </div>

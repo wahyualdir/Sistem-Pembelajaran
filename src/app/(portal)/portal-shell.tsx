@@ -415,20 +415,20 @@ export function PortalShell({
                                   if (!isDesktop) closeDrawer();
                                 }}
                                 className={cn(
-                                  'flex items-center justify-between rounded-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A]',
+                                  'flex items-center justify-between rounded-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9F1521]',
                                   isRailActive
                                     ? 'justify-center w-10 h-10 mx-auto'
-                                    : 'px-3 py-2 gap-2.5 text-xs sm:text-[13px] min-h-[38px]',
+                                    : 'px-3 py-2 gap-2.5 text-[13px] min-h-[38px]',
                                   isActive
-                                    ? 'bg-[#1C1917] text-white font-semibold shadow-2xs'
-                                    : 'text-[#44403C] hover:text-[#1C1917] hover:bg-[#FAF8F5] font-medium'
+                                    ? 'bg-[#9F1521] text-white font-semibold shadow-2xs'
+                                    : 'text-[#58595B] hover:text-[#111111] hover:bg-[#F3F3F4] font-normal'
                                 )}
                               >
                                 <span className="flex items-center gap-2.5 truncate">
                                   <Icon
                                     className={cn(
                                       'h-4 w-4 shrink-0 transition-colors',
-                                      isActive ? 'text-[#C2553A]' : 'text-[#78716C] group-hover:text-[#1C1917]'
+                                      isActive ? 'text-white' : 'text-[#808285] group-hover:text-[#9F1521]'
                                     )}
                                   />
                                   {!isRailActive && <span className="truncate">{item.label}</span>}
@@ -436,10 +436,10 @@ export function PortalShell({
                                 {!isRailActive && item.badge !== undefined && (
                                   <span
                                     className={cn(
-                                      'inline-flex min-w-5 items-center justify-center px-2 py-0.5 rounded-full text-[11px] font-sans font-semibold shrink-0',
+                                      'inline-flex min-w-5 items-center justify-center px-2 py-0.5 rounded-full text-[10px] font-sans font-bold shrink-0',
                                       isActive
-                                        ? 'bg-[#C2553A] text-white'
-                                        : 'bg-[#FEF2F0] text-[#C2553A]'
+                                        ? 'bg-white text-[#9F1521]'
+                                        : 'bg-[#FEF2F2] text-[#9F1521]'
                                     )}
                                   >
                                     {item.badge}
@@ -640,12 +640,13 @@ export function PortalShell({
             )}
 
             {/* ======================================================== */}
-            {/* HEADER ATAS: CLEAN MODERN ACADEMIC TOPBAR                */}
+            {/* HEADER ATAS: TELKOM UNIVERSITY INSTITUTIONAL TOPBAR      */}
             {/* ======================================================== */}
+            <div className="h-1 w-full bg-[#9F1521] shrink-0" />
             <header
               className={cn(
-                'sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#E8E5DE] bg-[#FAF8F5]/90 backdrop-blur-md px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
-                isScrolled && 'shadow-2xs border-b-[#D6D3CB]'
+                'sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#E2E3E4] bg-[#FFFFFF]/95 backdrop-blur-md px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
+                isScrolled && 'shadow-xs border-b-[#D0D6DD]'
               )}
             >
               {/* SISI KIRI & TENGAH: TOMBOL TOGGLE SIDEBAR + SEARCH BAR TERPADU */}

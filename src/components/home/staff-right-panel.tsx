@@ -6,12 +6,9 @@ import {
   CalendarDays,
   ChevronRight,
   BookOpen,
-  GraduationCap,
-  PlusCircle,
   Clock,
   Layers,
   Megaphone,
-  CalendarCheck2,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { AgendaItem } from '@/modules/academic/home-actions';
@@ -79,17 +76,17 @@ export function StaffRightPanel({
         ];
 
   return (
-    <div className="flex flex-col gap-5">
-      {/* 1. Pengalih Dua Tab Retro */}
-      <div className="flex items-center p-1.5 rounded-xl border-2 border-ink bg-gray-soft shadow-xs">
+    <div className="flex flex-col gap-5 font-sans">
+      {/* 1. Pengalih Dua Tab Tel-U Bersih */}
+      <div className="flex items-center p-1 rounded-xl border border-[#E2E3E4] bg-[#F3F3F4]">
         <button
           type="button"
           onClick={() => onTabChange('hari-ini')}
           className={cn(
-            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
+            'flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'hari-ini'
-              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-              : 'text-ink hover:bg-ink/5'
+              ? 'bg-[#FFFFFF] text-[#9F1521] font-bold shadow-2xs'
+              : 'text-[#808285] hover:text-[#111111]'
           )}
         >
           Hari Ini
@@ -98,10 +95,10 @@ export function StaffRightPanel({
           type="button"
           onClick={() => onTabChange('quick-actions')}
           className={cn(
-            'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
+            'flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'quick-actions'
-              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-              : 'text-ink hover:bg-ink/5'
+              ? 'bg-[#FFFFFF] text-[#9F1521] font-bold shadow-2xs'
+              : 'text-[#808285] hover:text-[#111111]'
           )}
         >
           Aksi Cepat
@@ -109,111 +106,88 @@ export function StaffRightPanel({
       </div>
 
       {/* ========================================================= */}
-      {/* KONDISI A: HARI INI                                       */}
+      {/* KONDISI A: HARI INI (OPEN DIVIDED SECTIONS)               */}
       {/* ========================================================= */}
       {activeTab === 'hari-ini' && (
-        <div className="flex flex-col gap-5 animate-fade-in pb-24">
-          {/* 1. Ringkasan Baris Metrik BAAK */}
-          <div className="right-panel-stats-card p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro">
-            <div className="stats-responsive-layout">
-              <div className="stats-responsive-item">
-                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
-                  Prodi
+        <div className="flex flex-col divide-y divide-[#E2E3E4] animate-fade-in pb-24">
+          {/* 1. Ringkasan Metrik BAAK */}
+          <div className="pb-5">
+            <div className="grid grid-cols-3 divide-x divide-[#E2E3E4] text-center">
+              <div className="px-2">
+                <span className="text-[11px] font-normal text-[#808285] block">Prodi</span>
+                <span className="font-heading font-extrabold text-xl text-[#111111] tabular-nums">
+                  {programsCount}
                 </span>
-                <div className="stats-right-group">
-                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink tabular-nums">
-                    {programsCount}
-                  </p>
-                  <span className="text-xs font-semibold text-ink bg-gray-soft px-1.5 py-0.5 rounded border border-ink/20 whitespace-normal text-center">
-                    Terdaftar
-                  </span>
-                </div>
               </div>
-
-              <div className="stats-responsive-item">
-                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
-                  Semester
+              <div className="px-2">
+                <span className="text-[11px] font-normal text-[#808285] block">Semester</span>
+                <span className="font-heading font-extrabold text-xl text-[#111111] tabular-nums">
+                  {semestersCount}
                 </span>
-                <div className="stats-right-group">
-                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink tabular-nums">
-                    {semestersCount}
-                  </p>
-                  <span className="text-xs font-medium text-gray-dark whitespace-normal text-center">
-                    Aktif
-                  </span>
-                </div>
               </div>
-
-              <div className="stats-responsive-item">
-                <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
-                  Katalog
+              <div className="px-2">
+                <span className="text-[11px] font-normal text-[#808285] block">Katalog MK</span>
+                <span className="font-heading font-extrabold text-xl text-[#9F1521] tabular-nums">
+                  {coursesCount}
                 </span>
-                <div className="stats-right-group">
-                  <p className="stats-value font-heading font-black text-base sm:text-lg text-ink tabular-nums">
-                    {coursesCount}
-                  </p>
-                  <span className="text-xs font-semibold text-ink whitespace-normal text-center">
-                    Mata Kuliah
-                  </span>
-                </div>
               </div>
             </div>
           </div>
 
           {/* 2. Aksi Cepat Administrasi BAAK */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <h4 className="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-black">
+          <div className="py-5 space-y-3">
+            <h4 className="font-heading font-bold text-[11px] uppercase tracking-wider text-[#808285]">
               Aksi Cepat BAAK
             </h4>
             <div className="grid grid-cols-2 gap-2">
               <Link
                 href="/staff/schedules"
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#9F1521] text-xs font-semibold text-[#111111] transition-colors"
               >
-                <Clock className="h-4 w-4 shrink-0 text-primary" />
+                <Clock className="h-4 w-4 shrink-0 text-[#9F1521]" />
                 <span className="truncate">Jadwal Kuliah</span>
               </Link>
               <Link
                 href="/staff/classes"
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#9F1521] text-xs font-semibold text-[#111111] transition-colors"
               >
-                <Layers className="h-4 w-4 shrink-0 text-primary" />
+                <Layers className="h-4 w-4 shrink-0 text-[#9F1521]" />
                 <span className="truncate">Asisten Lab</span>
               </Link>
               <Link
                 href="/staff/announcements"
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#9F1521] text-xs font-semibold text-[#111111] transition-colors"
               >
-                <Megaphone className="h-4 w-4 shrink-0 text-primary" />
+                <Megaphone className="h-4 w-4 shrink-0 text-[#9F1521]" />
                 <span className="truncate">Pengumuman</span>
               </Link>
               <Link
                 href="/staff/grades"
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#9F1521] text-xs font-semibold text-[#111111] transition-colors"
               >
-                <BookOpen className="h-4 w-4 shrink-0 text-primary" />
+                <BookOpen className="h-4 w-4 shrink-0 text-[#9F1521]" />
                 <span className="truncate">Rekap Nilai</span>
               </Link>
             </div>
           </div>
 
           {/* 3. Kalender Mini Bulan Berjalan */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
+          <div className="py-5 space-y-3">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <CalendarDays className="h-4 w-4 text-ink" />
-                <span className="font-heading font-bold text-sm text-ink">
+                <CalendarDays className="h-4 w-4 text-[#9F1521]" />
+                <span suppressHydrationWarning className="font-heading font-bold text-sm text-[#111111]">
                   {jakarta.monthName} {jakarta.year}
                 </span>
               </div>
-              <span className="text-xs font-sans font-bold bg-gray-soft px-1.5 py-0.5 rounded border border-ink text-gray-dark">
+              <span suppressHydrationWarning className="text-xs font-mono font-normal text-[#808285]">
                 {jakarta.shortTimeString}
               </span>
             </div>
 
-            <div className="grid grid-cols-7 gap-1 text-center text-xs font-sans">
+            <div className="grid grid-cols-7 gap-1 text-center text-xs">
               {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((d) => (
-                <span key={d} className="font-bold text-gray-dark py-0.5 text-xs">
+                <span key={d} className="font-medium text-[#808285] py-0.5 text-[11px]">
                   {d}
                 </span>
               ))}
@@ -231,59 +205,43 @@ export function StaffRightPanel({
                   <div
                     key={day}
                     className={cn(
-                      'h-7 rounded-md flex flex-col items-center justify-center font-bold text-xs relative transition-colors',
+                      'h-7 rounded-lg flex flex-col items-center justify-center text-xs relative transition-colors',
                       isToday
-                        ? 'bg-ink text-white shadow-xs'
+                        ? 'bg-[#9F1521] text-white font-bold'
                         : hasEvent
-                        ? 'bg-gray-soft text-ink border border-ink/40'
-                        : 'text-ink hover:bg-ink/5'
+                        ? 'bg-[#F3F3F4] text-[#111111] font-semibold'
+                        : 'text-[#58595B] hover:bg-[#F3F3F4]'
                     )}
                   >
                     <span>{day}</span>
                     {hasEvent && !isToday && (
-                      <span className="w-1 h-1 rounded-full bg-primary-dark absolute bottom-0.5" />
-                    )}
-                    {isToday && (
-                      <span className="w-1 h-1 rounded-full bg-primary absolute bottom-0.5" />
+                      <span className="w-1 h-1 rounded-full bg-[#9F1521] absolute bottom-0.5" />
                     )}
                   </div>
                 );
               })}
             </div>
-
-            <div className="flex items-center gap-2.5 pt-2 text-xs font-sans text-gray-dark border-t border-ink/10">
-              <span className="flex items-center gap-1 font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-ink" /> Hari Ini
-              </span>
-              <span className="flex items-center gap-1 font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary-dark" /> Tenggat BAAK
-              </span>
-            </div>
           </div>
 
           {/* 4. Agenda BAAK 7 Hari */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
-              <h4 className="font-heading font-bold text-sm text-ink uppercase tracking-wider">
-                Agenda Akademik 7 Hari
-              </h4>
-            </div>
+          <div className="pt-5 space-y-3">
+            <h4 className="font-heading font-bold text-[11px] uppercase tracking-wider text-[#808285]">
+              Agenda Akademik 7 Hari
+            </h4>
 
-            <div className="space-y-2.5">
+            <div className="divide-y divide-[#E2E3E4]">
               {defaultAgenda.map((ag) => (
                 <Link
                   key={ag.id}
                   href={ag.href}
-                  className="block group p-2.5 rounded-lg border border-ink/20 hover:border-ink bg-gray-soft/40 hover:bg-gray-soft transition-all"
+                  className="block group py-2.5 first:pt-0 last:pb-0 transition-colors"
                 >
-                  <div className="space-y-1">
-                    <span className="text-xs font-sans font-bold text-gray-dark">
-                      {ag.dayName} • {ag.time}
-                    </span>
-                    <p className="font-heading font-bold text-sm text-ink leading-snug break-words group-hover:underline">
-                      {ag.title}
-                    </p>
-                  </div>
+                  <span className="text-[11px] font-normal text-[#808285] block">
+                    {ag.dayName} • {ag.time}
+                  </span>
+                  <p className="font-heading font-bold text-xs sm:text-sm text-[#111111] leading-snug group-hover:text-[#9F1521] transition-colors">
+                    {ag.title}
+                  </p>
                 </Link>
               ))}
             </div>
@@ -296,44 +254,46 @@ export function StaffRightPanel({
       {/* ========================================================= */}
       {activeTab === 'quick-actions' && (
         <div className="flex flex-col gap-4 animate-fade-in pb-24">
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-white shadow-retro space-y-3">
-            <h4 className="font-heading font-bold text-sm text-ink uppercase tracking-wider">
+          <div className="space-y-2">
+            <h4 className="font-heading font-bold text-base text-[#111111]">
               Manajemen Master Akademik
             </h4>
-            <p className="text-xs text-gray-dark font-medium">
+            <p className="text-xs text-[#58595B] font-normal leading-relaxed">
               Biro BAAK bertanggung jawab atas penetapan struktur kurikulum, semester, dan penjadwalan kelas universitas.
             </p>
-            <div className="flex flex-col gap-2.5 pt-2">
-              <Link
-                href="/staff#prodi-form"
-                className="flex items-center justify-between p-3 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white transition-all text-xs font-bold shadow-xs"
-              >
-                <span>+ Buka Program Studi Baru</span>
-                <ChevronRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/staff#semester-form"
-                className="flex items-center justify-between p-3 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white transition-all text-xs font-bold shadow-xs"
-              >
-                <span>+ Atur Semester Akademik</span>
-                <ChevronRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/staff#course-form"
-                className="flex items-center justify-between p-3 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white transition-all text-xs font-bold shadow-xs"
-              >
-                <span>+ Tambah Mata Kuliah Kurikulum</span>
-                <ChevronRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/staff/classes"
-                className="flex items-center justify-between p-3 rounded-lg border-2 border-ink bg-black text-white hover:bg-neutral-800 transition-all text-xs font-bold shadow-retro-xs"
-              >
-                <span>Delegasi Asisten Laboratorium</span>
-                <ChevronRight className="h-4 w-4" />
-              </Link>
-            </div>
           </div>
+
+          <div className="divide-y divide-[#E2E3E4] border-y border-[#E2E3E4]">
+            <Link
+              href="/staff#prodi-form"
+              className="flex items-center justify-between py-3 text-xs font-semibold text-[#111111] hover:text-[#9F1521] transition-colors"
+            >
+              <span>+ Buka Program Studi Baru</span>
+              <ChevronRight className="h-4 w-4 text-[#808285]" />
+            </Link>
+            <Link
+              href="/staff#semester-form"
+              className="flex items-center justify-between py-3 text-xs font-semibold text-[#111111] hover:text-[#9F1521] transition-colors"
+            >
+              <span>+ Atur Semester Akademik</span>
+              <ChevronRight className="h-4 w-4 text-[#808285]" />
+            </Link>
+            <Link
+              href="/staff#course-form"
+              className="flex items-center justify-between py-3 text-xs font-semibold text-[#111111] hover:text-[#9F1521] transition-colors"
+            >
+              <span>+ Tambah Mata Kuliah Kurikulum</span>
+              <ChevronRight className="h-4 w-4 text-[#808285]" />
+            </Link>
+          </div>
+
+          <Link
+            href="/staff/classes"
+            className="flex items-center justify-between py-2.5 px-4 rounded-full bg-[#9F1521] text-white hover:bg-[#8F131E] transition-colors text-xs font-bold"
+          >
+            <span>Delegasi Asisten Laboratorium</span>
+            <ChevronRight className="h-4 w-4" />
+          </Link>
         </div>
       )}
     </div>
