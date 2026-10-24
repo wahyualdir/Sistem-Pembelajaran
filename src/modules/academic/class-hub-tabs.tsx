@@ -306,399 +306,666 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
     return Date.parse(a.close_at) >= Date.now();
   });
 
+  const activeRoleBadge = ta
+    ? 'Mode Asisten Perkuliahan'
+    : isStaff && !isActualLecturer
+    ? 'Mode Staf Akademik'
+    : lecturer
+    ? 'Mode Dosen Pengampu'
+    : 'Mode Mahasiswa';
+
+  const lecturerDisplayName = (cls as any).lecturer_name || 'Dosen Pengampu Utama';
+  const lecturerInitials = lecturerDisplayName
+    .replace(/^(Dr\.|Prof\.|Ir\.|H\.|Hj\.)\s*/gi, '')
+    .split(' ')
+    .slice(0, 2)
+    .map((w: string) => w[0] || '')
+    .join('')
+    .toUpperCase() || 'DS';
+
   return (
-    <div className="max-w-[1360px] mx-auto space-y-5 animate-fade-up font-sans p-3 sm:p-5 lg:p-6 pb-24">
-      {/* ======================================================== */}
-      {/* 1. TOP NAVIGASI GOOGLE CLASSROOM (BREADCRUMB & TABS)     */}
-      {/* ======================================================== */}
-      <div className="border-b-2 border-[#D6D3CB] pb-0 font-sans space-y-2.5">
-        {/* Baris Atas: Breadcrumb ala Classroom & Aksi Cepat */}
-        <div className="flex flex-wrap items-center justify-between gap-3 px-0.5">
-          {/* Breadcrumb: Classroom > Nama Kelas */}
-          <div className="flex items-center gap-2 text-xs font-bold text-[#57534E]">
+    <div className="max-w-[1360px] mx-auto space-y-6 animate-fade-up font-sans p-3 sm:p-5 lg:p-6 pb-24">
+      {/* ================================================================= */}
+      {/* 1. MASTER DOSSIER HEADER KELAS & BILAH NAVIGASI TERPADU           */}
+      {/* ================================================================= */}
+      <div className="border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm overflow-hidden font-sans">
+        {/* Pita Aksen Atas */}
+        <div className="h-2 w-full bg-[#C2553A] border-b border-[#1C1917]" />
+
+        {/* Baris Komando Atas: Navigasi Balik, Mode Peran, Kode Kelas & Tatap Muka */}
+        <div className="px-4 sm:px-5 py-2.5 bg-[#ECE9D8] border-b-2 border-[#7A756D] flex flex-wrap items-center justify-between gap-3">
+          {/* Kiri: Breadcrumb & Mode Peran */}
+          <div className="flex flex-wrap items-center gap-2 text-xs">
             <Link
               href="/classes"
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] transition-all cursor-pointer font-black shadow-retro-xs"
+              className="inline-flex items-center gap-1.5 px-3 py-1 border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-black shadow-retro-xs transition-all cursor-pointer"
             >
               <ArrowLeft className="h-3.5 w-3.5 text-[#C2553A]" />
-              <span>Classroom</span>
+              <span>Direktori Kelas</span>
             </Link>
-            <span className="text-[#7A756D] font-bold">&gt;</span>
-            <span className="font-heading font-black text-sm text-[#1C1917] truncate max-w-[280px] sm:max-w-md">
-              {cls.title} {cls.section ? '(' + cls.section + ')' : ''}
+            <span className="text-[#7A756D] font-bold">/</span>
+            <span className="px-2.5 py-1 border border-[#7A756D] bg-[#FAF8F5] text-[#1C1917] font-mono font-bold">
+              SEKSI {cls.section}
+            </span>
+            <span className="px-2.5 py-1 border border-[#C2553A] bg-[#FEF4F1] text-[#853827] font-bold">
+              {activeRoleBadge}
             </span>
           </div>
 
-          {/* Sisi Kanan: Aksi Cepat Live & Kode Kelas */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setIsLiveRoomOpen(true)}
-              className="text-xs font-bold bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] border-2 border-[#7A756D] px-3 py-1.5 shadow-retro-xs transition-all flex items-center gap-1.5 cursor-pointer rounded-lg"
-              title="Buka Ruang Tatap Muka Daring (Live WebRTC)"
-            >
-              <Video className="h-3.5 w-3.5 text-[#C2553A]" />
-              <span className="hidden sm:inline">{lecturer || ta ? 'Tatap Muka' : 'Gabung Tatap Muka'}</span>
-              <span className="sm:hidden">Live</span>
-            </button>
-            {lecturer && (
+          {/* Kanan: Kode Registrasi Kelas & Ruang Tatap Muka Daring */}
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-xs">
+              <Key className="h-3.5 w-3.5 text-[#C2553A] shrink-0" />
+              <span className="text-[11px] font-bold text-[#57534E] uppercase tracking-wider">Kode Kelas:</span>
+              <span className="text-xs font-mono font-black text-[#1C1917]">{cls.join_code}</span>
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="text-xs font-mono font-bold bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] border-2 border-[#7A756D] px-2.5 py-1.5 shadow-retro-xs transition-all flex items-center gap-1 cursor-pointer rounded-lg"
+                className="ml-1 px-2 py-0.5 border border-[#7A756D] bg-[#FAF8F5] hover:bg-[#1C1917] hover:text-white text-[#1C1917] text-[10px] font-bold transition-colors cursor-pointer"
                 title="Salin Kode Kelas"
               >
-                <Key className="h-3.5 w-3.5 text-[#C2553A]" />
-                <span>{cls.join_code}</span>
-                {copiedCode ? (
-                  <span className="text-[10px] bg-[#065F46] text-white px-1 py-0.2 font-bold">Disalin!</span>
-                ) : (
-                  <span className="text-[10px] text-[#7A756D] font-medium">Salin</span>
-                )}
+                {copiedCode ? 'Disalin!' : 'Salin'}
               </button>
-            )}
-            <span className="text-xs font-bold text-[#1C1917] bg-[#FAF8F5] border-2 border-[#7A756D] px-2.5 py-1.5 shadow-retro-xs rounded-lg">
-              {cls.sks || 3} SKS
-            </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsLiveRoomOpen(true)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 border-2 border-[#6B2D20] bg-[#C2553A] hover:bg-[#853827] text-white font-black text-xs shadow-retro-xs transition-all cursor-pointer"
+              title="Buka Ruang Tatap Muka Daring (Live WebRTC)"
+            >
+              <Video className="h-3.5 w-3.5" />
+              <span>{lecturer || ta ? 'Buka Tatap Muka Daring' : 'Gabung Tatap Muka'}</span>
+            </button>
           </div>
         </div>
 
-        {/* Baris Bawah: Tabs Ala Google Classroom dengan Indikator Garis Aktif */}
-        <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar pt-1">
+        {/* Area Identitas Utama & Grid Spesifikasi Akademik Kelas */}
+        <div className="p-5 sm:p-6 bg-[#FAF8F5] border-b-2 border-[#7A756D] space-y-5">
+          <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4">
+            <div className="space-y-2 max-w-3xl">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-0.5 bg-[#1C1917] text-white font-mono font-black text-[11px] uppercase tracking-wider">
+                  KELAS {cls.section}
+                </span>
+                <span className="px-2.5 py-0.5 border border-[#7A756D] bg-[#FFFFFF] text-[#1C1917] font-bold text-[11px]">
+                  Semester Ganjil 2026/2027
+                </span>
+                <span className="px-2.5 py-0.5 border border-[#C2553A] bg-[#FEF4F1] text-[#853827] font-mono font-black text-[11px]">
+                  Beban Studi: {cls.sks || 3} SKS
+                </span>
+                <span className="px-2.5 py-0.5 border border-[#10B981] bg-[#E8F5E9] text-[#065F46] font-bold text-[11px] inline-flex items-center gap-1">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+                  <span>Perkuliahan Aktif</span>
+                </span>
+              </div>
+
+              <h1 className="font-heading font-black text-2xl sm:text-3xl text-[#1C1917] tracking-tight leading-snug">
+                {cls.title}
+              </h1>
+
+              {cls.description && (
+                <p className="text-xs sm:text-sm text-[#57534E] font-medium leading-relaxed">
+                  {cls.description}
+                </p>
+              )}
+            </div>
+
+            {/* Kotak Identitas Dosen Pengampu */}
+            <div className="flex items-center gap-3 p-3 border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-xs shrink-0">
+              <div className="h-10 w-10 border-2 border-[#6B2D20] bg-[#C2553A] text-white flex items-center justify-center font-heading font-black text-xs shrink-0">
+                {lecturerInitials}
+              </div>
+              <div className="min-w-0 pr-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A756D] block">
+                  Dosen Pengampu Utama
+                </span>
+                <span className="text-xs sm:text-sm font-black text-[#1C1917] block truncate">
+                  {lecturerDisplayName}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* 4-Column Academic Specification Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+            <div className="p-3 border border-[#7A756D] bg-[#FFFFFF] flex items-start gap-2.5">
+              <Clock className="h-4 w-4 text-[#C2553A] shrink-0 mt-0.5" />
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A756D] block">
+                  Jadwal Perkuliahan
+                </span>
+                <span className="text-xs font-black text-[#1C1917] block truncate">
+                  {cls.schedule || 'Sesuai Jadwal Akademik'}
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3 border border-[#7A756D] bg-[#FFFFFF] flex items-start gap-2.5">
+              <MapPin className="h-4 w-4 text-[#1D4ED8] shrink-0 mt-0.5" />
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A756D] block">
+                  Ruang & Laboratorium
+                </span>
+                <span className="text-xs font-black text-[#1C1917] block truncate">
+                  {cls.room || 'Ruang Kuliah Terpadu'}
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3 border border-[#7A756D] bg-[#FFFFFF] flex items-start gap-2.5">
+              <Users className="h-4 w-4 text-[#065F46] shrink-0 mt-0.5" />
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A756D] block">
+                  Komposisi Peserta
+                </span>
+                <span className="text-xs font-black text-[#1C1917] block truncate">
+                  {members.length} Mahasiswa • {assistants.length} Asisten
+                </span>
+              </div>
+            </div>
+
+            <div className="p-3 border border-[#7A756D] bg-[#FFFFFF] flex items-start gap-2.5">
+              <ClipboardList className="h-4 w-4 text-[#853827] shrink-0 mt-0.5" />
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#7A756D] block">
+                  Aktivitas Terpublikasi
+                </span>
+                <span className="text-xs font-black text-[#1C1917] block truncate">
+                  {assignments.length} Tugas • {materials.length} Modul • {quizzes.length} Kuis
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Baris Bawah: Bilah Tab Navigasi Kelas Terpadu */}
+        <div className="px-3 sm:px-4 py-2.5 bg-[#FFFFFF] flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {roleTabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
+            const badgeCount =
+              tab.id === 'tugas'
+                ? assignments.length + materials.length + quizzes.length
+                : tab.id === 'presensi' || tab.id === 'bantu-presensi'
+                ? attendanceSessions.length
+                : tab.id === 'peserta' || tab.id === 'anggota'
+                ? members.length
+                : tab.id === 'materi' || tab.id === 'materi-asisten'
+                ? materials.length
+                : tab.id === 'asisten'
+                ? assistants.length
+                : null;
+
             return (
               <button
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  'py-2 px-3 sm:px-4 text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1.5 border-b-2 -mb-[2px]',
+                  'py-1.5 px-3 text-xs font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1.5 border',
                   isActive
-                    ? 'border-[#C2553A] text-[#1C1917] font-black bg-[#FAF8F5]/80'
-                    : 'border-transparent text-[#57534E] hover:text-[#1C1917] hover:border-[#D6D3CB]'
+                    ? 'border-[#1C1917] bg-[#1C1917] text-white font-black shadow-retro-xs'
+                    : 'border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] hover:bg-[#ECE9D8] hover:border-[#7A756D]'
                 )}
               >
-                <Icon className={cn('h-3.5 w-3.5 shrink-0', isActive ? 'text-[#C2553A]' : 'text-[#7A756D]')} />
+                <Icon className={cn('h-3.5 w-3.5 shrink-0', isActive ? 'text-white' : 'text-[#C2553A]')} />
                 <span>{tab.label}</span>
+                {badgeCount !== null && badgeCount > 0 && (
+                  <span
+                    className={cn(
+                      'px-1.5 py-0.2 text-[10px] font-mono font-black',
+                      isActive ? 'bg-[#C2553A] text-white' : 'bg-[#ECE9D8] text-[#1C1917]'
+                    )}
+                  >
+                    {badgeCount}
+                  </span>
+                )}
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* ======================================================== */}
-      {/* TAB: FORUM / JAWAB FORUM (BERITA & INTERAKSI KELAS)      */}
-      {/* ======================================================== */}
+      {/* ================================================================= */}
+      {/* TAB 1: FORUM / BERANDA OPERASIONAL KELAS (MULTI-ROLE WORKSPACE)   */}
+      {/* ================================================================= */}
       {(activeTab === 'forum' || activeTab === 'jawab-forum') && (
-        <div className="space-y-6">
-          {/* A. HERO COVER BANNER GOOGLE CLASSROOM (PERSIS FOTO USER) */}
-          <div className="relative rounded-2xl overflow-hidden border-2 border-[#6B2D20] bg-gradient-to-r from-[#1D4ED8] via-[#2563EB] to-[#1E1B4B] text-white p-6 sm:p-8 lg:p-9 shadow-retro font-sans">
-            {/* Background subtle retro stationery & academic watermark */}
-            <div className="absolute -right-6 -bottom-6 opacity-15 pointer-events-none select-none text-white">
-              <BookOpen className="h-48 w-48" />
-            </div>
-
-            <div className="relative z-10 flex flex-col justify-between min-h-[140px] gap-6">
-              {/* Baris Atas: Badge Seksi & SKS */}
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 rounded text-xs font-black uppercase tracking-wider bg-[#FFFFFF] text-[#1D4ED8] shadow-retro-xs">
-                    Kelas {cls.section}
-                  </span>
-                  <span className="px-2.5 py-1 rounded text-xs font-bold bg-[#FAF8F5]/20 text-white border border-white/30">
-                    Semester Ganjil 2026/2027
-                  </span>
-                </div>
-
-                <span className="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FAF8F5]/20 text-white border border-white/30">
-                  {cls.sks || 3} SKS
-                </span>
-              </div>
-
-              {/* Judul Mata Kuliah Besar ala Foto */}
-              <div className="space-y-2">
-                <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl text-white tracking-tight leading-tight">
-                  {cls.title}
-                </h1>
-
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs sm:text-sm text-white/90 font-medium">
-                  {cls.schedule && (
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="h-4 w-4 text-[#FDDDD7] shrink-0" />
-                      <span>{cls.schedule}</span>
-                    </span>
-                  )}
-                  {cls.room && (
-                    <span className="flex items-center gap-1.5">
-                      <MapPin className="h-4 w-4 text-[#FDDDD7] shrink-0" />
-                      <span>{cls.room}</span>
-                    </span>
-                  )}
-                  <span className="flex items-center gap-1.5">
-                    <Users className="h-4 w-4 text-[#FDDDD7] shrink-0" />
-                    <span>{members.length} Mahasiswa Terdaftar</span>
-                  </span>
-                </div>
-              </div>
-
-              {/* Baris Bawah: Kode Gabung Kelas & Tombol Tatap Muka */}
-              <div className="pt-3 border-t border-white/20 flex flex-wrap items-center justify-between gap-3 text-xs">
-                <div className="flex items-center gap-2">
-                  <span className="text-white/80 font-bold uppercase tracking-wider text-[11px]">Kode Kelas:</span>
-                  <button
-                    type="button"
-                    onClick={handleCopyCode}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-mono font-black border border-[#6B2D20] shadow-retro-xs cursor-pointer transition-all rounded"
-                    title="Salin kode kelas"
-                  >
-                    <Key className="h-3.5 w-3.5 text-[#C2553A]" />
-                    <span>{cls.join_code}</span>
-                    {copiedCode ? (
-                      <span className="text-xs text-[#065F46] font-bold">Disalin!</span>
-                    ) : (
-                      <span className="text-[10px] text-[#7A756D] font-medium">Salin</span>
-                    )}
-                  </button>
-                </div>
-
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start font-sans">
+          {/* KOLOM KIRI (4 KOLOM): PANEL KENDALI PERAN, PRESENSI & TIM PENGAJAR */}
+          <div className="lg:col-span-4 space-y-5">
+            {/* WIDGET 1: PANEL ADAPTIF PERAN (DOSEN / ASISTEN VS MAHASISWA) */}
+            <div className="border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm overflow-hidden">
+              <div className="px-4 py-2.5 bg-[#ECE9D8] border-b-2 border-[#7A756D] flex items-center justify-between">
+                <h3 className="font-heading font-black text-xs sm:text-sm text-[#1C1917] uppercase tracking-wider flex items-center gap-2">
+                  <ClipboardList className="h-4 w-4 text-[#C2553A]" />
+                  <span>{lecturer || ta || isStaff ? 'Kendali Akademik Pengajar' : 'Tenggat & Kewajiban Tugas'}</span>
+                </h3>
                 <button
                   type="button"
-                  onClick={() => setIsLiveRoomOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-black border border-[#6B2D20] shadow-retro-xs cursor-pointer transition-all rounded"
+                  onClick={() => setActiveTab('tugas')}
+                  className="text-[11px] font-black text-[#C2553A] hover:underline cursor-pointer"
                 >
-                  <Video className="h-3.5 w-3.5 text-[#C2553A]" />
-                  <span>{lecturer || ta ? 'Buka Tatap Muka Kelas' : 'Gabung Tatap Muka Kelas'}</span>
+                  Buka Tugas &rarr;
                 </button>
+              </div>
+
+              <div className="p-4 space-y-3.5">
+                {(lecturer || ta || isStaff) && (
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveTab('tugas');
+                        setIsClassworkCreateOpen(true);
+                      }}
+                      className="p-2.5 border-2 border-[#7A756D] bg-[#FAF8F5] hover:bg-[#1C1917] hover:text-white text-[#1C1917] text-left transition-colors cursor-pointer space-y-1 shadow-retro-xs"
+                    >
+                      <PlusCircle className="h-4 w-4 text-[#C2553A]" />
+                      <span className="text-xs font-black block leading-tight">Buat Tugas / Modul</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab(ta ? 'bantu-presensi' : 'presensi')}
+                      className="p-2.5 border-2 border-[#7A756D] bg-[#FAF8F5] hover:bg-[#1C1917] hover:text-white text-[#1C1917] text-left transition-colors cursor-pointer space-y-1 shadow-retro-xs"
+                    >
+                      <CalendarCheck2 className="h-4 w-4 text-[#065F46]" />
+                      <span className="text-xs font-black block leading-tight">Kelola Presensi</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsAnnounceOpen(true)}
+                      className="p-2.5 border-2 border-[#7A756D] bg-[#FAF8F5] hover:bg-[#1C1917] hover:text-white text-[#1C1917] text-left transition-colors cursor-pointer space-y-1 shadow-retro-xs"
+                    >
+                      <PenSquare className="h-4 w-4 text-[#1D4ED8]" />
+                      <span className="text-xs font-black block leading-tight">Kirim Pengumuman</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab(ta ? 'peserta' : 'nilai')}
+                      className="p-2.5 border-2 border-[#7A756D] bg-[#FAF8F5] hover:bg-[#1C1917] hover:text-white text-[#1C1917] text-left transition-colors cursor-pointer space-y-1 shadow-retro-xs"
+                    >
+                      <GraduationCap className="h-4 w-4 text-[#853827]" />
+                      <span className="text-xs font-black block leading-tight">
+                        {ta ? 'Data Peserta' : 'Rekapitulasi Nilai'}
+                      </span>
+                    </button>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between text-[11px] font-bold text-[#57534E] uppercase tracking-wider">
+                    <span>{lecturer || ta ? 'Status Penugasan Aktif' : 'Daftar Tenggat Mendatang'}</span>
+                    <span className="font-mono text-[#1C1917]">{upcomingAssignments.length} Tugas</span>
+                  </div>
+
+                  {upcomingAssignments.length === 0 ? (
+                    <div className="p-3 border border-[#D6D3CB] bg-[#FAF8F5] text-xs text-[#57534E] font-medium">
+                      {lecturer || ta
+                        ? 'Tidak ada tenggat tugas aktif minggu ini. Klik Buat Tugas / Modul untuk menerbitkan penugasan baru.'
+                        : 'Seluruh tugas dalam 7 hari ke depan telah terkendali.'}
+                    </div>
+                  ) : (
+                    <div className="space-y-2">
+                      {upcomingAssignments.slice(0, 3).map((a) => (
+                        <div
+                          key={a.id}
+                          onClick={() => setActiveTab('tugas')}
+                          className="p-3 border border-[#7A756D] bg-[#FAF8F5] hover:bg-[#FFFFFF] transition-all cursor-pointer space-y-1.5 shadow-retro-xs"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-[10px] font-mono font-bold text-[#853827] truncate">
+                              Tenggat: {fmtShort(a.close_at)}
+                            </span>
+                            {lecturer || ta ? (
+                              <span className="px-1.5 py-0.5 bg-[#ECE9D8] border border-[#7A756D] text-[10px] font-mono font-black text-[#1C1917]">
+                                {a.submissions ?? 0}/{members.length} Submisi
+                              </span>
+                            ) : a.mine ? (
+                              <span className="px-1.5 py-0.5 bg-[#E8F5E9] border border-[#10B981] text-[10px] font-bold text-[#065F46]">
+                                Terkumpul
+                              </span>
+                            ) : (
+                              <span className="px-1.5 py-0.5 bg-[#FEF4F1] border border-[#C2553A] text-[10px] font-bold text-[#853827]">
+                                Belum Dikumpulkan
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs font-black text-[#1C1917] line-clamp-1">{a.title}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* WIDGET 2: STATUS PRESENSI PERKULIAHAN TERPADU */}
+            <div className="border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm overflow-hidden">
+              <div className="px-4 py-2.5 bg-[#ECE9D8] border-b-2 border-[#7A756D] flex items-center justify-between">
+                <h3 className="font-heading font-black text-xs sm:text-sm text-[#1C1917] uppercase tracking-wider flex items-center gap-2">
+                  <CalendarCheck2 className="h-4 w-4 text-[#065F46]" />
+                  <span>Presensi Perkuliahan</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab(ta ? 'bantu-presensi' : 'presensi')}
+                  className="text-[11px] font-black text-[#C2553A] hover:underline cursor-pointer"
+                >
+                  Detail &rarr;
+                </button>
+              </div>
+
+              <div className="p-4 space-y-3">
+                <div className="grid grid-cols-2 gap-2 text-xs">
+                  <div className="p-2.5 border border-[#D6D3CB] bg-[#FAF8F5]">
+                    <span className="text-[10px] font-bold uppercase text-[#7A756D] block">Sesi Terlaksana</span>
+                    <span className="font-heading font-black text-sm text-[#1C1917]">
+                      {attendanceSessions.length} Pertemuan
+                    </span>
+                  </div>
+                  <div className="p-2.5 border border-[#D6D3CB] bg-[#FAF8F5]">
+                    <span className="text-[10px] font-bold uppercase text-[#7A756D] block">Syarat Ujian Akhir</span>
+                    <span className="font-heading font-black text-sm text-[#065F46]">Min. 75% Hadir</span>
+                  </div>
+                </div>
+
+                {attendanceSessions.length > 0 && attendanceSessions.some((s) => s.is_open) ? (
+                  <div className="p-3 border-2 border-[#10B981] bg-[#E8F5E9] space-y-2 text-xs">
+                    <span className="font-black text-[#065F46] block">
+                      Sesi Presensi Pertemuan Sedang Dibuka!
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab(ta ? 'bantu-presensi' : 'presensi')}
+                      className="w-full py-1.5 border-2 border-[#065F46] bg-[#065F46] hover:bg-[#1C1917] text-white font-black text-xs shadow-retro-xs cursor-pointer"
+                    >
+                      {lecturer || ta ? 'Pantau Daftar Hadir Mahasiswa' : 'Rekam Kehadiran Sekarang'}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="p-3 border border-[#D6D3CB] bg-[#FAF8F5] space-y-2 text-xs">
+                    <p className="text-[#57534E] font-medium leading-relaxed">
+                      {lecturer || ta
+                        ? 'Tidak ada sesi presensi yang sedang aktif saat ini. Anda dapat membuka sesi pertemuan baru saat perkuliahan dimulai.'
+                        : 'Belum ada sesi presensi yang dibuka saat ini. Silakan cek kembali saat jam perkuliahan berlangsung.'}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setActiveTab(ta ? 'bantu-presensi' : 'presensi')}
+                      className="w-full py-1.5 border border-[#7A756D] bg-[#FFFFFF] hover:bg-[#1C1917] hover:text-white text-[#1C1917] font-bold text-xs transition-colors cursor-pointer"
+                    >
+                      {lecturer || ta ? 'Buka & Kelola Sesi Presensi' : 'Lihat Riwayat Kehadiran Saya'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* WIDGET 3: TIM PENGAJAR & ASISTEN PENDAMPING */}
+            <div className="border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm overflow-hidden">
+              <div className="px-4 py-2.5 bg-[#ECE9D8] border-b-2 border-[#7A756D] flex items-center justify-between">
+                <h3 className="font-heading font-black text-xs sm:text-sm text-[#1C1917] uppercase tracking-wider flex items-center gap-2">
+                  <UserCheck className="h-4 w-4 text-[#1D4ED8]" />
+                  <span>Tim Pengajar & Asisten</span>
+                </h3>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab(lecturer ? 'asisten' : ta ? 'peserta' : 'anggota')}
+                  className="text-[11px] font-black text-[#C2553A] hover:underline cursor-pointer"
+                >
+                  {lecturer ? 'Kelola' : 'Lihat'} &rarr;
+                </button>
+              </div>
+
+              <div className="p-4 space-y-2.5">
+                <div className="p-2.5 border border-[#7A756D] bg-[#FAF8F5] flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="h-8 w-8 border border-[#6B2D20] bg-[#C2553A] text-white flex items-center justify-center font-black text-xs shrink-0">
+                      {lecturerInitials}
+                    </div>
+                    <div className="min-w-0">
+                      <span className="text-xs font-black text-[#1C1917] block truncate">{lecturerDisplayName}</span>
+                      <span className="text-[10px] text-[#57534E] font-medium block">Penanggung Jawab Kelas</span>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 bg-[#FEF4F1] border border-[#C2553A] text-[#853827] text-[10px] font-black uppercase shrink-0">
+                    Dosen
+                  </span>
+                </div>
+
+                {assistants.length > 0 ? (
+                  assistants.map((ast) => (
+                    <div
+                      key={ast.user_id}
+                      className="p-2.5 border border-[#D6D3CB] bg-[#FFFFFF] flex items-center justify-between gap-2"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="h-8 w-8 border border-[#7A756D] bg-[#ECE9D8] text-[#1C1917] flex items-center justify-center font-black text-xs shrink-0">
+                          {ast.name.slice(0, 2).toUpperCase()}
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-xs font-bold text-[#1C1917] block truncate">{ast.name}</span>
+                          <span className="text-[10px] font-mono text-[#7A756D] block">
+                            {ast.assistant_type === 'ASISTEN_LAB' ? 'Asisten Laboratorium' : 'Asisten Dosen'}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 bg-[#FAF8F5] border border-[#7A756D] text-[#1C1917] text-[10px] font-bold shrink-0">
+                        Asisten
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-xs text-[#57534E] font-medium py-1">
+                    Belum ada asisten dosen/praktikum yang ditugaskan pada seksi kelas ini.
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
-          {/* B. DUA KOLOM AUTENTIK GOOGLE CLASSROOM (PERSIS FOTO) */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Kolom Kiri: Widget "Mendatang" & Presensi */}
-            <div className="lg:col-span-4 space-y-4 font-sans">
-              {/* Widget Mendatang ala Google Classroom */}
-              <div className="rounded-2xl border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm p-4 sm:p-5 space-y-3">
-                <h3 className="font-heading font-black text-sm text-[#1C1917]">
-                  Mendatang
-                </h3>
+          {/* KOLOM KANAN (8 KOLOM): LINIMASA PENGUMUMAN, AKTIVITAS KELAS & DISKUSI */}
+          <div className="lg:col-span-8 space-y-5">
+            {/* PANEL 1: LINIMASA PENGUMUMAN & AKTIVITAS AKADEMIK TERBARU */}
+            <div className="border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm overflow-hidden">
+              <div className="px-4 sm:px-5 py-3 bg-[#ECE9D8] border-b-2 border-[#7A756D] flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <Bell className="h-4 w-4 text-[#C2553A]" />
+                  <h3 className="font-heading font-black text-xs sm:text-sm text-[#1C1917] uppercase tracking-wider">
+                    Linimasa Pengumuman & Publikasi Kelas
+                  </h3>
+                </div>
 
-                {upcomingAssignments.length === 0 ? (
-                  <p className="text-xs text-[#57534E] font-medium py-1">
-                    Hore, tidak ada tugas yang perlu segera diselesaikan!
-                  </p>
-                ) : (
-                  <div className="space-y-2.5">
-                    {upcomingAssignments.slice(0, 3).map((a) => (
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-mono font-bold text-[#57534E] bg-[#FAF8F5] border border-[#7A756D] px-2.5 py-1">
+                    {announcements.length} Pengumuman • {assignments.length} Tugas • {materials.length} Modul
+                  </span>
+                  {lecturer && (
+                    <button
+                      type="button"
+                      onClick={() => setIsAnnounceOpen(!isAnnounceOpen)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 border-2 border-[#6B2D20] bg-[#C2553A] hover:bg-[#853827] text-white text-xs font-black shadow-retro-xs transition-all cursor-pointer"
+                    >
+                      <PenSquare className="h-3.5 w-3.5" />
+                      <span>{isAnnounceOpen ? 'Tutup Form' : '+ Pengumuman Baru'}</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className="p-4 sm:p-5 space-y-4">
+                {/* Form Input Pengumuman jika dibuka Dosen */}
+                {lecturer && isAnnounceOpen && (
+                  <div className="border-2 border-[#7A756D] bg-[#FAF8F5] p-4 shadow-retro-xs space-y-3 animate-fade-up">
+                    <h4 className="text-xs font-heading font-black text-[#1C1917] uppercase tracking-wider">
+                      Publikasikan Pengumuman Resmi ke Seluruh Peserta Kelas
+                    </h4>
+                    <CreateAnnouncementForm classId={cls.id} />
+                  </div>
+                )}
+
+                {/* Daftar Pengumuman Resmi Dosen */}
+                {announcements.length > 0 && (
+                  <div className="space-y-3">
+                    {announcements.map((a) => (
                       <div
                         key={a.id}
-                        onClick={() => setActiveTab('tugas')}
-                        className="p-3 border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#FFFFFF] hover:border-[#7A756D] transition-all cursor-pointer space-y-1 shadow-retro-xs rounded-lg"
+                        className="border-2 border-[#7A756D] border-l-4 border-l-[#C2553A] bg-[#FAF8F5] p-4 space-y-2.5"
                       >
-                        <span className="text-[10px] font-mono font-bold text-[#853827] block truncate">
-                          Batas: {fmt(a.close_at)}
-                        </span>
-                        <p className="text-xs font-bold text-[#1C1917] truncate">{a.title}</p>
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-2.5">
+                            <div className="h-8 w-8 border border-[#6B2D20] bg-[#C2553A] text-white flex items-center justify-center font-black text-xs shrink-0">
+                              {lecturerInitials}
+                            </div>
+                            <div>
+                              <span className="text-xs font-black text-[#1C1917] block">{lecturerDisplayName}</span>
+                              <span className="text-[11px] text-[#7A756D] font-mono">{fmtShort(a.created_at)}</span>
+                            </div>
+                          </div>
+                          <span className="text-[10px] font-black uppercase bg-[#FEF4F1] text-[#853827] border border-[#C2553A] px-2 py-0.5">
+                            Pengumuman Resmi
+                          </span>
+                        </div>
+
+                        <h4 className="font-heading font-black text-sm sm:text-base text-[#1C1917]">{a.title}</h4>
+                        {a.body && (
+                          <MarkdownViewer content={a.body} className="text-xs sm:text-sm text-[#1C1917]/90 leading-relaxed" />
+                        )}
                       </div>
                     ))}
                   </div>
                 )}
 
-                <div className="pt-2 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('tugas')}
-                    className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border-2 border-[#1C1917] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-xs font-black text-[#1C1917] shadow-retro-xs transition-all cursor-pointer"
-                  >
-                    Lihat semua
-                  </button>
-                </div>
-              </div>
-
-              {/* Widget Presensi Perkuliahan Terpadu */}
-              <div className="rounded-2xl border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm p-4 sm:p-5 space-y-3">
-                <div className="flex items-center justify-between border-b border-[#D6D3CB] pb-2">
-                  <h3 className="font-heading font-black text-sm text-[#1C1917] flex items-center gap-2">
-                    <CalendarCheck2 className="h-4 w-4 text-[#C2553A]" />
-                    <span>Presensi Perkuliahan</span>
-                  </h3>
-                  <button
-                    type="button"
-                    onClick={() => setActiveTab('presensi')}
-                    className="text-xs font-bold text-[#C2553A] hover:underline cursor-pointer"
-                  >
-                    Detail
-                  </button>
-                </div>
-
-                {attendanceSessions.length > 0 && attendanceSessions.some((s) => s.is_open) ? (
-                  <div className="p-3 border-2 border-[#10B981] bg-[#E8F5E9] space-y-2 text-xs rounded-lg">
-                    <span className="font-black text-[#065F46] block">Sesi Pertemuan Sedang Dibuka!</span>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('presensi')}
-                      className="w-full py-1.5 border-2 border-[#065F46] bg-[#10B981] hover:bg-[#059669] text-white font-black text-xs shadow-retro-xs cursor-pointer rounded"
-                    >
-                      Buka Lembar Presensi
-                    </button>
+                {/* Daftar Tugas & Modul Terpublikasi */}
+                {assignments.length === 0 && materials.length === 0 && announcements.length === 0 ? (
+                  <div className="border-2 border-dashed border-[#7A756D] bg-[#FAF8F5] p-6 text-center text-xs text-[#57534E] font-medium">
+                    Belum ada pengumuman, modul materi, atau tugas yang dipublikasikan di kelas ini.
                   </div>
                 ) : (
-                  <p className="text-xs text-[#57534E] font-medium">
-                    Tidak ada sesi presensi aktif saat ini. Dosen akan mengaktifkan presensi saat kelas dimulai.
-                  </p>
-                )}
+                  <div className="space-y-2.5">
+                    {assignments.map((asg) => (
+                      <div
+                        key={asg.id}
+                        onClick={() => setActiveTab('tugas')}
+                        className="border-2 border-[#7A756D] bg-[#FAF8F5] hover:bg-[#FFFFFF] transition-all p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer shadow-retro-xs"
+                      >
+                        <div className="flex items-start sm:items-center gap-3 min-w-0">
+                          <div className="h-9 w-9 border-2 border-[#7A756D] bg-[#FFFFFF] text-[#C2553A] flex items-center justify-center shrink-0">
+                            <ClipboardList className="h-4 w-4" />
+                          </div>
+                          <div className="min-w-0 space-y-0.5">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="px-1.5 py-0.2 bg-[#1C1917] text-white font-mono font-bold text-[10px] uppercase">
+                                TUGAS
+                              </span>
+                              <p className="font-heading font-black text-xs sm:text-sm text-[#1C1917] truncate">
+                                {asg.title}
+                              </p>
+                            </div>
+                            <span className="text-[11px] text-[#57534E] font-medium block">
+                              Tenggat Pengumpulan: {fmt(asg.close_at)}
+                            </span>
+                          </div>
+                        </div>
 
-                <div className="pt-1 text-[11px] text-[#7A756D] flex justify-between font-medium border-t border-[#D6D3CB]">
-                  <span>Syarat UAS:</span>
-                  <span className="font-bold text-[#C2553A]">75% Kehadiran</span>
-                </div>
+                        <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
+                          {lecturer || ta ? (
+                            <span className="px-2.5 py-1 border border-[#7A756D] bg-[#ECE9D8] text-[#1C1917] font-mono font-black text-xs">
+                              {asg.submissions ?? 0} Submisi Masuk
+                            </span>
+                          ) : asg.mine ? (
+                            <span className="px-2.5 py-1 border border-[#10B981] bg-[#E8F5E9] text-[#065F46] font-bold text-xs">
+                              Sudah Dikumpulkan
+                            </span>
+                          ) : (
+                            <span className="px-2.5 py-1 border border-[#C2553A] bg-[#FEF4F1] text-[#853827] font-bold text-xs">
+                              Buka Tugas &rarr;
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+
+                    {materials.slice(0, 3).map((mat, idx) => (
+                      <div
+                        key={mat.id}
+                        onClick={() => setActiveTab('tugas')}
+                        className="border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] transition-all p-3.5 flex items-center justify-between gap-3 cursor-pointer shadow-retro-xs"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="h-9 w-9 border-2 border-[#7A756D] bg-[#FAF8F5] text-[#1D4ED8] flex items-center justify-center shrink-0">
+                            <BookOpen className="h-4 w-4" />
+                          </div>
+                          <div className="min-w-0 space-y-0.5">
+                            <div className="flex items-center gap-2">
+                              <span className="px-1.5 py-0.2 bg-[#ECE9D8] border border-[#7A756D] text-[#1C1917] font-mono font-bold text-[10px] uppercase">
+                                MODUL #{idx + 1}
+                              </span>
+                              <p className="font-heading font-bold text-xs sm:text-sm text-[#1C1917] truncate">
+                                {mat.title}
+                              </p>
+                            </div>
+                            <span className="text-[11px] text-[#7A756D] font-medium block">
+                              Dipublikasikan pada {fmtShort(mat.created_at)}
+                            </span>
+                          </div>
+                        </div>
+
+                        <span className="px-2.5 py-1 border border-[#7A756D] bg-[#FAF8F5] text-[#1C1917] font-bold text-xs shrink-0">
+                          Baca Materi &rarr;
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Kolom Kanan: Stream Feed Ala Google Classroom (Persis Foto) */}
-            <div className="lg:col-span-8 space-y-4 font-sans">
-              {/* Polling & Kuis Cepat Perkuliahan (Jika Ada) */}
-              <ClassLivePollCard classId={cls.id} currentUserRole={viewer} />
+            {/* PANEL 2: POLLING & KUIS INTERAKTIF CEPAT */}
+            <ClassLivePollCard classId={cls.id} currentUserRole={viewer} />
 
-              {/* Baris Tombol "Pengumuman baru" ala Foto Google Classroom */}
-              <div className="flex items-center justify-between gap-3">
-                {lecturer ? (
-                  <button
-                    type="button"
-                    onClick={() => setIsAnnounceOpen(!isAnnounceOpen)}
-                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] text-xs font-black shadow-retro-xs transition-all cursor-pointer"
-                  >
-                    <PenSquare className="h-4 w-4 text-[#C2553A]" />
-                    <span>{isAnnounceOpen ? 'Tutup Pengumuman' : 'Pengumuman baru'}</span>
-                  </button>
-                ) : (
-                  <div className="text-xs font-bold text-[#57534E] flex items-center gap-2">
-                    <MessagesSquare className="h-4 w-4 text-[#C2553A]" />
-                    <span>Aliran Informasi & Aktivitas Perkuliahan</span>
-                  </div>
-                )}
+            {/* PANEL 3: FORUM DISKUSI AKADEMIK TERPADU */}
+            <ClassForumTabView
+              classId={cls.id}
+              initialTopics={forumTopics}
+              availableTags={forumTags}
+              userRole={lecturer ? 'LECTURER' : ta ? 'TEACHING_ASSISTANT' : 'STUDENT'}
+              currentUserId={viewer}
+            />
 
-                <span className="text-xs text-[#7A756D] font-medium hidden sm:inline">
-                  {assignments.length} Tugas Perkuliahan Terbit
-                </span>
-              </div>
-
-              {/* Form Input Pengumuman jika dibuka Dosen */}
-              {lecturer && isAnnounceOpen && (
-                <div className="rounded-2xl border-2 border-[#7A756D] bg-[#FAF8F5] p-5 shadow-retro-sm space-y-3 animate-fade-up">
-                  <h4 className="text-xs font-heading font-black text-[#1C1917]">
-                    Kirim Pengumuman Baru ke Forum Kelas
-                  </h4>
-                  <CreateAnnouncementForm classId={cls.id} />
-                </div>
-              )}
-
-              {/* Stream Feed: Pengumuman Dosen (Jika Ada) */}
-              {announcements.map((a) => (
-                <div
-                  key={a.id}
-                  className="rounded-2xl border-2 border-[#7A756D] border-l-4 border-l-[#C2553A] bg-[#FFFFFF] shadow-retro-xs p-5 sm:p-6 space-y-3 animate-fade-up"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-full border-2 border-[#6B2D20] bg-[#C2553A] text-white flex items-center justify-center font-black text-xs shrink-0">
-                        DS
-                      </div>
-                      <div>
-                        <span className="text-xs sm:text-sm font-bold text-[#1C1917] block">
-                          {(cls as any).lecturer_name || 'Dosen Pengampu Kelas'}
-                        </span>
-                        <span className="text-xs text-[#7A756D] font-medium">{fmtShort(a.created_at)}</span>
-                      </div>
-                    </div>
-                    <span className="text-xs font-black uppercase bg-[#FEF4F1] text-[#853827] border border-[#C2553A] px-2.5 py-0.5 rounded">
-                      Pengumuman
+            {/* PANEL 4: PEMETAAN CAPAIAN PEMBELAJARAN KURIKULUM OBE */}
+            <div className="border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setIsCpmkExpanded(!isCpmkExpanded)}
+                className="w-full px-4 sm:px-5 py-3.5 bg-[#ECE9D8] hover:bg-[#FAF8F5] flex items-center justify-between text-left transition-all cursor-pointer font-sans"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Award className="h-5 w-5 text-[#C2553A] shrink-0" />
+                  <div>
+                    <span className="font-heading font-black text-xs sm:text-sm text-[#1C1917] uppercase tracking-wider block">
+                      Matriks Ketercapaian CPMK & CPL (Kurikulum OBE)
+                    </span>
+                    <span className="text-xs text-[#57534E] font-medium">
+                      Evaluasi distribusi capaian pembelajaran lulusan dan mata kuliah pada kelas ini
                     </span>
                   </div>
-
-                  <h3 className="font-heading font-black text-base sm:text-lg text-[#1C1917]">{a.title}</h3>
-                  {a.body && <MarkdownViewer content={a.body} className="text-xs sm:text-sm text-[#1C1917]/90 leading-relaxed" />}
                 </div>
-              ))}
+                <div className="flex items-center gap-1.5 text-xs font-black text-[#1C1917] bg-[#FFFFFF] border border-[#7A756D] px-2.5 py-1">
+                  <span>{isCpmkExpanded ? 'Tutup Matriks' : 'Buka Matriks'}</span>
+                  {isCpmkExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+                </div>
+              </button>
 
-              {/* STREAM ITEMS TUGAS KELAS (PERSIS SEPERTI PADA FOTO USER) */}
-              <div className="space-y-3">
-                {assignments.length === 0 ? (
-                  <div className="rounded-2xl border-2 border-dashed border-[#7A756D] bg-[#FAF8F5] p-8 text-center text-xs text-[#57534E] font-medium">
-                    Belum ada tugas atau pengumuman yang diposting di kelas ini.
-                  </div>
-                ) : (
-                  assignments.map((asg) => (
-                    <div
-                      key={asg.id}
-                      onClick={() => setActiveTab('tugas')}
-                      className="rounded-2xl border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-xs hover:shadow-retro hover:-translate-y-0.5 transition-all p-4 sm:p-4.5 flex items-center justify-between gap-4 cursor-pointer"
-                    >
-                      <div className="flex items-center gap-3.5 min-w-0">
-                        <div className="h-10 w-10 rounded-full border-2 border-[#7A756D] bg-[#FAF8F5] text-[#1D4ED8] flex items-center justify-center shrink-0 shadow-retro-xs">
-                          <ClipboardList className="h-5 w-5" />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="font-heading font-bold text-xs sm:text-sm text-[#1C1917] truncate leading-tight">
-                            {(cls as any).lecturer_name || 'Dosen Pengampu'} memposting tugas baru: {asg.title}
-                          </p>
-                          <span className="text-xs text-[#7A756D] font-medium block mt-0.5">
-                            {fmtShort((asg as any).created_at || asg.due_at)}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-1.5 shrink-0 text-[#7A756D]">
-                        <MoreVertical className="h-4 w-4" />
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* Forum Diskusi Interaktif Terpadu Kelas */}
-              <div className="pt-2">
-                <ClassForumTabView
-                  classId={cls.id}
-                  initialTopics={forumTopics}
-                  availableTags={forumTags}
-                  userRole={lecturer ? 'LECTURER' : ta ? 'TEACHING_ASSISTANT' : 'STUDENT'}
-                  currentUserId={viewer}
-                />
-              </div>
-
-              {/* Pemetaan Capaian CPMK & CPL (Accordion Terpadu) */}
-              <div className="rounded-2xl border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() => setIsCpmkExpanded(!isCpmkExpanded)}
-                  className="w-full p-4 flex items-center justify-between text-left hover:bg-[#FFFFFF] transition-all cursor-pointer font-sans"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Award className="h-5 w-5 text-[#C2553A] shrink-0" />
-                    <div>
-                      <span className="font-heading font-black text-sm text-[#1C1917] block">
-                        Ketercapaian CPMK & CPL Kurikulum OBE
-                      </span>
-                      <span className="text-xs text-[#57534E] font-medium">
-                        Pemetaan capaian pembelajaran lulusan dan mata kuliah
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs font-bold text-[#7A756D]">
-                    <span>{isCpmkExpanded ? 'Tutup Analisis' : 'Buka Analisis'}</span>
-                    {isCpmkExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                  </div>
-                </button>
-
-                {isCpmkExpanded && (
-                  <div className="p-4 sm:p-6 border-t-2 border-[#D6D3CB] bg-[#FFFFFF] animate-fade-up">
-                    <CpmkCplRadarCard classId={cls.id} />
-                  </div>
-                )}
-              </div>
+              {isCpmkExpanded && (
+                <div className="p-4 sm:p-6 border-t-2 border-[#7A756D] bg-[#FFFFFF] animate-fade-up">
+                  <CpmkCplRadarCard classId={cls.id} />
+                </div>
+              )}
             </div>
           </div>
         </div>
