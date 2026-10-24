@@ -319,9 +319,10 @@ export function StudentDashboardClient({
                     {materiTerakhir.materi.judul}
                   </h3>
 
-                  <p className="text-xs text-stone-500 font-sans font-medium">
+                  <p suppressHydrationWarning className="text-xs text-stone-500 font-sans font-medium">
                     Terakhir dibuka:{' '}
                     {new Date(materiTerakhir.progres.terakhirDibuka).toLocaleDateString('id-ID', {
+                      timeZone: 'Asia/Jakarta',
                       day: 'numeric',
                       month: 'long',
                       year: 'numeric',

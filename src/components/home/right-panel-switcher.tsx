@@ -213,11 +213,11 @@ export function RightPanelSwitcher({
             <div className="flex items-center justify-between border-b-2 border-[#D6D3CB] pb-2.5">
               <div className="flex items-center gap-1.5">
                 <CalendarDays className="h-4 w-4 text-[#1C1917]" />
-                <span className="font-heading font-extrabold text-sm text-[#1C1917]">
+                <span suppressHydrationWarning className="font-heading font-extrabold text-sm text-[#1C1917]">
                   {jakarta.monthName} {jakarta.year}
                 </span>
               </div>
-              <span className="text-xs font-sans font-extrabold bg-[#ECE9D8] px-2 py-0.5 rounded border border-[#7A756D] text-[#1C1917]">
+              <span suppressHydrationWarning className="text-xs font-sans font-extrabold bg-[#ECE9D8] px-2 py-0.5 rounded border border-[#7A756D] text-[#1C1917]">
                 {jakarta.shortTimeString}
               </span>
             </div>
@@ -431,7 +431,7 @@ export function RightPanelSwitcher({
                 </div>
                 <div className="flex justify-between items-center gap-2 py-1.5 border-b border-[#D6D3CB]">
                   <span className="text-[#57534E] font-bold shrink-0">Jadwal Kuliah</span>
-                  <span className="font-sans font-bold text-[#1C1917] text-right text-xs">
+                  <span suppressHydrationWarning className="font-sans font-bold text-[#1C1917] text-right text-xs">
                     {getDisplaySchedule()}
                   </span>
                 </div>

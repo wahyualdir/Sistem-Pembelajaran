@@ -217,7 +217,11 @@ export type ClassroomTabId = string;
 const fmtShort = (iso: string) => {
   try {
     const d = new Date(iso);
-    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+    return d.toLocaleDateString('id-ID', {
+      timeZone: 'Asia/Jakarta',
+      day: 'numeric',
+      month: 'short',
+    });
   } catch {
     return iso;
   }

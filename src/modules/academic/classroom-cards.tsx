@@ -435,8 +435,9 @@ export function GoogleClassroomCard({
             <span className="font-semibold text-[#853827] truncate">
               {item.upcomingTask.title}
             </span>
-            <span className="text-[11px] font-mono font-bold text-[#C2553A] shrink-0">
+            <span suppressHydrationWarning className="text-[11px] font-mono font-bold text-[#C2553A] shrink-0">
               {new Date(item.upcomingTask.due_at).toLocaleDateString('id-ID', {
+                timeZone: 'Asia/Jakarta',
                 day: 'numeric',
                 month: 'short',
               })}
