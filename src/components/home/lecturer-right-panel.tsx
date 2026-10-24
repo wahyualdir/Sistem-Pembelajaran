@@ -343,14 +343,14 @@ export function LecturerRightPanel({
               {/* TWO MAIN ACTION BUTTONS */}
               <div className="flex flex-col gap-3">
                 <Link
-                  href="/classes"
+                  href={`/classes/${effectiveCourse.id}?tab=tugas`}
                   className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border-2 border-ink bg-white text-ink font-heading font-bold text-sm shadow-[3px_3px_0px_#000] hover:bg-gray-soft hover:-translate-y-0.5 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
                 >
                   Kelola Modul & Tugas Kelas
                 </Link>
 
                 <Link
-                  href="/classes"
+                  href={`/classes/${effectiveCourse.id}?tab=presensi`}
                   className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-ink bg-black text-white font-heading font-bold text-base shadow-[3px_3px_0px_#000] hover:bg-black/90 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
                 >
                   <Play className="h-5 w-5 fill-white" />

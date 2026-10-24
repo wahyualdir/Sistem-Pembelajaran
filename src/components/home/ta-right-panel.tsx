@@ -191,28 +191,28 @@ export function TaRightPanel({
             </h4>
             <div className="grid grid-cols-2 gap-2">
               <Link
-                href="/classes"
+                href="/ta/grading"
                 className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
               >
                 <ClipboardList className="h-4 w-4 shrink-0 text-primary" />
                 <span className="truncate">Review Tugas</span>
               </Link>
               <Link
-                href="/classes"
+                href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=presensi`}
                 className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
               >
                 <QrCode className="h-4 w-4 shrink-0 text-primary" />
                 <span className="truncate">Bantu Presensi</span>
               </Link>
               <Link
-                href="/classes"
+                href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=materi`}
                 className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
               >
                 <BookOpen className="h-4 w-4 shrink-0 text-primary" />
                 <span className="truncate">Materi Lab</span>
               </Link>
               <Link
-                href="/classes"
+                href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=diskusi`}
                 className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
               >
                 <MessagesSquare className="h-4 w-4 shrink-0 text-primary" />
@@ -360,14 +360,14 @@ export function TaRightPanel({
               {/* TWO MAIN ACTION BUTTONS */}
               <div className="flex flex-col gap-3">
                 <Link
-                  href="/classes"
+                  href={`/classes/${effectiveCourse.id}?tab=tugas`}
                   className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border-2 border-ink bg-white text-ink font-heading font-bold text-sm shadow-[3px_3px_0px_#000] hover:bg-gray-soft hover:-translate-y-0.5 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
                 >
                   Buka Lembar Review Tugas Kelas
                 </Link>
 
                 <Link
-                  href="/classes"
+                  href={`/classes/${effectiveCourse.id}?tab=presensi`}
                   className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-ink bg-black text-white font-heading font-bold text-base shadow-[3px_3px_0px_#000] hover:bg-black/90 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
                 >
                   <Play className="h-5 w-5 fill-white" />

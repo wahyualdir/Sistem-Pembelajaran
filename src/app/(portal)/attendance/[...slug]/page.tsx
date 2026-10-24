@@ -1,61 +1,55 @@
 import React from 'react';
 import Link from 'next/link';
 import {
-  CalendarCheck2,
   Key,
   MapPin,
   FileSpreadsheet,
   FileText,
   Clock,
   CheckCircle2,
-  AlertCircle,
   QrCode,
-  Fingerprint,
-  PlusCircle,
   ArrowRight,
-  ShieldCheck,
-  UserCheck,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import {
   getAllAttendanceSessionsAction,
-  getClassAttendanceSummaryAction,
 } from '@/modules/academic/attendance-actions';
 
 interface PageProps {
-  params: {
-    slug: string[];
-  };
+  params: Promise<{ slug: string[] }> | { slug: string[] };
 }
 
 const DEFAULT_DEMO_SESSIONS = [
   {
     id: 'ses-1',
-    title: 'Pertemuan 7: Autentikasi JWT & Arsitektur Auth',
+    classId: 'c0000000-0000-0000-0000-000000000001',
+    title: 'Pertemuan 7: Autentikasi JWT & Arsitektur Auth (STI2544138)',
     meeting_number: 7,
     code: '829143',
-    time: 'Hari Ini, 08:00 - 10:30 WIB',
-    location_name: 'Lab Komputasi Awan (Gd. Rektorat Lt. 3)',
+    time: 'Hari Ini, 08:45 - 11:15 WIB',
+    location_name: '3C.2.05 - TEKNIK C',
     late_threshold_minutes: 15,
     methods: ['QR Dinamis', 'GPS Haversine', 'Biometrik WebAuthn'],
   },
   {
     id: 'ses-2',
-    title: 'Pertemuan 6: Pointer & Manajemen Memori Heap C/C++',
+    classId: 'c0000000-0000-0000-0000-000000000002',
+    title: 'Pertemuan 6: Pohon Berimbang AVL & Kompleksitas Graf (STI2543131)',
     meeting_number: 6,
     code: '614920',
-    time: 'Besok, 10:45 - 13:15 WIB',
-    location_name: 'Lab Komputer 1',
+    time: 'Besok, 10:30 - 13:00 WIB',
+    location_name: 'Computer System LAB - TEKNIK C',
     late_threshold_minutes: 15,
     methods: ['QR Dinamis', 'PIN Kelas'],
   },
   {
     id: 'ses-3',
-    title: 'Pertemuan 5: Optimasi Indeks B-Tree Basis Data',
+    classId: 'c0000000-0000-0000-0000-000000000003',
+    title: 'Pertemuan 5: Optimasi Indeks B-Tree Basis Data (STI2541114)',
     meeting_number: 5,
     code: '395128',
-    time: 'Kamis, 13:30 - 16:00 WIB',
-    location_name: 'Lab Basis Data Terdistribusi',
+    time: 'Rabu, 13:00 - 15:30 WIB',
+    location_name: 'Mobile Lab - TEKNIK D',
     late_threshold_minutes: 10,
     methods: ['GPS Geofence', 'Passkey'],
   },
@@ -64,32 +58,32 @@ const DEFAULT_DEMO_SESSIONS = [
 const CAMPUS_LOCATIONS = [
   {
     code: 'LAB-CLOUD',
-    name: 'Lab Komputasi Awan (Gd. Rektorat Lt. 3)',
-    coords: 'Lat: -6.208800 · Lng: 106.845600',
+    name: '3C.2.05 - TEKNIK C (Lab Komputasi Web)',
+    coords: 'Lat: 0.447800 · Lng: 101.453200',
+    radius: '50 Meter',
+    capacity: '45 Kursi',
+    status: 'Aktif & Terverifikasi',
+  },
+  {
+    code: 'LAB-SYS',
+    name: 'Computer System LAB - TEKNIK C',
+    coords: 'Lat: 0.447950 · Lng: 101.453400',
     radius: '50 Meter',
     capacity: '40 Kursi',
     status: 'Aktif & Terverifikasi',
   },
   {
-    code: 'AUD-01',
-    name: 'Auditorium Utama Kampus UIR',
-    coords: 'Lat: -6.209100 · Lng: 106.846200',
-    radius: '75 Meter',
-    capacity: '250 Kursi',
-    status: 'Aktif & Terverifikasi',
-  },
-  {
-    code: 'LAB-AI',
-    name: 'Laboratorium Riset AI & Big Data (Gd. C)',
-    coords: 'Lat: -6.208400 · Lng: 106.844900',
+    code: 'LAB-MOBILE',
+    name: 'Mobile Lab - TEKNIK D',
+    coords: 'Lat: 0.448100 · Lng: 101.453600',
     radius: '45 Meter',
-    capacity: '36 Kursi',
+    capacity: '42 Kursi',
     status: 'Aktif & Terverifikasi',
   },
   {
-    code: 'R-TEORI-304',
-    name: 'Ruang Kuliah Teori 304 (Fakultas Teknik)',
-    coords: 'Lat: -6.208650 · Lng: 106.845200',
+    code: 'R-TEORI-308',
+    name: '3C.2.08 - TEKNIK C (Ruang Kuliah Teori)',
+    coords: 'Lat: 0.447650 · Lng: 101.453100',
     radius: '50 Meter',
     capacity: '50 Kursi',
     status: 'Aktif & Terverifikasi',
@@ -100,7 +94,7 @@ const PERMIT_REQUESTS = [
   {
     id: 'per-1',
     student: '2024018 - Rian Hidayat',
-    course: 'Pemrograman Web Lanjut (TI-301)',
+    course: 'Pemrograman Web & Arsitektur Cloud (STI2544138)',
     meeting: 'Pertemuan ke-7',
     reason: 'Rawat inap demam berdarah di RS Citra Medika. Surat dokter terlampir.',
     date: '07 Okt 2026',
@@ -109,7 +103,7 @@ const PERMIT_REQUESTS = [
   {
     id: 'per-2',
     student: '2024045 - Aulia Maharani',
-    course: 'Algoritma & Pemrograman (TI-102)',
+    course: 'Algoritma & Struktur Data Lanjut (STI2543131)',
     meeting: 'Pertemuan ke-6',
     reason: 'Dispensasi perwakilan universitas lomba Olimpiade Sains Nasional (OSN).',
     date: '06 Okt 2026',
@@ -118,7 +112,7 @@ const PERMIT_REQUESTS = [
   {
     id: 'per-3',
     student: '2024012 - Farhan Pratama',
-    course: 'Sistem Basis Data (TI-204)',
+    course: 'Basis Data Terdistribusi & Big Data (STI2541114)',
     meeting: 'Pertemuan ke-5',
     reason: 'Sakit influenza dengan surat keterangan klinik pratama kampus.',
     date: '05 Okt 2026',
@@ -127,7 +121,8 @@ const PERMIT_REQUESTS = [
 ];
 
 export default async function AttendanceSubpage({ params }: PageProps) {
-  const subroute = params.slug?.[0] || '';
+  const resolvedParams = await Promise.resolve(params);
+  const subroute = resolvedParams?.slug?.[0] || '';
   const sessions = await getAllAttendanceSessionsAction().catch(() => []);
   const activeSessions = sessions.length > 0 ? sessions : DEFAULT_DEMO_SESSIONS;
 
@@ -191,11 +186,11 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                   <div className="space-y-2 pt-2 border-t-2 border-black/10 text-sm font-sans font-bold">
                     <p className="text-black flex items-center gap-2">
                       <Clock className="h-4 w-4 text-primary" />
-                      <span>{ses.time || '08:00 - 10:30 WIB'}</span>
+                      <span>{ses.time || '08:45 - 11:15 WIB'}</span>
                     </p>
                     <p className="text-black flex items-center gap-2">
                       <MapPin className="h-4 w-4 text-primary" />
-                      <span className="truncate">{ses.location_name || 'Lab Komputer'}</span>
+                      <span className="truncate">{ses.location_name || '3C.2.05 - TEKNIK C'}</span>
                     </p>
                   </div>
                 </div>
@@ -207,7 +202,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
                   </div>
 
                   <Link
-                    href="/classes"
+                    href={`/classes/${ses.classId || 'c0000000-0000-0000-0000-000000000001'}?tab=presensi`}
                     className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border-2 border-black bg-black text-white font-bold text-sm shadow-xs hover:bg-neutral-800 transition-all"
                   >
                     <span>Masuk Sesi</span>
@@ -254,9 +249,9 @@ export default async function AttendanceSubpage({ params }: PageProps) {
 
           <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-1.5">
             <span className="text-sm font-sans font-bold text-black uppercase">Lolos Syarat UAS (&ge;75%)</span>
-            <p className="font-heading font-bold text-3xl sm:text-4xl text-ink font-sans">34 <span className="text-sm font-sans text-black font-bold">/ 36 Mhs</span></p>
+            <p className="font-heading font-bold text-3xl sm:text-4xl text-ink font-sans">43 <span className="text-sm font-sans text-black font-bold">/ 45 Mhs</span></p>
             <span className="text-sm text-ink font-sans font-bold pt-1 block">
-              94.4% Mahasiswa Memenuhi Syarat
+              95.5% Mahasiswa Memenuhi Syarat
             </span>
           </div>
 
@@ -272,7 +267,7 @@ export default async function AttendanceSubpage({ params }: PageProps) {
         {/* Tabel Rekapitulasi Full Width */}
         <div className="rounded-xl border-2 border-black bg-white p-6 shadow-retro space-y-4">
           <div className="flex items-center justify-between border-b-2 border-black pb-3">
-            <h2 className="font-heading font-bold text-lg sm:text-xl text-black">Ringkasan Kehadiran Rombongan Belajar (TI-301)</h2>
+            <h2 className="font-heading font-bold text-lg sm:text-xl text-black">Ringkasan Kehadiran Rombongan Belajar (STI2544138)</h2>
             <span className="text-sm font-sans font-bold bg-gray-soft px-3 py-1 rounded border-2 border-black">
               Ambang Batas UAS: &ge; 75%
             </span>

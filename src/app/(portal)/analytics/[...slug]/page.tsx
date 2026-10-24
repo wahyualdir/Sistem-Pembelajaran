@@ -1,13 +1,12 @@
 import { redirect } from 'next/navigation';
 
 interface PageProps {
-  params: {
-    slug: string[];
-  };
+  params: Promise<{ slug: string[] }> | { slug: string[] };
 }
 
-export default function AnalyticsSubpage({ params }: PageProps) {
-  const sub = params.slug?.[0] || 'classes';
+export default async function AnalyticsSubpage({ params }: PageProps) {
+  const resolvedParams = await Promise.resolve(params);
+  const sub = resolvedParams?.slug?.[0] || 'classes';
   if (sub === 'classes') {
     redirect('/analytics?tab=kelas');
   }

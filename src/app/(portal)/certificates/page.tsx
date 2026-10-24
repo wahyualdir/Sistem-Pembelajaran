@@ -4,12 +4,16 @@ import {
   type CertificateItem,
   type PortfolioProjectItem,
 } from '@/modules/academic/certificates-hub-view';
+import { redirect } from 'next/navigation';
+import { isDemoMode } from '@/lib/config/features';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+import { getStudentCertificatesAction } from '@/modules/academic/badge-certificate-actions';
 
 const DEMO_CERTIFICATES: CertificateItem[] = [
   {
     id: 'cert-1',
-    title: 'Sertifikat Kompetensi Pemrograman Web Lanjut (Fullstack)',
-    issuer: 'Laboratorium Rekayasa Perangkat Lunak',
+    title: 'Sertifikat Kompetensi Pemrograman Web & Arsitektur Cloud (STI2544138)',
+    issuer: 'Laboratorium Rekayasa Perangkat Lunak UIR',
     date: '30 September 2026',
     credentialId: 'CERT-UIR-2026-WEB-0018',
     grade: 'Lulus dengan Pujian (Grade A)',
@@ -17,8 +21,8 @@ const DEMO_CERTIFICATES: CertificateItem[] = [
   },
   {
     id: 'cert-2',
-    title: 'Lencana Prestasi Terbaik: Kuis Algoritma & Struktur Data',
-    issuer: 'Fakultas Teknik Informatika',
+    title: 'Lencana Prestasi Terbaik: Algoritma & Struktur Data Lanjut (STI2543131)',
+    issuer: 'Fakultas Teknik Informatika UIR',
     date: '15 September 2026',
     credentialId: 'BADGE-DSA-TOP10-2026',
     grade: 'Peringkat 5 dari 120 Peserta',
@@ -26,7 +30,7 @@ const DEMO_CERTIFICATES: CertificateItem[] = [
   },
   {
     id: 'cert-3',
-    title: 'Sertifikat Asisten Laboratorium Komputer Komputasi',
+    title: 'Sertifikat Asisten Laboratorium Komputasi Terpadu',
     issuer: 'Ketua Program Studi Teknik Informatika',
     date: '01 Juli 2026',
     credentialId: 'ASDOS-TI-GANJIL-2026',
@@ -35,10 +39,10 @@ const DEMO_CERTIFICATES: CertificateItem[] = [
   },
   {
     id: 'cert-4',
-    title: 'Sertifikat Pelatihan Keamanan Siber & Kriptografi Modern',
-    issuer: 'Pusat Studi Cyber Defense & Forensik',
+    title: 'Sertifikat Praktikum Basis Data Terdistribusi & Big Data (STI2541114)',
+    issuer: 'Laboratorium Basis Data & Sistem Terdistribusi',
     date: '20 Agustus 2026',
-    credentialId: 'CERT-CYBER-UIR-8821',
+    credentialId: 'CERT-DB-UIR-8821',
     grade: 'Kompeten (Skor 92/100)',
     hours: '32 Jam Praktikum',
   },
@@ -48,7 +52,7 @@ const DEMO_PROJECTS: PortfolioProjectItem[] = [
   {
     id: 'proj-1',
     title: 'SIAJAR: LMS Next.js Enterprise & Proctoring',
-    course: 'Pemrograman Web Lanjut (TI-301)',
+    course: 'Pemrograman Web & Arsitektur Cloud (STI2544138)',
     type: 'Tugas Akhir Proyek',
     description:
       'Implementasi aplikasi manajemen perkuliahan dengan Next.js App Router, live panel proctoring ujian, compiler live coding sandbox, dan presensi QR haversine.',
@@ -59,7 +63,7 @@ const DEMO_PROJECTS: PortfolioProjectItem[] = [
   {
     id: 'proj-2',
     title: 'AI Resume & Quiz Generator Engine',
-    course: 'Kecerdasan Buatan (TI-401)',
+    course: 'Pengenalan Kecerdasan Buatan (STI2543129)',
     type: 'Proyek Kelompok Riset',
     description:
       'Aplikasi pembaca modul PDF otomatis dan ekstraksi bank soal kuis bergradasi taksonomi Bloom menggunakan model machine learning dan semantic search.',
@@ -70,7 +74,7 @@ const DEMO_PROJECTS: PortfolioProjectItem[] = [
   {
     id: 'proj-3',
     title: 'High-Concurrency Distributed Database Sharding',
-    course: 'Basis Data Terdistribusi (TI-305)',
+    course: 'Basis Data Terdistribusi & Big Data (STI2541114)',
     type: 'Eksperimen Benchmark',
     description:
       'Simulasi replikasi multi-master, partisi hash, dan pemulihan failover transaksi perbankan untuk menguji latensi throughput di bawah beban 10.000 TPS.',
@@ -80,21 +84,16 @@ const DEMO_PROJECTS: PortfolioProjectItem[] = [
   },
   {
     id: 'proj-4',
-    title: 'Penetration Testing Tool & Vulnerability Scanner',
-    course: 'Keamanan Siber & Kriptografi (TI-408)',
+    title: 'Kernel Scheduler & Virtual Memory Paging Simulator',
+    course: 'Sistem Operasi (STI2543130)',
     type: 'Mini Riset Lab',
     description:
-      'Audit keamanan web app otomatis terhadap celah SQL Injection, XSS, dan CSRF berpedoman OWASP Top 10 dengan laporan PDF eksekutif.',
-    tech: ['Python', 'Scapy', 'Nmap', 'Docker', 'Linux'],
+      'Simulasi algoritma penjadwalan proses Round-Robin vs Multilevel Feedback Queue serta analisis page fault LRU di lingkungan kernel Linux.',
+    tech: ['C', 'Python', 'Docker', 'Linux'],
     status: 'Selesai (Skor: 94/100)',
-    repo: 'github.com/wahyu/owasp-security-audit',
+    repo: 'github.com/wahyu/os-kernel-sim',
   },
 ];
-
-import { redirect } from 'next/navigation';
-import { isDemoMode } from '@/lib/config/features';
-import { getCurrentUserWithRoles } from '@/modules/identity/actions';
-import { getStudentCertificatesAction } from '@/modules/academic/badge-certificate-actions';
 
 interface CertificatesPageProps {
   searchParams?: Promise<{

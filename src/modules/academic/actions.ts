@@ -268,14 +268,16 @@ for (const sId of DEMO_STUDENT_IDS) {
   }
 }
 
-// TA Demo (Citra Asisten)
-if (!mem.enrollments.some((e) => e.class_id === DEMO_CLASS_ID && e.student_id === 'a0000003-0000-0000-0000-000000000003')) {
-  mem.enrollments.push({
-    class_id: DEMO_CLASS_ID,
-    student_id: 'a0000003-0000-0000-0000-000000000003',
-    student_name: 'Citra Asisten',
-    enrolled_at: new Date(Date.now() - 86400000 * 7).toISOString(),
-  });
+// TA Demo (Citra Asisten) - Hubungkan ke 3 Kelas Asistensi Utama
+for (const taClassId of [DEMO_CLASS_ID, DEMO_CLASS_ID_2, DEMO_CLASS_ID_3]) {
+  if (!mem.enrollments.some((e) => e.class_id === taClassId && e.student_id === 'a0000003-0000-0000-0000-000000000003')) {
+    mem.enrollments.push({
+      class_id: taClassId,
+      student_id: 'a0000003-0000-0000-0000-000000000003',
+      student_name: 'Citra Asisten',
+      enrolled_at: new Date(Date.now() - 86400000 * 7).toISOString(),
+    });
+  }
 }
 
 async function actor(role: string | string[]) {

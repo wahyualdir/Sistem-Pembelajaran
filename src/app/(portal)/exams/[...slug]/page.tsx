@@ -4,37 +4,28 @@ import {
   Award,
   ShieldAlert,
   Clock,
-  CheckSquare,
   AlertCircle,
   FolderArchive,
   PlusCircle,
-  Layers,
-  ArrowRight,
-  UserCheck,
-  FileText,
-  Eye,
   CheckCircle2,
   XCircle,
-  HelpCircle,
-  Terminal,
   Sparkles,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import {
   getAllQuizzesAction,
   getQuestionBankAction,
-  getExamLiveStatusAction,
 } from '@/modules/academic/quiz-actions';
 import { listMyClassesAction } from '@/modules/academic/actions';
-import { ExamLiveMonitorPanel, CreateQuizModal } from '@/modules/academic/quiz-components';
+import { ExamLiveMonitorPanel } from '@/modules/academic/quiz-components';
 import { AiQuizGeneratorModal } from '@/modules/academic/ai-quiz-generator-modal';
 import { QuestionImportExportModal } from '@/modules/academic/question-import-modal';
 import { cn } from '@/lib/utils';
+import { redirect } from 'next/navigation';
+import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
 interface PageProps {
-  params: {
-    slug: string[];
-  };
+  params: Promise<{ slug: string[] }> | { slug: string[] };
 }
 
 const DEFAULT_SAMPLE_QUESTIONS = [
@@ -45,7 +36,7 @@ const DEFAULT_SAMPLE_QUESTIONS = [
     points: 25,
     difficulty: 'HARD',
     cpl_tag: 'CPL-01: Arsitektur Perangkat Lunak',
-    topic_tag: 'Software Engineering',
+    topic_tag: 'Software Engineering (STI2544138)',
   },
   {
     id: 'qb-102',
@@ -54,7 +45,7 @@ const DEFAULT_SAMPLE_QUESTIONS = [
     points: 15,
     difficulty: 'MEDIUM',
     cpl_tag: 'CPL-02: Analisis Algoritmik',
-    topic_tag: 'Struktur Data & Algoritma',
+    topic_tag: 'Struktur Data & Algoritma (STI2543131)',
   },
   {
     id: 'qb-103',
@@ -63,7 +54,7 @@ const DEFAULT_SAMPLE_QUESTIONS = [
     points: 30,
     difficulty: 'HARD',
     cpl_tag: 'CPL-04: Implementasi Algoritma',
-    topic_tag: 'Coding Practical',
+    topic_tag: 'Coding Practical (STI2543131)',
   },
   {
     id: 'qb-104',
@@ -72,7 +63,7 @@ const DEFAULT_SAMPLE_QUESTIONS = [
     points: 10,
     difficulty: 'EASY',
     cpl_tag: 'CPL-03: Jaringan Komputer Modern',
-    topic_tag: 'Computer Networks',
+    topic_tag: 'Pemrograman Web (STI2544138)',
   },
   {
     id: 'qb-105',
@@ -81,7 +72,7 @@ const DEFAULT_SAMPLE_QUESTIONS = [
     points: 20,
     difficulty: 'MEDIUM',
     cpl_tag: 'CPL-05: Pengolahan Basis Data',
-    topic_tag: 'Database Management',
+    topic_tag: 'Basis Data Terdistribusi (STI2541114)',
   },
   {
     id: 'qb-106',
@@ -90,12 +81,9 @@ const DEFAULT_SAMPLE_QUESTIONS = [
     points: 15,
     difficulty: 'MEDIUM',
     cpl_tag: 'CPL-01: Protokol Web Standar',
-    topic_tag: 'Web Standards',
+    topic_tag: 'Pemrograman Web (STI2544138)',
   },
 ];
-
-import { redirect } from 'next/navigation';
-import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
 export default async function ExamSubpage({ params }: PageProps) {
   const user = await getCurrentUserWithRoles();
@@ -117,7 +105,8 @@ export default async function ExamSubpage({ params }: PageProps) {
     redirect('/exams');
   }
 
-  const subroute = params.slug?.[0] || '';
+  const resolvedParams = await Promise.resolve(params);
+  const subroute = resolvedParams?.slug?.[0] || '';
   const [quizzes, rawBank, myClasses] = await Promise.all([
     getAllQuizzesAction().catch(() => []),
     getQuestionBankAction().catch(() => []),
@@ -188,11 +177,11 @@ export default async function ExamSubpage({ params }: PageProps) {
               <QuestionImportExportModal />
               <AiQuizGeneratorModal classes={myClasses} />
               <Link
-                href="/classes"
+                href="/classes/c0000000-0000-0000-0000-000000000001?tab=ujian"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-black bg-black text-white font-bold text-xs shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
               >
                 <PlusCircle className="h-4 w-4" />
-                <span>Tambah Soal Manual</span>
+                <span>Tambah Soal di Kelas</span>
               </Link>
             </div>
           </div>
@@ -319,11 +308,11 @@ export default async function ExamSubpage({ params }: PageProps) {
                 </span>
               </div>
               <p className="text-sm font-bold text-black">
-                Pindah tab browser selama <strong>4 detik</strong> saat mengerjakan Soal Coding #4.
+                Pindah tab browser selama <strong>4 detik</strong> saat mengerjakan Soal Coding No. 4.
               </p>
               <div className="text-xs font-mono font-bold text-black/70 pt-2 border-t border-black/20 flex justify-between">
                 <span>09:15:22 WIB</span>
-                <span>UTS TI-301</span>
+                <span>UTS STI2544138</span>
               </div>
             </div>
 
@@ -337,11 +326,11 @@ export default async function ExamSubpage({ params }: PageProps) {
                 </span>
               </div>
               <p className="text-sm font-bold text-black">
-                Keluar dari mode fullscreen. Peringatan #1 ditampilkan kepada mahasiswa.
+                Keluar dari mode fullscreen. Peringatan ke-1 ditampilkan kepada mahasiswa.
               </p>
               <div className="text-xs font-mono font-bold text-black/70 pt-2 border-t border-black/20 flex justify-between">
                 <span>09:18:04 WIB</span>
-                <span>UTS TI-301</span>
+                <span>UTS STI2544138</span>
               </div>
             </div>
 
@@ -359,7 +348,7 @@ export default async function ExamSubpage({ params }: PageProps) {
               </p>
               <div className="text-xs font-mono font-bold text-black/70 pt-2 border-t border-black/20 flex justify-between">
                 <span>09:22:45 WIB</span>
-                <span>UTS TI-301</span>
+                <span>UTS STI2544138</span>
               </div>
             </div>
           </div>
@@ -400,7 +389,7 @@ export default async function ExamSubpage({ params }: PageProps) {
               </div>
               <div>
                 <h3 className="font-heading font-black text-lg text-black leading-snug">
-                  Sanggahan Soal Coding No. 4 (TI-301)
+                  Sanggahan Soal Coding No. 4 (STI2544138)
                 </h3>
                 <p className="text-xs font-bold text-black/70 mt-0.5">Diajukan oleh: 2024001 - Ahmad Fauzi</p>
               </div>
@@ -428,7 +417,7 @@ export default async function ExamSubpage({ params }: PageProps) {
               </div>
               <div>
                 <h3 className="font-heading font-black text-lg text-black leading-snug">
-                  Sanggahan Pilihan Ganda No. 8 (TI-102)
+                  Sanggahan Pilihan Ganda No. 8 (STI2543131)
                 </h3>
                 <p className="text-xs font-bold text-black/70 mt-0.5">Diajukan oleh: 2024018 - Rian Hidayat</p>
               </div>
@@ -437,7 +426,7 @@ export default async function ExamSubpage({ params }: PageProps) {
               </p>
             </div>
             <div className="pt-3 border-t-2 border-black/20 text-xs font-bold text-black">
-              ✓ Nilai telah disesuaikan (+5 Poin) oleh Dr. Ardiansyah
+              ✓ Nilai telah disesuaikan (+5 Poin) oleh Dr. Budi Santoso, M.Kom.
             </div>
           </div>
         </div>
@@ -454,14 +443,22 @@ export default async function ExamSubpage({ params }: PageProps) {
         headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-white"
       >
-        <div className="space-y-2">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
-            <Award className="h-7 w-7 text-black" />
-            <span className="capitalize">{subroute.replace('-', ' ') || 'Manajemen Ujian'}</span>
-          </h1>
-          <p className="text-xs sm:text-sm text-black/75 font-medium max-w-3xl leading-relaxed">
-            Kelola pembuatan ujian, tinjau jawaban essay/coding berbantuan AI, dan verifikasi integritas hasil belajar mahasiswa.
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-heading font-black tracking-tight text-black flex items-center gap-3">
+              <Award className="h-7 w-7 text-black" />
+              <span className="capitalize">{subroute.replace('-', ' ') || 'Manajemen Ujian'}</span>
+            </h1>
+            <p className="text-xs sm:text-sm text-black/75 font-medium max-w-3xl leading-relaxed">
+              Kelola pembuatan ujian, tinjau jawaban essay/coding berbantuan AI, dan verifikasi integritas hasil belajar mahasiswa.
+            </p>
+          </div>
+          <Link
+            href="/exams"
+            className="px-4 py-2 rounded-xl border-2 border-black bg-black text-white text-xs font-bold shrink-0 hover:bg-neutral-800 transition-all"
+          >
+            Semua Ujian & Kuis &rarr;
+          </Link>
         </div>
       </RetroWindow>
 
@@ -494,7 +491,7 @@ export default async function ExamSubpage({ params }: PageProps) {
         </Link>
 
         <Link
-          href="/exams/disputes"
+          href="/lecturer/disputes"
           className="rounded-2xl border-2 border-black bg-white p-6 shadow-retro hover:-translate-y-0.5 transition-all space-y-3 block"
         >
           <div className="p-3 w-fit rounded-xl border-2 border-black bg-gray-soft shadow-retro-sm">

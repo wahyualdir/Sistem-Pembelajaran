@@ -132,10 +132,10 @@ export function calculateCountdown(targetDate: string | Date, now: Date = new Da
 }
 
 export function evaluateBannerConditions(params: {
-  openExams: Array<{ id: string; title: string; classTitle: string; dueAt?: string; hasAttempt?: boolean }>;
-  openAttendance?: { id: string; classTitle: string; method: string; closeTime: string } | null;
-  urgentAssignments: Array<{ id: string; title: string; classTitle: string; dueAt: string }>;
-  upcomingClass?: { id: string; title: string; time: string; room: string } | null;
+  openExams: Array<{ id: string; title: string; classTitle: string; dueAt?: string; hasAttempt?: boolean; href?: string }>;
+  openAttendance?: { id: string; classTitle: string; method: string; closeTime: string; href?: string } | null;
+  urgentAssignments: Array<{ id: string; title: string; classTitle: string; dueAt: string; href?: string }>;
+  upcomingClass?: { id: string; title: string; time: string; room: string; href?: string } | null;
   lastStudiedMaterial?: { title: string; classTitle: string; href: string } | null;
   now?: Date;
 }): HomeBannerData {
@@ -153,7 +153,7 @@ export function evaluateBannerConditions(params: {
       subtitle: `${exam.classTitle} • Sisa waktu / batas: ${cd}`,
       timeRemaining: cd,
       buttonLabel: exam.hasAttempt ? 'Lanjutkan Ujian' : 'Mulai Ujian',
-      buttonHref: `/exams`,
+      buttonHref: exam.href || `/exams`,
       badge: 'PRIORITAS UTAMA',
     });
   }
@@ -167,7 +167,7 @@ export function evaluateBannerConditions(params: {
       title: `Presensi Terbuka: ${params.openAttendance.classTitle}`,
       subtitle: `Metode: ${params.openAttendance.method} • Batas: ${params.openAttendance.closeTime}`,
       buttonLabel: 'Absen Sekarang',
-      buttonHref: `/classes`,
+      buttonHref: params.openAttendance.href || `/classes`,
       badge: 'PRESENSI DIBUKA',
     });
   }
@@ -183,7 +183,7 @@ export function evaluateBannerConditions(params: {
       subtitle: `${asg.classTitle} • Hitung mundur: ${countdown.text}`,
       timeRemaining: countdown.text,
       buttonLabel: 'Kerjakan',
-      buttonHref: `/classes`,
+      buttonHref: asg.href || `/classes`,
       badge: '< 24 JAM',
     });
   }
@@ -197,7 +197,7 @@ export function evaluateBannerConditions(params: {
       title: `Kelas Akan Datang: ${params.upcomingClass.title}`,
       subtitle: `${params.upcomingClass.time} • Ruang: ${params.upcomingClass.room}`,
       buttonLabel: 'Lihat Kelas',
-      buttonHref: `/classes`,
+      buttonHref: params.upcomingClass.href || `/classes`,
       badge: 'AKAN MULAI',
     });
   }

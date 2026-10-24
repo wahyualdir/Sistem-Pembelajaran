@@ -8,55 +8,49 @@ import {
   MessageSquare,
   Layers,
   ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
   Clock,
-  PlusCircle,
-  FolderArchive,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { getMentoringRiskListAction } from '@/modules/early-warning/actions';
 import { MentoringRiskView } from '@/modules/early-warning/mentoring-risk-view';
 
 interface PageProps {
-  params: {
-    slug: string[];
-  };
+  params: Promise<{ slug: string[] }> | { slug: string[] };
 }
 
 const LECTURER_CLASSES = [
   {
     id: 'c0000000-0000-0000-0000-000000000001',
-    code: 'TI-301',
-    title: 'Pemrograman Web Lanjut (Kelas A)',
+    code: 'STI2544138',
+    title: 'Pemrograman Web & Arsitektur Cloud (IF-3A)',
     sks: 3,
-    studentsCount: 36,
+    studentsCount: 45,
     assistant: 'Citra Asisten',
-    schedule: 'Senin, 08:00 - 10:30 WIB · Lab Cloud',
+    schedule: 'Senin, 08:45 - 11:15 WIB · 3C.2.05 - TEKNIK C',
     pendingGrading: 4,
     materialsCount: 8,
     status: 'Pertemuan 7 / 16',
   },
   {
     id: 'c0000000-0000-0000-0000-000000000002',
-    code: 'TI-401',
-    title: 'Kecerdasan Buatan & Machine Learning (Kelas B)',
+    code: 'STI2543131',
+    title: 'Algoritma & Struktur Data Lanjut (IF-3B)',
     sks: 3,
-    studentsCount: 32,
-    assistant: 'Dinda Kirana',
-    schedule: 'Rabu, 13:30 - 16:00 WIB · Lab Riset AI',
+    studentsCount: 40,
+    assistant: 'Citra Asisten',
+    schedule: 'Selasa, 10:30 - 13:00 WIB · Computer System LAB - TEKNIK C',
     pendingGrading: 2,
     materialsCount: 7,
     status: 'Pertemuan 7 / 16',
   },
   {
     id: 'c0000000-0000-0000-0000-000000000003',
-    code: 'TI-305',
-    title: 'Basis Data Terdistribusi (Kelas C)',
+    code: 'STI2541114',
+    title: 'Basis Data Terdistribusi & Big Data (IF-3C)',
     sks: 3,
-    studentsCount: 38,
-    assistant: 'Kevin Pratama',
-    schedule: 'Kamis, 08:00 - 10:30 WIB · Lab 1',
+    studentsCount: 42,
+    assistant: 'Citra Asisten',
+    schedule: 'Rabu, 13:00 - 15:30 WIB · Mobile Lab - TEKNIK D',
     pendingGrading: 0,
     materialsCount: 6,
     status: 'Pertemuan 6 / 16',
@@ -64,7 +58,8 @@ const LECTURER_CLASSES = [
 ];
 
 export default async function LecturerSubpage({ params }: PageProps) {
-  const subroute = params.slug?.[0] || 'materials';
+  const resolvedParams = await Promise.resolve(params);
+  const subroute = resolvedParams?.slug?.[0] || 'materials';
 
   const titles: Record<string, { title: string; subtitle: string; icon: any; desc: string }> = {
     materials: {
@@ -196,7 +191,9 @@ export default async function LecturerSubpage({ params }: PageProps) {
 
                 <div>
                   <h3 className="font-heading font-black text-lg text-black leading-snug">
-                    {cls.title}
+                    <Link href={`/classes/${cls.id}`} className="hover:underline">
+                      {cls.title}
+                    </Link>
                   </h3>
                   <p className="text-xs text-black/75 mt-1 font-sans">
                     Asisten Dosen: <strong className="text-black">{cls.assistant}</strong>
@@ -217,9 +214,12 @@ export default async function LecturerSubpage({ params }: PageProps) {
 
               <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
                 {cls.pendingGrading > 0 ? (
-                  <span className="text-xs font-mono font-bold text-black bg-gray-soft px-2.5 py-1 rounded border border-black shadow-retro-sm">
+                  <Link
+                    href={`/classes/${cls.id}?tab=tugas`}
+                    className="text-xs font-mono font-bold text-black bg-gray-soft hover:bg-neutral-200 px-2.5 py-1 rounded border border-black shadow-retro-sm"
+                  >
                     {cls.pendingGrading} Tugas Perlu Nilai
-                  </span>
+                  </Link>
                 ) : (
                   <span className="text-xs font-mono font-bold text-black bg-white px-2.5 py-1 rounded border border-black shadow-retro-sm">
                     Nilai Lengkap
@@ -227,7 +227,7 @@ export default async function LecturerSubpage({ params }: PageProps) {
                 )}
 
                 <Link
-                  href="/classes"
+                  href={`/classes/${cls.id}`}
                   className="inline-flex items-center gap-1 px-3.5 py-2 rounded-xl border-2 border-black bg-black text-white font-bold text-xs shadow-retro-sm hover:bg-neutral-800 transition-all cursor-pointer"
                 >
                   <span>Kelola</span>

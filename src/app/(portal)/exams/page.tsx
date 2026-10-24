@@ -28,24 +28,24 @@ export default async function ExamsPage() {
   const fetchedQuizzes = isNew ? [] : await getAllQuizzesAction().catch(() => []);
   const isLecturer = role === 'LECTURER';
 
-  // Mengambil daftar kelas aktif yang diampu/diambil mahasiswa saat ini
+  // Mengambil daftar kelas aktif yang diampu/diambil mahasiswa saat ini (terhubung ke kurikulum UIR)
   const activeClasses = isNew ? [] : await getHomeActiveClassesAction().catch(() => []);
 
   // Menemukan kelas-kelas aktif mahasiswa untuk mengikat soal
-  const classWeb = activeClasses.find((c) => c.code === 'TI-301') || activeClasses[0];
-  const classRPL = activeClasses.find((c) => c.code === 'TI-302') || activeClasses[1];
-  const classAI = activeClasses.find((c) => c.code === 'TI-401') || activeClasses[2];
-  const classDB = activeClasses.find((c) => c.code === 'TI-305') || activeClasses[3];
+  const classWeb = activeClasses.find((c) => c.code === 'STI2544138') || activeClasses[0];
+  const classAlgo = activeClasses.find((c) => c.code === 'STI2543131') || activeClasses[1];
+  const classDB = activeClasses.find((c) => c.code === 'STI2541114') || activeClasses[2];
+  const classOS = activeClasses.find((c) => c.code === 'STI2543130') || activeClasses[3];
 
-  // Evaluasi terikat langsung dengan kelas aktif mahasiswa (tanpa kata "resmi")
+  // Evaluasi terikat langsung dengan kelas aktif mahasiswa
   const defaultBoundExams = [
     {
-      id: `exam-${classWeb?.id || 'course-1'}-uts`,
-      class_id: classWeb?.id || 'course-1',
-      course_name: classWeb?.title || 'Pemrograman Web Lanjut',
-      course_code: classWeb?.code || 'TI-301',
-      title: `Ujian Tengah Semester: ${classWeb?.title || 'Pemrograman Web Lanjut'}`,
-      description: `Evaluasi tengah semester mata kuliah ${classWeb?.title || 'Pemrograman Web Lanjut'}. Mencakup Next.js App Router, Server Actions, dan otentikasi peran RBAC.`,
+      id: `exam-${classWeb?.id || 'c0000000-0000-0000-0000-000000000001'}-uts`,
+      class_id: classWeb?.id || 'c0000000-0000-0000-0000-000000000001',
+      course_name: classWeb?.title || 'Pemrograman Web & Arsitektur Cloud',
+      course_code: classWeb?.code || 'STI2544138',
+      title: `Ujian Tengah Semester: ${classWeb?.title || 'Pemrograman Web & Arsitektur Cloud'}`,
+      description: `Evaluasi tengah semester mata kuliah ${classWeb?.title || 'Pemrograman Web & Arsitektur Cloud'}. Mencakup Next.js App Router, Server Actions, dan otentikasi peran RBAC.`,
       exam_type: 'UTS',
       duration_minutes: 60,
       questionsCount: 15,
@@ -55,12 +55,12 @@ export default async function ExamsPage() {
       schedule_info: '28 Okt 2026 · 15:00 WIB',
     },
     {
-      id: `exam-${classAI?.id || 'course-3'}-kuis`,
-      class_id: classAI?.id || 'course-3',
-      course_name: classAI?.title || 'Kecerdasan Buatan & Machine Learning',
-      course_code: classAI?.code || 'TI-401',
-      title: 'Kuis Mingguan: Jaringan Saraf Tiruan & Model Heuristik',
-      description: `Kuis pemahaman materi pekan ke-4 mata kuliah ${classAI?.title || 'Kecerdasan Buatan & Machine Learning'}: neural networks, fungsi aktivasi, dan model komputasi.`,
+      id: `exam-${classAlgo?.id || 'c0000000-0000-0000-0000-000000000002'}-kuis`,
+      class_id: classAlgo?.id || 'c0000000-0000-0000-0000-000000000002',
+      course_name: classAlgo?.title || 'Algoritma & Struktur Data Lanjut',
+      course_code: classAlgo?.code || 'STI2543131',
+      title: 'Kuis Mingguan: Pohon Berimbang AVL & Kompleksitas Graf',
+      description: `Kuis pemahaman materi pekan ke-4 mata kuliah ${classAlgo?.title || 'Algoritma & Struktur Data Lanjut'}: rotasi AVL Tree, algoritma Dijkstra, dan analisis asimtotik.`,
       exam_type: 'KUIS',
       duration_minutes: 30,
       questionsCount: 10,
@@ -70,12 +70,12 @@ export default async function ExamsPage() {
       schedule_info: 'Tenggat: 26 Okt 2026 · 23:59 WIB',
     },
     {
-      id: `exam-${classDB?.id || 'course-4'}-latihan`,
-      class_id: classDB?.id || 'course-4',
-      course_name: classDB?.title || 'Basis Data Terdistribusi',
-      course_code: classDB?.code || 'TI-305',
+      id: `exam-${classDB?.id || 'c0000000-0000-0000-0000-000000000003'}-latihan`,
+      class_id: classDB?.id || 'c0000000-0000-0000-0000-000000000003',
+      course_name: classDB?.title || 'Basis Data Terdistribusi & Big Data',
+      course_code: classDB?.code || 'STI2541114',
       title: 'Latihan Mandiri: Normalisasi & Replikasi Multi-Region',
-      description: `Simulasi latihan mandiri tanpa batasan waktu untuk pendalaman materi ${classDB?.title || 'Basis Data Terdistribusi'}. Skor dan pembahasan keluar instan.`,
+      description: `Simulasi latihan mandiri tanpa batasan waktu untuk pendalaman materi ${classDB?.title || 'Basis Data Terdistribusi & Big Data'}. Skor dan pembahasan keluar instan.`,
       exam_type: 'LATIHAN',
       duration_minutes: 45,
       questionsCount: 12,
@@ -85,12 +85,12 @@ export default async function ExamsPage() {
       schedule_info: 'Akses Bebas · Pembahasan Instan',
     },
     {
-      id: `exam-${classRPL?.id || 'course-2'}-uas`,
-      class_id: classRPL?.id || 'course-2',
-      course_name: classRPL?.title || 'Rekayasa Perangkat Lunak',
-      course_code: classRPL?.code || 'TI-302',
-      title: `Ujian Akhir Semester: ${classRPL?.title || 'Rekayasa Perangkat Lunak'}`,
-      description: `Evaluasi akhir komprehensif semester ganjil mata kuliah ${classRPL?.title || 'Rekayasa Perangkat Lunak'}. Mencakup SDLC, metodologi Agile Scrum, dan clean architecture.`,
+      id: `exam-${classOS?.id || 'c0000000-0000-0000-0000-000000000001'}-uas`,
+      class_id: classOS?.id || 'c0000000-0000-0000-0000-000000000001',
+      course_name: classOS?.title || 'Sistem Operasi',
+      course_code: classOS?.code || 'STI2543130',
+      title: `Ujian Akhir Semester: ${classOS?.title || 'Sistem Operasi'}`,
+      description: `Evaluasi akhir komprehensif semester ganjil mata kuliah ${classOS?.title || 'Sistem Operasi'}. Mencakup penjadwalan CPU, sinkronisasi semafor, dan memori virtual.`,
       exam_type: 'UAS',
       duration_minutes: 90,
       questionsCount: 20,

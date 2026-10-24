@@ -22,16 +22,14 @@ import {
   Bell,
   UserCheck,
   ArrowRight,
-  Database,
   Lock,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { ImpersonateUserCard } from '../impersonate-user-card';
+import { assertServerRole } from '@/lib/auth/server-guards';
 
 interface PageProps {
-  params: {
-    slug: string[];
-  };
+  params: Promise<{ slug: string[] }> | { slug: string[] };
 }
 
 const SYSTEM_HEALTH_CARDS = [
@@ -69,10 +67,9 @@ const SYSTEM_HEALTH_CARDS = [
   },
 ];
 
-import { assertServerRole } from '@/lib/auth/server-guards';
-
 export default async function AdminSubpage({ params }: PageProps) {
-  const parts = params.slug || [];
+  const resolvedParams = await Promise.resolve(params);
+  const parts = resolvedParams?.slug || [];
   const fullSlug = parts.join('/');
 
   const isSystemSubpage =
@@ -317,7 +314,7 @@ export default async function AdminSubpage({ params }: PageProps) {
                 </p>
               </div>
               <Link
-                href="/admin/audit"
+                href="/admin/system/audit"
                 className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
               >
                 <span>Periksa Audit Trail</span>
@@ -336,7 +333,7 @@ export default async function AdminSubpage({ params }: PageProps) {
                 </p>
               </div>
               <Link
-                href="/admin/security/rate-limits"
+                href="/admin/system/security"
                 className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
               >
                 <span>Kelola Keamanan</span>
@@ -355,7 +352,7 @@ export default async function AdminSubpage({ params }: PageProps) {
                 </p>
               </div>
               <Link
-                href="/admin/master"
+                href="/admin/users"
                 className="inline-flex items-center justify-between p-2.5 rounded-lg border-2 border-black bg-neutral-50 hover:bg-neutral-100 text-xs font-bold font-sans transition-all"
               >
                 <span>Kelola Akun & RBAC</span>

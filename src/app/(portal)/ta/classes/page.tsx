@@ -1,42 +1,42 @@
 import React from 'react';
 import Link from 'next/link';
-import { Layers, Users, BookOpen, ArrowRight, ShieldCheck, Clock, CheckCircle2 } from 'lucide-react';
+import { Layers, Users, ArrowRight, Clock } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 
 const ASSISTED_CLASSES = [
   {
     id: 'c0000000-0000-0000-0000-000000000001',
-    code: 'TI-301',
-    title: 'Pemrograman Web Lanjut',
-    section: 'Kelas A',
-    lecturer: 'Dr. Ardiansyah, S.T., M.Kom.',
-    studentsCount: 36,
+    code: 'STI2544138',
+    title: 'Pemrograman Web & Arsitektur Cloud',
+    section: 'IF-3A',
+    lecturer: 'Dr. Budi Santoso, M.Kom.',
+    studentsCount: 45,
     pendingReviews: 4,
-    schedule: 'Senin, 08:00 - 10:30 WIB · Lab Cloud',
+    schedule: 'Senin, 08:45 - 11:15 WIB · 3C.2.05 - TEKNIK C',
     permissions: ['Bantu Presensi', 'Review Draf Tugas', 'Moderasi Forum'],
     status: 'Aktif Berjalan',
   },
   {
     id: 'c0000000-0000-0000-0000-000000000002',
-    code: 'TI-102',
-    title: 'Algoritma & Pemrograman Dasar',
-    section: 'Kelas C',
-    lecturer: 'Bambang Sudarsono, M.Kom.',
+    code: 'STI2543131',
+    title: 'Algoritma & Struktur Data Lanjut',
+    section: 'IF-3B',
+    lecturer: 'Dr. Budi Santoso, M.Kom.',
     studentsCount: 40,
     pendingReviews: 2,
-    schedule: 'Rabu, 10:45 - 13:15 WIB · Lab 1',
+    schedule: 'Selasa, 10:30 - 13:00 WIB · Computer System LAB - TEKNIK C',
     permissions: ['Bantu Presensi', 'Review Draf Tugas'],
     status: 'Aktif Berjalan',
   },
   {
     id: 'c0000000-0000-0000-0000-000000000003',
-    code: 'TI-204',
-    title: 'Praktikum Sistem Basis Data',
-    section: 'Kelas B',
-    lecturer: 'Fajar Ramadhan, M.Kom.',
-    studentsCount: 32,
+    code: 'STI2541114',
+    title: 'Basis Data Terdistribusi & Big Data',
+    section: 'IF-3C',
+    lecturer: 'Dr. Budi Santoso, M.Kom.',
+    studentsCount: 42,
     pendingReviews: 0,
-    schedule: 'Kamis, 13:30 - 16:00 WIB · Lab Basis Data',
+    schedule: 'Rabu, 13:00 - 15:30 WIB · Mobile Lab - TEKNIK D',
     permissions: ['Bantu Presensi', 'Moderasi Forum', 'Pantau Ujian'],
     status: 'Aktif Berjalan',
   },
@@ -80,7 +80,9 @@ export default function AssistantClassesPage() {
 
               <div>
                 <h2 className="font-heading font-bold text-lg text-foreground leading-snug">
-                  {cls.title}
+                  <Link href={`/classes/${cls.id}`} className="hover:text-primary transition-colors">
+                    {cls.title}
+                  </Link>
                 </h2>
                 <p className="text-xs text-muted-foreground mt-1">
                   Dosen: <strong className="text-foreground">{cls.lecturer}</strong>
@@ -118,9 +120,12 @@ export default function AssistantClassesPage() {
 
             <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
               {cls.pendingReviews > 0 ? (
-                <span className="font-sans text-xs font-bold text-ink bg-gray-soft px-2 py-1 rounded border border-ink">
-                  {cls.pendingReviews} Draf Menunggu
-                </span>
+                <Link
+                  href="/ta/grading"
+                  className="font-sans text-xs font-bold text-ink bg-gray-soft hover:bg-neutral-200 px-2.5 py-1 rounded border border-ink transition-colors"
+                >
+                  {cls.pendingReviews} Draf Menunggu &rarr;
+                </Link>
               ) : (
                 <span className="font-sans text-xs font-bold text-ink bg-surface px-2 py-1 rounded border border-ink">
                   Semua Selesai Ditinjau
@@ -128,7 +133,7 @@ export default function AssistantClassesPage() {
               )}
 
               <Link
-                href="/classes"
+                href={`/classes/${cls.id}`}
                 className="inline-flex items-center gap-1 px-3.5 py-2 rounded-lg border-2 border-black bg-black text-white font-bold text-xs shadow-xs hover:bg-neutral-800 transition-all"
               >
                 <span>Buka Kelas</span>

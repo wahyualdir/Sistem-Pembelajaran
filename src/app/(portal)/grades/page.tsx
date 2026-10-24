@@ -2,11 +2,15 @@ import React from 'react';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { getAllAttemptsAction, getAllQuizzesAction } from '@/modules/academic/quiz-actions';
 import { GradesHubView, type CourseGrade } from '@/modules/academic/grades-hub-view';
+import { deterministicUuid } from '@/lib/akademik/deterministic-uuid';
+import { redirect } from 'next/navigation';
+import { isDemoMode } from '@/lib/config/features';
 
 const DEMO_GRADES: CourseGrade[] = [
   {
-    code: 'TI-301',
-    name: 'Pemrograman Web Lanjut',
+    classId: 'c0000000-0000-0000-0000-000000000001',
+    code: 'STI2544138',
+    name: 'Pemrograman Web & Arsitektur Cloud',
     sks: 3,
     attendancePercent: 92,
     assignmentsScore: 88,
@@ -19,8 +23,9 @@ const DEMO_GRADES: CourseGrade[] = [
     status: 'LULUS',
   },
   {
-    code: 'TI-302',
-    name: 'Rekayasa Perangkat Lunak',
+    classId: 'c0000000-0000-0000-0000-000000000002',
+    code: 'STI2543131',
+    name: 'Algoritma & Struktur Data Lanjut',
     sks: 3,
     attendancePercent: 88,
     assignmentsScore: 82,
@@ -33,22 +38,9 @@ const DEMO_GRADES: CourseGrade[] = [
     status: 'LULUS',
   },
   {
-    code: 'TI-401',
-    name: 'Kecerdasan Buatan & Machine Learning',
-    sks: 3,
-    attendancePercent: 95,
-    assignmentsScore: 94,
-    quizScore: 88,
-    midtermScore: 92,
-    finalScore: 90,
-    scoreNumber: 91.4,
-    gradeLetter: 'A',
-    gradePoint: 4.0,
-    status: 'LULUS',
-  },
-  {
-    code: 'TI-305',
-    name: 'Basis Data Terdistribusi',
+    classId: 'c0000000-0000-0000-0000-000000000003',
+    code: 'STI2541114',
+    name: 'Basis Data Terdistribusi & Big Data',
     sks: 3,
     attendancePercent: 85,
     assignmentsScore: 76,
@@ -61,9 +53,10 @@ const DEMO_GRADES: CourseGrade[] = [
     status: 'LULUS',
   },
   {
-    code: 'TI-408',
-    name: 'Keamanan Siber & Kriptografi',
-    sks: 2,
+    classId: deterministicUuid('kls-sti2543130-3a'),
+    code: 'STI2543130',
+    name: 'Sistem Operasi',
+    sks: 3,
     attendancePercent: 90,
     assignmentsScore: 85,
     quizScore: 80,
@@ -74,10 +67,22 @@ const DEMO_GRADES: CourseGrade[] = [
     gradePoint: 3.7,
     status: 'LULUS',
   },
+  {
+    classId: deterministicUuid('kls-sti2543129-3a'),
+    code: 'STI2543129',
+    name: 'Pengenalan Kecerdasan Buatan',
+    sks: 3,
+    attendancePercent: 95,
+    assignmentsScore: 94,
+    quizScore: 88,
+    midtermScore: 92,
+    finalScore: 90,
+    scoreNumber: 91.4,
+    gradeLetter: 'A',
+    gradePoint: 4.0,
+    status: 'LULUS',
+  },
 ];
-
-import { redirect } from 'next/navigation';
-import { isDemoMode } from '@/lib/config/features';
 
 export default async function GradesPage() {
   const user = await getCurrentUserWithRoles();

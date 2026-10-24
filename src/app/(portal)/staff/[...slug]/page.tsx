@@ -6,28 +6,16 @@ import {
   FileSpreadsheet,
   Users,
   UserCheck,
-  Compass,
-  BookOpen,
-  Calendar,
-  MapPin,
   CalendarDays,
-  Award,
   Layers,
-  Download,
   ArrowRight,
-  GraduationCap,
   CheckSquare,
-  Clock,
   FileText,
-  Building,
-  CheckCircle2,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
 
 interface PageProps {
-  params: {
-    slug: string[];
-  };
+  params: Promise<{ slug: string[] }> | { slug: string[] };
 }
 
 const STAFF_STATS = [
@@ -84,7 +72,8 @@ export default async function StaffSubpage({ params }: PageProps) {
     redirect('/ta');
   }
 
-  const parts = params.slug || [];
+  const resolvedParams = await Promise.resolve(params);
+  const parts = resolvedParams?.slug || [];
   const fullSlug = parts.join('/');
 
   // --- REDIRECTS UNTUK RUTE /staff/* LAMA KE TAB-TAB BARU (Fase 2D) ---
@@ -146,14 +135,30 @@ export default async function StaffSubpage({ params }: PageProps) {
         headerBadge="Staf Akademik"
         headerBadgeVariant="warning"
       >
-        <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
-            <Icon className="h-7 w-7 text-primary" />
-            <span>{current.title}</span>
-          </h1>
-          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
-            {current.desc}
-          </p>
+        <div className="p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
+              <Icon className="h-7 w-7 text-primary" />
+              <span>{current.title}</span>
+            </h1>
+            <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
+              {current.desc}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <Link
+              href="/staff/master"
+              className="px-3.5 py-2 rounded-lg border border-black bg-white hover:bg-neutral-100 text-xs font-bold text-black transition-all"
+            >
+              Data Master Akademik
+            </Link>
+            <Link
+              href="/staff/classes"
+              className="px-3.5 py-2 rounded-lg border border-black bg-black hover:bg-neutral-800 text-xs font-bold text-white transition-all"
+            >
+              Enroll & Peserta Kelas &rarr;
+            </Link>
+          </div>
         </div>
       </RetroWindow>
 
