@@ -1,6 +1,5 @@
 'use client';
 
-import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -27,6 +26,7 @@ import {
   Bookmark,
   Star,
   ArrowRight,
+  ArrowLeft,
   ShieldCheck,
   UserCheck,
   Send,
@@ -299,71 +299,76 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {/* ======================================================== */}
       {/* 1. TOP NAVIGASI GOOGLE CLASSROOM (TAB BESAR PER PERAN)   */}
       {/* ======================================================== */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-2 border-black pb-4">
-        {/* Tombol Kembali ke Daftar Kelas */}
-        <Link
-          href="/classes"
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border-2 border-black bg-white font-bold text-xs sm:text-sm text-black shadow-retro hover:bg-gray-soft transition-all w-fit"
-        >
-          <span>&larr;</span>
-          <span>Daftar Kelas</span>
-        </Link>
-
-        {/* TAB PER PERAN TERPISAH (SINKRON DENGAN ?tab=...) */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 overflow-x-auto no-scrollbar py-1">
-          {roleTabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  'flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer',
-                  isActive
-                    ? 'border-2 border-black bg-black text-white shadow-retro scale-[1.02]'
-                    : 'border-2 border-black bg-white text-black shadow-xs hover:bg-gray-soft'
-                )}
-              >
-                <Icon className="h-4 w-4 shrink-0" />
-                <span>{tab.label}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Kode Kelas Cepat untuk Pengajar */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setIsLiveRoomOpen(true)}
-            className="text-xs font-bold bg-white text-black border-2 border-black px-3 py-1.5 rounded-lg shadow-retro-xs hover:bg-black hover:text-white transition-all flex items-center gap-1.5 cursor-pointer"
-            title="Buka Ruang Tatap Muka Daring (Live WebRTC)"
+      <div className="space-y-3">
+        {/* Baris Atas: Tombol Kembali & Utilitas Kelas */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          {/* Tombol Kembali ke Daftar Kelas */}
+          <Link
+            href="/classes"
+            className="inline-flex items-center gap-2 px-3.5 py-2 border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] font-black text-xs sm:text-sm text-[#1C1917] shadow-retro-xs transition-all cursor-pointer"
           >
-            <Video className="h-3.5 w-3.5 text-primary" />
-            <span className="hidden sm:inline">{lecturer || ta ? 'Buka Tatap Muka' : 'Gabung Tatap Muka'}</span>
-            <span className="sm:hidden">Live</span>
-          </button>
-          {lecturer && (
+            <ArrowLeft className="h-4 w-4 text-[#C2553A]" />
+            <span>Daftar Kelas</span>
+          </Link>
+
+          {/* Utilitas & Aksi Cepat Kelas */}
+          <div className="flex items-center gap-2 shrink-0">
             <button
               type="button"
-              onClick={handleCopyCode}
-              className="text-xs font-bold bg-surface text-black border-2 border-black px-3 py-1.5 rounded-lg shadow-xs hover:bg-white transition-all flex items-center gap-1.5"
-              title="Salin Kode Kelas"
+              onClick={() => setIsLiveRoomOpen(true)}
+              className="text-xs font-bold bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] border-2 border-[#7A756D] px-3.5 py-2 shadow-retro-xs transition-all flex items-center gap-2 cursor-pointer"
+              title="Buka Ruang Tatap Muka Daring (Live WebRTC)"
             >
-              <Key className="h-3.5 w-3.5 text-black" />
-              <span>{cls.join_code}</span>
-              {copiedCode ? (
-                <span className="text-xs bg-black text-white px-1.5 py-0.5 rounded font-bold">Disalin!</span>
-              ) : (
-                <span className="text-xs text-black/60 font-medium">Salin</span>
-              )}
+              <Video className="h-3.5 w-3.5 text-[#C2553A]" />
+              <span className="hidden sm:inline">{lecturer || ta ? 'Buka Tatap Muka' : 'Gabung Tatap Muka'}</span>
+              <span className="sm:hidden">Live</span>
             </button>
-          )}
-          <span className="text-xs font-bold text-black bg-gray-soft border-2 border-black px-2.5 py-1.5 rounded-lg">
-            {cls.sks || 3} SKS
-          </span>
+            {lecturer && (
+              <button
+                type="button"
+                onClick={handleCopyCode}
+                className="text-xs font-mono font-bold bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] border-2 border-[#7A756D] px-3 py-2 shadow-retro-xs transition-all flex items-center gap-1.5 cursor-pointer"
+                title="Salin Kode Kelas"
+              >
+                <Key className="h-3.5 w-3.5 text-[#C2553A]" />
+                <span>{cls.join_code}</span>
+                {copiedCode ? (
+                  <span className="text-xs bg-[#065F46] text-white px-1.5 py-0.5 font-bold">Disalin!</span>
+                ) : (
+                  <span className="text-xs text-[#7A756D] font-medium">Salin</span>
+                )}
+              </button>
+            )}
+            <span className="text-xs font-bold text-[#1C1917] bg-[#FAF8F5] border-2 border-[#7A756D] px-3 py-2 shadow-retro-xs">
+              {cls.sks || 3} SKS
+            </span>
+          </div>
+        </div>
+
+        {/* Baris Bawah: Segmented Tabs Peran */}
+        <div className="border-2 border-[#7A756D] bg-[#FAF8F5] p-1.5 shadow-retro-sm overflow-x-auto no-scrollbar">
+          <div className="flex items-center gap-1.5 min-w-max">
+            {roleTabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  className={cn(
+                    'flex items-center gap-2 px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer',
+                    isActive
+                      ? 'bg-[#1C1917] text-white border-2 border-[#1C1917] shadow-retro-xs'
+                      : 'bg-transparent text-[#57534E] hover:text-[#1C1917] hover:bg-[#FFFFFF] border-2 border-transparent'
+                  )}
+                >
+                  <Icon className={cn('h-4 w-4 shrink-0', isActive ? 'text-[#C2553A]' : 'text-[#7A756D]')} />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -373,25 +378,24 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {(activeTab === 'forum' || activeTab === 'jawab-forum') && (
         <div className="space-y-6">
           {/* A. HERO COVER BANNER ALA GOOGLE CLASSROOM */}
-          <div className="rounded-2xl border-2 border-black bg-gray-soft shadow-retro-md p-6 sm:p-8 lg:p-10 relative overflow-hidden">
+          <div className="border-2 border-[#7A756D] border-l-4 border-l-[#C2553A] bg-[#FAF8F5] shadow-retro-sm p-6 sm:p-8 lg:p-10 relative overflow-hidden font-sans">
             {/* Header Baris & Status */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <WindowTrafficLights size="md" />
-                <span className="text-xs font-semibold text-black ml-2">
+                <span className="text-xs font-bold text-[#853827] bg-[#FEF4F1] border border-[#C2553A] px-2.5 py-0.5">
                   Kelas {cls.section}
                 </span>
               </div>
-              <span className="text-xs font-medium bg-white border-2 border-black px-3 py-1 rounded-lg shadow-xs">
+              <span className="text-xs font-bold bg-[#FFFFFF] border-2 border-[#7A756D] px-3 py-1 text-[#1C1917] shadow-retro-xs">
                 Semester Ganjil 2026/2027
               </span>
             </div>
 
             <div className="space-y-2 max-w-3xl">
-              <span className="text-xs font-semibold text-black bg-surface px-2.5 py-1 rounded border border-black inline-block shadow-xs">
+              <span className="text-xs font-bold text-[#853827] bg-[#FEF4F1] px-2.5 py-1 border border-[#C2553A] inline-block shadow-xs">
                 Kelas {cls.section}
               </span>
-              <h1 className="font-bold text-2xl sm:text-3xl text-black tracking-tight leading-snug">
+              <h1 className="font-heading font-black text-2xl sm:text-3xl text-[#1C1917] tracking-tight leading-snug">
                 {cls.title}
               </h1>
               <p className="text-xs sm:text-sm font-normal text-black/75 flex flex-wrap items-center gap-x-4 gap-y-1">
