@@ -672,26 +672,24 @@ export function PortalShell({
             {/* ======================================================== */}
             <header
               className={cn(
-                'sticky top-0 z-30 flex items-center justify-between border-b-2 border-[#7A756D] bg-[#ECE9D8] px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
-                isScrolled && 'shadow-md border-b-[#4A463F]'
+                'sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#D6D3CB] bg-[#ECE9D8] px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
+                isScrolled && 'shadow-xs border-b-[#B8B4AB]'
               )}
             >
-              {/* SISI KIRI: TOMBOL TOGGLE BILAH SAMPING */}
-              <div className="flex items-center shrink-0">
+              {/* SISI KIRI & TENGAH: TOMBOL TOGGLE SIDEBAR + SEARCH BAR TERPADU */}
+              <div className="flex items-center gap-2.5 sm:gap-3 flex-1 max-w-2xl min-w-0">
                 <button
                   ref={burgerButtonRef}
                   type="button"
                   onClick={handleBurgerClick}
-                  className="flex h-9 w-9 min-h-[36px] min-w-[36px] items-center justify-center font-sans font-extrabold bg-[#ECE9D8] text-[#1C1917] border-t border-l border-white border-b border-r border-[#7A756D] hover:bg-[#F2EFE8] active:border-t-[#7A756D] active:border-l-[#7A756D] active:border-b-white active:border-r-white transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A] shrink-0 cursor-pointer"
+                  className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#D6D3CB] hover:border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] shadow-2xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A] shrink-0 cursor-pointer"
                   title={isCollapsed ? 'Perbesar Bilah Samping' : 'Kecilkan Bilah Samping'}
                   aria-label="Toggle Sidebar"
                 >
                   <PanelLeft className="h-4 w-4 text-[#1C1917]" />
                 </button>
-              </div>
 
-              {/* SISI TENGAH: SEARCH BAR LUAS DENGAN KBD SHORTCUT ⌘K (COMMAND CENTER OS) */}
-              <div className="flex-1 max-w-2xl mx-3 sm:mx-6 md:mx-8 min-w-0">
+                {/* SEARCH BAR BERSIH & PROPORSIONAL (COMMAND CENTER OS) */}
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
@@ -701,21 +699,21 @@ export function PortalShell({
                       setIsCommandCenterOpen(true);
                     }
                   }}
-                  className="relative w-full"
+                  className="relative flex-1 min-w-0"
                 >
                   <div
                     onClick={() => setIsCommandCenterOpen(true)}
-                    className="flex items-center vt-window-inset px-3 sm:px-3.5 py-1.5 focus-within:ring-2 focus-within:ring-[#C2553A] transition-all bg-white cursor-pointer"
+                    className="flex items-center h-9 sm:h-10 px-3 sm:px-3.5 rounded-xl border border-[#D6D3CB] hover:border-[#7A756D] focus-within:border-[#C2553A] focus-within:ring-2 focus-within:ring-[#C2553A]/20 transition-all bg-[#FFFFFF] shadow-2xs cursor-pointer gap-2.5"
                   >
-                    <Search className="h-4 w-4 text-[#7A756D] mr-2.5 shrink-0" />
+                    <Search className="h-4 w-4 text-[#78716C] shrink-0" />
                     <input
                       ref={searchInputRef}
                       type="text"
                       value={searchQuery}
                       onFocus={() => setIsCommandCenterOpen(true)}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder='Spotlight OS: Ketik "absen", "bingung", "playback", "target 3.8" atau cari MK...'
-                      className="w-full bg-transparent text-sm font-medium text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none min-w-0 cursor-pointer"
+                      placeholder="Cari mata kuliah, materi, tugas, atau ketik perintah..."
+                      className="w-full bg-transparent text-xs sm:text-sm font-medium text-[#1C1917] placeholder:text-[#78716C] focus:outline-none min-w-0 truncate cursor-pointer"
                     />
                     <button
                       type="button"
@@ -723,26 +721,22 @@ export function PortalShell({
                         e.stopPropagation();
                         setIsCommandCenterOpen(true);
                       }}
-                      className="hidden sm:flex items-center gap-1 shrink-0 ml-2 select-none cursor-pointer"
+                      className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#ECE9D8] text-[11px] font-mono font-bold text-[#57534E] shrink-0 select-none cursor-pointer transition-colors"
                       title="Buka Command Center (Ctrl + K)"
                     >
-                      <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-xs font-sans font-extrabold text-[#1C1917] shadow-2xs">
-                        ⌘
-                      </kbd>
-                      <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-xs font-sans font-extrabold text-[#1C1917] shadow-2xs">
-                        K
-                      </kbd>
+                      <span>⌘</span>
+                      <span>K</span>
                     </button>
                   </div>
                 </form>
               </div>
 
-              {/* SISI KANAN: SEMESTER BADGE, NOTIFIKASI, & TOMBOL BANTUAN (?) */}
+              {/* SISI KANAN: SEMESTER BADGE, PERAN AKTIF & MODE CEPAT */}
               <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
                 {/* Badge Semester Velqora Terracotta */}
                 <div className="hidden lg:flex items-center">
-                  <span className="text-xs font-sans font-extrabold text-white uppercase tracking-wider bg-[#C2553A] px-3.5 py-1.5 border-t border-l border-[#EE7257] border-b border-r border-[#6B2D20] shadow-xs select-none">
-                    TA 2026/2027 GANJIL
+                  <span className="inline-flex items-center h-9 px-3.5 rounded-xl text-xs font-sans font-bold text-white uppercase tracking-wider bg-[#C2553A] border border-[#A34530] shadow-2xs select-none">
+                    TA 2026/2027 Ganjil
                   </span>
                 </div>
 
@@ -750,10 +744,10 @@ export function PortalShell({
                 {availableRoles && availableRoles.length > 1 && (
                   <Link
                     href="/workspace"
-                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-sans font-extrabold text-[#1C1917] bg-[#ECE9D8] hover:bg-[#F2EFE8] border-t border-l border-white border-b border-r border-[#7A756D] transition-all shadow-2xs"
+                    className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl text-xs font-sans font-bold text-[#1C1917] bg-[#FFFFFF] hover:bg-[#FAF8F5] border border-[#D6D3CB] hover:border-[#7A756D] transition-all shadow-2xs"
                     title="Beralih peran pengguna"
                   >
-                    <Layers className="h-3.5 w-3.5 text-[#853827]" />
+                    <Layers className="h-3.5 w-3.5 text-[#C2553A]" />
                     <span className="hidden sm:inline">{roleName}</span>
                     <ChevronDown className="h-3 w-3 text-[#7A756D]" />
                   </Link>
