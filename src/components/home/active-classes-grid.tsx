@@ -2,9 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Bookmark, Award, FileText, ArrowRight, BookOpen } from 'lucide-react';
+import { Bookmark, Award, FileText, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ActiveClassItem } from '@/modules/academic/home-actions';
+import {
+  getClassroomBannerTheme,
+  ClassroomBannerPattern,
+} from '@/modules/academic/classroom-cards';
 
 interface ActiveClassesGridProps {
   courses: ActiveClassItem[];
@@ -78,7 +82,10 @@ export function ActiveClassesGrid({
           {courses.map((course, idx) => {
             const isSelected = selectedCourse?.id === course.id;
             const isSaved = !!savedCourses[course.id];
-            const topAccent = idx % 2 === 0 ? 'bg-[#C2553A]' : 'bg-[#1C1917]';
+            const theme = getClassroomBannerTheme(
+              course.code || course.id || course.title,
+              idx
+            );
 
             return (
               <div
@@ -87,41 +94,45 @@ export function ActiveClassesGrid({
                 className={cn(
                   'group cursor-pointer rounded-2xl border bg-[#FFFFFF] transition-all flex flex-col justify-between overflow-hidden',
                   isSelected
-                    ? 'border-[#1C1917] ring-1 ring-[#1C1917] shadow-sm'
+                    ? 'border-[#1C1917] ring-2 ring-[#1C1917] shadow-sm'
                     : 'border-[#D6D3CB] hover:border-[#7A756D]'
                 )}
               >
-                {/* Header Kartu Editorial */}
-                <div className="bg-[#FAF8F5] border-b border-[#E8E5DE] relative">
-                  <div className={cn('h-1.5 w-full', topAccent)} />
-                  <BookOpen className="absolute -right-3 -bottom-3 h-20 w-20 text-[#1C1917] opacity-[0.04] pointer-events-none" />
+                {/* Header Kartu Berwarna & Bercorak ala Google Classroom */}
+                <div
+                  className={cn(
+                    theme.bannerGradient,
+                    'border-b border-[#1C1917]/15 relative text-white overflow-hidden'
+                  )}
+                >
+                  <ClassroomBannerPattern pattern={theme.pattern} />
 
                   <div className="p-4 space-y-2.5 relative z-10">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#FFFFFF] border border-[#D6D3CB] text-[11px] font-semibold text-[#1C1917]">
-                        <span className="font-mono font-bold text-[#853827]">{course.code}</span>
-                        <span className="text-[#B8B1A5]">•</span>
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#FFFFFF]/15 backdrop-blur-xs border border-[#FFFFFF]/25 text-[11px] font-semibold text-white">
+                        <span className="font-mono font-bold text-white">{course.code}</span>
+                        <span className="text-white/60">•</span>
                         <span>{course.sks} SKS</span>
                       </span>
 
                       {course.hasOpenExam ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-[#FEF2F0] text-[#853827] border border-[#C2553A]">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-[#FEF2F0] text-[#853827] border border-[#FFFFFF]/40 shadow-xs">
                           <Award className="h-3 w-3" />
                           <span>UJIAN</span>
                         </span>
                       ) : course.pendingTasksCount > 0 ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-[#ECE9D8] text-[#1C1917]">
-                          <FileText className="h-3 w-3 text-[#C2553A]" />
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-[#1C1917]/35 text-white border border-[#FFFFFF]/25">
+                          <FileText className="h-3 w-3 text-white" />
                           <span>{course.pendingTasksCount} Tugas</span>
                         </span>
                       ) : null}
                     </div>
 
-                    <h3 className="font-heading font-bold text-base text-[#1C1917] group-hover:text-[#C2553A] transition-colors leading-snug line-clamp-2 min-h-[2.5rem]">
+                    <h3 className="font-heading font-bold text-base text-white group-hover:underline decoration-white/80 underline-offset-4 transition-all leading-snug line-clamp-2 min-h-[2.5rem] drop-shadow-xs">
                       {course.title}
                     </h3>
 
-                    <p className="text-xs font-medium text-[#57534E] truncate">
+                    <p className="text-xs font-medium text-white/90 truncate">
                       {course.lecturer}
                     </p>
                   </div>
@@ -152,7 +163,10 @@ export function ActiveClassesGrid({
 
                   <div className="w-full h-1.5 rounded-full bg-[#ECE9D8] overflow-hidden">
                     <div
-                      className="bg-[#C2553A] h-full rounded-full transition-all duration-500"
+                      className={cn(
+                        theme.progressBar,
+                        'h-full rounded-full transition-all duration-500'
+                      )}
                       style={{ width: `${course.progressPercent}%` }}
                     />
                   </div>

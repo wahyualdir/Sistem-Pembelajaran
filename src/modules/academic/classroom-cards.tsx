@@ -41,30 +41,251 @@ export interface ClassCardItem {
   } | null;
 }
 
-// Palet Editorial Akademik Konsisten (Bebas Warna Pelangi Generik, Patuh cek-hex.js)
-const FRESH_THEMES = [
+export interface ClassroomBannerTheme {
+  id: string;
+  bannerGradient: string;
+  avatarBg: string;
+  accentText: string;
+  progressBar: string;
+  badgeSoftBg: string;
+  badgeSoftText: string;
+  pattern:
+    | 'cloud-nodes'
+    | 'binary-tree'
+    | 'data-cylinders'
+    | 'cyber-shield'
+    | 'neural-constellation'
+    | 'editorial-compass';
+}
+
+// Palet Banner Kelas Berwarna ala Google Classroom (100% Patuh cek-hex.js)
+export const CLASSROOM_BANNER_THEMES: ClassroomBannerTheme[] = [
   {
-    headerBg: 'bg-[#FAF8F5]',
-    topBar: 'bg-[#C2553A]',
-    avatarBg: 'bg-[#1C1917]',
+    id: 'terracotta',
+    bannerGradient: 'bg-gradient-to-br from-[#9E3B1E] via-[#853827] to-[#4A1F16]',
+    avatarBg: 'bg-[#4A1F16]',
     accentText: 'text-[#C2553A]',
-    badgeText: 'text-[#853827]',
+    progressBar: 'bg-[#C2553A]',
+    badgeSoftBg: 'bg-[#FEF2F0]',
+    badgeSoftText: 'text-[#853827]',
+    pattern: 'cloud-nodes',
   },
   {
-    headerBg: 'bg-[#FAF8F5]',
-    topBar: 'bg-[#1C1917]',
+    id: 'emerald',
+    bannerGradient: 'bg-gradient-to-br from-[#047857] via-[#065F46] to-[#064E3B]',
+    avatarBg: 'bg-[#064E3B]',
+    accentText: 'text-[#065F46]',
+    progressBar: 'bg-[#047857]',
+    badgeSoftBg: 'bg-[#FAF8F5]',
+    badgeSoftText: 'text-[#065F46]',
+    pattern: 'binary-tree',
+  },
+  {
+    id: 'navy',
+    bannerGradient: 'bg-gradient-to-br from-[#075985] via-[#0C4A6E] to-[#182247]',
+    avatarBg: 'bg-[#0B152D]',
+    accentText: 'text-[#0C4A6E]',
+    progressBar: 'bg-[#0369A1]',
+    badgeSoftBg: 'bg-[#FAF8F5]',
+    badgeSoftText: 'text-[#0C4A6E]',
+    pattern: 'data-cylinders',
+  },
+  {
+    id: 'amber',
+    bannerGradient: 'bg-gradient-to-br from-[#B45309] via-[#92400E] to-[#451A03]',
+    avatarBg: 'bg-[#451A03]',
+    accentText: 'text-[#92400E]',
+    progressBar: 'bg-[#B45309]',
+    badgeSoftBg: 'bg-[#F2EFE8]',
+    badgeSoftText: 'text-[#92400E]',
+    pattern: 'cyber-shield',
+  },
+  {
+    id: 'plum',
+    bannerGradient: 'bg-gradient-to-br from-[#6D28D9] via-[#4C1D95] to-[#3B0764]',
+    avatarBg: 'bg-[#3B0764]',
+    accentText: 'text-[#4C1D95]',
+    progressBar: 'bg-[#6D28D9]',
+    badgeSoftBg: 'bg-[#FAF8F5]',
+    badgeSoftText: 'text-[#4C1D95]',
+    pattern: 'neural-constellation',
+  },
+  {
+    id: 'espresso',
+    bannerGradient: 'bg-gradient-to-br from-[#38312A] via-[#2D2823] to-[#1C1917]',
     avatarBg: 'bg-[#C2553A]',
-    accentText: 'text-[#1C1917]',
-    badgeText: 'text-[#44403C]',
-  },
-  {
-    headerBg: 'bg-[#FAF8F5]',
-    topBar: 'bg-[#853827]',
-    avatarBg: 'bg-[#44403C]',
-    accentText: 'text-[#853827]',
-    badgeText: 'text-[#853827]',
+    accentText: 'text-[#C2553A]',
+    progressBar: 'bg-[#1C1917]',
+    badgeSoftBg: 'bg-[#F2EFE8]',
+    badgeSoftText: 'text-[#1C1917]',
+    pattern: 'editorial-compass',
   },
 ];
+
+export function getClassroomBannerTheme(
+  key?: string | null,
+  fallbackIndex = 0
+): ClassroomBannerTheme {
+  const k = (key || '').toUpperCase();
+  if (
+    k.includes('STI2544138') ||
+    k.includes('000001') ||
+    k.includes('PEMROGRAMAN WEB')
+  ) {
+    return CLASSROOM_BANNER_THEMES[0];
+  }
+  if (
+    k.includes('STI2543131') ||
+    k.includes('000002') ||
+    k.includes('ALGORITMA')
+  ) {
+    return CLASSROOM_BANNER_THEMES[1];
+  }
+  if (
+    k.includes('STI2541114') ||
+    k.includes('000003') ||
+    k.includes('BASIS DATA')
+  ) {
+    return CLASSROOM_BANNER_THEMES[2];
+  }
+  if (
+    k.includes('STI2543130') ||
+    k.includes('000004') ||
+    k.includes('JARINGAN')
+  ) {
+    return CLASSROOM_BANNER_THEMES[3];
+  }
+  if (
+    k.includes('STI2543129') ||
+    k.includes('000005') ||
+    k.includes('KECERDASAN BUATAN')
+  ) {
+    return CLASSROOM_BANNER_THEMES[4];
+  }
+  return CLASSROOM_BANNER_THEMES[Math.abs(fallbackIndex) % CLASSROOM_BANNER_THEMES.length];
+}
+
+export function ClassroomBannerPattern({
+  pattern,
+}: {
+  pattern: ClassroomBannerTheme['pattern'];
+}) {
+  return (
+    <div
+      className="absolute inset-0 pointer-events-none overflow-hidden select-none text-white"
+      aria-hidden="true"
+    >
+      {/* Lapisan Geometri Halus Latar Belakang (Gaya Google Classroom) */}
+      <svg
+        className="absolute -right-6 -top-8 h-48 w-72 opacity-[0.16]"
+        viewBox="0 0 280 180"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Gelombang & Lingkaran Latar */}
+        <circle cx="230" cy="35" r="78" fill="currentColor" fillOpacity="0.35" />
+        <circle cx="170" cy="145" r="64" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
+        <path
+          d="M-20 150 C60 110, 130 175, 290 95"
+          stroke="currentColor"
+          strokeWidth="1.75"
+          strokeOpacity="0.65"
+        />
+
+        {pattern === 'cloud-nodes' && (
+          <g stroke="currentColor" strokeWidth="2">
+            {/* Corak Cloud & Arsitektur Web */}
+            <rect x="155" y="28" width="96" height="62" rx="10" fill="currentColor" fillOpacity="0.22" />
+            <line x1="155" y1="44" x2="251" y2="44" />
+            <circle cx="166" cy="36" r="2.5" fill="currentColor" />
+            <circle cx="175" cy="36" r="2.5" fill="currentColor" />
+            <circle cx="184" cy="36" r="2.5" fill="currentColor" />
+            <path d="M182 68 L172 58 L182 48" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M224 48 L234 58 L224 68" strokeLinecap="round" strokeLinejoin="round" />
+            <line x1="208" y1="46" x2="198" y2="70" strokeLinecap="round" />
+            <circle cx="122" cy="88" r="14" fill="currentColor" fillOpacity="0.25" />
+            <line x1="136" y1="82" x2="155" y2="68" strokeDasharray="3 3" />
+          </g>
+        )}
+
+        {pattern === 'binary-tree' && (
+          <g stroke="currentColor" strokeWidth="2">
+            {/* Corak Pohon Biner & Struktur Data */}
+            <line x1="205" y1="32" x2="165" y2="76" />
+            <line x1="205" y1="32" x2="245" y2="76" />
+            <line x1="165" y1="76" x2="142" y2="122" />
+            <line x1="165" y1="76" x2="188" y2="122" />
+            <line x1="245" y1="76" x2="225" y2="122" />
+            <circle cx="205" cy="32" r="12" fill="currentColor" fillOpacity="0.35" />
+            <circle cx="165" cy="76" r="10" fill="currentColor" fillOpacity="0.35" />
+            <circle cx="245" cy="76" r="10" fill="currentColor" fillOpacity="0.35" />
+            <circle cx="142" cy="122" r="8" fill="currentColor" fillOpacity="0.25" />
+            <circle cx="188" cy="122" r="8" fill="currentColor" fillOpacity="0.25" />
+            <circle cx="225" cy="122" r="8" fill="currentColor" fillOpacity="0.25" />
+          </g>
+        )}
+
+        {pattern === 'data-cylinders' && (
+          <g stroke="currentColor" strokeWidth="2">
+            {/* Corak Basis Data Terdistribusi & Klaster Big Data */}
+            <ellipse cx="210" cy="40" rx="38" ry="12" fill="currentColor" fillOpacity="0.3" />
+            <path d="M172 40 V70 C172 76.6 189 82 210 82 C231 82 248 76.6 248 70 V40" fill="currentColor" fillOpacity="0.16" />
+            <path d="M172 70 V100 C172 106.6 189 112 210 112 C231 112 248 106.6 248 100 V70" fill="currentColor" fillOpacity="0.12" />
+            <circle cx="132" cy="64" r="16" strokeDasharray="3 3" />
+            <line x1="148" y1="64" x2="172" y2="64" />
+          </g>
+        )}
+
+        {pattern === 'cyber-shield' && (
+          <g stroke="currentColor" strokeWidth="2">
+            {/* Corak Perisai Keamanan Siber & Radar Jaringan */}
+            <polygon
+              points="210,22 250,38 250,78 210,114 170,78 170,38"
+              fill="currentColor"
+              fillOpacity="0.24"
+            />
+            <polygon points="210,36 236,47 236,74 210,98 184,74 184,47" strokeOpacity="0.7" />
+            <circle cx="210" cy="66" r="8" fill="currentColor" />
+            <circle cx="130" cy="48" r="24" strokeOpacity="0.5" />
+            <circle cx="130" cy="48" r="40" strokeOpacity="0.3" strokeDasharray="4 4" />
+          </g>
+        )}
+
+        {pattern === 'neural-constellation' && (
+          <g stroke="currentColor" strokeWidth="1.8">
+            {/* Corak Jaringan Saraf Tiruan & Konstelasi AI */}
+            <polygon
+              points="150,42 208,24 252,64 224,118 162,104"
+              fill="currentColor"
+              fillOpacity="0.18"
+            />
+            <line x1="150" y1="42" x2="252" y2="64" strokeOpacity="0.6" />
+            <line x1="208" y1="24" x2="162" y2="104" strokeOpacity="0.6" />
+            <line x1="208" y1="24" x2="224" y2="118" strokeOpacity="0.6" />
+            <circle cx="150" cy="42" r="6" fill="currentColor" />
+            <circle cx="208" cy="24" r="7" fill="currentColor" />
+            <circle cx="252" cy="64" r="6" fill="currentColor" />
+            <circle cx="224" cy="118" r="6" fill="currentColor" />
+            <circle cx="162" cy="104" r="6" fill="currentColor" />
+          </g>
+        )}
+
+        {pattern === 'editorial-compass' && (
+          <g stroke="currentColor" strokeWidth="2">
+            {/* Corak Kompas Akademik & Geometri Klasik */}
+            <circle cx="210" cy="68" r="44" fill="currentColor" fillOpacity="0.18" />
+            <circle cx="210" cy="68" r="28" strokeDasharray="3 3" />
+            <polygon points="210,30 220,68 210,106 200,68" fill="currentColor" fillOpacity="0.35" />
+            <polygon points="172,68 210,58 248,68 210,78" fill="currentColor" fillOpacity="0.2" />
+          </g>
+        )}
+      </svg>
+
+      {/* Aksen Sudut Kiri Bawah Halus */}
+      <div className="absolute -left-10 -bottom-12 h-28 w-28 rounded-full bg-[#FFFFFF] opacity-[0.06]" />
+    </div>
+  );
+}
 
 function getInitials(name?: string) {
   if (!name) return 'DS';
@@ -85,7 +306,10 @@ export function GoogleClassroomCard({
   index: number;
 }) {
   const [copied, setCopied] = useState(false);
-  const theme = FRESH_THEMES[index % FRESH_THEMES.length];
+  const theme = getClassroomBannerTheme(
+    item.course_code || item.id || item.title,
+    index
+  );
   const lecturerName = item.lecturer_name || 'Dosen Pengampu';
   const initials = getInitials(lecturerName);
   const sksCount = item.sks ?? 3;
@@ -101,66 +325,67 @@ export function GoogleClassroomCard({
 
   return (
     <article className="group relative flex flex-col justify-between rounded-2xl border border-[#D6D3CB] hover:border-[#7A756D] bg-[#FFFFFF] shadow-sm hover:shadow-retro-sm transition-all duration-200 overflow-hidden font-sans">
-      {/* 1. CLEAN SOFT-HEADER */}
-      <div className={`${theme.headerBg} relative flex flex-col justify-between border-b border-[#E8E5DE]`}>
-        {/* Garis Aksen Tipis di Puncak Kartu */}
-        <div className={`h-1.5 w-full ${theme.topBar}`} />
+      {/* 1. BANNER BERWARNA & BERCORAK ALA GOOGLE CLASSROOM */}
+      <div
+        className={`${theme.bannerGradient} relative flex flex-col justify-between border-b border-[#1C1917]/15 text-white overflow-hidden`}
+      >
+        {/* Corak Ilustrasi Vektor Akademik */}
+        <ClassroomBannerPattern pattern={theme.pattern} />
 
-        {/* Ilustrasi Watermark Lembut */}
-        <BookOpen className="absolute -right-3 -bottom-3 h-24 w-24 text-[#1C1917] opacity-[0.04] pointer-events-none" />
-
-        <div className="p-5 pb-4 space-y-3 relative z-10">
+        <div className="p-5 pb-4 space-y-3.5 relative z-10">
           {/* Baris Atas: Kode Mata Kuliah + Kelas & Kode Gabung */}
           <div className="flex items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#FFFFFF] border border-[#D6D3CB] text-[11px] font-semibold text-[#1C1917]">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#FFFFFF]/15 backdrop-blur-xs border border-[#FFFFFF]/25 text-[11px] font-semibold text-white">
               {item.course_code && (
                 <>
-                  <span className="font-mono font-bold text-[#853827]">{item.course_code}</span>
-                  <span className="text-[#B8B4AB]">•</span>
+                  <span className="font-mono font-bold text-white">{item.course_code}</span>
+                  <span className="text-white/60">•</span>
                 </>
               )}
-              <span className={theme.badgeText}>Kelas {item.section}</span>
-              <span className="text-[#B8B4AB]">•</span>
+              <span className="text-white/95">Kelas {item.section}</span>
+              <span className="text-white/60">•</span>
               <span>{sksCount} SKS</span>
             </span>
 
             <button
               type="button"
               onClick={handleCopy}
-              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#FFFFFF]/90 hover:bg-[#1C1917] text-[#57534E] hover:text-white border border-[#D6D3CB] transition-colors text-[11px] font-mono font-bold cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#1C1917]/30 hover:bg-[#FFFFFF] text-white hover:text-[#1C1917] border border-[#FFFFFF]/30 transition-colors text-[11px] font-mono font-bold cursor-pointer"
               title="Salin Kode Kelas"
             >
               {copied ? (
                 <>
-                  <Check className="h-3 w-3 text-[#059669]" />
+                  <Check className="h-3 w-3 text-[#10B981]" />
                   <span>Disalin</span>
                 </>
               ) : (
                 <>
-                  <Copy className="h-2.5 w-2.5 opacity-70" />
+                  <Copy className="h-2.5 w-2.5 opacity-85" />
                   <span>{item.join_code}</span>
                 </>
               )}
             </button>
           </div>
 
-          {/* Judul Mata Kuliah Bersih */}
+          {/* Judul Mata Kuliah di Atas Banner Berwarna */}
           <Link href={`/classes/${item.id}`} className="block group/title">
-            <h2 className="font-heading font-black text-base sm:text-[17px] text-[#1C1917] group-hover/title:text-[#C2553A] transition-colors leading-snug line-clamp-2 min-h-[2.6rem]">
+            <h2 className="font-heading font-black text-base sm:text-[18px] text-white group-hover/title:underline decoration-white/80 underline-offset-4 transition-all leading-snug line-clamp-2 min-h-[2.7rem] drop-shadow-xs">
               {item.title}
             </h2>
           </Link>
 
-          {/* Baris Dosen Pengampu menyatu di bawah Header */}
-          <div className="flex items-center gap-2 pt-0.5">
-            <div
-              className={`h-6 w-6 rounded-full ${theme.avatarBg} text-white flex items-center justify-center font-heading font-black text-[10px] shrink-0`}
-            >
-              {initials}
+          {/* Baris Dosen Pengampu dengan Avatar Kontras ala Google Classroom */}
+          <div className="flex items-center justify-between gap-2 pt-0.5">
+            <div className="flex items-center gap-2 min-w-0">
+              <div
+                className={`h-7 w-7 rounded-full ${theme.avatarBg} ring-2 ring-[#FFFFFF]/80 text-white flex items-center justify-center font-heading font-black text-[10px] shrink-0 shadow-xs`}
+              >
+                {initials}
+              </div>
+              <span className="text-xs font-semibold text-white/95 truncate">
+                {lecturerName}
+              </span>
             </div>
-            <span className="text-xs font-semibold text-[#44403C] truncate">
-              {lecturerName}
-            </span>
           </div>
         </div>
       </div>

@@ -84,6 +84,10 @@ import { toggleMaterialCompleteAction, remindUnreadStudentsAction } from './mate
 import { CpmkCplRadarCard } from './cpmk-cpl-radar-card';
 import { ClassLivePollCard } from './class-live-poll-card';
 import { ClassLiveInteractionView } from './class-live-interaction-view';
+import {
+  getClassroomBannerTheme,
+  ClassroomBannerPattern,
+} from './classroom-cards';
 
 export interface ClassDetailData {
   cls: {
@@ -325,38 +329,41 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
     .map((w: string) => w[0] || '')
     .join('')
     .toUpperCase() || 'DS';
+  const bannerTheme = getClassroomBannerTheme(
+    (cls as any).course_code || cls.id || cls.title,
+    0
+  );
 
   return (
     <div className="max-w-[1360px] mx-auto space-y-5 animate-fade-up font-sans p-3 sm:p-5 lg:p-6 pb-24">
       {/* ================================================================= */}
-      {/* 1. CLEAN SOFT-HEADER RUANG KELAS & BILAH NAVIGASI TERPADU         */}
+      {/* 1. BANNER BERWARNA & BERCORAK RUANG KELAS ALA GOOGLE CLASSROOM    */}
       {/* ================================================================= */}
       <div className="rounded-2xl border border-[#D6D3CB] bg-[#FFFFFF] shadow-sm overflow-hidden font-sans">
-        {/* Garis Aksen Tipis di Puncak */}
-        <div className="h-1.5 w-full bg-[#C2553A]" />
-
-        {/* Soft-Tinted Header Area */}
-        <div className="relative p-5 sm:p-6 bg-[#FAF8F5] border-b border-[#E8E5DE] space-y-4 overflow-hidden">
-          <BookOpen className="absolute -right-4 -bottom-4 h-36 w-36 text-[#1C1917] opacity-[0.04] pointer-events-none" />
+        {/* Header Area Berwarna & Bercorak */}
+        <div
+          className={`relative p-5 sm:p-7 ${bannerTheme.bannerGradient} border-b border-[#1C1917]/15 space-y-5 overflow-hidden text-white`}
+        >
+          <ClassroomBannerPattern pattern={bannerTheme.pattern} />
 
           {/* Baris Atas: Tombol Kembali, Pill Identitas, Kode Kelas & Tatap Muka */}
           <div className="relative z-10 flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2 text-xs">
               <Link
                 href="/classes"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-bold transition-all cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#FFFFFF]/30 bg-[#FFFFFF]/15 hover:bg-[#FFFFFF] text-white hover:text-[#1C1917] font-bold transition-all cursor-pointer backdrop-blur-xs"
               >
-                <ArrowLeft className="h-3.5 w-3.5 text-[#C2553A]" />
+                <ArrowLeft className="h-3.5 w-3.5" />
                 <span>Kelas Saya</span>
               </Link>
 
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFFFFF] border border-[#D6D3CB] font-bold text-[#1C1917]">
-                <span className="text-[#C2553A]">{cls.section}</span>
-                <span className="text-[#B8B4AB]">•</span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFFFFF]/15 backdrop-blur-xs border border-[#FFFFFF]/25 font-bold text-white">
+                <span>Kelas {cls.section}</span>
+                <span className="text-white/60">•</span>
                 <span>{cls.sks || 3} SKS</span>
               </span>
 
-              <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-[#FFFFFF]/80 border border-[#D6D3CB] text-[#57534E] font-semibold">
+              <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-[#1C1917]/30 border border-[#FFFFFF]/20 text-white/95 font-semibold">
                 {activeRoleBadge}
               </span>
             </div>
@@ -365,12 +372,12 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#1C1917] text-[#1C1917] hover:text-white text-xs font-mono font-bold transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#FFFFFF]/30 bg-[#1C1917]/30 hover:bg-[#FFFFFF] text-white hover:text-[#1C1917] text-xs font-mono font-bold transition-colors cursor-pointer"
                 title="Salin Kode Kelas"
               >
-                <Key className="h-3.5 w-3.5 text-[#C2553A]" />
+                <Key className="h-3.5 w-3.5" />
                 <span>{cls.join_code}</span>
-                <span className="text-[10px] font-sans font-semibold opacity-75">
+                <span className="text-[10px] font-sans font-semibold opacity-85">
                   {copiedCode ? 'Disalin!' : 'Salin'}
                 </span>
               </button>
@@ -378,10 +385,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               <button
                 type="button"
                 onClick={() => setIsLiveRoomOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#1C1917] hover:bg-[#C2553A] text-white font-bold text-xs transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-bold text-xs shadow-xs transition-colors cursor-pointer"
                 title="Buka Ruang Tatap Muka Daring (Live WebRTC)"
               >
-                <Video className="h-3.5 w-3.5" />
+                <Video className="h-3.5 w-3.5 text-[#C2553A]" />
                 <span>{lecturer || ta ? 'Buka Tatap Muka' : 'Gabung Tatap Muka'}</span>
               </button>
             </div>
@@ -390,37 +397,39 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           {/* Baris Tengah: Judul Mata Kuliah & Info Inti Satu Baris Segar */}
           <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between gap-4 pt-1">
             <div className="space-y-2 max-w-3xl">
-              <h1 className="font-heading font-black text-2xl sm:text-3xl text-[#1C1917] tracking-tight leading-snug">
+              <h1 className="font-heading font-black text-2xl sm:text-3xl text-white tracking-tight leading-snug drop-shadow-xs">
                 {cls.title}
               </h1>
 
-              {/* Baris Metadata Bersih Tanpa Kotak-Kotak */}
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs sm:text-sm text-[#44403C] font-medium">
+              {/* Baris Metadata Kontras Putih */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 text-xs sm:text-sm text-white/90 font-medium">
                 <span className="inline-flex items-center gap-1.5">
-                  <Clock className="h-4 w-4 text-[#C2553A]" />
+                  <Clock className="h-4 w-4 text-white/80" />
                   <span>{cls.schedule || 'Jadwal fleksibel / Mandiri'}</span>
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="h-4 w-4 text-[#7A756D]" />
+                  <MapPin className="h-4 w-4 text-white/80" />
                   <span>{cls.room || 'Ruang Perkuliahan'}</span>
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <Users className="h-4 w-4 text-[#7A756D]" />
+                  <Users className="h-4 w-4 text-white/80" />
                   <span>{members.length} Mahasiswa</span>
                 </span>
               </div>
             </div>
 
-            {/* Pill Dosen Pengampu Bersih */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#FFFFFF] border border-[#D6D3CB] self-start lg:self-end shrink-0">
-              <div className="h-7 w-7 rounded-full bg-[#C2553A] text-white flex items-center justify-center font-heading font-black text-xs shrink-0">
+            {/* Pill Dosen Pengampu Kontras */}
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#1C1917]/35 backdrop-blur-xs border border-[#FFFFFF]/25 self-start lg:self-end shrink-0">
+              <div
+                className={`h-7 w-7 rounded-full ${bannerTheme.avatarBg} ring-2 ring-[#FFFFFF]/80 text-white flex items-center justify-center font-heading font-black text-xs shrink-0`}
+              >
                 {lecturerInitials}
               </div>
               <div className="pr-1">
-                <span className="text-xs font-bold text-[#1C1917] block leading-tight">
+                <span className="text-xs font-bold text-white block leading-tight">
                   {lecturerDisplayName}
                 </span>
-                <span className="text-[10px] text-[#6B6560] font-medium block">
+                <span className="text-[10px] text-white/80 font-medium block">
                   Dosen Pengampu
                 </span>
               </div>
