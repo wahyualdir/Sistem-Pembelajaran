@@ -115,59 +115,6 @@ export default async function AttendancePage() {
     redirect('/staff');
   }
 
-  const realLeaves = await listLeavePermitsAction();
-  const isDemo = isDemoMode();
-  const isStaff = role === 'LECTURER' || role === 'TEACHING_ASSISTANT' || role === 'SUPER_ADMIN';
-
-  // Jika Dosen / Asdos: Tampilkan Hub Bertab Dosen [Sesi Presensi | Rekap Kehadiran | Izin & Sakit | Verifikasi GPS & Anomali | Pengaturan Lokasi]
-  if (isStaff) {
-    const classes = await listMyClassesAction().catch(() => []);
-    const firstClass = classes[0];
-    const detail = firstClass ? await getClassDetailAction(firstClass.id).catch(() => null) : null;
-    const sessions = firstClass ? await listAttendanceSessionsAction(firstClass.id).catch(() => []) : [];
-    const classSummary = firstClass && detail?.members
-      ? await getClassAttendanceSummaryAction(firstClass.id, detail.members).catch(() => [])
-      : [];
-    const anomalies = await listAttendanceAnomaliesAction().catch(() => []);
-
-    return (
-      <LecturerAttendanceHubView
-        classes={classes}
-        sessions={sessions}
-        classSummary={classSummary}
-        leaves={realLeaves}
-        anomalies={anomalies}
-        isDemo={isDemo}
-      />
-    );
-  }
-
-  const isNew = user?.isNewAccount ?? false;
-  const records = isDemo && !isNew ? DEMO_ATTENDANCE_RECORDS : [];
-  const leaves = isNew
-    ? []
-    : realLeaves.length > 0
-    ? realLeaves.map((l) => ({
-        id: l.id,
-        type: l.type,
-        courseTitle: l.course_title,
-        meetingNumber: l.meeting_number,
-        date: l.date,
-        reason: l.reason,
-        attachmentName: l.attachment_name,
-        status: l.status,
-        submittedAt: l.submitted_at,
-        feedback: l.feedback,
-      }))
-    : isDemo
-    ? DEMO_LEAVE_REQUESTS
-    : [];
-
-  return (
-    <AttendanceHubView
-      records={records}
-      leaves={leaves}
-      isDemo={isDemo && !isNew}
-    />
-  );
+  // Presensi kini terintegrasi dan dikelola langsung di dalam masing-masing kelas (model Google Classroom)
+  redirect('/classes');
 }

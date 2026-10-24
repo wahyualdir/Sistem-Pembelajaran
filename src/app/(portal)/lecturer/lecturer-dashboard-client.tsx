@@ -444,10 +444,10 @@ export function LecturerDashboardClient({
                   </div>
                 </div>
                 <Link
-                  href="/attendance"
+                  href="/classes"
                   className="text-xs sm:text-sm font-bold text-black hover:underline transition-colors shrink-0"
                 >
-                  Buka Presensi Terpadu &rarr;
+                  Buka di Kelas Saya &rarr;
                 </Link>
               </div>
 
@@ -461,11 +461,11 @@ export function LecturerDashboardClient({
                   </p>
                 </div>
                 <Link
-                  href="/attendance"
+                  href="/classes"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-bold shadow-retro transition-all shrink-0 min-h-[44px]"
                 >
                   <QrCode className="h-4 w-4" />
-                  <span>Buka Presensi Sekarang</span>
+                  <span>Buka di Kelas Saya</span>
                   <ChevronRight className="h-4 w-4" />
                 </Link>
               </div>

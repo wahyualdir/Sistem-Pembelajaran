@@ -126,7 +126,6 @@ const STUDENT_GROUPS: MenuGroup[] = [
     roles: ['STUDENT'],
     items: [
       { id: 'mhs-kelas', label: 'Kelas Saya', href: '/classes', icon: Layers, roles: ['STUDENT'] },
-      { id: 'mhs-presensi', label: 'Presensi', href: '/attendance', icon: CalendarCheck2, roles: ['STUDENT'] },
       { id: 'mhs-ujian', label: 'Ujian', href: '/exams', icon: FileCheck2, roles: ['STUDENT'] },
       { id: 'mhs-perpustakaan', label: 'Perpustakaan', href: '/library', icon: Library, roles: ['STUDENT'] },
       { id: 'mhs-tanya-ai', label: 'Tanya AI', href: '/ai-assistant', icon: Sparkles, roles: ['STUDENT'] },
@@ -213,7 +212,6 @@ const LECTURER_GROUPS: MenuGroup[] = [
     roles: ['LECTURER'],
     items: [
       { id: 'dsn-kelas', label: 'Kelas Saya', href: '/classes', icon: Layers, roles: ['LECTURER'] },
-      { id: 'dsn-presensi', label: 'Presensi', href: '/attendance', icon: CalendarCheck2, roles: ['LECTURER'] },
       { id: 'dsn-berita-acara', label: 'Berita Acara', href: '/lecturer/journals', icon: NotebookPen, roles: ['LECTURER'] },
       { id: 'dsn-tinjau-konten', label: 'Tinjau Konten', href: '/lecturer/content-review', icon: BadgeCheck, roles: ['LECTURER'] },
       { id: 'dsn-perpustakaan', label: 'Perpustakaan', href: '/library', icon: Library, roles: ['LECTURER'] },

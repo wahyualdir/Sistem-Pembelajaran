@@ -411,10 +411,10 @@ export function StudentDashboardClient({
                   </div>
                 </div>
                 <Link
-                  href="/attendance"
+                  href="/classes"
                   className="text-xs sm:text-sm font-bold text-primary-dark hover:text-ink transition-colors shrink-0"
                 >
-                  Buka Presensi Terpadu &rarr;
+                  Buka di Kelas Saya &rarr;
                 </Link>
               </div>
 
@@ -500,11 +500,11 @@ export function StudentDashboardClient({
                         Ruang: Lab Komputer 2 (Hybrid)
                       </span>
                       <Link
-                        href="/attendance"
+                        href="/classes"
                         className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-ink bg-ink text-white hover:bg-ink/90 text-xs sm:text-sm font-bold shadow-retro transition-all shrink-0 min-h-[40px]"
                       >
                         <Clock className="h-4 w-4" />
-                        <span>Klaim Presensi Sekarang</span>
+                        <span>Klaim Presensi di Kelas Saya</span>
                       </Link>
                     </div>
                   </div>

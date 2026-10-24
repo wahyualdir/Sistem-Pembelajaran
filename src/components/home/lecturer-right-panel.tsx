@@ -181,7 +181,7 @@ export function LecturerRightPanel({
                 <span className="truncate">Buat Tugas</span>
               </Link>
               <Link
-                href="/attendance"
+                href="/classes"
                 className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
               >
                 <QrCode className="h-4 w-4 shrink-0 text-primary" />
@@ -350,7 +350,7 @@ export function LecturerRightPanel({
                 </Link>
 
                 <Link
-                  href="/attendance"
+                  href="/classes"
                   className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-ink bg-black text-white font-heading font-bold text-base shadow-[3px_3px_0px_#000] hover:bg-black/90 active:translate-y-0.5 transition-all text-center focus-visible:outline-none"
                 >
                   <Play className="h-5 w-5 fill-white" />
