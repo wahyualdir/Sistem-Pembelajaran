@@ -235,19 +235,19 @@ export function PortalShell({
     };
   }, [isProfileMenuOpen]);
 
-  const userName = profile?.full_name || 'Wahyu Aldiriyanto';
   const normalizedRole = normalizeRole(role);
   const userRoleLabel = getRoleLabel(role);
+  const userName = profile?.full_name || userRoleLabel;
   const userSubtitle = roleName || userRoleLabel;
 
-  // Inisial avatar (contoh: "WA" untuk Wahyu Aldiriyanto)
+  // Inisial avatar dinamis sesuai nama profil atau peran aktif
   const initials =
     userName
       .split(' ')
       .filter(Boolean)
       .slice(0, 2)
       .map((n) => n[0].toUpperCase())
-      .join('') || 'WA';
+      .join('') || 'RK';
 
   // Mode rail hanya aktif pada desktop (>= 1280px) saat collapsed
   const isRailActive = isDesktop && isCollapsed;
@@ -309,8 +309,6 @@ export function PortalShell({
         <div className="min-h-screen bg-transparent text-[#1C1917] font-sans flex flex-col md:flex-row antialiased selection:bg-[#C2553A] selection:text-white relative">
           {/* Tech Background Grid & Gradient khas Velqora */}
           <TechBackground />
-          {/* CRT Scanlines Overlay */}
-          <div className="fixed inset-0 vt-scanlines pointer-events-none z-30" />
 
           {/* Drawer Backdrop Overlay (scrim) untuk < 1280px */}
           {isDrawerOpen && (
@@ -360,11 +358,11 @@ export function PortalShell({
                     <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="font-heading font-black text-base sm:text-lg tracking-tight text-[#1C1917] leading-none whitespace-nowrap">
+                    <span className="font-heading font-bold text-base sm:text-lg tracking-tight text-[#1C1917] leading-none whitespace-nowrap">
                       Ruang<span className="text-[#C2553A]">Kampus</span>
                     </span>
-                    <span className="text-xs font-sans font-extrabold text-[#853827] uppercase tracking-wider mt-1 leading-none">
-                      Academic Learning OS
+                    <span className="text-[11px] font-sans font-semibold text-[#7A756D] tracking-wide mt-1 leading-none">
+                      Portal Akademik Terpadu
                     </span>
                   </div>
                 </Link>
@@ -381,7 +379,7 @@ export function PortalShell({
                   <div key={group.id || group.title} className="space-y-1">
                     {!isRailActive && group.title ? (
                       <div className="flex items-center justify-between px-3 py-1 mb-0.5">
-                        <p className="text-xs font-sans font-extrabold tracking-wider text-[#1C1917] uppercase">
+                        <p className="text-[11px] font-sans font-semibold tracking-wider text-[#7A756D] uppercase">
                           {group.title}
                         </p>
                         {group.collapsible && (

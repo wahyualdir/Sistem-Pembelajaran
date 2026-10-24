@@ -109,16 +109,7 @@ export default async function ClassesPage({
               {classes.map((k, i) => (
                 <GoogleClassroomCard
                   key={k.id}
-                  item={{
-                    ...k,
-                    upcomingTask:
-                      i % 2 === 0
-                        ? {
-                            title: `Tugas ${i + 1}: Studi Kasus ${k.title.split(' ')[0]}`,
-                            due_at: new Date(Date.now() + 86400000 * (2 + i)).toISOString(),
-                          }
-                        : null,
-                  }}
+                  item={k}
                   isLecturer={lecturer || isStaff}
                   index={i}
                 />

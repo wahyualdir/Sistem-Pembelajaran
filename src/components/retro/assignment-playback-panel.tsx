@@ -136,6 +136,7 @@ export function AssignmentPlaybackPanel({
   const [selectedRecordId, setSelectedRecordId] = useState<string>(DEMO_SUBMISSION_RECORDS[0].id);
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(3);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [isPanelOpen, setIsPanelOpen] = useState<boolean>(false);
 
   // State untuk Live Proof-of-Work Editor (Mahasiswa)
   const [liveCode, setLiveCode] = useState<string>(
@@ -207,59 +208,70 @@ export function AssignmentPlaybackPanel({
   );
 
   return (
-    <div className="border-2 border-[#1C1917] bg-[#FFFFFF] shadow-retro overflow-hidden font-sans">
-      {/* Header Bar */}
-      <div className="px-4 sm:px-5 py-3 bg-[#ECE9D8] border-b-2 border-[#1C1917] flex flex-wrap items-center justify-between gap-3">
+    <div className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] overflow-hidden font-sans">
+      {/* Header Bar Ringkas (Collapsible agar tidak memenuhi halaman) */}
+      <div className="px-4 py-3 bg-[#FAF8F5] border-b border-[#E8E5DE] flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 bg-[#1C1917] text-white border border-[#1C1917]">
+          <div className="p-1.5 rounded-lg bg-[#1C1917] text-white">
             <History className="h-4 w-4 text-[#FDE047]" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-heading font-black text-sm sm:text-base text-[#1C1917]">
-                Time-Travel Playback &amp; Paste-Burst Detector
+              <h3 className="font-heading font-bold text-sm text-[#1C1917]">
+                Riwayat Pengerjaan &amp; Verifikasi Keaslian Kode
               </h3>
-              <span className="text-[10px] font-mono font-extrabold uppercase px-2 py-0.5 bg-[#FEF2F0] text-[#853827] border border-[#C2553A]">
-                PROOF-OF-WORK ENGINE
+              <span className="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded bg-[#ECE9D8] text-[#44403C]">
+                Telemetri Submisi
               </span>
             </div>
-            <p className="text-xs text-[#57534E] font-medium">
-              Verifikasi keaslian proses pengerjaan tugas dari menit ke-0 hingga selesai ({assignmentTitle})
+            <p className="text-xs text-[#57534E]">
+              Rekam jejak pengetikan bertahap dan pemeriksaan integritas submisi ({assignmentTitle})
             </p>
           </div>
         </div>
 
-        {/* Switcher Mode */}
-        <div className="flex items-center gap-1 bg-[#FAF8F5] p-1 border border-[#7A756D]">
+        <div className="flex items-center gap-2">
+          {isPanelOpen && (
+            <div className="flex items-center gap-1 bg-[#ECE9D8] p-1 rounded-lg border border-[#D6D3CB]">
+              <button
+                type="button"
+                onClick={() => setActiveTabMode('editor')}
+                className={cn(
+                  'px-2.5 py-1 rounded text-xs font-semibold transition-colors cursor-pointer',
+                  activeTabMode === 'editor'
+                    ? 'bg-[#C2553A] text-white'
+                    : 'text-[#1C1917] hover:bg-[#FAF8F5]'
+                )}
+              >
+                Editor Mahasiswa
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTabMode('playback')}
+                className={cn(
+                  'px-2.5 py-1 rounded text-xs font-semibold transition-colors cursor-pointer',
+                  activeTabMode === 'playback'
+                    ? 'bg-[#1C1917] text-white'
+                    : 'text-[#1C1917] hover:bg-[#FAF8F5]'
+                )}
+              >
+                Inspektor Dosen
+              </button>
+            </div>
+          )}
+
           <button
             type="button"
-            onClick={() => setActiveTabMode('editor')}
-            className={cn(
-              'px-2.5 py-1 text-xs font-extrabold transition-colors cursor-pointer',
-              activeTabMode === 'editor'
-                ? 'bg-[#C2553A] text-white'
-                : 'text-[#1C1917] hover:bg-[#ECE9D8]'
-            )}
+            onClick={() => setIsPanelOpen((prev) => !prev)}
+            className="px-3 py-1.5 rounded-lg border border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#ECE9D8] text-xs font-semibold text-[#1C1917] transition-colors cursor-pointer"
           >
-            Workspace Mahasiswa (Live Sensor)
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTabMode('playback')}
-            className={cn(
-              'px-2.5 py-1 text-xs font-extrabold transition-colors cursor-pointer',
-              activeTabMode === 'playback'
-                ? 'bg-[#1C1917] text-white'
-                : 'text-[#1C1917] hover:bg-[#ECE9D8]'
-            )}
-          >
-            Inspektor Dosen (Time-Travel Player)
+            {isPanelOpen ? 'Sembunyikan Panel' : 'Buka Panel Verifikasi'}
           </button>
         </div>
       </div>
 
       {/* MODE 1: TIME-TRAVEL PLAYBACK INSPECTOR (UNTUK DOSEN & SIMULASI) */}
-      {activeTabMode === 'playback' && (
+      {isPanelOpen && activeTabMode === 'playback' && (
         <div className="p-4 sm:p-5 bg-[#FAF8F5] space-y-4">
           {/* Pilihan Rekaman Mahasiswa */}
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -427,7 +439,7 @@ export function AssignmentPlaybackPanel({
       )}
 
       {/* MODE 2: WORKSPACE MAHASISWA DENGAN LIVE SENSOR ANTI-JOKI */}
-      {activeTabMode === 'editor' && (
+      {isPanelOpen && activeTabMode === 'editor' && (
         <div className="p-4 sm:p-5 bg-[#FAF8F5] space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#FFFFFF] border border-[#7A756D]">
             <div className="flex items-center gap-4 flex-wrap">

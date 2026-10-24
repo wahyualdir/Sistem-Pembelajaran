@@ -191,72 +191,41 @@ export function StudentDashboardClient({
       {/* ========================================================= */}
       <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
         <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
-          {/* HEADER BERANDA: RUANG PEMBELAJARAN MAHASISWA */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pt-1">
-            <div className="space-y-1.5">
-              {/* Kicker / Context Tag */}
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-md border border-[#7A756D] bg-[#ECE9D8] text-xs font-sans font-extrabold uppercase tracking-wider text-[#853827]">
-                  Portal Mahasiswa
-                </span>
-                <span className="text-[#7A756D] font-bold">•</span>
-                <span className="text-xs font-sans font-extrabold text-[#57534E] uppercase">
-                  Ganjil 2026/2027
-                </span>
+          {/* HEADER BERANDA & FILTER TERPADU (BERSIH & EDITORIAL) */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-3 border-b border-[#D6D3CB]">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#853827]">
+                <span>PORTAL AKADEMIK MAHASISWA</span>
+                <span className="text-[#B8B1A5]">•</span>
+                <span className="text-[#57534E]">{currentSummary.semesterLabel || 'Semester Ganjil 2026/2027'}</span>
               </div>
-
-              {/* Baris Judul Utama: Logo & Teks Simetris Sejajar Sempurna */}
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-lg border-2 border-[#7A756D] bg-white shadow-xs flex items-center justify-center shrink-0">
-                  <BookOpen className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-[#C2553A]" />
-                </div>
-                <h1 className="font-heading font-extrabold text-2xl sm:text-3xl tracking-tight text-[#1C1917] leading-none">
-                  Ruang Pembelajaran Mahasiswa
-                </h1>
-              </div>
-
-              {/* Subtitle */}
-              <p className="text-sm sm:text-base text-[#2D2823] font-bold leading-relaxed pt-0.5">
-                Pantau perkuliahan aktif, jadwal kuliah hari ini, tenggat tugas, dan ujian Anda.
-              </p>
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#1C1917]">
+                Ruang Pembelajaran Mahasiswa
+              </h1>
             </div>
 
-            <div className="hidden sm:flex items-center gap-2 shrink-0 pt-1">
-              <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-sans font-extrabold bg-white border-2 border-[#7A756D] text-[#1C1917] shadow-xs">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" />
-                <span>Status: Aktif</span>
-              </span>
-              <span className="inline-flex items-center px-3.5 py-1.5 rounded-lg text-xs font-sans font-extrabold bg-[#ECE9D8] border-2 border-[#7A756D] text-[#1C1917] shadow-xs">
-                2026/2027
-              </span>
-            </div>
-          </div>
-
-          {/* ROW 1: CATEGORIES PILLS (FILTER CHIP) */}
-          <section aria-label="Kategori Perkuliahan" className="space-y-2.5 sm:space-y-3">
-            <h2 className="font-heading font-extrabold text-sm sm:text-base uppercase tracking-wider text-[#1C1917]">
-              Categories
-            </h2>
-            <div className="flex flex-wrap items-center gap-2.5 pb-1.5">
+            {/* Filter Chip Ringkas Tanpa Judul Inggris 'Categories' */}
+            <nav aria-label="Kategori Perkuliahan" className="flex flex-wrap items-center gap-1.5">
               {CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
                 return (
                   <button
                     key={cat}
+                    type="button"
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      'px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-sm sm:text-base font-sans font-bold tracking-normal shrink-0 transition-all focus-visible:outline-none cursor-pointer',
+                      'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-sans transition-colors focus-visible:outline-none cursor-pointer',
                       isActive
-                        ? 'border-2 border-[#853827] bg-[#C2553A] text-white shadow-xs font-extrabold scale-[1.02]'
-                        : 'border-2 border-[#7A756D] bg-white text-[#1C1917] shadow-xs font-bold hover:bg-[#FAF8F5] hover:text-[#C2553A] hover:-translate-y-0.5'
+                        ? 'bg-[#1C1917] text-white font-semibold'
+                        : 'bg-[#ECE9D8]/70 text-[#44403C] font-medium hover:bg-[#ECE9D8] hover:text-[#1C1917]'
                     )}
                   >
                     {cat}
                   </button>
                 );
               })}
-            </div>
-          </section>
+            </nav>
+          </div>
 
           {/* SECTION 1: BANNER AKSI (SELALU TAMPIL PADA SEMUA FILTER) */}
           <ActionBanner
@@ -298,8 +267,8 @@ export function StudentDashboardClient({
           {materiTerakhir && (showAll || showKelasSaya || showTugasKuis) && (
             <section aria-label="Lanjutkan Belajar" className="space-y-3">
               <div className="flex items-center justify-between">
-                <h2 className="font-heading font-black text-lg sm:text-xl tracking-tight text-ink flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-primary inline-block" />
+                <h2 className="font-heading font-bold text-lg sm:text-xl tracking-tight text-ink flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-primary inline-block" />
                   <span>Lanjutkan Belajar</span>
                 </h2>
                 <Link
@@ -513,75 +482,56 @@ export function StudentDashboardClient({
             </section>
           )}
 
-          {/* SECTION 5: RECOMMENDED / MATERI & TUGAS (Tampil pada Filter Tugas & Kuis) */}
+          {/* SECTION 5: BAHAN AJAR & REFERENSI KULIAH (Tampil pada Filter Tugas & Kuis) */}
           {showTugasKuis && !showAll && (
-            <section aria-label="Materi dan Tugas Kuliah" className="space-y-6">
+            <section aria-label="Materi dan Tugas Kuliah" className="space-y-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
-                  Recommended / Materi & Tugas
+                <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink">
+                  Bahan Ajar & Referensi Kuliah
                 </h2>
                 <Link
                   href="/classes"
-                  className="text-base sm:text-lg font-bold text-primary-dark hover:text-ink transition-colors"
+                  className="text-xs sm:text-sm font-bold text-primary-dark hover:text-ink transition-colors"
                 >
-                  more &rarr;
+                  Semua Kelas &rarr;
                 </Link>
               </div>
 
               {courses.length === 0 ? (
-                <div className="rounded-2xl border-2 border-dashed border-ink bg-surface/50 p-6 sm:p-8 text-center space-y-2 shadow-retro">
-                  <BookOpen className="h-8 w-8 text-gray-dark mx-auto" />
+                <div className="rounded-xl border border-dashed border-[#D6D3CB] bg-[#FAF8F5] p-6 sm:p-8 text-center space-y-2">
+                  <BookOpen className="h-7 w-7 text-[#7A756D] mx-auto" />
                   <p className="font-heading font-bold text-base text-ink">
-                    Belum Ada Materi & Tugas Direkomendasikan
+                    Belum Ada Materi & Tugas
                   </p>
                   <p className="text-xs text-gray-dark max-w-md mx-auto">
                     Materi perkuliahan, kuis, dan bahan ajar akan tersedia setelah Anda terdaftar di kelas mata kuliah.
                   </p>
-                  <div className="pt-2">
-                    <Link
-                      href="/classes"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold text-ink shadow-retro transition-all"
-                    >
-                      <span>Mulai dari Kelas Saya</span>
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </Link>
-                  </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                   {RECOMMENDED_MATERIALS.map((mat) => (
                     <Link
                       key={mat.id}
                       href="/classes"
-                      className="group rounded-2xl border-2 border-ink bg-gray-soft p-5 sm:p-6 shadow-retro hover:-translate-y-1 hover:shadow-retro-md transition-all flex flex-col justify-between"
+                      className="group rounded-xl border border-[#D6D3CB] hover:border-[#7A756D] bg-[#FFFFFF] p-4 transition-all flex items-start justify-between gap-3.5"
                     >
-                      <div
-                        className={cn(
-                          'relative w-full aspect-[16/10] rounded-xl border-2 border-ink overflow-hidden mb-5 p-5 flex flex-col items-center justify-center text-center',
-                          mat.accent === 'yellow' ? 'bg-surface text-ink' : 'bg-ink text-white'
-                        )}
-                      >
-                        <div
-                          className={cn(
-                            'w-18 h-18 rounded-full border-2 flex items-center justify-center mb-2.5',
-                            mat.accent === 'yellow' ? 'border-ink/30 bg-ink/5' : 'border-white/40 bg-white/10'
-                          )}
-                        >
-                          <BookOpen className="h-9 w-9" />
+                      <div className="flex items-start gap-3 min-w-0">
+                        <div className="p-2.5 rounded-lg bg-[#FAF8F5] border border-[#D6D3CB] text-[#C2553A] shrink-0">
+                          <BookOpen className="h-4 w-4" />
                         </div>
-                        <span className="text-xs sm:text-sm font-sans font-bold tracking-wider uppercase">
-                          {mat.type}
-                        </span>
+                        <div className="space-y-1 min-w-0">
+                          <span className="inline-block text-[11px] font-mono font-semibold text-[#853827] uppercase">
+                            {mat.type}
+                          </span>
+                          <h4 className="font-heading font-bold text-sm sm:text-base text-[#1C1917] group-hover:text-[#C2553A] transition-colors truncate">
+                            {mat.title}
+                          </h4>
+                          <p className="text-xs text-[#57534E] truncate">
+                            {mat.course}
+                          </p>
+                        </div>
                       </div>
-
-                      <div className="space-y-2">
-                        <h4 className="font-heading font-bold text-xl text-ink line-clamp-2 leading-snug group-hover:underline transition-colors">
-                          {mat.title}
-                        </h4>
-                        <p className="text-base text-gray-dark truncate font-bold">
-                          {mat.course}
-                        </p>
-                      </div>
+                      <ChevronRight className="h-4 w-4 text-[#7A756D] group-hover:translate-x-0.5 transition-transform shrink-0 mt-1" />
                     </Link>
                   ))}
                 </div>
@@ -597,14 +547,9 @@ export function StudentDashboardClient({
       {/* Mode Desktop (>= 1280px / xl): Sticky dengan scroll internal sendiri */}
       <aside
         aria-label="Panel Ringkasan & Detail"
-        className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-[#D6D3CB] bg-[#FAF8F5]/80 backdrop-blur-xs p-5 sm:p-6 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
+        className="hidden xl:flex w-right-panel shrink-0 border-l border-[#D6D3CB] bg-[#FAF8F5] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
-        {/* KARTU LOGO INTERAKTIF 3D ROTASI BEBAS */}
-        <div className="shrink-0 w-full">
-          <UirLogo3D />
-        </div>
-
-        {/* PENGALIH DUA KONDISI: "Hari Ini" & "Detail Kelas" DI BAWAH KARTU LOGO */}
+        {/* PENGALIH DUA KONDISI: "Hari Ini" & "Detail Kelas" LANGSUNG DI ATAS PANEL */}
         <RightPanelSwitcher
           selectedCourse={selectedCourse}
           courses={courses}
@@ -614,6 +559,11 @@ export function StudentDashboardClient({
           activeTab={rightPanelTab}
           onTabChange={setRightPanelTab}
         />
+
+        {/* KARTU IDENTITAS KAMPUS DI BAGIAN BAWAH PANEL */}
+        <div className="shrink-0 w-full pt-2 border-t border-[#E8E5DE]">
+          <UirLogo3D />
+        </div>
       </aside>
 
       {/* Mode Slide-over Drawer (< 1280px / max-xl): Panel geser dari kanan */}

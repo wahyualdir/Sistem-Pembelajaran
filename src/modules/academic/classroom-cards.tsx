@@ -41,42 +41,28 @@ export interface ClassCardItem {
   } | null;
 }
 
-// Palet Aksen Lembut & Segar (Patuh cek-hex.js)
+// Palet Editorial Akademik Konsisten (Bebas Warna Pelangi Generik, Patuh cek-hex.js)
 const FRESH_THEMES = [
   {
-    headerBg: 'bg-[#FEF2F0]',
+    headerBg: 'bg-[#FAF8F5]',
     topBar: 'bg-[#C2553A]',
-    avatarBg: 'bg-[#C2553A]',
+    avatarBg: 'bg-[#1C1917]',
     accentText: 'text-[#C2553A]',
     badgeText: 'text-[#853827]',
   },
   {
-    headerBg: 'bg-[#F4EFEB]',
-    topBar: 'bg-[#2563EB]',
-    avatarBg: 'bg-[#2563EB]',
-    accentText: 'text-[#2563EB]',
-    badgeText: 'text-[#1D4ED8]',
+    headerBg: 'bg-[#FAF8F5]',
+    topBar: 'bg-[#1C1917]',
+    avatarBg: 'bg-[#C2553A]',
+    accentText: 'text-[#1C1917]',
+    badgeText: 'text-[#44403C]',
   },
   {
-    headerBg: 'bg-[#E8F5E9]',
-    topBar: 'bg-[#059669]',
-    avatarBg: 'bg-[#059669]',
-    accentText: 'text-[#059669]',
-    badgeText: 'text-[#065F46]',
-  },
-  {
-    headerBg: 'bg-[#FAF6F1]',
-    topBar: 'bg-[#D97706]',
-    avatarBg: 'bg-[#D97706]',
-    accentText: 'text-[#D97706]',
-    badgeText: 'text-[#B45309]',
-  },
-  {
-    headerBg: 'bg-[#F2EFE8]',
-    topBar: 'bg-[#7C3AED]',
-    avatarBg: 'bg-[#7C3AED]',
-    accentText: 'text-[#7C3AED]',
-    badgeText: 'text-[#6D28D9]',
+    headerBg: 'bg-[#FAF8F5]',
+    topBar: 'bg-[#853827]',
+    avatarBg: 'bg-[#44403C]',
+    accentText: 'text-[#853827]',
+    badgeText: 'text-[#853827]',
   },
 ];
 
@@ -124,10 +110,16 @@ export function GoogleClassroomCard({
         <BookOpen className="absolute -right-3 -bottom-3 h-24 w-24 text-[#1C1917] opacity-[0.04] pointer-events-none" />
 
         <div className="p-5 pb-4 space-y-3 relative z-10">
-          {/* Baris Atas: 1 Pill Identitas & 1 Pill Kode Kelas */}
+          {/* Baris Atas: Kode Mata Kuliah + Kelas & Kode Gabung */}
           <div className="flex items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#FFFFFF] border border-[#D6D3CB] text-[11px] font-bold text-[#1C1917]">
-              <span className={theme.badgeText}>{item.section}</span>
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#FFFFFF] border border-[#D6D3CB] text-[11px] font-semibold text-[#1C1917]">
+              {item.course_code && (
+                <>
+                  <span className="font-mono font-bold text-[#853827]">{item.course_code}</span>
+                  <span className="text-[#B8B4AB]">•</span>
+                </>
+              )}
+              <span className={theme.badgeText}>Kelas {item.section}</span>
               <span className="text-[#B8B4AB]">•</span>
               <span>{sksCount} SKS</span>
             </span>
@@ -399,8 +391,8 @@ export function ClassroomToolbar({
       {isAddOpen && (
         <div className="p-5 rounded-2xl border border-[#D6D3CB] bg-[#FFFFFF] shadow-sm animate-fade-up space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-heading font-black text-[#1C1917] flex items-center gap-2">
-              <Sparkles className="h-4 w-4 text-[#C2553A]" />
+            <h3 className="text-sm font-heading font-bold text-[#1C1917] flex items-center gap-2">
+              <Layers className="h-4 w-4 text-[#C2553A]" />
               <span>{lecturer ? 'Buka Rombongan Belajar Baru' : 'Gabung ke Kelas dengan Kode'}</span>
             </h3>
             <button

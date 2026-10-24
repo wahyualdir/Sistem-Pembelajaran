@@ -148,21 +148,21 @@ export function CommandCenterOS({
       {
         id: 'cmd-radar',
         category: 'command',
-        title: 'Anonim Confusion Radar — Barometer Pemahaman Kelas',
+        title: 'Barometer Pemahaman Materi Kelas (Anonim)',
         subtitle: 'Ketik "bingung" atau "radar" — Kirim sinyal anonim / pantau pemahaman kelas real-time',
         keywords: 'bingung radar paham kecepatan penjelasan interaktif pulse kelas',
         href: '/classes/c0000000-0000-0000-0000-000000000001?tab=interaksi',
-        badge: 'FITUR UNIK',
+        badge: 'INTERAKSI',
         icon: Activity,
       },
       {
         id: 'cmd-playback',
         category: 'command',
-        title: 'Time-Travel Playback & Paste Detector (Anti-Joki Tugas)',
-        subtitle: 'Ketik "playback" atau "joki" — Rekam & putar riwayat ketikan pengerjaan tugas',
+        title: 'Riwayat Ketikan & Verifikasi Pengerjaan Tugas',
+        subtitle: 'Ketik "playback" — Rekam & putar riwayat ketikan pengerjaan tugas',
         keywords: 'playback time travel anti joki paste detector tugas riwayat ketikan kode',
         href: '/classes/c0000000-0000-0000-0000-000000000001?tab=tugas',
-        badge: 'PROOF-OF-WORK',
+        badge: 'VERIFIKASI',
         icon: History,
       },
       {
@@ -290,9 +290,9 @@ export function CommandCenterOS({
               <span className="h-3 w-3 rounded-full bg-[#FFBD2E] border border-[#B87A00]" />
               <span className="h-3 w-3 rounded-full bg-[#27C93F] border border-[#118022]" />
             </div>
-            <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#1C1917] uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[#1C1917] tracking-wide">
               <Terminal className="h-3.5 w-3.5 text-[#C2553A]" />
-              <span>Velqora OS Command Spotlight — UIR ({roleName})</span>
+              <span>Pencarian &amp; Navigasi Cepat — {roleName}</span>
             </div>
           </div>
           <div className="flex items-center gap-2">

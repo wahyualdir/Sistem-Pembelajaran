@@ -178,15 +178,15 @@ export function ConfusionRadarPanel({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="font-heading font-black text-sm sm:text-base text-[#1C1917]">
-                Anonim Confusion Radar — Barometer Pemahaman Kelas Real-Time
+              <h3 className="font-heading font-bold text-sm sm:text-base text-[#1C1917]">
+                Barometer Pemahaman Materi Kelas
               </h3>
-              <span className="text-[10px] font-mono font-extrabold uppercase px-2 py-0.5 bg-[#FEF2F0] text-[#853827] border border-[#C2553A]">
-                100% ANONIM
+              <span className="text-[10px] font-mono font-bold uppercase px-2 py-0.5 bg-[#FEF2F0] text-[#853827] border border-[#C2553A]">
+                IDENTITAS TERSEMBUNYI
               </span>
             </div>
-            <p className="text-xs text-[#57534E] font-medium">
-              Sinyal dua arah tanpa identitas agar mahasiswa berani jujur saat materi sulit dipahami ({classTitle})
+            <p className="text-xs text-[#57534E]">
+              Umpan balik ketercapaian penyampaian materi perkuliahan secara langsung ({classTitle})
             </p>
           </div>
         </div>

@@ -241,6 +241,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
   const [remindSuccess, setRemindSuccess] = useState<string | null>(null);
   const [isLiveRoomOpen, setIsLiveRoomOpen] = useState(false);
   const [isCpmkExpanded, setIsCpmkExpanded] = useState(false);
+  const [isMoreTabsOpen, setIsMoreTabsOpen] = useState(false);
   const [selectedMaterialForReading, setSelectedMaterialForReading] = useState<{
     id: string;
     title: string;
@@ -335,7 +336,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
         <div className="h-1.5 w-full bg-[#C2553A]" />
 
         {/* Soft-Tinted Header Area */}
-        <div className="relative p-5 sm:p-6 bg-[#FEF2F0] border-b border-[#E8E5DE] space-y-4 overflow-hidden">
+        <div className="relative p-5 sm:p-6 bg-[#FAF8F5] border-b border-[#E8E5DE] space-y-4 overflow-hidden">
           <BookOpen className="absolute -right-4 -bottom-4 h-36 w-36 text-[#1C1917] opacity-[0.04] pointer-events-none" />
 
           {/* Baris Atas: Tombol Kembali, Pill Identitas, Kode Kelas & Tatap Muka */}
@@ -400,11 +401,11 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   <span>{cls.schedule || 'Jadwal fleksibel / Mandiri'}</span>
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="h-4 w-4 text-[#2563EB]" />
+                  <MapPin className="h-4 w-4 text-[#7A756D]" />
                   <span>{cls.room || 'Ruang Perkuliahan'}</span>
                 </span>
                 <span className="inline-flex items-center gap-1.5">
-                  <Users className="h-4 w-4 text-[#059669]" />
+                  <Users className="h-4 w-4 text-[#7A756D]" />
                   <span>{members.length} Mahasiswa</span>
                 </span>
               </div>
@@ -427,47 +428,100 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           </div>
         </div>
 
-        {/* Baris Bawah: Bilah Tab Navigasi Kelas Minimalis */}
-        <div className="px-4 py-2 bg-[#FFFFFF] flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          {roleTabs.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            const badgeCount =
-              tab.id === 'tugas'
-                ? assignments.length + materials.length + quizzes.length
-                : tab.id === 'presensi' || tab.id === 'bantu-presensi'
-                ? attendanceSessions.length
-                : tab.id === 'peserta' || tab.id === 'anggota'
-                ? members.length
-                : null;
+        {/* Baris Bawah: 5 Tab Inti + Menu Lainnya yang Ringkas */}
+        <div className="px-4 py-2 bg-[#FFFFFF] flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            {roleTabs.slice(0, 5).map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              const badgeCount =
+                tab.id === 'tugas'
+                  ? assignments.length + materials.length + quizzes.length
+                  : tab.id === 'presensi' || tab.id === 'bantu-presensi'
+                  ? attendanceSessions.length
+                  : tab.id === 'peserta' || tab.id === 'anggota'
+                  ? members.length
+                  : null;
 
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  'py-1.5 px-3.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1.5',
-                  isActive
-                    ? 'bg-[#1C1917] text-white font-bold'
-                    : 'text-[#57534E] hover:text-[#1C1917] hover:bg-[#FAF8F5]'
-                )}
-              >
-                <Icon className={cn('h-3.5 w-3.5 shrink-0', isActive ? 'text-white' : 'text-[#C2553A]')} />
-                <span>{tab.label}</span>
-                {badgeCount !== null && badgeCount > 0 && (
-                  <span
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => {
+                    setActiveTab(tab.id);
+                    setIsMoreTabsOpen(false);
+                  }}
+                  className={cn(
+                    'py-1.5 px-3.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer flex items-center gap-1.5',
+                    isActive
+                      ? 'bg-[#1C1917] text-white'
+                      : 'text-[#57534E] hover:text-[#1C1917] hover:bg-[#FAF8F5]'
+                  )}
+                >
+                  <Icon className={cn('h-3.5 w-3.5 shrink-0', isActive ? 'text-white' : 'text-[#C2553A]')} />
+                  <span>{tab.label}</span>
+                  {badgeCount !== null && badgeCount > 0 && (
+                    <span
+                      className={cn(
+                        'px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold',
+                        isActive ? 'bg-[#C2553A] text-white' : 'bg-[#F2EFE8] text-[#57534E]'
+                      )}
+                    >
+                      {badgeCount}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+
+            {roleTabs.length > 5 && (() => {
+              const secondaryTabs = roleTabs.slice(5);
+              const activeSecondary = secondaryTabs.find((t) => t.id === activeTab);
+              return (
+                <button
+                  type="button"
+                  onClick={() => setIsMoreTabsOpen((prev) => !prev)}
+                  className={cn(
+                    'py-1.5 px-3 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer flex items-center gap-1.5 border',
+                    activeSecondary
+                      ? 'bg-[#1C1917] text-white border-[#1C1917]'
+                      : 'border-[#E8E5DE] bg-[#FAF8F5] text-[#57534E] hover:text-[#1C1917]'
+                  )}
+                >
+                  <span>{activeSecondary ? activeSecondary.label : 'Lainnya'}</span>
+                  <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', isMoreTabsOpen && 'rotate-180')} />
+                </button>
+              );
+            })()}
+          </div>
+
+          {isMoreTabsOpen && roleTabs.length > 5 && (
+            <div className="w-full pt-2 border-t border-[#E8E5DE] flex flex-wrap items-center gap-1.5">
+              {roleTabs.slice(5).map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => {
+                      setActiveTab(tab.id);
+                      setIsMoreTabsOpen(false);
+                    }}
                     className={cn(
-                      'px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold',
-                      isActive ? 'bg-[#C2553A] text-white' : 'bg-[#F2EFE8] text-[#57534E]'
+                      'py-1 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5',
+                      isActive
+                        ? 'bg-[#C2553A] text-white'
+                        : 'bg-[#FAF8F5] text-[#57534E] hover:text-[#1C1917] border border-[#E8E5DE]'
                     )}
                   >
-                    {badgeCount}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+                    <Icon className="h-3.5 w-3.5 shrink-0" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -844,7 +898,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     return (
                       <div
                         key={a.id}
-                        className="rounded-2xl border-2 border-black bg-white shadow-retro overflow-hidden transition-all"
+                        className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] overflow-hidden transition-all"
                       >
                         {/* Header Baris Tugas */}
                         <div
@@ -852,7 +906,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           className="p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-neutral-50 transition-colors"
                         >
                           <div className="flex items-center gap-3.5 min-w-0">
-                            <div className="p-2.5 rounded-xl border-2 border-black bg-surface text-black shrink-0">
+                            <div className="p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] shrink-0">
                               <FileText className="h-5 w-5" />
                             </div>
                             <div className="min-w-0">
@@ -951,10 +1005,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   quizzes.map((q) => (
                     <div
                       key={q.id}
-                      className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      className="p-4 sm:p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-3.5">
-                        <div className="p-2.5 rounded-xl border-2 border-black bg-surface text-black shrink-0">
+                        <div className="p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] shrink-0">
                           <Award className="h-5 w-5" />
                         </div>
                         <div>
@@ -1004,11 +1058,11 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   materials.map((m, idx) => (
                     <div
                       key={m.id}
-                      className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3"
+                      className="p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] space-y-3"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-xl border-2 border-black bg-surface text-black">
+                          <div className="p-2 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917]">
                             <BookOpen className="h-4 w-4" />
                           </div>
                           <div>
@@ -1062,10 +1116,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   attendanceSessions.map((s) => (
                     <div
                       key={s.id}
-                      className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      className="p-4 sm:p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-3.5">
-                        <div className="p-2.5 rounded-xl border-2 border-black bg-gray-soft text-black shrink-0">
+                        <div className="p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] shrink-0">
                           <CalendarCheck2 className="h-5 w-5" />
                         </div>
                         <div>
@@ -1268,7 +1322,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             <div className="space-y-3">
               <h4 className="font-bold text-sm text-black">Daftar Asisten Kelas</h4>
               {assistants.map((ast) => (
-                <div key={ast.user_id} className="p-4 rounded-2xl border-2 border-black bg-white shadow-retro flex items-center justify-between gap-4">
+                <div key={ast.user_id} className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3.5">
                     <div className="h-10 w-10 rounded-full border-2 border-black bg-gray-soft flex items-center justify-center font-bold text-xs text-black shrink-0">
                       {ast.name.slice(0, 2).toUpperCase()}
@@ -1363,7 +1417,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           )}
 
           {(lecturer || ta) && (
-            <div className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
+            <div className="p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] space-y-3">
               <h4 className="font-bold text-sm text-black flex items-center gap-2">
                 <FolderArchive className="h-4 w-4 text-primary" /> Unggah Modul / Materi Baru
               </h4>
@@ -1389,10 +1443,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 );
 
                 return (
-                  <div key={m.id} className="p-5 rounded-2xl border-2 border-black bg-white shadow-retro space-y-3">
+                  <div key={m.id} className="p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] space-y-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-xl border-2 border-black bg-surface text-black">
+                        <div className="p-2 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917]">
                           <BookOpen className="h-4 w-4" />
                         </div>
                         <div>
@@ -1414,7 +1468,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
                     {/* Penguncian Berurutan (10.4) */}
                     {isLocked ? (
-                      <div className="p-3.5 rounded-xl border-2 border-black bg-gray-soft text-black font-bold shadow-retro-sm flex items-center gap-2 text-xs">
+                      <div className="p-3.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] font-bold shadow-retro-sm flex items-center gap-2 text-xs">
                         <Lock className="w-4 h-4 text-black shrink-0" />
                         <span>Selesaikan &apos;{prevMat?.title || 'materi sebelumnya'}&apos; dulu untuk membuka materi ini.</span>
                       </div>
@@ -1565,9 +1619,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   </p>
                 ) : (
                   attendanceSessions.map((s) => (
-                    <div key={s.id} className="p-4 sm:p-5 rounded-2xl border-2 border-black bg-white shadow-retro flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div key={s.id} className="p-4 sm:p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="flex items-center gap-3.5">
-                        <div className="p-2.5 rounded-xl border-2 border-black bg-gray-soft text-black shrink-0">
+                        <div className="p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] shrink-0">
                           <CalendarCheck2 className="h-5 w-5" />
                         </div>
                         <div>
@@ -1607,7 +1661,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                             href={s.recording_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-1.5 rounded-xl border-2 border-black bg-gray-soft text-black hover:bg-neutral-200 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
+                            className="px-3 py-1.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] hover:bg-neutral-200 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
                           >
                             <Play className="w-3.5 h-3.5" />
                             <span>Tonton Rekaman</span>
@@ -1653,7 +1707,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {activeTab === 'nilai' && (
         <div className="space-y-6">
           {/* Summary Card Nilai */}
-          <div className="p-6 sm:p-7 rounded-2xl border-2 border-black bg-white shadow-retro-md space-y-4">
+          <div className="p-6 sm:p-7 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]-md space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/15 pb-4">
               <div>
                 <h3 className="font-bold text-lg sm:text-xl text-black flex items-center gap-2">
@@ -1691,7 +1745,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             </div>
 
             {/* Rekap Nilai Akhir */}
-            <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-surface text-black flex items-center justify-between gap-4">
+            <div className="p-4 sm:p-5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold text-black/80">Estimasi Nilai Akhir</p>
                 <p className="text-2xl sm:text-3xl font-bold">A (Nilai Akhir: 88.55)</p>
