@@ -1,3 +1,4 @@
+import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React from 'react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
@@ -19,38 +20,38 @@ const ROLE_METADATA: Record<
   { label: string; desc: string; icon: React.ComponentType<{ className?: string }> }
 > = {
   STUDENT: {
-    label: 'Portal Mahasiswa',
-    desc: 'Mengikuti kelas, mengakses materi kuliah, mengumpulkan tugas, kuis, dan melihat nilai akademik.',
+    label: 'Ruang Mahasiswa',
+    desc: 'Mengikuti kelas, mengakses materi, mengumpulkan tugas, kuis, dan melihat nilai.',
     icon: GraduationCap,
   },
   LECTURER: {
-    label: 'Portal Dosen Pengampu',
-    desc: 'Mengelola perkuliahan, modul pembelajaran, penugasan, rubrik, dan penilaian mahasiswa.',
+    label: 'Ruang Dosen',
+    desc: 'Mengelola perkuliahan, materi, penugasan, rubrik, dan memfinalisasi penilaian.',
     icon: BookOpen,
   },
   TEACHING_ASSISTANT: {
-    label: 'Portal Asisten Dosen & Lab',
-    desc: 'Membantu asistensi praktikum, review draf laporan tugas, dan presensi kelas.',
+    label: 'Ruang Asisten Dosen',
+    desc: 'Membantu review tugas, moderasi forum diskusi, dan presensi sesuai delegasi dosen.',
     icon: Users,
   },
   PROGRAM_COORDINATOR: {
-    label: 'Portal Pimpinan Program Studi',
-    desc: 'Monitoring capaian kurikulum, persetujuan revisi nilai final, dan sistem peringatan dini prodi.',
+    label: 'Ruang Koordinator Prodi',
+    desc: 'Monitoring kelas, persetujuan perubahan nilai final, dan pelaporan capaian prodi.',
     icon: Compass,
   },
   ACADEMIC_STAFF: {
-    label: 'Portal Administrasi Akademik (BAAK)',
-    desc: 'Pengelolaan data master prodi, kalender semester, katalog mata kuliah, dan rombongan belajar.',
+    label: 'Ruang Staf Akademik',
+    desc: 'Administrasi data master, tahun akademik, semester, mata kuliah, jadwal dan kelas.',
     icon: FileSpreadsheet,
   },
   SYSTEM_ADMIN: {
-    label: 'Portal Administrator Sistem',
-    desc: 'Manajemen hak akses pengguna, penugasan peran, audit log keamanan, dan integritas sistem.',
+    label: 'Ruang System Administrator',
+    desc: 'Manajemen pengguna, penugasan peran, audit log keamanan, dan konfigurasi sistem.',
     icon: ShieldAlert,
   },
   SUPER_ADMIN: {
-    label: 'Portal Super Administrator',
-    desc: 'Kendali operasional menyeluruh universitas, kebijakan akademik, dan isolasi keamanan RLS.',
+    label: 'Ruang Super Administrator',
+    desc: 'Manajemen global universitas, kelola pengguna, role & permission, dan kebijakan akademik.',
     icon: ShieldAlert,
   },
 };
@@ -96,7 +97,7 @@ export default async function WorkspacePage() {
     }
   }
 
-  // Jika pengguna hanya memiliki 1 role, alihkan langsung ke halamannya
+  // Jika pengguna hanya memiliki 1 role, alihkan langsung
   if (!isSuperAdmin && roles.length === 1) {
     const singleRole = (roles[0].roles as { code?: string })?.code as string;
     const portalMap: Record<string, string> = {
@@ -112,130 +113,148 @@ export default async function WorkspacePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F3F3F4] text-[#111111] font-sans flex flex-col justify-between antialiased">
-      {/* 1. Institutional Top Bar Telkom University */}
-      <header className="h-16 flex items-center justify-between px-4 sm:px-6 lg:px-8 bg-[#9F1521] text-white shadow-xs">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white p-1 shadow-xs">
-            <img
-              src="/logo-ruangkampus.png"
-              alt="Telkom University Logo"
-              className="h-full w-full object-contain"
-            />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-heading font-extrabold text-sm sm:text-base tracking-tight text-white leading-tight">
-              Telkom University
-            </span>
-            <span className="text-[10px] uppercase tracking-wider text-white/80 font-medium leading-none">
-              Portal Akademik Terpadu
-            </span>
-          </div>
-        </Link>
+    <div
+      style={{
+        fontFamily:
+          "var(--font-sf-pro), 'SF Pro Display', 'SF Pro', 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif",
+      }}
+      className="min-h-[100dvh] w-full vt-desktop-bg text-[#1C1917] font-sans selection:bg-[#C2553A] selection:text-white flex flex-col justify-between antialiased relative"
+    >
+      {/* 1. CRT Scanlines Overlay */}
+      <div className="fixed inset-0 vt-scanlines pointer-events-none z-0" />
 
-        <span className="hidden sm:inline-flex items-center px-3 py-1 rounded-full bg-white/15 border border-white/20 text-white text-xs font-medium">
-          Semester Ganjil 2026/2027
-        </span>
+      {/* Top Bar Navigasi Sistem Velqora Retro OS */}
+      <header className="h-header-mobile md:h-header flex items-center justify-between px-4 sm:px-6 lg:px-8 border-b-2 border-[#7A756D] bg-[#ECE9D8] shrink-0 select-none shadow-xs relative z-10 pt-[env(safe-area-inset-top,0px)]">
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2.5 group focus-visible:outline-none">
+            <div className="flex h-9 w-9 items-center justify-center rounded-none border border-[#7A756D] bg-white p-1 shadow-2xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+              <img
+                src="/logo-ruangkampus.png"
+                alt="Logo RuangKampus"
+                className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
+              />
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="font-heading font-black text-base sm:text-lg tracking-tight text-[#1C1917] leading-none">
+                Ruang<span className="text-[#C2553A]">Kampus</span>
+              </span>
+              <span className="text-[9.5px] font-mono font-bold text-[#853827] uppercase tracking-wider mt-0.5 leading-none">
+                Academic Learning OS
+              </span>
+            </div>
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          <span className="hidden sm:inline-flex items-center px-3 py-1 bg-[#C2553A] text-white font-mono text-xs font-bold border-t border-l border-[#EE7257] border-b border-r border-[#6B2D20] shadow-xs select-none">
+            TA 2026/2027 GANJIL
+          </span>
+        </div>
       </header>
 
-      {/* 2. Main Workspace Selector */}
-      <main className="flex-1 flex items-center justify-center py-10 px-4 sm:px-6 lg:px-8">
-        <div className="w-full max-w-xl">
-          <div className="bg-[#FFFFFF] rounded-2xl border border-[#E2E3E4] shadow-sm p-6 sm:p-8 space-y-6">
-            <div className="text-center space-y-1.5">
-              <span className="inline-block px-3 py-1 rounded-full bg-[#FEF2F2] text-[#9F1521] text-xs font-semibold">
-                Multi-Peran Terautentikasi
-              </span>
-              <h1 className="text-xl sm:text-2xl font-heading font-bold tracking-tight text-[#111111]">
-                Pilih Ruang Kerja Portal
-              </h1>
-              <p className="text-xs sm:text-sm text-[#58595B] max-w-md mx-auto">
-                Halo, <strong className="font-semibold text-[#111111]">{profile?.full_name}</strong>. Akun Anda memiliki otorisasi multi-peran. Silakan pilih portal kerja yang ingin Anda tuju.
-              </p>
+      {/* Main Content Area */}
+      <main className="flex-1 flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-xl mx-auto w-full">
+          {/* Velqora Retro OS Window Container */}
+          <div className="vt-window rounded-none overflow-hidden transition-all shadow-xl animate-fade-up">
+            {/* Header Bar Jendela Velqora OS */}
+            <div className="vt-titlebar flex items-center justify-between px-3 py-1.5 select-none shrink-0">
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <span className="font-mono text-xs sm:text-sm font-bold text-white tracking-wide uppercase truncate">
+                  WORKSPACE_MANAGER.EXE — RuangKampus OS
+                </span>
+                <span className="font-mono text-[10px] font-bold bg-black/25 text-white border border-white/30 px-1.5 py-0.2 shrink-0">
+                  Multi-Peran
+                </span>
+              </div>
+
+              <div className="flex items-center gap-1 shrink-0 ml-2">
+                <span className="vt-window-btn" title="Minimalkan">_</span>
+                <span className="vt-window-btn" title="Perbesar">□</span>
+                <span className="vt-window-btn vt-window-btn-close" title="Tutup">×</span>
+              </div>
             </div>
 
-            <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-1">
-              {displayRoles.map((r) => {
-                const roleCode = (r.roles as { code?: string })?.code as string;
-                const meta = ROLE_METADATA[roleCode] || {
-                  label: roleCode,
-                  desc: 'Akses ruang kerja akademik.',
-                  icon: Users,
-                };
-                const Icon = meta.icon;
-                const isActive = activeRole === roleCode;
+            <div className="p-6 sm:p-7 bg-[#FFFFFF] space-y-5">
+              <div className="text-center space-y-1.5">
+                <h1 className="text-xl sm:text-2xl font-heading font-black tracking-tight text-[#1C1917]">
+                  Pilih Ruang Kerja Akademik
+                </h1>
+                <p className="text-xs sm:text-sm text-[#57534E] max-w-md mx-auto leading-relaxed">
+                  Halo, <strong className="font-bold text-[#1C1917]">{profile?.full_name}</strong>. Akun Anda memiliki akses multi-peran. Silakan pilih ruang kerja yang ingin Anda jalankan.
+                </p>
+              </div>
 
-                return (
-                  <div
-                    key={r.id}
-                    className={cn(
-                      'p-4 rounded-xl border transition-all flex items-center justify-between gap-4',
-                      isActive
-                        ? 'border-[#9F1521] bg-[#FEF2F2]/40 shadow-xs'
-                        : 'border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#808285]'
-                    )}
-                  >
-                    <div className="flex items-start gap-3.5 min-w-0">
-                      <div
-                        className={cn(
-                          'h-11 w-11 rounded-xl flex items-center justify-center shrink-0 mt-0.5 border',
-                          isActive
-                            ? 'bg-[#9F1521] text-white border-[#9F1521]'
-                            : 'bg-[#F3F3F4] text-[#9F1521] border-[#E2E3E4]'
-                        )}
-                      >
-                        <Icon className="h-5 w-5" />
-                      </div>
+              <div className="space-y-3 max-h-[55vh] overflow-y-auto pr-1.5">
+                {displayRoles.map((r) => {
+                  const roleCode = (r.roles as { code?: string })?.code as string;
+                  const meta = ROLE_METADATA[roleCode] || {
+                    label: roleCode,
+                    desc: 'Akses ruang kerja akademik.',
+                    icon: Users,
+                  };
+                  const Icon = meta.icon;
+                  const isActive = activeRole === roleCode;
 
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <h2 className="text-sm sm:text-base font-heading font-bold text-[#111111] truncate">
-                            {meta.label}
-                          </h2>
-                          {isActive && (
-                            <span className="text-[10px] font-semibold bg-[#059669] text-white px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0">
-                              <CheckCircle2 className="h-3 w-3" /> Sedang Aktif
-                            </span>
-                          )}
+                  return (
+                    <div
+                      key={r.id}
+                      className={cn(
+                        'vt-window-inset p-3.5 sm:p-4 flex items-center justify-between gap-4 transition-all',
+                        isActive
+                          ? 'border-l-4 border-l-[#C2553A] bg-[#FAF8F5]'
+                          : 'bg-white hover:bg-[#FAF8F5]'
+                      )}
+                    >
+                      <div className="flex items-start gap-3 min-w-0">
+                        <div className="h-10 w-10 rounded-none border border-[#7A756D] bg-[#FAF8F5] flex items-center justify-center text-[#C2553A] shrink-0 mt-0.5">
+                          <Icon className="h-5 w-5" />
                         </div>
-                        <p className="text-xs text-[#58595B] mt-1 line-clamp-2 leading-relaxed">
-                          {meta.desc}
-                        </p>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h2 className="text-sm sm:text-base font-bold text-[#1C1917] font-heading truncate">
+                              {meta.label}
+                            </h2>
+                            {isActive && (
+                              <span className="text-[10px] font-mono font-bold bg-[#C2553A] text-white px-2 py-0.5 border border-[#853827] flex items-center gap-1 shrink-0">
+                                <CheckCircle2 className="h-3 w-3" /> Sedang Aktif
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-[#57534E] mt-1 line-clamp-2 leading-relaxed">
+                            {meta.desc}
+                          </p>
+                        </div>
                       </div>
+
+                      <form action={switchWorkspaceAction} className="shrink-0">
+                        <input type="hidden" name="roleCode" value={roleCode} />
+                        <button
+                          type="submit"
+                          className="vt-btn-terracotta h-9 px-4 rounded-none font-mono text-xs flex items-center gap-1.5 cursor-pointer"
+                        >
+                          <span>Masuk</span>
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </button>
+                      </form>
                     </div>
+                  );
+                })}
+              </div>
 
-                    <form action={switchWorkspaceAction} className="shrink-0">
-                      <input type="hidden" name="roleCode" value={roleCode} />
-                      <button
-                        type="submit"
-                        className={cn(
-                          'h-9 px-4 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer shadow-xs',
-                          isActive
-                            ? 'bg-[#9F1521] hover:bg-[#8F131E] text-white'
-                            : 'bg-[#F3F3F4] hover:bg-[#E2E3E4] text-[#111111] border border-[#E2E3E4]'
-                        )}
-                      >
-                        <span>Masuk</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </button>
-                    </form>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="pt-2 text-center border-t border-[#E2E3E4]">
-              <p className="text-xs text-[#808285]">
-                Anda dapat berpindah peran kapan saja melalui menu identitas di pojok kanan atas.
-              </p>
+              <div className="pt-2 text-center border-t border-[#D6D3CB]">
+                <p className="text-xs text-[#78716C] font-mono">
+                  Tip: Anda dapat berpindah ruang kerja kapan saja melalui pemilih workspace di pojok menu.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* 3. Clean Footer */}
-      <footer className="py-4 text-center text-xs text-[#58595B] border-t border-[#E2E3E4] bg-[#FFFFFF]">
-        &copy; 2026 Telkom University &middot; CeLOE Learning Management System
+      {/* Footer Minimalis Velqora OS */}
+      <footer className="py-3 text-center text-xs font-mono text-[#78716C] relative z-10 border-t border-[#D6D3CB] bg-[#ECE9D8]">
+        RuangKampus OS &copy; 2026 &middot; Academic Learning OS &middot; JOBLIB505
       </footer>
     </div>
   );

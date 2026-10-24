@@ -78,17 +78,17 @@ export function LecturerRightPanel({
   };
 
   return (
-    <div className="flex flex-col gap-4 font-sans">
-      {/* 1. Pengalih Dua Tab Bersih Enterprise */}
-      <div className="flex items-center p-1 rounded-xl border border-[#E2E3E4] bg-[#F3F3F4]">
+    <div className="flex flex-col gap-5 font-sans">
+      {/* 1. Pengalih Dua Kondisi Bersih */}
+      <div className="flex items-center p-1 rounded-xl border border-[#E8E5DE] bg-[#F2EFE8]">
         <button
           type="button"
           onClick={() => onTabChange('hari-ini')}
           className={cn(
             'flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'hari-ini'
-              ? 'bg-[#FFFFFF] text-[#111111] shadow-2xs'
-              : 'text-[#58595B] hover:text-[#111111]'
+              ? 'bg-[#FFFFFF] text-[#1C1917] shadow-2xs'
+              : 'text-[#6B6560] hover:text-[#1C1917]'
           )}
         >
           Hari Ini
@@ -99,8 +99,8 @@ export function LecturerRightPanel({
           className={cn(
             'flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'detail-kelas'
-              ? 'bg-[#FFFFFF] text-[#111111] shadow-2xs'
-              : 'text-[#58595B] hover:text-[#111111]'
+              ? 'bg-[#FFFFFF] text-[#1C1917] shadow-2xs'
+              : 'text-[#6B6560] hover:text-[#1C1917]'
           )}
         >
           Detail Kelas
@@ -108,86 +108,86 @@ export function LecturerRightPanel({
       </div>
 
       {/* ========================================================= */}
-      {/* KONDISI A: HARI INI                                       */}
+      {/* KONDISI A: HARI INI (OPEN DIVIDED SECTIONS)               */}
       {/* ========================================================= */}
       {activeTab === 'hari-ini' && (
-        <div className="flex flex-col divide-y divide-[#E2E3E4] animate-fade-in pb-16">
+        <div className="flex flex-col divide-y divide-[#E8E5DE] animate-fade-in pb-24">
           {/* 1. Stat Strip Dosen */}
-          <div className="pb-4 grid grid-cols-3 divide-x divide-[#E2E3E4] text-center">
+          <div className="pb-5 grid grid-cols-3 divide-x divide-[#E8E5DE] text-center">
             <div className="px-2">
-              <span className="text-[11px] text-[#808285] block">Kelas</span>
-              <span className="font-heading font-bold text-sm sm:text-base text-[#111111] tabular-nums">
+              <span className="text-[11px] text-[#6B6560] block">Kelas</span>
+              <span className="font-heading font-bold text-lg text-[#1C1917] tabular-nums">
                 {classesCount}
               </span>
             </div>
             <div className="px-2">
-              <span className="text-[11px] text-[#808285] block">Antrean</span>
-              <span className="font-heading font-bold text-sm sm:text-base text-[#9F1521] tabular-nums">
+              <span className="text-[11px] text-[#6B6560] block">Antrean</span>
+              <span className="font-heading font-bold text-lg text-[#C2553A] tabular-nums">
                 {pendingReviewsCount}
               </span>
             </div>
             <div className="px-2">
-              <span className="text-[11px] text-[#808285] block">Submisi</span>
-              <span className="font-heading font-bold text-sm sm:text-base text-[#111111] tabular-nums">
+              <span className="text-[11px] text-[#6B6560] block">Submisi</span>
+              <span className="font-heading font-bold text-lg text-[#1C1917] tabular-nums">
                 {totalPendingSubmissions}
               </span>
             </div>
           </div>
 
           {/* 2. Aksi Cepat Dosen */}
-          <div className="py-4 space-y-2.5">
-            <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-[#808285]">
+          <div className="py-5 space-y-2.5">
+            <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-[#6B6560]">
               Pintasan Pengajaran
             </h4>
             <div className="grid grid-cols-2 gap-2">
               <Link
                 href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=tugas`}
-                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#9F1521] text-xs font-semibold text-[#111111] transition-colors shadow-2xs"
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:border-[#1C1917] text-xs font-semibold text-[#1C1917] transition-colors"
               >
-                <PlusCircle className="h-4 w-4 shrink-0 text-[#9F1521]" />
+                <PlusCircle className="h-4 w-4 shrink-0 text-[#C2553A]" />
                 <span className="truncate">Buat Tugas</span>
               </Link>
               <Link
                 href={`/classes/${effectiveCourse?.id || 'c0000000-0000-0000-0000-000000000001'}?tab=presensi`}
-                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#9F1521] text-xs font-semibold text-[#111111] transition-colors shadow-2xs"
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:border-[#1C1917] text-xs font-semibold text-[#1C1917] transition-colors"
               >
-                <QrCode className="h-4 w-4 shrink-0 text-[#9F1521]" />
+                <QrCode className="h-4 w-4 shrink-0 text-[#C2553A]" />
                 <span className="truncate">Buka Presensi</span>
               </Link>
               <Link
                 href="/exams"
-                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#9F1521] text-xs font-semibold text-[#111111] transition-colors shadow-2xs"
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:border-[#1C1917] text-xs font-semibold text-[#1C1917] transition-colors"
               >
-                <BookOpen className="h-4 w-4 shrink-0 text-[#9F1521]" />
+                <BookOpen className="h-4 w-4 shrink-0 text-[#C2553A]" />
                 <span className="truncate">Bank Soal</span>
               </Link>
               <Link
                 href="/grades"
-                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#9F1521] text-xs font-semibold text-[#111111] transition-colors shadow-2xs"
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:border-[#1C1917] text-xs font-semibold text-[#1C1917] transition-colors"
               >
-                <GraduationCap className="h-4 w-4 shrink-0 text-[#9F1521]" />
+                <GraduationCap className="h-4 w-4 shrink-0 text-[#C2553A]" />
                 <span className="truncate">Buku Nilai</span>
               </Link>
             </div>
           </div>
 
           {/* 3. Kalender Mini */}
-          <div className="py-4 space-y-3">
+          <div className="py-5 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <CalendarDays className="h-4 w-4 text-[#9F1521]" />
-                <span className="font-heading font-bold text-xs sm:text-sm text-[#111111]">
+                <CalendarDays className="h-4 w-4 text-[#C2553A]" />
+                <span className="font-heading font-bold text-sm text-[#1C1917]">
                   {jakarta.monthName} {jakarta.year}
                 </span>
               </div>
-              <span className="text-xs font-mono font-medium text-[#58595B]">
+              <span className="text-xs font-mono font-medium text-[#6B6560]">
                 {jakarta.shortTimeString}
               </span>
             </div>
 
             <div className="grid grid-cols-7 gap-1 text-center text-xs">
               {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((d) => (
-                <span key={d} className="font-medium text-[#808285] py-0.5 text-[11px]">
+                <span key={d} className="font-medium text-[#78716C] py-0.5 text-[11px]">
                   {d}
                 </span>
               ))}
@@ -207,15 +207,15 @@ export function LecturerRightPanel({
                     className={cn(
                       'h-7 rounded-lg flex flex-col items-center justify-center text-xs relative transition-colors',
                       isToday
-                        ? 'bg-[#9F1521] text-white font-bold'
+                        ? 'bg-[#C2553A] text-white font-bold'
                         : hasEvent
-                        ? 'bg-[#F3F3F4] text-[#111111] font-semibold'
-                        : 'text-[#58595B] hover:bg-[#F3F3F4]'
+                        ? 'bg-[#F2EFE8] text-[#1C1917] font-semibold'
+                        : 'text-[#44403C] hover:bg-[#FAF8F5]'
                     )}
                   >
                     <span>{day}</span>
                     {hasEvent && !isToday && (
-                      <span className="w-1 h-1 rounded-full bg-[#9F1521] absolute bottom-0.5" />
+                      <span className="w-1 h-1 rounded-full bg-[#C2553A] absolute bottom-0.5" />
                     )}
                   </div>
                 );
@@ -224,35 +224,35 @@ export function LecturerRightPanel({
           </div>
 
           {/* 4. Agenda Mengajar 7 Hari */}
-          <div className="pt-4 space-y-3">
+          <div className="pt-5 space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-[#808285]">
+              <h4 className="font-heading font-bold text-xs uppercase tracking-wider text-[#6B6560]">
                 Agenda Mengajar 7 Hari
               </h4>
               <Link
                 href="/calendar"
-                className="text-xs font-semibold text-[#9F1521] hover:underline"
+                className="text-xs font-semibold text-[#C2553A] hover:underline"
               >
                 Kalender &rarr;
               </Link>
             </div>
 
             {agenda.length === 0 ? (
-              <p className="text-xs text-[#58595B] py-2">
+              <p className="text-xs text-[#6B6560] py-2">
                 Tidak ada agenda pengajaran khusus 7 hari ke depan.
               </p>
             ) : (
-              <div className="divide-y divide-[#E2E3E4]">
+              <div className="divide-y divide-[#E8E5DE]">
                 {agenda.slice(0, 4).map((ag) => (
                   <Link
                     key={ag.id}
                     href={ag.href}
                     className="block group py-2.5 first:pt-0 last:pb-0"
                   >
-                    <span className="text-[11px] font-medium text-[#808285] block">
+                    <span className="text-[11px] font-medium text-[#6B6560] block">
                       {ag.dayName} • {ag.time}
                     </span>
-                    <p className="font-heading font-semibold text-xs sm:text-sm text-[#111111] leading-snug group-hover:text-[#9F1521] transition-colors">
+                    <p className="font-heading font-semibold text-xs sm:text-sm text-[#1C1917] leading-snug group-hover:text-[#C2553A] transition-colors">
                       {ag.title}
                     </p>
                   </Link>
@@ -267,13 +267,13 @@ export function LecturerRightPanel({
       {/* KONDISI B: DETAIL KELAS                                   */}
       {/* ========================================================= */}
       {activeTab === 'detail-kelas' && (
-        <div className="flex flex-col gap-4 animate-fade-in pb-16">
+        <div className="flex flex-col gap-4 animate-fade-in pb-24">
           {!effectiveCourse ? (
             <div className="py-6 text-center space-y-2">
-              <p className="font-heading font-bold text-sm text-[#111111]">
+              <p className="font-heading font-bold text-sm text-[#1C1917]">
                 Belum Ada Kelas Terpilih
               </p>
-              <p className="text-xs text-[#58595B]">
+              <p className="text-xs text-[#6B6560]">
                 Pilih salah satu kelas dari daftar untuk melihat rincian modul dan presensi.
               </p>
             </div>
@@ -282,7 +282,7 @@ export function LecturerRightPanel({
               <div className="flex flex-col gap-2.5">
                 <Link
                   href={`/classes/${effectiveCourse.id}?tab=presensi`}
-                  className="flex w-full items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#9F1521] hover:bg-[#8F131E] text-white font-semibold text-xs sm:text-sm transition-colors text-center shadow-xs"
+                  className="flex w-full items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#C2553A] hover:bg-[#A34530] text-white font-semibold text-xs sm:text-sm transition-colors text-center"
                 >
                   <Play className="h-4 w-4 fill-white" />
                   <span>Buka Presensi Kelas Aktif</span>
@@ -290,68 +290,68 @@ export function LecturerRightPanel({
 
                 <Link
                   href={`/classes/${effectiveCourse.id}?tab=tugas`}
-                  className="flex w-full items-center justify-center py-2 px-4 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#F3F3F4] text-[#111111] font-semibold text-xs transition-colors text-center"
+                  className="flex w-full items-center justify-center py-2 px-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-semibold text-xs transition-colors text-center"
                 >
                   Kelola Modul & Tugas Kelas
                 </Link>
               </div>
 
-              <div className="grid grid-cols-3 gap-2 border-y border-[#E2E3E4] py-2.5">
+              <div className="grid grid-cols-3 gap-2 border-y border-[#E8E5DE] py-2.5">
                 <button
                   type="button"
                   onClick={() => alert(`RPS & Silabus ${effectiveCourse.code} (${effectiveCourse.title}) siap diunduh.`)}
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#F3F3F4] transition-colors text-[#58595B] hover:text-[#111111] cursor-pointer"
+                  className="flex flex-col items-center justify-center py-1 rounded-lg hover:bg-[#FAF8F5] transition-colors text-[#44403C] cursor-pointer"
                 >
-                  <Download className="h-4 w-4 mb-1 text-[#9F1521]" />
+                  <Download className="h-4 w-4 mb-1 text-[#C2553A]" />
                   <span className="text-[11px] font-medium">RPS</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setSaved(!saved)}
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#F3F3F4] transition-colors text-[#58595B] hover:text-[#111111] cursor-pointer"
+                  className="flex flex-col items-center justify-center py-1 rounded-lg hover:bg-[#FAF8F5] transition-colors text-[#44403C] cursor-pointer"
                 >
-                  <Bookmark className={cn('h-4 w-4 mb-1 text-[#9F1521]', saved ? 'fill-current' : '')} />
+                  <Bookmark className={cn('h-4 w-4 mb-1 text-[#C2553A]', saved ? 'fill-current' : '')} />
                   <span className="text-[11px] font-medium">{saved ? 'Tersimpan' : 'Simpan'}</span>
                 </button>
 
                 <Link
                   href="/calendar"
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#F3F3F4] transition-colors text-[#58595B] hover:text-[#111111]"
+                  className="flex flex-col items-center justify-center py-1 rounded-lg hover:bg-[#FAF8F5] transition-colors text-[#44403C]"
                 >
-                  <ListPlus className="h-4 w-4 mb-1 text-[#9F1521]" />
+                  <ListPlus className="h-4 w-4 mb-1 text-[#C2553A]" />
                   <span className="text-[11px] font-medium">Jadwal</span>
                 </Link>
               </div>
 
-              <div className="divide-y divide-[#E2E3E4] text-xs">
+              <div className="divide-y divide-[#E8E5DE] text-xs">
                 <div className="flex justify-between items-center py-2.5">
-                  <span className="text-[#58595B]">Kode MK</span>
-                  <span className="font-mono font-bold text-[#111111]">{effectiveCourse.code}</span>
+                  <span className="text-[#6B6560]">Kode MK</span>
+                  <span className="font-mono font-bold text-[#1C1917]">{effectiveCourse.code}</span>
                 </div>
                 <div className="flex justify-between items-center py-2.5">
-                  <span className="text-[#58595B]">Progres Pertemuan</span>
-                  <span className="font-semibold text-[#111111] tabular-nums">{effectiveCourse.progressPercent}% Selesai</span>
+                  <span className="text-[#6B6560]">Progres Pertemuan</span>
+                  <span className="font-semibold text-[#1C1917] tabular-nums">{effectiveCourse.progressPercent}% Selesai</span>
                 </div>
                 <div className="flex justify-between items-center gap-2 py-2.5">
-                  <span className="text-[#58595B] shrink-0">Jadwal Mengajar</span>
-                  <span className="font-medium text-[#111111] text-right">
+                  <span className="text-[#6B6560] shrink-0">Jadwal Mengajar</span>
+                  <span className="font-medium text-[#1C1917] text-right">
                     {getDisplaySchedule()}
                   </span>
                 </div>
                 <div className="flex justify-between items-center gap-2 py-2.5">
-                  <span className="text-[#58595B] shrink-0">Ruang Kuliah</span>
-                  <span className="font-medium text-[#111111] text-right">{effectiveCourse.room}</span>
+                  <span className="text-[#6B6560] shrink-0">Ruang Kuliah</span>
+                  <span className="font-medium text-[#1C1917] text-right">{effectiveCourse.room}</span>
                 </div>
                 <div className="flex justify-between items-center py-2.5">
-                  <span className="text-[#58595B]">Kehadiran Rata-rata</span>
-                  <span className="font-semibold text-[#059669] tabular-nums">
+                  <span className="text-[#6B6560]">Kehadiran Rata-rata</span>
+                  <span className="font-semibold text-[#065F46] tabular-nums">
                     {effectiveCourse.attendance}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-2.5">
-                  <span className="text-[#58595B]">Bobot SKS</span>
-                  <span className="font-semibold text-[#111111] tabular-nums">{effectiveCourse.sks} SKS</span>
+                  <span className="text-[#6B6560]">Bobot SKS</span>
+                  <span className="font-semibold text-[#1C1917] tabular-nums">{effectiveCourse.sks} SKS</span>
                 </div>
               </div>
             </>

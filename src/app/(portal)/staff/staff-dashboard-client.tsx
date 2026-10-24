@@ -80,19 +80,19 @@ export function StaffDashboardClient({
   const showKelas = showAll || selectedCategory === 'Kelas & Asisten Lab';
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[calc(100vh-72px)] font-sans">
+    <div className="flex flex-col xl:flex-row min-h-[calc(100vh-72px)]">
       {/* 1. BAGIAN TENGAH: WORKSPACE UTAMA STAF BAAK */}
-      <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0 font-sans">
         <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
           {/* HEADER BERANDA & FILTER TERPADU STAF AKADEMIK */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-3 border-b border-[#E2E3E4]">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-3 border-b border-[#D6D3CB]">
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#9F1521]">
+              <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#853827]">
                 <span>PORTAL STAF ADMINISTRASI AKADEMIK</span>
-                <span className="text-[#808285]">•</span>
-                <span className="text-[#58595B]">BAAK CELESTE</span>
+                <span className="text-[#B8B1A5]">•</span>
+                <span className="text-[#57534E]">BAAK UIR</span>
               </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#111111]">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#1C1917]">
                 Biro Administrasi Akademik
               </h1>
             </div>
@@ -106,10 +106,10 @@ export function StaffDashboardClient({
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-sans transition-colors focus-visible:outline-none cursor-pointer',
+                      'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-sans transition-colors focus-visible:outline-none cursor-pointer',
                       isActive
-                        ? 'bg-[#9F1521] text-white font-semibold shadow-xs'
-                        : 'bg-[#F3F3F4] text-[#58595B] font-medium hover:bg-[#E2E3E4] hover:text-[#111111]'
+                        ? 'bg-[#1C1917] text-white font-semibold'
+                        : 'bg-[#ECE9D8]/70 text-[#44403C] font-medium hover:bg-[#ECE9D8] hover:text-[#1C1917]'
                     )}
                   >
                     {cat}
@@ -122,35 +122,35 @@ export function StaffDashboardClient({
           {/* BANNER AKSI PRIORITAS */}
           <ActionBanner initialData={bannerData} />
 
-          {/* STAT STRIP RINGKASAN BAAK */}
-          <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#E2E3E4] overflow-hidden shadow-xs">
+          {/* STAT STRIP RINGKASAN BAAK (1 PITA TERPADU, TANPA CARD TERPISAH) */}
+          <div className="rounded-2xl border border-[#E8E5DE] bg-[#FFFFFF] grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#E8E5DE] overflow-hidden">
             <div className="p-4 sm:p-5 flex items-center gap-3.5">
-              <div className="p-2.5 rounded-xl bg-[#F3F3F4] text-[#9F1521]">
+              <div className="p-2.5 rounded-xl bg-[#FAF8F5] text-[#C2553A]">
                 <GraduationCap className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-mono font-semibold text-[#808285] uppercase">Program Studi</p>
-                <p className="font-heading font-bold text-2xl text-[#111111] leading-tight">{programs.length}</p>
+                <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Program Studi</p>
+                <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{programs.length}</p>
               </div>
             </div>
 
             <div className="p-4 sm:p-5 flex items-center gap-3.5">
-              <div className="p-2.5 rounded-xl bg-[#F3F3F4] text-[#9F1521]">
+              <div className="p-2.5 rounded-xl bg-[#FAF8F5] text-[#C2553A]">
                 <CalendarDays className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-mono font-semibold text-[#808285] uppercase">Semester Akademik</p>
-                <p className="font-heading font-bold text-2xl text-[#111111] leading-tight">{semesters.length}</p>
+                <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Semester Akademik</p>
+                <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{semesters.length}</p>
               </div>
             </div>
 
             <div className="p-4 sm:p-5 flex items-center gap-3.5">
-              <div className="p-2.5 rounded-xl bg-[#F3F3F4] text-[#9F1521]">
+              <div className="p-2.5 rounded-xl bg-[#FAF8F5] text-[#C2553A]">
                 <BookOpen className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-mono font-semibold text-[#808285] uppercase">Katalog Mata Kuliah</p>
-                <p className="font-heading font-bold text-2xl text-[#111111] leading-tight">{courses.length}</p>
+                <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Katalog Mata Kuliah</p>
+                <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{courses.length}</p>
               </div>
             </div>
           </div>
@@ -158,21 +158,21 @@ export function StaffDashboardClient({
           {/* GRID 2 KOLOM MASTER: PRODI & SEMESTER */}
           {(showAll || showMaster) && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div id="prodi-form" className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] p-4 sm:p-5 space-y-4 shadow-xs">
-                <div className="flex items-center justify-between border-b border-[#E2E3E4] pb-3">
+              <div id="prodi-form" className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] p-4 sm:p-5 space-y-4">
+                <div className="flex items-center justify-between border-b border-[#E8E5DE] pb-3">
                   <div className="space-y-0.5">
-                    <h2 className="font-heading font-bold text-base text-[#111111] flex items-center gap-2">
-                      <GraduationCap className="h-4 w-4 text-[#9F1521]" />
+                    <h2 className="font-heading font-bold text-base text-[#1C1917] flex items-center gap-2">
+                      <GraduationCap className="h-4 w-4 text-[#C2553A]" />
                       <span>Program Studi</span>
                     </h2>
-                    <p className="text-xs text-[#58595B]">Tambah kode dan nama program studi baru.</p>
+                    <p className="text-xs text-[#57534E]">Tambah kode dan nama program studi baru.</p>
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#F3F3F4] border border-[#E2E3E4] text-xs font-mono font-semibold text-[#111111]">
+                  <span className="px-2.5 py-0.5 rounded bg-[#FAF8F5] border border-[#D6D3CB] text-xs font-mono font-semibold text-[#1C1917]">
                     {programs.length} PRODI
                   </span>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-[#E2E3E4] bg-[#F3F3F4]">
+                <div className="p-3.5 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5]">
                   <QuickAdd
                     action={createProgramAction}
                     fields={[
@@ -185,19 +185,19 @@ export function StaffDashboardClient({
                 </div>
 
                 <div className="space-y-2 pt-1">
-                  <h3 className="text-xs font-mono font-semibold text-[#808285] uppercase">
+                  <h3 className="text-xs font-mono font-semibold text-[#57534E] uppercase">
                     Daftar Program Studi Terdaftar
                   </h3>
-                  <div className="divide-y divide-[#E2E3E4] border border-[#E2E3E4] rounded-xl overflow-hidden bg-[#FFFFFF]">
+                  <div className="divide-y divide-[#E8E5DE] border border-[#D6D3CB] rounded-xl overflow-hidden bg-[#FFFFFF]">
                     {programs.length === 0 ? (
-                      <p className="p-4 text-xs text-[#58595B] text-center">Belum ada program studi.</p>
+                      <p className="p-4 text-xs text-[#57534E] text-center">Belum ada program studi.</p>
                     ) : (
                       programs.map((p) => (
-                        <div key={p.id} className="p-3 flex items-center justify-between hover:bg-[#F3F3F4] transition-colors">
-                          <span className="font-mono font-bold text-xs px-2.5 py-0.5 rounded-full bg-[#111111] text-white">
+                        <div key={p.id} className="p-3 flex items-center justify-between hover:bg-[#FAF8F5] transition-colors">
+                          <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[#1C1917] text-white">
                             {p.code}
                           </span>
-                          <span className="font-heading font-semibold text-xs sm:text-sm text-[#111111] truncate ml-2">
+                          <span className="font-heading font-semibold text-xs sm:text-sm text-[#1C1917] truncate ml-2">
                             {p.name}
                           </span>
                         </div>
@@ -207,21 +207,21 @@ export function StaffDashboardClient({
                 </div>
               </div>
 
-              <div id="semester-form" className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] p-4 sm:p-5 space-y-4 shadow-xs">
-                <div className="flex items-center justify-between border-b border-[#E2E3E4] pb-3">
+              <div id="semester-form" className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] p-4 sm:p-5 space-y-4">
+                <div className="flex items-center justify-between border-b border-[#E8E5DE] pb-3">
                   <div className="space-y-0.5">
-                    <h2 className="font-heading font-bold text-base text-[#111111] flex items-center gap-2">
-                      <CalendarDays className="h-4 w-4 text-[#9F1521]" />
+                    <h2 className="font-heading font-bold text-base text-[#1C1917] flex items-center gap-2">
+                      <CalendarDays className="h-4 w-4 text-[#C2553A]" />
                       <span>Semester Akademik</span>
                     </h2>
-                    <p className="text-xs text-[#58595B]">Buka periode semester ganjil/genap baru.</p>
+                    <p className="text-xs text-[#57534E]">Buka periode semester ganjil/genap baru.</p>
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full bg-[#F3F3F4] border border-[#E2E3E4] text-xs font-mono font-semibold text-[#111111]">
+                  <span className="px-2.5 py-0.5 rounded bg-[#FAF8F5] border border-[#D6D3CB] text-xs font-mono font-semibold text-[#1C1917]">
                     {semesters.length} PERIODE
                   </span>
                 </div>
 
-                <div className="p-3.5 rounded-xl border border-[#E2E3E4] bg-[#F3F3F4]">
+                <div className="p-3.5 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5]">
                   <QuickAdd
                     action={createSemesterAction}
                     fields={[
@@ -233,22 +233,22 @@ export function StaffDashboardClient({
                 </div>
 
                 <div className="space-y-2 pt-1">
-                  <h3 className="text-xs font-mono font-semibold text-[#808285] uppercase">
+                  <h3 className="text-xs font-mono font-semibold text-[#57534E] uppercase">
                     Periode Semester Akademik
                   </h3>
-                  <div className="divide-y divide-[#E2E3E4] border border-[#E2E3E4] rounded-xl overflow-hidden bg-[#FFFFFF]">
+                  <div className="divide-y divide-[#E8E5DE] border border-[#D6D3CB] rounded-xl overflow-hidden bg-[#FFFFFF]">
                     {semesters.length === 0 ? (
-                      <p className="p-4 text-xs text-[#58595B] text-center">Belum ada semester akademik.</p>
+                      <p className="p-4 text-xs text-[#57534E] text-center">Belum ada semester akademik.</p>
                     ) : (
                       semesters.map((s) => (
-                        <div key={s.id} className="p-3 flex items-center justify-between hover:bg-[#F3F3F4] transition-colors">
-                          <span className="font-heading font-semibold text-xs sm:text-sm text-[#111111] truncate">
+                        <div key={s.id} className="p-3 flex items-center justify-between hover:bg-[#FAF8F5] transition-colors">
+                          <span className="font-heading font-semibold text-xs sm:text-sm text-[#1C1917] truncate">
                             {s.label}
                           </span>
                           <span
                             className={cn(
-                              'font-mono font-bold text-[10px] px-2.5 py-0.5 rounded-full',
-                              s.is_active ? 'bg-[#9F1521] text-white' : 'bg-[#F3F3F4] text-[#58595B]'
+                              'font-mono font-bold text-[10px] px-2 py-0.5 rounded',
+                              s.is_active ? 'bg-[#C2553A] text-white' : 'bg-[#ECE9D8] text-[#57534E]'
                             )}
                           >
                             {s.is_active ? 'AKTIF' : 'ARSIP'}
@@ -264,23 +264,23 @@ export function StaffDashboardClient({
 
           {/* WINDOW 3: KATALOG MATA KULIAH */}
           {(showAll || showMaster) && (
-            <div id="course-form" className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] p-4 sm:p-5 space-y-4 shadow-xs">
-              <div className="flex items-center justify-between border-b border-[#E2E3E4] pb-3">
+            <div id="course-form" className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] p-4 sm:p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E8E5DE] pb-3">
                 <div className="space-y-0.5">
-                  <h2 className="font-heading font-bold text-base text-[#111111] flex items-center gap-2">
-                    <BookOpen className="h-4 w-4 text-[#9F1521]" />
+                  <h2 className="font-heading font-bold text-base text-[#1C1917] flex items-center gap-2">
+                    <BookOpen className="h-4 w-4 text-[#C2553A]" />
                     <span>Katalog Mata Kuliah Kurikulum</span>
                   </h2>
-                  <p className="text-xs text-[#58595B]">
+                  <p className="text-xs text-[#57534E]">
                     Daftar mata kuliah yang tersedia untuk dibuka kelas perkuliahannya oleh dosen.
                   </p>
                 </div>
-                <span className="px-2.5 py-0.5 rounded-full bg-[#F3F3F4] border border-[#E2E3E4] text-xs font-mono font-semibold text-[#111111]">
+                <span className="px-2.5 py-0.5 rounded bg-[#FAF8F5] border border-[#D6D3CB] text-xs font-mono font-semibold text-[#1C1917]">
                   {courses.length} MATA KULIAH
                 </span>
               </div>
 
-              <div className="p-3.5 rounded-xl border border-[#E2E3E4] bg-[#F3F3F4]">
+              <div className="p-3.5 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5]">
                 <QuickAdd
                   action={createCourseAction}
                   fields={[
@@ -295,16 +295,16 @@ export function StaffDashboardClient({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1">
                 {courses.slice(0, 9).map((c) => (
-                  <div key={c.id} className="p-3.5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] flex flex-col justify-between space-y-2 shadow-2xs">
+                  <div key={c.id} className="p-3.5 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] flex flex-col justify-between space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-xs px-2 py-0.5 rounded-md bg-[#FEF2F2] text-[#9F1521]">
+                      <span className="font-mono font-bold text-xs px-2 py-0.5 rounded bg-[#FFFFFF] border border-[#D6D3CB] text-[#853827]">
                         {c.code}
                       </span>
-                      <span className="text-xs font-semibold font-mono text-[#58595B]">
+                      <span className="text-xs font-semibold font-mono text-[#57534E]">
                         {c.credits || 3} SKS
                       </span>
                     </div>
-                    <h3 className="font-heading font-bold text-sm text-[#111111] line-clamp-2">
+                    <h3 className="font-heading font-bold text-sm text-[#1C1917] line-clamp-2">
                       {c.name}
                     </h3>
                   </div>
@@ -316,18 +316,18 @@ export function StaffDashboardClient({
           {/* SECTION SPESIFIK: PANDUAN DELEGASI ASISTEN LAB & KELAS */}
           {(showKelas || showAll) && (
             <section aria-label="Delegasi Asisten Laboratorium" className="space-y-3">
-              <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-xs">
+              <div className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="space-y-1 min-w-0">
-                  <h3 className="font-heading font-bold text-base sm:text-lg text-[#111111]">
+                  <h3 className="font-heading font-bold text-base sm:text-lg text-[#1C1917]">
                     Manajemen Asisten Laboratorium Terpadu
                   </h3>
-                  <p className="text-xs text-[#58595B] leading-relaxed">
+                  <p className="text-xs text-[#57534E] leading-relaxed">
                     Asisten Dosen ditugaskan langsung oleh dosen pengampu, sedangkan Asisten Laboratorium dapat ditugaskan bersama oleh Staf Akademik dan Dosen.
                   </p>
                 </div>
                 <Link
                   href="/staff/classes"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#9F1521] text-white hover:bg-[#8F131E] text-xs font-semibold transition-colors shrink-0 shadow-xs"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1C1917] text-white hover:bg-[#C2553A] text-xs font-semibold transition-colors shrink-0"
                 >
                   <Layers className="h-4 w-4" />
                   <span>Kelola Asisten Lab</span>
@@ -342,7 +342,7 @@ export function StaffDashboardClient({
       {/* 2. BAGIAN KANAN: DETAIL & ACTION PANEL */}
       <aside
         aria-label="Panel Ringkasan & Detail BAAK"
-        className="hidden xl:flex w-right-panel shrink-0 border-l border-[#E2E3E4] bg-[#FFFFFF] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
+        className="hidden xl:flex w-right-panel shrink-0 border-l border-[#D6D3CB] bg-[#FAF8F5] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
         <StaffRightPanel
           programsCount={programs.length}
@@ -352,7 +352,7 @@ export function StaffDashboardClient({
           onTabChange={setRightPanelTab}
         />
 
-        <div className="shrink-0 w-full pt-2 border-t border-[#E2E3E4]">
+        <div className="shrink-0 w-full pt-2 border-t border-[#E8E5DE]">
           <StaffIdentityCard
             staffName={staffName}
             nip={nip}
@@ -376,15 +376,15 @@ export function StaffDashboardClient({
             className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
           />
 
-          <div className="relative w-full max-w-[22rem] sm:w-right-panel bg-[#FFFFFF] border-l border-[#E2E3E4] h-[100dvh] flex flex-col shadow-2xl z-10 animate-slide-in-right">
-            <div className="flex h-header items-center justify-between px-6 border-b border-[#E2E3E4] bg-[#F3F3F4] shrink-0">
-              <span className="font-heading font-bold text-base text-[#111111] tracking-tight">
+          <div className="relative w-full max-w-[22rem] sm:w-right-panel bg-[#FAF8F5] border-l border-[#D6D3CB] h-[100dvh] flex flex-col shadow-2xl z-10 animate-slide-in-right">
+            <div className="flex h-header items-center justify-between px-6 border-b border-[#D6D3CB] bg-[#ECE9D8] shrink-0">
+              <span className="font-heading font-bold text-base text-[#1C1917] tracking-tight">
                 Ringkasan BAAK
               </span>
               <button
                 type="button"
                 onClick={() => setIsRightDrawerOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#D6D3CB] bg-[#FFFFFF] text-[#1C1917] cursor-pointer"
                 title="Tutup Panel (Esc)"
                 aria-label="Tutup Panel"
               >
@@ -400,7 +400,7 @@ export function StaffDashboardClient({
                 activeTab={rightPanelTab}
                 onTabChange={setRightPanelTab}
               />
-              <div className="shrink-0 w-full pt-2 border-t border-[#E2E3E4]">
+              <div className="shrink-0 w-full pt-2 border-t border-[#E8E5DE]">
                 <StaffIdentityCard
                   staffName={staffName}
                   nip={nip}

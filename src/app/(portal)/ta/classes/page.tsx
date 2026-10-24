@@ -48,18 +48,18 @@ const ASSISTED_CLASSES = [
 
 export default function AssistantClassesPage() {
   return (
-    <div className="p-6 sm:p-8 w-full space-y-6 animate-fade-up font-sans">
+    <div className="p-6 sm:p-9 w-full space-y-8 animate-fade-up">
       <RetroWindow
         title="Kelas yang Diasistensi"
         headerBadge="Mode Asisten"
         headerBadgeVariant="warning"
       >
         <div className="p-6 sm:p-8 space-y-2">
-          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-[#111111] flex items-center gap-3">
-            <Layers className="h-7 w-7 text-[#9F1521]" />
+          <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-foreground flex items-center gap-3">
+            <Layers className="h-7 w-7 text-primary" />
             <span>Kelas yang Diasistensi</span>
           </h1>
-          <p className="text-xs sm:text-sm text-[#58595B] max-w-3xl leading-relaxed">
+          <p className="text-sm sm:text-base text-black font-bold max-w-3xl leading-relaxed">
             Peran asisten Anda berlaku spesifik per kelas. Anda dapat membantu presensi, memeriksa draf tugas, dan menjawab forum mahasiswa sesuai izin dosen pengampu.
           </p>
         </div>
@@ -72,24 +72,24 @@ export default function AssistantClassesPage() {
           return (
             <div
               key={cls.id}
-              className="rounded-2xl border border-[#E2E3E4] hover:border-[#808285] bg-[#FFFFFF] shadow-xs flex flex-col justify-between overflow-hidden transition-all"
+              className="rounded-2xl border border-[#D6D3CB] hover:border-[#7A756D] bg-[#FFFFFF] shadow-sm flex flex-col justify-between overflow-hidden transition-all"
             >
-              {/* Header Berwarna & Bercorak ala Enterprise */}
+              {/* Header Berwarna & Bercorak ala Google Classroom */}
               <div
-                className={`${theme.bannerGradient} relative p-5 text-white border-b border-black/10 overflow-hidden space-y-3`}
+                className={`${theme.bannerGradient} relative p-5 text-white border-b border-[#1C1917]/15 overflow-hidden space-y-3`}
               >
                 <ClassroomBannerPattern pattern={theme.pattern} />
                 <div className="relative z-10 flex items-center justify-between gap-2">
-                  <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs border border-white/30 text-white">
+                  <span className="font-mono text-xs font-bold px-2.5 py-0.5 rounded-md bg-[#FFFFFF]/15 backdrop-blur-xs border border-[#FFFFFF]/25 text-white">
                     {cls.code} · {cls.section}
                   </span>
-                  <span className="text-[11px] font-sans font-semibold px-2.5 py-0.5 rounded-full bg-black/30 border border-white/20 text-white">
+                  <span className="text-[11px] font-sans font-bold px-2.5 py-0.5 rounded-full bg-[#1C1917]/30 border border-[#FFFFFF]/25 text-white">
                     {cls.status}
                   </span>
                 </div>
 
                 <div className="relative z-10">
-                  <h2 className="font-heading font-bold text-base sm:text-lg text-white leading-snug">
+                  <h2 className="font-heading font-black text-lg text-white leading-snug drop-shadow-xs">
                     <Link
                       href={`/classes/${cls.id}`}
                       className="hover:underline decoration-white/80 underline-offset-4 transition-all"
@@ -97,8 +97,8 @@ export default function AssistantClassesPage() {
                       {cls.title}
                     </Link>
                   </h2>
-                  <p className="text-xs text-white/90 mt-1 font-normal">
-                    Dosen: <strong className="text-white font-semibold">{cls.lecturer}</strong>
+                  <p className="text-xs text-white/90 mt-1 font-medium">
+                    Dosen: <strong className="text-white">{cls.lecturer}</strong>
                   </p>
                 </div>
               </div>
@@ -106,26 +106,26 @@ export default function AssistantClassesPage() {
               <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
                 <div className="space-y-3">
                   <div className="space-y-1.5 text-xs">
-                    <p className="text-[#58595B] flex items-center gap-2 font-sans font-medium">
+                    <p className="text-[#57534E] flex items-center gap-2 font-sans font-medium">
                       <Clock className={`h-3.5 w-3.5 ${theme.accentText} shrink-0`} />
                       <span>{cls.schedule}</span>
                     </p>
-                    <p className="text-[#58595B] flex items-center gap-2 font-sans font-normal">
-                      <Users className="h-3.5 w-3.5 text-[#808285] shrink-0" />
+                    <p className="text-[#57534E] flex items-center gap-2 font-sans font-medium">
+                      <Users className="h-3.5 w-3.5 text-[#78716C] shrink-0" />
                       <span>{cls.studentsCount} Mahasiswa Terdaftar</span>
                     </p>
                   </div>
 
                   {/* Izin Mandat Asdos */}
-                  <div className="pt-2 border-t border-[#E2E3E4]">
-                    <span className="text-[11px] font-sans font-bold uppercase text-[#808285] block mb-1.5">
+                  <div className="pt-2 border-t border-[#E8E5DE]">
+                    <span className="text-[11px] font-sans font-bold uppercase text-[#6B6560] block mb-1.5">
                       Izin Mandat Dosen:
                     </span>
                     <div className="flex flex-wrap gap-1.5">
                       {cls.permissions.map((perm) => (
                         <span
                           key={perm}
-                          className="text-xs font-sans font-medium px-2 py-0.5 rounded-md border border-[#E2E3E4] bg-[#F3F3F4] text-[#111111]"
+                          className="text-xs font-sans font-semibold px-2 py-0.5 rounded-md border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917]"
                         >
                           {perm}
                         </span>
@@ -134,23 +134,23 @@ export default function AssistantClassesPage() {
                   </div>
                 </div>
 
-                <div className="pt-3 border-t border-[#E2E3E4] flex items-center justify-between gap-2">
+                <div className="pt-3 border-t border-[#E8E5DE] flex items-center justify-between gap-2">
                   {cls.pendingReviews > 0 ? (
                     <Link
                       href="/ta/grading"
-                      className="font-sans text-xs font-bold text-[#9F1521] bg-[#FEF2F2] hover:bg-[#F3F3F4] px-2.5 py-1.5 rounded-lg border border-[#9F1521]/20 transition-colors"
+                      className="font-sans text-xs font-bold text-[#853827] bg-[#FEF2F0] hover:bg-[#FDE6E0] px-2.5 py-1.5 rounded-lg border border-[#C2553A]/30 transition-colors"
                     >
                       {cls.pendingReviews} Draf Menunggu &rarr;
                     </Link>
                   ) : (
-                    <span className="font-sans text-xs font-semibold text-[#059669] bg-[#FFFFFF] border border-[#059669]/25 px-2.5 py-1.5 rounded-lg">
+                    <span className="font-sans text-xs font-bold text-[#065F46] bg-[#FAF8F5] border border-[#065F46]/25 px-2.5 py-1.5 rounded-lg">
                       Semua Selesai Ditinjau
                     </span>
                   )}
 
                   <Link
                     href={`/classes/${cls.id}`}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#9F1521] hover:bg-[#8F131E] text-white font-semibold text-xs transition-all shadow-xs"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#1C1917] hover:bg-[#C2553A] text-white font-bold text-xs transition-all"
                   >
                     <span>Buka Kelas</span>
                     <ArrowRight className="h-3.5 w-3.5" />

@@ -84,21 +84,21 @@ export default async function ClassesPage({
 
         {/* PITA INFORMASI KELAS ARSIP */}
         {currentTab === 'arsip' && (
-          <div className="p-3.5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] font-semibold text-xs flex items-center gap-2.5 shadow-2xs">
-            <FolderArchive className="h-4 w-4 shrink-0 text-[#9F1521]" />
+          <div className="p-3.5 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] font-semibold text-xs flex items-center gap-2.5">
+            <FolderArchive className="h-4 w-4 shrink-0 text-[#C2553A]" />
             <span>Kelas dalam tab ini sudah diarsipkan dan berada dalam mode baca-saja (read-only).</span>
           </div>
         )}
 
-        {/* 2. GRID KARTU KELAS CLEAN */}
+        {/* 2. GRID KARTU KELAS CLEAN SOFT-HEADER (FRESH & LEGA) */}
         <section aria-label="Daftar Kelas Perkuliahan">
           {classes.length === 0 ? (
-            <div className="p-10 sm:p-14 text-center rounded-2xl border border-dashed border-[#E2E3E4] bg-[#FFFFFF] space-y-3">
-              <FolderArchive className="h-10 w-10 text-[#808285] mx-auto" />
-              <h3 className="text-base sm:text-lg font-heading font-bold text-[#111111]">
+            <div className="p-10 sm:p-14 text-center rounded-2xl border border-dashed border-[#D6D3CB] bg-[#FAF8F5] space-y-3">
+              <FolderArchive className="h-10 w-10 text-[#7A756D] mx-auto" />
+              <h3 className="text-base sm:text-lg font-heading font-black text-[#1C1917]">
                 Belum Ada Kelas Terdaftar
               </h3>
-              <p className="text-xs sm:text-sm text-[#58595B] max-w-md mx-auto leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#6B6560] max-w-md mx-auto leading-relaxed">
                 {lecturer
                   ? 'Gunakan tombol Buka Kelas di sudut kanan atas untuk membuat rombongan belajar baru.'
                   : 'Gunakan tombol Gabung Kelas di sudut kanan atas untuk masuk menggunakan kode dari Dosen Pengampu.'}

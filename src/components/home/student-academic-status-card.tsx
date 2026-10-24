@@ -4,10 +4,17 @@ import React from 'react';
 import Link from 'next/link';
 import {
   ShieldAlert,
+  ShieldCheck,
   AlertTriangle,
+  Info,
+  CheckCircle2,
+  Clock,
   ArrowRight,
   Sparkles,
+  HelpCircle,
+  BookOpen,
 } from 'lucide-react';
+import { RetroWindow } from '@/components/retro/retro-window';
 import type { StudentRiskEvaluation } from '@/modules/early-warning/types';
 
 interface StudentAcademicStatusCardProps {
@@ -15,6 +22,7 @@ interface StudentAcademicStatusCardProps {
 }
 
 export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatusCardProps) {
+  // Ambil evaluasi risiko tertinggi di antara seluruh kelas
   const highestRisk = evaluations.find((e) => e.riskLevel === 'RISIKO_TINGGI')
     || evaluations.find((e) => e.riskLevel === 'PERHATIAN')
     || evaluations[0];
@@ -22,59 +30,81 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
   const riskLevel = highestRisk?.riskLevel || 'AMAN';
   const atRiskClasses = evaluations.filter((e) => e.riskLevel !== 'AMAN');
 
+  // Sembunyikan kartu jika status aman (tidak ada kelas yang terindikasi berisiko)
+  // Informasi status aman diletakkan secara ringkas pada badge header agar beranda rapi
   if (riskLevel === 'AMAN' || atRiskClasses.length === 0) {
     return null;
   }
 
-  const isHighRisk = riskLevel === 'RISIKO_TINGGI';
+  const getRiskHeader = () => {
+    switch (riskLevel) {
+      case 'RISIKO_TINGGI':
+        return {
+          title: 'Perhatian Khusus Diperlukan',
+          badgeText: 'STATUS: RISIKO TINGGI',
+          badgeClass: 'bg-primary text-white border-black font-bold',
+          icon: ShieldAlert,
+          desc: 'Terdapat indikator kehadiran atau tugas yang memerlukan tindak lanjut segera untuk menjaga kelayakan akademik.',
+        };
+      case 'PERHATIAN':
+      default:
+        return {
+          title: 'Status Akademik Memerlukan Perhatian',
+          badgeText: 'STATUS: PERHATIAN',
+          badgeClass: 'bg-gray-dark text-white border-black font-bold',
+          icon: AlertTriangle,
+          desc: 'Beberapa parameter perkuliahan mendekati batas minimal. Tingkatkan kehadiran dan pastikan seluruh tugas diserahkan tepat waktu.',
+        };
+    }
+  };
+
+  const header = getRiskHeader();
+  const Icon = header.icon;
 
   return (
-    <section
-      aria-label="Status Akademik dan Peringatan Dini"
-      className="rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] shadow-sm overflow-hidden p-5 sm:p-6 space-y-5 font-sans"
+    <RetroWindow
+      title="status_akademik_dan_peringatan_dini.card"
+      badge={header.badgeText}
+      headerClassName="bg-gray-soft"
+      bodyClassName="p-5 sm:p-6 bg-surface space-y-5"
     >
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-[#E2E3E4]">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div
-            className={`p-2.5 rounded-xl border ${
-              isHighRisk
-                ? 'bg-[#FEF2F2] border-[#FDDDD7] text-[#9F1521]'
-                : 'bg-[#F3F3F4] border-[#E2E3E4] text-[#808285]'
+            className={`p-2.5 rounded-lg border-2 border-black ${
+              riskLevel === 'RISIKO_TINGGI'
+                ? 'bg-primary text-white'
+                : riskLevel === 'PERHATIAN'
+                ? 'bg-gray-dark text-white'
+                : 'bg-surface text-ink'
             }`}
           >
-            {isHighRisk ? <ShieldAlert className="h-5 w-5" /> : <AlertTriangle className="h-5 w-5" />}
+            <Icon className="h-6 w-6" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="font-heading font-extrabold text-lg text-[#111111]">
+              <h2 className="font-heading font-bold text-lg sm:text-xl text-ink">
                 Status Akademik Semester Ini
               </h2>
-              <span
-                className={`px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                  isHighRisk
-                    ? 'bg-[#FEF2F2] text-[#9F1521] border border-[#FDDDD7]'
-                    : 'bg-[#F3F3F4] text-[#58595B] border border-[#E2E3E4]'
-                }`}
-              >
-                {isHighRisk ? 'RISIKO TINGGI' : 'PERHATIAN'}
+              <span className={`px-2.5 py-0.5 rounded border text-xs ${header.badgeClass}`}>
+                {header.badgeText}
               </span>
             </div>
-            <p className="text-xs text-[#58595B] font-normal mt-0.5">
-              {isHighRisk
-                ? 'Terdapat indikator kehadiran atau tugas yang memerlukan tindak lanjut segera.'
-                : 'Beberapa parameter perkuliahan mendekati batas minimal. Tingkatkan kehadiran dan pengumpulan tugas.'}
+            <p className="text-xs sm:text-sm text-gray-dark font-medium mt-0.5">
+              {header.desc}
             </p>
           </div>
         </div>
 
-        <div className="p-2.5 rounded-lg bg-[#F3F3F4] border border-[#E2E3E4] text-xs text-[#58595B] font-normal max-w-xs">
-          <strong className="text-[#111111] font-semibold">Monitoring Mandiri:</strong> Alat bantu evaluasi diri mahasiswa, bukan sanksi otomatis.
+        <div className="p-2.5 rounded-lg border border-black bg-gray-soft/50 text-xs text-gray-dark font-sans max-w-xs">
+          <span className="font-bold text-ink">Catatan:</span> Sistem ini merupakan alat bantu monitoring mandiri, bukan sanksi atau pengurangan nilai otomatis.
         </div>
       </div>
 
-      {atRiskClasses.length > 0 && (
-        <div className="space-y-3 pt-1">
-          <p className="text-[11px] font-bold text-[#808285] uppercase tracking-wider">
+      {/* Rincian Indikator per Kelas Berisiko */}
+      {atRiskClasses.length > 0 ? (
+        <div className="space-y-3 pt-2">
+          <p className="text-xs font-bold text-gray-dark uppercase tracking-wider">
             Mata Kuliah yang Memerlukan Perhatian ({atRiskClasses.length})
           </p>
 
@@ -82,45 +112,47 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
             {atRiskClasses.map((item) => (
               <div
                 key={item.id}
-                className="p-4 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] hover:border-[#9F1521] transition-all space-y-3"
+                className="p-4 rounded-xl border-2 border-black bg-surface shadow-retro-sm space-y-3"
               >
-                <div className="flex items-center justify-between gap-2 border-b border-[#E2E3E4] pb-2.5">
-                  <h3 className="font-heading font-bold text-sm text-[#111111] truncate">
+                <div className="flex items-center justify-between gap-2 border-b border-black/10 pb-2">
+                  <h3 className="font-heading font-bold text-sm text-ink truncate">
                     {item.classTitle}
                   </h3>
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[11px] font-bold shrink-0 ${
+                    className={`px-2 py-0.5 rounded border text-xs shrink-0 font-bold ${
                       item.riskLevel === 'RISIKO_TINGGI'
-                        ? 'bg-[#FEF2F2] text-[#9F1521] border border-[#FDDDD7]'
-                        : 'bg-[#F3F3F4] text-[#58595B] border border-[#E2E3E4]'
+                        ? 'bg-primary text-white border-black'
+                        : 'bg-gray-dark text-white border-black'
                     }`}
                   >
                     {item.riskLevel === 'RISIKO_TINGGI' ? 'Risiko Tinggi' : 'Perhatian'}
                   </span>
                 </div>
 
+                {/* Daftar Alasan Indikator */}
                 <div className="space-y-1.5">
                   {item.indicators.map((ind, idx) => (
                     <div
                       key={idx}
-                      className="text-xs font-normal text-[#111111] flex items-start gap-2 bg-[#F3F3F4] p-2.5 rounded-lg border border-[#E2E3E4]"
+                      className="text-xs font-medium text-ink flex items-start gap-2 bg-gray-soft/30 p-2 rounded border border-black/10"
                     >
-                      <AlertTriangle className="h-3.5 w-3.5 text-[#9F1521] shrink-0 mt-0.5" />
+                      <AlertTriangle className="h-3.5 w-3.5 text-black shrink-0 mt-0.5" />
                       <div>
-                        <span className="font-bold text-[#111111] block">{ind.label}</span>
-                        <span className="text-[#58595B] text-xs">{ind.reason}</span>
+                        <span className="font-bold text-ink block">{ind.label}</span>
+                        <span className="text-gray-dark text-xs font-sans">{ind.reason}</span>
                       </div>
                     </div>
                   ))}
                 </div>
 
+                {/* Saran Tindakan */}
                 {item.recommendations.length > 0 && (
-                  <div className="p-2.5 rounded-lg bg-[#F3F3F4]/60 border border-[#E2E3E4] text-xs space-y-1">
-                    <span className="font-bold text-[#111111] flex items-center gap-1.5">
-                      <Sparkles className="h-3.5 w-3.5 text-[#9F1521]" />
+                  <div className="p-2.5 rounded-lg border border-black/20 bg-surface text-xs space-y-1">
+                    <span className="font-bold text-ink flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-black" />
                       Saran Tindakan:
                     </span>
-                    <p className="text-xs text-[#58595B] font-normal leading-relaxed">
+                    <p className="text-xs text-gray-dark leading-relaxed font-sans">
                       {item.recommendations[0]}
                     </p>
                   </div>
@@ -129,17 +161,24 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
                 <div className="pt-1 flex justify-end">
                   <Link
                     href={`/classes/${item.classId}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#9F1521] hover:text-[#8F131E] transition-colors"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-ink hover:underline transition-colors"
                   >
                     <span>Buka Kelas Kuliah</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    <ArrowRight className="h-3.5 w-3.5 text-black" />
                   </Link>
                 </div>
               </div>
             ))}
           </div>
         </div>
+      ) : (
+        <div className="p-4 rounded-xl border border-black bg-gray-soft/20 flex items-center gap-3">
+          <CheckCircle2 className="h-5 w-5 text-ink shrink-0" />
+          <p className="text-xs text-ink font-medium">
+            Tidak ada mata kuliah yang terindikasi berisiko saat ini. Pertahankan kehadiran di atas 75% dan kumpulkan tugas tepat waktu!
+          </p>
+        </div>
       )}
-    </section>
+    </RetroWindow>
   );
 }

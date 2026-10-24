@@ -29,52 +29,47 @@ export function RetroWindow({
   const displayBadge = headerBadge || badge;
   const hasHeader = Boolean(title || displayBadge || actions);
 
-  // Clean up any archaic dot-suffixes in title for human-readable polish
-  const cleanTitle = title
-    ? title.replace(/\.(card|view|window|panel)$/i, '').replace(/_/g, ' ')
-    : title;
-
   return (
     <section
       className={cn(
-        'rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] shadow-sm overflow-hidden transition-all duration-150',
+        'rounded-2xl border border-[#E8E5DE] bg-[#FFFFFF] overflow-hidden transition-all duration-150',
         className
       )}
     >
       {hasHeader && (
         <div
           className={cn(
-            'flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 border-b border-[#E2E3E4] bg-[#FFFFFF]',
+            'flex flex-wrap items-center justify-between gap-3 px-5 py-3.5 border-b border-[#E8E5DE] bg-[#FAF8F5]/60',
             headerClassName
           )}
         >
           <div className="flex items-center gap-2.5 min-w-0 flex-1">
-            {cleanTitle && (
-              <h3 className="font-heading text-sm sm:text-base font-bold tracking-tight text-[#111111] capitalize truncate">
-                {cleanTitle}
+            {title && (
+              <h3 className="font-heading text-sm sm:text-base font-bold tracking-tight text-[#1C1917] truncate">
+                {title}
               </h3>
             )}
             {displayBadge && (
-              <span className="font-sans text-[11px] font-bold bg-[#FEF2F2] text-[#9F1521] border border-[#FDDDD7] px-2.5 py-0.5 rounded-full shrink-0">
+              <span className="font-sans text-[11px] font-semibold bg-[#F2EFE8] text-[#57534E] border border-[#D6D3CB] px-2.5 py-0.5 rounded-full shrink-0">
                 {displayBadge}
               </span>
             )}
             {subtitle && (
-              <span className="hidden md:inline text-xs text-[#808285] font-normal truncate">
+              <span className="hidden md:inline text-xs text-[#6B6560] truncate">
                 — {subtitle}
               </span>
             )}
           </div>
 
           {actions && (
-            <div className="flex items-center gap-2 text-xs font-semibold text-[#111111] shrink-0">
+            <div className="flex items-center gap-2 text-xs font-semibold text-[#1C1917] shrink-0">
               {actions}
             </div>
           )}
         </div>
       )}
 
-      <div className={cn('p-5 sm:p-6 bg-[#FFFFFF] text-[#111111]', bodyClassName)}>
+      <div className={cn('p-5 sm:p-6 bg-[#FFFFFF] text-[#1C1917]', bodyClassName)}>
         {children}
       </div>
     </section>

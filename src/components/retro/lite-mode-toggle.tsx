@@ -8,6 +8,7 @@ export function LiteModeToggle({ className }: { className?: string }) {
   const [isLiteMode, setIsLiteMode] = useState(false);
 
   useEffect(() => {
+    // Check initial state from localStorage
     try {
       const saved = localStorage.getItem('siajar_lite_mode');
       if (saved === 'true') {
@@ -39,27 +40,31 @@ export function LiteModeToggle({ className }: { className?: string }) {
       type="button"
       onClick={toggleLiteMode}
       className={cn(
-        'inline-flex items-center gap-1.5 h-9 px-3 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#F3F3F4] text-xs font-semibold text-[#58595B] hover:text-[#111111] transition-all cursor-pointer',
-        isLiteMode && 'bg-[#FEF2F2] border-[#FDDDD7] text-[#9F1521]',
+        'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border-2 border-ink text-xs font-mono font-bold transition-all shadow-retro-xs cursor-pointer',
+        isLiteMode
+          ? 'bg-ink text-white hover:bg-black'
+          : 'bg-surface text-ink hover:bg-gray-soft',
         className
       )}
       title={
         isLiteMode
-          ? 'Mode Hemat Daya Aktif (Animasi diminimalkan)'
-          : 'Aktifkan Mode Hemat Daya / Performa Ringan'
+          ? 'Mode Performa Ringan Aktif (Bayangan & animasi dinonaktifkan untuk hemat baterai/RAM)'
+          : 'Aktifkan Mode Performa Ringan (Cocok untuk perangkat dengan spesifikasi lama)'
       }
-      aria-label="Sakelar Mode Hemat Daya"
+      aria-label="Sakelar Mode Hemat Performa"
       aria-pressed={isLiteMode}
     >
       {isLiteMode ? (
         <>
-          <Zap className="h-3.5 w-3.5 text-[#9F1521] fill-[#9F1521]" />
-          <span className="hidden sm:inline">Mode Hemat: ON</span>
+          <Zap className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400" />
+          <span className="hidden sm:inline">Mode Cepat: ON</span>
+          <span className="sm:hidden">Cepat</span>
         </>
       ) : (
         <>
-          <ZapOff className="h-3.5 w-3.5 text-[#808285]" />
-          <span className="hidden sm:inline">Mode Hemat: OFF</span>
+          <ZapOff className="h-3.5 w-3.5 text-gray-dark" />
+          <span className="hidden sm:inline">Mode Cepat: OFF</span>
+          <span className="sm:hidden">Hemat</span>
         </>
       )}
     </button>

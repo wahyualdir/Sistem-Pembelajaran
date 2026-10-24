@@ -106,19 +106,19 @@ export function CoordinatorDashboardClient({
   const showMonitoring = showAll || selectedCategory === 'Monitoring Perkuliahan';
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[calc(100vh-72px)] font-sans">
+    <div className="flex flex-col xl:flex-row min-h-[calc(100vh-72px)]">
       {/* 1. BAGIAN TENGAH: WORKSPACE UTAMA KAPRODI */}
-      <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
+      <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0 font-sans">
         <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
           {/* HEADER BERANDA & FILTER TERPADU KAPRODI */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-3 border-b border-[#E2E3E4]">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-3 border-b border-[#D6D3CB]">
             <div className="space-y-1">
-              <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#9F1521]">
+              <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#853827]">
                 <span>PORTAL KOORDINATOR PROGRAM STUDI</span>
-                <span className="text-[#808285]">•</span>
-                <span className="text-[#58595B]">{department}</span>
+                <span className="text-[#B8B1A5]">•</span>
+                <span className="text-[#57534E]">{department}</span>
               </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#111111]">
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#1C1917]">
                 Ruang Pimpinan &amp; Evaluasi Prodi
               </h1>
             </div>
@@ -132,10 +132,10 @@ export function CoordinatorDashboardClient({
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      'px-3 py-1.5 rounded-xl text-xs sm:text-sm font-sans transition-colors focus-visible:outline-none cursor-pointer',
+                      'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-sans transition-colors focus-visible:outline-none cursor-pointer',
                       isActive
-                        ? 'bg-[#9F1521] text-white font-semibold shadow-xs'
-                        : 'bg-[#F3F3F4] text-[#58595B] font-medium hover:bg-[#E2E3E4] hover:text-[#111111]'
+                        ? 'bg-[#1C1917] text-white font-semibold'
+                        : 'bg-[#ECE9D8]/70 text-[#44403C] font-medium hover:bg-[#ECE9D8] hover:text-[#1C1917]'
                     )}
                   >
                     {cat}
@@ -148,23 +148,23 @@ export function CoordinatorDashboardClient({
           {/* ACTION BANNER */}
           <ActionBanner initialData={bannerData} />
 
-          {/* STAT STRIP KAPRODI */}
-          <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E2E3E4] overflow-hidden shadow-xs">
+          {/* STAT STRIP KAPRODI (1 PITA RINGKAS, TANPA CARD BERLEBIHAN) */}
+          <div className="rounded-2xl border border-[#E8E5DE] bg-[#FFFFFF] grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E8E5DE] overflow-hidden">
             <div className="p-4 flex flex-col justify-between">
-              <p className="text-xs font-mono font-semibold text-[#808285] uppercase">Total Pengajuan</p>
-              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#111111] mt-1">{requests.length}</p>
+              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Total Pengajuan</p>
+              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917] mt-1">{requests.length}</p>
             </div>
             <div className="p-4 flex flex-col justify-between">
-              <p className="text-xs font-mono font-semibold text-[#808285] uppercase">Menunggu ACC</p>
-              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#9F1521] mt-1">{pending.length}</p>
+              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Menunggu ACC</p>
+              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#C2553A] mt-1">{pending.length}</p>
             </div>
             <div className="p-4 flex flex-col justify-between">
-              <p className="text-xs font-mono font-semibold text-[#808285] uppercase">Disetujui</p>
-              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#059669] mt-1">{approved.length}</p>
+              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Disetujui</p>
+              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#065F46] mt-1">{approved.length}</p>
             </div>
             <div className="p-4 flex flex-col justify-between">
-              <p className="text-xs font-mono font-semibold text-[#808285] uppercase">Ditolak</p>
-              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#111111] mt-1">{rejected.length}</p>
+              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Ditolak</p>
+              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917] mt-1">{rejected.length}</p>
             </div>
           </div>
 
@@ -181,25 +181,25 @@ export function CoordinatorDashboardClient({
           {/* SECTION: ANTREAN PERSETUJUAN PERUBAHAN NILAI */}
           {(showAll || showNilai) && (
             <div id="approvals-section" className="space-y-4">
-              <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] overflow-hidden shadow-xs">
-                <div className="p-4 border-b border-[#E2E3E4] bg-[#F3F3F4] flex items-center justify-between">
-                  <h2 className="font-heading font-bold text-sm sm:text-base text-[#111111] flex items-center gap-2">
-                    <FileCheck className="h-4 w-4 text-[#9F1521]" />
+              <div className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] overflow-hidden">
+                <div className="p-4 border-b border-[#E8E5DE] bg-[#FAF8F5] flex items-center justify-between">
+                  <h2 className="font-heading font-bold text-sm sm:text-base text-[#1C1917] flex items-center gap-2">
+                    <FileCheck className="h-4 w-4 text-[#C2553A]" />
                     <span>Pengajuan Perubahan Nilai Menunggu Keputusan</span>
                   </h2>
-                  <span className="text-xs font-mono font-bold text-[#9F1521] px-2.5 py-0.5 rounded-full border border-[#E2E3E4] bg-[#FFFFFF]">
+                  <span className="text-xs font-mono font-bold text-[#853827] px-2.5 py-0.5 rounded border border-[#D6D3CB] bg-[#FFFFFF]">
                     {pending.length} Menunggu
                   </span>
                 </div>
 
                 <div className="p-4">
                   {pending.length === 0 ? (
-                    <div className="p-8 text-center rounded-xl border border-dashed border-[#E2E3E4] bg-[#F3F3F4] space-y-2">
+                    <div className="p-8 text-center rounded-xl border border-dashed border-[#D6D3CB] bg-[#FAF8F5] space-y-2">
                       <CheckCircle2 className="h-7 w-7 text-[#059669] mx-auto" />
-                      <p className="text-sm font-heading font-bold text-[#111111]">
+                      <p className="text-sm font-heading font-bold text-[#1C1917]">
                         Tidak Ada Pengajuan Menunggu Keputusan
                       </p>
-                      <p className="text-xs text-[#58595B] max-w-md mx-auto">
+                      <p className="text-xs text-[#57534E] max-w-md mx-auto">
                         Semua permohonan revisi nilai mahasiswa telah diproses secara tuntas.
                       </p>
                     </div>
@@ -208,37 +208,37 @@ export function CoordinatorDashboardClient({
                       {pending.map((req) => (
                         <div
                           key={req.id}
-                          className="rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] p-4 space-y-3 shadow-2xs"
+                          className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] p-4 space-y-3"
                         >
-                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E2E3E4] pb-2">
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E8E5DE] pb-2">
                             <div>
-                              <span className="px-2 py-0.5 rounded-full bg-[#FEF2F2] text-[#9F1521] text-[11px] font-mono font-bold">
+                              <span className="px-2 py-0.5 rounded bg-[#FAF8F5] border border-[#D6D3CB] text-[#853827] text-[11px] font-mono font-bold">
                                 {req.class_title}
                               </span>
-                              <h3 className="font-heading font-bold text-sm text-[#111111] mt-1">
+                              <h3 className="font-heading font-bold text-sm text-[#1C1917] mt-1">
                                 Mahasiswa: {req.student_name} ({req.student_nim})
                               </h3>
                             </div>
-                            <span className="text-xs font-mono font-semibold text-[#58595B]">
+                            <span className="text-xs font-mono font-semibold text-[#57534E]">
                               Dosen: {req.requester_name}
                             </span>
                           </div>
 
                           <div className="flex items-center gap-3 text-xs font-mono font-bold">
-                            <span className="px-2.5 py-1 rounded-lg border border-[#E2E3E4] bg-[#F3F3F4] text-[#111111]">
+                            <span className="px-2 py-1 rounded border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917]">
                               Nilai Lama: {req.old_score ?? '-'}
                             </span>
                             <span>&rarr;</span>
-                            <span className="px-2.5 py-1 rounded-lg bg-[#9F1521] text-white">
+                            <span className="px-2 py-1 rounded bg-[#1C1917] text-white">
                               Nilai Baru: {req.new_score}
                             </span>
                           </div>
 
-                          <p className="text-xs text-[#58595B] bg-[#F3F3F4] p-2.5 rounded-lg border border-[#E2E3E4]">
-                            <strong className="text-[#111111]">Alasan Dosen:</strong> {req.reason}
+                          <p className="text-xs text-[#44403C] bg-[#FAF8F5] p-2.5 rounded-lg border border-[#E8E5DE]">
+                            <strong>Alasan Dosen:</strong> {req.reason}
                           </p>
 
-                          <div className="pt-1 border-t border-[#E2E3E4]">
+                          <div className="pt-1 border-t border-[#E8E5DE]">
                             <ChangeDecision id={req.id} />
                           </div>
                         </div>
@@ -252,35 +252,35 @@ export function CoordinatorDashboardClient({
 
           {/* SECTION: RIWAYAT KEPUTUSAN */}
           {(showAll || showNilai) && requests.some((r) => r.status !== 'PENDING') && (
-            <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] overflow-hidden shadow-xs">
-              <div className="p-4 border-b border-[#E2E3E4] bg-[#F3F3F4] flex items-center justify-between">
-                <h3 className="font-heading font-bold text-sm text-[#111111]">
+            <div className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] overflow-hidden">
+              <div className="p-4 border-b border-[#E8E5DE] bg-[#FAF8F5] flex items-center justify-between">
+                <h3 className="font-heading font-bold text-sm text-[#1C1917]">
                   Riwayat Keputusan Revisi Nilai
                 </h3>
-                <span className="text-xs font-mono font-semibold text-[#58595B]">
+                <span className="text-xs font-mono font-semibold text-[#57534E]">
                   {approved.length + rejected.length} Diputuskan
                 </span>
               </div>
-              <div className="divide-y divide-[#E2E3E4]">
+              <div className="divide-y divide-[#E8E5DE]">
                 {requests
                   .filter((r) => r.status !== 'PENDING')
                   .slice(0, 5)
                   .map((r) => (
                     <div key={r.id} className="p-3.5 flex items-center justify-between text-xs">
                       <div className="space-y-0.5">
-                        <p className="font-heading font-bold text-[#111111]">
+                        <p className="font-heading font-bold text-[#1C1917]">
                           {r.student_name} — {r.class_title}
                         </p>
-                        <p className="text-[#58595B] font-mono">
+                        <p className="text-[#57534E] font-mono">
                           Revisi {r.old_score ?? '-'} &rarr; {r.new_score}
                         </p>
                       </div>
                       <span
                         className={cn(
-                          'px-2.5 py-0.5 rounded-full font-mono font-bold text-[11px]',
+                          'px-2.5 py-0.5 rounded font-mono font-bold text-[11px]',
                           r.status === 'APPROVED'
                             ? 'bg-[#E8F5E9] text-[#065F46]'
-                            : 'bg-[#FEF2F2] text-[#9F1521]'
+                            : 'bg-[#FEF2F2] text-[#991B1B]'
                         )}
                       >
                         {r.status === 'APPROVED' ? 'DISETUJUI' : 'DITOLAK'}
@@ -296,7 +296,7 @@ export function CoordinatorDashboardClient({
       {/* 2. BAGIAN KANAN: DETAIL & ACTION PANEL */}
       <aside
         aria-label="Panel Ringkasan & Detail Kaprodi"
-        className="hidden xl:flex w-right-panel shrink-0 border-l border-[#E2E3E4] bg-[#FFFFFF] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
+        className="hidden xl:flex w-right-panel shrink-0 border-l border-[#D6D3CB] bg-[#FAF8F5] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
         <CoordinatorRightPanel
           pendingApprovalsCount={pending.length}
@@ -307,7 +307,7 @@ export function CoordinatorDashboardClient({
           onTabChange={setRightPanelTab}
         />
 
-        <div className="shrink-0 w-full pt-2 border-t border-[#E2E3E4]">
+        <div className="shrink-0 w-full pt-2 border-t border-[#E8E5DE]">
           <CoordinatorIdentityCard
             coordinatorName={coordinatorName}
             nidn={nidn}
@@ -332,15 +332,15 @@ export function CoordinatorDashboardClient({
             className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity animate-fade-in"
           />
 
-          <div className="relative w-full max-w-[22rem] sm:w-right-panel bg-[#FFFFFF] border-l border-[#E2E3E4] h-[100dvh] flex flex-col shadow-2xl z-10 animate-slide-in-right">
-            <div className="flex h-header items-center justify-between px-6 border-b border-[#E2E3E4] bg-[#F3F3F4] shrink-0">
-              <span className="font-heading font-bold text-base text-[#111111] tracking-tight">
+          <div className="relative w-full max-w-[22rem] sm:w-right-panel bg-[#FAF8F5] border-l border-[#D6D3CB] h-[100dvh] flex flex-col shadow-2xl z-10 animate-slide-in-right">
+            <div className="flex h-header items-center justify-between px-6 border-b border-[#D6D3CB] bg-[#ECE9D8] shrink-0">
+              <span className="font-heading font-bold text-base text-[#1C1917] tracking-tight">
                 Ringkasan Kaprodi
               </span>
               <button
                 type="button"
                 onClick={() => setIsRightDrawerOpen(false)}
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] cursor-pointer"
+                className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#D6D3CB] bg-[#FFFFFF] text-[#1C1917] cursor-pointer"
                 title="Tutup Panel (Esc)"
                 aria-label="Tutup Panel"
               >
@@ -357,7 +357,7 @@ export function CoordinatorDashboardClient({
                 activeTab={rightPanelTab}
                 onTabChange={setRightPanelTab}
               />
-              <div className="shrink-0 w-full pt-2 border-t border-[#E2E3E4]">
+              <div className="shrink-0 w-full pt-2 border-t border-[#E8E5DE]">
                 <CoordinatorIdentityCard
                   coordinatorName={coordinatorName}
                   nidn={nidn}
