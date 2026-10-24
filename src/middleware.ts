@@ -108,12 +108,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // 2. Pengguna sudah login membuka halaman login/register -> redirect ke portal/workspace
+  // 2. Pengguna membuka halaman login/register
+  // Cegah redirect loop: jika ada parameter ?from (hasil pengalihan proteksi) atau tidak ada activeRole,
+  // izinkan halaman login terbuka agar user dapat melihat form & mengganti sesi.
   if (isAuthenticated && (pathname === '/login' || pathname === '/register')) {
-    if (activeRole && ROLE_PORTAL_MAP[activeRole]) {
+    const hasFrom = request.nextUrl.searchParams.has('from');
+    if (!hasFrom && activeRole && ROLE_PORTAL_MAP[activeRole]) {
       return NextResponse.redirect(new URL(ROLE_PORTAL_MAP[activeRole], request.url));
     }
-    return NextResponse.redirect(new URL('/workspace', request.url));
+    return response;
   }
 
   // 3. Pengguna membuka root '/'

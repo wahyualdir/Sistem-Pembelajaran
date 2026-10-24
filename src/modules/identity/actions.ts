@@ -1048,7 +1048,16 @@ export async function getCurrentUserWithRoles() {
   const userId = effectiveUserId;
 
   // Cari di synthetic users jika ada
-  let matchedDemo = Object.values(SYNTHETIC_DEMO_USERS).find((u) => u.id === userId);
+  let matchedDemo =
+    SYNTHETIC_DEMO_USERS[userId] ||
+    SYNTHETIC_DEMO_USERS[userId.toLowerCase()] ||
+    Object.values(SYNTHETIC_DEMO_USERS).find(
+      (u) =>
+        u.id === userId ||
+        u.nim === userId ||
+        u.nidn === userId ||
+        u.email?.toLowerCase() === userId.toLowerCase()
+    );
 
   let profile = matchedDemo
     ? {

@@ -218,6 +218,7 @@ for (const m of SEED_MAHASISWA_UIR) {
   };
   SYNTHETIC_DEMO_USERS[m.nim] = userObj;
   SYNTHETIC_DEMO_USERS[m.email] = userObj;
+  SYNTHETIC_DEMO_USERS[userObj.id] = userObj;
 }
 
 // 2. Registrasikan 42 Dosen UIR
@@ -235,6 +236,7 @@ for (const d of SEED_DOSEN_UIR) {
   SYNTHETIC_DEMO_USERS[d.nidn] = userObj;
   SYNTHETIC_DEMO_USERS[d.email] = userObj;
   SYNTHETIC_DEMO_USERS[d.id] = userObj;
+  SYNTHETIC_DEMO_USERS[userObj.id] = userObj;
 }
 
 // 3. Registrasikan 6 Staf & Admin UIR
@@ -258,6 +260,7 @@ for (const s of STAF_ADMIN_UIR) {
   };
   SYNTHETIC_DEMO_USERS[s.nip] = userObj;
   SYNTHETIC_DEMO_USERS[s.email] = userObj;
+  SYNTHETIC_DEMO_USERS[userObj.id] = userObj;
 }
 
 if (process.env.SUPERADMIN_EMAIL) {
