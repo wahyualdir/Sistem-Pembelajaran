@@ -152,7 +152,7 @@ export function SemesterWeave({
         bodyClassName="p-4 sm:p-5 bg-surface space-y-4"
       >
         {/* Header Sekunder: Judul & Keterangan Pekan */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-black/10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-[#E8E5DE]">
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-base sm:text-lg font-heading font-extrabold text-[#1C1917]">
@@ -182,7 +182,7 @@ export function SemesterWeave({
         <div className="overflow-x-auto -mx-1 px-1">
           <table role="table" className="w-full border-collapse select-none min-w-[560px] sm:min-w-[640px]">
             <thead>
-              <tr className="border-b border-stone-200">
+              <tr className="border-b border-[#E8E5DE]">
                 <th
                   scope="col"
                   className="w-[140px] sm:w-[190px] md:w-[220px] pr-3 pb-2 text-left text-xs uppercase tracking-wider font-extrabold text-[#57534E]"
@@ -294,7 +294,7 @@ export function SemesterWeave({
         </div>
 
         {/* Legenda Bentuk & Warna (Pill Chips yang Rapi & Indah) */}
-        <div className="pt-3 border-t border-black/10">
+        <div className="pt-3 border-t border-[#E8E5DE]">
           <div className="flex flex-wrap items-center gap-2 text-xs font-sans font-medium text-stone-600">
             <span className="text-[11px] font-bold text-stone-500 uppercase tracking-wider mr-1">
               Legenda:
@@ -327,7 +327,7 @@ export function SemesterWeave({
         </div>
 
         {/* Baris Ringkasan Komprehensif (Ikhtisar Aktivitas & Tindak Lanjut) */}
-        <div className="p-3.5 sm:p-4 rounded-lg border border-stone-300 bg-stone-50/90 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs sm:text-sm shadow-2xs">
+        <div className="p-3.5 sm:p-4 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs sm:text-sm shadow-2xs">
           <div className="flex items-start gap-2.5">
             <div className="p-2 rounded-md bg-[#853827]/10 text-[#853827] shrink-0 mt-0.5">
               <CalendarCheck className="h-4 w-4" />

@@ -71,7 +71,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div
-            className={`p-2.5 rounded-lg border-2 border-black ${
+            className={`p-2.5 rounded-lg border border-[#E8E5DE] shadow-2xs ${
               riskLevel === 'RISIKO_TINGGI'
                 ? 'bg-primary text-white'
                 : riskLevel === 'PERHATIAN'
@@ -96,7 +96,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
           </div>
         </div>
 
-        <div className="p-2.5 rounded-lg border border-black bg-gray-soft/50 text-xs text-gray-dark font-sans max-w-xs">
+        <div className="p-2.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] text-xs text-gray-dark font-sans max-w-xs">
           <span className="font-bold text-ink">Catatan:</span> Sistem ini merupakan alat bantu monitoring mandiri, bukan sanksi atau pengurangan nilai otomatis.
         </div>
       </div>
@@ -112,17 +112,17 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
             {atRiskClasses.map((item) => (
               <div
                 key={item.id}
-                className="p-4 rounded-xl border-2 border-black bg-surface shadow-retro-sm space-y-3"
+                className="p-4 rounded-xl border border-[#E8E5DE] bg-white shadow-2xs space-y-3"
               >
-                <div className="flex items-center justify-between gap-2 border-b border-black/10 pb-2">
+                <div className="flex items-center justify-between gap-2 border-b border-[#E8E5DE] pb-2">
                   <h3 className="font-heading font-bold text-sm text-ink truncate">
                     {item.classTitle}
                   </h3>
                   <span
                     className={`px-2 py-0.5 rounded border text-xs shrink-0 font-bold ${
                       item.riskLevel === 'RISIKO_TINGGI'
-                        ? 'bg-primary text-white border-black'
-                        : 'bg-gray-dark text-white border-black'
+                        ? 'bg-primary text-white border-[#E8E5DE]'
+                        : 'bg-gray-dark text-white border-[#E8E5DE]'
                     }`}
                   >
                     {item.riskLevel === 'RISIKO_TINGGI' ? 'Risiko Tinggi' : 'Perhatian'}
@@ -134,7 +134,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
                   {item.indicators.map((ind, idx) => (
                     <div
                       key={idx}
-                      className="text-xs font-medium text-ink flex items-start gap-2 bg-gray-soft/30 p-2 rounded border border-black/10"
+                      className="text-xs font-medium text-ink flex items-start gap-2 bg-[#FAF8F5] p-2 rounded border border-[#E8E5DE]"
                     >
                       <AlertTriangle className="h-3.5 w-3.5 text-black shrink-0 mt-0.5" />
                       <div>
@@ -147,7 +147,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
 
                 {/* Saran Tindakan */}
                 {item.recommendations.length > 0 && (
-                  <div className="p-2.5 rounded-lg border border-black/20 bg-surface text-xs space-y-1">
+                  <div className="p-2.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] text-xs space-y-1">
                     <span className="font-bold text-ink flex items-center gap-1.5">
                       <Sparkles className="h-3.5 w-3.5 text-black" />
                       Saran Tindakan:
@@ -172,7 +172,7 @@ export function StudentAcademicStatusCard({ evaluations }: StudentAcademicStatus
           </div>
         </div>
       ) : (
-        <div className="p-4 rounded-xl border border-black bg-gray-soft/20 flex items-center gap-3">
+        <div className="p-4 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] flex items-center gap-3">
           <CheckCircle2 className="h-5 w-5 text-ink shrink-0" />
           <p className="text-xs text-ink font-medium">
             Tidak ada mata kuliah yang terindikasi berisiko saat ini. Pertahankan kehadiran di atas 75% dan kumpulkan tugas tepat waktu!

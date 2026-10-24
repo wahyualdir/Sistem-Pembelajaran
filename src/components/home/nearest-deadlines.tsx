@@ -31,7 +31,7 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
   }, []);
 
   return (
-    <section aria-label="Tenggat Terdekat" className="space-y-3.5">
+    <section aria-label="Tenggat Terdekat" className="space-y-3.5 font-sans">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Clock className="h-4 w-4 text-[#C2553A]" />
@@ -48,7 +48,7 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
       </div>
 
       {items.length === 0 ? (
-        <div className="p-6 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] text-center space-y-2">
+        <div className="p-6 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] text-center space-y-2 shadow-2xs">
           <CheckCircle2 className="h-7 w-7 text-[#059669] mx-auto" />
           <p className="font-heading font-bold text-base text-[#1C1917]">Semua Tugas Selesai</p>
           <p className="text-xs text-[#57534E]">Tidak ada tenggat tugas atau kuis yang menunggu pengumpulan.</p>
@@ -62,16 +62,16 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
               <div
                 key={item.id}
                 className={cn(
-                  'group p-4 rounded-xl border bg-[#FFFFFF] transition-all flex flex-col justify-between gap-2.5',
+                  'group p-4 rounded-xl border bg-[#FFFFFF] transition-all flex flex-col justify-between gap-2.5 shadow-2xs',
                   item.isUrgent
                     ? 'border-[#C2553A] bg-[#FAF8F5]'
-                    : 'border-[#D6D3CB] hover:border-[#7A756D]'
+                    : 'border-[#E8E5DE] hover:border-[#D6D3CB]'
                 )}
               >
                 {/* Baris 1: Ikon + Nama Mata Kuliah di Kiri, Badge Mendesak di Kanan */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <div className="shrink-0 p-1.5 rounded-lg border border-[#D6D3CB] bg-[#FFFFFF] text-[#C2553A] flex items-center justify-center">
+                    <div className="shrink-0 p-1.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] text-[#C2553A] flex items-center justify-center">
                       {isQuiz ? <Award className="h-3.5 w-3.5" /> : <FileText className="h-3.5 w-3.5" />}
                     </div>
                     <span className="text-xs font-semibold text-[#57534E] truncate">
@@ -91,7 +91,7 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
                   )}
                 </div>
 
-                {/* Baris 2: Judul Tugas / Kuis Lebar Penuh (Tidak Terpotong Sempit) */}
+                {/* Baris 2: Judul Tugas / Kuis */}
                 <h3 className="font-heading font-bold text-sm sm:text-base text-[#1C1917] leading-snug line-clamp-2">
                   {item.title}
                 </h3>

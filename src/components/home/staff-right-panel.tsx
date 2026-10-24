@@ -81,15 +81,15 @@ export function StaffRightPanel({
   return (
     <div className="flex flex-col gap-5">
       {/* 1. Pengalih Dua Tab Retro */}
-      <div className="flex items-center p-1.5 rounded-xl border-2 border-ink bg-gray-soft shadow-xs">
+      <div className="flex items-center p-1 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] shadow-2xs">
         <button
           type="button"
           onClick={() => onTabChange('hari-ini')}
           className={cn(
             'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'hari-ini'
-              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-              : 'text-ink hover:bg-ink/5'
+              ? 'bg-[#FFFFFF] text-[#1C1917] border border-[#E8E5DE] shadow-2xs'
+              : 'text-[#57534E] hover:text-[#1C1917] hover:bg-black/5'
           )}
         >
           Hari Ini
@@ -100,8 +100,8 @@ export function StaffRightPanel({
           className={cn(
             'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-heading font-bold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'quick-actions'
-              ? 'bg-ink text-white border-b-4 border-b-primary shadow-retro'
-              : 'text-ink hover:bg-ink/5'
+              ? 'bg-[#FFFFFF] text-[#1C1917] border border-[#E8E5DE] shadow-2xs'
+              : 'text-[#57534E] hover:text-[#1C1917] hover:bg-black/5'
           )}
         >
           Aksi Cepat
@@ -114,7 +114,7 @@ export function StaffRightPanel({
       {activeTab === 'hari-ini' && (
         <div className="flex flex-col gap-5 animate-fade-in pb-24">
           {/* 1. Ringkasan Baris Metrik BAAK */}
-          <div className="right-panel-stats-card p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro">
+          <div className="right-panel-stats-card p-4 sm:p-5 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs">
             <div className="stats-responsive-layout">
               <div className="stats-responsive-item">
                 <span className="stats-label text-xs sm:text-sm font-sans font-bold text-black uppercase tracking-wider shrink-0">
@@ -161,35 +161,35 @@ export function StaffRightPanel({
           </div>
 
           {/* 2. Aksi Cepat Administrasi BAAK */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs space-y-3">
             <h4 className="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-black">
               Aksi Cepat BAAK
             </h4>
             <div className="grid grid-cols-2 gap-2">
               <Link
                 href="/staff/schedules"
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] hover:bg-white hover:border-[#D6D3CB] text-xs font-bold transition-all shadow-2xs"
               >
                 <Clock className="h-4 w-4 shrink-0 text-primary" />
                 <span className="truncate">Jadwal Kuliah</span>
               </Link>
               <Link
                 href="/staff/classes"
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] hover:bg-white hover:border-[#D6D3CB] text-xs font-bold transition-all shadow-2xs"
               >
                 <Layers className="h-4 w-4 shrink-0 text-primary" />
                 <span className="truncate">Asisten Lab</span>
               </Link>
               <Link
                 href="/staff/announcements"
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] hover:bg-white hover:border-[#D6D3CB] text-xs font-bold transition-all shadow-2xs"
               >
                 <Megaphone className="h-4 w-4 shrink-0 text-primary" />
                 <span className="truncate">Pengumuman</span>
               </Link>
               <Link
                 href="/staff/grades"
-                className="flex items-center gap-2 p-2.5 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white text-xs font-bold transition-all shadow-xs"
+                className="flex items-center gap-2 p-2.5 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] hover:bg-white hover:border-[#D6D3CB] text-xs font-bold transition-all shadow-2xs"
               >
                 <BookOpen className="h-4 w-4 shrink-0 text-primary" />
                 <span className="truncate">Rekap Nilai</span>
@@ -198,15 +198,15 @@ export function StaffRightPanel({
           </div>
 
           {/* 3. Kalender Mini Bulan Berjalan */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs space-y-3">
+            <div className="flex items-center justify-between border-b border-[#E8E5DE] pb-2.5">
               <div className="flex items-center gap-1.5">
                 <CalendarDays className="h-4 w-4 text-ink" />
                 <span className="font-heading font-bold text-sm text-ink">
                   {jakarta.monthName} {jakarta.year}
                 </span>
               </div>
-              <span className="text-xs font-sans font-bold bg-gray-soft px-1.5 py-0.5 rounded border border-ink text-gray-dark">
+              <span className="text-xs font-sans font-bold bg-[#FAF8F5] px-1.5 py-0.5 rounded border border-[#E8E5DE] text-gray-dark">
                 {jakarta.shortTimeString}
               </span>
             </div>
@@ -235,8 +235,8 @@ export function StaffRightPanel({
                       isToday
                         ? 'bg-ink text-white shadow-xs'
                         : hasEvent
-                        ? 'bg-gray-soft text-ink border border-ink/40'
-                        : 'text-ink hover:bg-ink/5'
+                        ? 'bg-[#FAF8F5] text-ink border border-[#E8E5DE]'
+                        : 'text-[#57534E] hover:text-[#1C1917] hover:bg-black/5'
                     )}
                   >
                     <span>{day}</span>
@@ -251,7 +251,7 @@ export function StaffRightPanel({
               })}
             </div>
 
-            <div className="flex items-center gap-2.5 pt-2 text-xs font-sans text-gray-dark border-t border-ink/10">
+            <div className="flex items-center gap-2.5 pt-2 text-xs font-sans text-gray-dark border-t border-[#E8E5DE]">
               <span className="flex items-center gap-1 font-semibold">
                 <span className="w-1.5 h-1.5 rounded-full bg-ink" /> Hari Ini
               </span>
@@ -262,8 +262,8 @@ export function StaffRightPanel({
           </div>
 
           {/* 4. Agenda BAAK 7 Hari */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-surface shadow-retro space-y-3">
-            <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs space-y-3">
+            <div className="flex items-center justify-between border-b border-[#E8E5DE] pb-2.5">
               <h4 className="font-heading font-bold text-sm text-ink uppercase tracking-wider">
                 Agenda Akademik 7 Hari
               </h4>
@@ -274,7 +274,7 @@ export function StaffRightPanel({
                 <Link
                   key={ag.id}
                   href={ag.href}
-                  className="block group p-2.5 rounded-lg border border-ink/20 hover:border-ink bg-gray-soft/40 hover:bg-gray-soft transition-all"
+                  className="block group p-2.5 rounded-lg border border-[#E8E5DE] hover:border-[#D6D3CB] bg-[#FAF8F5] hover:bg-white shadow-2xs transition-all"
                 >
                   <div className="space-y-1">
                     <span className="text-xs font-sans font-bold text-gray-dark">
@@ -296,7 +296,7 @@ export function StaffRightPanel({
       {/* ========================================================= */}
       {activeTab === 'quick-actions' && (
         <div className="flex flex-col gap-4 animate-fade-in pb-24">
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-ink bg-white shadow-retro space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs space-y-3">
             <h4 className="font-heading font-bold text-sm text-ink uppercase tracking-wider">
               Manajemen Master Akademik
             </h4>
@@ -306,28 +306,28 @@ export function StaffRightPanel({
             <div className="flex flex-col gap-2.5 pt-2">
               <Link
                 href="/staff#prodi-form"
-                className="flex items-center justify-between p-3 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white transition-all text-xs font-bold shadow-xs"
+                className="flex items-center justify-between p-3 rounded-xl border border-[#E8E5DE] hover:border-[#D6D3CB] bg-[#FAF8F5] hover:bg-white text-[#1C1917] transition-all text-xs font-bold shadow-2xs"
               >
                 <span>+ Buka Program Studi Baru</span>
                 <ChevronRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/staff#semester-form"
-                className="flex items-center justify-between p-3 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white transition-all text-xs font-bold shadow-xs"
+                className="flex items-center justify-between p-3 rounded-xl border border-[#E8E5DE] hover:border-[#D6D3CB] bg-[#FAF8F5] hover:bg-white text-[#1C1917] transition-all text-xs font-bold shadow-2xs"
               >
                 <span>+ Atur Semester Akademik</span>
                 <ChevronRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/staff#course-form"
-                className="flex items-center justify-between p-3 rounded-lg border-2 border-ink bg-gray-soft hover:bg-ink hover:text-white transition-all text-xs font-bold shadow-xs"
+                className="flex items-center justify-between p-3 rounded-xl border border-[#E8E5DE] hover:border-[#D6D3CB] bg-[#FAF8F5] hover:bg-white text-[#1C1917] transition-all text-xs font-bold shadow-2xs"
               >
                 <span>+ Tambah Mata Kuliah Kurikulum</span>
                 <ChevronRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/staff/classes"
-                className="flex items-center justify-between p-3 rounded-lg border-2 border-ink bg-black text-white hover:bg-neutral-800 transition-all text-xs font-bold shadow-retro-xs"
+                className="flex items-center justify-between p-3 rounded-xl border border-[#A34530] bg-[#C2553A] text-white hover:bg-[#B84A2B] transition-all text-xs font-bold shadow-2xs"
               >
                 <span>Delegasi Asisten Laboratorium</span>
                 <ChevronRight className="h-4 w-4" />

@@ -20,7 +20,7 @@ interface TodayScheduleProps {
 
 export function TodaySchedule({ items }: TodayScheduleProps) {
   return (
-    <section aria-label="Jadwal Hari Ini" className="space-y-3.5">
+    <section aria-label="Jadwal Hari Ini" className="space-y-3.5 font-sans">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CalendarDays className="h-4 w-4 text-[#C2553A]" />
@@ -37,7 +37,7 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
       </div>
 
       {items.length === 0 ? (
-        <div className="p-6 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] text-center space-y-2.5">
+        <div className="p-6 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] text-center space-y-2.5 shadow-2xs">
           <CalendarDays className="h-7 w-7 text-[#7A756D] mx-auto" />
           <p className="font-heading font-bold text-base text-[#1C1917]">Tidak Ada Kuliah Hari Ini</p>
           <p className="text-xs text-[#57534E] max-w-md mx-auto">
@@ -45,7 +45,7 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
           </p>
           <Link
             href="/calendar"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] font-semibold text-xs text-[#1C1917] hover:bg-[#ECE9D8] transition-colors"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] font-semibold text-xs text-[#1C1917] hover:bg-[#FFFFFF] transition-colors"
           >
             <span>Buka Kalender Akademik</span>
             <ArrowRight className="h-3.5 w-3.5" />
@@ -61,10 +61,10 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
               <div
                 key={item.id}
                 className={cn(
-                  'p-4 rounded-xl border bg-[#FFFFFF] transition-all flex flex-col justify-between gap-3',
+                  'p-4 rounded-xl border bg-[#FFFFFF] transition-all flex flex-col justify-between gap-3 shadow-2xs',
                   isOngoing
                     ? 'border-[#C2553A] border-l-4 bg-[#FAF8F5]'
-                    : 'border-[#D6D3CB] hover:border-[#7A756D]'
+                    : 'border-[#E8E5DE] hover:border-[#D6D3CB]'
                 )}
               >
                 {/* Baris 1: Jam & Kode MK di Kiri, Status di Kanan */}
@@ -73,7 +73,7 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                     <span className="text-xs font-mono font-bold text-[#1C1917] tabular-nums">
                       {item.time}
                     </span>
-                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-[#FFFFFF] border border-[#D6D3CB] text-[#853827]">
+                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-[#FAF8F5] border border-[#E8E5DE] text-[#853827]">
                       {item.code}
                     </span>
                   </div>
@@ -85,13 +85,13 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                     </span>
                   )}
                   {isFinished && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#ECE9D8] text-[#44403C] shrink-0">
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#F2EFE8] text-[#44403C] shrink-0">
                       <CheckCircle2 className="h-3 w-3" />
                       SELESAI
                     </span>
                   )}
                   {!isOngoing && !isFinished && (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#FAF8F5] text-[#57534E] border border-[#D6D3CB] shrink-0">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#FAF8F5] text-[#57534E] border border-[#E8E5DE] shrink-0">
                       AKAN DATANG
                     </span>
                   )}
@@ -118,23 +118,18 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                   {isOngoing && item.hasActiveAttendance ? (
                     <Link
                       href="/classes"
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#C2553A] text-white font-bold text-xs hover:bg-[#853827] transition-colors shrink-0"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#C2553A] hover:bg-[#B84A2B] text-white font-bold text-xs shadow-xs transition-colors shrink-0"
                     >
-                      <Key className="h-3.5 w-3.5" />
-                      <span>Presensi</span>
+                      <Play className="h-3.5 w-3.5 fill-white" />
+                      <span>Masuk Kelas &amp; Presensi</span>
                     </Link>
                   ) : (
                     <Link
                       href="/classes"
-                      className={cn(
-                        'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border font-bold text-xs transition-colors shrink-0',
-                        isOngoing
-                          ? 'bg-[#1C1917] text-white border-[#1C1917] hover:bg-[#C2553A]'
-                          : 'bg-[#FFFFFF] text-[#1C1917] border-[#D6D3CB] hover:bg-[#ECE9D8]'
-                      )}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#FFFFFF] text-[#1C1917] font-semibold text-xs transition-colors shrink-0"
                     >
-                      <Play className="h-3 w-3" />
-                      <span>Masuk Kelas</span>
+                      <span>Detail Kelas</span>
+                      <ArrowRight className="h-3 w-3" />
                     </Link>
                   )}
                 </div>

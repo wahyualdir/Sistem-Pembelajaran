@@ -326,7 +326,7 @@ export function PortalShell({
             ref={drawerRef}
             tabIndex={-1}
             className={cn(
-              'fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r-2 border-r-[#7A756D] border-l-2 border-l-[#FFFFFF] bg-[#FAF8F5] h-[100dvh] shrink-0 outline-none',
+              'fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r border-r-[#E8E5DE] bg-[#FAF8F5] h-[100dvh] shrink-0 outline-none',
               'xl:sticky xl:top-0 xl:h-[100dvh] xl:z-40 shadow-xs',
               'transition-all duration-200 ease-in-out motion-reduce:transition-none',
               'pl-[env(safe-area-inset-left,0px)] pb-[env(safe-area-inset-bottom,0px)]',
@@ -336,25 +336,25 @@ export function PortalShell({
           >
             {/* Header Sidebar: Brand Block (Full vs Rail) */}
             {isRailActive ? (
-              <div className="flex h-header shrink-0 items-center justify-center border-b-2 border-[#7A756D] bg-[#ECE9D8] px-2 box-border">
+              <div className="flex h-header shrink-0 items-center justify-center border-b border-[#E8E5DE] bg-[#FAF8F5] px-2 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center justify-center group focus-visible:outline-none"
                   title={`RuangKampus - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-[#7A756D] bg-white p-0.5 shadow-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E8E5DE] bg-white p-0.5 shadow-2xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
                     <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                 </Link>
               </div>
             ) : (
-              <div className="flex items-center h-header shrink-0 border-b-2 border-[#7A756D] bg-[#ECE9D8] px-4 box-border">
+              <div className="flex items-center h-header shrink-0 border-b border-[#E8E5DE] bg-[#FAF8F5] px-4 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0"
                   title={`RuangKampus - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-white p-0.5 shadow-retro-sm group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E8E5DE] bg-white p-0.5 shadow-2xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
                     <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                   <div className="flex flex-col min-w-0">
@@ -469,17 +469,17 @@ export function PortalShell({
             {/* ======================================================== */}
             {/* DI BAWAH MENU BAGIAN BAWAH: WIDGET PROFIL INTERAKTIF     */}
             {/* ======================================================== */}
-            <div className="p-2 sm:p-2.5 border-t-2 border-retro-border bg-gray-soft space-y-1.5 shrink-0 sidebar-compact-user-container">
+            <div className="p-2 sm:p-2.5 border-t border-[#E8E5DE] bg-[#FAF8F5] space-y-1.5 shrink-0 sidebar-compact-user-container">
               <div ref={profileMenuRef} className="relative">
                 {/* Menu Popover Profil saat Ditekan */}
                 {isProfileMenuOpen && (
                   <div
                     className={cn(
-                      'absolute bottom-full mb-2 rounded-xl border-2 border-retro-border bg-retro-surface p-2.5 shadow-retro-md z-50 space-y-1.5 animate-fade-up',
+                      'absolute bottom-full mb-2 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] p-2.5 shadow-md z-50 space-y-1.5 animate-fade-up',
                       isRailActive ? 'left-0 w-60' : 'left-0 right-0'
                     )}
                   >
-                    <div className="px-2.5 py-2 border-b-2 border-retro-border/30 mb-1">
+                    <div className="px-2.5 py-2 border-b border-[#E8E5DE] mb-1">
                       <p className="text-sm font-bold text-foreground truncate">{userName}</p>
                       <p className="text-xs text-muted-foreground font-sans font-medium">{userSubtitle}</p>
                     </div>
@@ -521,7 +521,7 @@ export function PortalShell({
                     </Link>
 
                     {availableRoles && availableRoles.length > 1 && (
-                      <div className="pb-2 mb-2 border-b-2 border-retro-border/30">
+                      <div className="pb-2 mb-2 border-b border-[#E8E5DE]">
                         <p className="px-3 py-1 text-[11px] font-bold uppercase text-muted-foreground tracking-wider">
                           Pilih Peran Aktif
                         </p>
@@ -559,7 +559,7 @@ export function PortalShell({
                       <span>Perangkat dan Sesi</span>
                     </Link>
 
-                    <div className="pt-1.5 border-t-2 border-retro-border/30">
+                    <div className="pt-1.5 border-t border-[#E8E5DE]">
                       <form action={logoutAction}>
                         <button
                           type="submit"
@@ -578,13 +578,13 @@ export function PortalShell({
                   type="button"
                   onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                   className={cn(
-                    'flex items-center rounded-xl border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-bg transition-all group focus-visible:outline-none w-full text-left',
+                    'flex items-center rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] shadow-2xs hover:bg-[#FAF8F5] hover:border-[#D6D3CB] transition-all group focus-visible:outline-none w-full text-left',
                     isRailActive ? 'justify-center p-2' : 'gap-2.5 p-2 sm:p-2.5 sidebar-compact-user-card'
                   )}
                   title={isRailActive ? `Profil: ${userName}` : 'Buka Menu Profil Pengguna'}
                 >
                   {/* Box Kotak Inisial Avatar */}
-                  <div className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-lg border-2 border-retro-border bg-black text-white overflow-hidden flex items-center justify-center text-xs sm:text-sm font-bold shrink-0 shadow-xs sidebar-compact-avatar">
+                  <div className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-lg border border-[#E8E5DE] bg-[#1C1917] text-white overflow-hidden flex items-center justify-center text-xs sm:text-sm font-bold shrink-0 shadow-2xs sidebar-compact-avatar">
                     {initials}
                   </div>
 
@@ -618,7 +618,7 @@ export function PortalShell({
                   <form action={logoutAction} className="w-full">
                     <button
                       type="submit"
-                      className="flex items-center justify-center gap-2 w-full py-1.5 sm:py-2 px-3 rounded-lg border-2 border-retro-border bg-retro-surface hover:bg-gray-soft text-black text-xs sm:text-sm font-bold transition-colors focus-visible:outline-none"
+                      className="flex items-center justify-center gap-2 w-full py-1.5 sm:py-2 px-3 rounded-lg border border-[#E8E5DE] bg-[#FFFFFF] hover:bg-[#FAF8F5] hover:border-[#D6D3CB] text-[#1C1917] text-xs sm:text-sm font-bold shadow-2xs transition-colors focus-visible:outline-none"
                     >
                       <LogOut className="h-3.5 w-3.5" />
                       <span>Keluar Akun</span>
@@ -630,7 +630,7 @@ export function PortalShell({
                   <button
                     type="submit"
                     title="Keluar / Logout"
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black hover:bg-gray-soft transition-colors focus-visible:outline-none"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-[#E8E5DE] bg-[#FFFFFF] text-[#1C1917] hover:bg-[#FAF8F5] hover:border-[#D6D3CB] shadow-2xs transition-colors focus-visible:outline-none"
                   >
                     <LogOut className="h-4 w-4" />
                   </button>
@@ -672,8 +672,8 @@ export function PortalShell({
             {/* ======================================================== */}
             <header
               className={cn(
-                'sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#D6D3CB] bg-[#ECE9D8] px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
-                isScrolled && 'shadow-xs border-b-[#B8B4AB]'
+                'sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#E8E5DE] bg-[#FAF8F5]/90 backdrop-blur-md px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
+                isScrolled && 'shadow-2xs border-b-[#D6D3CB]'
               )}
             >
               {/* SISI KIRI & TENGAH: TOMBOL TOGGLE SIDEBAR + SEARCH BAR TERPADU */}
@@ -682,7 +682,7 @@ export function PortalShell({
                   ref={burgerButtonRef}
                   type="button"
                   onClick={handleBurgerClick}
-                  className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#D6D3CB] hover:border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] shadow-2xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A] shrink-0 cursor-pointer"
+                  className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E8E5DE] hover:border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] shadow-2xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A] shrink-0 cursor-pointer"
                   title={isCollapsed ? 'Perbesar Bilah Samping' : 'Kecilkan Bilah Samping'}
                   aria-label="Toggle Sidebar"
                 >
@@ -703,7 +703,7 @@ export function PortalShell({
                 >
                   <div
                     onClick={() => setIsCommandCenterOpen(true)}
-                    className="flex items-center h-9 sm:h-10 px-3 sm:px-3.5 rounded-xl border border-[#D6D3CB] hover:border-[#7A756D] focus-within:border-[#C2553A] focus-within:ring-2 focus-within:ring-[#C2553A]/20 transition-all bg-[#FFFFFF] shadow-2xs cursor-pointer gap-2.5"
+                    className="flex items-center h-9 sm:h-10 px-3 sm:px-3.5 rounded-xl border border-[#E8E5DE] hover:border-[#D6D3CB] focus-within:border-[#C2553A] focus-within:ring-2 focus-within:ring-[#C2553A]/20 transition-all bg-[#FFFFFF] shadow-2xs cursor-pointer gap-2.5"
                   >
                     <Search className="h-4 w-4 text-[#78716C] shrink-0" />
                     <input
@@ -721,7 +721,7 @@ export function PortalShell({
                         e.stopPropagation();
                         setIsCommandCenterOpen(true);
                       }}
-                      className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#ECE9D8] text-[11px] font-mono font-bold text-[#57534E] shrink-0 select-none cursor-pointer transition-colors"
+                      className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] hover:bg-[#ECE7DF] text-[11px] font-mono font-bold text-[#57534E] shrink-0 select-none cursor-pointer transition-colors"
                       title="Buka Command Center (Ctrl + K)"
                     >
                       <span>⌘</span>
@@ -744,7 +744,7 @@ export function PortalShell({
                 {availableRoles && availableRoles.length > 1 && (
                   <Link
                     href="/workspace"
-                    className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl text-xs font-sans font-bold text-[#1C1917] bg-[#FFFFFF] hover:bg-[#FAF8F5] border border-[#D6D3CB] hover:border-[#7A756D] transition-all shadow-2xs"
+                    className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl text-xs font-sans font-bold text-[#1C1917] bg-[#FFFFFF] hover:bg-[#FAF8F5] border border-[#E8E5DE] hover:border-[#D6D3CB] transition-all shadow-2xs"
                     title="Beralih peran pengguna"
                   >
                     <Layers className="h-3.5 w-3.5 text-[#C2553A]" />
@@ -761,7 +761,7 @@ export function PortalShell({
                   <button
                     type="button"
                     onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                    className="xl:hidden relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface shadow-retro-sm hover:bg-gray-soft transition-all focus-visible:outline-none cursor-pointer"
+                    className="xl:hidden relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] shadow-2xs hover:bg-[#FAF8F5] hover:border-[#D6D3CB] transition-all focus-visible:outline-none cursor-pointer"
                     title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan dan Detail'}
                     aria-label="Panel Ringkasan dan Detail"
                   >

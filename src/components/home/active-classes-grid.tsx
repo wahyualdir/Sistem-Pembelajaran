@@ -59,7 +59,7 @@ export function ActiveClassesGrid({
       </div>
 
       {courses.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-[#D6D3CB] bg-[#FAF8F5] p-8 text-center space-y-3">
+        <div className="rounded-xl border border-dashed border-[#E8E5DE] bg-[#FFFFFF] p-8 text-center space-y-3 shadow-2xs">
           <FileText className="h-8 w-8 text-[#7A756D] mx-auto" />
           <p className="font-heading font-bold text-base text-[#1C1917]">
             {emptyTitle}
@@ -92,10 +92,10 @@ export function ActiveClassesGrid({
                 key={course.id}
                 onClick={() => onSelectCourse(course)}
                 className={cn(
-                  'group cursor-pointer rounded-2xl border bg-[#FFFFFF] transition-all flex flex-col justify-between overflow-hidden',
+                  'group cursor-pointer rounded-2xl border bg-[#FFFFFF] transition-all flex flex-col justify-between overflow-hidden shadow-2xs',
                   isSelected
                     ? 'border-[#1C1917] ring-2 ring-[#1C1917] shadow-sm'
-                    : 'border-[#D6D3CB] hover:border-[#7A756D]'
+                    : 'border-[#E8E5DE] hover:border-[#D6D3CB]'
                 )}
               >
                 {/* Header Kartu Berwarna & Bercorak ala Google Classroom */}
@@ -161,7 +161,7 @@ export function ActiveClassesGrid({
                     </div>
                   </div>
 
-                  <div className="w-full h-1.5 rounded-full bg-[#ECE9D8] overflow-hidden">
+                  <div className="w-full h-1.5 rounded-full bg-[#E8E5DE] overflow-hidden">
                     <div
                       className={cn(
                         theme.progressBar,

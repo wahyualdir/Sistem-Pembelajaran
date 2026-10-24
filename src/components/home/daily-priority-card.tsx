@@ -49,9 +49,9 @@ export function DailyPriorityCard({ initialItems }: { initialItems: DailyPriorit
       case 'flashcard':
         return <Brain className="h-4 w-4 text-indigo-600" />;
       case 'bab':
-        return <BookOpen className="h-4 w-4 text-primary" />;
+        return <BookOpen className="h-4 w-4 text-emerald-600" />;
       default:
-        return <Sparkles className="h-4 w-4 text-primary" />;
+        return <Bell className="h-4 w-4 text-[#C2553A]" />;
     }
   };
 
@@ -66,7 +66,7 @@ export function DailyPriorityCard({ initialItems }: { initialItems: DailyPriorit
       case 'bab':
         return 'bg-emerald-100 text-emerald-900 border-emerald-300';
       default:
-        return 'bg-gray-soft text-black border-black/20';
+        return 'bg-[#FAF8F5] text-[#1C1917] border-[#E8E5DE]';
     }
   };
 
@@ -74,19 +74,19 @@ export function DailyPriorityCard({ initialItems }: { initialItems: DailyPriorit
     <section aria-label="Prioritas Hari Ini" className="space-y-3 animate-fade-up font-sans">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg border-2 border-black bg-white text-black shadow-xs">
-            <Sparkles className="h-4 w-4 text-primary" />
+          <div className="p-1.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] text-[#1C1917] shadow-2xs">
+            <Sparkles className="h-4 w-4 text-[#C2553A]" />
           </div>
           <div>
-            <h2 className="font-heading font-bold text-base sm:text-lg text-black tracking-tight">
+            <h2 className="font-heading font-bold text-base sm:text-lg text-[#1C1917] tracking-tight">
               Prioritas Hari Ini
             </h2>
-            <p className="text-xs text-black/60 font-medium">
+            <p className="text-xs text-[#57534E] font-medium">
               Fokus pembelajaran cerdas terurut berdasarkan tenggat dan capaian Anda
             </p>
           </div>
         </div>
-        <span className="text-xs font-bold text-black/60 px-2 py-0.5 rounded border border-black/20 bg-white">
+        <span className="text-xs font-bold text-[#57534E] px-2 py-0.5 rounded-full border border-[#E8E5DE] bg-[#FFFFFF]">
           {items.length} butir
         </span>
       </div>
@@ -95,10 +95,10 @@ export function DailyPriorityCard({ initialItems }: { initialItems: DailyPriorit
         {items.map((item) => (
           <div
             key={item.key}
-            className="p-3 sm:p-3.5 rounded-xl border-2 border-black bg-white shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-gray-soft/20 transition-all"
+            className="p-3 sm:p-3.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-[#D6D3CB] transition-all"
           >
             <div className="flex items-start sm:items-center gap-3 flex-1 min-w-0">
-              <div className="p-2 rounded-lg border border-black/20 bg-gray-soft/60 shrink-0 mt-0.5 sm:mt-0">
+              <div className="p-2 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] shrink-0 mt-0.5 sm:mt-0">
                 {getIcon(item.key)}
               </div>
               <div className="space-y-0.5 min-w-0 flex-1">
@@ -111,11 +111,11 @@ export function DailyPriorityCard({ initialItems }: { initialItems: DailyPriorit
                   >
                     {item.reason}
                   </span>
-                  <span className="text-xs font-bold text-black/60 truncate max-w-[180px]">
+                  <span className="text-xs font-bold text-[#57534E] truncate max-w-[180px]">
                     {item.className}
                   </span>
                 </div>
-                <h3 className="font-bold text-xs sm:text-sm text-black truncate">
+                <h3 className="font-bold text-xs sm:text-sm text-[#1C1917] truncate">
                   {item.title}
                 </h3>
               </div>
@@ -124,18 +124,19 @@ export function DailyPriorityCard({ initialItems }: { initialItems: DailyPriorit
             <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
               <Link
                 href={item.actionHref}
-                className="px-3 py-1.5 rounded-lg border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs font-bold shadow-xs inline-flex items-center gap-1.5 transition-all"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#FFFFFF] text-[#1C1917] text-xs font-bold shadow-2xs transition-all"
               >
-                <span>{item.actionLabel || 'Mulai'}</span>
-                <ArrowRight className="h-3.5 w-3.5" />
+                <span>{item.actionLabel}</span>
+                <ArrowRight className="h-3 w-3 text-[#C2553A]" />
               </Link>
+
               <button
                 type="button"
                 onClick={() => handleDismiss(item.key)}
                 disabled={dismissingKey === item.key}
-                className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-gray-soft text-black/70 hover:text-black transition-all cursor-pointer"
-                title="Abaikan butir untuk hari ini"
-                aria-label="Abaikan untuk hari ini"
+                className="p-1.5 rounded-lg text-[#7A756D] hover:text-[#1C1917] hover:bg-[#FAF8F5] transition-colors cursor-pointer"
+                title="Tandai selesai / abaikan"
+                aria-label="Tandai selesai"
               >
                 <X className="h-4 w-4" />
               </button>

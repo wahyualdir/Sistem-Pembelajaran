@@ -83,11 +83,11 @@
   --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
   /* Velqora Academic Learning OS Palette */
-  --bg: #FAF8F5;
+  --bg: #F5F3EE;
   --bg-main: var(--bg);
   --surface: #FFFFFF;
   --bg-surface: var(--surface);
-  --bg-surface-raised: #ECE9D8;
+  --bg-surface-raised: #FAF8F5;
   --ink: #1C1917;
 
   /* Velqora Signature Terracotta (#C2553A) "Warm Academic Library" */
@@ -99,12 +99,12 @@
 
   --gray: #7A756D;
   --gray-dark: #4A463F;
-  --gray-soft: #ECE9D8;
+  --gray-soft: #FAF8F5;
   --shadow: 2px 2px 0px rgba(122, 117, 109, 0.45);
 
   /* Pemetaan Dasar ke Token Sistem */
-  --border-main: #D6D3CB;
-  --border-strong: #7A756D;
+  --border-main: #E8E5DE;
+  --border-strong: #D6D3CB;
 
   /* Velqora Warm Charcoal & Stone Typography - Kontras Tinggi & Jelas */
   --text-primary: #1C1917;
@@ -131,11 +131,11 @@
   --shadow-md: var(--shadow);
 
   /* Palet Retro Velqora OS */
-  --retro-bg: #FAF8F5;
+  --retro-bg: #F5F3EE;
   --retro-surface: #FFFFFF;
-  --retro-warm: #ECE9D8;
-  --retro-border: #7A756D;
-  --retro-dither: #F4EFEB;
+  --retro-warm: #FAF8F5;
+  --retro-border: #E8E5DE;
+  --retro-dither: #F5F3EE;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
@@ -529,33 +529,33 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
 
 /* Retro Aesthetics dengan Token --ink */
 .border-retro {
-  border: 2px solid var(--ink, #000000);
+  border: 1px solid #E8E5DE;
 }
 .border-retro-sm {
-  border: 1.5px solid var(--ink, #000000);
+  border: 1px solid #E8E5DE;
 }
 .shadow-retro {
-  box-shadow: 4px 4px 0px var(--ink, #000000);
+  box-shadow: 0 1px 3px rgba(45, 40, 35, 0.04), 0 3px 8px -1px rgba(45, 40, 35, 0.04);
 }
 .shadow-retro-md {
-  box-shadow: 5px 5px 0px var(--ink, #000000);
+  box-shadow: 0 2px 6px rgba(45, 40, 35, 0.05), 0 4px 12px -2px rgba(45, 40, 35, 0.04);
 }
 .shadow-retro-lg {
-  box-shadow: 7px 7px 0px var(--ink, #000000);
+  box-shadow: 0 4px 12px rgba(45, 40, 35, 0.06), 0 8px 24px -4px rgba(45, 40, 35, 0.05);
 }
 .shadow-retro-window {
-  box-shadow: 6px 6px 0px var(--ink, #000000);
+  box-shadow: 0 2px 8px rgba(45, 40, 35, 0.05), 0 1px 3px rgba(45, 40, 35, 0.04);
 }
 .retro-window {
   background: var(--surface, #FFFFFF);
-  border: 2px solid var(--ink, #000000);
-  box-shadow: 6px 6px 0px var(--ink, #000000);
+  border: 1px solid #E8E5DE;
+  box-shadow: 0 2px 8px rgba(45, 40, 35, 0.05), 0 1px 3px rgba(45, 40, 35, 0.04);
   border-radius: 2px;
   overflow: hidden;
 }
 .retro-window-header {
   background: var(--retro-warm);
-  border-bottom: 2px solid var(--ink, #000000);
+  border-bottom: 1px solid #E8E5DE;
   padding: 12px 18px;
   display: flex;
   align-items: center;
@@ -1245,7 +1245,7 @@ textarea::placeholder,
 }
 
 .vt-desktop-bg {
-  background-color: #FAF8F5;
+  background-color: #F5F3EE;
   background-image: 
     radial-gradient(ellipse at 50% 10%, rgba(194, 85, 58, 0.08) 0%, transparent 60%),
     radial-gradient(ellipse at 85% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
@@ -1268,12 +1268,12 @@ textarea::placeholder,
 
 /* Retro Window Framing (Warm Classic Ivory & Bevel) */
 .vt-window {
-  background-color: #ECE9D8;
-  border-top: 2px solid #FFFFFF;
-  border-left: 2px solid #FFFFFF;
-  border-right: 2px solid #7A756D;
-  border-bottom: 2px solid #7A756D;
-  box-shadow: 2px 6px 20px rgba(28, 25, 23, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+  background-color: #FFFFFF;
+  border: 1px solid #E8E5DE;
+  border-radius: 12px;
+
+
+  box-shadow: 0 1px 3px rgba(45, 40, 35, 0.04), 0 3px 8px -1px rgba(45, 40, 35, 0.04);
 }
 
 .dark .vt-window,
@@ -1287,10 +1287,10 @@ html.dark .vt-window {
 }
 
 .vt-window-inset {
-  border-top: 2px solid #7A756D;
-  border-left: 2px solid #7A756D;
-  border-right: 2px solid #FFFFFF;
-  border-bottom: 2px solid #FFFFFF;
+  border: 1px solid #E8E5DE;
+  border-radius: 8px;
+
+
   background-color: #FFFFFF;
 }
 
@@ -1331,7 +1331,7 @@ html.dark .vt-titlebar {
   font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 800;
-  background-color: #ECE9D8;
+  background-color: #FFFFFF;
   color: #1C1917;
   border-top: 1px solid #FFFFFF;
   border-left: 1px solid #FFFFFF;
@@ -1397,8 +1397,8 @@ html.dark .vt-titlebar {
   color: #1C1917;
   font-family: var(--font-sans);
   font-weight: 700;
-  border-top: 2px solid #FFFFFF;
-  border-left: 2px solid #FFFFFF;
+  border: 1px solid #E8E5DE;
+  border-radius: 12px;
   border-right: 2px solid #8A857D;
   border-bottom: 2px solid #8A857D;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
@@ -1415,14 +1415,14 @@ html.dark .vt-titlebar {
 .vt-btn-chrome:active {
   border-top: 2px solid #8A857D;
   border-left: 2px solid #8A857D;
-  border-right: 2px solid #FFFFFF;
-  border-bottom: 2px solid #FFFFFF;
+
+
 }
 
 /* Taskbar Styling (Retro Windows Cream) */
 .vt-taskbar {
   background: #ECE9D8;
-  border-top: 2px solid #FFFFFF;
+  border: 1px solid #E8E5DE;
   box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
 }
 

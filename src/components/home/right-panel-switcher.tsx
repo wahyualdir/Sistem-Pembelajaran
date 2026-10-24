@@ -84,15 +84,15 @@ export function RightPanelSwitcher({
   return (
     <div className="flex flex-col gap-5">
       {/* 1. Pengalih Dua Kondisi (Tab Chip Retro) */}
-      <div className="flex items-center p-1.5 rounded-xl border-2 border-[#7A756D] bg-[#ECE9D8] shadow-xs">
+      <div className="flex items-center p-1 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] shadow-2xs">
         <button
           type="button"
           onClick={() => onTabChange('hari-ini')}
           className={cn(
             'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-sans font-extrabold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'hari-ini'
-              ? 'bg-[#1C1917] text-white border-b-4 border-b-[#C2553A] shadow-xs'
-              : 'text-[#1C1917] hover:bg-black/5'
+              ? 'bg-[#FFFFFF] text-[#1C1917] border border-[#E8E5DE] shadow-2xs'
+              : 'text-[#57534E] hover:text-[#1C1917] hover:bg-black/5'
           )}
         >
           Hari Ini
@@ -103,8 +103,8 @@ export function RightPanelSwitcher({
           className={cn(
             'flex-1 py-2 px-3 rounded-lg text-xs sm:text-sm font-sans font-extrabold transition-all focus-visible:outline-none text-center cursor-pointer',
             activeTab === 'detail-kelas'
-              ? 'bg-[#1C1917] text-white border-b-4 border-b-[#C2553A] shadow-xs'
-              : 'text-[#1C1917] hover:bg-black/5'
+              ? 'bg-[#FFFFFF] text-[#1C1917] border border-[#E8E5DE] shadow-2xs'
+              : 'text-[#57534E] hover:text-[#1C1917] hover:bg-black/5'
           )}
         >
           Detail Kelas
@@ -117,10 +117,10 @@ export function RightPanelSwitcher({
       {activeTab === 'hari-ini' && (
         <div className="flex flex-col gap-5 animate-fade-in pb-24">
           {/* 1. Header Identitas Kampus & Status Semester Mahasiswa */}
-          <div className="p-4 sm:p-5 rounded-2xl border border-[#D6D3CB] bg-white shadow-2xs space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs space-y-3">
             <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#E8E5DE]">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="h-9 w-9 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] p-1 flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="h-9 w-9 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] p-1 flex items-center justify-center shrink-0 overflow-hidden">
                   <img
                     src="/logo-ruangkampus.png"
                     alt="Logo RuangKampus"
@@ -154,7 +154,7 @@ export function RightPanelSwitcher({
           </div>
 
           {/* 2. Ringkasan Baris Metrik (Statistik: Hadir, IPK, Streak) */}
-          <div className="p-4 rounded-2xl border border-[#D6D3CB] bg-white shadow-2xs space-y-2.5">
+          <div className="p-4 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs space-y-2.5">
             {/* Item 1: Hadir */}
             <div className="flex items-center justify-between py-1.5 border-b border-[#E8E5DE]">
               <span className="text-xs font-sans font-bold text-[#57534E] uppercase tracking-wider">
@@ -209,15 +209,15 @@ export function RightPanelSwitcher({
           </div>
 
           {/* 3. Kalender Mini Bulan Berjalan */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-[#7A756D] bg-white shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b-2 border-[#D6D3CB] pb-2.5">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs space-y-3">
+            <div className="flex items-center justify-between border-b border-[#E8E5DE] pb-2.5">
               <div className="flex items-center gap-1.5">
                 <CalendarDays className="h-4 w-4 text-[#1C1917]" />
                 <span suppressHydrationWarning className="font-heading font-extrabold text-sm text-[#1C1917]">
                   {jakarta.monthName} {jakarta.year}
                 </span>
               </div>
-              <span suppressHydrationWarning className="text-xs font-sans font-extrabold bg-[#ECE9D8] px-2 py-0.5 rounded border border-[#7A756D] text-[#1C1917]">
+              <span suppressHydrationWarning className="text-xs font-sans font-extrabold bg-[#FAF8F5] px-2 py-0.5 rounded-lg border border-[#E8E5DE] text-[#1C1917]">
                 {jakarta.shortTimeString}
               </span>
             </div>
@@ -247,8 +247,8 @@ export function RightPanelSwitcher({
                       isToday
                         ? 'bg-[#C2553A] text-white shadow-xs'
                         : hasEvent
-                        ? 'bg-[#ECE9D8] text-[#1C1917] border border-[#7A756D]'
-                        : 'text-[#1C1917] hover:bg-black/5'
+                        ? 'bg-[#FAF8F5] text-[#1C1917] border border-[#E8E5DE]'
+                        : 'text-[#57534E] hover:text-[#1C1917] hover:bg-black/5'
                     )}
                   >
                     <span>{day}</span>
@@ -263,7 +263,7 @@ export function RightPanelSwitcher({
               })}
             </div>
 
-            <div className="flex items-center gap-2.5 pt-2 text-xs font-sans text-[#7A756D] border-t border-[#D6D3CB]">
+            <div className="flex items-center gap-2.5 pt-2 text-xs font-sans text-[#7A756D] border-t border-[#E8E5DE]">
               <span className="flex items-center gap-1 font-bold text-[#1C1917]">
                 <span className="w-2 h-2 rounded-full bg-[#C2553A]" /> Hari Ini
               </span>
@@ -274,8 +274,8 @@ export function RightPanelSwitcher({
           </div>
 
           {/* 4. Agenda 7 Hari ke Depan */}
-          <div className="p-4 sm:p-5 rounded-xl border-2 border-[#7A756D] bg-white shadow-xs space-y-3">
-            <div className="flex items-center justify-between border-b-2 border-[#D6D3CB] pb-2.5">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs space-y-3">
+            <div className="flex items-center justify-between border-b border-[#E8E5DE] pb-2.5">
               <h4 className="font-heading font-extrabold text-sm text-[#1C1917] uppercase tracking-wider">
                 Agenda 7 Hari ke Depan
               </h4>
@@ -289,7 +289,7 @@ export function RightPanelSwitcher({
 
             <div className="space-y-3">
               {agenda.length === 0 ? (
-                <div className="p-4 rounded-xl border-2 border-dashed border-[#D6D3CB] bg-white text-center">
+                <div className="p-4 rounded-xl border border-dashed border-[#E8E5DE] bg-white text-center">
                   <p className="text-xs font-bold text-[#7A756D]">
                     Tidak ada agenda perkuliahan dalam 7 hari ke depan.
                   </p>
@@ -303,7 +303,7 @@ export function RightPanelSwitcher({
                     <Link
                       key={ag.id}
                       href={ag.href}
-                      className="group flex items-start gap-3 p-3 rounded-xl border-2 border-[#D6D3CB] hover:border-[#7A756D] bg-white hover:bg-[#FAF8F5] transition-all"
+                      className="group flex items-start gap-3 p-3 rounded-xl border border-[#E8E5DE] hover:border-[#D6D3CB] bg-white hover:bg-[#FAF8F5] shadow-2xs transition-all"
                     >
                       <div
                         className={cn(
@@ -311,7 +311,7 @@ export function RightPanelSwitcher({
                           isExam
                             ? 'bg-[#C2553A] text-white border-[#853827] font-bold'
                             : isTask
-                            ? 'bg-[#ECE9D8] text-[#1C1917] border-[#7A756D]'
+                            ? 'bg-[#FAF8F5] text-[#1C1917] border-[#E8E5DE]'
                             : 'bg-[#1C1917] text-white border-[#1C1917]'
                         )}
                       >
@@ -349,7 +349,7 @@ export function RightPanelSwitcher({
       {activeTab === 'detail-kelas' && (
         <div className="flex flex-col gap-4 animate-fade-in pb-24">
           {!effectiveCourse ? (
-            <div className="p-5 sm:p-6 rounded-xl border-2 border-dashed border-[#D6D3CB] bg-white text-center space-y-3 shadow-xs">
+            <div className="p-5 sm:p-6 rounded-xl border border-dashed border-[#E8E5DE] bg-white text-center space-y-3 shadow-2xs">
               <CalendarDays className="h-8 w-8 text-[#7A756D] mx-auto" />
               <p className="font-heading font-extrabold text-sm text-[#1C1917]">
                 Belum Ada Kelas Terpilih
@@ -360,7 +360,7 @@ export function RightPanelSwitcher({
               <div className="pt-2">
                 <Link
                   href="/classes"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-[#7A756D] bg-[#ECE9D8] hover:bg-white text-xs font-sans font-extrabold text-[#1C1917] transition-all shadow-xs"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] hover:bg-white text-xs font-sans font-extrabold text-[#1C1917] transition-all shadow-2xs"
                 >
                   <span>Buka Kelas Saya</span>
                   <ChevronRight className="h-3.5 w-3.5" />
@@ -373,14 +373,14 @@ export function RightPanelSwitcher({
               <div className="flex flex-col gap-3">
                 <Link
                   href={`/classes/${effectiveCourse.id}?tab=materi`}
-                  className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border-2 border-[#7A756D] bg-white text-[#1C1917] font-sans font-extrabold text-sm shadow-xs hover:bg-[#FAF8F5] hover:text-[#C2553A] hover:-translate-y-0.5 active:translate-y-0.5 transition-all text-center focus-visible:outline-none cursor-pointer"
+                  className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border border-[#E8E5DE] hover:border-[#D6D3CB] bg-white text-[#1C1917] font-sans font-extrabold text-sm shadow-2xs hover:bg-[#FAF8F5] hover:text-[#C2553A] hover:-translate-y-0.5 active:translate-y-0.5 transition-all text-center focus-visible:outline-none cursor-pointer"
                 >
                   Buka Silabus & Modul Kuliah
                 </Link>
 
                 <Link
                   href={`/classes/${effectiveCourse.id}?tab=presensi`}
-                  className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-[#853827] bg-[#C2553A] text-white font-sans font-extrabold text-base shadow-xs hover:bg-[#B84A2B] active:translate-y-0.5 transition-all text-center focus-visible:outline-none cursor-pointer"
+                  className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border border-[#A34530] bg-[#C2553A] text-white font-sans font-extrabold text-base shadow-2xs hover:bg-[#B84A2B] active:translate-y-0.5 transition-all text-center focus-visible:outline-none cursor-pointer"
                 >
                   <Play className="h-5 w-5 fill-white" />
                   <span>Masuk Kelas / Presensi Aktif</span>
@@ -388,11 +388,11 @@ export function RightPanelSwitcher({
               </div>
 
               {/* THREE QUICK ACTIONS (DOWNLOAD, SAVE, ADD TO LIST) */}
-              <div className="grid grid-cols-3 gap-2 border-y-2 border-[#D6D3CB] py-3">
+              <div className="grid grid-cols-3 gap-2 border-y border-[#E8E5DE] py-3">
                 <button
                   type="button"
                   onClick={() => alert(`Silabus & RPS ${effectiveCourse.code} (${effectiveCourse.title}) siap diunduh.`)}
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#ECE9D8] transition-colors text-[#1C1917] focus-visible:outline-none cursor-pointer"
+                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#FAF8F5] transition-colors text-[#1C1917] focus-visible:outline-none cursor-pointer"
                   title="Unduh RPS & Silabus"
                 >
                   <Download className="h-5 w-5 mb-1 text-[#853827]" />
@@ -402,7 +402,7 @@ export function RightPanelSwitcher({
                 <button
                   type="button"
                   onClick={() => setSaved(!saved)}
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#ECE9D8] transition-colors text-[#1C1917] focus-visible:outline-none cursor-pointer"
+                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#FAF8F5] transition-colors text-[#1C1917] focus-visible:outline-none cursor-pointer"
                   title="Simpan ke favorit"
                 >
                   <Bookmark className={cn('h-5 w-5 mb-1 text-[#853827]', saved ? 'fill-current' : '')} />
@@ -411,7 +411,7 @@ export function RightPanelSwitcher({
 
                 <Link
                   href="/calendar"
-                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#ECE9D8] transition-colors text-[#1C1917] focus-visible:outline-none cursor-pointer"
+                  className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#FAF8F5] transition-colors text-[#1C1917] focus-visible:outline-none cursor-pointer"
                   title="Cek Jadwal Kuliah"
                 >
                   <ListPlus className="h-5 w-5 mb-1 text-[#853827]" />
@@ -420,26 +420,26 @@ export function RightPanelSwitcher({
               </div>
 
               {/* METADATA INFO TABLE */}
-              <div className="p-4 sm:p-5 rounded-xl border-2 border-[#7A756D] bg-white shadow-xs space-y-2 text-xs sm:text-sm">
-                <div className="flex justify-between items-center py-1.5 border-b border-[#D6D3CB]">
+              <div className="p-4 sm:p-5 rounded-2xl border border-[#E8E5DE] bg-white shadow-2xs space-y-2 text-xs sm:text-sm">
+                <div className="flex justify-between items-center py-1.5 border-b border-[#E8E5DE]">
                   <span className="text-[#57534E] font-bold">Kode MK</span>
                   <span className="font-sans font-extrabold text-[#1C1917]">{effectiveCourse.code}</span>
                 </div>
-                <div className="flex justify-between items-center py-1.5 border-b border-[#D6D3CB]">
+                <div className="flex justify-between items-center py-1.5 border-b border-[#E8E5DE]">
                   <span className="text-[#57534E] font-bold">Progres Belajar</span>
                   <span className="font-sans font-extrabold text-[#1C1917] tabular-nums">{effectiveCourse.progressPercent}% Selesai</span>
                 </div>
-                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-[#D6D3CB]">
+                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-[#E8E5DE]">
                   <span className="text-[#57534E] font-bold shrink-0">Jadwal Kuliah</span>
                   <span suppressHydrationWarning className="font-sans font-bold text-[#1C1917] text-right text-xs">
                     {getDisplaySchedule()}
                   </span>
                 </div>
-                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-[#D6D3CB]">
+                <div className="flex justify-between items-center gap-2 py-1.5 border-b border-[#E8E5DE]">
                   <span className="text-[#57534E] font-bold shrink-0">Ruang Kelas</span>
                   <span className="font-sans font-bold text-[#1C1917] text-right">{effectiveCourse.room}</span>
                 </div>
-                <div className="flex justify-between items-center py-1.5 border-b border-[#D6D3CB]">
+                <div className="flex justify-between items-center py-1.5 border-b border-[#E8E5DE]">
                   <span className="text-[#57534E] font-bold">Kehadiran</span>
                   <span className="font-sans font-extrabold text-[#1C1917] underline decoration-2 tabular-nums">
                     {effectiveCourse.attendance}
