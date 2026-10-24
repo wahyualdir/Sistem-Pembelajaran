@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Bookmark, Award, FileText, ArrowRight } from 'lucide-react';
+import { Bookmark, Award, FileText, ArrowRight, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { ActiveClassItem } from '@/modules/academic/home-actions';
 
@@ -25,7 +25,7 @@ export function ActiveClassesGrid({
   onSelectCourse,
   title = 'Kelas Aktif',
   emptyTitle = 'Belum Ada Kelas yang Diikuti',
-  emptySubtitle = 'Sebagai mahasiswa baru, Anda belum terdaftar pada kelas mata kuliah apa pun. Buka menu Kelas Saya untuk bergabung ke rombongan belajar dosen Anda.',
+  emptySubtitle = 'Anda belum terdaftar pada kelas mata kuliah apa pun. Buka menu Kelas Saya untuk bergabung ke rombongan belajar dosen Anda.',
   emptyActionLabel = 'Buka Kelas Saya',
   emptyActionHref = '/classes',
   moreHref = '/classes',
@@ -41,151 +41,120 @@ export function ActiveClassesGrid({
   };
 
   return (
-    <section aria-label="Mata Kuliah Aktif" className="space-y-6">
+    <section aria-label="Mata Kuliah Aktif" className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink">
+        <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-[#1C1917]">
           {title}
         </h2>
         <Link
           href={moreHref}
-          className="text-base sm:text-lg font-bold text-primary-dark hover:text-ink transition-colors"
+          className="text-xs sm:text-sm font-semibold text-[#C2553A] hover:text-[#1C1917] transition-colors"
         >
-          more &rarr;
+          Semua Kelas &rarr;
         </Link>
       </div>
 
-      {/* TAMPILAN KOSONG UNTUK AKUN BARU ATAU GRID KELAS */}
       {courses.length === 0 ? (
-        <div className="rounded-xl border-2 border-dashed border-ink bg-surface/50 p-8 text-center space-y-3">
-          <FileText className="h-10 w-10 text-gray-dark mx-auto" />
-          <p className="font-heading font-bold text-lg text-ink">
+        <div className="rounded-xl border border-dashed border-[#D6D3CB] bg-[#FAF8F5] p-8 text-center space-y-3">
+          <FileText className="h-8 w-8 text-[#7A756D] mx-auto" />
+          <p className="font-heading font-bold text-base text-[#1C1917]">
             {emptyTitle}
           </p>
-          <p className="text-xs sm:text-sm text-gray-dark font-bold max-w-md mx-auto">
+          <p className="text-xs sm:text-sm text-[#57534E] max-w-md mx-auto">
             {emptySubtitle}
           </p>
-          <div className="pt-2">
+          <div className="pt-1">
             <Link
               href={emptyActionHref}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border-2 border-ink bg-ink text-white hover:bg-ink/90 text-xs sm:text-sm font-bold shadow-retro transition-all"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#1C1917] text-white hover:bg-[#C2553A] text-xs font-semibold transition-colors"
             >
               <span>{emptyActionLabel}</span>
-              <ArrowRight className="h-4 w-4" />
+              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
-          {courses.map((course) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {courses.map((course, idx) => {
             const isSelected = selectedCourse?.id === course.id;
             const isSaved = !!savedCourses[course.id];
+            const topAccent = idx % 2 === 0 ? 'bg-[#C2553A]' : 'bg-[#1C1917]';
 
             return (
               <div
                 key={course.id}
                 onClick={() => onSelectCourse(course)}
                 className={cn(
-                  'group cursor-pointer rounded-xl border-2 border-ink bg-gray-soft p-4 sm:p-5 transition-all flex flex-col justify-between animate-fade-up',
+                  'group cursor-pointer rounded-2xl border bg-[#FFFFFF] transition-all flex flex-col justify-between overflow-hidden',
                   isSelected
-                    ? 'shadow-retro-lg ring-2 ring-ink bg-surface border-b-4 border-b-primary'
-                    : 'shadow-retro hover:-translate-y-1 hover:shadow-retro-md'
+                    ? 'border-[#1C1917] ring-1 ring-[#1C1917] shadow-sm'
+                    : 'border-[#D6D3CB] hover:border-[#7A756D]'
                 )}
               >
-                {/* Retro Book Cover Graphic (Monokrom & Warm Cream Elegan) */}
-                <div
-                  className={cn(
-                    'relative w-full aspect-[3/4.2] rounded-lg border-2 border-ink overflow-hidden mb-4 p-5 flex flex-col justify-between transition-transform group-hover:scale-[1.02]',
-                    course.colorScheme === 'yellow' ? 'bg-surface text-ink' : 'bg-ink text-white'
-                  )}
-                >
-                  {/* Vintage Book Frame Border */}
-                  <div
-                    className={cn(
-                      'absolute inset-2.5 border-2 rounded-lg pointer-events-none',
-                      course.colorScheme === 'yellow' ? 'border-ink/25' : 'border-white/30'
-                    )}
-                  />
+                {/* Header Kartu Editorial */}
+                <div className="bg-[#FAF8F5] border-b border-[#E8E5DE] relative">
+                  <div className={cn('h-1.5 w-full', topAccent)} />
+                  <BookOpen className="absolute -right-3 -bottom-3 h-20 w-20 text-[#1C1917] opacity-[0.04] pointer-events-none" />
 
-                  <div className="relative z-10 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm sm:text-base font-sans font-bold uppercase tracking-wider block">
-                        {course.code}
+                  <div className="p-4 space-y-2.5 relative z-10">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#FFFFFF] border border-[#D6D3CB] text-[11px] font-semibold text-[#1C1917]">
+                        <span className="font-mono font-bold text-[#853827]">{course.code}</span>
+                        <span className="text-[#B8B1A5]">•</span>
+                        <span>{course.sks} SKS</span>
                       </span>
 
-                      {/* Penanda kecil jika ada tugas atau ujian yang belum selesai */}
-                      {course.hasOpenExam && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-primary-dark text-white border border-ink shadow-xs">
+                      {course.hasOpenExam ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-[#FEF2F0] text-[#853827] border border-[#C2553A]">
                           <Award className="h-3 w-3" />
                           <span>UJIAN</span>
                         </span>
-                      )}
-                      {!course.hasOpenExam && course.pendingTasksCount > 0 && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-sans font-bold bg-gray-soft text-ink border border-ink shadow-xs">
-                          <FileText className="h-3 w-3" />
+                      ) : course.pendingTasksCount > 0 ? (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold bg-[#ECE9D8] text-[#1C1917]">
+                          <FileText className="h-3 w-3 text-[#C2553A]" />
                           <span>{course.pendingTasksCount} Tugas</span>
                         </span>
-                      )}
+                      ) : null}
                     </div>
 
-                    <h3 className="font-heading font-bold text-lg sm:text-xl leading-snug line-clamp-3 break-normal">
+                    <h3 className="font-heading font-bold text-base text-[#1C1917] group-hover:text-[#C2553A] transition-colors leading-snug line-clamp-2 min-h-[2.5rem]">
                       {course.title}
                     </h3>
-                  </div>
 
-                  <div
-                    className={cn(
-                      'relative z-10 pt-4 border-t-2',
-                      course.colorScheme === 'yellow' ? 'border-ink/30' : 'border-white/30'
-                    )}
-                  >
-                    <p className="text-base sm:text-lg font-bold truncate">
+                    <p className="text-xs font-medium text-[#57534E] truncate">
                       {course.lecturer}
                     </p>
-                    <span className="text-sm font-sans font-bold uppercase mt-1 block">
-                      {course.sks} SKS
-                    </span>
                   </div>
                 </div>
 
-                {/* Info Bawah Cover (Footer Kartu) */}
-                <div className="space-y-3">
-                  <h4 className="font-heading font-bold text-xl sm:text-2xl text-ink line-clamp-2 leading-snug group-hover:underline transition-colors">
-                    {course.title}
-                  </h4>
-                  <p className="text-base sm:text-lg text-gray-dark font-bold break-words">
-                    {course.lecturer}
-                  </p>
-
-                  {/* Progres Belajar Menggantikan Rating Bintang (Bagian 4.5) */}
-                  <div className="pt-3 border-t border-ink/15 space-y-2">
-                    <div className="flex items-center justify-between text-ink">
-                      <span className="text-xs sm:text-sm font-bold uppercase tracking-wider font-sans text-gray-dark">
-                        {progressLabel}
+                {/* Footer Kartu & Progres */}
+                <div className="p-4 space-y-2.5 bg-[#FFFFFF]">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-medium text-[#57534E]">
+                      {progressLabel}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-bold text-[#1C1917]">
+                        {course.progressPercent}%
                       </span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm sm:text-base font-bold font-sans text-ink">
-                          {course.progressPercent}%
-                        </span>
-                        <button
-                          type="button"
-                          onClick={(e) => toggleSave(course.id, e)}
-                          className="text-ink hover:scale-110 transition-transform p-1 rounded-lg hover:bg-surface"
-                          title="Simpan mata kuliah"
-                        >
-                          <Bookmark
-                            className={cn('h-5 w-5', isSaved ? 'fill-current text-primary-dark' : '')}
-                          />
-                        </button>
-                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleSave(course.id, e)}
+                        className="text-[#57534E] hover:text-[#1C1917] p-0.5 rounded transition-colors"
+                        title="Simpan mata kuliah"
+                      >
+                        <Bookmark
+                          className={cn('h-4 w-4', isSaved ? 'fill-current text-[#C2553A]' : '')}
+                        />
+                      </button>
                     </div>
+                  </div>
 
-                    {/* Bar Progres Tipis Bergaya Hitam Solid */}
-                    <div className="w-full h-2 rounded-full border border-ink bg-surface overflow-hidden">
-                      <div
-                        className="bg-ink h-full rounded-full transition-all duration-500"
-                        style={{ width: `${course.progressPercent}%` }}
-                      />
-                    </div>
+                  <div className="w-full h-1.5 rounded-full bg-[#ECE9D8] overflow-hidden">
+                    <div
+                      className="bg-[#C2553A] h-full rounded-full transition-all duration-500"
+                      style={{ width: `${course.progressPercent}%` }}
+                    />
                   </div>
                 </div>
               </div>

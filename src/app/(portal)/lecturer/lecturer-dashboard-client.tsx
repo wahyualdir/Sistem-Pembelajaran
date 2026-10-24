@@ -157,112 +157,73 @@ export function LecturerDashboardClient({
       {/* ========================================================= */}
       <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0 font-sans">
         <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
-          {/* HEADER BERANDA: RUANG PENGAMPU DOSEN */}
-          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pt-1 border-b-2 border-black/15 pb-4">
-            <div className="space-y-1.5">
-              {/* Kicker / Context Tag */}
-              <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-md border border-black/20 bg-black/5 text-[11px] font-sans font-bold uppercase tracking-wider text-black">
-                  Portal Dosen Pengampu
-                </span>
-                <span className="text-black/30 font-bold">•</span>
-                <span className="text-[11px] font-sans font-bold text-black/70 uppercase">
-                  Ganjil 2026/2027
-                </span>
+          {/* HEADER BERANDA & FILTER TERPADU DOSEN PENGAMPU */}
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-3 border-b border-[#D6D3CB]">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#853827]">
+                <span>PORTAL DOSEN PENGAMPU</span>
+                <span className="text-[#B8B1A5]">•</span>
+                <span className="text-[#57534E]">Semester Ganjil 2026/2027</span>
               </div>
-
-              {/* Baris Judul Utama */}
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-lg border-2 border-ink bg-surface shadow-xs flex items-center justify-center shrink-0">
-                  <GraduationCap className="h-5 w-5 sm:h-6 sm:w-6 text-ink" />
-                </div>
-                <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-ink leading-none">
-                  Ruang Pengampu Dosen
-                </h1>
-              </div>
-
-              {/* Subtitle */}
-              <p className="text-xs sm:text-sm text-ink/80 font-bold leading-relaxed pt-0.5">
-                Kelola perkuliahan, pantau presensi mahasiswa real-time, koreksi tugas & kuis, dan kelola bank soal.
-              </p>
+              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#1C1917]">
+                Ruang Pengampu Dosen
+              </h1>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 shrink-0 pt-1">
-              <Link
-                href="/classes"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-black bg-white hover:bg-black hover:text-white text-black font-black text-xs sm:text-sm transition-all shadow-retro cursor-pointer"
-              >
-                <PlusCircle className="h-4 w-4" />
-                <span>Buat Tugas Baru</span>
-              </Link>
-              <Link
-                href="/classes"
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border-2 border-black bg-black text-white hover:bg-neutral-800 font-black text-xs sm:text-sm transition-all shadow-retro cursor-pointer"
-              >
-                <Layers className="h-4 w-4" />
-                <span>Kelola {classes} Kelas</span>
-              </Link>
-            </div>
-          </div>
-
-          {/* ROW 1: CATEGORIES PILLS (FILTER CHIP) */}
-          <section aria-label="Kategori Pengajar" className="space-y-2.5 sm:space-y-3">
-            <h2 className="font-heading font-bold text-xs sm:text-sm uppercase tracking-wider text-gray-dark">
-              Categories
-            </h2>
-            <div className="flex flex-wrap items-center gap-2 pb-1.5">
+            <nav aria-label="Kategori Pengajar" className="flex flex-wrap items-center gap-1.5">
               {LECTURER_CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
                 return (
                   <button
                     key={cat}
+                    type="button"
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      'px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold tracking-tight shrink-0 transition-all focus-visible:outline-none cursor-pointer',
+                      'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-sans transition-colors focus-visible:outline-none cursor-pointer',
                       isActive
-                        ? 'border-2 border-ink bg-ink text-white shadow-retro scale-[1.02]'
-                        : 'border-2 border-ink bg-surface text-ink shadow-retro hover:bg-gray-soft hover:-translate-y-0.5'
+                        ? 'bg-[#1C1917] text-white font-semibold'
+                        : 'bg-[#ECE9D8]/70 text-[#44403C] font-medium hover:bg-[#ECE9D8] hover:text-[#1C1917]'
                     )}
                   >
                     {cat}
                   </button>
                 );
               })}
-            </div>
-          </section>
+            </nav>
+          </div>
 
           {/* SECTION 1: BANNER AKSI PRIORITAS */}
           <ActionBanner initialData={bannerData} />
 
-          {/* 3 KARTU METRIK RINGKASAN DOSEN (RETRO CARDS) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
-            <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-white shadow-retro flex items-center gap-3.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-gray-soft text-black shadow-retro-sm">
-                <Layers className="h-6 w-6 text-black" />
+          {/* 3 KARTU METRIK RINGKASAN DOSEN */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex items-center gap-3.5">
+              <div className="p-2.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] text-[#C2553A]">
+                <Layers className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-mono font-bold text-black/70 uppercase tracking-wider">Kelas Aktif</p>
-                <p className="font-heading font-black text-2xl sm:text-3xl text-black leading-tight">{classes}</p>
+                <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Kelas Aktif</p>
+                <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{classes}</p>
               </div>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-white shadow-retro flex items-center gap-3.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-gray-soft text-black shadow-retro-sm">
-                <Clock className="h-6 w-6 text-black" />
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex items-center gap-3.5">
+              <div className="p-2.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] text-[#C2553A]">
+                <Clock className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-mono font-bold text-black/70 uppercase tracking-wider">Tugas Menunggu Koreksi</p>
-                <p className="font-heading font-black text-2xl sm:text-3xl text-black leading-tight">{items.length}</p>
+                <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Tugas Menunggu Koreksi</p>
+                <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{items.length}</p>
               </div>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl border-2 border-black bg-white shadow-retro flex items-center gap-3.5">
-              <div className="p-2.5 rounded-lg border-2 border-black bg-gray-soft text-black shadow-retro-sm">
-                <GraduationCap className="h-6 w-6 text-black" />
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex items-center gap-3.5">
+              <div className="p-2.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] text-[#C2553A]">
+                <GraduationCap className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-mono font-bold text-black/70 uppercase tracking-wider">Total Submisi Mahasiswa</p>
-                <p className="font-heading font-black text-2xl sm:text-3xl text-black leading-tight">{totalPending}</p>
+                <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Total Submisi Mahasiswa</p>
+                <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{totalPending}</p>
               </div>
             </div>
           </div>
@@ -280,7 +241,7 @@ export function LecturerDashboardClient({
               {/* Kolom Kanan: Antrean Submisi Perlu Direview */}
               {(showAll || showKoreksi) && (
                 <div className="space-y-4">
-                  <div className="rounded-xl border-2 border-black bg-white shadow-retro overflow-hidden">
+                  <div className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] overflow-hidden">
                     <div className="p-4 sm:p-5 border-b-2 border-black bg-gray-soft flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="h-3 w-3 rounded-full border border-black bg-black inline-block" />
@@ -405,7 +366,7 @@ export function LecturerDashboardClient({
                 </Link>
               </div>
 
-              <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="space-y-1 min-w-0">
                   <h3 className="font-heading font-bold text-base sm:text-lg text-ink">
                     Penyusunan Kuis & Ujian Terstandar
@@ -451,7 +412,7 @@ export function LecturerDashboardClient({
                 </Link>
               </div>
 
-              <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] p-4 sm:p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="space-y-1 min-w-0">
                   <h3 className="font-heading font-bold text-base sm:text-lg text-ink">
                     Buka Sesi Presensi Kuliah Hari Ini
@@ -480,22 +441,9 @@ export function LecturerDashboardClient({
       {/* Mode Desktop (>= 1280px / xl): Sticky dengan scroll internal sendiri */}
       <aside
         aria-label="Panel Ringkasan & Detail Pengajar"
-        className="hidden xl:flex w-right-panel shrink-0 border-l-2 border-retro-border bg-retro-bg p-5 sm:p-6 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
+        className="hidden xl:flex w-right-panel shrink-0 border-l border-[#D6D3CB] bg-[#FAF8F5] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
-        {/* KARTU IDENTITAS DOSEN & STATUS BEBAN MENGAJAR (BKD) */}
-        <div className="shrink-0 w-full">
-          <LecturerIdentityCard
-            lecturerName={lecturerName}
-            nidn={nidn}
-            functionalTitle={functionalTitle}
-            department={department}
-            sksCount={totalSks}
-            theoryClassesCount={theoryCount}
-            practicumClassesCount={practicumCount}
-          />
-        </div>
-
-        {/* PENGALIH DUA KONDISI: "Hari Ini" & "Detail Kelas" */}
+        {/* PENGALIH DUA KONDISI: "Hari Ini" & "Detail Kelas" LANGSUNG DI ATAS */}
         <LecturerRightPanel
           selectedCourse={selectedCourse}
           courses={courses}
@@ -507,6 +455,19 @@ export function LecturerDashboardClient({
           activeTab={rightPanelTab}
           onTabChange={setRightPanelTab}
         />
+
+        {/* KARTU IDENTITAS DOSEN & STATUS BEBAN MENGAJAR (BKD) DI BAGIAN BAWAH */}
+        <div className="shrink-0 w-full pt-2 border-t border-[#E8E5DE]">
+          <LecturerIdentityCard
+            lecturerName={lecturerName}
+            nidn={nidn}
+            functionalTitle={functionalTitle}
+            department={department}
+            sksCount={totalSks}
+            theoryClassesCount={theoryCount}
+            practicumClassesCount={practicumCount}
+          />
+        </div>
       </aside>
 
       {/* Mode Slide-over Drawer (< 1280px / max-xl): Panel geser dari kanan */}
