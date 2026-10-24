@@ -32,6 +32,7 @@ import {
 import { ShellContext } from '@/components/shared/dashboard-shell';
 import { TechBackground } from '@/components/ui/tech-background';
 import { LiteModeToggle } from '@/components/retro/lite-mode-toggle';
+import { CommandCenterOS } from '@/components/shared/command-center-os';
 
 export interface PortalLayoutContextValue {
   isSidebarCollapsed: boolean;
@@ -90,6 +91,7 @@ export function PortalShell({
   const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
   const [hasRightPanel, setHasRightPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isCommandCenterOpen, setIsCommandCenterOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const profileMenuRef = useRef<HTMLDivElement>(null);
   const burgerButtonRef = useRef<HTMLButtonElement>(null);
@@ -115,13 +117,12 @@ export function PortalShell({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Shortcut Cmd/Ctrl + K untuk fokus ke search bar
+  // Shortcut Cmd/Ctrl + K untuk membuka Velqora OS Command Center
   useEffect(() => {
     const handleSearchKey = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
         e.preventDefault();
-        searchInputRef.current?.focus();
-        searchInputRef.current?.select();
+        setIsCommandCenterOpen((prev) => !prev);
       }
     };
     window.addEventListener('keydown', handleSearchKey);
@@ -691,35 +692,49 @@ export function PortalShell({
                 </button>
               </div>
 
-              {/* SISI TENGAH: SEARCH BAR LUAS DENGAN KBD SHORTCUT ⌘K */}
+              {/* SISI TENGAH: SEARCH BAR LUAS DENGAN KBD SHORTCUT ⌘K (COMMAND CENTER OS) */}
               <div className="flex-1 max-w-2xl mx-3 sm:mx-6 md:mx-8 min-w-0">
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
                     if (searchQuery.trim()) {
                       router.push(`/classes?q=${encodeURIComponent(searchQuery.trim())}`);
+                    } else {
+                      setIsCommandCenterOpen(true);
                     }
                   }}
                   className="relative w-full"
                 >
-                  <div className="flex items-center vt-window-inset px-3 sm:px-3.5 py-1.5 focus-within:ring-2 focus-within:ring-[#C2553A] transition-all bg-white">
+                  <div
+                    onClick={() => setIsCommandCenterOpen(true)}
+                    className="flex items-center vt-window-inset px-3 sm:px-3.5 py-1.5 focus-within:ring-2 focus-within:ring-[#C2553A] transition-all bg-white cursor-pointer"
+                  >
                     <Search className="h-4 w-4 text-[#7A756D] mr-2.5 shrink-0" />
                     <input
                       ref={searchInputRef}
                       type="text"
                       value={searchQuery}
+                      onFocus={() => setIsCommandCenterOpen(true)}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Cari mata kuliah, materi, modul komputasi..."
-                      className="w-full bg-transparent text-sm font-medium text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none min-w-0"
+                      placeholder='Spotlight OS: Ketik "absen", "bingung", "playback", "target 3.8" atau cari MK...'
+                      className="w-full bg-transparent text-sm font-medium text-[#1C1917] placeholder:text-[#A8A29E] focus:outline-none min-w-0 cursor-pointer"
                     />
-                    <div className="hidden sm:flex items-center gap-1 shrink-0 ml-2 select-none">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsCommandCenterOpen(true);
+                      }}
+                      className="hidden sm:flex items-center gap-1 shrink-0 ml-2 select-none cursor-pointer"
+                      title="Buka Command Center (Ctrl + K)"
+                    >
                       <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-xs font-sans font-extrabold text-[#1C1917] shadow-2xs">
                         ⌘
                       </kbd>
                       <kbd className="px-1.5 py-0.2 border border-[#B8B1A5] bg-[#ECE9D8] text-xs font-sans font-extrabold text-[#1C1917] shadow-2xs">
                         K
                       </kbd>
-                    </div>
+                    </button>
                   </div>
                 </form>
               </div>
@@ -768,6 +783,15 @@ export function PortalShell({
             <main className="flex-1 bg-transparent min-w-0 pb-20 sm:pb-24 relative z-10">
               {children}
             </main>
+
+            {/* MODAL SPOTLIGHT COMMAND CENTER OS (CTRL + K) */}
+            <CommandCenterOS
+              isOpen={isCommandCenterOpen}
+              onClose={() => setIsCommandCenterOpen(false)}
+              role={role}
+              roleName={roleName}
+              navGroups={navGroups}
+            />
           </div>
         </div>
       </PortalLayoutContext.Provider>

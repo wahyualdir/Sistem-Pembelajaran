@@ -42,4 +42,25 @@ describe('Inovasi Pembelajaran Web: Tatap Muka Terpadu, Pembaca Modul, dan Mode 
       expect(toggleModule.LiteModeToggle).toBeDefined();
     }, 20000);
   });
+
+  describe('4. Velqora OS Command Center (Ctrl + K Academic Spotlight)', () => {
+    it('memastikan CommandCenterOS terdefinisi dan dapat diimpor tanpa crash', async () => {
+      const cmdModule = await import('../src/components/shared/command-center-os');
+      expect(cmdModule.CommandCenterOS).toBeDefined();
+    }, 20000);
+  });
+
+  describe('5. Anonim Confusion Radar (Barometer Pemahaman Kelas Real-Time)', () => {
+    it('memastikan ConfusionRadarPanel terdefinisi dan dapat diimpor tanpa crash', async () => {
+      const radarModule = await import('../src/components/retro/confusion-radar-panel');
+      expect(radarModule.ConfusionRadarPanel).toBeDefined();
+    }, 20000);
+  });
+
+  describe('6. Time-Travel Playback & Paste-Burst Detector (Anti-Joki Engine)', () => {
+    it('memastikan AssignmentPlaybackPanel terdefinisi dan dapat diimpor tanpa crash', async () => {
+      const playbackModule = await import('../src/components/retro/assignment-playback-panel');
+      expect(playbackModule.AssignmentPlaybackPanel).toBeDefined();
+    }, 20000);
+  });
 });

@@ -58,6 +58,8 @@ import { ClassFeatureSettingsTab } from './class-feature-settings-tab';
 import { TabAktivitasKelas } from '@/components/aktivitas/tab-aktivitas-kelas';
 import { RetroLiveClassroom } from '@/components/retro/retro-live-classroom';
 import { RetroDocViewer } from '@/components/retro/retro-doc-viewer';
+import { ConfusionRadarPanel } from '@/components/retro/confusion-radar-panel';
+import { AssignmentPlaybackPanel } from '@/components/retro/assignment-playback-panel';
 import type {
   ClassMapItem,
   ClassChapterItem,
@@ -822,11 +824,14 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           <div className="space-y-6">
             {/* Topik 1: Tugas Perkuliahan */}
             {(classworkFilter === 'all' || classworkFilter === 'tugas') && (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <h3 className="font-bold text-base sm:text-lg text-black flex items-center gap-2">
                   <FileText className="h-5 w-5 text-primary" />
                   <span>Tugas Perkuliahan</span>
                 </h3>
+
+                {/* Engine Inovatif Anti-Joki & Proof-of-Work Time-Travel Playback */}
+                <AssignmentPlaybackPanel isLecturerOrTa={Boolean(lecturer || ta)} />
 
                 {assignments.length === 0 ? (
                   <p className="text-xs text-black/60 italic p-4 bg-white rounded-xl border border-black/20">
@@ -1769,12 +1774,20 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {/* TAB: INTERAKSI KULIAH (TANYA JAWAB LANGSUNG & KUIS KILAT)*/}
       {/* ======================================================== */}
       {activeTab === 'interaksi' && (
-        <ClassLiveInteractionView
-          classId={cls.id}
-          currentUserRole={viewer}
-          currentUserId={currentUserId}
-          isStaff={Boolean(isActualLecturer || ta || isStaff)}
-        />
+        <div className="space-y-6">
+          <ConfusionRadarPanel
+            classId={cls.id}
+            classTitle={cls.title}
+            isLecturerOrTa={Boolean(lecturer || ta)}
+            totalStudents={members.length || 36}
+          />
+          <ClassLiveInteractionView
+            classId={cls.id}
+            currentUserRole={viewer}
+            currentUserId={currentUserId}
+            isStaff={Boolean(isActualLecturer || ta || isStaff)}
+          />
+        </div>
       )}
 
       {/* MODAL TATAP MUKA LANGSUNG RETRO (JITSI WEBRTC) */}

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { Inter } from "next/font/google";
 import "./globals.css";
 
 const sfPro = localFont({
@@ -41,11 +40,27 @@ const sfPro = localFont({
   adjustFontFallback: false,
 });
 
-const inter = Inter({
-  subsets: ["latin"],
+const inter = localFont({
+  src: [
+    {
+      path: "../../public/sf-pro-regular.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/sf-pro-medium.woff",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/sf-pro-bold.woff",
+      weight: "700",
+      style: "normal",
+    },
+  ],
   variable: "--font-inter",
   display: "swap",
-  axes: ["opsz"],
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
