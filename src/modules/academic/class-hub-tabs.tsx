@@ -31,6 +31,7 @@ import {
   UserCheck,
   Send,
   MoreVertical,
+  PenSquare,
   ChevronDown,
   ChevronUp,
   ExternalLink,
@@ -207,6 +208,15 @@ export const STUDENT_CLASSROOM_TABS = [
 export const CLASSROOM_TABS = STUDENT_CLASSROOM_TABS;
 export type ClassroomTabId = string;
 
+const fmtShort = (iso: string) => {
+  try {
+    const d = new Date(iso);
+    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+  } catch {
+    return iso;
+  }
+};
+
 const fmt = (iso: string) =>
   `${new Date(iso).toLocaleString('id-ID', {
     timeZone: 'Asia/Jakarta',
@@ -297,57 +307,34 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
   });
 
   return (
-    <div className="max-w-[1360px] mx-auto space-y-4 sm:space-y-5 animate-fade-up font-sans p-3 sm:p-5 lg:p-6 pb-24">
+    <div className="max-w-[1360px] mx-auto space-y-5 animate-fade-up font-sans p-3 sm:p-5 lg:p-6 pb-24">
       {/* ======================================================== */}
-      {/* 1. TOP NAVIGASI GOOGLE CLASSROOM (TAB TERPADU SATU BARIS)*/}
+      {/* 1. TOP NAVIGASI GOOGLE CLASSROOM (BREADCRUMB & TABS)     */}
       {/* ======================================================== */}
-      <div className="border-2 border-[#7A756D] bg-[#FAF8F5] p-2 sm:p-2.5 shadow-retro-sm">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-2.5">
-          {/* Sisi Kiri: Tombol Kembali & Segmented Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-            {/* Tombol Kembali ke Daftar Kelas */}
+      <div className="border-b-2 border-[#D6D3CB] pb-0 font-sans space-y-2.5">
+        {/* Baris Atas: Breadcrumb ala Classroom & Aksi Cepat */}
+        <div className="flex flex-wrap items-center justify-between gap-3 px-0.5">
+          {/* Breadcrumb: Classroom > Nama Kelas */}
+          <div className="flex items-center gap-2 text-xs font-bold text-[#57534E]">
             <Link
               href="/classes"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] font-black text-xs text-[#1C1917] shadow-retro-xs transition-all shrink-0 cursor-pointer"
-              title="Kembali ke Daftar Kelas"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] transition-all cursor-pointer font-black shadow-retro-xs"
             >
               <ArrowLeft className="h-3.5 w-3.5 text-[#C2553A]" />
-              <span className="hidden sm:inline">Daftar Kelas</span>
+              <span>Classroom</span>
             </Link>
-
-            <div className="h-5 w-[1px] bg-[#D6D3CB] shrink-0" />
-
-            {/* Segmented Tabs Peran */}
-            <div className="flex items-center gap-1 shrink-0">
-              {roleTabs.map((tab) => {
-                const Icon = tab.icon;
-                const isActive = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => setActiveTab(tab.id)}
-                    className={cn(
-                      'flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold transition-all shrink-0 cursor-pointer',
-                      isActive
-                        ? 'bg-[#1C1917] text-white border-2 border-[#1C1917] shadow-retro-xs'
-                        : 'bg-[#FFFFFF] text-[#57534E] hover:text-[#1C1917] hover:bg-[#FAF8F5] border border-[#D6D3CB]'
-                    )}
-                  >
-                    <Icon className={cn('h-3.5 w-3.5 shrink-0', isActive ? 'text-[#C2553A]' : 'text-[#7A756D]')} />
-                    <span>{tab.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+            <span className="text-[#7A756D] font-bold">&gt;</span>
+            <span className="font-heading font-black text-sm text-[#1C1917] truncate max-w-[280px] sm:max-w-md">
+              {cls.title} {cls.section ? '(' + cls.section + ')' : ''}
+            </span>
           </div>
 
-          {/* Sisi Kanan: Aksi Cepat Live, Kode Kelas & SKS */}
-          <div className="flex items-center gap-1.5 shrink-0 self-end xl:self-auto">
+          {/* Sisi Kanan: Aksi Cepat Live & Kode Kelas */}
+          <div className="flex items-center gap-2">
             <button
               type="button"
               onClick={() => setIsLiveRoomOpen(true)}
-              className="text-xs font-bold bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] border-2 border-[#7A756D] px-3 py-1.5 shadow-retro-xs transition-all flex items-center gap-1.5 cursor-pointer"
+              className="text-xs font-bold bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] border-2 border-[#7A756D] px-3 py-1.5 shadow-retro-xs transition-all flex items-center gap-1.5 cursor-pointer rounded-lg"
               title="Buka Ruang Tatap Muka Daring (Live WebRTC)"
             >
               <Video className="h-3.5 w-3.5 text-[#C2553A]" />
@@ -358,22 +345,46 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="text-xs font-mono font-bold bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] border-2 border-[#7A756D] px-2.5 py-1.5 shadow-retro-xs transition-all flex items-center gap-1 cursor-pointer"
+                className="text-xs font-mono font-bold bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] border-2 border-[#7A756D] px-2.5 py-1.5 shadow-retro-xs transition-all flex items-center gap-1 cursor-pointer rounded-lg"
                 title="Salin Kode Kelas"
               >
                 <Key className="h-3.5 w-3.5 text-[#C2553A]" />
                 <span>{cls.join_code}</span>
                 {copiedCode ? (
-                  <span className="text-[10px] bg-[#065F46] text-white px-1.5 py-0.5 font-bold">Disalin!</span>
+                  <span className="text-[10px] bg-[#065F46] text-white px-1 py-0.2 font-bold">Disalin!</span>
                 ) : (
                   <span className="text-[10px] text-[#7A756D] font-medium">Salin</span>
                 )}
               </button>
             )}
-            <span className="text-xs font-bold text-[#1C1917] bg-[#FFFFFF] border-2 border-[#7A756D] px-2.5 py-1.5 shadow-retro-xs">
+            <span className="text-xs font-bold text-[#1C1917] bg-[#FAF8F5] border-2 border-[#7A756D] px-2.5 py-1.5 shadow-retro-xs rounded-lg">
               {cls.sks || 3} SKS
             </span>
           </div>
+        </div>
+
+        {/* Baris Bawah: Tabs Ala Google Classroom dengan Indikator Garis Aktif */}
+        <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar pt-1">
+          {roleTabs.map((tab) => {
+            const Icon = tab.icon;
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                className={cn(
+                  'py-2 px-3 sm:px-4 text-xs sm:text-sm font-bold transition-all shrink-0 cursor-pointer flex items-center gap-1.5 border-b-2 -mb-[2px]',
+                  isActive
+                    ? 'border-[#C2553A] text-[#1C1917] font-black bg-[#FAF8F5]/80'
+                    : 'border-transparent text-[#57534E] hover:text-[#1C1917] hover:border-[#D6D3CB]'
+                )}
+              >
+                <Icon className={cn('h-3.5 w-3.5 shrink-0', isActive ? 'text-[#C2553A]' : 'text-[#7A756D]')} />
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -382,31 +393,31 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {/* ======================================================== */}
       {(activeTab === 'forum' || activeTab === 'jawab-forum') && (
         <div className="space-y-6">
-          {/* A. HERO COVER BANNER GOOGLE CLASSROOM (DESAIN AUTENTIK) */}
-          <div className="relative overflow-hidden border-2 border-[#6B2D20] bg-gradient-to-r from-[#C2553A] via-[#B84A2B] to-[#853827] text-white p-6 sm:p-8 lg:p-9 shadow-retro font-sans">
-            {/* Background subtle retro watermark */}
-            <div className="absolute -right-6 -bottom-6 opacity-10 pointer-events-none select-none text-white">
-              <BookOpen className="h-44 w-44" />
+          {/* A. HERO COVER BANNER GOOGLE CLASSROOM (PERSIS FOTO USER) */}
+          <div className="relative rounded-2xl overflow-hidden border-2 border-[#6B2D20] bg-gradient-to-r from-[#1D4ED8] via-[#2563EB] to-[#1E1B4B] text-white p-6 sm:p-8 lg:p-9 shadow-retro font-sans">
+            {/* Background subtle retro stationery & academic watermark */}
+            <div className="absolute -right-6 -bottom-6 opacity-15 pointer-events-none select-none text-white">
+              <BookOpen className="h-48 w-48" />
             </div>
 
-            <div className="relative z-10 flex flex-col justify-between min-h-[140px] gap-5">
-              {/* Baris Atas: Badge Seksi, Semester, & SKS */}
+            <div className="relative z-10 flex flex-col justify-between min-h-[140px] gap-6">
+              {/* Baris Atas: Badge Seksi & SKS */}
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <span className="px-3 py-1 text-xs font-black uppercase tracking-wider bg-[#FFFFFF] text-[#853827] border-2 border-[#6B2D20] shadow-retro-xs">
+                  <span className="px-3 py-1 rounded text-xs font-black uppercase tracking-wider bg-[#FFFFFF] text-[#1D4ED8] shadow-retro-xs">
                     Kelas {cls.section}
                   </span>
-                  <span className="px-2.5 py-1 text-xs font-bold bg-[#FAF8F5]/20 text-white border border-white/30">
+                  <span className="px-2.5 py-1 rounded text-xs font-bold bg-[#FAF8F5]/20 text-white border border-white/30">
                     Semester Ganjil 2026/2027
                   </span>
                 </div>
 
-                <span className="px-2.5 py-1 text-xs font-mono font-bold bg-[#FAF8F5]/20 text-white border border-white/30">
+                <span className="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FAF8F5]/20 text-white border border-white/30">
                   {cls.sks || 3} SKS
                 </span>
               </div>
 
-              {/* Judul Mata Kuliah & Jadwal */}
+              {/* Judul Mata Kuliah Besar ala Foto */}
               <div className="space-y-2">
                 <h1 className="font-heading font-black text-2xl sm:text-3xl lg:text-4xl text-white tracking-tight leading-tight">
                   {cls.title}
@@ -439,7 +450,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   <button
                     type="button"
                     onClick={handleCopyCode}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-mono font-black border border-[#6B2D20] shadow-retro-xs cursor-pointer transition-all"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-mono font-black border border-[#6B2D20] shadow-retro-xs cursor-pointer transition-all rounded"
                     title="Salin kode kelas"
                   >
                     <Key className="h-3.5 w-3.5 text-[#C2553A]" />
@@ -455,7 +466,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 <button
                   type="button"
                   onClick={() => setIsLiveRoomOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-black border border-[#6B2D20] shadow-retro-xs cursor-pointer transition-all"
+                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-black border border-[#6B2D20] shadow-retro-xs cursor-pointer transition-all rounded"
                 >
                   <Video className="h-3.5 w-3.5 text-[#C2553A]" />
                   <span>{lecturer || ta ? 'Buka Tatap Muka Kelas' : 'Gabung Tatap Muka Kelas'}</span>
@@ -464,226 +475,229 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             </div>
           </div>
 
-          {/* B. DUA KOLOM AUTENTIK: PANEL RINGKASAN TUNGGAL (KIRI) & STREAM FEED (KANAN) */}
+          {/* B. DUA KOLOM AUTENTIK GOOGLE CLASSROOM (PERSIS FOTO) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            {/* Kolom Kiri: Satu Panel Ringkasan Perkuliahan Terpadu (TIDAK BERTUMPUK) */}
-            <div className="lg:col-span-4 space-y-4">
-              <div className="border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm divide-y-2 divide-[#D6D3CB] font-sans">
-                {/* Bagian 1: Mendatang (Upcoming Deadlines) */}
-                <div className="p-4 sm:p-5 space-y-3">
-                  <div className="flex items-center justify-between pb-1">
-                    <h3 className="font-heading font-black text-sm text-[#1C1917] flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-[#C2553A]" />
-                      <span>Mendatang</span>
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={() => setActiveTab('tugas')}
-                      className="text-xs font-bold text-[#C2553A] hover:underline cursor-pointer"
-                    >
-                      Lihat semua
-                    </button>
-                  </div>
+            {/* Kolom Kiri: Widget "Mendatang" & Presensi */}
+            <div className="lg:col-span-4 space-y-4 font-sans">
+              {/* Widget Mendatang ala Google Classroom */}
+              <div className="rounded-2xl border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm p-4 sm:p-5 space-y-3">
+                <h3 className="font-heading font-black text-sm text-[#1C1917]">
+                  Mendatang
+                </h3>
 
-                  {upcomingAssignments.length === 0 ? (
-                    <p className="text-xs text-[#57534E] font-medium py-1">
-                      Semua tugas telah selesai. Tidak ada batas waktu yang dekat!
-                    </p>
-                  ) : (
-                    <div className="space-y-2.5">
-                      {upcomingAssignments.slice(0, 3).map((a) => (
-                        <div
-                          key={a.id}
-                          onClick={() => setActiveTab('tugas')}
-                          className="p-3 border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#FFFFFF] hover:border-[#7A756D] transition-all cursor-pointer space-y-1 shadow-retro-xs"
-                        >
-                          <span className="text-[10px] font-mono font-bold text-[#853827] block truncate">
-                            Batas: {fmt(a.close_at)}
-                          </span>
-                          <p className="text-xs font-bold text-[#1C1917] truncate">{a.title}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                {upcomingAssignments.length === 0 ? (
+                  <p className="text-xs text-[#57534E] font-medium py-1">
+                    Hore, tidak ada tugas yang perlu segera diselesaikan!
+                  </p>
+                ) : (
+                  <div className="space-y-2.5">
+                    {upcomingAssignments.slice(0, 3).map((a) => (
+                      <div
+                        key={a.id}
+                        onClick={() => setActiveTab('tugas')}
+                        className="p-3 border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#FFFFFF] hover:border-[#7A756D] transition-all cursor-pointer space-y-1 shadow-retro-xs rounded-lg"
+                      >
+                        <span className="text-[10px] font-mono font-bold text-[#853827] block truncate">
+                          Batas: {fmt(a.close_at)}
+                        </span>
+                        <p className="text-xs font-bold text-[#1C1917] truncate">{a.title}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="pt-2 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('tugas')}
+                    className="inline-flex items-center justify-center px-4 py-1.5 rounded-full border-2 border-[#1C1917] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-xs font-black text-[#1C1917] shadow-retro-xs transition-all cursor-pointer"
+                  >
+                    Lihat semua
+                  </button>
+                </div>
+              </div>
+
+              {/* Widget Presensi Perkuliahan Terpadu */}
+              <div className="rounded-2xl border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm p-4 sm:p-5 space-y-3">
+                <div className="flex items-center justify-between border-b border-[#D6D3CB] pb-2">
+                  <h3 className="font-heading font-black text-sm text-[#1C1917] flex items-center gap-2">
+                    <CalendarCheck2 className="h-4 w-4 text-[#C2553A]" />
+                    <span>Presensi Perkuliahan</span>
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('presensi')}
+                    className="text-xs font-bold text-[#C2553A] hover:underline cursor-pointer"
+                  >
+                    Detail
+                  </button>
                 </div>
 
-                {/* Bagian 2: Presensi Perkuliahan Hari Ini */}
-                <div className="p-4 sm:p-5 space-y-3 bg-[#FAF8F5]/60">
-                  <div className="flex items-center justify-between pb-1">
-                    <h3 className="font-heading font-black text-sm text-[#1C1917] flex items-center gap-2">
-                      <CalendarCheck2 className="h-4 w-4 text-[#C2553A]" />
-                      <span>Presensi Perkuliahan</span>
-                    </h3>
+                {attendanceSessions.length > 0 && attendanceSessions.some((s) => s.is_open) ? (
+                  <div className="p-3 border-2 border-[#10B981] bg-[#E8F5E9] space-y-2 text-xs rounded-lg">
+                    <span className="font-black text-[#065F46] block">Sesi Pertemuan Sedang Dibuka!</span>
                     <button
                       type="button"
                       onClick={() => setActiveTab('presensi')}
-                      className="text-xs font-bold text-[#C2553A] hover:underline cursor-pointer"
+                      className="w-full py-1.5 border-2 border-[#065F46] bg-[#10B981] hover:bg-[#059669] text-white font-black text-xs shadow-retro-xs cursor-pointer rounded"
                     >
-                      Buka
+                      Buka Lembar Presensi
                     </button>
                   </div>
+                ) : (
+                  <p className="text-xs text-[#57534E] font-medium">
+                    Tidak ada sesi presensi aktif saat ini. Dosen akan mengaktifkan presensi saat kelas dimulai.
+                  </p>
+                )}
 
-                  {attendanceSessions.length > 0 && attendanceSessions.some((s) => s.is_open) ? (
-                    <div className="p-3 border-2 border-[#10B981] bg-[#E8F5E9] space-y-2 text-xs">
-                      <span className="font-black text-[#065F46] block">Sesi Pertemuan Sedang Dibuka!</span>
-                      <button
-                        type="button"
-                        onClick={() => setActiveTab('presensi')}
-                        className="w-full py-1.5 border-2 border-[#065F46] bg-[#10B981] hover:bg-[#059669] text-white font-black text-xs shadow-retro-xs cursor-pointer"
-                      >
-                        Buka Lembar Presensi
-                      </button>
-                    </div>
-                  ) : (
-                    <p className="text-xs text-[#57534E] font-medium">
-                      Tidak ada sesi presensi aktif saat ini. Dosen akan mengaktifkan presensi saat kelas dimulai.
-                    </p>
-                  )}
-                </div>
-
-                {/* Bagian 3: Spesifikasi Akademik Singkat */}
-                <div className="p-4 text-xs font-sans text-[#57534E] space-y-2 bg-[#FFFFFF]">
-                  <div className="flex justify-between font-medium">
-                    <span>Kehadiran Minimal:</span>
-                    <span className="font-bold text-[#C2553A]">75% (Syarat UAS)</span>
-                  </div>
-                  <div className="flex justify-between font-medium">
-                    <span>Bobot Kredit:</span>
-                    <span className="font-bold text-[#1C1917]">{cls.sks || 3} SKS</span>
-                  </div>
-                  <div className="flex justify-between font-medium">
-                    <span>Kode Pendaftaran:</span>
-                    <span className="font-mono font-bold text-[#1C1917]">{cls.join_code}</span>
-                  </div>
+                <div className="pt-1 text-[11px] text-[#7A756D] flex justify-between font-medium border-t border-[#D6D3CB]">
+                  <span>Syarat UAS:</span>
+                  <span className="font-bold text-[#C2553A]">75% Kehadiran</span>
                 </div>
               </div>
             </div>
 
-            {/* Kolom Kanan: Main Stream Feed */}
-            <div className="lg:col-span-8 space-y-4">
-              {/* Polling & Kuis Cepat Perkuliahan (Fase 5) */}
+            {/* Kolom Kanan: Stream Feed Ala Google Classroom (Persis Foto) */}
+            <div className="lg:col-span-8 space-y-4 font-sans">
+              {/* Polling & Kuis Cepat Perkuliahan (Jika Ada) */}
               <ClassLivePollCard classId={cls.id} currentUserRole={viewer} />
 
-              {/* Post Box "Umumkan sesuatu ke kelas Anda..." (Khusus Dosen Pengampu) */}
-              {lecturer && (
-                <div className="border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm p-4 sm:p-5 space-y-3 font-sans">
-                  <div
+              {/* Baris Tombol "Pengumuman baru" ala Foto Google Classroom */}
+              <div className="flex items-center justify-between gap-3">
+                {lecturer ? (
+                  <button
+                    type="button"
                     onClick={() => setIsAnnounceOpen(!isAnnounceOpen)}
-                    className="flex items-center gap-3.5 p-3 sm:p-3.5 border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#FAF8F5]/80 cursor-pointer transition-all shadow-retro-xs"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-full border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] text-xs font-black shadow-retro-xs transition-all cursor-pointer"
                   >
-                    <div className="h-9 w-9 border-2 border-[#6B2D20] bg-[#C2553A] text-white flex items-center justify-center font-black text-xs shrink-0">
-                      DS
-                    </div>
-                    <span className="text-xs sm:text-sm font-medium text-[#57534E] flex-1">
-                      Umumkan sesuatu ke kelas Anda...
-                    </span>
-                    <Send className="h-4 w-4 text-[#C2553A]" />
+                    <PenSquare className="h-4 w-4 text-[#C2553A]" />
+                    <span>{isAnnounceOpen ? 'Tutup Pengumuman' : 'Pengumuman baru'}</span>
+                  </button>
+                ) : (
+                  <div className="text-xs font-bold text-[#57534E] flex items-center gap-2">
+                    <MessagesSquare className="h-4 w-4 text-[#C2553A]" />
+                    <span>Aliran Informasi & Aktivitas Perkuliahan</span>
                   </div>
+                )}
 
-                  {isAnnounceOpen && (
-                    <div className="pt-3 border-t-2 border-[#D6D3CB] animate-fade-up space-y-3">
-                      <h4 className="text-xs font-heading font-black text-[#1C1917]">
-                        Kirim Pengumuman Resmi Dosen Pengampu
-                      </h4>
-                      <CreateAnnouncementForm classId={cls.id} />
-                    </div>
-                  )}
+                <span className="text-xs text-[#7A756D] font-medium hidden sm:inline">
+                  {assignments.length} Tugas Perkuliahan Terbit
+                </span>
+              </div>
+
+              {/* Form Input Pengumuman jika dibuka Dosen */}
+              {lecturer && isAnnounceOpen && (
+                <div className="rounded-2xl border-2 border-[#7A756D] bg-[#FAF8F5] p-5 shadow-retro-sm space-y-3 animate-fade-up">
+                  <h4 className="text-xs font-heading font-black text-[#1C1917]">
+                    Kirim Pengumuman Baru ke Forum Kelas
+                  </h4>
+                  <CreateAnnouncementForm classId={cls.id} />
                 </div>
               )}
 
-              {/* Feed: Pengumuman Dosen & Diskusi Kelas */}
-              <div className="space-y-3.5">
-                {announcements.map((a) => (
-                  <div
-                    key={a.id}
-                    className="p-5 sm:p-6 border-2 border-[#7A756D] border-l-4 border-l-[#C2553A] bg-[#FFFFFF] shadow-retro-sm space-y-3 animate-fade-up font-sans"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <div className="h-9 w-9 border-2 border-[#6B2D20] bg-[#C2553A] text-white flex items-center justify-center font-black text-xs shrink-0">
-                          DS
+              {/* Stream Feed: Pengumuman Dosen (Jika Ada) */}
+              {announcements.map((a) => (
+                <div
+                  key={a.id}
+                  className="rounded-2xl border-2 border-[#7A756D] border-l-4 border-l-[#C2553A] bg-[#FFFFFF] shadow-retro-xs p-5 sm:p-6 space-y-3 animate-fade-up"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="h-9 w-9 rounded-full border-2 border-[#6B2D20] bg-[#C2553A] text-white flex items-center justify-center font-black text-xs shrink-0">
+                        DS
+                      </div>
+                      <div>
+                        <span className="text-xs sm:text-sm font-bold text-[#1C1917] block">
+                          {(cls as any).lecturer_name || 'Dosen Pengampu Kelas'}
+                        </span>
+                        <span className="text-xs text-[#7A756D] font-medium">{fmtShort(a.created_at)}</span>
+                      </div>
+                    </div>
+                    <span className="text-xs font-black uppercase bg-[#FEF4F1] text-[#853827] border border-[#C2553A] px-2.5 py-0.5 rounded">
+                      Pengumuman
+                    </span>
+                  </div>
+
+                  <h3 className="font-heading font-black text-base sm:text-lg text-[#1C1917]">{a.title}</h3>
+                  {a.body && <MarkdownViewer content={a.body} className="text-xs sm:text-sm text-[#1C1917]/90 leading-relaxed" />}
+                </div>
+              ))}
+
+              {/* STREAM ITEMS TUGAS KELAS (PERSIS SEPERTI PADA FOTO USER) */}
+              <div className="space-y-3">
+                {assignments.length === 0 ? (
+                  <div className="rounded-2xl border-2 border-dashed border-[#7A756D] bg-[#FAF8F5] p-8 text-center text-xs text-[#57534E] font-medium">
+                    Belum ada tugas atau pengumuman yang diposting di kelas ini.
+                  </div>
+                ) : (
+                  assignments.map((asg) => (
+                    <div
+                      key={asg.id}
+                      onClick={() => setActiveTab('tugas')}
+                      className="rounded-2xl border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-xs hover:shadow-retro hover:-translate-y-0.5 transition-all p-4 sm:p-4.5 flex items-center justify-between gap-4 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3.5 min-w-0">
+                        <div className="h-10 w-10 rounded-full border-2 border-[#7A756D] bg-[#FAF8F5] text-[#1D4ED8] flex items-center justify-center shrink-0 shadow-retro-xs">
+                          <ClipboardList className="h-5 w-5" />
                         </div>
-                        <div>
-                          <span className="text-xs sm:text-sm font-bold text-[#1C1917] block">
-                            Dosen Pengampu Kelas
+                        <div className="min-w-0">
+                          <p className="font-heading font-bold text-xs sm:text-sm text-[#1C1917] truncate leading-tight">
+                            {(cls as any).lecturer_name || 'Dosen Pengampu'} memposting tugas baru: {asg.title}
+                          </p>
+                          <span className="text-xs text-[#7A756D] font-medium block mt-0.5">
+                            {fmtShort((asg as any).created_at || asg.due_at)}
                           </span>
-                          <span className="text-xs font-mono font-medium text-[#7A756D]">{fmt(a.created_at)}</span>
                         </div>
                       </div>
-                      <span className="text-xs font-black uppercase bg-[#FEF4F1] text-[#853827] border border-[#C2553A] px-2.5 py-0.5">
-                        Pengumuman
+
+                      <div className="flex items-center gap-1.5 shrink-0 text-[#7A756D]">
+                        <MoreVertical className="h-4 w-4" />
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {/* Forum Diskusi Interaktif Terpadu Kelas */}
+              <div className="pt-2">
+                <ClassForumTabView
+                  classId={cls.id}
+                  initialTopics={forumTopics}
+                  availableTags={forumTags}
+                  userRole={lecturer ? 'LECTURER' : ta ? 'TEACHING_ASSISTANT' : 'STUDENT'}
+                  currentUserId={viewer}
+                />
+              </div>
+
+              {/* Pemetaan Capaian CPMK & CPL (Accordion Terpadu) */}
+              <div className="rounded-2xl border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm overflow-hidden">
+                <button
+                  type="button"
+                  onClick={() => setIsCpmkExpanded(!isCpmkExpanded)}
+                  className="w-full p-4 flex items-center justify-between text-left hover:bg-[#FFFFFF] transition-all cursor-pointer font-sans"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <Award className="h-5 w-5 text-[#C2553A] shrink-0" />
+                    <div>
+                      <span className="font-heading font-black text-sm text-[#1C1917] block">
+                        Ketercapaian CPMK & CPL Kurikulum OBE
+                      </span>
+                      <span className="text-xs text-[#57534E] font-medium">
+                        Pemetaan capaian pembelajaran lulusan dan mata kuliah
                       </span>
                     </div>
-
-                    <h3 className="font-heading font-black text-base sm:text-lg text-[#1C1917]">{a.title}</h3>
-                    {a.body && <MarkdownViewer content={a.body} className="text-xs sm:text-sm text-[#1C1917]/90 leading-relaxed" />}
                   </div>
-                ))}
-
-                {/* Notifikasi Tugas Baru di Stream */}
-                {assignments.slice(0, 2).map((asg) => (
-                  <div
-                    key={asg.id}
-                    onClick={() => setActiveTab('tugas')}
-                    className="p-4 sm:p-4.5 border-2 border-[#7A756D] border-l-4 border-l-[#1D4ED8] bg-[#FAF8F5] shadow-retro-sm hover:shadow-retro hover:-translate-y-0.5 cursor-pointer transition-all flex items-center justify-between gap-4 font-sans"
-                  >
-                    <div className="flex items-center gap-3.5">
-                      <div className="p-2.5 border-2 border-[#7A756D] bg-[#FFFFFF] text-[#1D4ED8] shrink-0 shadow-retro-xs">
-                        <FileText className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <span className="text-[10px] text-[#1D4ED8] font-black uppercase tracking-wider block">
-                          Tugas Baru
-                        </span>
-                        <h4 className="font-heading font-black text-sm sm:text-base text-[#1C1917]">{asg.title}</h4>
-                        <span className="text-xs font-mono font-bold text-[#853827]">Batas: {fmt(asg.due_at)}</span>
-                      </div>
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-[#1D4ED8] shrink-0" />
+                  <div className="flex items-center gap-2 text-xs font-bold text-[#7A756D]">
+                    <span>{isCpmkExpanded ? 'Tutup Analisis' : 'Buka Analisis'}</span>
+                    {isCpmkExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                   </div>
-                ))}
+                </button>
 
-                {/* Forum Diskusi Interaktif Terpadu Kelas */}
-                <div className="pt-2">
-                  <ClassForumTabView
-                    classId={cls.id}
-                    initialTopics={forumTopics}
-                    availableTags={forumTags}
-                    userRole={lecturer ? 'LECTURER' : ta ? 'TEACHING_ASSISTANT' : 'STUDENT'}
-                    currentUserId={viewer}
-                  />
-                </div>
-
-                {/* Pemetaan Capaian CPMK & CPL (Accordion Terpadu) */}
-                <div className="border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm">
-                  <button
-                    type="button"
-                    onClick={() => setIsCpmkExpanded(!isCpmkExpanded)}
-                    className="w-full p-4 flex items-center justify-between text-left hover:bg-[#FFFFFF] transition-all cursor-pointer font-sans"
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <Award className="h-5 w-5 text-[#C2553A] shrink-0" />
-                      <div>
-                        <span className="font-heading font-black text-sm text-[#1C1917] block">
-                          Ketercapaian CPMK & CPL Kurikulum OBE
-                        </span>
-                        <span className="text-xs text-[#57534E] font-medium">
-                          Pemetaan capaian pembelajaran lulusan dan mata kuliah
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 text-xs font-bold text-[#7A756D]">
-                      <span>{isCpmkExpanded ? 'Tutup Analisis' : 'Buka Analisis'}</span>
-                      {isCpmkExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                    </div>
-                  </button>
-
-                  {isCpmkExpanded && (
-                    <div className="p-4 sm:p-6 border-t-2 border-[#D6D3CB] bg-[#FFFFFF] animate-fade-up">
-                      <CpmkCplRadarCard classId={cls.id} />
-                    </div>
-                  )}
-                </div>
+                {isCpmkExpanded && (
+                  <div className="p-4 sm:p-6 border-t-2 border-[#D6D3CB] bg-[#FFFFFF] animate-fade-up">
+                    <CpmkCplRadarCard classId={cls.id} />
+                  </div>
+                )}
               </div>
             </div>
           </div>
