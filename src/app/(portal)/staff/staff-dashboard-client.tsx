@@ -122,34 +122,34 @@ export function StaffDashboardClient({
           {/* BANNER AKSI PRIORITAS */}
           <ActionBanner initialData={bannerData} />
 
-          {/* STAT STRIP RINGKASAN BAAK (1 PITA TERPADU, TANPA CARD TERPISAH) */}
-          <div className="rounded-2xl border border-[#E8E5DE] bg-[#FFFFFF] grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-[#E8E5DE] overflow-hidden">
-            <div className="p-4 sm:p-5 flex items-center gap-3.5">
-              <div className="p-2.5 rounded-xl bg-[#FAF8F5] text-[#C2553A]">
+          {/* 3 KARTU METRIK RINGKASAN BAAK */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex items-center gap-3.5">
+              <div className="p-2.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] text-[#C2553A]">
                 <GraduationCap className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Program Studi</p>
+                <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Program Studi</p>
                 <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{programs.length}</p>
               </div>
             </div>
 
-            <div className="p-4 sm:p-5 flex items-center gap-3.5">
-              <div className="p-2.5 rounded-xl bg-[#FAF8F5] text-[#C2553A]">
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex items-center gap-3.5">
+              <div className="p-2.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] text-[#C2553A]">
                 <CalendarDays className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Semester Akademik</p>
+                <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Semester Akademik</p>
                 <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{semesters.length}</p>
               </div>
             </div>
 
-            <div className="p-4 sm:p-5 flex items-center gap-3.5">
-              <div className="p-2.5 rounded-xl bg-[#FAF8F5] text-[#C2553A]">
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex items-center gap-3.5">
+              <div className="p-2.5 rounded-lg border border-[#E8E5DE] bg-[#FAF8F5] text-[#C2553A]">
                 <BookOpen className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Katalog Mata Kuliah</p>
+                <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Katalog Mata Kuliah</p>
                 <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{courses.length}</p>
               </div>
             </div>

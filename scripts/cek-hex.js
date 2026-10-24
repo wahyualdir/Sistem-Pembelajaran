@@ -1,32 +1,26 @@
 const fs = require("fs");
 const path = require("path");
 
-// Palet resmi identitas Telkom University & RuangKampus
+// Palet resmi identitas Velqora & RuangKampus
 const ALLOWED_HEX = new Set([
-  // Telkom University Official Palette (Crimson Maroon, Red, Slate Gray, Silver Gray, Pure White, Charcoal)
-  "#9F1521", "#8F131E", "#A91117", "#ED1C24", "#ED1E28", "#B6252A", "#C51626", "#AC000F",
-  "#F3F3F4", "#F5F5F5", "#E2E3E4", "#D0D6DD", "#D9D6D6",
-  "#58595B", "#55565B", "#808285", "#959597",
-  "#111111", "#000000", "#FFFFFF", "#FFF", "#000", "#111",
-
-  // Velqora Signature Terracotta & Warm Burnt Orange (Backward Compatibility)
+  // Velqora Signature Terracotta & Warm Burnt Orange
   "#FEF2F0", "#FDDDD7", "#FBB9AD", "#F48E7C", "#E0654F", "#C2553A", "#A34530", "#853827", "#6B2D20", "#4A1F16",
   "#C65D3B", "#B54F2F", "#F4E4DD", "#B84A2B", "#EE7257", "#9E3B1E", "#7A2E19", "#4E1C0E", "#FBC8BC", "#F69F8C",
   "#FEF4F1", "#FDE6E0",
 
-  // Surfaces & Warm Paper Ivory
-  "#FAF8F5", "#FAFAF8", "#FAF6F1", "#F5F3EE", "#EDEAE3", "#E8E5DE", "#ECE9D8", "#F4EFEB", "#E8E0D7",
+  // Velqora Surfaces & Warm Paper Ivory
+  "#FAF8F5", "#FAFAF8", "#FFFFFF", "#FAF6F1", "#F5F3EE", "#EDEAE3", "#E8E5DE", "#ECE9D8", "#F4EFEB", "#E8E0D7",
   "#F0EAE3", "#ECE7DF", "#F2EFE8", "#F5EFEB", "#E0DACB", "#DFD8CB",
 
-  // Dark Obsidian & Zinc
+  // Velqora Dark Obsidian & Zinc
   "#09090B", "#121214", "#141416", "#18181B", "#1C1C20", "#232328", "#27272A", "#2B2B32", "#3F3F46", "#52525B",
   "#71717A", "#A1A1AA", "#D4D4D8", "#F4F4F5", "#14110F", "#38312A", "#2E2822", "#120F0D", "#1E1915", "#0D0A08",
   "#064E3B", "#451A03", "#3B0764",
 
-  // Borders & Inset Framing
+  // Velqora Borders & Inset Framing
   "#D6D3CB", "#B8B4AB", "#7A756D", "#8A857D", "#B8B1A5", "#4A463F", "#E5DDD5", "#C4BFB6", "#9C968D",
 
-  // Typography / Charcoal & Espresso
+  // Velqora Typography / Warm Charcoal & Espresso
   "#1C1917", "#1F1B18", "#2D2823", "#1A1816", "#44403C", "#57534E", "#6B6560", "#6E675F", "#78716C", "#A39C94",
   "#A8A29E", "#524B42",
 
@@ -47,6 +41,10 @@ const ALLOWED_HEX = new Set([
   "#1E1B4B", "#4C1D95", "#9F1239", "#EA580C", "#FDE047", "#44144E", "#2D0A36", "#17051C", "#0284C7", "#0EA5E9",
   "#38BDF8", "#BAE6FD", "#0369A1", "#075985", "#0C4A6E", "#0F172A", "#312E81", "#701A75", "#FEF08A", "#3B0744",
   "#26042C", "#140217", "#020617", "#050B1A", "#0B152D", "#182247", "#090D16", "#0B1329", "#070C1B", "#04070E",
+
+  // Legacy campus palette
+  "#F3F3F4", "#111111", "#ED1C24", "#A91117", "#808285", "#58595B", "#E2E3E4", "#000000",
+  "#FFF", "#000", "#111",
 ]);
 
 function getFiles(dir, files = []) {
@@ -72,6 +70,7 @@ for (const file of files) {
   if (matches) {
     const disallowed = matches.filter((h) => {
       const upper = h.toUpperCase();
+      // Izinkan jika persis sama atau jika format 8-digit dengan 6-digit pertama valid
       return !ALLOWED_HEX.has(upper) && !ALLOWED_HEX.has(upper.slice(0, 7));
     });
     if (disallowed.length > 0) {
@@ -83,7 +82,7 @@ for (const file of files) {
 
 if (errorCount > 0) {
   console.error(`\n[Gagal] Ditemukan ${errorCount} kode warna hex di luar palet resmi kampus!`);
-  console.error(`Hanya diizinkan: #F3F3F4, #FFFFFF, #111111, #ED1C24, #A91117, #9F1521, #808285, #58595B, #E2E3E4, #000000.`);
+  console.error(`Hanya diizinkan: #F3F3F4, #FFFFFF, #111111, #ED1C24, #A91117, #808285, #58595B, #E2E3E4, #000000.`);
   process.exit(1);
 } else {
   console.log("✅ [Lolos] Seluruh warna hex sesuai dengan palet resmi identitas kampus (merah, abu-abu, putih, hitam netral).");

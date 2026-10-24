@@ -111,22 +111,22 @@ export function AdminDashboardClient({
           {/* ACTION BANNER */}
           <ActionBanner initialData={bannerData} />
 
-          {/* STAT STRIP METRIK KEAMANAN (1 PITA TERPADU, MINIM CARD) */}
-          <div className="rounded-2xl border border-[#E8E5DE] bg-[#FFFFFF] grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E8E5DE] overflow-hidden">
-            <div className="p-4">
-              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Peristiwa Audit</p>
+          {/* 4 KARTU METRIK KEAMANAN */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]">
+              <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Peristiwa Audit</p>
               <p className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917] mt-1">{totalLogs}</p>
             </div>
-            <div className="p-4">
-              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Sesi Login Aktif</p>
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]">
+              <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Sesi Login Aktif</p>
               <p className="font-heading font-bold text-2xl sm:text-3xl text-[#C2553A] mt-1">{totalLogins}</p>
             </div>
-            <div className="p-4">
-              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Status Proteksi</p>
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]">
+              <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Status Proteksi</p>
               <p className="font-heading font-bold text-base sm:text-lg text-[#059669] mt-2">TERLINDUNGI</p>
             </div>
-            <div className="p-4">
-              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Integritas Log</p>
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]">
+              <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Integritas Log</p>
               <p className="font-heading font-bold text-base sm:text-lg text-[#1C1917] mt-2">APPEND-ONLY</p>
             </div>
           </div>

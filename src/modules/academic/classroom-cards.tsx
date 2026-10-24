@@ -62,12 +62,12 @@ export interface ClassroomBannerTheme {
 export const CLASSROOM_BANNER_THEMES: ClassroomBannerTheme[] = [
   {
     id: 'terracotta',
-    bannerGradient: 'bg-gradient-to-br from-[#C51626] via-[#9F1521] to-[#8F131E]',
-    avatarBg: 'bg-[#8F131E]',
-    accentText: 'text-[#9F1521]',
-    progressBar: 'bg-[#9F1521]',
-    badgeSoftBg: 'bg-[#FEF2F2]',
-    badgeSoftText: 'text-[#9F1521]',
+    bannerGradient: 'bg-gradient-to-br from-[#9E3B1E] via-[#853827] to-[#4A1F16]',
+    avatarBg: 'bg-[#4A1F16]',
+    accentText: 'text-[#C2553A]',
+    progressBar: 'bg-[#C2553A]',
+    badgeSoftBg: 'bg-[#FEF2F0]',
+    badgeSoftText: 'text-[#853827]',
     pattern: 'cloud-nodes',
   },
   {
@@ -479,7 +479,7 @@ export function GoogleClassroomCard({
 
         <Link
           href={`/classes/${item.id}`}
-          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#9F1521] hover:bg-[#8F131E] text-white font-bold text-xs transition-colors shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#1C1917] hover:bg-[#C2553A] text-white font-bold text-xs transition-colors"
         >
           <span>Masuk Kelas</span>
           <ArrowRight className="h-3.5 w-3.5" />

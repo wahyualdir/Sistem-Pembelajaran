@@ -148,22 +148,22 @@ export function CoordinatorDashboardClient({
           {/* ACTION BANNER */}
           <ActionBanner initialData={bannerData} />
 
-          {/* STAT STRIP KAPRODI (1 PITA RINGKAS, TANPA CARD BERLEBIHAN) */}
-          <div className="rounded-2xl border border-[#E8E5DE] bg-[#FFFFFF] grid grid-cols-2 sm:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E8E5DE] overflow-hidden">
-            <div className="p-4 flex flex-col justify-between">
-              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Total Pengajuan</p>
+          {/* 4 KARTU METRIK KAPRODI */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col justify-between">
+              <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Total Pengajuan</p>
               <p className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917] mt-1">{requests.length}</p>
             </div>
-            <div className="p-4 flex flex-col justify-between">
-              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Menunggu ACC</p>
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col justify-between">
+              <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Menunggu ACC</p>
               <p className="font-heading font-bold text-2xl sm:text-3xl text-[#C2553A] mt-1">{pending.length}</p>
             </div>
-            <div className="p-4 flex flex-col justify-between">
-              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Disetujui</p>
-              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#065F46] mt-1">{approved.length}</p>
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col justify-between">
+              <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Disetujui</p>
+              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917] mt-1">{approved.length}</p>
             </div>
-            <div className="p-4 flex flex-col justify-between">
-              <p className="text-xs font-mono font-semibold text-[#6B6560] uppercase">Ditolak</p>
+            <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col justify-between">
+              <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Ditolak</p>
               <p className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917] mt-1">{rejected.length}</p>
             </div>
           </div>

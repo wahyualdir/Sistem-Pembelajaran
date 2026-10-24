@@ -320,48 +320,48 @@ export function PortalShell({
           )}
 
           {/* ======================================================== */}
-          {/* 1. BILAH SAMPING MODERN (SIDEBAR CLEAN ACADEMIC)         */}
+          {/* 1. BILAH SAMPING (SIDEBAR - BASELINE 218px+ / RAIL 72px)  */}
           {/* ======================================================== */}
           <aside
             ref={drawerRef}
             tabIndex={-1}
             className={cn(
-              'fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r border-[#E8E5DE] bg-[#FFFFFF] h-[100dvh] shrink-0 outline-none',
-              'xl:sticky xl:top-0 xl:h-[100dvh] xl:z-40',
+              'fixed top-0 bottom-0 left-0 z-50 flex flex-col border-r-2 border-r-[#7A756D] border-l-2 border-l-[#FFFFFF] bg-[#FAF8F5] h-[100dvh] shrink-0 outline-none',
+              'xl:sticky xl:top-0 xl:h-[100dvh] xl:z-40 shadow-xs',
               'transition-all duration-200 ease-in-out motion-reduce:transition-none',
               'pl-[env(safe-area-inset-left,0px)] pb-[env(safe-area-inset-bottom,0px)]',
               isRailActive ? 'w-sidebar xl:w-rail' : 'w-sidebar',
-              isDrawerOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full xl:translate-x-0'
+              isDrawerOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full xl:translate-x-0'
             )}
           >
             {/* Header Sidebar: Brand Block (Full vs Rail) */}
             {isRailActive ? (
-              <div className="flex h-header shrink-0 items-center justify-center border-b border-[#E8E5DE] bg-[#FFFFFF] px-2 box-border">
+              <div className="flex h-header shrink-0 items-center justify-center border-b-2 border-[#7A756D] bg-[#ECE9D8] px-2 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center justify-center group focus-visible:outline-none"
                   title={`RuangKampus - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] p-1 group-hover:border-[#C2553A] transition-colors shrink-0 overflow-hidden">
-                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-[#7A756D] bg-white p-0.5 shadow-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                 </Link>
               </div>
             ) : (
-              <div className="flex items-center h-header shrink-0 border-b border-[#E8E5DE] bg-[#FFFFFF] px-4 box-border">
+              <div className="flex items-center h-header shrink-0 border-b-2 border-[#7A756D] bg-[#ECE9D8] px-4 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0"
                   title={`RuangKampus - ${userSubtitle}`}
                 >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] p-1 group-hover:border-[#C2553A] transition-colors shrink-0 overflow-hidden">
-                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain" />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-white p-0.5 shadow-retro-sm group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="font-heading font-bold text-base sm:text-lg tracking-tight text-[#1C1917] leading-none whitespace-nowrap">
                       Ruang<span className="text-[#C2553A]">Kampus</span>
                     </span>
-                    <span className="text-[11px] font-sans font-medium text-[#6B6560] mt-1 leading-none">
+                    <span className="text-[11px] font-sans font-semibold text-[#7A756D] tracking-wide mt-1 leading-none">
                       Portal Akademik Terpadu
                     </span>
                   </div>
@@ -370,7 +370,7 @@ export function PortalShell({
             )}
 
             {/* DAFTAR MENU LENGKAP KATEGORISASI SIAKAD & PERKULIAHAN */}
-            <nav aria-label="Navigasi Utama" className="flex-1 overflow-y-auto px-3 py-3 space-y-4">
+            <nav aria-label="Navigasi Utama" className="flex-1 overflow-y-auto px-2 sm:px-2.5 py-1 sm:py-1.5 space-y-2.5">
               {navGroups.map((group) => {
                 const isGroupCollapsed = hasMountedCollapse
                   ? !!collapsedGroups[group.id]
@@ -378,22 +378,22 @@ export function PortalShell({
                 return (
                   <div key={group.id || group.title} className="space-y-1">
                     {!isRailActive && group.title ? (
-                      <div className="flex items-center justify-between px-2.5 py-1">
-                        <p className="text-[11px] font-sans font-semibold tracking-wider text-[#78716C] uppercase">
+                      <div className="flex items-center justify-between px-3 py-1 mb-0.5">
+                        <p className="text-[11px] font-sans font-semibold tracking-wider text-[#7A756D] uppercase">
                           {group.title}
                         </p>
                         {group.collapsible && (
                           <button
                             type="button"
                             onClick={() => toggleGroupCollapse(group.id)}
-                            className="p-1 rounded-lg hover:bg-[#FAF8F5] text-[#78716C] hover:text-[#1C1917] transition-colors cursor-pointer"
+                            className="p-1 rounded hover:bg-[#ECE7DF] text-[#7A756D] hover:text-[#1C1917] transition-transform cursor-pointer"
                             title={`Buka/Tutup grup ${group.title}`}
                             aria-label={`Toggle grup ${group.title}`}
                           >
                             <ChevronDown
                               className={cn(
                                 'h-3.5 w-3.5 transition-transform duration-200',
-                                isGroupCollapsed ? '-rotate-90 text-[#78716C]' : 'rotate-0 text-[#1C1917]'
+                                isGroupCollapsed ? '-rotate-90 text-[#7A756D]' : 'rotate-0 text-[#1C1917]'
                               )}
                             />
                           </button>
@@ -415,20 +415,20 @@ export function PortalShell({
                                   if (!isDesktop) closeDrawer();
                                 }}
                                 className={cn(
-                                  'flex items-center justify-between rounded-xl transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9F1521]',
+                                  'flex items-center justify-between rounded-xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A]',
                                   isRailActive
-                                    ? 'justify-center w-10 h-10 mx-auto'
-                                    : 'px-3 py-2 gap-2.5 text-[13px] min-h-[38px]',
+                                    ? 'justify-center w-11 h-9 mx-auto'
+                                    : 'px-3 py-2 gap-2.5 text-xs sm:text-sm min-h-[38px]',
                                   isActive
-                                    ? 'bg-[#9F1521] text-white font-semibold shadow-2xs'
-                                    : 'text-[#58595B] hover:text-[#111111] hover:bg-[#F3F3F4] font-normal'
+                                    ? 'bg-[#C2553A] text-white shadow-xs border-t border-l border-[#EE7257] border-b border-r border-[#6B2D20] font-bold'
+                                    : 'text-[#2D2823] hover:text-[#1A1816] hover:bg-[#ECE7DF] border border-transparent font-medium'
                                 )}
                               >
                                 <span className="flex items-center gap-2.5 truncate">
                                   <Icon
                                     className={cn(
-                                      'h-4 w-4 shrink-0 transition-colors',
-                                      isActive ? 'text-white' : 'text-[#808285] group-hover:text-[#9F1521]'
+                                      'h-4 w-4 shrink-0 transition-transform',
+                                      isActive ? 'text-white' : 'text-[#6E675F] group-hover:text-[#1A1816]'
                                     )}
                                   />
                                   {!isRailActive && <span className="truncate">{item.label}</span>}
@@ -436,10 +436,10 @@ export function PortalShell({
                                 {!isRailActive && item.badge !== undefined && (
                                   <span
                                     className={cn(
-                                      'inline-flex min-w-5 items-center justify-center px-2 py-0.5 rounded-full text-[10px] font-sans font-bold shrink-0',
+                                      'inline-flex min-w-5 items-center justify-center px-2 py-0.5 text-xs font-sans font-extrabold shrink-0',
                                       isActive
-                                        ? 'bg-white text-[#9F1521]'
-                                        : 'bg-[#FEF2F2] text-[#9F1521]'
+                                        ? 'bg-white/20 text-white border border-white/30'
+                                        : 'bg-[#C2553A]/10 text-[#C2553A] border border-[#C2553A]/30'
                                     )}
                                   >
                                     {item.badge}
@@ -451,7 +451,7 @@ export function PortalShell({
                               {isRailActive && (
                                 <div
                                   role="tooltip"
-                                  className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 hidden group-hover:flex group-focus-within:flex items-center z-50 whitespace-nowrap rounded-lg bg-[#1C1917] px-2.5 py-1.5 text-xs font-semibold text-white shadow-md animate-fade-in"
+                                  className="pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 hidden group-hover:flex group-focus-within:flex items-center z-50 whitespace-nowrap rounded-md border-2 border-ink bg-ink px-2.5 py-1.5 text-xs font-bold text-white shadow-retro animate-fade-in"
                                 >
                                   {item.label}
                                 </div>
@@ -469,19 +469,19 @@ export function PortalShell({
             {/* ======================================================== */}
             {/* DI BAWAH MENU BAGIAN BAWAH: WIDGET PROFIL INTERAKTIF     */}
             {/* ======================================================== */}
-            <div className="p-3 border-t border-[#E8E5DE] bg-[#FAF8F5]/60 shrink-0 sidebar-compact-user-container">
+            <div className="p-2 sm:p-2.5 border-t-2 border-retro-border bg-gray-soft space-y-1.5 shrink-0 sidebar-compact-user-container">
               <div ref={profileMenuRef} className="relative">
                 {/* Menu Popover Profil saat Ditekan */}
                 {isProfileMenuOpen && (
                   <div
                     className={cn(
-                      'absolute bottom-full mb-2 rounded-2xl border border-[#D6D3CB] bg-[#FFFFFF] p-2 shadow-lg z-50 space-y-1 animate-fade-up',
+                      'absolute bottom-full mb-2 rounded-xl border-2 border-retro-border bg-retro-surface p-2.5 shadow-retro-md z-50 space-y-1.5 animate-fade-up',
                       isRailActive ? 'left-0 w-60' : 'left-0 right-0'
                     )}
                   >
-                    <div className="px-3 py-2 border-b border-[#E8E5DE] mb-1">
-                      <p className="text-sm font-bold text-[#1C1917] truncate">{userName}</p>
-                      <p className="text-xs text-[#6B6560] font-sans font-medium">{userSubtitle}</p>
+                    <div className="px-2.5 py-2 border-b-2 border-retro-border/30 mb-1">
+                      <p className="text-sm font-bold text-foreground truncate">{userName}</p>
+                      <p className="text-xs text-muted-foreground font-sans font-medium">{userSubtitle}</p>
                     </div>
 
                     <Link
@@ -490,9 +490,9 @@ export function PortalShell({
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer();
                       }}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1C1917] transition-colors group"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
-                      <User className="h-4 w-4 text-[#6B6560] group-hover:text-[#1C1917]" />
+                      <User className="h-4 w-4 text-black group-hover:scale-110 transition-transform" />
                       <span>Buka Profil Lengkap</span>
                     </Link>
 
@@ -502,9 +502,9 @@ export function PortalShell({
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer();
                       }}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1C1917] transition-colors group"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
-                      <Layers className="h-4 w-4 text-[#6B6560] group-hover:text-[#1C1917]" />
+                      <Layers className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                       <span>Ganti Peran / Workspace</span>
                     </Link>
 
@@ -514,15 +514,15 @@ export function PortalShell({
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer();
                       }}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1C1917] transition-colors group"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
-                      <Settings className="h-4 w-4 text-[#6B6560] group-hover:text-[#1C1917]" />
+                      <Settings className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                       <span>Pengaturan Akun</span>
                     </Link>
 
                     {availableRoles && availableRoles.length > 1 && (
-                      <div className="py-1.5 my-1 border-y border-[#E8E5DE]">
-                        <p className="px-3 py-1 text-[10px] font-bold uppercase text-[#78716C] tracking-wider">
+                      <div className="pb-2 mb-2 border-b-2 border-retro-border/30">
+                        <p className="px-3 py-1 text-[11px] font-bold uppercase text-muted-foreground tracking-wider">
                           Pilih Peran Aktif
                         </p>
                         {availableRoles.map((rCode) => {
@@ -534,12 +534,12 @@ export function PortalShell({
                               <button
                                 type="submit"
                                 className={cn(
-                                  'flex items-center justify-between w-full px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors text-left cursor-pointer',
-                                  isCurrent ? 'bg-[#1C1917] text-white' : 'hover:bg-[#FAF8F5] text-[#44403C]'
+                                  'flex items-center justify-between w-full px-3 py-1.5 rounded-md text-xs font-bold transition-colors text-left cursor-pointer',
+                                  isCurrent ? 'bg-black text-white' : 'hover:bg-gray-soft text-foreground'
                                 )}
                               >
                                 <span>{rLabel}</span>
-                                {isCurrent && <span className="text-[10px] font-bold bg-[#C2553A] px-1.5 py-0.5 rounded-full">Aktif</span>}
+                                {isCurrent && <span className="text-xs font-sans font-extrabold bg-white/25 px-1.5 py-0.5 rounded">Aktif</span>}
                               </button>
                             </form>
                           );
@@ -553,17 +553,17 @@ export function PortalShell({
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer();
                       }}
-                      className="flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-[#FAF8F5] text-xs font-semibold text-[#1C1917] transition-colors group"
+                      className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
-                      <Laptop className="h-4 w-4 text-[#6B6560] group-hover:text-[#1C1917]" />
+                      <Laptop className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                       <span>Perangkat dan Sesi</span>
                     </Link>
 
-                    <div className="pt-1 border-t border-[#E8E5DE]">
+                    <div className="pt-1.5 border-t-2 border-retro-border/30">
                       <form action={logoutAction}>
                         <button
                           type="submit"
-                          className="flex items-center gap-2.5 w-full px-3 py-2 rounded-xl hover:bg-[#FEF2F0] text-[#853827] text-xs font-semibold transition-colors cursor-pointer"
+                          className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg hover:bg-gray-soft text-black text-sm font-bold transition-colors"
                         >
                           <LogOut className="h-4 w-4" />
                           <span>Keluar Akun</span>
@@ -573,52 +573,80 @@ export function PortalShell({
                   </div>
                 )}
 
-                {/* Tombol Profil Bersih */}
+                {/* Tombol Profil Pill (Membuka / Menutup Popover Menu Profil) */}
                 <button
                   type="button"
                   onClick={() => setIsProfileMenuOpen((prev) => !prev)}
                   className={cn(
-                    'flex items-center rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:border-[#D6D3CB] transition-all group focus-visible:outline-none w-full text-left cursor-pointer',
-                    isRailActive ? 'justify-center p-2' : 'gap-2.5 p-2.5 sidebar-compact-user-card'
+                    'flex items-center rounded-xl border-2 border-retro-border bg-retro-surface shadow-retro hover:bg-retro-bg transition-all group focus-visible:outline-none w-full text-left',
+                    isRailActive ? 'justify-center p-2' : 'gap-2.5 p-2 sm:p-2.5 sidebar-compact-user-card'
                   )}
                   title={isRailActive ? `Profil: ${userName}` : 'Buka Menu Profil Pengguna'}
                 >
-                  <div className="relative h-9 w-9 rounded-full bg-[#1C1917] text-white overflow-hidden flex items-center justify-center text-xs font-bold shrink-0 sidebar-compact-avatar">
+                  {/* Box Kotak Inisial Avatar */}
+                  <div className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-lg border-2 border-retro-border bg-black text-white overflow-hidden flex items-center justify-center text-xs sm:text-sm font-bold shrink-0 shadow-xs sidebar-compact-avatar">
                     {initials}
                   </div>
 
+                  {/* Nama dan Subtitle Role */}
                   {!isRailActive && (
                     <div className="text-left min-w-0 flex-1">
-                      <p className="text-xs sm:text-sm font-bold text-[#1C1917] leading-tight truncate">
+                      <p className="text-base font-extrabold text-black leading-tight truncate transition-colors">
                         {userName}
                       </p>
-                      <p className="text-[11px] text-[#6B6560] font-sans font-medium leading-tight truncate mt-0.5">
+                      <p className="text-xs sm:text-sm text-black font-sans font-bold leading-tight truncate mt-1">
                         {userSubtitle}
                       </p>
                     </div>
                   )}
 
+                  {/* Panah Dropdown Chevron v */}
                   {!isRailActive && (
                     <ChevronDown
                       className={cn(
-                        'h-4 w-4 text-[#78716C] group-hover:text-[#1C1917] shrink-0 transition-transform ml-1',
-                        isProfileMenuOpen && 'rotate-180 text-[#1C1917]'
+                        'h-4 w-4 text-black group-hover:text-black shrink-0 transition-transform ml-1',
+                        isProfileMenuOpen && 'rotate-180 text-black'
                       )}
                     />
                   )}
                 </button>
               </div>
+
+              {/* Tombol Logout Ramping */}
+              {!isRailActive ? (
+                <div className="w-full sidebar-compact-hide-logout">
+                  <form action={logoutAction} className="w-full">
+                    <button
+                      type="submit"
+                      className="flex items-center justify-center gap-2 w-full py-1.5 sm:py-2 px-3 rounded-lg border-2 border-retro-border bg-retro-surface hover:bg-gray-soft text-black text-xs sm:text-sm font-bold transition-colors focus-visible:outline-none"
+                    >
+                      <LogOut className="h-3.5 w-3.5" />
+                      <span>Keluar Akun</span>
+                    </button>
+                  </form>
+                </div>
+              ) : (
+                <form action={logoutAction} className="flex justify-center">
+                  <button
+                    type="submit"
+                    title="Keluar / Logout"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-retro-border bg-retro-surface text-black hover:bg-gray-soft transition-colors focus-visible:outline-none"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </button>
+                </form>
+              )}
             </div>
           </aside>
 
           {/* ======================================================== */}
-          {/* 2. AREA KONTEN UTAMA DENGAN TOPBAR BERSIH                */}
+          {/* 2. AREA KONTEN UTAMA DENGAN TOPBAR BERSIH */}
           {/* ======================================================== */}
           <div className="flex-1 flex flex-col min-w-0">
             {isImpersonating && (
-              <div className="bg-[#1C1917] text-white px-4 py-2 text-xs font-semibold flex flex-wrap items-center justify-between gap-2 border-b border-[#2D2823] z-40">
+              <div className="bg-black text-white px-4 py-2.5 text-xs font-bold flex flex-wrap items-center justify-between gap-2 border-b-2 border-black shadow-retro z-40">
                 <div className="flex items-center gap-2">
-                  <ShieldAlert className="h-4 w-4 text-[#C2553A] shrink-0" />
+                  <ShieldAlert className="h-4 w-4 shrink-0" />
                   <span>
                     Sedang mengimpersonasi: <u>{userName}</u> ({userSubtitle}) — Sisa Waktu 30:00. Tindakan tercatat di Audit Log.
                   </span>
@@ -630,7 +658,7 @@ export function PortalShell({
                 >
                   <button
                     type="submit"
-                    className="bg-[#FFFFFF] text-[#1C1917] px-3 py-1 rounded-lg text-xs font-semibold hover:bg-[#FAF8F5] cursor-pointer flex items-center gap-1.5"
+                    className="bg-gray-soft text-black px-3 py-1.5 rounded text-xs font-sans hover:bg-retro-surface border-2 border-black cursor-pointer font-bold shadow-xs flex items-center gap-1.5"
                   >
                     <span>Keluar dari Impersonasi</span>
                     <span>&rarr;</span>
@@ -640,13 +668,12 @@ export function PortalShell({
             )}
 
             {/* ======================================================== */}
-            {/* HEADER ATAS: TELKOM UNIVERSITY INSTITUTIONAL TOPBAR      */}
+            {/* HEADER ATAS: VELQORA ACADEMIC OS TOPBAR                 */}
             {/* ======================================================== */}
-            <div className="h-1 w-full bg-[#9F1521] shrink-0" />
             <header
               className={cn(
-                'sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#E2E3E4] bg-[#FFFFFF]/95 backdrop-blur-md px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
-                isScrolled && 'shadow-xs border-b-[#D0D6DD]'
+                'sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#D6D3CB] bg-[#ECE9D8] px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
+                isScrolled && 'shadow-xs border-b-[#B8B4AB]'
               )}
             >
               {/* SISI KIRI & TENGAH: TOMBOL TOGGLE SIDEBAR + SEARCH BAR TERPADU */}

@@ -1,5 +1,5 @@
 /* ------------------------------------------------------------- */
-/* Apple SF Pro / Inter Webfonts (Disajikan Cepat dari /public)   */
+/* Apple SF Pro Webfonts (Disajikan Mandiri & Cepat dari /public)  */
 /* ------------------------------------------------------------- */
 @font-face {
   font-family: 'SF Pro Display';
@@ -78,76 +78,82 @@
 @tailwind utilities;
 
 :root {
-  --font-sans: 'Inter', var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-heading: 'Inter', var(--font-sf-pro), 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-sans: var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-heading: var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 
-  /* Telkom University Official Theme Tokens (telkomuniversity.ac.id) */
-  --bg: #F3F3F4;
-  --bg-main: #F3F3F4;
+  /* Velqora Academic Learning OS Palette */
+  --bg: #FAF8F5;
+  --bg-main: var(--bg);
   --surface: #FFFFFF;
-  --bg-surface: #FFFFFF;
-  --bg-surface-raised: #F5F5F5;
-  --ink: #111111;
+  --bg-surface: var(--surface);
+  --bg-surface-raised: #ECE9D8;
+  --ink: #1C1917;
 
-  /* Tel-U Crimson Maroon (#9F1521) & Vibrant Red (#ED1C24) */
-  --primary: #9F1521;
-  --primary-hover: #8F131E;
-  --primary-dark: #A91117;
-  --primary-soft: #FEF2F2;
+  /* Velqora Signature Terracotta (#C2553A) "Warm Academic Library" */
+  --primary: #C2553A;
+  --primary-hover: #B84A2B;
+  --primary-dark: #853827;
+  --primary-soft: #F4E4DD;
   --primary-foreground: #FFFFFF;
 
-  --gray: #808285;
-  --gray-dark: #58595B;
-  --gray-soft: #F3F3F4;
-  --shadow: 0 2px 10px rgba(17, 17, 17, 0.05);
+  --gray: #7A756D;
+  --gray-dark: #4A463F;
+  --gray-soft: #ECE9D8;
+  --shadow: 2px 2px 0px rgba(122, 117, 109, 0.45);
 
-  /* Border Perak Bersih khas Tel-U */
-  --border-main: #E2E3E4;
-  --border-strong: #D0D6DD;
+  /* Pemetaan Dasar ke Token Sistem */
+  --border-main: #D6D3CB;
+  --border-strong: #7A756D;
 
-  /* Hierarki Tipografi Kontras Besar-Kecil khas Telkom University */
-  --text-primary: #111111;
-  --text-secondary: #58595B;
-  --text-subtle: #808285;
+  /* Velqora Warm Charcoal & Stone Typography - Kontras Tinggi & Jelas */
+  --text-primary: #1C1917;
+  --text-secondary: #2D2823;
+  --text-subtle: #44403C;
 
-  --ring: rgb(159 21 33 / 0.25);
-  --panel: #111111;
-  --panel-accent: #9F1521;
+  /* Aksen Utama */
+  --ring: rgb(194 85 58 / 0.4);
+  --panel: var(--ink);
+  --panel-accent: var(--primary);
 
-  --status-danger: #ED1C24;
+  /* Status Berkontras Jelas */
+  --status-danger: #EF4444;
   --status-danger-soft: #FEF2F2;
-  --status-danger-border: #9F1521;
+  --status-danger-border: #DC2626;
   --status-danger-foreground: #FFFFFF;
 
-  --radius-sm: 6px;
-  --radius-control: 10px;
-  --radius-container: 14px;
-  --radius-lg: 18px;
-  --shadow-sm: 0 1px 3px rgba(17, 17, 17, 0.04);
-  --shadow-md: 0 6px 20px rgba(17, 17, 17, 0.06);
+  /* Bentuk & Bayangan Tactile Beveled */
+  --radius-sm: 4px;
+  --radius-control: 6px;
+  --radius-container: 10px;
+  --radius-lg: 12px;
+  --shadow-sm: 1px 1px 0px var(--border-strong);
+  --shadow-md: var(--shadow);
 
-  --retro-bg: #F3F3F4;
+  /* Palet Retro Velqora OS */
+  --retro-bg: #FAF8F5;
   --retro-surface: #FFFFFF;
-  --retro-warm: #F5F5F5;
-  --retro-border: #E2E3E4;
-  --retro-dither: #F3F3F4;
+  --retro-warm: #ECE9D8;
+  --retro-border: #7A756D;
+  --retro-dither: #F4EFEB;
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* Layout Dimension Tokens */
-  --layout-sidebar-width: 16.25rem;
-  --layout-rail-width: 4.5rem;
-  --layout-right-panel-width: clamp(300px, 24vw, 350px);
-  --layout-header-height: 4rem;
+  /* Layout Dimension Tokens (Rem-based Responsive Scaling) */
+  --layout-sidebar-width: 16.5rem;
+  --layout-rail-width: 4.75rem;
+  --layout-right-panel-width: clamp(310px, 25vw, 360px);
+  --layout-header-height: 4.5rem;
   --layout-header-height-mobile: 3.5rem;
 
+  /* Safe Area Variables */
   --sat: env(safe-area-inset-top, 0px);
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
 }
 
+/* Kepadatan Vertikal Khusus Viewport Tinggi < 720px (Baseline ~650px) */
 @media (max-height: 719px) {
   .sidebar-compact-hide-logout {
     display: none !important;
@@ -172,19 +178,30 @@
 
 .dark {
   --bg-main: #111111;
-  --bg-surface: #18181B;
-  --bg-surface-raised: #27272A;
-  --border-main: #27272A;
-  --border-strong: #3F3F46;
+  --bg-surface: #111111;
+  --bg-surface-raised: #58595B;
+  --border-main: #FFFFFF;
+  --border-strong: #FFFFFF;
   --text-primary: #FFFFFF;
   --text-secondary: #E2E3E4;
   --text-subtle: #808285;
   --primary: #ED1C24;
-  --primary-hover: #9F1521;
-  --primary-soft: #27272A;
+  --primary-hover: #A91117;
+  --primary-soft: #58595B;
   --primary-foreground: #FFFFFF;
-  --ring: rgb(237 28 36 / 0.4);
+  --ring: rgb(237 28 36 / 0.5);
   --panel: #111111;
+
+  --retro-bg: #111111;
+  --retro-surface: #111111;
+  --retro-warm: #58595B;
+  --retro-border: #FFFFFF;
+  --retro-dither: #58595B;
+
+  --status-danger: #ED1C24;
+  --status-danger-soft: #58595B;
+  --status-danger-border: #FFFFFF;
+  --shadow-md: 3px 3px 0px #FFFFFF;
 }
 
 @layer base {
@@ -192,65 +209,92 @@
     border-color: var(--border-main);
   }
   html {
-    font-size: 15px !important;
+    font-size: 16px !important;
     font-family: var(--font-sans);
-    color: #111111;
+    color: #000000;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    scroll-behavior: smooth;
+  }
+  @media (min-width: 1024px) {
+    html {
+      font-size: 16px !important;
+    }
+  }
+  @media (min-width: 1536px) {
+    html {
+      font-size: 16px !important;
+    }
+  }
+  @media (min-width: 1920px) {
+    html {
+      font-size: 16px !important;
+    }
   }
 
   body {
     font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    font-kerning: normal;
+    font-synthesis: none;
+    letter-spacing: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     background-color: var(--bg-main);
-    color: #58595B;
-    font-size: 0.9375rem;
-    line-height: 1.6;
+    color: #1C1917;
+    font-size: 1rem;
+    line-height: 1.5;
     min-height: 100dvh;
     overflow-x: hidden;
-    font-weight: 400;
+    font-weight: 700;
   }
-
-  /* Kontras Tipografi Besar-Kecil ala Telkom University */
   h1 {
-    font-family: var(--font-heading);
+    font-family: var(--font-sans);
     font-weight: 800;
-    letter-spacing: -0.025em;
-    color: #111111;
-    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: #000000;
     text-wrap: balance;
   }
   h2 {
-    font-family: var(--font-heading);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: #111111;
-    line-height: 1.28;
-    text-wrap: balance;
-  }
-  h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-    font-weight: 700;
+    font-family: var(--font-sans);
+    font-weight: 800;
     letter-spacing: -0.01em;
-    color: #111111;
-    line-height: 1.35;
+    color: #000000;
     text-wrap: balance;
   }
-
+  h3 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: normal;
+    color: #000000;
+    text-wrap: balance;
+  }
+  h4, h5, h6 {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    letter-spacing: normal;
+    color: #000000;
+    text-wrap: balance;
+  }
   p {
-    font-weight: 400;
-    color: #58595B;
+    font-weight: 600;
+    color: #1C1917;
   }
-
+  .uppercase, [class*="uppercase"] {
+    letter-spacing: 0.04em;
+  }
   code, pre, kbd, samp {
-    font-family: var(--font-mono);
+    font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-weight: 500;
   }
-
   input, textarea, select, button {
     font-family: inherit;
+    font-optical-sizing: inherit;
+    font-kerning: inherit;
+    font-synthesis: inherit;
+    letter-spacing: inherit;
   }
-
   .tabular-nums,
   [data-tabular-nums],
   table td,
@@ -259,58 +303,9 @@
   }
 }
 
-/* Otomatis Pemetaan Warna Legacy Terracotta ke Telkom University Crimson & Neutral */
-.bg-\[\#FAF8F5\],
-.bg-\[\#ECE9D8\],
-.bg-\[\#F2EFE8\] {
-  background-color: #F3F3F4 !important;
-}
-.bg-\[\#C2553A\],
-.bg-\[\#853827\],
-.bg-\[\#A34530\] {
-  background-color: #9F1521 !important;
-}
-.hover\:bg-\[\#C2553A\]:hover,
-.hover\:bg-\[\#853827\]:hover,
-.hover\:bg-\[\#A34530\]:hover {
-  background-color: #8F131E !important;
-}
-.text-\[\#C2553A\],
-.text-\[\#853827\] {
-  color: #9F1521 !important;
-}
-.hover\:text-\[\#C2553A\]:hover {
-  color: #9F1521 !important;
-}
-.border-\[\#D6D3CB\],
-.border-\[\#E8E5DE\],
-.border-\[\#7A756D\] {
-  border-color: #E2E3E4 !important;
-}
-.divide-\[\#E8E5DE\] > :not([hidden]) ~ :not([hidden]),
-.divide-\[\#D6D3CB\] > :not([hidden]) ~ :not([hidden]) {
-  border-color: #E2E3E4 !important;
-}
-.text-\[\#1C1917\] {
-  color: #111111 !important;
-}
-.text-\[\#57534E\],
-.text-\[\#44403C\] {
-  color: #58595B !important;
-}
-.text-\[\#6B6560\],
-.text-\[\#78716C\],
-.text-\[\#7A756D\] {
-  color: #808285 !important;
-}
-.bg-\[\#1C1917\] {
-  background-color: #111111 !important;
-}
-
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #D0D6DD; border-radius: 9999px; }
-::-webkit-scrollbar-thumb:hover { background: #808285; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 8px; }
 
 /* ---------- Gerak ---------- */
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
@@ -324,25 +319,56 @@
 @keyframes shake { 0%, 100% { transform: none; } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 @keyframes sweep { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
 
+/* ---------- 3D Perspective Logo UIR Animation ---------- */
 @keyframes uir-perspective-float {
-  0% { transform: translateY(0px) rotateY(-22deg) rotateX(10deg) rotateZ(-2deg) scale(1); }
-  25% { transform: translateY(-8px) rotateY(-8deg) rotateX(4deg) rotateZ(0deg) scale(1.03); }
-  50% { transform: translateY(-16px) rotateY(22deg) rotateX(-9deg) rotateZ(3deg) scale(1.06); }
-  75% { transform: translateY(-8px) rotateY(8deg) rotateX(-2deg) rotateZ(1deg) scale(1.03); }
-  100% { transform: translateY(0px) rotateY(-22deg) rotateX(10deg) rotateZ(-2deg) scale(1); }
+  0% {
+    transform: translateY(0px) rotateY(-22deg) rotateX(10deg) rotateZ(-2deg) scale(1);
+  }
+  25% {
+    transform: translateY(-8px) rotateY(-8deg) rotateX(4deg) rotateZ(0deg) scale(1.03);
+  }
+  50% {
+    transform: translateY(-16px) rotateY(22deg) rotateX(-9deg) rotateZ(3deg) scale(1.06);
+  }
+  75% {
+    transform: translateY(-8px) rotateY(8deg) rotateX(-2deg) rotateZ(1deg) scale(1.03);
+  }
+  100% {
+    transform: translateY(0px) rotateY(-22deg) rotateX(10deg) rotateZ(-2deg) scale(1);
+  }
 }
 
 @keyframes uir-perspective-shadow {
-  0% { transform: scale(1) translateX(-5px); opacity: 0.5; }
-  50% { transform: scale(0.65) translateX(7px); opacity: 0.2; }
-  100% { transform: scale(1) translateX(-5px); opacity: 0.5; }
+  0% {
+    transform: scale(1) translateX(-5px);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(0.65) translateX(7px);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(1) translateX(-5px);
+    opacity: 0.5;
+  }
 }
 
 @keyframes uir-shine {
-  0% { transform: translateX(-160%) skewX(-25deg); opacity: 0; }
-  20% { opacity: 0.85; }
-  40% { transform: translateX(180%) skewX(-25deg); opacity: 0; }
-  100% { transform: translateX(180%) skewX(-25deg); opacity: 0; }
+  0% {
+    transform: translateX(-160%) skewX(-25deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.85;
+  }
+  40% {
+    transform: translateX(180%) skewX(-25deg);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(180%) skewX(-25deg);
+    opacity: 0;
+  }
 }
 
 .animate-uir-perspective {
@@ -359,12 +385,14 @@
 }
 
 @layer components {
+  /* Urutan tampil (login): tunda lewat --d */
   .seq { animation: rise 0.6s var(--ease) var(--d, 0ms) backwards; }
   .mask-line { display: block; overflow: hidden; }
   .mask-line > span { display: block; animation: mask-up 0.85s var(--ease) var(--d, 0ms) backwards; }
   .tl-line { transform-origin: top; animation: draw 0.9s cubic-bezier(0.4, 0, 0.6, 1) 0.65s both; }
   .tl-dot { border: 1px solid rgb(255 255 255 / 0.5); animation: dot-on 0.45s var(--ease) var(--d, 0ms) both; }
 
+  /* Pindah halaman: isi utama muncul berurutan, sekali per navigasi */
   .page-enter > * { animation: rise 0.34s var(--ease) backwards; }
   .page-enter > :nth-child(2) { animation-delay: 45ms; }
   .page-enter > :nth-child(3) { animation-delay: 90ms; }
@@ -375,25 +403,35 @@
   .animation-delay-200 { animation-delay: 200ms; }
   .animation-delay-300 { animation-delay: 300ms; }
 
+  /* Menu aktif: penanda tumbuh saat halaman berpindah */
   .nav-active::before { transform-origin: top; animation: bar-in 0.3s var(--ease) both; }
+
   .shake { animation: shake 0.32s ease-in-out; }
 
-  /* Form fields & Pill CTA buttons ala Telkom University */
+  details[open] .demo-list > li { animation: rise 0.28s var(--ease) backwards; }
+  details[open] .demo-list > li:nth-child(2) { animation-delay: 30ms; }
+  details[open] .demo-list > li:nth-child(3) { animation-delay: 60ms; }
+  details[open] .demo-list > li:nth-child(4) { animation-delay: 90ms; }
+  details[open] .demo-list > li:nth-child(5) { animation-delay: 120ms; }
+  details[open] .demo-list > li:nth-child(6) { animation-delay: 150ms; }
+
+  /* Form fields and buttons Retro Classic Mac */
   .field {
     width: 100%;
     min-height: 2.5rem;
     height: 2.5rem;
     padding: 0 0.875rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #111111;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #000000;
     background: #FFFFFF;
-    border: 1px solid #D0D6DD;
-    border-radius: 0.625rem;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    border: 2px solid #000000;
+    border-radius: 2px;
+    box-shadow: 3px 3px 0px 0px #000000;
+    transition: border-color 0.15s, box-shadow 0.2s;
   }
-  .field::placeholder { color: #808285; font-size: 0.8125rem; font-weight: 400; }
-  .field:focus-visible { outline: none; border-color: #9F1521; box-shadow: 0 0 0 3px rgba(159, 21, 33, 0.12); }
+  .field::placeholder { color: #58595B; font-size: 0.875rem; font-weight: 500; }
+  .field:focus-visible { outline: none; border-color: #000000; box-shadow: 4px 4px 0px 0px #000000; }
   .field:disabled { opacity: 0.6; cursor: not-allowed; }
 
   @media (max-width: 767px) {
@@ -401,31 +439,67 @@
     select,
     textarea,
     .field {
-      font-size: 16px !important;
+      font-size: 16px !important; /* Mencegah auto-zoom iOS Safari */
+      box-shadow: 2px 2px 0px 0px #000000;
     }
   }
 
+  /* Perlindungan Ukuran Teks Minimum (Kriteria Lulus: Tidak ada teks di bawah 12px) */
+  .text-2xs {
+    font-size: max(0.8125rem, 13px);
+  }
+  .text-xs {
+    font-size: max(0.875rem, 14px);
+  }
+
+  @media (pointer: coarse) {
+    .field {
+      min-height: 2.75rem;
+      height: 2.75rem;
+    }
+  }
+  
   .btn-solid {
     position: relative;
     overflow: hidden;
     width: 100%;
     min-height: 2.5rem;
     height: 2.5rem;
-    padding: 0 1.25rem;
+    padding: 0 1rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.8125rem;
+    font-size: 0.9375rem;
     font-weight: 700;
-    color: #FFFFFF;
-    background: #9F1521;
-    border: 1px solid #9F1521;
-    border-radius: 9999px;
-    transition: background-color 0.15s, color 0.15s;
+    color: #000000;
+    background: #FFFFFF;
+    border: 2px solid #000000;
+    border-radius: 2px;
+    box-shadow: 3px 3px 0px 0px #000000;
+    transition: transform 0.1s, box-shadow 0.1s, background-color 0.15s, color 0.15s;
     cursor: pointer;
   }
-  .btn-solid:hover:not(:disabled) { background: #8F131E; border-color: #8F131E; color: #FFFFFF; }
+  .btn-solid:hover:not(:disabled) { background: #000000; color: #FFFFFF; }
+  .btn-solid:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 1px 1px 0px 0px #000000; }
+  .btn-solid:focus-visible { outline: 2px solid #000000; outline-offset: 2px; }
   .btn-solid:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-solid[data-pending="true"]::after {
+    content: ""; position: absolute; left: 0; bottom: 0; height: 3px; width: 100%;
+    background: #000000; animation: sweep 1s var(--ease) infinite;
+  }
+
+  @media (max-width: 767px) {
+    .btn-solid {
+      box-shadow: 2px 2px 0px 0px #000000;
+    }
+  }
+
+  @media (pointer: coarse) {
+    .btn-solid {
+      min-height: 2.75rem;
+      height: 2.75rem;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -438,84 +512,65 @@
   }
 }
 
-.portal-enter > * > * { animation: rise 0.35s var(--ease) backwards; }
-.portal-enter > * > :nth-child(2) { animation-delay: 50ms; }
-.portal-enter > * > :nth-child(3) { animation-delay: 100ms; }
-.portal-enter > * > :nth-child(n + 4) { animation-delay: 150ms; }
+/* Halaman portal: blok di dalam halaman naik berurutan saat berpindah menu */
+.portal-enter > * > * { animation: rise 0.4s var(--ease) backwards; }
+.portal-enter > * > :nth-child(2) { animation-delay: 60ms; }
+.portal-enter > * > :nth-child(3) { animation-delay: 120ms; }
+.portal-enter > * > :nth-child(n + 4) { animation-delay: 180ms; }
 
+/* Baris perangkat yang dicabut menutup sebelum daftar dimuat ulang */
 @keyframes collapse-out {
   to { opacity: 0; max-height: 0; padding-top: 0; padding-bottom: 0; margin-top: 0; border-width: 0; transform: translateX(10px); }
 }
 .row-leave { overflow: hidden; max-height: 8rem; animation: collapse-out 0.34s var(--ease) forwards; }
 
+/* Isi materi membuka halus saat <details> dibuka */
 details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
 
-/* Softened Utility Classes (Telkom University Corporate Clean) */
+/* Retro Aesthetics dengan Token --ink */
 .border-retro {
-  border: 1px solid #E2E3E4;
+  border: 2px solid var(--ink, #000000);
 }
 .border-retro-sm {
-  border: 1px solid #E2E3E4;
+  border: 1.5px solid var(--ink, #000000);
 }
-.shadow-retro,
-.shadow-retro-sm,
-.shadow-retro-md,
-.shadow-retro-lg,
+.shadow-retro {
+  box-shadow: 4px 4px 0px var(--ink, #000000);
+}
+.shadow-retro-md {
+  box-shadow: 5px 5px 0px var(--ink, #000000);
+}
+.shadow-retro-lg {
+  box-shadow: 7px 7px 0px var(--ink, #000000);
+}
 .shadow-retro-window {
-  box-shadow: 0 2px 8px rgba(17, 17, 17, 0.05);
+  box-shadow: 6px 6px 0px var(--ink, #000000);
 }
-.retro-window,
-.vt-window {
-  background: #FFFFFF;
-  border: 1px solid #E2E3E4;
-  border-radius: 14px;
-  box-shadow: 0 2px 10px rgba(17, 17, 17, 0.04);
+.retro-window {
+  background: var(--surface, #FFFFFF);
+  border: 2px solid var(--ink, #000000);
+  box-shadow: 6px 6px 0px var(--ink, #000000);
+  border-radius: 2px;
   overflow: hidden;
 }
-.retro-window-header,
-.vt-titlebar {
-  background: #FFFFFF;
-  color: #111111;
-  border-bottom: 1px solid #E2E3E4;
+.retro-window-header {
+  background: var(--retro-warm);
+  border-bottom: 2px solid var(--ink, #000000);
   padding: 12px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.vt-window-inset {
-  border: 1px solid #E2E3E4;
-  border-radius: 10px;
-  background-color: #FFFFFF;
+/* Halftone Dither Pattern */
+.bg-retro-dither {
+  background-color: #E2E3E4;
+  background-image: radial-gradient(#000000 1.15px, transparent 1.15px);
+  background-size: 4px 4px;
 }
-.vt-btn-terracotta {
-  background: #9F1521;
-  color: #FFFFFF;
-  font-weight: 700;
-  border: 1px solid #9F1521;
-  border-radius: 9999px;
-  transition: all 0.15s ease;
-  cursor: pointer;
-}
-.vt-btn-terracotta:hover {
-  background: #8F131E;
-}
-.vt-btn-chrome {
-  background: #FFFFFF;
-  color: #111111;
-  font-weight: 600;
-  border: 1px solid #D0D6DD;
-  border-radius: 9999px;
-  transition: all 0.15s ease;
-  cursor: pointer;
-}
-.vt-btn-chrome:hover {
-  background: #F3F3F4;
-  border-color: #9F1521;
-  color: #9F1521;
-}
-.vt-taskbar {
-  background: #FFFFFF;
-  border-top: 1px solid #E2E3E4;
+.bg-retro-grid {
+  background-size: 20px 20px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
 }
 
 /* ========================================================= */
@@ -539,7 +594,7 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
     align-items: center;
     justify-content: flex-start;
     padding: 0.25rem 0.25rem;
-    border-right: 1px solid #E2E3E4;
+    border-right: 1px solid rgba(17, 17, 17, 0.1);
     min-width: 0;
   }
   .stats-responsive-item:last-child {
@@ -565,7 +620,7 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
     align-items: center;
     justify-content: space-between;
     padding-bottom: 0.625rem;
-    border-bottom: 1px solid #E2E3E4;
+    border-bottom: 1px solid rgba(17, 17, 17, 0.1);
     border-right: none;
     text-align: left;
     width: 100%;
@@ -582,6 +637,10 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
   }
 }
 
+/* ========================================================= */
+/* TOMBOL AI MENGAMBANG: IKON SAJA PADA TINGGI < 700PX ATAU  */
+/* LEBAR < 1280PX                                            */
+/* ========================================================= */
 @media (max-width: 1279px), (max-height: 699px) {
   .ai-assistant-btn-text {
     display: none !important;
@@ -594,6 +653,15 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
   }
 }
 
+/* ========================================================= */
+/* SCROLL REVEAL & SCROLL ANIMATION SUITE                    */
+/* ========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Base fade-up scroll reveal: Selalu opacity 1 secara default agar tidak terjadi blank putih / hilang */
 .reveal-on-scroll,
 .reveal-scale,
 .reveal-slide-left,
@@ -603,16 +671,42 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
   transition: opacity 0.4s ease-out, transform 0.4s ease-out;
 }
 
+.reveal-on-scroll.is-visible,
+.reveal-scale.is-visible,
+.reveal-slide-left.is-visible,
+.reveal-slide-right.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger delay bertahap untuk kumpulan kartu anak */
+.reveal-stagger > *:nth-child(1) { transition-delay: 40ms; }
+.reveal-stagger > *:nth-child(2) { transition-delay: 90ms; }
+.reveal-stagger > *:nth-child(3) { transition-delay: 140ms; }
+.reveal-stagger > *:nth-child(4) { transition-delay: 190ms; }
+.reveal-stagger > *:nth-child(5) { transition-delay: 240ms; }
+.reveal-stagger > *:nth-child(6) { transition-delay: 290ms; }
+.reveal-stagger > *:nth-child(n+7) { transition-delay: 340ms; }
+
+/* Delay utilitas khusus */
+.reveal-delay-100 { transition-delay: 100ms !important; }
+.reveal-delay-200 { transition-delay: 200ms !important; }
+.reveal-delay-300 { transition-delay: 300ms !important; }
+.reveal-delay-400 { transition-delay: 400ms !important; }
+
+/* Indikator Progres Scroll di atas */
 .scroll-progress-bar {
   position: fixed;
   top: 0;
   left: 0;
-  height: 3px;
-  background: #9F1521;
+  height: 3.5px;
+  background: var(--primary);
   z-index: 9999;
   transition: width 0.12s ease-out;
+  box-shadow: 0 1px 0 var(--ink);
 }
 
+/* Tombol Melayang Kembali ke Atas */
 .scroll-to-top-btn {
   position: fixed;
   bottom: 1.5rem;
@@ -621,49 +715,729 @@ details[open] > .reveal { animation: rise 0.3s var(--ease) backwards; }
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* Aksesibilitas: Matikan transisi jika pengguna meminta reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal-on-scroll,
+  .reveal-scale,
+  .reveal-slide-left,
+  .reveal-slide-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+/* ======================================================== */
+/* TIPOGRAFI SF PRO TEBAL & JELAS UNTUK SEMUA MENU          */
+/* ======================================================== */
+nav,
+[role="navigation"],
+[role="tablist"],
+[role="tab"],
+.nav-link,
+.menu-item,
+header,
+.portal-header,
+.portal-sidebar,
+.sidebar-compact-user-card {
+  font-family: var(--font-sf-pro), 'SF Pro Display', 'SF Pro Text', 'SF Pro', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Navigasi menu link, button, dan tabs: Tebal dan Berani */
+nav a,
+nav button,
+nav [role="button"],
+[role="tab"],
+.portal-sidebar a,
+.portal-sidebar button,
+.portal-header button {
+  font-weight: 700 !important;
+  letter-spacing: normal;
+}
+
+/* Judul grup menu (uppercase tebal & berani) */
+nav p,
+.portal-sidebar p {
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #000000 !important;
+}
+
+/* ======================================================== */
+/* ATURAN TEGAS: TULISAN TIDAK BOLEH BERWARNA MERAH         */
+/* SELURUH TULISAN/TEKS HARUS HITAM SEMUA                   */
+/* ======================================================== */
+
+/* Override tegas: seluruh class text-red, text-rose, text-danger, text-primary pada teks wajib HITAM */
+.text-primary,
+.text-primary-dark,
+.text-danger,
+.text-red-50,
+.text-red-100,
+.text-red-200,
+.text-red-300,
+.text-red-400,
+.text-red-500,
+.text-red-600,
+.text-red-700,
+.text-red-800,
+.text-red-900,
+.text-red-950,
+.text-rose-50,
+.text-rose-100,
+.text-rose-200,
+.text-rose-300,
+.text-rose-400,
+.text-rose-500,
+.text-rose-600,
+.text-rose-700,
+.text-rose-800,
+.text-rose-900,
+.text-rose-950 {
+  color: #111111 !important;
+}
+
+/* Hover state pada teks merah wajib tetap hitam/underline */
+.hover\:text-primary:hover,
+.hover\:text-primary-dark:hover,
+.hover\:text-red-600:hover,
+.hover\:text-red-700:hover,
+.hover\:text-rose-600:hover,
+.hover\:text-rose-700:hover,
+.group-hover\:text-primary:hover,
+.group-hover\:text-primary-dark:hover,
+.group:hover .group-hover\:text-primary,
+.group:hover .group-hover\:text-primary-dark {
+  color: #111111 !important;
+}
+
+/* ======================================================== */
+/* ATURAN TEGAS: SELURUH TULISAN WAJIB GELAP, TEBAL & JELAS */
+/* TERAPKAN KE SELURUH MENU DAN HALAMAN                     */
+/* ======================================================== */
+
+/* 1. Gelapkan seluruh kelas warna teks sekunder, abu-abu, pudar, dan muted menjadi hitam pekat */
+.text-gray-dark,
+.text-gray,
+.text-muted-foreground,
+.text-subtle,
+.text-text-secondary,
+.text-text-subtle,
+.text-black\/40,
+.text-black\/50,
+.text-black\/60,
+.text-black\/70,
+.text-black\/80,
+.text-black\/90,
+.text-gray-400,
+.text-gray-500,
+.text-gray-600,
+.text-gray-700,
+.text-gray-800,
+.text-gray-900,
+.text-slate-400,
+.text-slate-500,
+.text-slate-600,
+.text-slate-700,
+.text-slate-800,
+.text-slate-900,
+.text-zinc-400,
+.text-zinc-500,
+.text-zinc-600,
+.text-zinc-700,
+.text-zinc-800,
+.text-zinc-900,
+.text-neutral-400,
+.text-neutral-500,
+.text-neutral-600,
+.text-neutral-700,
+.text-neutral-800,
+.text-neutral-900 {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+/* 2. Seluruh tipografi body, paragraf, deskripsi, dan elemen teks wajib gelap dan jelas */
+body,
+main,
+section,
+article,
+p,
+span:not(.text-white):not([class*="text-white"]):not(.text-primary-foreground),
+label,
+td,
+th,
+li,
+input,
+select,
+textarea {
+  color: #000000;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 3. Pertebal bobot font untuk semua teks agar tidak ada tulisan tipis atau pudar */
+.font-normal {
+  font-weight: 500 !important;
+}
+
+.font-medium {
+  font-weight: 600 !important;
+}
+
+.font-semibold {
+  font-weight: 600 !important;
+}
+
+.font-bold,
+.font-extrabold,
+.font-black,
+.font-heading {
+  font-weight: 700 !important;
+}
+
+/* Paragraph dan deskripsi teks dibuat lebih tebal dan jelas */
+p,
+.text-xs,
+.text-sm {
+  font-weight: 500;
+  color: #000000;
+  letter-spacing: normal;
+}
+
+/* Judul dan header selalu hitam pekat & extra bold */
+h1, h2, h3, h4, h5, h6 {
+  color: #000000 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.01em;
+}
+
+/* Placeholder input yang terbaca jelas */
+input::placeholder,
+textarea::placeholder,
+::placeholder {
+  color: #58595B !important;
+  font-weight: 600;
+  opacity: 1 !important;
+}
+
+/* 4. Pertahankan teks putih pada elemen latar belakang gelap seperti tombol & badge aktif */
+.text-white,
+.text-white *,
+.text-slate-100,
+.text-neutral-100,
+.text-primary-foreground,
+.bg-black .text-white,
+.bg-ink .text-white,
+.bg-primary .text-white,
+.btn-solid,
+.btn-solid *,
+[class*="text-white"],
+[class*="text-primary-foreground"] {
+  color: #ffffff !important;
+}
+
+/* ======================================================== */
+/* ATURAN TEGAS: SELEKSI / BLOK TEKS SAAT USER MAU NYALIN   */
+/* Latar seleksi hitam dengan teks putih terang & kontras   */
+/* ======================================================== */
 ::selection,
 *::selection {
-  background-color: #9F1521;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+::-moz-selection,
+*::-moz-selection {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* ======================================================== */
+/* ANIMASI LANGIT DINAMIS & JAM (SKY CLOCK WIDGET)          */
+/* ======================================================== */
+@keyframes sky-celestial-float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.02);
+  }
+}
+
+@keyframes sky-mist-drift {
+  0% {
+    transform: translateX(-35%);
+  }
+  50% {
+    transform: translateX(15%);
+  }
+  100% {
+    transform: translateX(-35%);
+  }
+}
+
+@keyframes sky-cloud-drift-soft {
+  0% {
+    transform: translateX(-160%);
+  }
+  100% {
+    transform: translateX(360%);
+  }
+}
+
+@keyframes sky-star-scintillate {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes sky-shooting-star {
+  0% {
+    transform: translateX(0) translateY(0) scale(0);
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  12% {
+    transform: translateX(-150px) translateY(110px) scale(0.3);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-150px) translateY(110px) scale(0);
+    opacity: 0;
+  }
+}
+
+.animate-sky-celestial-float {
+  animation: sky-celestial-float 6s ease-in-out infinite;
+}
+
+.animate-sky-mist-slow {
+  animation: sky-mist-drift 32s ease-in-out infinite;
+}
+
+.animate-sky-cloud-drift-1 {
+  animation: sky-cloud-drift-soft 34s linear infinite;
+}
+
+.animate-sky-cloud-drift-2 {
+  animation: sky-cloud-drift-soft 46s linear infinite;
+}
+
+.animate-sky-star-twinkle {
+  animation: sky-star-scintillate 2.8s ease-in-out infinite;
+}
+
+.animate-sky-shooting-star {
+  animation: sky-shooting-star 11s ease-in infinite;
+}
+
+@keyframes sky-bird-soar {
+  0% {
+    transform: translateX(-60px) translateY(0px);
+  }
+  30% {
+    transform: translateX(110px) translateY(-10px);
+  }
+  60% {
+    transform: translateX(250px) translateY(6px);
+  }
+  100% {
+    transform: translateX(460px) translateY(-4px);
+  }
+}
+
+@keyframes sky-sunbeam-pulse {
+  0%, 100% {
+    opacity: 0.12;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 0.28;
+    transform: scaleY(1.05);
+  }
+}
+
+.animate-sky-bird-1 {
+  animation: sky-bird-soar 20s linear infinite;
+}
+
+.animate-sky-bird-2 {
+  animation: sky-bird-soar 26s linear infinite;
+  animation-delay: -8s;
+}
+
+.animate-sky-sunbeam {
+  animation: sky-sunbeam-pulse 7s ease-in-out infinite;
+}
+
+@keyframes sky-aurora-wave {
+  0%, 100% {
+    transform: translateY(0px) scaleY(1) rotate(-10deg);
+    opacity: 0.25;
+  }
+  50% {
+    transform: translateY(-8px) scaleY(1.2) rotate(-5deg);
+    opacity: 0.55;
+  }
+}
+
+.animate-sky-aurora {
+  animation: sky-aurora-wave 12s ease-in-out infinite;
+}
+
+@keyframes sky-particle-drift {
+  0% {
+    transform: translateY(20px) translateX(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.75;
+  }
+  75% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-70px) translateX(30px);
+    opacity: 0;
+  }
+}
+
+.animate-sky-particle-1 {
+  animation: sky-particle-drift 8s ease-in-out infinite;
+}
+
+.animate-sky-particle-2 {
+  animation: sky-particle-drift 11s ease-in-out infinite 2.5s;
+}
+
+.animate-sky-particle-3 {
+  animation: sky-particle-drift 9.5s ease-in-out infinite 5s;
+}
+
+.animate-sky-particle-4 {
+  animation: sky-particle-drift 13s ease-in-out infinite 1.2s;
+}
+
+@keyframes sky-beacon-pulse {
+  0%, 75%, 100% {
+    opacity: 0.25;
+    transform: scale(0.9);
+  }
+  85% {
+    opacity: 1;
+    transform: scale(1.35);
+    box-shadow: 0 0 8px #ED1C24;
+  }
+}
+
+.animate-sky-beacon {
+  animation: sky-beacon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes sky-lens-flare-pulse {
+  0%, 100% {
+    opacity: 0.35;
+    transform: scale(0.96) rotate(0deg);
+  }
+  50% {
+    opacity: 0.65;
+    transform: scale(1.06) rotate(20deg);
+  }
+}
+
+.animate-sky-lens-flare {
+  animation: sky-lens-flare-pulse 9s ease-in-out infinite;
+}
+
+.animate-sky-bird-3 {
+  animation: sky-bird-soar 22s linear infinite;
+  animation-delay: -4s;
+}
+
+@keyframes retro-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-retro-float {
+  animation: retro-float 5s ease-in-out infinite;
+}
+
+@keyframes retro-glow {
+  0%, 100% {
+    box-shadow: 3px 3px 0px #000000;
+  }
+  50% {
+    box-shadow: 5px 5px 0px #000000;
+  }
+}
+
+.animate-retro-glow {
+  animation: retro-glow 3s ease-in-out infinite;
+}
+
+
+
+
+
+
+
+
+
+
+/* Animasi Mengambang & Bergoyang Logo Aplikasi (Login Page) */
+@keyframes float-dance-1 {
+  0%, 100% { transform: translateY(0px) rotate(-6deg); }
+  50% { transform: translateY(-26px) rotate(4deg); }
+}
+
+@keyframes float-dance-2 {
+  0%, 100% { transform: translateY(0px) rotate(6deg); }
+  50% { transform: translateY(-28px) rotate(-5deg); }
+}
+
+@keyframes float-dance-3 {
+  0%, 100% { transform: translateY(-14px) rotate(-8deg); }
+  50% { transform: translateY(16px) rotate(6deg); }
+}
+
+@keyframes float-dance-4 {
+  0%, 100% { transform: translateY(8px) rotate(5deg); }
+  50% { transform: translateY(-22px) rotate(-7deg); }
+}
+
+@keyframes float-dance-5 {
+  0%, 100% { transform: translateY(-18px) rotate(7deg); }
+  50% { transform: translateY(10px) rotate(-5deg); }
+}
+
+/* ======================================================== */
+/* VELQORA ACADEMIC LEARNING OS & COMPUTATIONAL NOTEBOOK    */
+/* ======================================================== */
+
+.vt-scanlines {
+  background: linear-gradient(
+    rgba(28, 25, 23, 0) 50%, 
+    rgba(28, 25, 23, 0.03) 50%
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+.vt-desktop-bg {
+  background-color: #FAF8F5;
+  background-image: 
+    radial-gradient(ellipse at 50% 10%, rgba(194, 85, 58, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+    linear-gradient(rgba(194, 85, 58, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(194, 85, 58, 0.07) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 28px 28px, 28px 28px;
+}
+
+.bg-tech-grid-light {
+  background-size: 28px 28px;
+  background-image: 
+    linear-gradient(to right, rgba(194, 85, 58, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(194, 85, 58, 0.07) 1px, transparent 1px);
+}
+
+.radial-mask-vignette {
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 60%, transparent 100%);
+}
+
+/* Retro Window Framing (Warm Classic Ivory & Bevel) */
+.vt-window {
+  background-color: #ECE9D8;
+  border-top: 2px solid #FFFFFF;
+  border-left: 2px solid #FFFFFF;
+  border-right: 2px solid #7A756D;
+  border-bottom: 2px solid #7A756D;
+  box-shadow: 2px 6px 20px rgba(28, 25, 23, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.dark .vt-window,
+html.dark .vt-window {
+  background-color: #18181B;
+  border-top: 2px solid #3F3F46;
+  border-left: 2px solid #3F3F46;
+  border-right: 2px solid #09090B;
+  border-bottom: 2px solid #09090B;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.vt-window-inset {
+  border-top: 2px solid #7A756D;
+  border-left: 2px solid #7A756D;
+  border-right: 2px solid #FFFFFF;
+  border-bottom: 2px solid #FFFFFF;
+  background-color: #FFFFFF;
+}
+
+.dark .vt-window-inset,
+html.dark .vt-window-inset {
+  border-top: 2px solid #09090B;
+  border-left: 2px solid #09090B;
+  border-right: 2px solid #3F3F46;
+  border-bottom: 2px solid #3F3F46;
+  background-color: #121214;
+}
+
+/* Window Titlebar (Signature Velqora Terracotta Gradient) */
+.vt-titlebar {
+  background: linear-gradient(90deg, #C2553A 0%, #B84A2B 60%, #853827 100%);
   color: #FFFFFF;
 }
 
-@keyframes sky-celestial-float {
-  0%, 100% { transform: translateY(0px) scale(1); }
-  50% { transform: translateY(-6px) scale(1.02); }
+.dark .vt-titlebar,
+html.dark .vt-titlebar {
+  background: linear-gradient(90deg, #A34530 0%, #853827 60%, #6B2D20 100%);
+  color: #FFFFFF;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
 }
-@keyframes sky-mist-drift {
-  0%, 100% { transform: translateX(-35%); }
-  50% { transform: translateX(15%); }
-}
-@keyframes sky-cloud-drift-soft {
-  0% { transform: translateX(-160%); }
-  100% { transform: translateX(360%); }
-}
-@keyframes sky-star-scintillate {
-  0%, 100% { opacity: 0.25; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.3); }
-}
-@keyframes sky-shooting-star {
-  0%, 100% { transform: translateX(0) translateY(0) scale(0); opacity: 0; }
-  3% { opacity: 1; transform: scale(1); }
-  12% { transform: translateX(-150px) translateY(110px) scale(0.3); opacity: 0; }
-}
-.animate-sky-celestial-float { animation: sky-celestial-float 6s ease-in-out infinite; }
-.animate-sky-mist-slow { animation: sky-mist-drift 32s ease-in-out infinite; }
-.animate-sky-cloud-drift-1 { animation: sky-cloud-drift-soft 34s linear infinite; }
-.animate-sky-cloud-drift-2 { animation: sky-cloud-drift-soft 46s linear infinite; }
-.animate-sky-star-twinkle { animation: sky-star-scintillate 2.8s ease-in-out infinite; }
-.animate-sky-shooting-star { animation: sky-shooting-star 11s ease-in infinite; }
 
+.vt-titlebar-inactive {
+  background: linear-gradient(90deg, #9C968D 0%, #7A756D 100%);
+  color: #F4EFEB;
+}
+
+/* Control Buttons (Minimize, Maximize, Close) */
+.vt-window-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 800;
+  background-color: #ECE9D8;
+  color: #1C1917;
+  border-top: 1px solid #FFFFFF;
+  border-left: 1px solid #FFFFFF;
+  border-right: 1px solid #4A463F;
+  border-bottom: 1px solid #4A463F;
+  transition: all 0.1s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.vt-window-btn:hover {
+  background-color: #F5EFEB;
+  color: #000000;
+}
+
+.vt-window-btn:active {
+  border-top: 1px solid #4A463F;
+  border-left: 1px solid #4A463F;
+  border-right: 1px solid #FFFFFF;
+  border-bottom: 1px solid #FFFFFF;
+}
+
+.vt-window-btn-close:hover {
+  background-color: #EF4444 !important;
+  color: #FFFFFF !important;
+  border-color: #DC2626 !important;
+}
+
+/* Velqora Terracotta Primary Button */
+.vt-btn-terracotta {
+  background: #C2553A;
+  color: #FFFFFF;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-top: 2px solid #EE7257;
+  border-left: 2px solid #EE7257;
+  border-right: 2px solid #6B2D20;
+  border-bottom: 2px solid #6B2D20;
+  box-shadow: 0 2px 10px rgba(194, 85, 58, 0.35);
+  transition: all 0.12s ease;
+  cursor: pointer;
+}
+
+.vt-btn-terracotta:hover {
+  background: #B84A2B;
+  box-shadow: 0 4px 16px rgba(194, 85, 58, 0.5);
+  transform: translateY(-1px);
+}
+
+.vt-btn-terracotta:active {
+  border-top: 2px solid #6B2D20;
+  border-left: 2px solid #6B2D20;
+  border-right: 2px solid #EE7257;
+  border-bottom: 2px solid #EE7257;
+  transform: translateY(1px);
+}
+
+/* Warm Paper / Chrome Bevel Button */
+.vt-btn-chrome {
+  background: #FFFFFF;
+  color: #1C1917;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  border-top: 2px solid #FFFFFF;
+  border-left: 2px solid #FFFFFF;
+  border-right: 2px solid #8A857D;
+  border-bottom: 2px solid #8A857D;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.12s ease;
+  cursor: pointer;
+}
+
+.vt-btn-chrome:hover {
+  background: #F4EFEB;
+  color: #C2553A;
+  border-color: #B54F2F;
+}
+
+.vt-btn-chrome:active {
+  border-top: 2px solid #8A857D;
+  border-left: 2px solid #8A857D;
+  border-right: 2px solid #FFFFFF;
+  border-bottom: 2px solid #FFFFFF;
+}
+
+/* Taskbar Styling (Retro Windows Cream) */
+.vt-taskbar {
+  background: #ECE9D8;
+  border-top: 2px solid #FFFFFF;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Marquee / Ribbon Animation */
 @keyframes vt-marquee {
   0% { transform: translateX(0%); }
   100% { transform: translateX(-50%); }
 }
+
 .animate-vt-marquee {
   display: flex;
   width: max-content;
   animation: vt-marquee 28s linear infinite;
 }
+
 .animate-vt-marquee:hover {
   animation-play-state: paused;
 }

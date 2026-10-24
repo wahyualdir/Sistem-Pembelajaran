@@ -64,9 +64,9 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "RuangKampus — Sistem Pembelajaran Terpadu",
+  title: "SIAJAR — Sistem Informasi Ajar Terpadu",
   description:
-    "Satu ruang kerja akademik modern untuk kelas, materi, tugas, penilaian, dan diskusi.",
+    "Satu ruang kerja akademik untuk kelas, materi, tugas, penilaian, dan diskusi.",
 };
 
 export const viewport: Viewport = {
@@ -82,7 +82,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="id" className={`${sfPro.variable} ${inter.variable}`}>
-      <body className="min-h-[100dvh] overflow-x-hidden bg-[#F3F3F4] font-sans font-normal text-[#111111] antialiased">
+      <body className="min-h-[100dvh] overflow-x-hidden bg-background font-sans font-bold text-ink antialiased">
         <ScrollAnimationProvider>{children}</ScrollAnimationProvider>
       </body>
     </html>
