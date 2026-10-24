@@ -9,6 +9,7 @@ import {
   Play,
   Key,
   ArrowRight,
+  User,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { TodayScheduleItem } from '@/modules/academic/home-actions';
@@ -60,60 +61,64 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
               <div
                 key={item.id}
                 className={cn(
-                  'p-4 rounded-xl border bg-[#FFFFFF] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3.5',
+                  'p-4 rounded-xl border bg-[#FFFFFF] transition-all flex flex-col justify-between gap-3',
                   isOngoing
                     ? 'border-[#C2553A] border-l-4 bg-[#FAF8F5]'
                     : 'border-[#D6D3CB] hover:border-[#7A756D]'
                 )}
               >
-                <div className="space-y-1.5 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
+                {/* Baris 1: Jam & Kode MK di Kiri, Status di Kanan */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
                     <span className="text-xs font-mono font-bold text-[#1C1917] tabular-nums">
                       {item.time}
                     </span>
-
-                    {isOngoing && (
-                      <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-[#C2553A] text-white">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-                        BERLANGSUNG
-                      </span>
-                    )}
-                    {isFinished && (
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-[#ECE9D8] text-[#44403C]">
-                        <CheckCircle2 className="h-3 w-3" />
-                        SELESAI
-                      </span>
-                    )}
-                    {!isOngoing && !isFinished && (
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-[#FAF8F5] text-[#57534E] border border-[#D6D3CB]">
-                        AKAN DATANG
-                      </span>
-                    )}
-
-                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-[#FAF8F5] border border-[#E8E5DE] text-[#853827]">
+                    <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-[#FFFFFF] border border-[#D6D3CB] text-[#853827]">
                       {item.code}
                     </span>
                   </div>
 
-                  <h3 className="font-heading font-bold text-base text-[#1C1917] break-words leading-snug">
-                    {item.title}
-                  </h3>
-
-                  <div className="flex items-center gap-3 text-xs text-[#57534E] flex-wrap">
-                    <div className="flex items-center gap-1 font-semibold text-[#1C1917]">
-                      <MapPin className="h-3.5 w-3.5 text-[#C2553A] shrink-0" />
-                      <span>{item.room}</span>
-                    </div>
-                    <span className="text-[#B8B1A5]">•</span>
-                    <span className="truncate">{item.lecturer}</span>
-                  </div>
+                  {isOngoing && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#C2553A] text-white shrink-0">
+                      <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                      BERLANGSUNG
+                    </span>
+                  )}
+                  {isFinished && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#ECE9D8] text-[#44403C] shrink-0">
+                      <CheckCircle2 className="h-3 w-3" />
+                      SELESAI
+                    </span>
+                  )}
+                  {!isOngoing && !isFinished && (
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#FAF8F5] text-[#57534E] border border-[#D6D3CB] shrink-0">
+                      AKAN DATANG
+                    </span>
+                  )}
                 </div>
 
-                <div className="shrink-0 flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#E8E5DE]">
+                {/* Baris 2: Judul Mata Kuliah Utuh & Dosen Pengampu */}
+                <div className="space-y-1">
+                  <h3 className="font-heading font-bold text-base text-[#1C1917] leading-snug">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-[#57534E] font-medium flex items-center gap-1.5">
+                    <User className="h-3.5 w-3.5 text-[#78716C] shrink-0" />
+                    <span className="truncate">{item.lecturer}</span>
+                  </p>
+                </div>
+
+                {/* Baris 3: Ruangan di Kiri & Tombol Aksi di Kanan */}
+                <div className="pt-2.5 border-t border-[#E8E5DE] flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1C1917] min-w-0">
+                    <MapPin className="h-3.5 w-3.5 text-[#C2553A] shrink-0" />
+                    <span className="truncate">{item.room}</span>
+                  </div>
+
                   {isOngoing && item.hasActiveAttendance ? (
                     <Link
                       href="/classes"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#C2553A] text-white font-semibold text-xs hover:bg-[#853827] transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#C2553A] text-white font-bold text-xs hover:bg-[#853827] transition-colors shrink-0"
                     >
                       <Key className="h-3.5 w-3.5" />
                       <span>Presensi</span>
@@ -122,13 +127,13 @@ export function TodaySchedule({ items }: TodayScheduleProps) {
                     <Link
                       href="/classes"
                       className={cn(
-                        'inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border font-semibold text-xs transition-colors',
+                        'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border font-bold text-xs transition-colors shrink-0',
                         isOngoing
                           ? 'bg-[#1C1917] text-white border-[#1C1917] hover:bg-[#C2553A]'
-                          : 'bg-[#FAF8F5] text-[#1C1917] border-[#D6D3CB] hover:bg-[#ECE9D8]'
+                          : 'bg-[#FFFFFF] text-[#1C1917] border-[#D6D3CB] hover:bg-[#ECE9D8]'
                       )}
                     >
-                      <Play className="h-3.5 w-3.5" />
+                      <Play className="h-3 w-3" />
                       <span>Masuk Kelas</span>
                     </Link>
                   )}

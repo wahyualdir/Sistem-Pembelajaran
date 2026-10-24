@@ -117,95 +117,93 @@ export function RightPanelSwitcher({
       {activeTab === 'hari-ini' && (
         <div className="flex flex-col gap-5 animate-fade-in pb-24">
           {/* 1. Header Identitas Kampus & Status Semester Mahasiswa */}
-          <div className="p-4 sm:p-5 rounded-2xl border-2 border-[#7A756D] bg-white shadow-xs space-y-3">
-            <div className="flex items-center gap-2.5 pb-2.5 border-b-2 border-[#D6D3CB]">
-              <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                <div className="h-9 w-9 rounded-xl border-2 border-[#7A756D] bg-white p-0.5 flex items-center justify-center shrink-0 shadow-2xs overflow-hidden">
+          <div className="p-4 sm:p-5 rounded-2xl border border-[#D6D3CB] bg-white shadow-2xs space-y-3">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#E8E5DE]">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="h-9 w-9 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] p-1 flex items-center justify-center shrink-0 overflow-hidden">
                   <img
                     src="/logo-ruangkampus.png"
                     alt="Logo RuangKampus"
                     className="h-full w-full object-contain"
                   />
                 </div>
-                <div className="min-w-0 flex-1">
-                  <span className="text-base font-heading font-extrabold text-[#1C1917] tracking-tight block leading-tight whitespace-nowrap">
+                <div className="min-w-0">
+                  <span className="text-sm font-heading font-black text-[#1C1917] tracking-tight block leading-tight">
                     Ruang<span className="text-[#C2553A]">Kampus</span>
                   </span>
-                  <span className="text-xs sm:text-sm font-sans font-extrabold text-[#853827] uppercase tracking-wider block leading-tight mt-0.5 truncate">
+                  <span className="text-[11px] font-sans font-bold text-[#853827] uppercase tracking-wider block leading-tight mt-0.5">
                     Kartu Mahasiswa Aktif
                   </span>
                 </div>
               </div>
+
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E8F5E9] border border-[#10B981] text-[#065F46] text-[10px] font-bold shrink-0">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#10B981]" />
+                <span>AKTIF</span>
+              </span>
             </div>
 
-            <div className="flex items-center justify-between pt-0.5">
-              <div className="min-w-0">
-                <span className="text-xs font-sans font-extrabold text-[#7A756D] uppercase tracking-wider block">
-                  Tahun Akademik
-                </span>
-                <p className="font-heading font-extrabold text-sm sm:text-base text-[#1C1917] truncate mt-0.5">
-                  {summary.semesterLabel}
-                </p>
-              </div>
-              <span className="text-xs font-sans font-extrabold px-3 py-1 rounded-lg border-2 border-[#7A756D] bg-[#ECE9D8] text-[#1C1917] shadow-2xs">
-                Ruang<span className="text-[#C2553A]">Kampus</span>
+            <div className="space-y-0.5">
+              <span className="text-[10px] font-sans font-bold text-[#7A756D] uppercase tracking-wider block">
+                Tahun Akademik Berjalan
               </span>
+              <p className="font-heading font-bold text-sm text-[#1C1917]">
+                {summary.semesterLabel}
+              </p>
             </div>
           </div>
 
           {/* 2. Ringkasan Baris Metrik (Statistik: Hadir, IPK, Streak) */}
-          <div className="right-panel-stats-card p-4 sm:p-5 rounded-xl border-2 border-[#7A756D] bg-white shadow-xs">
-            <div className="stats-responsive-layout">
-              {/* Item 1: Hadir */}
-              <div className="stats-responsive-item">
-                <span className="stats-label text-xs sm:text-sm font-sans font-extrabold text-[#1C1917] uppercase tracking-wider shrink-0">
-                  Hadir
+          <div className="p-4 rounded-2xl border border-[#D6D3CB] bg-white shadow-2xs space-y-2.5">
+            {/* Item 1: Hadir */}
+            <div className="flex items-center justify-between py-1.5 border-b border-[#E8E5DE]">
+              <span className="text-xs font-sans font-bold text-[#57534E] uppercase tracking-wider">
+                Kehadiran
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-heading font-black text-base text-[#1C1917] tabular-nums">
+                  {summary.averageAttendance}
                 </span>
-                <div className="stats-right-group">
-                  <p className="stats-value font-heading font-extrabold text-base sm:text-lg text-[#1C1917] tabular-nums">
-                    {summary.averageAttendance}
-                  </p>
-                  {summary.attendanceQualified ? (
-                    <span className="text-xs font-bold text-[#1C1917] bg-[#ECE9D8] px-2 py-0.5 rounded border border-[#7A756D] whitespace-normal text-center">
-                      Syarat UAS ✓
-                    </span>
-                  ) : (
-                    <span className="text-xs font-bold text-[#7A756D] whitespace-normal text-center">
-                      Belum Ada Data
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Item 2: IPK */}
-              <div className="stats-responsive-item">
-                <span className="stats-label text-xs sm:text-sm font-sans font-extrabold text-[#1C1917] uppercase tracking-wider shrink-0">
-                  IPK
-                </span>
-                <div className="stats-right-group">
-                  <p className="stats-value font-heading font-extrabold text-base sm:text-lg text-[#1C1917] tabular-nums">
-                    {summary.ipk}
-                  </p>
-                  <span className="text-xs font-bold text-[#7A756D] whitespace-normal text-center">
-                    Skala 4.0
+                {summary.attendanceQualified ? (
+                  <span className="text-[11px] font-bold text-[#065F46] bg-[#E8F5E9] px-2 py-0.5 rounded-md border border-[#10B981]">
+                    Syarat UAS
                   </span>
-                </div>
-              </div>
-
-              {/* Item 3: Streak */}
-              <div className="stats-responsive-item">
-                <span className="stats-label text-xs sm:text-sm font-sans font-extrabold text-[#1C1917] uppercase tracking-wider shrink-0">
-                  Streak
-                </span>
-                <div className="stats-right-group">
-                  <p className="stats-value font-heading font-extrabold text-base sm:text-lg text-[#1C1917] flex items-center justify-center gap-1 tabular-nums">
-                    <Flame className="h-4 w-4 text-[#C2553A] fill-[#C2553A] shrink-0" />
-                    <span>{summary.studyStreakDays}h</span>
-                  </p>
-                  <span className="text-xs font-bold text-[#853827] whitespace-normal text-center">
-                    Aktif Kuliah
+                ) : (
+                  <span className="text-[11px] font-semibold text-[#7A756D]">
+                    Belum Cukup
                   </span>
-                </div>
+                )}
+              </div>
+            </div>
+
+            {/* Item 2: IPK */}
+            <div className="flex items-center justify-between py-1.5 border-b border-[#E8E5DE]">
+              <span className="text-xs font-sans font-bold text-[#57534E] uppercase tracking-wider">
+                IPK Kumulatif
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-heading font-black text-base text-[#1C1917] tabular-nums">
+                  {summary.ipk}
+                </span>
+                <span className="text-[11px] font-semibold text-[#7A756D] bg-[#FAF8F5] px-2 py-0.5 rounded-md border border-[#D6D3CB]">
+                  Skala 4.0
+                </span>
+              </div>
+            </div>
+
+            {/* Item 3: Streak */}
+            <div className="flex items-center justify-between pt-1">
+              <span className="text-xs font-sans font-bold text-[#57534E] uppercase tracking-wider">
+                Konsistensi
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-heading font-black text-base text-[#1C1917] flex items-center gap-1 tabular-nums">
+                  <Flame className="h-4 w-4 text-[#C2553A] fill-[#C2553A] shrink-0" />
+                  <span>{summary.studyStreakDays} Hari</span>
+                </span>
+                <span className="text-[11px] font-bold text-[#853827] bg-[#FEF2F0] px-2 py-0.5 rounded-md border border-[#FDDDD7]">
+                  Aktif Kuliah
+                </span>
               </div>
             </div>
           </div>
@@ -374,14 +372,14 @@ export function RightPanelSwitcher({
               {/* TWO MAIN ACTION BUTTONS */}
               <div className="flex flex-col gap-3">
                 <Link
-                  href="/classes"
+                  href={`/classes/${effectiveCourse.id}?tab=materi`}
                   className="flex w-full items-center justify-center py-2.5 px-4 rounded-xl border-2 border-[#7A756D] bg-white text-[#1C1917] font-sans font-extrabold text-sm shadow-xs hover:bg-[#FAF8F5] hover:text-[#C2553A] hover:-translate-y-0.5 active:translate-y-0.5 transition-all text-center focus-visible:outline-none cursor-pointer"
                 >
                   Buka Silabus & Modul Kuliah
                 </Link>
 
                 <Link
-                  href="/classes"
+                  href={`/classes/${effectiveCourse.id}?tab=presensi`}
                   className="flex w-full items-center justify-center gap-2.5 py-3 px-4 rounded-xl border-2 border-[#853827] bg-[#C2553A] text-white font-sans font-extrabold text-base shadow-xs hover:bg-[#B84A2B] active:translate-y-0.5 transition-all text-center focus-visible:outline-none cursor-pointer"
                 >
                   <Play className="h-5 w-5 fill-white" />

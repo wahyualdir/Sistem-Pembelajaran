@@ -191,21 +191,34 @@ export function StudentDashboardClient({
       {/* ========================================================= */}
       <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0">
         <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">
-          {/* HEADER BERANDA & FILTER TERPADU (BERSIH & EDITORIAL) */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-3 border-b border-[#D6D3CB]">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#853827]">
-                <span>PORTAL AKADEMIK MAHASISWA</span>
-                <span className="text-[#B8B1A5]">•</span>
-                <span className="text-[#57534E]">{currentSummary.semesterLabel || 'Semester Ganjil 2026/2027'}</span>
+          {/* HEADER BERANDA & FILTER TERPADU (RAPIH, TIDAK TERPOTONG & 1 BARIS FILTER) */}
+          <div className="space-y-3.5 pb-3.5 border-b border-[#D6D3CB]">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+              <div className="space-y-1 min-w-0">
+                <div className="flex flex-wrap items-center gap-2 text-xs font-mono font-bold text-[#853827]">
+                  <span className="uppercase tracking-wider">Portal Akademik Mahasiswa</span>
+                  <span className="text-[#B8B1A5]">•</span>
+                  <span className="text-[#57534E] font-sans font-semibold">
+                    {currentSummary.semesterLabel || 'Semester Ganjil 2026/2027'}
+                  </span>
+                </div>
+                <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-[#1C1917] leading-tight">
+                  Ruang Pembelajaran Mahasiswa
+                </h1>
               </div>
-              <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#1C1917]">
-                Ruang Pembelajaran Mahasiswa
-              </h1>
+
+              <div className="hidden sm:flex items-center gap-1.5 shrink-0">
+                <span className="px-2.5 py-1 rounded-full bg-[#FEF2F0] text-[#C2553A] border border-[#FDDDD7] text-xs font-bold">
+                  {courses.length} Mata Kuliah Aktif
+                </span>
+              </div>
             </div>
 
-            {/* Filter Chip Ringkas Tanpa Judul Inggris 'Categories' */}
-            <nav aria-label="Kategori Perkuliahan" className="flex flex-wrap items-center gap-1.5">
+            {/* Bilah Kategori 1 Baris Utuh (Tidak Terpecah 2 Baris) */}
+            <nav
+              aria-label="Kategori Perkuliahan"
+              className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 rounded-xl bg-[#F2EFE8] border border-[#D6D3CB] w-full sm:w-fit max-w-full"
+            >
               {CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
                 return (
@@ -214,10 +227,10 @@ export function StudentDashboardClient({
                     type="button"
                     onClick={() => setSelectedCategory(cat)}
                     className={cn(
-                      'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-sans transition-colors focus-visible:outline-none cursor-pointer',
+                      'px-3.5 py-1.5 rounded-lg text-xs font-sans transition-all focus-visible:outline-none cursor-pointer shrink-0 whitespace-nowrap',
                       isActive
-                        ? 'bg-[#1C1917] text-white font-semibold'
-                        : 'bg-[#ECE9D8]/70 text-[#44403C] font-medium hover:bg-[#ECE9D8] hover:text-[#1C1917]'
+                        ? 'bg-[#1C1917] text-white font-bold shadow-2xs'
+                        : 'text-[#44403C] font-semibold hover:bg-[#FFFFFF]/70 hover:text-[#1C1917]'
                     )}
                   >
                     {cat}

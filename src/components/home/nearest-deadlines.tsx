@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { FileText, Award, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { FileText, Award, Clock, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { calculateCountdown, type HomeDeadlineItem } from '@/modules/academic/home-utils';
 
@@ -62,46 +62,53 @@ export function NearestDeadlines({ initialItems }: NearestDeadlinesProps) {
               <div
                 key={item.id}
                 className={cn(
-                  'group p-3.5 sm:p-4 rounded-xl border bg-[#FFFFFF] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3',
+                  'group p-4 rounded-xl border bg-[#FFFFFF] transition-all flex flex-col justify-between gap-2.5',
                   item.isUrgent
                     ? 'border-[#C2553A] bg-[#FAF8F5]'
                     : 'border-[#D6D3CB] hover:border-[#7A756D]'
                 )}
               >
-                <div className="flex items-start sm:items-center gap-3 min-w-0">
-                  <div className="shrink-0 p-2 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#C2553A] flex items-center justify-center">
-                    {isQuiz ? <Award className="h-4 w-4" /> : <FileText className="h-4 w-4" />}
+                {/* Baris 1: Ikon + Nama Mata Kuliah di Kiri, Badge Mendesak di Kanan */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="shrink-0 p-1.5 rounded-lg border border-[#D6D3CB] bg-[#FFFFFF] text-[#C2553A] flex items-center justify-center">
+                      {isQuiz ? <Award className="h-3.5 w-3.5" /> : <FileText className="h-3.5 w-3.5" />}
+                    </div>
+                    <span className="text-xs font-semibold text-[#57534E] truncate">
+                      {item.classTitle}
+                    </span>
                   </div>
 
-                  <div className="space-y-0.5 min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono font-semibold text-[#57534E]">
-                        {item.classTitle}
-                      </span>
-                      {item.isUrgent && (
-                        <span className="inline-flex items-center gap-1 px-1.5 py-0.2 rounded text-[10px] font-mono font-bold bg-[#FEF2F0] text-[#853827] border border-[#C2553A]">
-                          <AlertCircle className="h-2.5 w-2.5" />
-                          MENDESAK
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="font-heading font-bold text-sm sm:text-base text-[#1C1917] break-words leading-snug line-clamp-2">
-                      {item.title}
-                    </h3>
-                  </div>
+                  {item.isUrgent ? (
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#FEF2F0] text-[#853827] border border-[#C2553A] shrink-0">
+                      <AlertCircle className="h-2.5 w-2.5" />
+                      MENDESAK
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#F2EFE8] text-[#57534E] shrink-0">
+                      {isQuiz ? 'KUIS' : 'TUGAS'}
+                    </span>
+                  )}
                 </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#E8E5DE]">
-                  <div className="flex items-center gap-1 text-xs font-mono font-semibold text-[#853827] tabular-nums">
+                {/* Baris 2: Judul Tugas / Kuis Lebar Penuh (Tidak Terpotong Sempit) */}
+                <h3 className="font-heading font-bold text-sm sm:text-base text-[#1C1917] leading-snug line-clamp-2">
+                  {item.title}
+                </h3>
+
+                {/* Baris 3: Countdown di Kiri & Tombol Aksi di Kanan */}
+                <div className="pt-2.5 border-t border-[#E8E5DE] flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-[#853827] tabular-nums">
                     <Clock className="h-3.5 w-3.5 text-[#C2553A] shrink-0" />
-                    <span>{item.dueCountdown}</span>
+                    <span>Sisa waktu: {item.dueCountdown}</span>
                   </div>
 
                   <Link
                     href={item.actionHref}
-                    className="px-3.5 py-1.5 rounded-lg bg-[#1C1917] text-white font-semibold text-xs hover:bg-[#C2553A] transition-colors shrink-0"
+                    className="inline-flex items-center gap-1 px-3.5 py-1.5 rounded-lg bg-[#1C1917] text-white font-bold text-xs hover:bg-[#C2553A] transition-colors shrink-0"
                   >
-                    {isQuiz ? 'Buka Kuis' : 'Kerjakan'}
+                    <span>{isQuiz ? 'Buka Kuis' : 'Kerjakan'}</span>
+                    <ArrowRight className="h-3 w-3" />
                   </Link>
                 </div>
               </div>
