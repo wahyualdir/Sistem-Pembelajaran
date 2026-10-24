@@ -2,21 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { listMasterDataAction, listMyClassesAction } from '@/modules/academic/actions';
-import { CreateClassForm, JoinClassForm } from '@/modules/academic/class-forms';
-import { RetroWindow } from '@/components/retro/retro-window';
 import { GoogleClassroomCard, ClassroomToolbar } from '@/modules/academic/classroom-cards';
 import { getStudentPendingEvaluationsAction } from '@/modules/academic/evaluation-actions';
 import { StudentEdomBanner } from '@/modules/academic/student-edom-banner';
-import {
-  Layers,
-  BookOpen,
-  ArrowRight,
-  GraduationCap,
-  PlusCircle,
-  Key,
-  FolderArchive,
-} from 'lucide-react';
-
+import { Layers, BookOpen, FolderArchive } from 'lucide-react';
 import { ClassCloneModal } from '@/modules/academic/class-clone-modal';
 
 export default async function ClassesPage({
@@ -105,7 +94,7 @@ export default async function ClassesPage({
         </div>
 
         {/* Toolbar Interaktif: Pencarian & Form Tambah/Gabung Kelas */}
-        <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro">
+        <div className="border-2 border-ink bg-surface p-3.5 sm:p-4 shadow-retro-sm">
           <ClassroomToolbar
             lecturer={lecturer}
             student={student}
@@ -125,26 +114,26 @@ export default async function ClassesPage({
 
         {/* PITA INFORMASI KELAS ARSIP */}
         {currentTab === 'arsip' && (
-          <div className="p-3.5 rounded-xl border-2 border-ink bg-gray-soft text-ink font-bold text-xs flex items-center gap-2.5 shadow-retro">
+          <div className="p-3 sm:p-3.5 border-2 border-ink bg-gray-soft text-ink font-bold text-xs flex items-center gap-2.5 shadow-retro-sm">
             <FolderArchive className="h-4 w-4 shrink-0 text-primary" />
             <span>Kelas ini sudah diarsipkan dan hanya bisa dibaca.</span>
           </div>
         )}
 
-        {/* 2. GRID KARTU KELAS */}
-        <section aria-label="Daftar Kelas Perkuliahan" className="space-y-4">
-          <div className="flex items-center justify-between border-b-2 border-ink pb-2.5">
-            <h2 className="font-heading font-bold text-xl sm:text-2xl tracking-tight text-ink flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-primary inline-block" />
-              <span>Daftar Kelas Perkuliahan</span>
-            </h2>
-            <span className="text-xs sm:text-sm font-bold text-gray-dark">
-              {currentTab === 'arsip' ? 'Arsip Kelas Lampau' : 'Semester Ganjil 2026/2027'}
+        {/* 2. DAFTAR KELAS PERKULIAHAN (HORIZONTAL DOSSIER) */}
+        <section aria-label="Daftar Kelas Perkuliahan" className="space-y-3.5">
+          <div className="flex items-center justify-between border-b-2 border-ink pb-2 text-xs font-bold text-gray-dark">
+            <span className="flex items-center gap-2 uppercase tracking-wider text-ink font-bold">
+              <BookOpen className="h-4 w-4 text-primary shrink-0" />
+              <span>{currentTab === 'arsip' ? 'Arsip Kelas Lampau' : 'Semester Ganjil 2026/2027'}</span>
+            </span>
+            <span>
+              {classes.length} Kelas Terdaftar
             </span>
           </div>
 
           {classes.length === 0 ? (
-            <div className="p-10 sm:p-14 text-center rounded-xl border-2 border-dashed border-ink bg-surface/50 shadow-retro space-y-3">
+            <div className="p-10 sm:p-14 text-center border-2 border-dashed border-ink bg-surface shadow-retro-sm space-y-3">
               <FolderArchive className="h-10 w-10 sm:h-12 sm:w-12 text-gray-dark mx-auto" />
               <h3 className="text-base sm:text-lg font-heading font-bold text-ink">Belum Ada Kelas Terdaftar</h3>
               <p className="text-xs sm:text-sm text-gray-dark font-medium max-w-md mx-auto leading-relaxed">
@@ -154,7 +143,7 @@ export default async function ClassesPage({
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            <div className="flex flex-col gap-3 sm:gap-3.5">
               {classes.map((k, i) => (
                 <GoogleClassroomCard
                   key={k.id}

@@ -1,6 +1,5 @@
 'use client';
 
-import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -22,54 +21,9 @@ import {
   MapPin,
   Sparkles,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { CreateClassForm, JoinClassForm } from './class-forms';
 import type { CourseItem, SemesterItem } from './actions';
-
-// 6 Palet Warna Retro Khas Identitas Kampus Neo-Brutalisme (Merah, Abu-abu, Putih, Hitam)
-const RETRO_BANNER_THEMES = [
-  {
-    bg: 'bg-surface',
-    text: 'text-ink',
-    accent: 'bg-primary',
-    border: 'border-ink',
-    badge: 'bg-gray-soft',
-  },
-  {
-    bg: 'bg-gray-soft',
-    text: 'text-ink',
-    accent: 'bg-ink',
-    border: 'border-ink',
-    badge: 'bg-surface',
-  },
-  {
-    bg: 'bg-ink',
-    text: 'text-white',
-    accent: 'bg-primary',
-    border: 'border-ink',
-    badge: 'bg-surface text-ink',
-  },
-  {
-    bg: 'bg-surface',
-    text: 'text-ink',
-    accent: 'bg-gray-dark',
-    border: 'border-ink',
-    badge: 'bg-gray-soft',
-  },
-  {
-    bg: 'bg-gray-soft',
-    text: 'text-ink',
-    accent: 'bg-primary-dark',
-    border: 'border-ink',
-    badge: 'bg-surface',
-  },
-  {
-    bg: 'bg-surface',
-    text: 'text-ink',
-    accent: 'bg-gray',
-    border: 'border-ink',
-    badge: 'bg-gray-soft',
-  },
-];
 
 export interface ClassroomCardProps {
   id: string;
@@ -96,6 +50,14 @@ export interface ClassroomCardProps {
   schedule?: string;
 }
 
+const ACCENT_BORDER_CLASSES = [
+  'border-l-[#C2553A]', // Terracotta
+  'border-l-[#10B981]', // Emerald
+  'border-l-[#1D4ED8]', // Navy
+  'border-l-[#B45309]', // Amber
+  'border-l-[#DC2626]', // Crimson
+];
+
 export function GoogleClassroomCard({
   item,
   isLecturer,
@@ -106,7 +68,7 @@ export function GoogleClassroomCard({
   index: number;
 }) {
   const [copied, setCopied] = useState(false);
-  const theme = RETRO_BANNER_THEMES[index % RETRO_BANNER_THEMES.length];
+  const accentBorder = ACCENT_BORDER_CLASSES[index % ACCENT_BORDER_CLASSES.length];
 
   const handleCopyCode = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -116,185 +78,117 @@ export function GoogleClassroomCard({
     setTimeout(() => setCopied(false), 2000);
   };
 
-  // Generate avatar initials from lecturer / title
-  const rawInitialsSource = item.lecturer_name
-    ? item.lecturer_name.replace(/^(Dr\.|Prof\.|Ir\.|Drs\.|H\.|Hj\.)\s*/gi, '')
-    : item.title;
-  const initials = rawInitialsSource
-    .split(' ')
-    .slice(0, 2)
-    .map((w) => w[0])
-    .join('')
-    .toUpperCase();
-
   return (
     <div
-      className="group rounded-2xl border-2 border-black bg-white shadow-retro-md hover:shadow-retro-lg hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between overflow-hidden animate-fade-up font-sans"
-      style={{ animationDelay: `${index * 60}ms` }}
+      className={cn(
+        'border-2 border-[#7A756D] border-l-4 bg-[#FAF8F5] shadow-retro-sm hover:shadow-retro hover:-translate-y-0.5 transition-all p-3.5 sm:p-4.5 flex flex-col lg:flex-row lg:items-center justify-between gap-4 font-sans',
+        accentBorder
+      )}
     >
-      <div>
-        {/* ======================================================== */}
-        {/* 1. GOOGLE CLASSROOM RETRO HERO BANNER                    */}
-        {/* ======================================================== */}
-        <div className={`p-4 sm:p-5 ${theme.bg} border-b-2 border-black relative`}>
-          {/* Header Baris & Status */}
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <WindowTrafficLights size="sm" />
-              <span className="text-xs font-bold text-black ml-1.5 truncate">
-                Kelas {item.section}
-              </span>
-              {item.course_code && (
-                <span className="text-[10px] font-mono font-bold bg-white/95 border border-black px-1.5 py-0.5 rounded shadow-retro-xs text-black">
-                  {item.course_code}
-                </span>
-              )}
-            </div>
-
-            <span className="text-xs font-bold bg-white/95 border border-black px-2 py-0.5 rounded shadow-retro-sm text-black">
-              Aktif
+      {/* Sisi Kiri: Badge, Kode, Judul, Dosen & Rombel */}
+      <div className="space-y-1.5 flex-1 min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="px-2.5 py-0.5 text-xs font-black uppercase tracking-wider bg-[#FEF4F1] text-[#853827] border border-[#C2553A]">
+            Kelas {item.section}
+          </span>
+          {item.course_code && (
+            <span className="text-xs font-mono font-bold bg-[#FFFFFF] border border-[#D6D3CB] px-2 py-0.5 text-[#1C1917]">
+              {item.course_code}
             </span>
-          </div>
-
-          {/* Judul Mata Kuliah & Informasi Kurikulum */}
-          <div className="pr-12">
-            <Link
-              href={`/classes/${item.id}`}
-              className="font-bold text-lg text-black hover:underline line-clamp-2 leading-snug block"
-            >
-              {item.title}
-            </Link>
-            <p className="text-xs text-black font-bold mt-1 truncate">
-              {item.meta || `${item.course_code ? item.course_code + ' · ' : ''}Semester Ganjil 2026/2027 · ${item.sks ?? 3} SKS`}
-            </p>
-            {item.lecturer_name && (
-              <p className="text-[11px] text-black font-bold mt-1.5 flex items-center gap-1.5 truncate">
-                <GraduationCap className="h-3.5 w-3.5 text-primary shrink-0" />
-                <span>{item.lecturer_name}</span>
-              </p>
-            )}
-          </div>
-
-          {/* Dosen Avatar Bulat Tumpang-Tindih */}
-          <div
-            title={item.lecturer_name ? `Dosen: ${item.lecturer_name}` : item.title}
-            className="absolute right-4 -bottom-6 h-12 w-12 rounded-full border-2 border-black bg-white shadow-retro flex items-center justify-center font-bold text-sm text-black select-none z-10"
-          >
-            {initials}
-          </div>
+          )}
+          <span className="text-xs font-bold text-[#7A756D]">
+            {item.sks ?? 3} SKS
+          </span>
+          <span className="text-xs font-black text-[#065F46] bg-[#E8F5E9] border border-[#10B981] px-2 py-0.5">
+            Aktif
+          </span>
         </div>
 
-        {/* ======================================================== */}
-        {/* 2. BODY KARTU: JADWAL, TENGGAT TUGAS & INFO KELAS         */}
-        {/* ======================================================== */}
-        <div className="p-4 sm:p-5 pt-8 space-y-3 bg-white">
-          {/* Jadwal Kuliah & Ruangan */}
-          {(item.schedule || item.room) && (
-            <div className="flex flex-wrap items-center justify-between gap-1.5 p-2 rounded-lg border border-black/25 bg-gray-soft/60 text-xs font-bold text-black">
-              {item.schedule && (
-                <span className="flex items-center gap-1 truncate">
-                  <Calendar className="h-3.5 w-3.5 text-primary shrink-0" />
-                  <span>{item.schedule}</span>
-                </span>
-              )}
-              {item.room && (
-                <span className="flex items-center gap-1 text-black/80 ml-auto truncate">
-                  <MapPin className="h-3 w-3 shrink-0" />
-                  <span>{item.room}</span>
-                </span>
-              )}
-            </div>
+        <Link
+          href={`/classes/${item.id}`}
+          className="font-heading font-black text-base sm:text-lg text-[#1C1917] hover:text-[#C2553A] leading-tight block truncate"
+        >
+          {item.title}
+        </Link>
+
+        <div className="flex flex-wrap items-center gap-3 text-xs font-bold text-[#57534E]">
+          {item.lecturer_name && (
+            <span className="flex items-center gap-1.5">
+              <GraduationCap className="h-3.5 w-3.5 text-[#C2553A] shrink-0" />
+              <span>{item.lecturer_name}</span>
+            </span>
           )}
-
-          {/* Tenggat Waktu Mendatang */}
-          <div className="p-3 rounded-xl border border-black/30 bg-gray-soft/40 space-y-1">
-            <span className="text-xs font-bold text-black block">
-              Tenggat Terdekat
-            </span>
-            <div className="flex items-center gap-2 text-xs font-bold text-black">
-              <Clock className="h-3.5 w-3.5 text-primary shrink-0" />
-              <span className="truncate">
-                {item.upcomingTask?.title || 'Tugas 1: Analisis Arsitektur Microservices (4 hari)'}
-              </span>
-            </div>
-          </div>
-
-          {/* Informasi Peserta & Kode Kelas */}
-          <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-black font-bold">
-            <span className="flex items-center gap-1.5 font-bold text-black">
-              <Users className="h-3.5 w-3.5 text-black" />
-              <span>{item.members !== undefined ? `${item.members} Mahasiswa` : 'Rombel Aktif'}</span>
-            </span>
-
-            {isLecturer && item.join_code && (
-              <button
-                type="button"
-                onClick={handleCopyCode}
-                className="text-xs font-bold bg-white border border-black px-2 py-0.5 rounded shadow-retro-sm hover:bg-gray-soft transition-all flex items-center gap-1 text-black"
-                title="Salin Kode Kelas"
-              >
-                <Key className="h-3 w-3 text-primary" />
-                <span>{item.join_code}</span>
-                {copied && <span className="text-xs text-retro-mint font-bold">✓</span>}
-              </button>
-            )}
-          </div>
-
-          {/* Progres Belajar Mahasiswa */}
-          {!isLecturer && (
-            <div className="pt-2.5 border-t border-black/20 space-y-1.5">
-              <div className="flex items-center justify-between text-xs font-bold text-black">
-                <span className="text-black font-bold">Progres Belajar</span>
-                <span className="font-bold text-black">{item.progressPercent ?? 65}%</span>
-              </div>
-              <div className="w-full h-2 rounded-full border border-black bg-gray-soft overflow-hidden">
-                <div
-                  className="bg-black h-full rounded-full transition-all duration-500"
-                  style={{ width: `${item.progressPercent ?? 65}%` }}
-                />
-              </div>
-            </div>
+          <span className="flex items-center gap-1.5">
+            <Users className="h-3.5 w-3.5 text-[#7A756D] shrink-0" />
+            <span>{item.members !== undefined ? `${item.members} Mahasiswa` : 'Rombel Aktif'}</span>
+          </span>
+          {isLecturer && item.join_code && (
+            <button
+              type="button"
+              onClick={handleCopyCode}
+              className="text-xs font-bold bg-[#FFFFFF] border border-[#7A756D] px-2 py-0.5 hover:bg-[#ECE9D8] transition-all flex items-center gap-1 text-[#1C1917] cursor-pointer"
+              title="Salin Kode Kelas"
+            >
+              <Key className="h-3 w-3 text-[#C2553A]" />
+              <span>{item.join_code}</span>
+              {copied && <CheckCircle2 className="h-3.5 w-3.5 text-[#065F46]" />}
+            </button>
           )}
         </div>
       </div>
 
-      {/* ======================================================== */}
-      {/* 3. FOOTER KARTU: AKSES CEPAT (FOLDER, TUGAS, BUKA)        */}
-      {/* ======================================================== */}
-      <div className="px-4 sm:px-5 py-3 border-t-2 border-black/15 bg-neutral-50 flex items-center justify-between gap-2">
-        {/* Ikon Pintasan Cepat ala Google Classroom */}
-        <div className="flex items-center gap-1">
-          <Link
-            href={`/classes/${item.id}?tab=tugas`}
-            className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-gray-soft hover:border-black text-black transition-all shadow-xs"
-            title="Tugas Kelas"
-          >
-            <FileText className="h-4 w-4" />
-          </Link>
-          <Link
-            href={`/classes/${item.id}?tab=tugas&filter=materi`}
-            className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-gray-soft hover:border-black text-black transition-all shadow-xs"
-            title="Materi & Modul"
-          >
-            <FolderArchive className="h-4 w-4" />
-          </Link>
-          <Link
-            href={`/classes/${item.id}?tab=anggota`}
-            className="p-1.5 rounded-lg border border-black/30 bg-white hover:bg-gray-soft hover:border-black text-black transition-all shadow-xs"
-            title="Peserta Kelas"
-          >
-            <Users className="h-4 w-4" />
-          </Link>
+      {/* Sisi Tengah: Spesifikasi Jadwal, Ruangan, & Tugas (Memanjang) */}
+      <div className="flex flex-wrap sm:flex-nowrap items-center gap-3 shrink-0">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 bg-[#FFFFFF] border border-[#D6D3CB] p-2 text-xs text-center shrink-0">
+          <div className="px-3">
+            <span className="block text-[10px] font-bold uppercase text-[#7A756D] tracking-wider">JADWAL</span>
+            <span className="font-black text-[#1C1917] whitespace-nowrap truncate max-w-[130px] block" title={item.schedule || 'Senin, 08:45 WIB'}>
+              {item.schedule ? item.schedule.split(' ')[0] + ' ' + (item.schedule.split(' ')[1] || '') : 'Senin 08:45'}
+            </span>
+          </div>
+          <div className="px-3 border-l border-[#D6D3CB]">
+            <span className="block text-[10px] font-bold uppercase text-[#7A756D] tracking-wider">RUANGAN</span>
+            <span className="font-black text-[#1C1917] whitespace-nowrap truncate max-w-[120px] block" title={item.room || 'Lab Komputer'}>
+              {item.room || 'Lab Komputer'}
+            </span>
+          </div>
+          <div className="px-3 border-l border-[#D6D3CB] col-span-2 sm:col-span-1">
+            <span className="block text-[10px] font-bold uppercase text-[#7A756D] tracking-wider">TENGGAT</span>
+            <span className="font-black text-[#853827] whitespace-nowrap truncate max-w-[130px] block" title={item.upcomingTask?.title || 'Tugas Aktif'}>
+              {item.upcomingTask?.title ? item.upcomingTask.title.split(':')[0] : 'Tidak Ada'}
+            </span>
+          </div>
         </div>
 
-        {/* Tombol Utama Buka Kelas */}
-        <Link
-          href={`/classes/${item.id}`}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border-2 border-black bg-black text-white hover:bg-neutral-800 text-xs sm:text-sm font-bold shadow-retro transition-all"
-        >
-          <span>Buka Kelas</span>
-          <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
+        {/* Pintasan Cepat & Tombol Utama */}
+        <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+          {/* Ikon Pintasan Folder/Tugas */}
+          <div className="flex items-center gap-1 shrink-0">
+            <Link
+              href={`/classes/${item.id}?tab=tugas`}
+              className="p-2 border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] transition-all shadow-retro-xs"
+              title="Tugas Kelas"
+            >
+              <FileText className="h-4 w-4" />
+            </Link>
+            <Link
+              href={`/classes/${item.id}?tab=tugas&filter=materi`}
+              className="p-2 border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] transition-all shadow-retro-xs"
+              title="Materi & Modul"
+            >
+              <FolderArchive className="h-4 w-4" />
+            </Link>
+          </div>
+
+          {/* Tombol Utama Buka Kelas */}
+          <Link
+            href={`/classes/${item.id}`}
+            className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 py-2 px-5 bg-[#C2553A] hover:bg-[#853827] text-white font-black text-xs sm:text-sm border-2 border-[#6B2D20] shadow-retro-sm transition-all whitespace-nowrap min-w-[140px] min-h-[38px]"
+          >
+            <span>Buka Kelas</span>
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
       </div>
     </div>
   );
@@ -304,7 +198,7 @@ export function ClassroomToolbar({
   lecturer,
   student,
   master,
-  totalClasses,
+  totalClasses: _totalClasses,
   initialQuery = '',
 }: {
   lecturer: boolean;
@@ -317,38 +211,24 @@ export function ClassroomToolbar({
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
   return (
-    <div className="space-y-4">
-      {/* Top Bar Actions & Search */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 bg-white p-4 sm:p-5 rounded-2xl border-2 border-black shadow-retro">
-        <div className="space-y-0.5">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="font-bold text-base sm:text-lg text-black">
-              Daftar Kelas Perkuliahan
-            </span>
-            <span className="text-xs font-bold bg-gray-soft border border-black px-2 py-0.5 rounded shadow-retro-xs">
-              {totalClasses} Kelas Aktif
-            </span>
-          </div>
-          <p className="text-xs text-black font-bold">
-            Pilih kelas untuk mengakses materi, modul baca, tatap muka daring, pengumpulan tugas, dan aktivitas kuliah.
-          </p>
-        </div>
-
+    <div className="space-y-3 font-sans">
+      {/* Search & Actions Bar (Clean & Seamless) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* Form Pencarian Cepat Mata Kuliah & Dosen */}
-        <form method="GET" action="/classes" className="flex items-center gap-2 w-full lg:max-w-sm">
+        <form method="GET" action="/classes" className="flex items-center gap-2 w-full sm:max-w-md">
           <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-black/60 pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#7A756D] pointer-events-none" />
             <input
               type="search"
               name="q"
               defaultValue={initialQuery}
               placeholder="Cari matkul, kode (STI...), dosen..."
-              className="w-full pl-8 pr-2.5 py-1.5 rounded-xl border-2 border-black bg-white text-xs font-bold text-black placeholder:text-black/50 focus:outline-none focus:ring-1 focus:ring-primary shadow-xs"
+              className="w-full pl-9 pr-3 py-2 border-2 border-[#7A756D] bg-[#FFFFFF] text-xs font-bold text-[#1C1917] placeholder:text-[#7A756D] focus:outline-none focus:border-[#C2553A] shadow-retro-sm"
             />
           </div>
           <button
             type="submit"
-            className="px-3 py-1.5 rounded-xl border-2 border-black bg-black text-white text-xs font-bold hover:bg-neutral-800 transition-all shrink-0 cursor-pointer shadow-retro-xs"
+            className="px-4 py-2 border-2 border-[#7A756D] bg-[#1C1917] hover:bg-[#2D2823] text-white text-xs font-black shadow-retro-sm transition-all shrink-0 cursor-pointer min-h-[38px]"
           >
             Cari
           </button>
@@ -362,9 +242,9 @@ export function ClassroomToolbar({
                 setIsJoinOpen(!isJoinOpen);
                 setIsCreateOpen(false);
               }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-black bg-gray-soft text-black font-bold text-xs sm:text-sm shadow-retro hover:bg-white transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-black text-xs shadow-retro-sm transition-all cursor-pointer min-h-[38px]"
             >
-              <Key className="h-4 w-4" />
+              <Key className="h-4 w-4 text-[#C2553A]" />
               <span>{isJoinOpen ? 'Tutup Form' : 'Gabung Kelas dengan Kode'}</span>
             </button>
           )}
@@ -376,9 +256,9 @@ export function ClassroomToolbar({
                 setIsCreateOpen(!isCreateOpen);
                 setIsJoinOpen(false);
               }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-black bg-black text-white font-bold text-xs sm:text-sm shadow-retro hover:bg-neutral-800 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 border-2 border-[#6B2D20] bg-[#C2553A] hover:bg-[#853827] text-white font-black text-xs shadow-retro-sm transition-all cursor-pointer min-h-[38px]"
             >
-              <PlusCircle className="h-4 w-4" />
+              <PlusCircle className="h-4 w-4 text-white" />
               <span>{isCreateOpen ? 'Tutup Form' : 'Buat Kelas Baru'}</span>
             </button>
           )}
@@ -387,9 +267,9 @@ export function ClassroomToolbar({
 
       {/* Expandable Join Form (Mahasiswa) */}
       {student && isJoinOpen && (
-        <div className="p-5 sm:p-6 rounded-2xl border-2 border-black bg-gray-soft/50 shadow-retro animate-fade-up">
-          <h3 className="font-bold text-sm text-black mb-3 flex items-center gap-2">
-            <Key className="h-4 w-4 text-primary" />
+        <div className="p-5 sm:p-6 border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm animate-fade-up">
+          <h3 className="font-heading font-black text-sm text-[#1C1917] mb-3 flex items-center gap-2">
+            <Key className="h-4 w-4 text-[#C2553A]" />
             <span>Gabung Kelas dengan Kode dari Dosen</span>
           </h3>
           <JoinClassForm />
@@ -398,9 +278,9 @@ export function ClassroomToolbar({
 
       {/* Expandable Create Form (Dosen) */}
       {lecturer && isCreateOpen && (
-        <div className="p-5 sm:p-6 rounded-2xl border-2 border-black bg-gray-soft/50 shadow-retro animate-fade-up">
-          <h3 className="font-bold text-sm text-black mb-3 flex items-center gap-2">
-            <PlusCircle className="h-4 w-4 text-primary" />
+        <div className="p-5 sm:p-6 border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm animate-fade-up">
+          <h3 className="font-heading font-black text-sm text-[#1C1917] mb-3 flex items-center gap-2">
+            <PlusCircle className="h-4 w-4 text-[#C2553A]" />
             <span>Buat Kelas Perkuliahan Baru</span>
           </h3>
           <CreateClassForm courses={master?.courses} semesters={master?.semesters} />
