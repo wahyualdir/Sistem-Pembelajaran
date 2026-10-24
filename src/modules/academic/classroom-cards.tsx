@@ -58,10 +58,10 @@ export interface ClassroomBannerTheme {
     | 'editorial-compass';
 }
 
-// Palet Banner Kelas Berwarna ala Google Classroom (100% Patuh cek-hex.js)
+// Palet Banner Kelas Berwarna ala Modern Enterprise University (100% Patuh cek-hex.js)
 export const CLASSROOM_BANNER_THEMES: ClassroomBannerTheme[] = [
   {
-    id: 'terracotta',
+    id: 'crimson',
     bannerGradient: 'bg-gradient-to-br from-[#C51626] via-[#9F1521] to-[#8F131E]',
     avatarBg: 'bg-[#8F131E]',
     accentText: 'text-[#9F1521]',
@@ -76,7 +76,7 @@ export const CLASSROOM_BANNER_THEMES: ClassroomBannerTheme[] = [
     avatarBg: 'bg-[#064E3B]',
     accentText: 'text-[#065F46]',
     progressBar: 'bg-[#047857]',
-    badgeSoftBg: 'bg-[#FAF8F5]',
+    badgeSoftBg: 'bg-[#FFFFFF]',
     badgeSoftText: 'text-[#065F46]',
     pattern: 'binary-tree',
   },
@@ -86,7 +86,7 @@ export const CLASSROOM_BANNER_THEMES: ClassroomBannerTheme[] = [
     avatarBg: 'bg-[#0B152D]',
     accentText: 'text-[#0C4A6E]',
     progressBar: 'bg-[#0369A1]',
-    badgeSoftBg: 'bg-[#FAF8F5]',
+    badgeSoftBg: 'bg-[#FFFFFF]',
     badgeSoftText: 'text-[#0C4A6E]',
     pattern: 'data-cylinders',
   },
@@ -96,7 +96,7 @@ export const CLASSROOM_BANNER_THEMES: ClassroomBannerTheme[] = [
     avatarBg: 'bg-[#451A03]',
     accentText: 'text-[#92400E]',
     progressBar: 'bg-[#B45309]',
-    badgeSoftBg: 'bg-[#F2EFE8]',
+    badgeSoftBg: 'bg-[#F3F3F4]',
     badgeSoftText: 'text-[#92400E]',
     pattern: 'cyber-shield',
   },
@@ -106,18 +106,18 @@ export const CLASSROOM_BANNER_THEMES: ClassroomBannerTheme[] = [
     avatarBg: 'bg-[#3B0764]',
     accentText: 'text-[#4C1D95]',
     progressBar: 'bg-[#6D28D9]',
-    badgeSoftBg: 'bg-[#FAF8F5]',
+    badgeSoftBg: 'bg-[#FFFFFF]',
     badgeSoftText: 'text-[#4C1D95]',
     pattern: 'neural-constellation',
   },
   {
-    id: 'espresso',
-    bannerGradient: 'bg-gradient-to-br from-[#38312A] via-[#2D2823] to-[#1C1917]',
-    avatarBg: 'bg-[#C2553A]',
-    accentText: 'text-[#C2553A]',
-    progressBar: 'bg-[#1C1917]',
-    badgeSoftBg: 'bg-[#F2EFE8]',
-    badgeSoftText: 'text-[#1C1917]',
+    id: 'charcoal',
+    bannerGradient: 'bg-gradient-to-br from-[#58595B] via-[#232328] to-[#111111]',
+    avatarBg: 'bg-[#9F1521]',
+    accentText: 'text-[#9F1521]',
+    progressBar: 'bg-[#111111]',
+    badgeSoftBg: 'bg-[#F3F3F4]',
+    badgeSoftText: 'text-[#111111]',
     pattern: 'editorial-compass',
   },
 ];
@@ -175,14 +175,12 @@ export function ClassroomBannerPattern({
       className="absolute inset-0 pointer-events-none overflow-hidden select-none text-white"
       aria-hidden="true"
     >
-      {/* Lapisan Geometri Halus Latar Belakang (Gaya Google Classroom) */}
       <svg
         className="absolute -right-6 -top-8 h-48 w-72 opacity-[0.16]"
         viewBox="0 0 280 180"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Gelombang & Lingkaran Latar */}
         <circle cx="230" cy="35" r="78" fill="currentColor" fillOpacity="0.35" />
         <circle cx="170" cy="145" r="64" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
         <path
@@ -194,7 +192,6 @@ export function ClassroomBannerPattern({
 
         {pattern === 'cloud-nodes' && (
           <g stroke="currentColor" strokeWidth="2">
-            {/* Corak Cloud & Arsitektur Web */}
             <rect x="155" y="28" width="96" height="62" rx="10" fill="currentColor" fillOpacity="0.22" />
             <line x1="155" y1="44" x2="251" y2="44" />
             <circle cx="166" cy="36" r="2.5" fill="currentColor" />
@@ -210,7 +207,6 @@ export function ClassroomBannerPattern({
 
         {pattern === 'binary-tree' && (
           <g stroke="currentColor" strokeWidth="2">
-            {/* Corak Pohon Biner & Struktur Data */}
             <line x1="205" y1="32" x2="165" y2="76" />
             <line x1="205" y1="32" x2="245" y2="76" />
             <line x1="165" y1="76" x2="142" y2="122" />
@@ -227,7 +223,6 @@ export function ClassroomBannerPattern({
 
         {pattern === 'data-cylinders' && (
           <g stroke="currentColor" strokeWidth="2">
-            {/* Corak Basis Data Terdistribusi & Klaster Big Data */}
             <ellipse cx="210" cy="40" rx="38" ry="12" fill="currentColor" fillOpacity="0.3" />
             <path d="M172 40 V70 C172 76.6 189 82 210 82 C231 82 248 76.6 248 70 V40" fill="currentColor" fillOpacity="0.16" />
             <path d="M172 70 V100 C172 106.6 189 112 210 112 C231 112 248 106.6 248 100 V70" fill="currentColor" fillOpacity="0.12" />
@@ -238,7 +233,6 @@ export function ClassroomBannerPattern({
 
         {pattern === 'cyber-shield' && (
           <g stroke="currentColor" strokeWidth="2">
-            {/* Corak Perisai Keamanan Siber & Radar Jaringan */}
             <polygon
               points="210,22 250,38 250,78 210,114 170,78 170,38"
               fill="currentColor"
@@ -253,7 +247,6 @@ export function ClassroomBannerPattern({
 
         {pattern === 'neural-constellation' && (
           <g stroke="currentColor" strokeWidth="1.8">
-            {/* Corak Jaringan Saraf Tiruan & Konstelasi AI */}
             <polygon
               points="150,42 208,24 252,64 224,118 162,104"
               fill="currentColor"
@@ -272,7 +265,6 @@ export function ClassroomBannerPattern({
 
         {pattern === 'editorial-compass' && (
           <g stroke="currentColor" strokeWidth="2">
-            {/* Corak Kompas Akademik & Geometri Klasik */}
             <circle cx="210" cy="68" r="44" fill="currentColor" fillOpacity="0.18" />
             <circle cx="210" cy="68" r="28" strokeDasharray="3 3" />
             <polygon points="210,30 220,68 210,106 200,68" fill="currentColor" fillOpacity="0.35" />
@@ -280,8 +272,6 @@ export function ClassroomBannerPattern({
           </g>
         )}
       </svg>
-
-      {/* Aksen Sudut Kiri Bawah Halus */}
       <div className="absolute -left-10 -bottom-12 h-28 w-28 rounded-full bg-[#FFFFFF] opacity-[0.06]" />
     </div>
   );
@@ -324,18 +314,17 @@ export function GoogleClassroomCard({
   };
 
   return (
-    <article className="group relative flex flex-col justify-between rounded-2xl border border-[#D6D3CB] hover:border-[#7A756D] bg-[#FFFFFF] shadow-sm hover:shadow-retro-sm transition-all duration-200 overflow-hidden font-sans">
-      {/* 1. BANNER BERWARNA & BERCORAK ALA GOOGLE CLASSROOM */}
+    <article className="group relative flex flex-col justify-between rounded-2xl border border-[#E2E3E4] hover:border-[#808285] bg-[#FFFFFF] shadow-xs hover:shadow-md transition-all duration-200 overflow-hidden font-sans">
+      {/* 1. BANNER BERWARNA & BERCORAK ALA TEL-U ENTERPRISE */}
       <div
-        className={`${theme.bannerGradient} relative flex flex-col justify-between border-b border-[#1C1917]/15 text-white overflow-hidden`}
+        className={`${theme.bannerGradient} relative flex flex-col justify-between border-b border-black/10 text-white overflow-hidden`}
       >
-        {/* Corak Ilustrasi Vektor Akademik */}
         <ClassroomBannerPattern pattern={theme.pattern} />
 
         <div className="p-5 pb-4 space-y-3.5 relative z-10">
           {/* Baris Atas: Kode Mata Kuliah + Kelas & Kode Gabung */}
           <div className="flex items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#FFFFFF]/15 backdrop-blur-xs border border-[#FFFFFF]/25 text-[11px] font-semibold text-white">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-xs border border-white/30 text-[11px] font-semibold text-white">
               {item.course_code && (
                 <>
                   <span className="font-mono font-bold text-white">{item.course_code}</span>
@@ -350,7 +339,7 @@ export function GoogleClassroomCard({
             <button
               type="button"
               onClick={handleCopy}
-              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#1C1917]/30 hover:bg-[#FFFFFF] text-white hover:text-[#1C1917] border border-[#FFFFFF]/30 transition-colors text-[11px] font-mono font-bold cursor-pointer"
+              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-black/30 hover:bg-[#FFFFFF] text-white hover:text-[#111111] border border-white/30 transition-colors text-[11px] font-mono font-bold cursor-pointer"
               title="Salin Kode Kelas"
             >
               {copied ? (
@@ -369,20 +358,20 @@ export function GoogleClassroomCard({
 
           {/* Judul Mata Kuliah di Atas Banner Berwarna */}
           <Link href={`/classes/${item.id}`} className="block group/title">
-            <h2 className="font-heading font-black text-base sm:text-[18px] text-white group-hover/title:underline decoration-white/80 underline-offset-4 transition-all leading-snug line-clamp-2 min-h-[2.7rem] drop-shadow-xs">
+            <h2 className="font-heading font-bold text-base sm:text-lg text-white group-hover/title:underline decoration-white/80 underline-offset-4 transition-all leading-snug line-clamp-2 min-h-[2.7rem]">
               {item.title}
             </h2>
           </Link>
 
-          {/* Baris Dosen Pengampu dengan Avatar Kontras ala Google Classroom */}
+          {/* Baris Dosen Pengampu dengan Avatar */}
           <div className="flex items-center justify-between gap-2 pt-0.5">
             <div className="flex items-center gap-2 min-w-0">
               <div
-                className={`h-7 w-7 rounded-full ${theme.avatarBg} ring-2 ring-[#FFFFFF]/80 text-white flex items-center justify-center font-heading font-black text-[10px] shrink-0 shadow-xs`}
+                className={`h-7 w-7 rounded-full ${theme.avatarBg} ring-2 ring-white/80 text-white flex items-center justify-center font-heading font-bold text-[10px] shrink-0 shadow-xs`}
               >
                 {initials}
               </div>
-              <span className="text-xs font-semibold text-white/95 truncate">
+              <span className="text-xs font-medium text-white/95 truncate">
                 {lecturerName}
               </span>
             </div>
@@ -390,52 +379,51 @@ export function GoogleClassroomCard({
         </div>
       </div>
 
-      {/* 2. BODY BERSIH TANPA GARIS TABEL KOTAK-KOTAK */}
+      {/* 2. BODY BERSIH */}
       <div className="p-5 py-4 bg-[#FFFFFF] flex-1 flex flex-col justify-between space-y-3.5">
-        {/* Info Jadwal & Ruangan Utuh (Tidak Terpotong) */}
-        <div className="space-y-2 text-xs text-[#57534E]">
+        <div className="space-y-2 text-xs text-[#58595B]">
           <div className="flex items-center gap-2.5">
             <Clock className={`h-3.5 w-3.5 ${theme.accentText} shrink-0`} />
-            <span className="font-semibold text-[#1C1917] truncate">
+            <span className="font-semibold text-[#111111] truncate">
               {item.schedule || 'Jadwal fleksibel / Mandiri'}
             </span>
           </div>
 
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2.5 min-w-0">
-              <MapPin className="h-3.5 w-3.5 text-[#78716C] shrink-0" />
-              <span className="font-medium text-[#57534E] truncate">
+              <MapPin className="h-3.5 w-3.5 text-[#808285] shrink-0" />
+              <span className="font-normal text-[#58595B] truncate">
                 {item.room || 'Ruang Perkuliahan'}
               </span>
             </div>
 
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#6B6560] shrink-0">
-              <Users className="h-3 w-3 text-[#78716C]" />
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#58595B] shrink-0">
+              <Users className="h-3 w-3 text-[#808285]" />
               <span>{memberCount} peserta</span>
             </span>
           </div>
         </div>
 
-        {/* Status Pill Lembut (Tanpa Border Kaku) */}
+        {/* Status Pill Lembut */}
         {isLecturer ? (
           <Link
             href={`/classes/${item.id}?tab=tugas`}
-            className="px-3 py-2 rounded-xl bg-[#FAF8F5] hover:bg-[#F2EFE8] transition-colors flex items-center justify-between gap-2 text-xs"
+            className="px-3 py-2 rounded-xl bg-[#F3F3F4] hover:bg-[#E2E3E4] transition-colors flex items-center justify-between gap-2 text-xs"
           >
-            <span className="font-medium text-[#57534E] truncate">
+            <span className="font-medium text-[#58595B] truncate">
               Kelola materi, kuis & nilai kelas
             </span>
-            <span className="font-bold text-[#C2553A] shrink-0">Kelola &rarr;</span>
+            <span className="font-bold text-[#9F1521] shrink-0">Kelola &rarr;</span>
           </Link>
         ) : item.upcomingTask ? (
           <Link
             href={`/classes/${item.id}?tab=tugas`}
-            className="px-3 py-2 rounded-xl bg-[#FEF4F1] hover:bg-[#FDE6E0] transition-colors flex items-center justify-between gap-2 text-xs"
+            className="px-3 py-2 rounded-xl bg-[#FEF2F2] hover:bg-[#F3F3F4] transition-colors flex items-center justify-between gap-2 text-xs"
           >
-            <span className="font-semibold text-[#853827] truncate">
+            <span className="font-semibold text-[#9F1521] truncate">
               {item.upcomingTask.title}
             </span>
-            <span suppressHydrationWarning className="text-[11px] font-mono font-bold text-[#C2553A] shrink-0">
+            <span suppressHydrationWarning className="text-[11px] font-mono font-bold text-[#9F1521] shrink-0">
               {new Date(item.upcomingTask.due_at).toLocaleDateString('id-ID', {
                 timeZone: 'Asia/Jakarta',
                 day: 'numeric',
@@ -444,7 +432,7 @@ export function GoogleClassroomCard({
             </span>
           </Link>
         ) : (
-          <div className="px-3 py-2 rounded-xl bg-[#FAF8F5] flex items-center justify-between gap-2 text-xs text-[#78716C]">
+          <div className="px-3 py-2 rounded-xl bg-[#F3F3F4] flex items-center justify-between gap-2 text-xs text-[#808285]">
             <span>Tidak ada tenggat tugas terdekat</span>
             <span className="text-[11px] font-semibold text-[#059669]">Terkendali</span>
           </div>
@@ -452,25 +440,25 @@ export function GoogleClassroomCard({
       </div>
 
       {/* 3. FOOTER MINIMALIS: IKON PINTASAN + 1 TOMBOL UTAMA */}
-      <div className="px-4 py-2.5 bg-[#FAF8F5]/70 border-t border-[#E8E5DE] flex items-center justify-between gap-2">
+      <div className="px-4 py-2.5 bg-[#F3F3F4]/50 border-t border-[#E2E3E4] flex items-center justify-between gap-2">
         <div className="flex items-center gap-1">
           <Link
             href={`/classes/${item.id}?tab=tugas`}
-            className="p-2 rounded-lg text-[#57534E] hover:text-[#1C1917] hover:bg-[#ECE9D8]/70 transition-colors"
+            className="p-2 rounded-lg text-[#58595B] hover:text-[#111111] hover:bg-[#E2E3E4] transition-colors"
             title="Tugas & Kuis"
           >
             <ClipboardList className="h-4 w-4" />
           </Link>
           <Link
             href={`/classes/${item.id}?tab=presensi`}
-            className="p-2 rounded-lg text-[#57534E] hover:text-[#1C1917] hover:bg-[#ECE9D8]/70 transition-colors"
+            className="p-2 rounded-lg text-[#58595B] hover:text-[#111111] hover:bg-[#E2E3E4] transition-colors"
             title="Presensi Kehadiran"
           >
             <CalendarCheck2 className="h-4 w-4" />
           </Link>
           <Link
             href={`/classes/${item.id}?tab=tugas`}
-            className="p-2 rounded-lg text-[#57534E] hover:text-[#1C1917] hover:bg-[#ECE9D8]/70 transition-colors"
+            className="p-2 rounded-lg text-[#58595B] hover:text-[#111111] hover:bg-[#E2E3E4] transition-colors"
             title="Modul & Materi"
           >
             <FolderOpen className="h-4 w-4" />
@@ -479,7 +467,7 @@ export function GoogleClassroomCard({
 
         <Link
           href={`/classes/${item.id}`}
-          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#9F1521] hover:bg-[#8F131E] text-white font-bold text-xs transition-colors shadow-2xs"
+          className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-[#9F1521] hover:bg-[#8F131E] text-white font-semibold text-xs transition-colors shadow-2xs"
         >
           <span>Masuk Kelas</span>
           <ArrowRight className="h-3.5 w-3.5" />
@@ -531,29 +519,29 @@ export function ClassroomToolbar({
 
   return (
     <div className="space-y-4 font-sans">
-      {/* UNIFIED FRESH HEADER & TOOLBAR (1 BAR RINGKAS) */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-[#E8E5DE]">
+      {/* UNIFIED FRESH HEADER & TOOLBAR */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-[#E2E3E4]">
         {/* Kiri: Judul & Ringkasan Pill Segar */}
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2.5">
-            <h1 className="font-heading font-black text-2xl sm:text-3xl tracking-tight text-[#1C1917] flex items-center gap-2">
-              <Layers className="h-6 w-6 text-[#C2553A]" />
+            <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#111111] flex items-center gap-2">
+              <Layers className="h-6 w-6 text-[#9F1521]" />
               <span>Kelas Saya</span>
             </h1>
 
             <div className="flex items-center gap-1.5">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#FEF2F0] text-[#C2553A] font-bold text-xs">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#FEF2F2] text-[#9F1521] font-bold text-xs">
                 {totalClasses} Kelas
               </span>
-              <span className="px-2.5 py-0.5 rounded-full bg-[#F2EFE8] text-[#57534E] font-bold text-xs">
+              <span className="px-2.5 py-0.5 rounded-full bg-[#F3F3F4] text-[#58595B] font-bold text-xs">
                 {totalSks} SKS
               </span>
-              <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-[#FAF8F5] border border-[#D6D3CB] text-[#57534E] font-semibold text-xs">
+              <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full bg-[#FFFFFF] border border-[#E2E3E4] text-[#58595B] font-semibold text-xs">
                 {roleLabel}
               </span>
             </div>
           </div>
-          <p className="text-xs sm:text-sm text-[#6B6560]">
+          <p className="text-xs sm:text-sm text-[#58595B]">
             {lecturer
               ? 'Kelola rombongan belajar, materi kuliah, penugasan, dan presensi dalam satu ruang terpadu.'
               : 'Akses ruang belajar, materi perkuliahan, tenggat tugas, dan presensi semester aktif.'}
@@ -563,23 +551,23 @@ export function ClassroomToolbar({
         {/* Kanan: Filter Aktif/Arsip, Pencarian Cepat & Tombol + Kelas */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Toggle Aktif / Arsip */}
-          <div className="inline-flex rounded-xl bg-[#F2EFE8] p-1 border border-[#D6D3CB]">
+          <div className="inline-flex rounded-xl bg-[#F3F3F4] p-1 border border-[#E2E3E4]">
             <Link
               href="/classes?tab=aktif"
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
                 currentTab === 'aktif'
-                  ? 'bg-[#FFFFFF] text-[#1C1917] shadow-xs'
-                  : 'text-[#6B6560] hover:text-[#1C1917]'
+                  ? 'bg-[#FFFFFF] text-[#111111] shadow-2xs'
+                  : 'text-[#58595B] hover:text-[#111111]'
               }`}
             >
               Aktif
             </Link>
             <Link
               href="/classes?tab=arsip"
-              className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+              className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
                 currentTab === 'arsip'
-                  ? 'bg-[#FFFFFF] text-[#1C1917] shadow-xs'
-                  : 'text-[#6B6560] hover:text-[#1C1917]'
+                  ? 'bg-[#FFFFFF] text-[#111111] shadow-2xs'
+                  : 'text-[#58595B] hover:text-[#111111]'
               }`}
             >
               Arsip
@@ -588,13 +576,13 @@ export function ClassroomToolbar({
 
           {/* Pencarian Ringkas */}
           <form onSubmit={handleSearch} className="relative flex-1 sm:flex-initial">
-            <Search className="h-3.5 w-3.5 text-[#78716C] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <Search className="h-3.5 w-3.5 text-[#808285] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             <input
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Cari mata kuliah..."
-              className="w-full sm:w-48 lg:w-56 pl-8 pr-3 py-1.5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] focus:border-[#1C1917] text-xs font-medium text-[#1C1917] placeholder:text-[#78716C] focus:outline-none transition-colors"
+              className="w-full sm:w-48 lg:w-56 pl-8 pr-3 py-1.5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] focus:border-[#9F1521] text-xs font-medium text-[#111111] placeholder:text-[#808285] focus:outline-none transition-colors"
             />
           </form>
 
@@ -604,7 +592,7 @@ export function ClassroomToolbar({
             <button
               type="button"
               onClick={() => setIsAddOpen(!isAddOpen)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#C2553A] hover:bg-[#A34530] text-white font-bold text-xs transition-colors cursor-pointer shrink-0"
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#9F1521] hover:bg-[#8F131E] text-white font-semibold text-xs transition-colors cursor-pointer shrink-0 shadow-2xs"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>{lecturer ? 'Buka Kelas' : 'Gabung Kelas'}</span>
@@ -615,16 +603,16 @@ export function ClassroomToolbar({
 
       {/* PANEL EXPANDABLE: GABUNG KELAS (MAHASISWA) ATAU BUKA KELAS BARU (DOSEN) */}
       {isAddOpen && (
-        <div className="p-5 rounded-2xl border border-[#D6D3CB] bg-[#FFFFFF] shadow-sm animate-fade-up space-y-3">
+        <div className="p-5 rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] shadow-sm animate-fade-up space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-heading font-bold text-[#1C1917] flex items-center gap-2">
-              <Layers className="h-4 w-4 text-[#C2553A]" />
+            <h3 className="text-sm font-heading font-bold text-[#111111] flex items-center gap-2">
+              <Layers className="h-4 w-4 text-[#9F1521]" />
               <span>{lecturer ? 'Buka Rombongan Belajar Baru' : 'Gabung ke Kelas dengan Kode'}</span>
             </h3>
             <button
               type="button"
               onClick={() => setIsAddOpen(false)}
-              className="text-xs font-semibold text-[#78716C] hover:text-[#1C1917] cursor-pointer"
+              className="text-xs font-semibold text-[#808285] hover:text-[#111111] cursor-pointer"
             >
               Tutup
             </button>

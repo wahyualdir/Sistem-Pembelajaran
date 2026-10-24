@@ -177,7 +177,7 @@ export function ClassLiveInteractionView({
   return (
     <div className="space-y-6">
       {/* 1. HEADER RUANG INTERAKSI KELAS */}
-      <div className="border-2 border-[#7A756D] border-l-4 border-l-[#C2553A] bg-[#FAF8F5] shadow-retro-sm p-5 sm:p-6 lg:p-7 relative overflow-hidden font-sans">
+      <div className="border-2 border-[#808285] border-l-4 border-l-[#9F1521] bg-[#FFFFFF] shadow-retro-sm p-5 sm:p-6 lg:p-7 relative overflow-hidden font-sans">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
@@ -185,15 +185,15 @@ export function ClassLiveInteractionView({
                 <span className="h-2 w-2 rounded-full bg-[#10B981] animate-pulse" />
                 Sesi Perkuliahan Langsung
               </span>
-              <span className="text-xs font-bold text-[#57534E] hidden sm:inline">
+              <span className="text-xs font-bold text-[#58595B] hidden sm:inline">
                 Interaksi Waktu Nyata
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-heading font-black text-[#1C1917] tracking-tight flex items-center gap-2.5">
-              <MessageSquare className="h-6 w-6 text-[#C2553A]" />
+            <h1 className="text-xl sm:text-2xl font-heading font-black text-[#111111] tracking-tight flex items-center gap-2.5">
+              <MessageSquare className="h-6 w-6 text-[#9F1521]" />
               <span>Ruang Interaksi Kuliah</span>
             </h1>
-            <p className="text-xs sm:text-sm text-[#57534E] max-w-2xl font-medium leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#58595B] max-w-2xl font-medium leading-relaxed">
               Ajukan pertanyaan seputar materi yang sedang diterangkan, dukung pertanyaan teman yang
               belum dipahami, dan ikuti kuis kilat untuk menguji pemahaman materi kuliah.
             </p>
@@ -207,11 +207,11 @@ export function ClassLiveInteractionView({
               className={cn(
                 'px-4 py-2 text-xs sm:text-sm font-bold border-2 transition-all flex items-center gap-2 cursor-pointer shadow-retro-xs',
                 activeSubTab === 'tanya'
-                  ? 'bg-[#1C1917] text-white border-[#1C1917]'
-                  : 'bg-[#FFFFFF] text-[#1C1917] border-[#7A756D] hover:bg-[#FAF8F5]'
+                  ? 'bg-[#111111] text-white border-[#111111]'
+                  : 'bg-[#FFFFFF] text-[#111111] border-[#808285] hover:bg-[#FFFFFF]'
               )}
             >
-              <HelpCircle className={cn('h-4 w-4', activeSubTab === 'tanya' ? 'text-[#C2553A]' : 'text-[#7A756D]')} />
+              <HelpCircle className={cn('h-4 w-4', activeSubTab === 'tanya' ? 'text-[#9F1521]' : 'text-[#808285]')} />
               <span>Tanya Jawab Kuliah</span>
             </button>
 
@@ -221,11 +221,11 @@ export function ClassLiveInteractionView({
               className={cn(
                 'px-4 py-2 text-xs sm:text-sm font-bold border-2 transition-all flex items-center gap-2 cursor-pointer shadow-retro-xs',
                 activeSubTab === 'kuis'
-                  ? 'bg-[#1C1917] text-white border-[#1C1917]'
-                  : 'bg-[#FFFFFF] text-[#1C1917] border-[#7A756D] hover:bg-[#FAF8F5]'
+                  ? 'bg-[#111111] text-white border-[#111111]'
+                  : 'bg-[#FFFFFF] text-[#111111] border-[#808285] hover:bg-[#FFFFFF]'
               )}
             >
-              <BarChart3 className={cn('h-4 w-4', activeSubTab === 'kuis' ? 'text-[#C2553A]' : 'text-[#7A756D]')} />
+              <BarChart3 className={cn('h-4 w-4', activeSubTab === 'kuis' ? 'text-[#9F1521]' : 'text-[#808285]')} />
               <span>Kuis Kilat & Polling</span>
             </button>
 
@@ -233,10 +233,10 @@ export function ClassLiveInteractionView({
               <button
                 type="button"
                 onClick={() => setIsProjectorMode(!isProjectorMode)}
-                className="px-3.5 py-2 text-xs font-bold border-2 border-[#7A756D] bg-[#FFFFFF] text-[#1C1917] hover:bg-[#FAF8F5] shadow-retro-xs transition-all flex items-center gap-1.5 cursor-pointer ml-auto"
+                className="px-3.5 py-2 text-xs font-bold border-2 border-[#808285] bg-[#FFFFFF] text-[#111111] hover:bg-[#FFFFFF] shadow-retro-xs transition-all flex items-center gap-1.5 cursor-pointer ml-auto"
                 title="Buka Tampilan Khusus Layar Proyektor Kelas"
               >
-                <Tv className="h-4 w-4 text-[#C2553A]" />
+                <Tv className="h-4 w-4 text-[#9F1521]" />
                 <span>Mode Proyektor</span>
               </button>
             )}
@@ -246,16 +246,16 @@ export function ClassLiveInteractionView({
 
       {/* 2. MODE PROYEKTOR KELAS (PRESENTASI FOKUS UNTUK DOSEN) */}
       {isProjectorMode && isStaff && (
-        <div className="border-4 border-[#1C1917] bg-[#1C1917] text-white shadow-retro-lg p-6 sm:p-8 space-y-4 animate-fade-up font-sans">
+        <div className="border-4 border-[#111111] bg-[#111111] text-white shadow-retro-lg p-6 sm:p-8 space-y-4 animate-fade-up font-sans">
           <div className="flex items-center justify-between border-b border-white/20 pb-3">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#FDDDD7]">
-              <Tv className="h-4 w-4 text-[#C2553A]" />
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#FEF2F2]">
+              <Tv className="h-4 w-4 text-[#9F1521]" />
               <span>Tampilan Proyektor Kelas Tatap Muka (Layar Fokus)</span>
             </div>
             <button
               type="button"
               onClick={() => setIsProjectorMode(false)}
-              className="text-xs bg-[#FFFFFF] text-[#1C1917] px-3 py-1 font-bold hover:bg-[#FAF8F5] cursor-pointer"
+              className="text-xs bg-[#FFFFFF] text-[#111111] px-3 py-1 font-bold hover:bg-[#FFFFFF] cursor-pointer"
             >
               Tutup Mode Proyektor
             </button>
@@ -264,7 +264,7 @@ export function ClassLiveInteractionView({
           {pinnedOrActiveQuestion ? (
             <div className="space-y-4 py-2">
               <div className="flex items-center gap-2">
-                <span className="bg-[#FAF8F5] text-[#1C1917] text-xs font-bold px-3 py-1 uppercase tracking-wider border border-[#7A756D]">
+                <span className="bg-[#FFFFFF] text-[#111111] text-xs font-bold px-3 py-1 uppercase tracking-wider border border-[#808285]">
                   {pinnedOrActiveQuestion.is_pinned ? 'Pertanyaan Disematkan' : 'Sedang Dibahas'}
                 </span>
                 <span className="text-xs text-white/70">
@@ -278,7 +278,7 @@ export function ClassLiveInteractionView({
 
               {pinnedOrActiveQuestion.lecturer_response && (
                 <div className="p-4 border border-white/30 bg-white/10 text-xs sm:text-sm space-y-1">
-                  <span className="font-bold text-[#FDDDD7] block">Catatan Penjelasan Dosen:</span>
+                  <span className="font-bold text-[#FEF2F2] block">Catatan Penjelasan Dosen:</span>
                   <p className="text-white/90 leading-relaxed">
                     {pinnedOrActiveQuestion.lecturer_response}
                   </p>
@@ -305,13 +305,13 @@ export function ClassLiveInteractionView({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start font-sans">
           {/* KOLOM KIRI: FORM KIRIM PERTANYAAN (UNTUK MAHASISWA & PENGAJAR) */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm p-4 sm:p-5 space-y-4">
-              <div className="border-b-2 border-[#D6D3CB] pb-3">
-                <h3 className="font-heading font-black text-sm sm:text-base text-[#1C1917] flex items-center gap-2">
-                  <HelpCircle className="h-4.5 w-4.5 text-[#C2553A]" />
+            <div className="border-2 border-[#808285] bg-[#FFFFFF] shadow-retro-sm p-4 sm:p-5 space-y-4">
+              <div className="border-b-2 border-[#E2E3E4] pb-3">
+                <h3 className="font-heading font-black text-sm sm:text-base text-[#111111] flex items-center gap-2">
+                  <HelpCircle className="h-4.5 w-4.5 text-[#9F1521]" />
                   <span>Ajukan Pertanyaan</span>
                 </h3>
-                <p className="text-xs text-[#57534E] mt-1 font-medium leading-relaxed">
+                <p className="text-xs text-[#58595B] mt-1 font-medium leading-relaxed">
                   Punya pertanyaan tentang konsep atau slide materi yang baru saja dijelaskan? Kirim di sini agar dibahas bersama.
                 </p>
               </div>
@@ -323,28 +323,28 @@ export function ClassLiveInteractionView({
                     value={questionText}
                     onChange={(e) => setQuestionText(e.target.value)}
                     placeholder="Tuliskan pertanyaan kuliah Anda secara jelas dan ringkas..."
-                    className="w-full p-3 border-2 border-[#7A756D] bg-[#FAF8F5] text-xs sm:text-sm font-sans text-[#1C1917] placeholder:text-[#7A756D] focus:outline-none focus:border-[#C2553A] resize-none"
+                    className="w-full p-3 border-2 border-[#808285] bg-[#FFFFFF] text-xs sm:text-sm font-sans text-[#111111] placeholder:text-[#808285] focus:outline-none focus:border-[#9F1521] resize-none"
                   />
-                  <div className="flex justify-between items-center text-xs font-mono text-[#57534E] mt-1">
+                  <div className="flex justify-between items-center text-xs font-mono text-[#58595B] mt-1">
                     <span>Minimal 5 karakter</span>
                     <span>{questionText.length}/500</span>
                   </div>
                 </div>
 
                 {/* Sakelar Anonim (Menjaga Keberanian Mahasiswa untuk Bertanya) */}
-                <label className="flex items-start gap-2.5 p-3 border border-[#D6D3CB] bg-[#FAF8F5] cursor-pointer select-none">
+                <label className="flex items-start gap-2.5 p-3 border border-[#E2E3E4] bg-[#FFFFFF] cursor-pointer select-none">
                   <input
                     type="checkbox"
                     checked={isAnonymous}
                     onChange={(e) => setIsAnonymous(e.target.checked)}
-                    className="mt-0.5 h-4 w-4 border-2 border-[#7A756D] accent-[#C2553A]"
+                    className="mt-0.5 h-4 w-4 border-2 border-[#808285] accent-[#9F1521]"
                   />
                   <div className="space-y-0.5">
-                    <span className="text-xs font-bold text-[#1C1917] flex items-center gap-1.5">
-                      <Shield className="h-3.5 w-3.5 text-[#C2553A]" />
+                    <span className="text-xs font-bold text-[#111111] flex items-center gap-1.5">
+                      <Shield className="h-3.5 w-3.5 text-[#9F1521]" />
                       <span>Kirim sebagai Mahasiswa Anonim</span>
                     </span>
-                    <p className="text-xs text-[#57534E] font-medium leading-tight">
+                    <p className="text-xs text-[#58595B] font-medium leading-tight">
                       Nama asli Anda disamarkan dari rekan-rekan sekelas agar Anda dapat bertanya tanpa sungkan.
                     </p>
                   </div>
@@ -366,7 +366,7 @@ export function ClassLiveInteractionView({
                 <button
                   type="submit"
                   disabled={isSubmitting || questionText.trim().length < 5}
-                  className="w-full py-2.5 border-2 border-[#6B2D20] bg-[#C2553A] hover:bg-[#853827] text-white font-black text-xs sm:text-sm shadow-retro-sm disabled:opacity-50 transition-all flex items-center justify-center gap-2 cursor-pointer min-h-[40px]"
+                  className="w-full py-2.5 border-2 border-[#8F131E] bg-[#9F1521] hover:bg-[#9F1521] text-white font-black text-xs sm:text-sm shadow-retro-sm disabled:opacity-50 transition-all flex items-center justify-center gap-2 cursor-pointer min-h-[40px]"
                 >
                   <Send className="h-4 w-4" />
                   <span>{isSubmitting ? 'Mengirim...' : 'Kirim Pertanyaan Kuliah'}</span>
@@ -375,12 +375,12 @@ export function ClassLiveInteractionView({
             </div>
 
             {/* TIPS BERTANYA YANG BAIK */}
-            <div className="p-3.5 border border-[#D6D3CB] bg-[#FAF8F5] text-xs text-[#57534E] space-y-1.5 shadow-retro-xs">
-              <span className="font-bold text-[#1C1917] flex items-center gap-1.5">
-                <Sparkles className="h-4 w-4 text-[#C2553A]" />
+            <div className="p-3.5 border border-[#E2E3E4] bg-[#FFFFFF] text-xs text-[#58595B] space-y-1.5 shadow-retro-xs">
+              <span className="font-bold text-[#111111] flex items-center gap-1.5">
+                <Sparkles className="h-4 w-4 text-[#9F1521]" />
                 <span>Kiat Bertanya Efektif di Kelas</span>
               </span>
-              <ul className="list-disc list-inside space-y-1 text-[#57534E] pl-1 font-medium">
+              <ul className="list-disc list-inside space-y-1 text-[#58595B] pl-1 font-medium">
                 <li>Sebutkan slide atau sub-bab yang membingungkan.</li>
                 <li>Dukung pertanyaan rekan sekelas yang memiliki kebingungan serupa.</li>
                 <li>Dosen akan memilih pertanyaan paling banyak didukung untuk diulas di kelas.</li>
@@ -391,10 +391,10 @@ export function ClassLiveInteractionView({
           {/* KOLOM KANAN: DAFTAR PERTANYAAN WAKTU NYATA */}
           <div className="lg:col-span-7 space-y-3.5">
             {/* BILAH FILTER & REFRESH */}
-            <div className="flex flex-wrap items-center justify-between gap-2.5 p-3 border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2.5 p-3 border-2 border-[#808285] bg-[#FFFFFF] shadow-retro-sm">
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-                <span className="text-xs font-bold text-[#57534E] flex items-center gap-1 mr-1 shrink-0">
-                  <Filter className="h-3.5 w-3.5 text-[#C2553A]" />
+                <span className="text-xs font-bold text-[#58595B] flex items-center gap-1 mr-1 shrink-0">
+                  <Filter className="h-3.5 w-3.5 text-[#9F1521]" />
                   <span>Status:</span>
                 </span>
                 {(['semua', 'antre', 'dibahas', 'terjawab'] as LiveQuestionFilter[]).map((f) => (
@@ -405,8 +405,8 @@ export function ClassLiveInteractionView({
                     className={cn(
                       'px-2.5 py-1 text-xs font-bold transition-all border shrink-0 cursor-pointer shadow-retro-xs',
                       filter === f
-                        ? 'bg-[#1C1917] text-white border-[#1C1917]'
-                        : 'bg-[#FFFFFF] text-[#57534E] hover:text-[#1C1917] border-[#7A756D] hover:bg-[#FAF8F5]'
+                        ? 'bg-[#111111] text-white border-[#111111]'
+                        : 'bg-[#FFFFFF] text-[#58595B] hover:text-[#111111] border-[#808285] hover:bg-[#FFFFFF]'
                     )}
                   >
                     {f === 'semua'
@@ -424,22 +424,22 @@ export function ClassLiveInteractionView({
                 type="button"
                 onClick={loadQuestions}
                 disabled={isLoading}
-                className="text-xs font-bold text-[#1C1917] bg-[#FFFFFF] border border-[#7A756D] hover:bg-[#FAF8F5] px-2.5 py-1 flex items-center gap-1.5 cursor-pointer shadow-retro-xs shrink-0"
+                className="text-xs font-bold text-[#111111] bg-[#FFFFFF] border border-[#808285] hover:bg-[#FFFFFF] px-2.5 py-1 flex items-center gap-1.5 cursor-pointer shadow-retro-xs shrink-0"
                 title="Segarkan daftar pertanyaan"
               >
-                <RefreshCw className={cn('h-3.5 w-3.5 text-[#C2553A]', isLoading && 'animate-spin')} />
+                <RefreshCw className={cn('h-3.5 w-3.5 text-[#9F1521]', isLoading && 'animate-spin')} />
                 <span>{isLoading ? 'Memuat...' : 'Segarkan'}</span>
               </button>
             </div>
 
             {/* DAFTAR PERTANYAAN */}
             {questions.length === 0 ? (
-              <div className="border-2 border-dashed border-[#7A756D] bg-[#FAF8F5] p-8 sm:p-12 text-center space-y-2.5 shadow-retro-sm">
-                <div className="h-12 w-12 border-2 border-[#C2553A] bg-[#FEF4F1] flex items-center justify-center mx-auto text-[#853827] shadow-retro-xs">
+              <div className="border-2 border-dashed border-[#808285] bg-[#FFFFFF] p-8 sm:p-12 text-center space-y-2.5 shadow-retro-sm">
+                <div className="h-12 w-12 border-2 border-[#9F1521] bg-[#FEF2F2] flex items-center justify-center mx-auto text-[#9F1521] shadow-retro-xs">
                   <HelpCircle className="h-6 w-6" />
                 </div>
-                <h4 className="font-heading font-black text-sm sm:text-base text-[#1C1917]">Belum Ada Pertanyaan di Kelas Ini</h4>
-                <p className="text-xs text-[#57534E] max-w-sm mx-auto font-medium leading-relaxed">
+                <h4 className="font-heading font-black text-sm sm:text-base text-[#111111]">Belum Ada Pertanyaan di Kelas Ini</h4>
+                <p className="text-xs text-[#58595B] max-w-sm mx-auto font-medium leading-relaxed">
                   Jadilah yang pertama mengajukan pertanyaan materi. Pertanyaan Anda akan tampil di
                   layar perkuliahan.
                 </p>
@@ -455,38 +455,38 @@ export function ClassLiveInteractionView({
                     <div
                       key={q.id}
                       className={cn(
-                        'border-2 border-[#7A756D] p-4 sm:p-5 transition-all shadow-retro-sm relative bg-[#FAF8F5]',
+                        'border-2 border-[#808285] p-4 sm:p-5 transition-all shadow-retro-sm relative bg-[#FFFFFF]',
                         isPinned
-                          ? 'border-l-4 border-l-[#B45309] bg-[#FEF4F1]'
+                          ? 'border-l-4 border-l-[#B45309] bg-[#FEF2F2]'
                           : isBeingDiscussed
                           ? 'border-l-4 border-l-[#1D4ED8]'
                           : isAnswered
                           ? 'border-l-4 border-l-[#10B981]'
-                          : 'border-l-4 border-l-[#7A756D]'
+                          : 'border-l-4 border-l-[#808285]'
                       )}
                     >
                       {/* PITA STATUS DISEMATKAN */}
                       {isPinned && (
-                        <div className="mb-2 flex items-center gap-1.5 text-xs font-bold text-[#853827] bg-[#FEF4F1] px-2.5 py-0.5 border border-[#C2553A] w-fit">
-                          <Pin className="h-3 w-3 rotate-45 text-[#C2553A]" />
+                        <div className="mb-2 flex items-center gap-1.5 text-xs font-bold text-[#9F1521] bg-[#FEF2F2] px-2.5 py-0.5 border border-[#9F1521] w-fit">
+                          <Pin className="h-3 w-3 rotate-45 text-[#9F1521]" />
                           <span>Ditayangkan di Layar Kelas</span>
                         </div>
                       )}
 
                       {/* BARIS ATAS: NAMA PENANYA & BADGE STATUS */}
-                      <div className="flex items-center justify-between gap-2 border-b border-[#D6D3CB] pb-2 mb-2.5">
+                      <div className="flex items-center justify-between gap-2 border-b border-[#E2E3E4] pb-2 mb-2.5">
                         <div className="flex items-center gap-2 text-xs">
                           <span
                             className={cn(
                               'font-bold truncate max-w-[200px]',
-                              q.is_anonymous ? 'text-[#57534E] italic' : 'text-[#1C1917]'
+                              q.is_anonymous ? 'text-[#58595B] italic' : 'text-[#111111]'
                             )}
                           >
                             {q.student_name}
                           </span>
-                          <span className="text-[#7A756D] text-[11px]">&bull;</span>
-                          <span className="text-[#57534E] text-xs font-mono flex items-center gap-1">
-                            <Clock className="h-3 w-3 text-[#7A756D]" />
+                          <span className="text-[#808285] text-[11px]">&bull;</span>
+                          <span className="text-[#58595B] text-xs font-mono flex items-center gap-1">
+                            <Clock className="h-3 w-3 text-[#808285]" />
                             <span>
                               {new Date(q.created_at).toLocaleTimeString('id-ID', {
                                 hour: '2-digit',
@@ -500,7 +500,7 @@ export function ClassLiveInteractionView({
                         {/* BADGE STATUS */}
                         <div>
                           {isBeingDiscussed ? (
-                            <span className="text-xs font-bold px-2 py-0.5 border border-[#1D4ED8] bg-[#FAF8F5] text-[#1D4ED8] flex items-center gap-1">
+                            <span className="text-xs font-bold px-2 py-0.5 border border-[#1D4ED8] bg-[#FFFFFF] text-[#1D4ED8] flex items-center gap-1">
                               <Volume2 className="h-3 w-3" />
                               <span>Sedang Dibahas</span>
                             </span>
@@ -510,7 +510,7 @@ export function ClassLiveInteractionView({
                               <span>Selesai Dijawab</span>
                             </span>
                           ) : (
-                            <span className="text-xs font-medium px-2 py-0.5 border border-[#D6D3CB] bg-[#FFFFFF] text-[#57534E]">
+                            <span className="text-xs font-medium px-2 py-0.5 border border-[#E2E3E4] bg-[#FFFFFF] text-[#58595B]">
                               Menunggu Giliran
                             </span>
                           )}
@@ -518,25 +518,25 @@ export function ClassLiveInteractionView({
                       </div>
 
                       {/* ISI PERTANYAAN */}
-                      <p className="text-xs sm:text-sm font-semibold text-[#1C1917] leading-relaxed mb-3">
+                      <p className="text-xs sm:text-sm font-semibold text-[#111111] leading-relaxed mb-3">
                         {q.question}
                       </p>
 
                       {/* TANGGAPAN / CATATAN JAWABAN DOSEN */}
                       {q.lecturer_response && (
-                        <div className="p-3 border border-[#D6D3CB] bg-[#FFFFFF] text-xs space-y-1 mb-3 shadow-retro-xs">
-                          <span className="font-bold text-[#1C1917] flex items-center gap-1.5">
-                            <Check className="h-3.5 w-3.5 text-[#C2553A]" />
+                        <div className="p-3 border border-[#E2E3E4] bg-[#FFFFFF] text-xs space-y-1 mb-3 shadow-retro-xs">
+                          <span className="font-bold text-[#111111] flex items-center gap-1.5">
+                            <Check className="h-3.5 w-3.5 text-[#9F1521]" />
                             <span>Catatan Jawaban Dosen:</span>
                           </span>
-                          <p className="text-[#57534E] font-medium leading-relaxed pl-5">
+                          <p className="text-[#58595B] font-medium leading-relaxed pl-5">
                             {q.lecturer_response}
                           </p>
                         </div>
                       )}
 
                       {/* BARIS BAWAH: TOMBOL DUKUNGAN (UPVOTE) & AKSI DOSEN */}
-                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#D6D3CB]">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#E2E3E4]">
                         {/* Tombol Upvote */}
                         <button
                           type="button"
@@ -544,8 +544,8 @@ export function ClassLiveInteractionView({
                           className={cn(
                             'px-3 py-1.5 border-2 text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-retro-xs',
                             q.has_upvoted
-                              ? 'border-[#6B2D20] bg-[#C2553A] text-white'
-                              : 'border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917]'
+                              ? 'border-[#8F131E] bg-[#9F1521] text-white'
+                              : 'border-[#808285] bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#111111]'
                           )}
                           title="Dukung jika Anda memiliki kebingungan yang sama"
                         >
@@ -564,7 +564,7 @@ export function ClassLiveInteractionView({
                                 <button
                                   type="button"
                                   onClick={() => handleStatusChange(q.id, 'dibahas')}
-                                  className="text-xs font-bold px-2.5 py-1 border border-[#1D4ED8] bg-[#FAF8F5] hover:bg-[#FFFFFF] text-[#1D4ED8] cursor-pointer shadow-retro-xs"
+                                  className="text-xs font-bold px-2.5 py-1 border border-[#1D4ED8] bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#1D4ED8] cursor-pointer shadow-retro-xs"
                                   title="Tandai dosen sedang membahas pertanyaan ini secara lisan"
                                 >
                                   Bahas Sekarang
@@ -586,10 +586,10 @@ export function ClassLiveInteractionView({
                                 type="button"
                                 onClick={() => handleTogglePin(q.id)}
                                 className={cn(
-                                  'p-1.5 border border-[#7A756D] text-xs cursor-pointer shadow-retro-xs',
+                                  'p-1.5 border border-[#808285] text-xs cursor-pointer shadow-retro-xs',
                                   q.is_pinned
-                                    ? 'bg-[#FEF4F1] text-[#853827] border-[#C2553A]'
-                                    : 'bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#57534E]'
+                                    ? 'bg-[#FEF2F2] text-[#9F1521] border-[#9F1521]'
+                                    : 'bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#58595B]'
                                 )}
                                 title={q.is_pinned ? 'Lepas sematan' : 'Sematkan ke layar kelas'}
                               >
@@ -602,7 +602,7 @@ export function ClassLiveInteractionView({
                                   setResponseModalQuestion(q);
                                   setResponseText(q.lecturer_response || '');
                                 }}
-                                className="text-xs font-bold px-2.5 py-1 border border-[#7A756D] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] cursor-pointer shadow-retro-xs"
+                                className="text-xs font-bold px-2.5 py-1 border border-[#808285] bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#111111] cursor-pointer shadow-retro-xs"
                                 title="Tulis catatan jawaban ringkas"
                               >
                                 Catat Jawaban
@@ -615,7 +615,7 @@ export function ClassLiveInteractionView({
                             <button
                               type="button"
                               onClick={() => handleDelete(q.id)}
-                              className="text-xs text-[#57534E] hover:text-[#DC2626] px-1.5 py-1 font-medium cursor-pointer"
+                              className="text-xs text-[#58595B] hover:text-[#DC2626] px-1.5 py-1 font-medium cursor-pointer"
                               title="Hapus pertanyaan"
                             >
                               Hapus
@@ -635,28 +635,28 @@ export function ClassLiveInteractionView({
       {/* 5. MODAL TULIS JAWABAN DOSEN */}
       {responseModalQuestion && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
-          <div className="w-full max-w-lg bg-[#FFFFFF] border-2 border-[#7A756D] p-5 sm:p-6 shadow-retro-md space-y-4 animate-scale-up">
-            <div className="flex items-center justify-between border-b-2 border-[#D6D3CB] pb-3">
-              <h3 className="font-heading font-black text-sm sm:text-base text-[#1C1917] flex items-center gap-2">
-                <CheckCircle2 className="h-4.5 w-4.5 text-[#C2553A]" />
+          <div className="w-full max-w-lg bg-[#FFFFFF] border-2 border-[#808285] p-5 sm:p-6 shadow-retro-md space-y-4 animate-scale-up">
+            <div className="flex items-center justify-between border-b-2 border-[#E2E3E4] pb-3">
+              <h3 className="font-heading font-black text-sm sm:text-base text-[#111111] flex items-center gap-2">
+                <CheckCircle2 className="h-4.5 w-4.5 text-[#9F1521]" />
                 <span>Catat Jawaban atau Rangkuman Dosen</span>
               </h3>
               <button
                 type="button"
                 onClick={() => setResponseModalQuestion(null)}
-                className="text-[#57534E] hover:text-[#1C1917] cursor-pointer"
+                className="text-[#58595B] hover:text-[#111111] cursor-pointer"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="p-3 border border-[#D6D3CB] bg-[#FAF8F5] text-xs text-[#57534E]">
-              <span className="font-bold block text-[#1C1917] mb-1">Pertanyaan Mahasiswa:</span>
+            <div className="p-3 border border-[#E2E3E4] bg-[#FFFFFF] text-xs text-[#58595B]">
+              <span className="font-bold block text-[#111111] mb-1">Pertanyaan Mahasiswa:</span>
               <p className="italic">&ldquo;{responseModalQuestion.question}&rdquo;</p>
             </div>
 
             <div>
-              <label className="text-xs font-bold text-[#1C1917] block mb-1">
+              <label className="text-xs font-bold text-[#111111] block mb-1">
                 Catatan Penjelasan Dosen (Opsional):
               </label>
               <textarea
@@ -664,7 +664,7 @@ export function ClassLiveInteractionView({
                 value={responseText}
                 onChange={(e) => setResponseText(e.target.value)}
                 placeholder="Contoh: Sudah dibahas di kelas: lihat slide 14 rumus korelasi parsial."
-                className="w-full p-3 border-2 border-[#7A756D] bg-[#FAF8F5] text-xs sm:text-sm font-sans focus:outline-none focus:border-[#C2553A] text-[#1C1917]"
+                className="w-full p-3 border-2 border-[#808285] bg-[#FFFFFF] text-xs sm:text-sm font-sans focus:outline-none focus:border-[#9F1521] text-[#111111]"
               />
             </div>
 
@@ -672,14 +672,14 @@ export function ClassLiveInteractionView({
               <button
                 type="button"
                 onClick={() => setResponseModalQuestion(null)}
-                className="px-3.5 py-2 border-2 border-[#7A756D] text-xs font-bold bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] shadow-retro-xs cursor-pointer"
+                className="px-3.5 py-2 border-2 border-[#808285] text-xs font-bold bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#111111] shadow-retro-xs cursor-pointer"
               >
                 Batal
               </button>
               <button
                 type="button"
                 onClick={handleSaveResponse}
-                className="px-4 py-2 border-2 border-[#6B2D20] text-xs font-black bg-[#C2553A] hover:bg-[#853827] text-white shadow-retro-sm cursor-pointer"
+                className="px-4 py-2 border-2 border-[#8F131E] text-xs font-black bg-[#9F1521] hover:bg-[#9F1521] text-white shadow-retro-sm cursor-pointer"
               >
                 Simpan & Tandai Terjawab
               </button>

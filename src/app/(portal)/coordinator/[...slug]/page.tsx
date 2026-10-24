@@ -32,28 +32,28 @@ const COORDINATOR_METRICS = [
     value: '96.2%',
     desc: '24 dari 24 kelas berjalan sesuai silabus',
     badge: 'Tercapai',
-    badgeColor: 'bg-white text-[#1C1917] border border-[#D6D3CB]',
+    badgeColor: 'bg-white text-[#111111] border border-[#E2E3E4]',
   },
   {
     title: 'Beban Mengajar Dosen (BKD)',
     value: '12 - 16 SKS',
     desc: 'Rata-rata 14.2 SKS per dosen tetap',
     badge: 'Optimal',
-    badgeColor: 'bg-white text-[#1C1917] border border-[#D6D3CB]',
+    badgeColor: 'bg-white text-[#111111] border border-[#E2E3E4]',
   },
   {
     title: 'Mahasiswa Perlu Perhatian',
     value: '8 Mahasiswa',
     desc: 'Kehadiran <75% atau indeks tugas tertunda',
     badge: 'Perlu Tindakan',
-    badgeColor: 'bg-[#C2553A] text-white border border-[#853827]',
+    badgeColor: 'bg-[#9F1521] text-white border border-[#9F1521]',
   },
   {
     title: 'Pengajuan Menunggu Persetujuan',
     value: '3 Berkas',
     desc: 'Soal ujian, revisi nilai, dan kelas baru',
     badge: 'Pending Review',
-    badgeColor: 'bg-[#FAF8F5] text-[#1C1917] border border-[#D6D3CB]',
+    badgeColor: 'bg-[#FFFFFF] text-[#111111] border border-[#E2E3E4]',
   },
 ];
 
@@ -209,24 +209,24 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-[#1C1917] flex items-center gap-3">
-              <Icon className="h-7 w-7 text-[#C2553A]" />
+            <h1 className="text-2xl sm:text-3xl font-heading font-bold tracking-tight text-[#111111] flex items-center gap-3">
+              <Icon className="h-7 w-7 text-[#9F1521]" />
               <span>{current.title}</span>
             </h1>
-            <p className="text-sm sm:text-base text-[#57534E] font-medium max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-base text-[#58595B] font-medium max-w-3xl leading-relaxed">
               {current.desc}
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <Link
               href="/coordinator/assignments"
-              className="px-3.5 py-2 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#ECE9D8] text-xs font-semibold text-[#1C1917] transition-colors"
+              className="px-3.5 py-2 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#F3F3F4] text-xs font-semibold text-[#111111] transition-colors"
             >
               Penugasan Dosen
             </Link>
             <Link
               href="/classes"
-              className="px-3.5 py-2 rounded-lg bg-[#1C1917] hover:bg-[#C2553A] text-white text-xs font-semibold transition-colors"
+              className="px-3.5 py-2 rounded-lg bg-[#111111] hover:bg-[#9F1521] text-white text-xs font-semibold transition-colors"
             >
               Semua Rombel Kelas &rarr;
             </Link>
@@ -235,7 +235,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
       </RetroWindow>
 
       {/* Stat Strip Monitoring Prodi (1 Pita Terpadu, Minim Card) */}
-      <div className="rounded-2xl border border-[#E8E5DE] bg-[#FFFFFF] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E8E5DE] overflow-hidden">
+      <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 sm:divide-x divide-[#E2E3E4] overflow-hidden">
         {COORDINATOR_METRICS.map((m) => (
           <div
             key={m.title}
@@ -243,14 +243,14 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
           >
             <div>
               <div className="flex items-center justify-between gap-2">
-                <span className="text-xs font-bold uppercase text-[#6B6560]">{m.title}</span>
+                <span className="text-xs font-bold uppercase text-[#808285]">{m.title}</span>
                 <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full ${m.badgeColor}`}>
                   {m.badge}
                 </span>
               </div>
-              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917] mt-2">{m.value}</p>
+              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#111111] mt-2">{m.value}</p>
             </div>
-            <p className="text-xs text-[#6B6560] pt-1 font-sans">
+            <p className="text-xs text-[#808285] pt-1 font-sans">
               {m.desc}
             </p>
           </div>
@@ -258,26 +258,26 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
       </div>
 
       {/* Tabel Mata Kuliah & Matriks Kurikulum Terhubung */}
-      <div className="rounded-xl border border-[#D6D3CB] bg-white overflow-hidden">
-        <div className="p-4 sm:p-5 bg-[#FAF8F5] border-b border-[#E8E5DE] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div className="rounded-xl border border-[#E2E3E4] bg-white overflow-hidden">
+        <div className="p-4 sm:p-5 bg-[#FFFFFF] border-b border-[#E2E3E4] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <h2 className="font-heading font-bold text-base sm:text-lg text-[#1C1917]">
+            <h2 className="font-heading font-bold text-base sm:text-lg text-[#111111]">
               Daftar Mata Kuliah & Rombel Kurikulum Aktif (Teknik Informatika UIR)
             </h2>
-            <p className="text-xs text-[#57534E]">
+            <p className="text-xs text-[#58595B]">
               Klik mata kuliah atau tombol ruang kelas untuk meninjau silabus, pertemuan, dan penugasan langsung di kelas terkait.
             </p>
           </div>
           <Link
             href="/coordinator/reports?tab=capaian-cpl"
-            className="text-xs font-semibold text-[#C2553A] hover:underline shrink-0"
+            className="text-xs font-semibold text-[#9F1521] hover:underline shrink-0"
           >
             Lihat Analisis Capaian CPL &rarr;
           </Link>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm font-sans">
-            <thead className="border-b border-[#D6D3CB] bg-[#FAF8F5] text-xs font-bold uppercase text-[#57534E]">
+            <thead className="border-b border-[#E2E3E4] bg-[#FFFFFF] text-xs font-bold uppercase text-[#58595B]">
               <tr>
                 <th className="py-3.5 px-4">Kode MK</th>
                 <th className="py-3.5 px-4">Mata Kuliah</th>
@@ -287,36 +287,36 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
                 <th className="py-3.5 px-4 text-right">Rombel Terhubung</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#E8E5DE]">
+            <tbody className="divide-y divide-[#E2E3E4]">
               {CONNECTED_PRODI_COURSES.map((course) => (
-                <tr key={course.code} className="hover:bg-[#FAF8F5] transition-colors">
-                  <td className="py-3.5 px-4 font-mono font-bold text-xs text-[#853827]">
+                <tr key={course.code} className="hover:bg-[#FFFFFF] transition-colors">
+                  <td className="py-3.5 px-4 font-mono font-bold text-xs text-[#9F1521]">
                     {course.code}
                   </td>
                   <td className="py-3.5 px-4">
                     <Link
                       href={`/classes/${course.classId}`}
-                      className="font-heading font-bold text-sm text-[#1C1917] hover:text-[#C2553A] transition-colors block"
+                      className="font-heading font-bold text-sm text-[#111111] hover:text-[#9F1521] transition-colors block"
                     >
                       {course.name}
                     </Link>
-                    <span className="text-xs text-[#7A756D]">{course.semester}</span>
+                    <span className="text-xs text-[#808285]">{course.semester}</span>
                   </td>
-                  <td className="py-3.5 px-3 text-center font-mono font-bold text-xs text-[#1C1917]">
+                  <td className="py-3.5 px-3 text-center font-mono font-bold text-xs text-[#111111]">
                     {course.sks} SKS
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded bg-[#FAF8F5] border border-[#D6D3CB] text-xs font-semibold text-[#1C1917]">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded bg-[#FFFFFF] border border-[#E2E3E4] text-xs font-semibold text-[#111111]">
                       {course.cpl}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 text-xs font-semibold text-[#44403C]">
+                  <td className="py-3.5 px-4 text-xs font-semibold text-[#58595B]">
                     {course.lecturer}
                   </td>
                   <td className="py-3.5 px-4 text-right">
                     <Link
                       href={`/classes/${course.classId}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#1C1917] hover:text-white text-xs font-semibold text-[#1C1917] transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#111111] hover:text-white text-xs font-semibold text-[#111111] transition-colors"
                     >
                       <span>{course.section}</span>
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -331,60 +331,60 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
 
       {/* Grid 3 Kartu Tindakan & Status Program Studi Full Width */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        <div className="rounded-xl border border-[#D6D3CB] bg-white p-5 space-y-4 flex flex-col justify-between">
+        <div className="rounded-xl border border-[#E2E3E4] bg-white p-5 space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <BookOpen className="h-5 w-5 text-[#C2553A]" />
-              <h3 className="font-heading font-bold text-base text-[#1C1917]">Pemetaan Kurikulum OBE</h3>
+              <BookOpen className="h-5 w-5 text-[#9F1521]" />
+              <h3 className="font-heading font-bold text-base text-[#111111]">Pemetaan Kurikulum OBE</h3>
             </div>
-            <p className="text-xs text-[#57534E] leading-relaxed">
+            <p className="text-xs text-[#58595B] leading-relaxed">
               12 Indikator Capaian Pembelajaran Lulusan (CPL) terhubung dengan 63 mata kuliah kurikulum Teknik Informatika UIR.
             </p>
           </div>
           <Link
             href="/coordinator/reports?tab=capaian-cpl"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#ECE9D8] text-xs font-semibold text-[#1C1917] transition-all"
+            className="inline-flex items-center justify-between p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#F3F3F4] text-xs font-semibold text-[#111111] transition-all"
           >
             <span>Buka Matriks CPL</span>
-            <ArrowRight className="h-4 w-4 text-[#1C1917]" />
+            <ArrowRight className="h-4 w-4 text-[#111111]" />
           </Link>
         </div>
 
-        <div className="rounded-xl border border-[#D6D3CB] bg-white p-5 space-y-4 flex flex-col justify-between">
+        <div className="rounded-xl border border-[#E2E3E4] bg-white p-5 space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <ShieldAlert className="h-5 w-5 text-[#C2553A]" />
-              <h3 className="font-heading font-bold text-base text-[#1C1917]">Supervisi Ujian Semester</h3>
+              <ShieldAlert className="h-5 w-5 text-[#9F1521]" />
+              <h3 className="font-heading font-bold text-base text-[#111111]">Supervisi Ujian Semester</h3>
             </div>
-            <p className="text-xs text-[#57534E] leading-relaxed">
+            <p className="text-xs text-[#58595B] leading-relaxed">
               Seluruh sesi ujian UTS/UAS dipantau real-time dengan standar proctoring anti-kecurangan prodi.
             </p>
           </div>
           <Link
             href="/coordinator/monitoring?tab=ujian"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#ECE9D8] text-xs font-semibold text-[#1C1917] transition-all"
+            className="inline-flex items-center justify-between p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#F3F3F4] text-xs font-semibold text-[#111111] transition-all"
           >
             <span>Pantau Ujian Prodi</span>
-            <ArrowRight className="h-4 w-4 text-[#1C1917]" />
+            <ArrowRight className="h-4 w-4 text-[#111111]" />
           </Link>
         </div>
 
-        <div className="rounded-xl border border-[#D6D3CB] bg-white p-5 space-y-4 flex flex-col justify-between">
+        <div className="rounded-xl border border-[#E2E3E4] bg-white p-5 space-y-4 flex flex-col justify-between">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <CheckSquare className="h-5 w-5 text-[#C2553A]" />
-              <h3 className="font-heading font-bold text-base text-[#1C1917]">Antrean Otorisasi Nilai</h3>
+              <CheckSquare className="h-5 w-5 text-[#9F1521]" />
+              <h3 className="font-heading font-bold text-base text-[#111111]">Antrean Otorisasi Nilai</h3>
             </div>
-            <p className="text-xs text-[#57534E] leading-relaxed">
+            <p className="text-xs text-[#58595B] leading-relaxed">
               Verifikasi berita acara perubahan nilai dari dosen pengampu sebelum disahkan ke Biro Akademik.
             </p>
           </div>
           <Link
             href="/coordinator/approvals?tab=perubahan-nilai"
-            className="inline-flex items-center justify-between p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#ECE9D8] text-xs font-semibold text-[#1C1917] transition-all"
+            className="inline-flex items-center justify-between p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#F3F3F4] text-xs font-semibold text-[#111111] transition-all"
           >
             <span>Tinjau Pengajuan</span>
-            <ArrowRight className="h-4 w-4 text-[#1C1917]" />
+            <ArrowRight className="h-4 w-4 text-[#111111]" />
           </Link>
         </div>
       </div>

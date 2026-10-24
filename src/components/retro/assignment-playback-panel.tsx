@@ -208,23 +208,23 @@ export function AssignmentPlaybackPanel({
   );
 
   return (
-    <div className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] overflow-hidden font-sans">
+    <div className="rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] overflow-hidden font-sans">
       {/* Header Bar Ringkas (Collapsible agar tidak memenuhi halaman) */}
-      <div className="px-4 py-3 bg-[#FAF8F5] border-b border-[#E8E5DE] flex flex-wrap items-center justify-between gap-3">
+      <div className="px-4 py-3 bg-[#FFFFFF] border-b border-[#E2E3E4] flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-[#1C1917] text-white">
+          <div className="p-1.5 rounded-lg bg-[#111111] text-white">
             <History className="h-4 w-4 text-[#FDE047]" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="font-heading font-bold text-sm text-[#1C1917]">
+              <h3 className="font-heading font-bold text-sm text-[#111111]">
                 Riwayat Pengerjaan &amp; Verifikasi Keaslian Kode
               </h3>
-              <span className="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded bg-[#ECE9D8] text-[#44403C]">
+              <span className="text-[10px] font-mono font-semibold uppercase px-2 py-0.5 rounded bg-[#F3F3F4] text-[#58595B]">
                 Telemetri Submisi
               </span>
             </div>
-            <p className="text-xs text-[#57534E]">
+            <p className="text-xs text-[#58595B]">
               Rekam jejak pengetikan bertahap dan pemeriksaan integritas submisi ({assignmentTitle})
             </p>
           </div>
@@ -232,15 +232,15 @@ export function AssignmentPlaybackPanel({
 
         <div className="flex items-center gap-2">
           {isPanelOpen && (
-            <div className="flex items-center gap-1 bg-[#ECE9D8] p-1 rounded-lg border border-[#D6D3CB]">
+            <div className="flex items-center gap-1 bg-[#F3F3F4] p-1 rounded-lg border border-[#E2E3E4]">
               <button
                 type="button"
                 onClick={() => setActiveTabMode('editor')}
                 className={cn(
                   'px-2.5 py-1 rounded text-xs font-semibold transition-colors cursor-pointer',
                   activeTabMode === 'editor'
-                    ? 'bg-[#C2553A] text-white'
-                    : 'text-[#1C1917] hover:bg-[#FAF8F5]'
+                    ? 'bg-[#9F1521] text-white'
+                    : 'text-[#111111] hover:bg-[#FFFFFF]'
                 )}
               >
                 Editor Mahasiswa
@@ -251,8 +251,8 @@ export function AssignmentPlaybackPanel({
                 className={cn(
                   'px-2.5 py-1 rounded text-xs font-semibold transition-colors cursor-pointer',
                   activeTabMode === 'playback'
-                    ? 'bg-[#1C1917] text-white'
-                    : 'text-[#1C1917] hover:bg-[#FAF8F5]'
+                    ? 'bg-[#111111] text-white'
+                    : 'text-[#111111] hover:bg-[#FFFFFF]'
                 )}
               >
                 Inspektor Dosen
@@ -263,7 +263,7 @@ export function AssignmentPlaybackPanel({
           <button
             type="button"
             onClick={() => setIsPanelOpen((prev) => !prev)}
-            className="px-3 py-1.5 rounded-lg border border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#ECE9D8] text-xs font-semibold text-[#1C1917] transition-colors cursor-pointer"
+            className="px-3 py-1.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#F3F3F4] text-xs font-semibold text-[#111111] transition-colors cursor-pointer"
           >
             {isPanelOpen ? 'Sembunyikan Panel' : 'Buka Panel Verifikasi'}
           </button>
@@ -272,11 +272,11 @@ export function AssignmentPlaybackPanel({
 
       {/* MODE 1: TIME-TRAVEL PLAYBACK INSPECTOR (UNTUK DOSEN & SIMULASI) */}
       {isPanelOpen && activeTabMode === 'playback' && (
-        <div className="p-4 sm:p-5 bg-[#FAF8F5] space-y-4">
+        <div className="p-4 sm:p-5 bg-[#FFFFFF] space-y-4">
           {/* Pilihan Rekaman Mahasiswa */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-extrabold text-[#1C1917]">Pilih Rekaman Submisi:</span>
+              <span className="text-xs font-extrabold text-[#111111]">Pilih Rekaman Submisi:</span>
               {DEMO_SUBMISSION_RECORDS.map((rec) => (
                 <button
                   key={rec.id}
@@ -285,8 +285,8 @@ export function AssignmentPlaybackPanel({
                   className={cn(
                     'px-3 py-1.5 text-xs font-bold border transition-all cursor-pointer',
                     selectedRecordId === rec.id
-                      ? 'border-2 border-[#1C1917] bg-[#1C1917] text-white'
-                      : 'border-[#7A756D] bg-[#FFFFFF] text-[#1C1917] hover:bg-[#ECE9D8]'
+                      ? 'border-2 border-[#111111] bg-[#111111] text-white'
+                      : 'border-[#808285] bg-[#FFFFFF] text-[#111111] hover:bg-[#F3F3F4]'
                   )}
                 >
                   {rec.studentName} ({rec.authenticityScore}% Organik)
@@ -308,8 +308,8 @@ export function AssignmentPlaybackPanel({
 
           {/* 4 Metrik Telemetri */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-            <div className="p-3 bg-[#FFFFFF] border border-[#7A756D]">
-              <p className="text-[11px] font-bold text-[#57534E]">Skor Keaslian Ketikan</p>
+            <div className="p-3 bg-[#FFFFFF] border border-[#808285]">
+              <p className="text-[11px] font-bold text-[#58595B]">Skor Keaslian Ketikan</p>
               <p
                 className={cn(
                   'text-xl font-black',
@@ -319,16 +319,16 @@ export function AssignmentPlaybackPanel({
                 {activeRecord.authenticityScore}%
               </p>
             </div>
-            <div className="p-3 bg-[#FFFFFF] border border-[#7A756D]">
-              <p className="text-[11px] font-bold text-[#57534E]">Durasi Ketik Aktif</p>
-              <p className="text-xl font-black text-[#1C1917]">{activeRecord.activeMinutes} Menit</p>
+            <div className="p-3 bg-[#FFFFFF] border border-[#808285]">
+              <p className="text-[11px] font-bold text-[#58595B]">Durasi Ketik Aktif</p>
+              <p className="text-xl font-black text-[#111111]">{activeRecord.activeMinutes} Menit</p>
             </div>
-            <div className="p-3 bg-[#FFFFFF] border border-[#7A756D]">
-              <p className="text-[11px] font-bold text-[#57534E]">Total Ketikan Organik</p>
-              <p className="text-xl font-black text-[#1C1917]">{activeRecord.totalKeystrokes} Key</p>
+            <div className="p-3 bg-[#FFFFFF] border border-[#808285]">
+              <p className="text-[11px] font-bold text-[#58595B]">Total Ketikan Organik</p>
+              <p className="text-xl font-black text-[#111111]">{activeRecord.totalKeystrokes} Key</p>
             </div>
-            <div className="p-3 bg-[#FFFFFF] border border-[#7A756D]">
-              <p className="text-[11px] font-bold text-[#57534E]">Lonjakan Copy-Paste</p>
+            <div className="p-3 bg-[#FFFFFF] border border-[#808285]">
+              <p className="text-[11px] font-bold text-[#58595B]">Lonjakan Copy-Paste</p>
               <p
                 className={cn(
                   'text-xl font-black',
@@ -341,13 +341,13 @@ export function AssignmentPlaybackPanel({
           </div>
 
           {/* Kontrol Pemutar Time-Travel (Slider & Tombol Play) */}
-          <div className="p-4 bg-[#FFFFFF] border-2 border-[#1C1917] space-y-3">
+          <div className="p-4 bg-[#FFFFFF] border-2 border-[#111111] space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-2">
                 <button
                   type="button"
                   onClick={() => (isPlaying ? setIsPlaying(false) : handleStartPlayback())}
-                  className="px-3.5 py-1.5 bg-[#C2553A] hover:bg-[#853827] text-white text-xs font-extrabold border border-[#6B2D20] inline-flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-1.5 bg-[#9F1521] hover:bg-[#9F1521] text-white text-xs font-extrabold border border-[#8F131E] inline-flex items-center gap-1.5 cursor-pointer"
                 >
                   {isPlaying ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
                   <span>{isPlaying ? 'Jeda Playback' : 'Putar Riwayat Ketikan'}</span>
@@ -358,14 +358,14 @@ export function AssignmentPlaybackPanel({
                     setIsPlaying(false);
                     setCurrentStepIndex(0);
                   }}
-                  className="px-2.5 py-1.5 bg-[#ECE9D8] hover:bg-[#D6D3CB] text-[#1C1917] text-xs font-bold border border-[#7A756D] inline-flex items-center gap-1 cursor-pointer"
+                  className="px-2.5 py-1.5 bg-[#F3F3F4] hover:bg-[#E2E3E4] text-[#111111] text-xs font-bold border border-[#808285] inline-flex items-center gap-1 cursor-pointer"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
                   <span>Ulang dari Menit 0</span>
                 </button>
               </div>
 
-              <span className="text-xs font-mono font-extrabold text-[#1C1917] bg-[#F5F3EE] px-2.5 py-1 border border-[#7A756D]">
+              <span className="text-xs font-mono font-extrabold text-[#111111] bg-[#F5F3EE] px-2.5 py-1 border border-[#808285]">
                 Tahap {currentSnapshot.step} / {activeRecord.snapshots.length} · {currentSnapshot.timeLabel}
               </span>
             </div>
@@ -381,10 +381,10 @@ export function AssignmentPlaybackPanel({
                   setIsPlaying(false);
                   setCurrentStepIndex(Number(e.target.value));
                 }}
-                className="w-full accent-[#C2553A] cursor-pointer"
+                className="w-full accent-[#9F1521] cursor-pointer"
                 aria-label="Time-Travel Scrubber"
               />
-              <div className="flex justify-between text-[11px] font-mono font-bold text-[#57534E]">
+              <div className="flex justify-between text-[11px] font-mono font-bold text-[#58595B]">
                 {activeRecord.snapshots.map((snap, idx) => (
                   <button
                     key={snap.step}
@@ -396,10 +396,10 @@ export function AssignmentPlaybackPanel({
                     className={cn(
                       'px-2 py-0.5 border cursor-pointer',
                       idx === currentStepIndex
-                        ? 'bg-[#1C1917] text-white border-[#1C1917]'
+                        ? 'bg-[#111111] text-white border-[#111111]'
                         : snap.eventType === 'PASTE_BURST'
                         ? 'bg-[#FEF2F2] text-[#991B1B] border-[#DC2626]'
-                        : 'bg-[#FAF8F5] text-[#1C1917] border-[#D6D3CB]'
+                        : 'bg-[#FFFFFF] text-[#111111] border-[#E2E3E4]'
                     )}
                   >
                     Tahap #{snap.step} {snap.eventType === 'PASTE_BURST' ? '(!)' : ''}
@@ -414,7 +414,7 @@ export function AssignmentPlaybackPanel({
                 'p-3 border text-xs font-bold flex items-start gap-2',
                 currentSnapshot.eventType === 'PASTE_BURST'
                   ? 'bg-[#FEF2F2] text-[#991B1B] border-[#DC2626]'
-                  : 'bg-[#F5F3EE] text-[#1C1917] border-[#7A756D]'
+                  : 'bg-[#F5F3EE] text-[#111111] border-[#808285]'
               )}
             >
               {currentSnapshot.eventType === 'PASTE_BURST' ? (
@@ -431,7 +431,7 @@ export function AssignmentPlaybackPanel({
             </div>
 
             {/* Tampilan Kode pada Titik Waktu Tersebut */}
-            <div className="bg-[#18181B] text-[#F4F4F5] p-4 border border-[#1C1917] font-mono text-xs overflow-x-auto">
+            <div className="bg-[#18181B] text-[#F4F4F5] p-4 border border-[#111111] font-mono text-xs overflow-x-auto">
               <pre className="leading-relaxed whitespace-pre-wrap">{currentSnapshot.code}</pre>
             </div>
           </div>
@@ -440,15 +440,15 @@ export function AssignmentPlaybackPanel({
 
       {/* MODE 2: WORKSPACE MAHASISWA DENGAN LIVE SENSOR ANTI-JOKI */}
       {isPanelOpen && activeTabMode === 'editor' && (
-        <div className="p-4 sm:p-5 bg-[#FAF8F5] space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#FFFFFF] border border-[#7A756D]">
+        <div className="p-4 sm:p-5 bg-[#FFFFFF] space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-[#FFFFFF] border border-[#808285]">
             <div className="flex items-center gap-4 flex-wrap">
-              <span className="flex items-center gap-1.5 text-xs font-extrabold text-[#1C1917]">
+              <span className="flex items-center gap-1.5 text-xs font-extrabold text-[#111111]">
                 <Keyboard className="h-4 w-4 text-[#059669]" />
                 <span>Ketikan Organik: {organicKeystrokes} keystrokes</span>
               </span>
-              <span className="flex items-center gap-1.5 text-xs font-extrabold text-[#1C1917]">
-                <ClipboardPaste className="h-4 w-4 text-[#C2553A]" />
+              <span className="flex items-center gap-1.5 text-xs font-extrabold text-[#111111]">
+                <ClipboardPaste className="h-4 w-4 text-[#9F1521]" />
                 <span>Paste Burst (&gt;50 char): {pasteBurstCount}x</span>
               </span>
             </div>
@@ -465,20 +465,20 @@ export function AssignmentPlaybackPanel({
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-extrabold text-[#1C1917] block">
+            <label className="text-xs font-extrabold text-[#111111] block">
               Editor Lembar Kerja Berpembuktian (Coba ketik biasa vs tempel/paste teks panjang untuk menguji sensor):
             </label>
             <textarea
               rows={7}
               value={liveCode}
               onChange={handleLiveChange}
-              className="w-full p-3.5 bg-[#18181B] text-[#F4F4F5] font-mono text-xs sm:text-sm border-2 border-[#1C1917] focus:outline-none focus:border-[#C2553A]"
+              className="w-full p-3.5 bg-[#18181B] text-[#F4F4F5] font-mono text-xs sm:text-sm border-2 border-[#111111] focus:outline-none focus:border-[#9F1521]"
             />
           </div>
 
           {/* Log Sensor Real-Time */}
           <div className="space-y-1.5">
-            <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#57534E]">
+            <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#58595B]">
               Log Telemetri Keaslian Pengerjaan:
             </p>
             <div className="space-y-1">
@@ -489,7 +489,7 @@ export function AssignmentPlaybackPanel({
                     'px-3 py-1.5 text-xs font-mono font-bold border flex items-center justify-between',
                     item.type === 'PASTE_BURST'
                       ? 'bg-[#FEF2F2] text-[#991B1B] border-[#DC2626]'
-                      : 'bg-[#FFFFFF] text-[#1C1917] border-[#D6D3CB]'
+                      : 'bg-[#FFFFFF] text-[#111111] border-[#E2E3E4]'
                   )}
                 >
                   <span>{item.info}</span>

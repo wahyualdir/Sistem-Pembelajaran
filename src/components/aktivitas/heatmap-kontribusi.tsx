@@ -109,13 +109,13 @@ export function HeatmapKontribusi({
   return (
     <div
       className={cn(
-        'rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4 font-sans',
+        'rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] p-4 sm:p-5 shadow-sm space-y-4 font-sans',
         className
       )}
     >
       {/* HEADER & FILTER */}
       {(judul || deskripsi || tampilkanFilterKelas || aksiHeader) && (
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-ink/10 pb-3.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#E2E3E4] pb-3.5">
           <div className="space-y-1">
             {judul ? (
               <div className="flex items-center gap-2.5">
@@ -143,7 +143,7 @@ export function HeatmapKontribusi({
                   value={filterKelas}
                   onChange={(e) => handleFilterChange(e.target.value)}
                   aria-label="Filter berdasarkan kelas perkuliahan"
-                  className="text-xs font-bold text-ink bg-surface border-2 border-ink rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary shadow-xs cursor-pointer"
+                  className="text-xs font-semibold text-[#111111] bg-[#FFFFFF] border border-[#E2E3E4] rounded-lg px-2.5 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#9F1521]/20 cursor-pointer"
                 >
                   <option value="semua">Semua Kelas ({daftarKelas.length})</option>
                   {daftarKelas.map((k) => (

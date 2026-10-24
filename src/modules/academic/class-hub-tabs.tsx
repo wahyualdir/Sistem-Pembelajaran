@@ -343,10 +343,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {/* ================================================================= */}
       {/* 1. BANNER BERWARNA & BERCORAK RUANG KELAS ALA GOOGLE CLASSROOM    */}
       {/* ================================================================= */}
-      <div className="rounded-2xl border border-[#D6D3CB] bg-[#FFFFFF] shadow-sm overflow-hidden font-sans">
+      <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] shadow-sm overflow-hidden font-sans">
         {/* Header Area Berwarna & Bercorak */}
         <div
-          className={`relative p-5 sm:p-7 ${bannerTheme.bannerGradient} border-b border-[#1C1917]/15 space-y-5 overflow-hidden text-white`}
+          className={`relative p-5 sm:p-7 ${bannerTheme.bannerGradient} border-b border-[#111111]/15 space-y-5 overflow-hidden text-white`}
         >
           <ClassroomBannerPattern pattern={bannerTheme.pattern} />
 
@@ -355,7 +355,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             <div className="flex flex-wrap items-center gap-2 text-xs">
               <Link
                 href="/classes"
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#FFFFFF]/30 bg-[#FFFFFF]/15 hover:bg-[#FFFFFF] text-white hover:text-[#1C1917] font-bold transition-all cursor-pointer backdrop-blur-xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#FFFFFF]/30 bg-[#FFFFFF]/15 hover:bg-[#FFFFFF] text-white hover:text-[#111111] font-bold transition-all cursor-pointer backdrop-blur-xs"
               >
                 <ArrowLeft className="h-3.5 w-3.5" />
                 <span>Kelas Saya</span>
@@ -367,7 +367,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 <span>{cls.sks || 3} SKS</span>
               </span>
 
-              <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-[#1C1917]/30 border border-[#FFFFFF]/20 text-white/95 font-semibold">
+              <span className="hidden sm:inline-flex px-3 py-1 rounded-full bg-[#111111]/30 border border-[#FFFFFF]/20 text-white/95 font-semibold">
                 {activeRoleBadge}
               </span>
             </div>
@@ -376,7 +376,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               <button
                 type="button"
                 onClick={handleCopyCode}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#FFFFFF]/30 bg-[#1C1917]/30 hover:bg-[#FFFFFF] text-white hover:text-[#1C1917] text-xs font-mono font-bold transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#FFFFFF]/30 bg-[#111111]/30 hover:bg-[#FFFFFF] text-white hover:text-[#111111] text-xs font-mono font-bold transition-colors cursor-pointer"
                 title="Salin Kode Kelas"
               >
                 <Key className="h-3.5 w-3.5" />
@@ -389,10 +389,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               <button
                 type="button"
                 onClick={() => setIsLiveRoomOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] font-bold text-xs shadow-xs transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#111111] font-bold text-xs shadow-xs transition-colors cursor-pointer"
                 title="Buka Ruang Tatap Muka Daring (Live WebRTC)"
               >
-                <Video className="h-3.5 w-3.5 text-[#C2553A]" />
+                <Video className="h-3.5 w-3.5 text-[#9F1521]" />
                 <span>{lecturer || ta ? 'Buka Tatap Muka' : 'Gabung Tatap Muka'}</span>
               </button>
             </div>
@@ -423,7 +423,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             </div>
 
             {/* Pill Dosen Pengampu Kontras */}
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#1C1917]/35 backdrop-blur-xs border border-[#FFFFFF]/25 self-start lg:self-end shrink-0">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-[#111111]/35 backdrop-blur-xs border border-[#FFFFFF]/25 self-start lg:self-end shrink-0">
               <div
                 className={`h-7 w-7 rounded-full ${bannerTheme.avatarBg} ring-2 ring-[#FFFFFF]/80 text-white flex items-center justify-center font-heading font-black text-xs shrink-0`}
               >
@@ -467,17 +467,17 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   className={cn(
                     'py-1.5 px-3.5 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer flex items-center gap-1.5',
                     isActive
-                      ? 'bg-[#1C1917] text-white'
-                      : 'text-[#57534E] hover:text-[#1C1917] hover:bg-[#FAF8F5]'
+                      ? 'bg-[#111111] text-white'
+                      : 'text-[#58595B] hover:text-[#111111] hover:bg-[#FFFFFF]'
                   )}
                 >
-                  <Icon className={cn('h-3.5 w-3.5 shrink-0', isActive ? 'text-white' : 'text-[#C2553A]')} />
+                  <Icon className={cn('h-3.5 w-3.5 shrink-0', isActive ? 'text-white' : 'text-[#9F1521]')} />
                   <span>{tab.label}</span>
                   {badgeCount !== null && badgeCount > 0 && (
                     <span
                       className={cn(
                         'px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold',
-                        isActive ? 'bg-[#C2553A] text-white' : 'bg-[#F2EFE8] text-[#57534E]'
+                        isActive ? 'bg-[#9F1521] text-white' : 'bg-[#F3F3F4] text-[#58595B]'
                       )}
                     >
                       {badgeCount}
@@ -497,8 +497,8 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   className={cn(
                     'py-1.5 px-3 rounded-xl text-xs font-semibold transition-all shrink-0 cursor-pointer flex items-center gap-1.5 border',
                     activeSecondary
-                      ? 'bg-[#1C1917] text-white border-[#1C1917]'
-                      : 'border-[#E8E5DE] bg-[#FAF8F5] text-[#57534E] hover:text-[#1C1917]'
+                      ? 'bg-[#111111] text-white border-[#111111]'
+                      : 'border-[#E2E3E4] bg-[#FFFFFF] text-[#58595B] hover:text-[#111111]'
                   )}
                 >
                   <span>{activeSecondary ? activeSecondary.label : 'Lainnya'}</span>
@@ -509,7 +509,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           </div>
 
           {isMoreTabsOpen && roleTabs.length > 5 && (
-            <div className="w-full pt-2 border-t border-[#E8E5DE] flex flex-wrap items-center gap-1.5">
+            <div className="w-full pt-2 border-t border-[#E2E3E4] flex flex-wrap items-center gap-1.5">
               {roleTabs.slice(5).map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -524,8 +524,8 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     className={cn(
                       'py-1 px-3 rounded-lg text-xs font-semibold transition-colors cursor-pointer flex items-center gap-1.5',
                       isActive
-                        ? 'bg-[#C2553A] text-white'
-                        : 'bg-[#FAF8F5] text-[#57534E] hover:text-[#1C1917] border border-[#E8E5DE]'
+                        ? 'bg-[#9F1521] text-white'
+                        : 'bg-[#FFFFFF] text-[#58595B] hover:text-[#111111] border border-[#E2E3E4]'
                     )}
                   >
                     <Icon className="h-3.5 w-3.5 shrink-0" />
@@ -546,16 +546,16 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           {/* KOLOM KIRI (4 KOLOM): RINGKASAN TUGAS & PRESENSI BERSIH */}
           <div className="lg:col-span-4 space-y-4">
             {/* WIDGET 1: TENGGAT TUGAS / KENDALI PENGAJAR */}
-            <div className="rounded-2xl border border-[#D6D3CB] bg-[#FFFFFF] p-5 space-y-3.5 shadow-xs">
+            <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] p-5 space-y-3.5 shadow-xs">
               <div className="flex items-center justify-between">
-                <h3 className="font-heading font-black text-sm text-[#1C1917] flex items-center gap-2">
-                  <ClipboardList className="h-4 w-4 text-[#C2553A]" />
+                <h3 className="font-heading font-black text-sm text-[#111111] flex items-center gap-2">
+                  <ClipboardList className="h-4 w-4 text-[#9F1521]" />
                   <span>{lecturer || ta || isStaff ? 'Pintasan Pengajar' : 'Tugas Mendatang'}</span>
                 </h3>
                 <button
                   type="button"
                   onClick={() => setActiveTab('tugas')}
-                  className="text-xs font-bold text-[#C2553A] hover:underline cursor-pointer"
+                  className="text-xs font-bold text-[#9F1521] hover:underline cursor-pointer"
                 >
                   Lihat semua
                 </button>
@@ -569,16 +569,16 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                       setActiveTab('tugas');
                       setIsClassworkCreateOpen(true);
                     }}
-                    className="p-2.5 rounded-xl bg-[#FAF8F5] hover:bg-[#1C1917] hover:text-white text-[#1C1917] text-left transition-colors cursor-pointer space-y-1"
+                    className="p-2.5 rounded-xl bg-[#FFFFFF] hover:bg-[#111111] hover:text-white text-[#111111] text-left transition-colors cursor-pointer space-y-1"
                   >
-                    <PlusCircle className="h-4 w-4 text-[#C2553A]" />
+                    <PlusCircle className="h-4 w-4 text-[#9F1521]" />
                     <span className="text-xs font-bold block">Buat Tugas / Modul</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setActiveTab(ta ? 'bantu-presensi' : 'presensi')}
-                    className="p-2.5 rounded-xl bg-[#FAF8F5] hover:bg-[#1C1917] hover:text-white text-[#1C1917] text-left transition-colors cursor-pointer space-y-1"
+                    className="p-2.5 rounded-xl bg-[#FFFFFF] hover:bg-[#111111] hover:text-white text-[#111111] text-left transition-colors cursor-pointer space-y-1"
                   >
                     <CalendarCheck2 className="h-4 w-4 text-[#059669]" />
                     <span className="text-xs font-bold block">Buka Presensi</span>
@@ -587,7 +587,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               )}
 
               {upcomingAssignments.length === 0 ? (
-                <div className="p-3.5 rounded-xl bg-[#FAF8F5] text-xs text-[#6B6560]">
+                <div className="p-3.5 rounded-xl bg-[#FFFFFF] text-xs text-[#808285]">
                   Tidak ada tenggat tugas aktif dalam minggu ini.
                 </div>
               ) : (
@@ -596,23 +596,23 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     <div
                       key={a.id}
                       onClick={() => setActiveTab('tugas')}
-                      className="p-3 rounded-xl bg-[#FAF8F5] hover:bg-[#F2EFE8] transition-colors cursor-pointer space-y-1"
+                      className="p-3 rounded-xl bg-[#FFFFFF] hover:bg-[#F3F3F4] transition-colors cursor-pointer space-y-1"
                     >
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[11px] font-mono font-semibold text-[#C2553A]">
+                        <span className="text-[11px] font-mono font-semibold text-[#9F1521]">
                           Tenggat {fmtShort(a.close_at)}
                         </span>
                         {lecturer || ta ? (
-                          <span className="text-[10px] font-mono font-bold text-[#57534E]">
+                          <span className="text-[10px] font-mono font-bold text-[#58595B]">
                             {a.submissions ?? 0}/{members.length} Submisi
                           </span>
                         ) : a.mine ? (
                           <span className="text-[10px] font-bold text-[#059669]">Terkumpul</span>
                         ) : (
-                          <span className="text-[10px] font-bold text-[#C2553A]">Belum</span>
+                          <span className="text-[10px] font-bold text-[#9F1521]">Belum</span>
                         )}
                       </div>
-                      <p className="text-xs font-bold text-[#1C1917] line-clamp-1">{a.title}</p>
+                      <p className="text-xs font-bold text-[#111111] line-clamp-1">{a.title}</p>
                     </div>
                   ))}
                 </div>
@@ -620,13 +620,13 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             </div>
 
             {/* WIDGET 2: PRESENSI PERKULIAHAN RINGKAS */}
-            <div className="rounded-2xl border border-[#D6D3CB] bg-[#FFFFFF] p-5 space-y-3 shadow-xs">
+            <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] p-5 space-y-3 shadow-xs">
               <div className="flex items-center justify-between">
-                <h3 className="font-heading font-black text-sm text-[#1C1917] flex items-center gap-2">
+                <h3 className="font-heading font-black text-sm text-[#111111] flex items-center gap-2">
                   <CalendarCheck2 className="h-4 w-4 text-[#059669]" />
                   <span>Presensi Kehadiran</span>
                 </h3>
-                <span className="text-xs font-semibold text-[#6B6560]">
+                <span className="text-xs font-semibold text-[#808285]">
                   {attendanceSessions.length} Pertemuan
                 </span>
               </div>
@@ -645,7 +645,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   </button>
                 </div>
               ) : (
-                <div className="p-3.5 rounded-xl bg-[#FAF8F5] space-y-2.5 text-xs text-[#6B6560]">
+                <div className="p-3.5 rounded-xl bg-[#FFFFFF] space-y-2.5 text-xs text-[#808285]">
                   <p className="leading-relaxed">
                     {lecturer || ta
                       ? 'Belum ada sesi presensi aktif saat ini.'
@@ -654,7 +654,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   <button
                     type="button"
                     onClick={() => setActiveTab(ta ? 'bantu-presensi' : 'presensi')}
-                    className="w-full py-2 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#1C1917] hover:text-white text-[#1C1917] font-bold text-xs transition-colors cursor-pointer"
+                    className="w-full py-2 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#111111] hover:text-white text-[#111111] font-bold text-xs transition-colors cursor-pointer"
                   >
                     {lecturer || ta ? 'Kelola Sesi Presensi' : 'Lihat Riwayat Presensi'}
                   </button>
@@ -666,10 +666,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           {/* KOLOM KANAN (8 KOLOM): ALIRAN PENGUMUMAN, TUGAS & DISKUSI */}
           <div className="lg:col-span-8 space-y-4">
             {/* PANEL 1: PENGUMUMAN & AKTIVITAS TERBARU */}
-            <div className="rounded-2xl border border-[#D6D3CB] bg-[#FFFFFF] p-5 space-y-4 shadow-xs">
+            <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] p-5 space-y-4 shadow-xs">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="font-heading font-black text-sm sm:text-base text-[#1C1917] flex items-center gap-2">
-                  <Bell className="h-4 w-4 text-[#C2553A]" />
+                <h3 className="font-heading font-black text-sm sm:text-base text-[#111111] flex items-center gap-2">
+                  <Bell className="h-4 w-4 text-[#9F1521]" />
                   <span>Aktivitas & Pengumuman Kelas</span>
                 </h3>
 
@@ -677,7 +677,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   <button
                     type="button"
                     onClick={() => setIsAnnounceOpen(!isAnnounceOpen)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#FEF2F0] hover:bg-[#C2553A] text-[#C2553A] hover:text-white text-xs font-bold transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#FEF2F2] hover:bg-[#9F1521] text-[#9F1521] hover:text-white text-xs font-bold transition-colors cursor-pointer"
                   >
                     <PenSquare className="h-3.5 w-3.5" />
                     <span>{isAnnounceOpen ? 'Tutup' : '+ Pengumuman'}</span>
@@ -686,7 +686,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               </div>
 
               {lecturer && isAnnounceOpen && (
-                <div className="p-4 rounded-xl bg-[#FAF8F5] border border-[#D6D3CB] space-y-3 animate-fade-up">
+                <div className="p-4 rounded-xl bg-[#FFFFFF] border border-[#E2E3E4] space-y-3 animate-fade-up">
                   <CreateAnnouncementForm classId={cls.id} />
                 </div>
               )}
@@ -695,22 +695,22 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
               {announcements.map((a) => (
                 <div
                   key={a.id}
-                  className="p-4 rounded-xl bg-[#FEF2F0]/60 border border-[#FDDDD7] space-y-2"
+                  className="p-4 rounded-xl bg-[#FEF2F2]/60 border border-[#FEF2F2] space-y-2"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-xs font-bold text-[#1C1917]">{lecturerDisplayName}</span>
-                    <span className="text-[11px] text-[#78716C]">{fmtShort(a.created_at)}</span>
+                    <span className="text-xs font-bold text-[#111111]">{lecturerDisplayName}</span>
+                    <span className="text-[11px] text-[#808285]">{fmtShort(a.created_at)}</span>
                   </div>
-                  <h4 className="font-heading font-black text-sm text-[#1C1917]">{a.title}</h4>
+                  <h4 className="font-heading font-black text-sm text-[#111111]">{a.title}</h4>
                   {a.body && (
-                    <MarkdownViewer content={a.body} className="text-xs sm:text-sm text-[#44403C] leading-relaxed" />
+                    <MarkdownViewer content={a.body} className="text-xs sm:text-sm text-[#58595B] leading-relaxed" />
                   )}
                 </div>
               ))}
 
               {/* Daftar Tugas & Modul Terbit */}
               {assignments.length === 0 && materials.length === 0 && announcements.length === 0 ? (
-                <div className="p-6 rounded-xl bg-[#FAF8F5] text-center text-xs text-[#6B6560]">
+                <div className="p-6 rounded-xl bg-[#FFFFFF] text-center text-xs text-[#808285]">
                   Belum ada pengumuman atau tugas yang dipublikasikan di kelas ini.
                 </div>
               ) : (
@@ -719,23 +719,23 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     <div
                       key={asg.id}
                       onClick={() => setActiveTab('tugas')}
-                      className="p-3.5 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5]/60 hover:bg-[#FAF8F5] hover:border-[#D6D3CB] transition-all flex items-center justify-between gap-3 cursor-pointer"
+                      className="p-3.5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF]/60 hover:bg-[#FFFFFF] hover:border-[#E2E3E4] transition-all flex items-center justify-between gap-3 cursor-pointer"
                     >
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="h-9 w-9 rounded-xl bg-[#FEF2F0] text-[#C2553A] flex items-center justify-center shrink-0">
+                        <div className="h-9 w-9 rounded-xl bg-[#FEF2F2] text-[#9F1521] flex items-center justify-center shrink-0">
                           <ClipboardList className="h-4 w-4" />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-heading font-bold text-xs sm:text-sm text-[#1C1917] truncate">
+                          <p className="font-heading font-bold text-xs sm:text-sm text-[#111111] truncate">
                             {asg.title}
                           </p>
-                          <span className="text-[11px] text-[#6B6560] block">
+                          <span className="text-[11px] text-[#808285] block">
                             Tenggat: {fmt(asg.close_at)}
                           </span>
                         </div>
                       </div>
 
-                      <span className="px-2.5 py-1 rounded-lg bg-[#FFFFFF] border border-[#D6D3CB] text-[#1C1917] font-bold text-xs shrink-0">
+                      <span className="px-2.5 py-1 rounded-lg bg-[#FFFFFF] border border-[#E2E3E4] text-[#111111] font-bold text-xs shrink-0">
                         {lecturer || ta ? `${asg.submissions ?? 0} Submisi` : asg.mine ? 'Terkumpul' : 'Buka'}
                       </span>
                     </div>
@@ -745,17 +745,17 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     <div
                       key={mat.id}
                       onClick={() => setActiveTab('tugas')}
-                      className="p-3.5 rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] hover:bg-[#FAF8F5] transition-all flex items-center justify-between gap-3 cursor-pointer"
+                      className="p-3.5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] hover:bg-[#FFFFFF] transition-all flex items-center justify-between gap-3 cursor-pointer"
                     >
                       <div className="flex items-center gap-3 min-w-0">
                         <div className="h-9 w-9 rounded-xl bg-[#F4EFEB] text-[#2563EB] flex items-center justify-center shrink-0">
                           <BookOpen className="h-4 w-4" />
                         </div>
                         <div className="min-w-0">
-                          <p className="font-heading font-bold text-xs sm:text-sm text-[#1C1917] truncate">
+                          <p className="font-heading font-bold text-xs sm:text-sm text-[#111111] truncate">
                             {mat.title}
                           </p>
-                          <span className="text-[11px] text-[#6B6560] block">
+                          <span className="text-[11px] text-[#808285] block">
                             Modul Materi • {fmtShort(mat.created_at)}
                           </span>
                         </div>
@@ -781,26 +781,26 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             />
 
             {/* PANEL 4: MATRIKS CAPAIAN CPMK & CPL (ACCORDION BERSIH) */}
-            <div className="rounded-2xl border border-[#D6D3CB] bg-[#FFFFFF] overflow-hidden shadow-xs">
+            <div className="rounded-2xl border border-[#E2E3E4] bg-[#FFFFFF] overflow-hidden shadow-xs">
               <button
                 type="button"
                 onClick={() => setIsCpmkExpanded(!isCpmkExpanded)}
-                className="w-full px-5 py-3.5 hover:bg-[#FAF8F5] flex items-center justify-between text-left transition-colors cursor-pointer"
+                className="w-full px-5 py-3.5 hover:bg-[#FFFFFF] flex items-center justify-between text-left transition-colors cursor-pointer"
               >
                 <div className="flex items-center gap-2.5">
-                  <Award className="h-4 w-4 text-[#C2553A] shrink-0" />
-                  <span className="font-heading font-bold text-xs sm:text-sm text-[#1C1917]">
+                  <Award className="h-4 w-4 text-[#9F1521] shrink-0" />
+                  <span className="font-heading font-bold text-xs sm:text-sm text-[#111111]">
                     Ketercapaian CPMK & CPL Kurikulum OBE
                   </span>
                 </div>
-                <div className="flex items-center gap-1 text-xs font-semibold text-[#6B6560]">
+                <div className="flex items-center gap-1 text-xs font-semibold text-[#808285]">
                   <span>{isCpmkExpanded ? 'Tutup' : 'Lihat'}</span>
                   {isCpmkExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                 </div>
               </button>
 
               {isCpmkExpanded && (
-                <div className="p-5 border-t border-[#E8E5DE] bg-[#FFFFFF] animate-fade-up">
+                <div className="p-5 border-t border-[#E2E3E4] bg-[#FFFFFF] animate-fade-up">
                   <CpmkCplRadarCard classId={cls.id} />
                 </div>
               )}
@@ -815,7 +815,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {activeTab === 'tugas' && (
         <div className="space-y-6">
           {/* Action Bar & Filter Chips Topik */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#FAF8F5] p-3.5 sm:p-4 border-2 border-[#7A756D] shadow-retro-sm font-sans">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#FFFFFF] p-3.5 sm:p-4 border-2 border-[#808285] shadow-retro-sm font-sans">
             {/* Filter Chips */}
             <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
               {[
@@ -832,8 +832,8 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   className={cn(
                     'px-3.5 py-1.5 text-xs font-bold transition-all shrink-0 cursor-pointer shadow-retro-xs',
                     classworkFilter === f.id
-                      ? 'border-2 border-[#1C1917] bg-[#1C1917] text-white'
-                      : 'border border-[#7A756D] bg-[#FFFFFF] text-[#57534E] hover:text-[#1C1917] hover:bg-[#FAF8F5]'
+                      ? 'border-2 border-[#111111] bg-[#111111] text-white'
+                      : 'border border-[#808285] bg-[#FFFFFF] text-[#58595B] hover:text-[#111111] hover:bg-[#FFFFFF]'
                   )}
                 >
                   {f.label}
@@ -847,7 +847,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 <button
                   type="button"
                   onClick={() => setIsClassworkCreateOpen(!isClassworkCreateOpen)}
-                  className="inline-flex items-center gap-2 px-4 py-2 border-2 border-[#6B2D20] bg-[#C2553A] hover:bg-[#853827] text-white font-black text-xs sm:text-sm shadow-retro-sm transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-2 border-2 border-[#8F131E] bg-[#9F1521] hover:bg-[#9F1521] text-white font-black text-xs sm:text-sm shadow-retro-sm transition-all cursor-pointer"
                 >
                   <PlusCircle className="h-4 w-4" />
                   <span>{isClassworkCreateOpen ? 'Tutup Form' : '+ Buat Baru'}</span>
@@ -858,29 +858,29 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
           {/* Form Pembuatan Konten jika Dosen mengklik "+ Buat" */}
           {lecturer && isClassworkCreateOpen && (
-            <div className="p-5 sm:p-6 border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm space-y-5 animate-fade-up font-sans">
-              <h3 className="font-heading font-black text-base text-[#1C1917] flex items-center gap-2">
-                <PlusCircle className="h-5 w-5 text-[#C2553A]" />
+            <div className="p-5 sm:p-6 border-2 border-[#808285] bg-[#FFFFFF] shadow-retro-sm space-y-5 animate-fade-up font-sans">
+              <h3 className="font-heading font-black text-base text-[#111111] flex items-center gap-2">
+                <PlusCircle className="h-5 w-5 text-[#9F1521]" />
                 <span>Publikasikan Tugas atau Materi</span>
               </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="p-4 sm:p-5 border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-xs space-y-3">
-                  <h4 className="font-heading font-black text-sm text-[#1C1917] flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-[#C2553A]" /> Terbitkan Tugas Baru
+                <div className="p-4 sm:p-5 border-2 border-[#808285] bg-[#FFFFFF] shadow-retro-xs space-y-3">
+                  <h4 className="font-heading font-black text-sm text-[#111111] flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-[#9F1521]" /> Terbitkan Tugas Baru
                   </h4>
                   <CreateAssignmentForm classId={cls.id} />
                 </div>
 
-                <div className="p-4 sm:p-5 border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-xs space-y-3">
-                  <h4 className="font-heading font-black text-sm text-[#1C1917] flex items-center gap-2">
-                    <FolderArchive className="h-4 w-4 text-[#C2553A]" /> Unggah Modul / Materi
+                <div className="p-4 sm:p-5 border-2 border-[#808285] bg-[#FFFFFF] shadow-retro-xs space-y-3">
+                  <h4 className="font-heading font-black text-sm text-[#111111] flex items-center gap-2">
+                    <FolderArchive className="h-4 w-4 text-[#9F1521]" /> Unggah Modul / Materi
                   </h4>
                   <CreateMaterialForm classId={cls.id} />
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 pt-3 border-t-2 border-[#D6D3CB]">
+              <div className="flex flex-wrap items-center gap-3 pt-3 border-t-2 border-[#E2E3E4]">
                 <CreateQuizModal classId={cls.id} />
                 <CreateAttendanceSessionModal classId={cls.id} nextMeetingNumber={attendanceSessions.length + 1} />
               </div>
@@ -911,7 +911,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                     return (
                       <div
                         key={a.id}
-                        className="rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] overflow-hidden transition-all"
+                        className="rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] overflow-hidden transition-all"
                       >
                         {/* Header Baris Tugas */}
                         <div
@@ -919,7 +919,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           className="p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer hover:bg-neutral-50 transition-colors"
                         >
                           <div className="flex items-center gap-3.5 min-w-0">
-                            <div className="p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] shrink-0">
+                            <div className="p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] shrink-0">
                               <FileText className="h-5 w-5" />
                             </div>
                             <div className="min-w-0">
@@ -1018,10 +1018,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   quizzes.map((q) => (
                     <div
                       key={q.id}
-                      className="p-4 sm:p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      className="p-4 sm:p-5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-3.5">
-                        <div className="p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] shrink-0">
+                        <div className="p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] shrink-0">
                           <Award className="h-5 w-5" />
                         </div>
                         <div>
@@ -1071,11 +1071,11 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   materials.map((m, idx) => (
                     <div
                       key={m.id}
-                      className="p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] space-y-3"
+                      className="p-5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] space-y-3"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917]">
+                          <div className="p-2 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111]">
                             <BookOpen className="h-4 w-4" />
                           </div>
                           <div>
@@ -1129,10 +1129,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   attendanceSessions.map((s) => (
                     <div
                       key={s.id}
-                      className="p-4 sm:p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      className="p-4 sm:p-5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-3.5">
-                        <div className="p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] shrink-0">
+                        <div className="p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] shrink-0">
                           <CalendarCheck2 className="h-5 w-5" />
                         </div>
                         <div>
@@ -1190,28 +1190,28 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
           {/* Section Pengajar */}
           <div className="space-y-4 font-sans">
-            <div className="flex items-center justify-between border-b-2 border-[#7A756D] pb-3">
-              <h3 className="font-heading font-black text-lg sm:text-xl text-[#1C1917] flex items-center gap-2">
-                <UserCheck className="h-5 w-5 text-[#C2553A]" />
+            <div className="flex items-center justify-between border-b-2 border-[#808285] pb-3">
+              <h3 className="font-heading font-black text-lg sm:text-xl text-[#111111] flex items-center gap-2">
+                <UserCheck className="h-5 w-5 text-[#9F1521]" />
                 <span>Dosen & Pengajar</span>
               </h3>
-              <span className="text-xs font-bold bg-[#FAF8F5] border border-[#7A756D] px-2.5 py-1 text-[#1C1917]">
+              <span className="text-xs font-bold bg-[#FFFFFF] border border-[#808285] px-2.5 py-1 text-[#111111]">
                 {(assistants?.length ?? 0) + 1} Pengajar
               </span>
             </div>
 
             {/* Dosen Utama */}
-            <div className="p-4 sm:p-5 border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm flex items-center justify-between gap-4">
+            <div className="p-4 sm:p-5 border-2 border-[#808285] bg-[#FFFFFF] shadow-retro-sm flex items-center justify-between gap-4">
               <div className="flex items-center gap-3.5">
-                <div className="h-11 w-11 border-2 border-[#6B2D20] bg-[#C2553A] text-white flex items-center justify-center font-black text-sm shrink-0">
+                <div className="h-11 w-11 border-2 border-[#8F131E] bg-[#9F1521] text-white flex items-center justify-center font-black text-sm shrink-0">
                   DS
                 </div>
                 <div>
-                  <h4 className="font-heading font-black text-base text-[#1C1917]">Dosen Pengampu Utama</h4>
-                  <span className="text-xs text-[#57534E] font-medium">Dosen Penanggung Jawab Mata Kuliah</span>
+                  <h4 className="font-heading font-black text-base text-[#111111]">Dosen Pengampu Utama</h4>
+                  <span className="text-xs text-[#58595B] font-medium">Dosen Penanggung Jawab Mata Kuliah</span>
                 </div>
               </div>
-              <span className="text-xs font-black uppercase bg-[#FEF4F1] text-[#853827] border border-[#C2553A] px-3 py-1">
+              <span className="text-xs font-black uppercase bg-[#FEF2F2] text-[#9F1521] border border-[#9F1521] px-3 py-1">
                 Dosen
               </span>
             </div>
@@ -1222,15 +1222,15 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 {assistants.map((ast) => (
                   <div
                     key={ast.user_id}
-                    className="p-4 border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm flex items-center justify-between gap-4"
+                    className="p-4 border-2 border-[#808285] bg-[#FFFFFF] shadow-retro-sm flex items-center justify-between gap-4"
                   >
                     <div className="flex items-center gap-3.5">
-                      <div className="h-10 w-10 border-2 border-[#7A756D] bg-[#FAF8F5] text-[#1C1917] flex items-center justify-center font-black text-xs shrink-0">
+                      <div className="h-10 w-10 border-2 border-[#808285] bg-[#FFFFFF] text-[#111111] flex items-center justify-center font-black text-xs shrink-0">
                         {ast.name.slice(0, 2).toUpperCase()}
                       </div>
                       <div>
-                        <h4 className="font-heading font-black text-sm text-[#1C1917]">{ast.name}</h4>
-                        <span className="text-xs text-[#57534E] font-mono">
+                        <h4 className="font-heading font-black text-sm text-[#111111]">{ast.name}</h4>
+                        <span className="text-xs text-[#58595B] font-mono">
                           {ast.nidn ? `NIDN: ${ast.nidn}` : `NIM: ${ast.nim || '2024002'}`}
                         </span>
                       </div>
@@ -1238,11 +1238,11 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
                     <div className="flex items-center gap-2">
                       {ast.assistant_type === 'ASISTEN_LAB' ? (
-                        <span className="text-xs font-bold bg-[#FAF8F5] text-[#1D4ED8] border border-[#1D4ED8] px-2.5 py-1">
+                        <span className="text-xs font-bold bg-[#FFFFFF] text-[#1D4ED8] border border-[#1D4ED8] px-2.5 py-1">
                           Asisten Lab
                         </span>
                       ) : (
-                        <span className="text-xs font-bold bg-[#FEF4F1] text-[#853827] border border-[#C2553A] px-2.5 py-1">
+                        <span className="text-xs font-bold bg-[#FEF2F2] text-[#9F1521] border border-[#9F1521] px-2.5 py-1">
                           Asisten Dosen
                         </span>
                       )}
@@ -1262,8 +1262,8 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
             {/* Form Tambah Asisten untuk Dosen & Staf */}
             {(lecturer || isStaff) && (
-              <div className="p-4 sm:p-5 border-2 border-[#7A756D] bg-[#FAF8F5] shadow-retro-sm space-y-3">
-                <h4 className="font-heading font-black text-sm text-[#1C1917]">
+              <div className="p-4 sm:p-5 border-2 border-[#808285] bg-[#FFFFFF] shadow-retro-sm space-y-3">
+                <h4 className="font-heading font-black text-sm text-[#111111]">
                   + Tambah {isStaff && !isActualLecturer ? 'Asisten Lab' : 'Asisten (Dosen / Lab)'}
                 </h4>
                 <AssistantForm
@@ -1277,18 +1277,18 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
           {/* Section Teman Sekelas (Mahasiswa) */}
           <div className="space-y-4 font-sans">
-            <div className="flex items-center justify-between border-b-2 border-[#7A756D] pb-3">
-              <h3 className="font-heading font-black text-lg sm:text-xl text-[#1C1917] flex items-center gap-2">
-                <Users className="h-5 w-5 text-[#C2553A]" />
+            <div className="flex items-center justify-between border-b-2 border-[#808285] pb-3">
+              <h3 className="font-heading font-black text-lg sm:text-xl text-[#111111] flex items-center gap-2">
+                <Users className="h-5 w-5 text-[#9F1521]" />
                 <span>Daftar Mahasiswa</span>
               </h3>
-              <span className="text-xs font-bold bg-[#FAF8F5] border border-[#7A756D] px-2.5 py-1 text-[#1C1917]">
+              <span className="text-xs font-bold bg-[#FFFFFF] border border-[#808285] px-2.5 py-1 text-[#111111]">
                 {members.length} Mahasiswa
               </span>
             </div>
 
             {members.length === 0 ? (
-              <p className="text-xs text-[#57534E] italic p-6 bg-[#FAF8F5] border-2 border-dashed border-[#7A756D] text-center font-medium">
+              <p className="text-xs text-[#58595B] italic p-6 bg-[#FFFFFF] border-2 border-dashed border-[#808285] text-center font-medium">
                 Belum ada mahasiswa yang terdaftar di kelas ini.
               </p>
             ) : (
@@ -1296,14 +1296,14 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 {members.map((m) => (
                   <div
                     key={m.student_id}
-                    className="p-3.5 border-2 border-[#7A756D] bg-[#FFFFFF] shadow-retro-sm flex items-center gap-3"
+                    className="p-3.5 border-2 border-[#808285] bg-[#FFFFFF] shadow-retro-sm flex items-center gap-3"
                   >
-                    <div className="h-9 w-9 border-2 border-[#7A756D] bg-[#FAF8F5] text-[#1C1917] flex items-center justify-center font-black text-xs shrink-0">
+                    <div className="h-9 w-9 border-2 border-[#808285] bg-[#FFFFFF] text-[#111111] flex items-center justify-center font-black text-xs shrink-0">
                       {m.name.slice(0, 2).toUpperCase()}
                     </div>
                     <div className="min-w-0">
-                      <p className="font-heading font-bold text-xs sm:text-sm text-[#1C1917] truncate">{m.name}</p>
-                      <span className="text-xs font-mono font-medium text-[#7A756D]">
+                      <p className="font-heading font-bold text-xs sm:text-sm text-[#111111] truncate">{m.name}</p>
+                      <span className="text-xs font-mono font-medium text-[#808285]">
                         NIM: {m.nim || m.student_id.slice(0, 8)}
                       </span>
                     </div>
@@ -1335,7 +1335,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             <div className="space-y-3">
               <h4 className="font-bold text-sm text-black">Daftar Asisten Kelas</h4>
               {assistants.map((ast) => (
-                <div key={ast.user_id} className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex items-center justify-between gap-4">
+                <div key={ast.user_id} className="p-4 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] flex items-center justify-between gap-4">
                   <div className="flex items-center gap-3.5">
                     <div className="h-10 w-10 rounded-full border-2 border-black bg-gray-soft flex items-center justify-center font-bold text-xs text-black shrink-0">
                       {ast.name.slice(0, 2).toUpperCase()}
@@ -1430,7 +1430,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
           )}
 
           {(lecturer || ta) && (
-            <div className="p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] space-y-3">
+            <div className="p-5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] space-y-3">
               <h4 className="font-bold text-sm text-black flex items-center gap-2">
                 <FolderArchive className="h-4 w-4 text-primary" /> Unggah Modul / Materi Baru
               </h4>
@@ -1456,10 +1456,10 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 );
 
                 return (
-                  <div key={m.id} className="p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] space-y-3">
+                  <div key={m.id} className="p-5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] space-y-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917]">
+                        <div className="p-2 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111]">
                           <BookOpen className="h-4 w-4" />
                         </div>
                         <div>
@@ -1481,7 +1481,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
                     {/* Penguncian Berurutan (10.4) */}
                     {isLocked ? (
-                      <div className="p-3.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] font-bold shadow-retro-sm flex items-center gap-2 text-xs">
+                      <div className="p-3.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] font-bold shadow-retro-sm flex items-center gap-2 text-xs">
                         <Lock className="w-4 h-4 text-black shrink-0" />
                         <span>Selesaikan &apos;{prevMat?.title || 'materi sebelumnya'}&apos; dulu untuk membuka materi ini.</span>
                       </div>
@@ -1632,9 +1632,9 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                   </p>
                 ) : (
                   attendanceSessions.map((s) => (
-                    <div key={s.id} className="p-4 sm:p-5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div key={s.id} className="p-4 sm:p-5 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div className="flex items-center gap-3.5">
-                        <div className="p-2.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] shrink-0">
+                        <div className="p-2.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] shrink-0">
                           <CalendarCheck2 className="h-5 w-5" />
                         </div>
                         <div>
@@ -1674,7 +1674,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                             href={s.recording_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-3 py-1.5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] hover:bg-neutral-200 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
+                            className="px-3 py-1.5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] hover:bg-neutral-200 text-xs font-bold inline-flex items-center gap-1.5 shadow-xs"
                           >
                             <Play className="w-3.5 h-3.5" />
                             <span>Tonton Rekaman</span>
@@ -1720,7 +1720,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
       {activeTab === 'nilai' && (
         <div className="space-y-6">
           {/* Summary Card Nilai */}
-          <div className="p-6 sm:p-7 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]-md space-y-4">
+          <div className="p-6 sm:p-7 rounded-xl border border-[#E2E3E4] bg-[#FFFFFF]-md space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-black/15 pb-4">
               <div>
                 <h3 className="font-bold text-lg sm:text-xl text-black flex items-center gap-2">
@@ -1758,7 +1758,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
             </div>
 
             {/* Rekap Nilai Akhir */}
-            <div className="p-4 sm:p-5 rounded-lg border border-[#D6D3CB] bg-[#FAF8F5] text-[#1C1917] flex items-center justify-between gap-4">
+            <div className="p-4 sm:p-5 rounded-lg border border-[#E2E3E4] bg-[#FFFFFF] text-[#111111] flex items-center justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold text-black/80">Estimasi Nilai Akhir</p>
                 <p className="text-2xl sm:text-3xl font-bold">A (Nilai Akhir: 88.55)</p>
