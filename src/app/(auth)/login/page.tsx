@@ -9,22 +9,15 @@ import {
   AlertCircle,
   LogIn,
   ArrowLeft,
-  ShieldCheck,
   Eye,
   EyeOff,
   User,
   Lock,
-  BookOpen,
-  GraduationCap,
-  Award,
   Sparkles,
-  ChevronDown,
+  X,
   Layers,
-  MapPin,
-  TrendingUp,
-  CheckCheck,
-  Calendar,
 } from 'lucide-react';
+import { TechBackground } from '@/components/ui/tech-background';
 
 const DEMO = [
   ['Mahasiswa UIR', 'NIM 243510001', '243510001'],
@@ -47,6 +40,7 @@ function LoginFormContent() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showDemoModal, setShowDemoModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState(searchParams.get('error') || '');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorKey, setErrorKey] = useState(0);
@@ -72,11 +66,15 @@ function LoginFormContent() {
     setIdentifier(id);
     setPassword('demo12345');
     setErrorMessage('');
+    setShowDemoModal(false);
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:grid lg:grid-cols-12 font-sans selection:bg-[#C2553A] selection:text-white antialiased bg-[#FAF8F5]">
-      {/* CSS Khusus Mengatasi Tampilan Biru Default Autofill Browser */}
+    <div className="min-h-screen w-full flex flex-col justify-between items-center font-sans selection:bg-[#C2553A] selection:text-white antialiased bg-[#FAF8F5] relative p-4 sm:p-6 lg:p-8 overflow-x-hidden">
+      {/* Background Grid & Ambient Glow */}
+      <TechBackground />
+
+      {/* Override Warna Biru Default Autofill Browser */}
       <style>{`
         input:-webkit-autofill,
         input:-webkit-autofill:hover,
@@ -91,221 +89,66 @@ function LoginFormContent() {
         }
       `}</style>
 
-      {/* ======================================================== */}
-      {/* 1. SISI KIRI: EDITORIAL KANVAS TERRACOTTA & PREVIEW LMS  */}
-      {/* ======================================================== */}
-      <div className="hidden lg:flex lg:col-span-6 xl:col-span-7 bg-[#853827] text-[#FAF8F5] p-8 xl:p-12 flex-col justify-between relative overflow-hidden">
-        {/* Ornamen Latar Belakang Geometris Halus */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 pointer-events-none opacity-10 bg-[radial-gradient(#FFFFFF_1px,transparent_1px)] [background-size:24px_24px]"
-        />
-        <div
-          aria-hidden="true"
-          className="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-[#C2553A]/30 blur-3xl pointer-events-none"
-        />
-
-        {/* Header Kiri: Brand & Akreditasi */}
-        <div className="relative z-10 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#FFFFFF] p-1.5 flex items-center justify-center shadow-md">
-              <img
-                src="/logo-ruangkampus.png"
-                alt="Logo RuangKampus"
-                className="h-full w-full object-contain"
-              />
-            </div>
-            <div>
-              <div className="font-heading font-black text-xl text-[#FAF8F5] tracking-tight leading-tight">
-                Ruang<span className="text-[#FDDDD7]">Kampus</span>
-              </div>
-              <div className="text-[11px] font-sans font-semibold text-[#FDDDD7]/80 tracking-wide">
-                Teknik Informatika · Universitas Islam Riau
-              </div>
-            </div>
-          </Link>
-
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#6B2D20] border border-[#C2553A]/40 text-[10px] font-mono font-bold text-[#FDDDD7] tracking-wider uppercase">
-            <Sparkles className="h-3 w-3 text-[#FDDDD7]" />
-            <span>Kurikulum OBE Terpadu</span>
+      {/* 1. Bar Navigasi Atas Minimalis */}
+      <header className="w-full max-w-5xl flex items-center justify-between py-2 z-10">
+        <Link
+          href="/"
+          className="flex items-center gap-2.5 group"
+        >
+          <div className="h-9 w-9 rounded-xl bg-[#FFFFFF] border border-[#D6D3CB] p-1.5 flex items-center justify-center shadow-2xs group-hover:border-[#C2553A] transition-colors">
+            <img
+              src="/logo-ruangkampus.png"
+              alt="Logo RuangKampus"
+              className="h-full w-full object-contain"
+            />
           </div>
-        </div>
-
-        {/* Konten Kiri Tengah: Judul & Mini Mockup Widget LMS */}
-        <div className="relative z-10 my-auto py-8 space-y-6 max-w-xl">
-          <div className="space-y-3">
-            <h1 className="font-heading font-black text-3xl xl:text-4xl text-[#FFFFFF] leading-tight tracking-tight">
-              Transformasi Pembelajaran Digital yang Terarah &amp; Terukur.
-            </h1>
-            <p className="text-sm xl:text-base text-[#FDDDD7] font-medium leading-relaxed">
-              Akses perkuliahan berbasis Capaian Pembelajaran Lulusan (CPL), presensi berbasis radius GPS, pengumpulan tugas terstruktur, dan ujian CBT terintegrasi.
-            </p>
-          </div>
-
-          {/* MOCKUP WIDGET INTERAKTIF LMS */}
-          <div className="rounded-2xl border border-[#C2553A]/40 bg-[#4A1F16]/75 backdrop-blur-md p-5 shadow-2xl space-y-4">
-            <div className="flex items-start justify-between gap-3 border-b border-[#6B2D20] pb-3">
-              <div className="flex items-center gap-3">
-                <div className="h-10 w-10 rounded-xl bg-[#C2553A]/30 border border-[#FDDDD7]/20 flex items-center justify-center text-[#FDDDD7]">
-                  <BookOpen className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-[#6B2D20] text-[#FDDDD7]">
-                      IF-401 · 3 SKS
-                    </span>
-                    <span className="text-[11px] text-[#FDDDD7]/70 font-medium">
-                      Kelas 5A
-                    </span>
-                  </div>
-                  <div className="font-heading font-bold text-sm text-[#FFFFFF] mt-0.5">
-                    Pemrograman Web Lanjut
-                  </div>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#10B981] bg-[#064E3B]/80 px-2.5 py-1 rounded-full border border-[#10B981]/30">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse" />
-                Sesi Berlangsung
-              </span>
-            </div>
-
-            {/* Metrik Capaian CPMK & Presensi */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 rounded-xl bg-[#2D2823]/60 border border-[#6B2D20]">
-                <div className="flex items-center justify-between text-[11px] text-[#FDDDD7]/80">
-                  <span className="flex items-center gap-1 font-medium">
-                    <TrendingUp className="h-3 w-3 text-[#10B981]" />
-                    Target CPMK
-                  </span>
-                  <span className="font-mono font-bold text-[#FFFFFF]">88%</span>
-                </div>
-                <div className="w-full bg-[#6B2D20] h-1.5 rounded-full mt-2 overflow-hidden">
-                  <div className="bg-[#10B981] h-full rounded-full w-[88%]" />
-                </div>
-                <span className="text-[9px] text-[#FDDDD7]/60 mt-1 block">
-                  3 Indikator Terpenuhi
-                </span>
-              </div>
-
-              <div className="p-3 rounded-xl bg-[#2D2823]/60 border border-[#6B2D20]">
-                <div className="flex items-center justify-between text-[11px] text-[#FDDDD7]/80">
-                  <span className="flex items-center gap-1 font-medium">
-                    <MapPin className="h-3 w-3 text-[#FDDDD7]" />
-                    Radius GPS
-                  </span>
-                  <span className="font-mono font-bold text-[#10B981]">12m</span>
-                </div>
-                <div className="flex items-center gap-1 mt-2 text-[10px] font-semibold text-[#FAF8F5]">
-                  <CheckCheck className="h-3 w-3 text-[#10B981]" />
-                  <span>Kampus UIR (Terverifikasi)</span>
-                </div>
-                <span className="text-[9px] text-[#FDDDD7]/60 mt-0.5 block">
-                  Presensi Sesi Ke-8
-                </span>
-              </div>
-            </div>
-
-            {/* Notifikasi Tugas Mendatang */}
-            <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#6B2D20]/50 border border-[#C2553A]/30 text-xs text-[#FDDDD7]">
-              <div className="flex items-center gap-2">
-                <Calendar className="h-3.5 w-3.5 text-[#FDDDD7]" />
-                <span className="font-medium text-[#FAF8F5]">
-                  Praktikum 05: RESTful API &amp; Server Actions
-                </span>
-              </div>
-              <span className="text-[10px] font-mono text-[#FDDDD7]/80">
-                Tenggat: 23:59 WIB
-              </span>
-            </div>
-          </div>
-
-          {/* 3 Keunggulan Ringkas */}
-          <div className="grid grid-cols-3 gap-3 pt-2">
-            <div className="p-2.5 rounded-xl bg-[#6B2D20]/40 border border-[#C2553A]/20 text-center">
-              <div className="text-[10px] font-mono font-bold text-[#FDDDD7] uppercase">
-                Standarisasi
-              </div>
-              <div className="text-xs font-bold text-[#FFFFFF] mt-0.5">
-                Akreditasi Unggul
-              </div>
-            </div>
-            <div className="p-2.5 rounded-xl bg-[#6B2D20]/40 border border-[#C2553A]/20 text-center">
-              <div className="text-[10px] font-mono font-bold text-[#FDDDD7] uppercase">
-                Keamanan
-              </div>
-              <div className="text-xs font-bold text-[#FFFFFF] mt-0.5">
-                CBT Anti-Curang
-              </div>
-            </div>
-            <div className="p-2.5 rounded-xl bg-[#6B2D20]/40 border border-[#C2553A]/20 text-center">
-              <div className="text-[10px] font-mono font-bold text-[#FDDDD7] uppercase">
-                Sinkronisasi
-              </div>
-              <div className="text-xs font-bold text-[#FFFFFF] mt-0.5">
-                SIAKAD UIR
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Footer Kiri: Visi Institusi */}
-        <div className="relative z-10 border-t border-[#6B2D20] pt-4 flex items-center justify-between text-xs text-[#FDDDD7]/80 font-medium">
-          <span>&ldquo;Membangun ekosistem belajar adaptif, transparan, dan berdaya saing global.&rdquo;</span>
-          <span className="text-[11px] font-mono text-[#FDDDD7]">UIR · {new Date().getFullYear()}</span>
-        </div>
-      </div>
-
-      {/* ======================================================== */}
-      {/* 2. SISI KANAN: FORMULIR AUTENTIKASI MINIMALIS ELEGAN     */}
-      {/* ======================================================== */}
-      <div className="lg:col-span-6 xl:col-span-5 min-h-screen flex flex-col justify-between p-6 sm:p-10 xl:p-14 bg-[#FAF8F5]">
-        {/* Bar Navigasi Atas Sisi Kanan */}
-        <div className="flex items-center justify-between">
-          <div className="flex lg:hidden items-center gap-2.5">
-            <div className="h-8 w-8 rounded-lg bg-[#FFFFFF] border border-[#D6D3CB] p-1 flex items-center justify-center shadow-xs">
-              <img
-                src="/logo-ruangkampus.png"
-                alt="Logo RuangKampus"
-                className="h-full w-full object-contain"
-              />
-            </div>
-            <span className="font-heading font-black text-base text-[#1C1917]">
+          <div className="flex flex-col">
+            <span className="font-heading font-black text-base text-[#1C1917] leading-none">
               Ruang<span className="text-[#C2553A]">Kampus</span>
             </span>
+            <span className="text-[10px] font-semibold text-[#7A756D] tracking-wide mt-0.5">
+              Teknik Informatika UIR
+            </span>
           </div>
+        </Link>
 
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#F5F3EE] text-xs font-bold text-[#57534E] hover:text-[#1C1917] transition-all shadow-2xs ml-auto"
-          >
-            <ArrowLeft className="h-3.5 w-3.5 text-[#C2553A]" />
-            <span>Kembali ke Beranda</span>
-          </Link>
-        </div>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]/90 hover:bg-[#FFFFFF] text-xs font-semibold text-[#57534E] hover:text-[#1C1917] transition-all shadow-2xs"
+        >
+          <ArrowLeft className="h-3.5 w-3.5 text-[#C2553A]" />
+          <span>Kembali ke Beranda</span>
+        </Link>
+      </header>
 
-        {/* Konten Form Terpusat */}
-        <div className="my-auto py-8 w-full max-w-md mx-auto space-y-6">
-          <div className="space-y-2">
+      {/* 2. Kartu Login Terpusat (Centered Minimalist Card) */}
+      <main className="w-full max-w-[420px] my-auto py-6 z-10">
+        <div className="relative rounded-3xl border border-[#D6D3CB] bg-[#FFFFFF] shadow-sm sm:shadow-md p-6 sm:p-8 overflow-hidden">
+          {/* Garis Aksen Terracotta di Atas Kartu */}
+          <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-[#853827] via-[#C2553A] to-[#853827]" />
+
+          {/* Header Kartu */}
+          <div className="text-center space-y-2 mb-6">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FEF2F0] border border-[#FDDDD7] text-[10px] font-mono font-bold text-[#853827]">
-              <ShieldCheck className="h-3.5 w-3.5 text-[#C2553A]" />
-              <span>PORTAL MASUK TERINTEGRASI</span>
+              <Sparkles className="h-3 w-3 text-[#C2553A]" />
+              <span>SISTEM INFORMASI AKADEMIK</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-heading font-black text-[#1C1917] tracking-tight">
-              Masuk ke Ruang Kerja
-            </h2>
-            <p className="text-xs sm:text-sm text-[#57534E] font-medium leading-relaxed">
-              Gunakan NIM, NIDN, NIP, atau email resmi kampus untuk melanjutkan aktivitas perkuliahan Anda.
+            <h1 className="text-2xl font-heading font-black text-[#1C1917] tracking-tight">
+              Masuk ke Akun
+            </h1>
+            <p className="text-xs text-[#57534E] font-medium leading-relaxed max-w-xs mx-auto">
+              Silakan masukkan identitas resmi Anda untuk mengakses ruang perkuliahan.
             </p>
           </div>
 
-          {/* Notifikasi Error & Sukses */}
+          {/* Alert Error / Sukses */}
           {errorMessage && (
             <div
               key={errorKey}
               id="login-error-alert"
               data-testid="login-error-alert"
               role="alert"
-              className="shake rounded-xl border border-[#DC2626] bg-[#FEF2F2] text-[#991B1B] font-semibold p-3.5 text-xs flex items-center gap-2.5"
+              className="shake mb-4 rounded-xl border border-[#DC2626] bg-[#FEF2F2] text-[#991B1B] font-semibold p-3 text-xs flex items-center gap-2.5"
             >
               <AlertCircle className="h-4 w-4 text-[#DC2626] shrink-0" />
               <span>{errorMessage}</span>
@@ -314,7 +157,7 @@ function LoginFormContent() {
           {successMessage && (
             <div
               role="status"
-              className="rounded-xl border border-[#059669] bg-[#E8F5E9] text-[#065F46] p-3.5 text-xs font-semibold flex items-center gap-2.5"
+              className="mb-4 rounded-xl border border-[#059669] bg-[#E8F5E9] text-[#065F46] p-3 text-xs font-semibold flex items-center gap-2.5"
             >
               <CheckCircle2 className="h-4 w-4 shrink-0 text-[#059669]" />
               <span>{successMessage}</span>
@@ -369,7 +212,7 @@ function LoginFormContent() {
                   name="password"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
-                  placeholder="Masukkan kata sandi akun"
+                  placeholder="Masukkan kata sandi"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={isPending}
@@ -399,7 +242,7 @@ function LoginFormContent() {
               className="w-full h-11 px-4 rounded-xl bg-[#C2553A] hover:bg-[#853827] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs disabled:opacity-60 disabled:cursor-not-allowed mt-2"
             >
               <LogIn className="h-4 w-4" />
-              <span>{isPending ? 'Memverifikasi Kredensial...' : 'Masuk ke RuangKampus'}</span>
+              <span>{isPending ? 'Memverifikasi...' : 'Masuk ke RuangKampus'}</span>
             </button>
 
             <div className="pt-2 text-center text-xs text-[#57534E]">
@@ -412,50 +255,83 @@ function LoginFormContent() {
               </Link>
             </div>
           </form>
+        </div>
+      </main>
 
-          {/* Accordion Akun Demo Cepat (Pengembang) */}
-          {process.env.NODE_ENV === 'development' && (
-            <details className="pt-4 border-t border-[#E8E5DE] group">
-              <summary className="cursor-pointer text-xs font-bold text-[#57534E] hover:text-[#1C1917] select-none flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <Layers className="h-3.5 w-3.5 text-[#C2553A]" />
-                  <span>Akun Simulasi Peran (Mode Dev)</span>
-                </span>
-                <ChevronDown className="h-3.5 w-3.5 text-[#7A756D] group-open:rotate-180 transition-transform" />
-              </summary>
-              <div className="mt-3 p-3 bg-[#FFFFFF] border border-[#E8E5DE] rounded-xl space-y-2 shadow-2xs">
-                <p className="text-[11px] text-[#57534E] font-medium leading-relaxed">
-                  Pilih salah satu identitas peran di bawah ini untuk mengisi formulir otomatis:
+      {/* 3. Footer Sederhana & Bersih */}
+      <footer className="w-full max-w-5xl text-center py-2 text-xs text-[#7A756D] z-10">
+        <span>RuangKampus &copy; {new Date().getFullYear()} — Teknik Informatika Universitas Islam Riau</span>
+      </footer>
+
+      {/* 4. Floating Pill Akun Simulasi Peran (Hanya Muncul di Mode Dev) */}
+      {process.env.NODE_ENV === 'development' && (
+        <>
+          <button
+            type="button"
+            onClick={() => setShowDemoModal(true)}
+            className="fixed bottom-4 right-4 z-40 bg-[#1C1917] hover:bg-[#2D2823] text-[#FAF8F5] text-xs font-semibold px-3.5 py-2 rounded-full shadow-lg border border-[#3F3F46] flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95"
+            title="Pilih akun simulasi peran"
+          >
+            <Layers className="h-3.5 w-3.5 text-[#C2553A]" />
+            <span>Akun Demo</span>
+          </button>
+
+          {/* Modal / Pop-over Akun Demo */}
+          {showDemoModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C1917]/50 backdrop-blur-xs">
+              <div className="bg-[#FFFFFF] border border-[#D6D3CB] rounded-2xl p-5 max-w-md w-full shadow-2xl space-y-4">
+                <div className="flex items-center justify-between border-b border-[#E8E5DE] pb-3">
+                  <div className="flex items-center gap-2">
+                    <Layers className="h-4 w-4 text-[#C2553A]" />
+                    <h2 className="font-heading font-bold text-sm text-[#1C1917]">
+                      Pilih Akun Simulasi Peran
+                    </h2>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowDemoModal(false)}
+                    className="p-1 rounded-lg text-[#7A756D] hover:text-[#1C1917] transition-colors cursor-pointer"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+
+                <p className="text-xs text-[#57534E] leading-relaxed">
+                  Klik peran di bawah untuk mengisi kolom login secara otomatis dengan kata sandi pengembang:
                 </p>
-                <ul className="demo-list grid grid-cols-2 gap-1.5 max-h-48 overflow-y-auto pr-1">
-                  {DEMO.map(([peran, ket, id]) => (
-                    <li key={id}>
-                      <button
-                        type="button"
-                        onClick={() => handleDemoFill(id)}
-                        className="w-full rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] hover:border-[#1C1917] hover:bg-[#FFFFFF] p-2 text-left transition-all cursor-pointer shadow-2xs"
-                      >
-                        <span className="block font-bold text-xs text-[#1C1917] leading-tight truncate">
-                          {peran}
-                        </span>
-                        <span className="text-[10px] text-[#57534E] font-mono block mt-0.5 truncate">
-                          {ket}
-                        </span>
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </details>
-          )}
-        </div>
 
-        {/* Footer Sisi Kanan */}
-        <div className="pt-4 border-t border-[#E8E5DE] flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-[#7A756D]">
-          <span>RuangKampus &copy; {new Date().getFullYear()}</span>
-          <span className="font-mono text-[11px]">Teknik Informatika · UIR</span>
-        </div>
-      </div>
+                <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto pr-1">
+                  {DEMO.map(([peran, ket, id]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => handleDemoFill(id)}
+                      className="p-2.5 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#FFFFFF] hover:border-[#C2553A] text-left transition-all cursor-pointer shadow-2xs group"
+                    >
+                      <span className="block font-bold text-xs text-[#1C1917] group-hover:text-[#C2553A] truncate">
+                        {peran}
+                      </span>
+                      <span className="block text-[10px] text-[#57534E] font-mono mt-0.5 truncate">
+                        {ket}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="pt-2 border-t border-[#E8E5DE] text-right">
+                  <button
+                    type="button"
+                    onClick={() => setShowDemoModal(false)}
+                    className="px-4 py-1.5 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#E8E5DE] text-xs font-semibold text-[#1C1917] cursor-pointer"
+                  >
+                    Tutup
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
@@ -465,7 +341,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="flex min-h-screen items-center justify-center p-4 text-xs font-mono text-[#57534E] bg-[#FAF8F5]">
-          Memuat portal autentikasi...
+          Memuat portal login...
         </div>
       }
     >
