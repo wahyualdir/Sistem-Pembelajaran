@@ -18,9 +18,18 @@ export async function checkSupabaseOnline(): Promise<boolean> {
 
   try {
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321';
+    const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+    const headers: Record<string, string> = {};
+    if (anonKey) {
+      headers['apikey'] = anonKey;
+      headers['Authorization'] = `Bearer ${anonKey}`;
+    }
+    const isLocal = url.includes('localhost') || url.includes('127.0.0.1');
+    const timeoutMs = isLocal ? 300 : 2500;
     const res = await fetch(`${url}/auth/v1/health`, {
       method: 'GET',
-      signal: AbortSignal.timeout(300), // 300ms cepat
+      headers,
+      signal: AbortSignal.timeout(timeoutMs),
     });
     cachedStatus = res.ok;
   } catch {
