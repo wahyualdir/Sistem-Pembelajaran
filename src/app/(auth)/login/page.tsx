@@ -3,6 +3,7 @@
 import React, { useState, useTransition, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { loginAction } from '@/modules/identity/actions';
 import {
   CheckCircle2,
@@ -96,10 +97,13 @@ function LoginFormContent() {
           className="flex items-center gap-2.5 group"
         >
           <div className="h-9 w-9 rounded-xl bg-[#FFFFFF] border border-[#D6D3CB] p-1.5 flex items-center justify-center shadow-2xs group-hover:border-[#C2553A] transition-colors">
-            <img
+            <Image
               src="/logo-ruangkampus.png"
               alt="Logo RuangKampus"
+              width={36}
+              height={36}
               className="h-full w-full object-contain"
+              priority
             />
           </div>
           <div className="flex flex-col">

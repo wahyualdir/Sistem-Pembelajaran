@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LogOut,
@@ -342,7 +343,7 @@ export function PortalShell({
                   title={`RuangKampus - ${userSubtitle}`}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E8E5DE] bg-white p-0.5 shadow-2xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
-                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
+                    <Image src="/logo-ruangkampus.png" alt="Logo RuangKampus" width={36} height={36} className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                 </Link>
               </div>
@@ -354,7 +355,7 @@ export function PortalShell({
                   title={`RuangKampus - ${userSubtitle}`}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#E8E5DE] bg-white p-0.5 shadow-2xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
-                    <img src="/logo-ruangkampus.png" alt="Logo RuangKampus" className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
+                    <Image src="/logo-ruangkampus.png" alt="Logo RuangKampus" width={36} height={36} className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]" />
                   </div>
                   <div className="flex flex-col min-w-0">
                     <span className="font-heading font-bold text-base sm:text-lg tracking-tight text-[#1C1917] leading-none whitespace-nowrap">

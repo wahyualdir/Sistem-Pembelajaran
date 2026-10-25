@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   BookOpen,
   ArrowRight,
@@ -80,10 +81,13 @@ export default function HomePage() {
       <header className="sticky top-0 z-30 w-full bg-[#FFFFFF]/95 backdrop-blur-xs border-b border-[#E8E5DE]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2.5">
-            <img
+            <Image
               src="/logo-ruangkampus.png"
               alt="Logo RuangKampus"
+              width={32}
+              height={32}
               className="h-8 w-8 object-contain"
+              priority
             />
             <div className="flex flex-col">
               <span className="font-heading font-bold text-base sm:text-lg tracking-tight text-[#1C1917] leading-none">

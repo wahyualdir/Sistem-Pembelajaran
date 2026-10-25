@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Play,
   Download,
@@ -121,9 +122,11 @@ export function RightPanelSwitcher({
             <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#E8E5DE]">
               <div className="flex items-center gap-2.5 min-w-0">
                 <div className="h-9 w-9 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] p-1 flex items-center justify-center shrink-0 overflow-hidden">
-                  <img
+                  <Image
                     src="/logo-ruangkampus.png"
                     alt="Logo RuangKampus"
+                    width={36}
+                    height={36}
                     className="h-full w-full object-contain"
                   />
                 </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import {
   Video,
   VideoOff,
@@ -131,9 +132,11 @@ export function RetroLiveClassroom({
         <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b-2 border-ink bg-gray-soft select-none shrink-0">
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-8 w-8 rounded-lg border-2 border-ink bg-white p-0.5 shrink-0 flex items-center justify-center shadow-retro-xs overflow-hidden">
-              <img
+              <Image
                 src="/logo-uir.png"
                 alt="Logo UIR"
+                width={32}
+                height={32}
                 className="h-full w-full object-contain"
               />
             </div>

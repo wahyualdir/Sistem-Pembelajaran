@@ -3,6 +3,7 @@
 import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState, useTransition, Suspense } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { registerAction } from '@/modules/identity/actions';
 import {
   CheckCircle2,
@@ -84,15 +85,17 @@ function RegisterFormContent() {
 
           <Link href="/" className="flex items-center gap-2.5 ml-1 group focus-visible:outline-none">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border-2 border-black bg-white p-1 shadow-retro-xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
-              <img
+              <Image
                 src="/logo-ruangkampus.png"
                 alt="Logo RuangKampus"
+                width={36}
+                height={36}
                 className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
               />
             </div>
             <div className="flex flex-col min-w-0">
               <span className="font-heading font-black text-base sm:text-lg tracking-tight text-black leading-none">
-                Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
+                Ruang<span className="text-[#C2553A]">Kampus</span>
               </span>
               <span className="text-[9.5px] font-mono font-bold text-gray-dark uppercase tracking-wider mt-0.5 leading-none">
                 Sistem Pembelajaran

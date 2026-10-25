@@ -3,6 +3,7 @@
 import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React, { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { changePasswordAction } from '@/modules/identity/actions';
 import { KeyRound, ShieldAlert, ArrowRight } from 'lucide-react';
 
@@ -58,15 +59,17 @@ export default function MustChangePasswordPage() {
           <div className="p-6 sm:p-8 space-y-6">
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-retro-border bg-white p-1 shadow-retro shrink-0 overflow-hidden">
-                <img
+                <Image
                   src="/logo-ruangkampus.png"
                   alt="Logo RuangKampus"
+                  width={40}
+                  height={40}
                   className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
                 />
               </div>
               <div className="flex flex-col text-left">
                 <span className="font-heading font-black text-base tracking-tight text-foreground leading-tight">
-                  Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
+                  Ruang<span className="text-[#C2553A]">Kampus</span>
                 </span>
                 <span className="text-[10px] font-mono font-bold text-muted-foreground uppercase tracking-wider">
                   Keamanan Akun

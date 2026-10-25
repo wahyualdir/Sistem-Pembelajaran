@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
@@ -187,15 +188,17 @@ export function Sidebar({
             title="RuangKampus"
           >
             <div className="flex h-10 w-10 items-center justify-center rounded-xl border-2 border-black bg-white p-1 shadow-retro group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
-              <img
+              <Image
                 src="/logo-ruangkampus.png"
                 alt="Logo RuangKampus"
+                width={40}
+                height={40}
                 className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
               />
             </div>
             <div className="flex flex-col text-left">
               <span className="font-heading font-black text-base tracking-tight text-black leading-tight">
-                Ruang<span style={{ color: '#ED1C24' }} className="text-[#ED1C24]">Kampus</span>
+                Ruang<span className="text-[#C2553A]">Kampus</span>
               </span>
               <span className="text-[10px] font-mono font-bold text-gray-dark uppercase tracking-wider leading-tight mt-0.5">
                 Sistem Pembelajaran

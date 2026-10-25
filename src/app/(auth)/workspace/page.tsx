@@ -1,6 +1,7 @@
 import { WindowTrafficLights } from '@/components/retro/window-traffic-lights';
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles, switchWorkspaceAction } from '@/modules/identity/actions';
 import { cn } from '@/lib/utils';
@@ -128,9 +129,11 @@ export default async function WorkspacePage() {
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2.5 group focus-visible:outline-none">
             <div className="flex h-9 w-9 items-center justify-center rounded-none border border-[#7A756D] bg-white p-1 shadow-2xs group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
-              <img
+              <Image
                 src="/logo-ruangkampus.png"
                 alt="Logo RuangKampus"
+                width={36}
+                height={36}
                 className="h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
               />
             </div>

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import {
   ShieldAlert,
   Lock,
@@ -31,9 +32,11 @@ export function AdminIdentityCard({
       <div className="flex items-center gap-2.5 pb-3 border-b-2 border-[#D6D3CB]">
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <div className="h-9 w-9 rounded-xl border-2 border-[#7A756D] bg-white p-0.5 flex items-center justify-center shrink-0 shadow-2xs overflow-hidden">
-            <img
+            <Image
               src="/logo-ruangkampus.png"
               alt="Logo RuangKampus"
+              width={36}
+              height={36}
               className="h-full w-full object-contain"
             />
           </div>
