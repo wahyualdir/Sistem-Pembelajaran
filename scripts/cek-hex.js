@@ -45,6 +45,9 @@ const ALLOWED_HEX = new Set([
   // Legacy campus palette
   "#F3F3F4", "#111111", "#ED1C24", "#A91117", "#808285", "#58595B", "#E2E3E4", "#000000",
   "#FFF", "#000", "#111",
+
+  // Token Redesain Halaman Masuk RuangKampus (Yanzz - INSTRUKSI_REDESAIN_LOGIN)
+  "#1E4638", "#F6F2EA", "#1C1B19", "#4A473F", "#B44A2F", "#8F3A24", "#8A8577", "#D9E3DC",
 ]);
 
 function getFiles(dir, files = []) {
