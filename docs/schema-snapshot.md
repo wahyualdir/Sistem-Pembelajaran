@@ -1,7 +1,7 @@
 # Snapshot Skema Database SIAJAR (Single Source of Truth)
 
 > **Tanggal Dihasilkan**: 12 Oktober 2026  
-> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..39 dijalankan dari nol.  
+> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..40 dijalankan dari nol.  
 > **Tujuan**: Sumber kebenaran tunggal (*Single Source of Truth*) nama tabel, kolom, tipe data, foreign key, dan kebijakan RLS untuk perencanaan dan implementasi Fase 3.
 
 ---
@@ -973,6 +973,69 @@
 |---|---|---|---|
 | `class_gamification_settings_manage` | `ALL` | `authenticated` | PERMISSIVE |
 | `class_gamification_settings_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.class_live_question_upvotes`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 3
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `question_id` | `uuid` | NO | - |
+| `user_id` | `uuid` | NO | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `question_id` -> `public.class_live_questions(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `user_id` -> `public.profiles(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `question_id`
+- PRIMARY KEY: `user_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `live_question_upvotes_delete` | `DELETE` | `authenticated` | PERMISSIVE |
+| `live_question_upvotes_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `live_question_upvotes_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.class_live_questions`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 13
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `class_id` | `uuid` | NO | - |
+| `session_id` | `uuid` | YES | - |
+| `student_id` | `uuid` | NO | - |
+| `student_name` | `text` | NO | - |
+| `is_anonymous` | `boolean` | NO | `false` |
+| `question` | `text` | NO | - |
+| `upvotes_count` | `integer` | NO | `0` |
+| `status` | `text` | NO | `'antre'` |
+| `is_pinned` | `boolean` | NO | `false` |
+| `lecturer_response` | `text` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `session_id` -> `public.attendance_sessions(id)` (ON DELETE SET NULL)
+- FOREIGN KEY: `student_id` -> `public.profiles(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `live_questions_delete` | `DELETE` | `authenticated` | PERMISSIVE |
+| `live_questions_insert` | `INSERT` | `authenticated` | PERMISSIVE |
+| `live_questions_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `live_questions_update` | `UPDATE` | `authenticated` | PERMISSIVE |
 
 ---
 

@@ -44,7 +44,7 @@ USING (
         AND (
             c.lecturer_id = (SELECT auth.uid())
             OR EXISTS (SELECT 1 FROM public.enrollments e WHERE e.class_id = c.id AND e.student_id = (SELECT auth.uid()))
-            OR EXISTS (SELECT 1 FROM public.class_assistants ca WHERE ca.class_id = c.id AND ca.assistant_id = (SELECT auth.uid()))
+            OR EXISTS (SELECT 1 FROM public.class_assistants ca WHERE ca.class_id = c.id AND ca.user_id = (SELECT auth.uid()))
             OR EXISTS (SELECT 1 FROM public.user_roles ur JOIN public.roles r ON ur.role_id = r.id WHERE ur.user_id = (SELECT auth.uid()) AND r.name IN ('ACADEMIC_STAFF', 'SUPER_ADMIN', 'PROGRAM_COORDINATOR'))
         )
     )
@@ -62,7 +62,7 @@ WITH CHECK (
         AND (
             c.lecturer_id = (SELECT auth.uid())
             OR EXISTS (SELECT 1 FROM public.enrollments e WHERE e.class_id = c.id AND e.student_id = (SELECT auth.uid()))
-            OR EXISTS (SELECT 1 FROM public.class_assistants ca WHERE ca.class_id = c.id AND ca.assistant_id = (SELECT auth.uid()))
+            OR EXISTS (SELECT 1 FROM public.class_assistants ca WHERE ca.class_id = c.id AND ca.user_id = (SELECT auth.uid()))
         )
     )
 );
@@ -78,7 +78,7 @@ USING (
         WHERE c.id = public.class_live_questions.class_id
         AND (
             c.lecturer_id = (SELECT auth.uid())
-            OR EXISTS (SELECT 1 FROM public.class_assistants ca WHERE ca.class_id = c.id AND ca.assistant_id = (SELECT auth.uid()))
+            OR EXISTS (SELECT 1 FROM public.class_assistants ca WHERE ca.class_id = c.id AND ca.user_id = (SELECT auth.uid()))
             OR EXISTS (SELECT 1 FROM public.user_roles ur JOIN public.roles r ON ur.role_id = r.id WHERE ur.user_id = (SELECT auth.uid()) AND r.name IN ('SUPER_ADMIN'))
         )
     )
@@ -100,7 +100,7 @@ USING (
         WHERE c.id = public.class_live_questions.class_id
         AND (
             c.lecturer_id = (SELECT auth.uid())
-            OR EXISTS (SELECT 1 FROM public.class_assistants ca WHERE ca.class_id = c.id AND ca.assistant_id = (SELECT auth.uid()))
+            OR EXISTS (SELECT 1 FROM public.class_assistants ca WHERE ca.class_id = c.id AND ca.user_id = (SELECT auth.uid()))
             OR EXISTS (SELECT 1 FROM public.user_roles ur JOIN public.roles r ON ur.role_id = r.id WHERE ur.user_id = (SELECT auth.uid()) AND r.name IN ('SUPER_ADMIN'))
         )
     )
