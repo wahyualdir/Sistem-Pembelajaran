@@ -224,10 +224,13 @@ export function CommandCenterOS({
     setSelectedIndex(0);
   }, [query]);
 
-  const handleSelect = (entry: CommandEntry) => {
-    onClose();
-    router.push(entry.href);
-  };
+  const handleSelect = React.useCallback(
+    (entry: CommandEntry) => {
+      onClose();
+      router.push(entry.href);
+    },
+    [onClose, router]
+  );
 
   useEffect(() => {
     if (!isOpen) return;
@@ -260,7 +263,7 @@ export function CommandCenterOS({
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, filteredEntries, selectedIndex, query, onClose, router]);
+  }, [isOpen, filteredEntries, selectedIndex, query, onClose, router, handleSelect]);
 
   if (!isOpen) return null;
 

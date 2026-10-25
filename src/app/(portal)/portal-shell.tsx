@@ -280,7 +280,7 @@ export function PortalShell({
     } finally {
       setHasMountedCollapse(true);
     }
-  }, [normalizedRole]);
+  }, [normalizedRole, navGroups]);
 
   const toggleGroupCollapse = (groupId: string) => {
     setCollapsedGroups((prev) => {

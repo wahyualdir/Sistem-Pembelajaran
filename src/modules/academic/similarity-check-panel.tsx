@@ -47,18 +47,18 @@ export function SimilarityCheckPanel({
   const [reviewNote, setReviewNote] = useState<string>('');
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
-  const loadResults = async () => {
+  const loadResults = React.useCallback(async () => {
     setIsLoading(true);
     const res = await getSimilarityResultsAction(assignmentId);
     if (res.ok && res.pairs) {
       setPairs(res.pairs as SimilarityPair[]);
     }
     setIsLoading(false);
-  };
+  }, [assignmentId]);
 
   useEffect(() => {
     loadResults();
-  }, [assignmentId]);
+  }, [loadResults]);
 
   const handleRunCheck = async () => {
     if (!isLecturer) return;

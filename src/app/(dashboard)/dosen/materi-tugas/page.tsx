@@ -73,21 +73,24 @@ export default function DosenMateriTugasPage() {
     MateriTugasStore.getRekapProgresKelas(selectedKelasId)
   );
 
-  const refreshData = (kId = selectedKelasId) => {
-    ambilMateriByKelasAction(kId).then((res) => {
-      if (res.success && res.materi) setDaftarMateri(res.materi);
-    });
-    ambilTugasByKelasAction(kId).then((res) => {
-      if (res.success && res.tugas) setDaftarTugas(res.tugas);
-    });
-    ambilRekapProgresDosenAction(kId).then((res) => {
-      if (res.success && res.rekap) setRekapProgres(res.rekap);
-    });
-  };
+  const refreshData = React.useCallback(
+    (kId = selectedKelasId) => {
+      ambilMateriByKelasAction(kId).then((res) => {
+        if (res.success && res.materi) setDaftarMateri(res.materi);
+      });
+      ambilTugasByKelasAction(kId).then((res) => {
+        if (res.success && res.tugas) setDaftarTugas(res.tugas);
+      });
+      ambilRekapProgresDosenAction(kId).then((res) => {
+        if (res.success && res.rekap) setRekapProgres(res.rekap);
+      });
+    },
+    [selectedKelasId]
+  );
 
   useEffect(() => {
     refreshData(selectedKelasId);
-  }, [selectedKelasId]);
+  }, [selectedKelasId, refreshData]);
 
   // State Modal Tambah Materi
   const [isMateriModalOpen, setIsMateriModalOpen] = useState(false);

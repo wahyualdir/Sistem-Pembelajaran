@@ -131,7 +131,7 @@ export function Sidebar({
     } catch {} finally {
       setHasMountedCollapse(true);
     }
-  }, [normalizedRole]);
+  }, [normalizedRole, groups]);
 
   const toggleGroupCollapse = (groupId: string) => {
     setCollapsedGroups((prev) => {
