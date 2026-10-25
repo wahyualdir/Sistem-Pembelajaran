@@ -31,7 +31,6 @@ import {
 } from './portal-nav';
 import { ShellContext } from '@/components/shared/dashboard-shell';
 import { TechBackground } from '@/components/ui/tech-background';
-import { LiteModeToggle } from '@/components/retro/lite-mode-toggle';
 import { CommandCenterOS } from '@/components/shared/command-center-os';
 
 export interface PortalLayoutContextValue {
@@ -752,9 +751,6 @@ export function PortalShell({
                     <ChevronDown className="h-3 w-3 text-[#7A756D]" />
                   </Link>
                 )}
-
-                {/* Sakelar Mode Performa Ringan / Hemat Daya */}
-                <LiteModeToggle />
 
                 {/* Tombol Panel Kanan Geser jika halaman memiliki panel kanan */}
                 {hasRightPanel && (
