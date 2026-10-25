@@ -202,7 +202,7 @@ export function ContentReviewClient({
                 Integritas Kurasi Konten Pembelajaran
               </h2>
               <p className="text-xs sm:text-sm text-black/75 max-w-lg mx-auto leading-relaxed font-medium">
-                Di SIAJAR, seluruh konten berbantuan kecerdasan buatan (flashcard dan podcast) berstatus <strong>Draf</strong> dan wajib ditinjau serta disetujui dosen sebelum dapat diakses mahasiswa.
+                Di RuangKampus, seluruh konten berbantuan kecerdasan buatan (flashcard dan podcast) berstatus <strong>Draf</strong> dan wajib ditinjau serta disetujui dosen sebelum dapat diakses mahasiswa.
               </p>
             </div>
 

@@ -109,7 +109,7 @@ export function StudentDashboardClient({
       id: 'banner-welcome',
       priority: 5,
       category: 'IDLE',
-      title: 'Selamat Datang di SIAJAR',
+      title: 'Selamat Datang di RuangKampus',
       subtitle: 'Akun baru Anda siap digunakan. Buka menu Kelas Saya untuk mulai mendaftar ke kelas perkuliahan dosen Anda.',
       buttonLabel: 'Buka Kelas Saya',
       buttonHref: '/classes',

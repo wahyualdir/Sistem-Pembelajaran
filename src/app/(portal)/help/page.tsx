@@ -324,7 +324,7 @@ export default function HelpCenterPage() {
               Bantuan dan Panduan Operasional
             </h1>
             <p className="text-xs sm:text-sm text-gray-dark font-bold">
-              Panduan lengkap operasional sistem akademik SIAJAR untuk seluruh peran: pembelajaran terstruktur, CBT, dan privasi.
+              Panduan lengkap operasional sistem akademik RuangKampus untuk seluruh peran: pembelajaran terstruktur, CBT, dan privasi.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2 shrink-0">
@@ -465,7 +465,7 @@ export default function HelpCenterPage() {
               <span>Transparansi Privasi dan Pelindungan Data Pribadi</span>
             </h3>
             <p className="text-xs sm:text-sm text-gray-dark font-bold max-w-2xl leading-relaxed">
-              Sistem SIAJAR mematuhi Undang-Undang Pelindungan Data Pribadi (UU PDP). Pelajari parameter telemetri pengerjaan ujian, batas retensi arsip surat izin sakit (180 hari), serta mekanisme anonimitas mutlak pada evaluasi dosen.
+              Sistem RuangKampus mematuhi Undang-Undang Pelindungan Data Pribadi (UU PDP). Pelajari parameter telemetri pengerjaan ujian, batas retensi arsip surat izin sakit (180 hari), serta mekanisme anonimitas mutlak pada evaluasi dosen.
             </p>
           </div>
 

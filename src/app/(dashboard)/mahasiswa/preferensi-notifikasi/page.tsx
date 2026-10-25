@@ -349,13 +349,13 @@ export default function PreferensiNotifikasiPage() {
                 </label>
                 <Input
                   type="email"
-                  placeholder="cadangan.mhs2024001@siajar.test"
+                  placeholder="cadangan.mhs2024001@kampus.test"
                   value={emailCadangan}
                   onChange={(e) => setEmailCadangan(e.target.value)}
                   disabled={loading || isPending}
                 />
                 <span className="text-xs text-muted-foreground block">
-                  Kosongkan jika hanya ingin menerima ke email resmi kampus (@student.uir.ac.id).
+                  Kosongkan jika hanya ingin menerima ke email resmi kampus.
                 </span>
               </div>
             </CardContent>

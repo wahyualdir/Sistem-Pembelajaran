@@ -64,7 +64,7 @@ const inter = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "SIAJAR — Sistem Informasi Ajar Terpadu",
+  title: "RuangKampus — Sistem Pembelajaran Terpadu",
   description:
     "Satu ruang kerja akademik untuk kelas, materi, tugas, penilaian, dan diskusi.",
 };

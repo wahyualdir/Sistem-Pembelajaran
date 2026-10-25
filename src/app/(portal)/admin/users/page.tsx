@@ -2,7 +2,7 @@ import React from 'react';
 import { SuperadminUsersHubView } from '@/modules/admin/superadmin-users-hub-view';
 
 export const metadata = {
-  title: 'Kelola Pengguna & Impersonate - SIAJAR LMS',
+  title: 'Kelola Pengguna & Impersonate - RuangKampus',
   description: 'Manajemen akun civitas akademika dan sesi impersonasi teknis',
 };
 

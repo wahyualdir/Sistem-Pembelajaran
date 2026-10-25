@@ -6,7 +6,7 @@ import { PreferencesView } from '@/modules/notifications/preferences-view';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
 export const metadata = {
-  title: 'Preferensi Notifikasi & Kanal Pengiriman - SIAJAR LMS',
+  title: 'Preferensi Notifikasi & Kanal Pengiriman - RuangKampus',
   description: 'Kelola preferensi kanal (In-App, Email, WhatsApp) dan jenis pengingat perkuliahan',
 };
 

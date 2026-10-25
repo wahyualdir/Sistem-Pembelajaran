@@ -193,7 +193,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
 
   const current = sectionTitles[fullSlug] || {
     title: 'Manajemen Program Studi',
-    subtitle: 'Sistem Pembelajaran Terpadu LMS SIAJAR',
+    subtitle: 'Sistem Pembelajaran Terpadu RuangKampus',
     icon: Compass,
     desc: 'Pengawasan kurikulum, monitoring mutu perkuliahan, dan persetujuan akademik program studi.',
   };
@@ -262,7 +262,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
         <div className="p-4 sm:p-5 bg-[#FAF8F5] border-b border-[#E8E5DE] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 className="font-heading font-bold text-base sm:text-lg text-[#1C1917]">
-              Daftar Mata Kuliah & Rombel Kurikulum Aktif (Teknik Informatika UIR)
+              Daftar Mata Kuliah & Rombel Kurikulum Aktif (Teknik Informatika)
             </h2>
             <p className="text-xs text-[#57534E]">
               Klik mata kuliah atau tombol ruang kelas untuk meninjau silabus, pertemuan, dan penugasan langsung di kelas terkait.
@@ -338,7 +338,7 @@ export default async function CoordinatorSubpage({ params }: PageProps) {
               <h3 className="font-heading font-bold text-base text-[#1C1917]">Pemetaan Kurikulum OBE</h3>
             </div>
             <p className="text-xs text-[#57534E] leading-relaxed">
-              12 Indikator Capaian Pembelajaran Lulusan (CPL) terhubung dengan 63 mata kuliah kurikulum Teknik Informatika UIR.
+              12 Indikator Capaian Pembelajaran Lulusan (CPL) terhubung dengan 63 mata kuliah kurikulum Teknik Informatika.
             </p>
           </div>
           <Link

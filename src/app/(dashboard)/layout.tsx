@@ -60,7 +60,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const profile = userContext?.profile || {
     id: session?.userId || 'u-1',
     full_name: session?.name || 'Wahyu Aldiriyanto',
-    email: session?.email || 'wahyu@student.uir.ac.id',
+    email: session?.email || 'wahyu@student.kampus.ac.id',
   };
 
   const account = (

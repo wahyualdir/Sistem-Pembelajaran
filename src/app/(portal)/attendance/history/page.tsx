@@ -100,7 +100,7 @@ export default function AttendanceHistoryPage() {
               </h1>
             </div>
             <p className="text-sm sm:text-base text-black/80 font-medium max-w-2xl mt-1 leading-relaxed">
-              Catatan autentik presensi perkuliahan yang tercatat di server SIAJAR. Seluruh sesi tervalidasi menggunakan verifikasi waktu nyata.
+              Catatan autentik presensi perkuliahan yang tercatat di server RuangKampus. Seluruh sesi tervalidasi menggunakan verifikasi waktu nyata.
             </p>
           </div>
 

@@ -7,13 +7,13 @@ import {
 const PROJECTS = [
   {
     id: 'proj-1',
-    title: 'SIAJAR: LMS Next.js Enterprise & Proctoring',
+    title: 'RuangKampus: LMS Enterprise & Proctoring',
     course: 'Pemrograman Web Lanjut (TI-301)',
     type: 'Tugas Akhir Proyek',
     description: 'Implementasi aplikasi manajemen perkuliahan dengan Next.js App Router, live panel proctoring ujian, compiler live coding sandbox, dan presensi QR haversine.',
     tech: ['Next.js 15', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS'],
     status: 'Selesai (Skor: 95/100)',
-    repo: 'github.com/wahyu/siajar-lms',
+    repo: 'github.com/wahyu/ruangkampus-lms',
   },
   {
     id: 'proj-2',

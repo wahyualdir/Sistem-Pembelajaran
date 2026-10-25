@@ -28,7 +28,7 @@ export default async function ExamsPage() {
   const fetchedQuizzes = isNew ? [] : await getAllQuizzesAction().catch(() => []);
   const isLecturer = role === 'LECTURER';
 
-  // Mengambil daftar kelas aktif yang diampu/diambil mahasiswa saat ini (terhubung ke kurikulum UIR)
+  // Mengambil daftar kelas aktif yang diampu/diambil mahasiswa saat ini
   const activeClasses = isNew ? [] : await getHomeActiveClassesAction().catch(() => []);
 
   // Menemukan kelas-kelas aktif mahasiswa untuk mengikat soal

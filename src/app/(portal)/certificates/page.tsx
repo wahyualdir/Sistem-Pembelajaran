@@ -13,16 +13,16 @@ const DEMO_CERTIFICATES: CertificateItem[] = [
   {
     id: 'cert-1',
     title: 'Sertifikat Kompetensi Pemrograman Web & Arsitektur Cloud (STI2544138)',
-    issuer: 'Laboratorium Rekayasa Perangkat Lunak UIR',
+    issuer: 'Laboratorium Rekayasa Perangkat Lunak',
     date: '30 September 2026',
-    credentialId: 'CERT-UIR-2026-WEB-0018',
+    credentialId: 'CERT-2026-WEB-0018',
     grade: 'Lulus dengan Pujian (Grade A)',
     hours: '64 Jam Pelajaran',
   },
   {
     id: 'cert-2',
     title: 'Lencana Prestasi Terbaik: Algoritma & Struktur Data Lanjut (STI2543131)',
-    issuer: 'Fakultas Teknik Informatika UIR',
+    issuer: 'Fakultas Teknik Informatika',
     date: '15 September 2026',
     credentialId: 'BADGE-DSA-TOP10-2026',
     grade: 'Peringkat 5 dari 120 Peserta',
@@ -42,7 +42,7 @@ const DEMO_CERTIFICATES: CertificateItem[] = [
     title: 'Sertifikat Praktikum Basis Data Terdistribusi & Big Data (STI2541114)',
     issuer: 'Laboratorium Basis Data & Sistem Terdistribusi',
     date: '20 Agustus 2026',
-    credentialId: 'CERT-DB-UIR-8821',
+    credentialId: 'CERT-DB-8821',
     grade: 'Kompeten (Skor 92/100)',
     hours: '32 Jam Praktikum',
   },
@@ -51,14 +51,14 @@ const DEMO_CERTIFICATES: CertificateItem[] = [
 const DEMO_PROJECTS: PortfolioProjectItem[] = [
   {
     id: 'proj-1',
-    title: 'SIAJAR: LMS Next.js Enterprise & Proctoring',
+    title: 'RuangKampus: LMS Enterprise & Proctoring',
     course: 'Pemrograman Web & Arsitektur Cloud (STI2544138)',
     type: 'Tugas Akhir Proyek',
     description:
       'Implementasi aplikasi manajemen perkuliahan dengan Next.js App Router, live panel proctoring ujian, compiler live coding sandbox, dan presensi QR haversine.',
     tech: ['Next.js 15', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS'],
     status: 'Selesai (Skor: 95/100)',
-    repo: 'github.com/wahyu/siajar-lms',
+    repo: 'github.com/wahyu/ruangkampus-lms',
   },
   {
     id: 'proj-2',

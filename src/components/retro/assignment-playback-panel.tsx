@@ -140,7 +140,7 @@ export function AssignmentPlaybackPanel({
 
   // State untuk Live Proof-of-Work Editor (Mahasiswa)
   const [liveCode, setLiveCode] = useState<string>(
-    `// Ketik kode atau jawaban Anda di sini.\n// Sistem mencatat riwayat ketikan organik sebagai bukti keaslian karya (Anti-Joki).\npublic class TugasUIR {\n  public static void main(String[] args) {\n    \n  }\n}`
+    `// Ketik kode atau jawaban Anda di sini.\n// Sistem mencatat riwayat ketikan organik sebagai bukti keaslian karya (Anti-Joki).\npublic class TugasMandiri {\n  public static void main(String[] args) {\n    \n  }\n}`
   );
   const [organicKeystrokes, setOrganicKeystrokes] = useState<number>(42);
   const [pasteBurstCount, setPasteBurstCount] = useState<number>(0);

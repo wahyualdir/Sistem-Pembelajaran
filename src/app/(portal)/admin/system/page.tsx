@@ -2,8 +2,8 @@ import React from 'react';
 import { SystemDashboardHubView } from '@/modules/admin/system-dashboard-hub-view';
 
 export const metadata = {
-  title: 'Pusat Kendali Administrator Sistem - SIAJAR LMS',
-  description: 'Monitoring infrastruktur, basis data, keamanan, dan integrasi SIAJAR',
+  title: 'Pusat Kendali Administrator Sistem - RuangKampus',
+  description: 'Monitoring infrastruktur, basis data, keamanan, dan integrasi RuangKampus',
 };
 
 import { assertServerRole } from '@/lib/auth/server-guards';

@@ -52,7 +52,7 @@ export function OSHeroWindow() {
               {/* Status Pill */}
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#F4E4DD] border border-[#C2553A]/30 rounded-full text-xs font-mono text-[#C2553A] font-bold">
                 <span className="w-2 h-2 rounded-full bg-[#C2553A] animate-pulse" />
-                <span>• SYSTEM ONLINE · 28 MATAKULIAH TERVERIFIKASI (SIAJAR v2.4)</span>
+                <span>• SYSTEM ONLINE · 28 MATAKULIAH TERVERIFIKASI (RuangKampus v2.4)</span>
               </div>
 
               {/* Big Velqora-Style Headline */}
@@ -217,7 +217,7 @@ export function OSHeroWindow() {
                   </span>
                 </div>
                 <div className="text-[#A8A29E] truncate mt-0.5">
-                  &gt; SIAJAR v2.4 · Kain Semester Weave · Multi-Role Isolation Online
+                  &gt; RuangKampus v2.4 · Kain Semester Weave · Multi-Role Isolation Online
                 </div>
               </div>
             </div>

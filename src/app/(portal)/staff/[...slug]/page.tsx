@@ -122,7 +122,7 @@ export default async function StaffSubpage({ params }: PageProps) {
 
   const current = sectionTitles[fullSlug] || {
     title: 'Layanan Administrasi Akademik',
-    subtitle: 'Sistem Pembelajaran Terpadu LMS SIAJAR',
+    subtitle: 'Sistem Pembelajaran Terpadu RuangKampus',
     icon: FileSpreadsheet,
     desc: 'Pengelolaan data master, penjadwalan kelas, pendaftaran rombel, dan pengajuan masuk.',
   };

@@ -37,7 +37,7 @@ const EVENTS = [
     time: '08:00 WIB - Selesai',
     speaker: 'Dewan Juri Akademik & Industri',
     role: 'Kolaborasi Fakultas & Industri Mitra',
-    location: 'Auditorium Gedung Rektorat UIR',
+    location: 'Auditorium Gedung Rektorat',
     type: 'Kompetisi Tim',
     seats: '24 Tim Terdaftar',
     status: 'Pendaftaran Ditutup H-5',

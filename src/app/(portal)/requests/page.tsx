@@ -6,7 +6,7 @@ import { RequestsView } from '@/modules/requests/requests-view';
 import { KrsStore } from '@/features/krs/krs-store';
 
 export const metadata = {
-  title: 'Pengajuan Surat Akademik dan KRS - SIAJAR LMS',
+  title: 'Pengajuan Surat Akademik dan KRS - RuangKampus',
   description: 'Layanan mandiri pengajuan surat keterangan aktif, dispensasi, legalisasi berkas, dan Kartu Rencana Studi.',
 };
 

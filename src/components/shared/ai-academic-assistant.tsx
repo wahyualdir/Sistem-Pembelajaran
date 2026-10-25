@@ -21,7 +21,7 @@ export function AiAcademicAssistant() {
     {
       id: 'welcome',
       sender: 'ai',
-      text: 'Halo! Saya **SIAJAR AI Academic Assistant** 🤖. Tanyakan apa saja tentang materi kuliah, aturan akademik, tugas, kuis, atau tips belajar Anda!',
+      text: 'Halo! Saya **RuangKampus AI Academic Assistant** 🤖. Tanyakan apa saja tentang materi kuliah, aturan akademik, tugas, kuis, atau tips belajar Anda!',
       time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -82,7 +82,7 @@ export function AiAcademicAssistant() {
           type="button"
           onClick={() => setIsOpen(true)}
           className="ai-assistant-btn fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center justify-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full border-2 border-black bg-black px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-retro hover:bg-neutral-800 transition-all hover:scale-105 active:scale-95 group cursor-pointer"
-          aria-label="Buka Asisten AI SIAJAR"
+          aria-label="Buka Asisten AI Akademik"
         >
           <div className="relative shrink-0 flex items-center justify-center">
             <Bot className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
@@ -105,7 +105,7 @@ export function AiAcademicAssistant() {
               </div>
               <div>
                 <h3 className="text-xs font-bold text-ink flex items-center gap-1.5">
-                  SIAJAR AI Assistant
+                  RuangKampus AI Assistant
                   <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
                 </h3>
                 <p className="text-xs text-gray-dark">Konsultasi & Panduan Akademik</p>

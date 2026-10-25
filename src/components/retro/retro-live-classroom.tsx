@@ -38,7 +38,7 @@ export function RetroLiveClassroom({
   classId,
   classTitle,
   section,
-  userName = 'Civitas Akademika UIR',
+  userName = 'Civitas Akademika',
   userEmail = 'civitas@uir.ac.id',
   isHost = false,
   roomNamePrefix = 'uir-siajar',
@@ -133,8 +133,8 @@ export function RetroLiveClassroom({
           <div className="flex items-center gap-3 min-w-0">
             <div className="h-8 w-8 rounded-lg border-2 border-ink bg-white p-0.5 shrink-0 flex items-center justify-center shadow-retro-xs overflow-hidden">
               <Image
-                src="/logo-uir.png"
-                alt="Logo UIR"
+                src="/logo-ruangkampus.png"
+                alt="Logo RuangKampus"
                 width={32}
                 height={32}
                 className="h-full w-full object-contain"
@@ -152,7 +152,7 @@ export function RetroLiveClassroom({
                 )}
               </div>
               <span className="text-[10px] font-mono font-semibold text-gray-dark uppercase tracking-wider block">
-                SIAJAR Live Classroom &bull; WebRTC Powered
+                RuangKampus Live Classroom &bull; WebRTC Powered
               </span>
             </div>
           </div>

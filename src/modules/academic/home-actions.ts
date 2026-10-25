@@ -47,7 +47,7 @@ export async function getHomeBannerAction(): Promise<HomeBannerData> {
         id: 'banner-welcome',
         priority: 5,
         category: 'IDLE',
-        title: 'Selamat Datang di SIAJAR',
+        title: 'Selamat Datang di RuangKampus',
         subtitle: `Halo, ${userContext.profile?.full_name || 'Mahasiswa'}! Akun baru Anda siap digunakan. Buka menu Kelas Saya untuk mulai mendaftar ke kelas perkuliahan dosen Anda.`,
         buttonLabel: 'Buka Kelas Saya',
         buttonHref: '/classes',

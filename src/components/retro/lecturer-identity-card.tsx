@@ -42,7 +42,7 @@ export function LecturerIdentityCard({
 
   return (
     <div className="w-full rounded-2xl border-2 border-[#7A756D] bg-white p-4 sm:p-5 shadow-xs space-y-4 font-sans relative overflow-hidden transition-all hover:shadow-xs">
-      {/* 1. Header Identitas Kampus & Logo Resmi UIR */}
+      {/* 1. Header Identitas Kampus & Logo Resmi */}
       <div className="flex items-center gap-2.5 pb-3 border-b-2 border-[#D6D3CB]">
         <div className="flex items-center gap-2.5 min-w-0 flex-1">
           <div className="h-9 w-9 rounded-xl border-2 border-[#7A756D] bg-white p-0.5 flex items-center justify-center shrink-0 shadow-2xs overflow-hidden">

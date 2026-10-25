@@ -10,7 +10,7 @@ const ANNOUNCEMENTS = [
     category: 'Akademik',
     isPinned: true,
     content:
-      'Diberitahukan kepada seluruh mahasiswa bahwa UTS akan diselenggarakan secara hybrid menggunakan modul Ujian LMS SIAJAR. Mahasiswa wajib memastikan baterai laptop terisi penuh, koneksi stabil, dan mematuhi aturan proctoring.',
+      'Diberitahukan kepada seluruh mahasiswa bahwa UTS akan diselenggarakan secara hybrid menggunakan modul Ujian RuangKampus. Mahasiswa wajib memastikan baterai laptop terisi penuh, koneksi stabil, dan mematuhi aturan proctoring.',
   },
   {
     id: 'ann-2',
@@ -40,7 +40,7 @@ const ANNOUNCEMENTS = [
     category: 'Layanan',
     isPinned: false,
     content:
-      'Mahasiswa yang memerlukan izin sakit wajib mengunggah surat keterangan dokter paling lambat H+2 setelah jadwal ujian melalui portal Presensi SIAJAR untuk validasi ujian susulan.',
+      'Mahasiswa yang memerlukan izin sakit wajib mengunggah surat keterangan dokter paling lambat H+2 setelah jadwal ujian melalui portal Presensi RuangKampus untuk validasi ujian susulan.',
   },
 ];
 
@@ -88,9 +88,9 @@ const THREADS = [
     id: 'th-4',
     title: 'Persiapan Sertifikasi AWS Certified Solutions Architect untuk Mahasiswa',
     author: 'Dimas Aditya',
-    authorRole: 'Alumni TI UIR',
+    authorRole: 'Alumni TI',
     excerpt:
-      'Sharing jalur sertifikasi cloud computing, cara klaim voucher diskon institusi UIR, dan bank soal simulasi ujian resmi AWS Associate.',
+      'Sharing jalur sertifikasi cloud computing, cara klaim voucher diskon institusi kampus, dan bank soal simulasi ujian resmi AWS Associate.',
     replies: 11,
     views: 240,
     category: 'Karir & Sertifikasi',
@@ -112,7 +112,7 @@ const GROUPS = [
   },
   {
     id: 'g-2',
-    name: 'Komunitas Riset AI & NLP UIR',
+    name: 'Komunitas Riset AI & NLP',
     topic: 'Machine Learning',
     description:
       'Eksplorasi paper riset AI terkini, implementasi fine-tuning model bahasa (LLM), computer vision, dan kolaborasi publikasi ilmiah.',
@@ -223,7 +223,7 @@ const EVENTS = [
     time: '08:00 WIB - Selesai',
     speaker: 'Dewan Juri Akademik & Industri',
     role: 'Kolaborasi Fakultas & Industri Mitra',
-    location: 'Auditorium Gedung Rektorat UIR',
+    location: 'Auditorium Gedung Rektorat',
     type: 'Kompetisi Tim',
     seats: '24 Tim Terdaftar',
     status: 'Pendaftaran Ditutup H-5',

@@ -3,7 +3,7 @@ import { assertServerRole } from '@/lib/auth/server-guards';
 import { SystemSecurityHubView } from '@/modules/admin/system-security-hub-view';
 
 export const metadata = {
-  title: 'Pusat Keamanan & Manajemen Sesi - SIAJAR LMS',
+  title: 'Pusat Keamanan & Manajemen Sesi - RuangKampus',
   description: 'Audit sesi aktif, deteksi login mencurigakan, dan konfigurasi rate limiting',
 };
 

@@ -4,7 +4,7 @@ import { NotificationsView } from '@/modules/notifications/notifications-view';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
 export const metadata = {
-  title: 'Pusat Notifikasi & Pengingat Otomatis - SIAJAR LMS',
+  title: 'Pusat Notifikasi & Pengingat Otomatis - RuangKampus',
   description: 'Pemberitahuan tenggat tugas, jadwal ujian, sesi presensi, dan pengumuman akademik civitas kampus',
 };
 

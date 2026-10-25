@@ -102,7 +102,7 @@ export default async function LecturerSubpage({ params }: PageProps) {
 
   const current = titles[subroute] || {
     title: 'Manajemen Pengajaran Dosen',
-    subtitle: 'Sistem Pembelajaran Terpadu LMS SIAJAR',
+    subtitle: 'Sistem Pembelajaran Terpadu RuangKampus',
     icon: Layers,
     desc: 'Layanan administrasi dan pembelajaran untuk dosen pengampu mata kuliah.',
   };

@@ -38,7 +38,7 @@ export default async function VerifyCertificatePage({ params }: VerifyCertificat
             className="inline-flex items-center gap-1.5 text-xs font-bold text-black hover:text-primary transition-colors underline"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span>Kembali ke Portal SIAJAR</span>
+            <span>Kembali ke Portal RuangKampus</span>
           </Link>
           <span className="text-xs font-bold text-black/60 font-sans">
             Sistem Verifikasi Ijazah & Sertifikat
@@ -67,7 +67,7 @@ export default async function VerifyCertificatePage({ params }: VerifyCertificat
                 {result.certificate.title}
               </h1>
               <p className="text-xs font-sans text-black/70">
-                Pangkalan Data Sertifikasi Kompetensi & Kelulusan SIAJAR &bull; Universitas Islam Riau
+                Pangkalan Data Sertifikasi Kompetensi & Kelulusan RuangKampus
               </p>
             </div>
 
@@ -156,7 +156,7 @@ export default async function VerifyCertificatePage({ params }: VerifyCertificat
             {/* Tombol Cetak / PDF */}
             <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
               <span className="text-xs text-black/70 font-sans">
-                Dokumen ini merupakan arsip digital tersumpah yang diterbitkan resmi melalui portal SIAJAR.
+                Dokumen ini merupakan arsip digital tersumpah yang diterbitkan resmi melalui portal RuangKampus.
               </span>
               <button
                 type="button"
@@ -201,7 +201,7 @@ export default async function VerifyCertificatePage({ params }: VerifyCertificat
                 <input
                   type="text"
                   name="code"
-                  placeholder="Contoh: UIR-CERT-2026-TI-0018"
+                  placeholder="Contoh: CERT-2026-TI-0018"
                   className="flex-1 rounded-lg border-2 border-black p-2.5 text-xs font-bold uppercase font-sans bg-white"
                 />
                 <button

@@ -90,7 +90,7 @@ export function StaffDashboardClient({
               <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#853827]">
                 <span>PORTAL STAF ADMINISTRASI AKADEMIK</span>
                 <span className="text-[#B8B1A5]">•</span>
-                <span className="text-[#57534E]">BAAK UIR</span>
+                <span className="text-[#57534E]">BAAK</span>
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#1C1917]">
                 Biro Administrasi Akademik

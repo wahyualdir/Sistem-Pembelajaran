@@ -19,7 +19,7 @@ export default function TransparencyPage() {
           <div className="space-y-0.5">
             <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-ink flex items-center gap-2.5">
               <ShieldCheck className="h-6 w-6 sm:h-7 sm:w-7 text-primary inline-block" />
-              Privasi dan Kebijakan Pemantauan SIAJAR
+              Privasi dan Kebijakan Pemantauan RuangKampus
             </h1>
             <p className="text-xs sm:text-sm text-gray-dark font-bold">
               Dokumentasi resmi mengenai hak pengguna, parameter pemantauan proctoring ujian, geolokasi presensi, dan retensi data.
@@ -125,7 +125,7 @@ export default function TransparencyPage() {
               <p className="text-gray-dark font-bold space-y-1">
                 <span>&bull; <strong>Hak Transparansi:</strong> Mahasiswa berhak melihat log anomali proctoring yang dicatat sistem saat ujian.</span><br />
                 <span>&bull; <strong>Sengketa Nilai (Dispute):</strong> Jika terjadi kendala koneksi atau teknis, mahasiswa dapat mengajukan sanggahan langsung lewat fitur Sengketa Nilai dalam 7 hari.</span><br />
-                <span>&bull; <strong>Keputusan Akhir pada Manusia:</strong> Sistem SIAJAR tidak mendiskualifikasi nilai secara sepihak. Dosen pengampu selalu menjadi pengambil keputusan akhir.</span>
+                <span>&bull; <strong>Keputusan Akhir pada Manusia:</strong> Sistem RuangKampus tidak mendiskualifikasi nilai secara sepihak. Dosen pengampu selalu menjadi pengambil keputusan akhir.</span>
               </p>
             </div>
           </div>

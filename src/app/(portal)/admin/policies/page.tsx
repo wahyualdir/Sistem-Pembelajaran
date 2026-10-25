@@ -2,7 +2,7 @@ import React from 'react';
 import { SuperadminPoliciesHubView } from '@/modules/admin/superadmin-policies-hub-view';
 
 export const metadata = {
-  title: 'Kebijakan Akademik, Ujian & Privasi - SIAJAR LMS',
+  title: 'Kebijakan Akademik, Ujian & Privasi - RuangKampus',
   description: 'Pengaturan standar baku kelulusan, batas pengawasan ujian, dan privasi UU PDP',
 };
 

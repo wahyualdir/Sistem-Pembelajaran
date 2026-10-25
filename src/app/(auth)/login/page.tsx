@@ -87,7 +87,7 @@ function LoginFormContent() {
               Ruang<span className="text-[#C2553A]">Kampus</span>
             </span>
             <span className="text-[10px] font-semibold text-[#7A756D] tracking-wide mt-0.5">
-              Teknik Informatika UIR
+              Teknik Informatika
             </span>
           </div>
         </Link>

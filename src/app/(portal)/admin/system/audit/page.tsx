@@ -4,7 +4,7 @@ import { SystemAuditHubView } from '@/modules/admin/system-audit-hub-view';
 import { getAuditLogsAction } from '@/modules/admin/audit-actions';
 
 export const metadata = {
-  title: 'Log Audit Sistem (Read-Only) - SIAJAR LMS',
+  title: 'Log Audit Sistem (Read-Only) - RuangKampus',
   description: 'Jejak audit append-only perubahan nilai, presensi, dan impersonasi',
 };
 

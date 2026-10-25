@@ -51,7 +51,7 @@ interface CommandEntry {
   icon: React.ComponentType<{ className?: string }>;
 }
 
-const CONNECTED_UIR_CLASSES: CommandEntry[] = [
+const CONNECTED_CLASSES: CommandEntry[] = [
   {
     id: 'cls-web',
     category: 'class',
@@ -178,7 +178,7 @@ export function CommandCenterOS({
       {
         id: 'cmd-ai',
         category: 'command',
-        title: 'Tanya Asisten AI Akademik UIR',
+        title: 'Tanya Asisten AI Akademik',
         subtitle: 'Ketik "ai" — Diskusi materi perkuliahan, persiapan kuis, dan rangkuman modul',
         keywords: 'ai asisten tanya pintar rangkuman materi',
         href: '/ai-assistant',
@@ -203,7 +203,7 @@ export function CommandCenterOS({
       }
     }
 
-    return [...smartCommands, ...CONNECTED_UIR_CLASSES, ...menuEntries];
+    return [...smartCommands, ...CONNECTED_CLASSES, ...menuEntries];
   }, [navGroups, roleName]);
 
   const filteredEntries = useMemo(() => {
@@ -493,7 +493,7 @@ export function CommandCenterOS({
           </div>
           <div className="flex items-center gap-1.5 text-[#853827]">
             <ShieldCheck className="h-3.5 w-3.5" />
-            <span>Terhubung Kurikulum TI UIR 2026/2027</span>
+            <span>Terhubung Kurikulum TI 2026/2027</span>
           </div>
         </div>
       </div>

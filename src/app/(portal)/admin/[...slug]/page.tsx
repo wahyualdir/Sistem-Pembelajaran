@@ -172,12 +172,12 @@ export default async function AdminSubpage({ params }: PageProps) {
     },
     'settings/branding': {
       title: 'Platform, Nama Kampus & Identitas Visual',
-      subtitle: 'Konfigurasi Lembaga & Nama Portal SIAJAR',
+      subtitle: 'Konfigurasi Lembaga & Nama Portal RuangKampus',
       icon: Sliders,
       desc: 'Pengaturan metadata institusi pendidikan tinggi, nama universitas, dan favicon.',
     },
     'settings/ai': {
-      title: 'Pengaturan Mesin AI SIAJAR',
+      title: 'Pengaturan Mesin AI RuangKampus',
       subtitle: 'Konfigurasi Model LLM, Prompt & Token Limit',
       icon: Sliders,
       desc: 'Pengaturan parameter asisten AI untuk pembuatan kuis latihan, ringkasan materi, dan review tugas.',
@@ -202,7 +202,7 @@ export default async function AdminSubpage({ params }: PageProps) {
     },
     roles: {
       title: 'Manajemen Peran & Hak Akses (RBAC)',
-      subtitle: 'Konfigurasi Izin granular 7 Role SIAJAR',
+      subtitle: 'Konfigurasi Izin granular 7 Role RuangKampus',
       icon: ShieldAlert,
       desc: 'Penetapan matriks izin per role: Super Admin, System Admin, Kaprodi, Staf, Dosen, Mhs, dan Asisten.',
     },
@@ -239,8 +239,8 @@ export default async function AdminSubpage({ params }: PageProps) {
   };
 
   const current = sectionTitles[fullSlug] || {
-    title: 'Administrasi Sistem SIAJAR',
-    subtitle: 'Sistem Pembelajaran Terpadu LMS SIAJAR',
+    title: 'Administrasi Sistem RuangKampus',
+    subtitle: 'Sistem Pembelajaran Terpadu LMS RuangKampus',
     icon: Server,
     desc: 'Pengelolaan infrastruktur, keamanan siber, dan kebijakan platform pembelajaran.',
   };

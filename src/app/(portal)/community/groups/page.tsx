@@ -15,7 +15,7 @@ const GROUPS = [
   },
   {
     id: 'g-2',
-    name: 'Komunitas Riset AI & NLP UIR',
+    name: 'Komunitas Riset AI & NLP',
     topic: 'Machine Learning',
     description: 'Eksplorasi paper riset AI terkini, implementasi fine-tuning model bahasa (LLM), computer vision, dan kolaborasi publikasi ilmiah.',
     members: 24,

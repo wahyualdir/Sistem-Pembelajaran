@@ -104,7 +104,7 @@ export function RetroDocViewer({
               </h3>
               {authorOrDate && (
                 <span className="text-[10px] font-mono opacity-70 block truncate">
-                  {authorOrDate} &bull; SIAJAR Reader
+                  {authorOrDate} &bull; RuangKampus Reader
                 </span>
               )}
             </div>

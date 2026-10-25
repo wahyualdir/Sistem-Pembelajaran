@@ -45,7 +45,7 @@ export default async function TakeQuizPage({
           </div>
         ) : (
           <span className="text-xs font-sans font-bold text-black/60 hidden sm:inline-block">
-            SIAJAR CBT Engine v2.4
+            RuangKampus CBT Engine v2.4
           </span>
         )}
       </div>

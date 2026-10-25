@@ -6,7 +6,7 @@ import { PreferencesView } from '@/modules/notifications/preferences-view';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 
 export const metadata = {
-  title: 'Pengaturan Akun dan Preferensi - SIAJAR LMS',
+  title: 'Pengaturan Akun dan Preferensi - RuangKampus',
   description: 'Pengaturan preferensi notifikasi, saluran pengiriman, tampilan, dan keamanan akun',
 };
 

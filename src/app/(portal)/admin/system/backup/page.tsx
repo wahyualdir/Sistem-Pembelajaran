@@ -2,7 +2,7 @@ import React from 'react';
 import { SystemBackupHubView } from '@/modules/admin/system-backup-hub-view';
 
 export const metadata = {
-  title: 'Cadangan & Pemulihan Basis Data - SIAJAR LMS',
+  title: 'Cadangan & Pemulihan Basis Data - RuangKampus',
   description: 'Snapshot berkala basis data PostgreSQL dan pemulihan bencana',
 };
 

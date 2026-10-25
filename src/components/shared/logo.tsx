@@ -22,7 +22,9 @@ export function Logo({ className, showText = true, size = "md" }: LogoProps) {
         </svg>
       </span>
       {showText && (
-        <span className="text-base font-semibold tracking-tight text-foreground">SIAJAR</span>
+        <span className="font-heading font-black text-base tracking-tight text-[#1C1917] leading-none">
+          Ruang<span className="text-[#C2553A]">Kampus</span>
+        </span>
       )}
     </div>
   );

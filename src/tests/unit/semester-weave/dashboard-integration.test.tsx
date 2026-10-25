@@ -106,6 +106,6 @@ describe('Integrasi Beranda Mahasiswa di Belakang Feature Flag (Fase G)', () => 
     );
 
     // Banner selamat datang / aksi tetap ada
-    expect(htmlWithFlag).toContain('Selamat Datang di SIAJAR');
+    expect(htmlWithFlag).toContain('Selamat Datang di RuangKampus');
   });
 });
