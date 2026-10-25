@@ -15,24 +15,8 @@ import {
   User,
   Lock,
   Sparkles,
-  X,
-  Layers,
 } from 'lucide-react';
 import { TechBackground } from '@/components/ui/tech-background';
-
-const DEMO = [
-  ['Mahasiswa UIR', 'NIM 243510001', '243510001'],
-  ['Kaprodi UIR', 'NIDN 2008000307', '2008000307'],
-  ['Asisten Dosen UIR', 'NIM 233510001', '233510001'],
-  ['Super Admin UIR', 'NIP 20120009', '20120009'],
-  ['Super Admin', 'superadmin', 'superadmin'],
-  ['Mahasiswa', 'NIM 2024001', '2024001'],
-  ['Dosen', 'NIDN 0012345678', '0012345678'],
-  ['Mahasiswa + Asisten', 'NIM 2024002', '2024002'],
-  ['Kaprodi', 'NIDN 0087654321', '0087654321'],
-  ['Staf Akademik', 'NIP 198501012010121001', '198501012010121001'],
-  ['System Admin', 'sysadmin', 'sysadmin'],
-] as const;
 
 function LoginFormContent() {
   const searchParams = useSearchParams();
@@ -41,7 +25,6 @@ function LoginFormContent() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [showDemoModal, setShowDemoModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState(searchParams.get('error') || '');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorKey, setErrorKey] = useState(0);
@@ -61,13 +44,6 @@ function LoginFormContent() {
         window.location.href = res.redirectTo;
       }
     });
-  };
-
-  const handleDemoFill = (id: string) => {
-    setIdentifier(id);
-    setPassword('demo12345');
-    setErrorMessage('');
-    setShowDemoModal(false);
   };
 
   return (
@@ -248,16 +224,6 @@ function LoginFormContent() {
               <LogIn className="h-4 w-4" />
               <span>{isPending ? 'Memverifikasi...' : 'Masuk ke RuangKampus'}</span>
             </button>
-
-            <div className="pt-2 text-center text-xs text-[#57534E]">
-              <span>Belum memiliki akun terdaftar? </span>
-              <Link
-                href="/register"
-                className="font-bold underline text-[#C2553A] hover:text-[#853827] transition-colors"
-              >
-                Daftar Akun Baru
-              </Link>
-            </div>
           </form>
         </div>
       </main>
@@ -266,76 +232,6 @@ function LoginFormContent() {
       <footer className="w-full max-w-5xl text-center py-2 text-xs text-[#7A756D] z-10">
         <span>RuangKampus &copy; {new Date().getFullYear()} — Teknik Informatika Universitas Islam Riau</span>
       </footer>
-
-      {/* 4. Floating Pill Akun Simulasi Peran (Hanya Muncul di Mode Dev) */}
-      {process.env.NODE_ENV === 'development' && (
-        <>
-          <button
-            type="button"
-            onClick={() => setShowDemoModal(true)}
-            className="fixed bottom-4 right-4 z-40 bg-[#1C1917] hover:bg-[#2D2823] text-[#FAF8F5] text-xs font-semibold px-3.5 py-2 rounded-full shadow-lg border border-[#3F3F46] flex items-center gap-2 cursor-pointer transition-all hover:scale-105 active:scale-95"
-            title="Pilih akun simulasi peran"
-          >
-            <Layers className="h-3.5 w-3.5 text-[#C2553A]" />
-            <span>Akun Demo</span>
-          </button>
-
-          {/* Modal / Pop-over Akun Demo */}
-          {showDemoModal && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C1917]/50 backdrop-blur-xs">
-              <div className="bg-[#FFFFFF] border border-[#D6D3CB] rounded-2xl p-5 max-w-md w-full shadow-2xl space-y-4">
-                <div className="flex items-center justify-between border-b border-[#E8E5DE] pb-3">
-                  <div className="flex items-center gap-2">
-                    <Layers className="h-4 w-4 text-[#C2553A]" />
-                    <h2 className="font-heading font-bold text-sm text-[#1C1917]">
-                      Pilih Akun Simulasi Peran
-                    </h2>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowDemoModal(false)}
-                    className="p-1 rounded-lg text-[#7A756D] hover:text-[#1C1917] transition-colors cursor-pointer"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-
-                <p className="text-xs text-[#57534E] leading-relaxed">
-                  Klik peran di bawah untuk mengisi kolom login secara otomatis dengan kata sandi pengembang:
-                </p>
-
-                <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto pr-1">
-                  {DEMO.map(([peran, ket, id]) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => handleDemoFill(id)}
-                      className="p-2.5 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#FFFFFF] hover:border-[#C2553A] text-left transition-all cursor-pointer shadow-2xs group"
-                    >
-                      <span className="block font-bold text-xs text-[#1C1917] group-hover:text-[#C2553A] truncate">
-                        {peran}
-                      </span>
-                      <span className="block text-[10px] text-[#57534E] font-mono mt-0.5 truncate">
-                        {ket}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-
-                <div className="pt-2 border-t border-[#E8E5DE] text-right">
-                  <button
-                    type="button"
-                    onClick={() => setShowDemoModal(false)}
-                    className="px-4 py-1.5 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] hover:bg-[#E8E5DE] text-xs font-semibold text-[#1C1917] cursor-pointer"
-                  >
-                    Tutup
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-        </>
-      )}
     </div>
   );
 }
