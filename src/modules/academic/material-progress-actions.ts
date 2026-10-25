@@ -1,5 +1,6 @@
-import { hasUserRole } from '@/lib/auth/server-guards';
 'use server';
+
+import { hasUserRole } from '@/lib/auth/server-guards';
 
 import { createClient } from '@/lib/supabase/server';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
