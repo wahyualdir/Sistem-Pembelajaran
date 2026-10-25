@@ -1,3 +1,4 @@
+import { hasUserRole } from '@/lib/auth/server-guards';
 'use server';
 
 // Server Actions untuk Komentar Berkas pada Penilaian Tugas SIAJAR (Bagian 9.3)
@@ -44,8 +45,8 @@ export async function createFeedbackCommentAction(
     return { ok: false, error: 'Sesi Anda telah kedaluwarsa. Silakan masuk kembali.' };
   }
 
-  const isLecturer = auth.roles.includes('LECTURER') || auth.roles.includes('SUPER_ADMIN');
-  const isTA = auth.roles.includes('TEACHING_ASSISTANT');
+  const isLecturer = hasUserRole(auth, ['LECTURER', 'SUPER_ADMIN']);
+  const isTA = hasUserRole(auth, 'TEACHING_ASSISTANT');
 
   if (!isLecturer && !isTA) {
     return { ok: false, error: 'Hanya Pengajar atau Asisten yang dapat memberikan komentar pada berkas.' };
@@ -124,7 +125,7 @@ export async function getFeedbackCommentsAction(
     return { ok: false, error: 'Sesi kedaluwarsa.' };
   }
 
-  const isStudent = auth.roles.includes('STUDENT');
+  const isStudent = hasUserRole(auth, 'STUDENT');
 
   let list = feedbackCommentsStore.filter((c) => c.submission_id === submissionId);
 
@@ -156,7 +157,7 @@ export async function deleteFeedbackCommentAction(
 
   const comment = feedbackCommentsStore[index];
   const isOwner = comment.author_id === auth.user.id;
-  const isLecturer = auth.roles.includes('LECTURER') || auth.roles.includes('SUPER_ADMIN');
+  const isLecturer = hasUserRole(auth, ['LECTURER', 'SUPER_ADMIN']);
 
   if (!isOwner && !isLecturer) {
     return { ok: false, error: 'Anda tidak memiliki wewenang untuk menghapus komentar ini.' };

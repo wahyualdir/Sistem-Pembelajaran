@@ -5,12 +5,22 @@ import { DokumenKartuUjianPdf } from "@/lib/pdf/dokumen-kartu-ujian";
 import { UjianStore, JenisUjian } from "@/features/ujian/ujian-store";
 import { MasterStore } from "@/features/master/master-store";
 import { SEED_TAHUN_AJARAN } from "@/lib/db/seed-data";
+import { authorizeAcademicStudentAccess } from "@/lib/auth/pdf-access";
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const mahasiswaId = searchParams.get("mhsId") || "mhs-1";
     const jenis = (searchParams.get("jenis") || "UTS") as JenisUjian;
+
+    // Verifikasi otentikasi & cegah IDOR
+    const authCheck = await authorizeAcademicStudentAccess(mahasiswaId);
+    if (!authCheck.authorized) {
+      return NextResponse.json(
+        { error: authCheck.error },
+        { status: authCheck.status || 403 }
+      );
+    }
 
     // Evaluasi 3 Syarat Kelayakan Kartu Ujian (Bab 6.6)
     const evaluasi = UjianStore.evaluasiKartuUjianMahasiswa(mahasiswaId);

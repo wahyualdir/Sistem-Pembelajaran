@@ -1,3 +1,4 @@
+import { hasUserRole } from '@/lib/auth/server-guards';
 'use server';
 
 // Server Actions untuk Pengelolaan Tugas Kelompok SIAJAR
@@ -82,9 +83,7 @@ export async function createGroupSetAction(
     return { ok: false, error: 'Sesi Anda telah kedaluwarsa. Silakan masuk kembali.' };
   }
 
-  const isLecturerOrAdmin =
-    auth.roles.includes('LECTURER') ||
-    auth.roles.includes('SUPER_ADMIN');
+  const isLecturerOrAdmin = hasUserRole(auth, ['LECTURER', 'SUPER_ADMIN']);
 
   if (!isLecturerOrAdmin) {
     return { ok: false, error: 'Hanya Dosen Pengampu yang memiliki wewenang membuat set kelompok.' };

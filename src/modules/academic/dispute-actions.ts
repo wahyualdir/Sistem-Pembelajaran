@@ -1,3 +1,4 @@
+import { hasUserRole } from '@/lib/auth/server-guards';
 'use server';
 
 // Server Actions untuk Sanggah Nilai oleh Mahasiswa SIAJAR
@@ -81,7 +82,7 @@ export async function createGradeDisputeAction(
     return { ok: false, error: 'Sesi Anda telah kedaluwarsa. Silakan masuk kembali.' };
   }
 
-  const isStudent = auth.roles.includes('STUDENT');
+  const isStudent = hasUserRole(auth, 'STUDENT');
   if (!isStudent) {
     return { ok: false, error: 'Hanya Mahasiswa yang dapat mengajukan sanggahan nilai.' };
   }
@@ -273,9 +274,7 @@ export async function resolveGradeDisputeAction(
   const auth = await getCurrentUserWithRoles();
   if (!auth) return { ok: false, error: 'Sesi Anda telah kedaluwarsa.' };
 
-  const isLecturerOrAdmin =
-    auth.roles.includes('LECTURER') ||
-    auth.roles.includes('SUPER_ADMIN');
+  const isLecturerOrAdmin = hasUserRole(auth, ['LECTURER', 'SUPER_ADMIN']);
 
   if (!isLecturerOrAdmin) {
     return { ok: false, error: 'Hanya Dosen Pengampu yang memiliki wewenang meninjau dan memutuskan sanggahan nilai.' };

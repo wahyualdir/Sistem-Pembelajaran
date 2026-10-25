@@ -3,6 +3,7 @@ import React from "react";
 import { renderToBuffer, DocumentProps } from "@react-pdf/renderer";
 import { DokumenSuratPdf } from "@/lib/pdf/dokumen-surat";
 import { SuratStore } from "@/features/surat/surat-store";
+import { authorizeSuratAccess } from "@/lib/auth/pdf-access";
 
 export async function GET(request: NextRequest) {
   try {
@@ -16,6 +17,15 @@ export async function GET(request: NextRequest) {
     const surat = SuratStore.getPengajuanById(suratId);
     if (!surat) {
       return NextResponse.json({ error: "Surat tidak ditemukan" }, { status: 404 });
+    }
+
+    // Verifikasi otentikasi & cegah IDOR
+    const authCheck = await authorizeSuratAccess(surat);
+    if (!authCheck.authorized) {
+      return NextResponse.json(
+        { error: authCheck.error },
+        { status: authCheck.status || 403 }
+      );
     }
 
     if (surat.status !== "DISETUJUI") {

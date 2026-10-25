@@ -4,11 +4,21 @@ import { renderToBuffer, DocumentProps } from "@react-pdf/renderer";
 import { DokumenTranskripPdf } from "@/lib/pdf/dokumen-transkrip";
 import { NilaiStore } from "@/features/nilai/nilai-store";
 import { MasterStore } from "@/features/master/master-store";
+import { authorizeAcademicStudentAccess } from "@/lib/auth/pdf-access";
 
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const mahasiswaId = searchParams.get("mhsId") || "mhs-1";
+
+    // Verifikasi otentikasi & cegah IDOR
+    const authCheck = await authorizeAcademicStudentAccess(mahasiswaId);
+    if (!authCheck.authorized) {
+      return NextResponse.json(
+        { error: authCheck.error },
+        { status: authCheck.status || 403 }
+      );
+    }
 
     const transkripData = NilaiStore.getTranskripMahasiswa(mahasiswaId);
 

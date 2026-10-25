@@ -287,11 +287,30 @@ export async function submitQuizAttemptAction(
     };
   }
 
-  const quiz = quizStore.quizzes.find((q) => q.id === quizId);
+  const currentStore = getQuizStore();
+  const quiz =
+    (currentStore.quizzes || []).find((q) => q.id === quizId) ||
+    quizStore.quizzes.find((q) => q.id === quizId);
   if (!quiz) return { ok: false, error: 'Kuis/Ujian tidak ditemukan.' };
 
+  // Validasi waktu rilis (release_at)
+  if (quiz.release_at && new Date(quiz.release_at) > new Date()) {
+    return { ok: false, error: 'Ujian ini belum dibuka untuk pengerjaan.' };
+  }
+
+  // Validasi batas waktu pengerjaan (due_at)
+  if (quiz.due_at) {
+    const dueTime = new Date(quiz.due_at).getTime();
+    const gracePeriodMs = 5 * 60 * 1000; // toleransi keterlambatan transmisi 5 menit
+    if (Date.now() > dueTime + gracePeriodMs) {
+      return { ok: false, error: 'Batas waktu pengerjaan ujian telah berakhir. Jawaban tidak dapat diterima.' };
+    }
+  }
+
   // Check existing attempt
-  const existing = quizStore.attempts.find((a) => a.quiz_id === quizId && a.student_id === user.user.id);
+  const existing =
+    (currentStore.attempts || []).find((a) => a.quiz_id === quizId && a.student_id === user.user.id) ||
+    quizStore.attempts.find((a) => a.quiz_id === quizId && a.student_id === user.user.id);
   if (existing) {
     return { ok: false, error: 'Anda sudah mengumpulkan ujian/kuis ini.' };
   }
@@ -381,6 +400,9 @@ export async function submitQuizAttemptAction(
   }
 
   quizStore.attempts.push(attempt);
+  if (currentStore !== quizStore && !currentStore.attempts.includes(attempt)) {
+    currentStore.attempts.push(attempt);
+  }
 
   // Update Live Status to SUBMITTED
   const examLive = (quizStore.liveStatus[quizId] ??= {});

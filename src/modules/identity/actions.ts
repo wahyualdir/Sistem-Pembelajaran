@@ -42,6 +42,7 @@ const ROLE_PORTAL_MAP: Record<string, string> = {
 };
 
 import { checkSupabaseOnline } from '@/lib/supabase/status';
+import { parseSignedSession } from '@/lib/auth/session';
 
 
 /**
@@ -84,20 +85,13 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   }
 
   const normalizedId = identifier.trim();
-  const defaultAdminEmail = ['wahyualdiriyanto80', ['gm', 'ail.com'].join('@')].join('');
-  const superAdminEnvEmail = (process.env.SUPERADMIN_EMAIL || defaultAdminEmail).trim().toLowerCase();
+  const defaultAdminEmail = (process.env.SUPERADMIN_EMAIL || 'superadmin@siajar.ac.id').trim().toLowerCase();
+  const superAdminEnvEmail = defaultAdminEmail;
   const isSuperAdminByIdentifier =
     normalizedId.toLowerCase() === 'superadmin' ||
-    normalizedId.toLowerCase() === defaultAdminEmail.toLowerCase() ||
     Boolean(superAdminEnvEmail && normalizedId.toLowerCase() === superAdminEnvEmail) ||
     normalizedId.toLowerCase() === 'superadmin@siajar.test' ||
     normalizedId.toLowerCase() === 'superadmin@siajar.ac.id';
-
-  if (isSuperAdminByIdentifier) {
-    resetLoginFailure(identifier);
-    resetLoginFailure('superadmin');
-    resetLoginFailure(defaultAdminEmail);
-  }
 
   let demoUser = SYNTHETIC_DEMO_USERS[normalizedId] || SYNTHETIC_DEMO_USERS[normalizedId.toLowerCase()];
   if (!demoUser && isSuperAdminByIdentifier) {
@@ -435,6 +429,23 @@ export async function registerAction(formData: unknown): Promise<ActionResponse>
   }
 
   const { name, identifier, email, role, password } = parseResult.data;
+
+  // Verifikasi wewenang pendaftaran mandiri (Issue 2):
+  // Publik hanya diizinkan mendaftar sebagai STUDENT.
+  if (role !== 'STUDENT') {
+    const callerContext = await getCurrentUserWithRoles();
+    const isCallerAdmin = callerContext?.roles?.some((r: any) => {
+      const code = r?.roles?.code || r?.role_id || r?.code;
+      return code === 'SUPER_ADMIN' || code === 'SYSTEM_ADMIN';
+    });
+
+    if (!isCallerAdmin) {
+      return {
+        ok: false,
+        error: 'Pendaftaran mandiri publik hanya terbuka untuk peran Mahasiswa (STUDENT). Pembuatan akun Dosen, Staf, atau Administrator harus dilakukan oleh Administrator.',
+      };
+    }
+  }
   const normalizedId = identifier.trim();
   const normalizedEmail = email.toLowerCase().trim();
 
@@ -654,10 +665,42 @@ export async function changePasswordAction(formData: unknown): Promise<ActionRes
     };
   }
 
-  const { newPassword } = parseResult.data;
+  const { currentPassword, newPassword } = parseResult.data;
 
   const user = userContext.user;
   const isOnline = await checkSupabaseOnline();
+
+  // Verifikasi kebenaran kata sandi saat ini sebelum mengubah ke kata sandi baru (Issue 7)
+  const customPasswordsStore: Map<string, string> = ((globalThis as any).__siajarCustomPasswords ??= new Map<string, string>());
+  const isSuperAdminUser = userContext.roles.some((r: any) => {
+    const code = r?.roles?.code || r?.role_id || r?.code;
+    return code === 'SUPER_ADMIN';
+  });
+  const expectedOfflinePass =
+    customPasswordsStore.get(user.id) ||
+    customPasswordsStore.get(user.email) ||
+    (isSuperAdminUser ? (customPasswordsStore.get('superadmin') || 'Admin123!') : 'Password123!');
+
+  if (isOnline) {
+    const supabase = await createServerSupabase();
+    const { error: verifyErr } = await supabase.auth.signInWithPassword({
+      email: user.email || userContext.profile?.email || '',
+      password: currentPassword,
+    });
+    if (verifyErr) {
+      return {
+        ok: false,
+        error: 'Password saat ini yang Anda masukkan salah.',
+      };
+    }
+  } else {
+    if (currentPassword !== expectedOfflinePass) {
+      return {
+        ok: false,
+        error: 'Password saat ini yang Anda masukkan salah.',
+      };
+    }
+  }
 
   if (isOnline) {
     // Verifikasi password tidak sama dengan NIM / email
@@ -712,7 +755,6 @@ export async function changePasswordAction(formData: unknown): Promise<ActionRes
   }
 
   // Simpan ke in-memory store untuk offline / fallback
-  const customPasswordsStore: Map<string, string> = ((globalThis as any).__siajarCustomPasswords ??= new Map<string, string>());
   customPasswordsStore.set(user.id, newPassword);
   if (userContext.roles.some((r: any) => r.roles?.code === 'SUPER_ADMIN' || r.code === 'SUPER_ADMIN' || r === 'SUPER_ADMIN')) {
     customPasswordsStore.set('superadmin', newPassword);
@@ -1116,7 +1158,7 @@ export async function getCurrentUserWithRoles() {
     const sessionCookie = cookieStore.get('siakad_session')?.value;
     if (sessionCookie) {
       try {
-        const decoded = JSON.parse(Buffer.from(sessionCookie, 'base64').toString('utf-8'));
+        const decoded = parseSignedSession(sessionCookie) as any;
         if (decoded && decoded.name) {
           profile = {
             id: decoded.userId || userId,
@@ -1157,7 +1199,7 @@ export async function getCurrentUserWithRoles() {
       try {
         const s = cookieStore.get('siakad_session')?.value;
         if (!s) return false;
-        const dec = JSON.parse(Buffer.from(s, 'base64').toString('utf-8'));
+        const dec = parseSignedSession(s) as any;
         return !!dec.isNewAccount;
       } catch {
         return false;

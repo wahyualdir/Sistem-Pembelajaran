@@ -1,3 +1,4 @@
+import { hasUserRole } from '@/lib/auth/server-guards';
 // Layanan dan Helper Kebijakan Akademik Institusi SIAJAR
 // Mengacu pada Dokumen Instruksi Antigravity Versi 2 (Bagian 8.1 & Lampiran A)
 
@@ -233,8 +234,8 @@ export async function updatePolicyAction(
     return { ok: false, error: 'Sesi Anda telah kedaluwarsa. Silakan masuk kembali.' };
   }
 
-  const isSuperAdmin = authState.roles.includes('SUPER_ADMIN');
-  const isSysAdmin = authState.roles.includes('SYSTEM_ADMIN');
+  const isSuperAdmin = hasUserRole(authState, 'SUPER_ADMIN');
+  const isSysAdmin = hasUserRole(authState, 'SYSTEM_ADMIN');
   if (!isSuperAdmin && !isSysAdmin) {
     return { ok: false, error: 'Hanya Administrator yang memiliki wewenang mengubah kebijakan institusi.' };
   }

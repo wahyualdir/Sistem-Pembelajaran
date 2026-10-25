@@ -1,3 +1,4 @@
+import { hasUserRole } from '@/lib/auth/server-guards';
 'use server';
 
 // Server Actions untuk Pengelolaan Rubrik Penilaian dan Umpan Balik SIAJAR
@@ -107,9 +108,7 @@ export async function createRubricAction(
     return { ok: false, error: 'Sesi Anda telah kedaluwarsa. Silakan masuk kembali.' };
   }
 
-  const isLecturerOrAdmin =
-    auth.roles.includes('LECTURER') ||
-    auth.roles.includes('SUPER_ADMIN');
+  const isLecturerOrAdmin = hasUserRole(auth, ['LECTURER', 'SUPER_ADMIN']);
 
   if (!isLecturerOrAdmin) {
     return { ok: false, error: 'Hanya Dosen yang memiliki wewenang membuat rubrik penilaian.' };
@@ -346,7 +345,7 @@ export async function gradeSubmissionWithRubricAction(input: {
   const auth = await getCurrentUserWithRoles();
   if (!auth) return { ok: false, error: 'Sesi Anda telah kedaluwarsa.' };
 
-  const isTA = auth.roles.includes('TEACHING_ASSISTANT') && !auth.roles.includes('LECTURER');
+  const isTA = hasUserRole(auth, 'TEACHING_ASSISTANT') && !hasUserRole(auth, 'LECTURER');
   // Asisten dilarang finalisasi nilai, harus draft
   const isDraft = isTA ? true : input.isDraft;
 

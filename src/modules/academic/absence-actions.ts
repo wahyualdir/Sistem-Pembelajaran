@@ -5,6 +5,8 @@ import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { recordSystemAuditLog } from '@/lib/audit';
 import { getPolicy } from '@/lib/policies';
 import { validateAbsenceDates } from '@/lib/akademik/perkuliahan-utils';
+import { hasUserRole } from '@/lib/auth/server-guards';
+import { checkSupabaseOnline } from '@/lib/supabase/status';
 
 export interface AbsenceRequestItem {
   id: string;
@@ -390,7 +392,52 @@ export async function getAbsenceProofSignedUrlAction(
     return { ok: false, error: 'Silakan masuk terlebih dahulu.' };
   }
 
-  // Audit log: wajib dicatat setiap kali dosen membuka bukti izin/sakit
+  // Verifikasi Otorisasi (BOLA/IDOR Guard):
+  const isPrivileged = hasUserRole(auth, [
+    'SUPER_ADMIN',
+    'SYSTEM_ADMIN',
+    'ACADEMIC_STAFF',
+    'PROGRAM_COORDINATOR',
+  ]);
+  const isLecturerOrTA = hasUserRole(auth, ['LECTURER', 'TEACHING_ASSISTANT']);
+  const isStudentOwner = absenceRequestsStore.some(
+    (req) =>
+      req.attachmentPath === attachmentPath &&
+      (req.studentId === auth.user.id || req.studentId === auth.profile?.email)
+  );
+
+  if (!isPrivileged && !isLecturerOrTA && !isStudentOwner) {
+    try {
+      const isOnline = await checkSupabaseOnline();
+      if (isOnline) {
+        const supabase = await createClient();
+        const { data: dbReq } = await supabase
+          .from('absence_requests')
+          .select('id, student_id')
+          .eq('attachment_path', attachmentPath)
+          .eq('student_id', auth.user.id)
+          .maybeSingle();
+        if (!dbReq) {
+          return {
+            ok: false,
+            error: 'Anda tidak memiliki hak akses untuk membuka berkas permohonan izin ini.',
+          };
+        }
+      } else {
+        return {
+          ok: false,
+          error: 'Anda tidak memiliki hak akses untuk membuka berkas permohonan izin ini.',
+        };
+      }
+    } catch {
+      return {
+        ok: false,
+        error: 'Anda tidak memiliki hak akses untuk membuka berkas permohonan izin ini.',
+      };
+    }
+  }
+
+  // Audit log: wajib dicatat setiap kali dosen/staff/mahasiswa membuka bukti izin/sakit
   await recordSystemAuditLog({
     actorId: auth.user.id,
     actorName: auth.profile?.full_name || auth.user.email,
@@ -400,7 +447,7 @@ export async function getAbsenceProofSignedUrlAction(
     entityId: attachmentPath,
     scopeType: 'class',
     scopeId: classId,
-    description: `Dosen ${auth.profile?.full_name || auth.user.email} membuka berkas bukti permohonan izin/sakit: ${attachmentPath}`,
+    description: "Aktor " + (auth.profile?.full_name || auth.user.email) + " (" + auth.activeRole + ") membuka berkas bukti permohonan izin/sakit: " + attachmentPath,
   });
 
   try {

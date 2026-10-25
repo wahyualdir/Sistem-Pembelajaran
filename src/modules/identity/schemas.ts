@@ -62,7 +62,7 @@ export const registerSchema = z
       'PROGRAM_COORDINATOR',
       'ACADEMIC_STAFF',
       'SYSTEM_ADMIN',
-    ]),
+    ]).default('STUDENT'),
     password: z.string().min(6, 'Password minimal 6 karakter'),
     confirmPassword: z.string().min(6, 'Konfirmasi password wajib diisi'),
   })

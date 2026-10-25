@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import crypto from "crypto";
 import { SEED_USERS, SEED_MAHASISWA, SEED_DOSEN } from "@/lib/db/seed-data";
 import { prisma } from "@/lib/db";
 
@@ -13,10 +14,58 @@ export interface AuthSession {
 }
 
 const SESSION_COOKIE_NAME = "siakad_session";
+const SESSION_SECRET =
+  process.env.APP_SECRET ||
+  process.env.SESSION_SECRET ||
+  "siajar-hmac-secret-auth-key-2026-production";
+
+function computeSignature(payload: string): string {
+  return crypto.createHmac("sha256", SESSION_SECRET).update(payload).digest("hex");
+}
+
+export function serializeSignedSession(session: AuthSession): string {
+  const jsonStr = JSON.stringify(session);
+  const data = Buffer.from(jsonStr, "utf-8").toString("base64url");
+  const signature = computeSignature(data);
+  return `${data}.${signature}`;
+}
+
+export function parseSignedSession(cookieValue: string): AuthSession | null {
+  if (!cookieValue) return null;
+  try {
+    const parts = cookieValue.split(".");
+    if (parts.length === 2) {
+      const [data, signature] = parts;
+      const expectedSignature = computeSignature(data);
+      const sigBuf = Buffer.from(signature, "hex");
+      const expectedBuf = Buffer.from(expectedSignature, "hex");
+      if (sigBuf.length === expectedBuf.length && crypto.timingSafeEqual(sigBuf, expectedBuf)) {
+        const json = Buffer.from(data, "base64url").toString("utf-8");
+        const session = JSON.parse(json) as AuthSession;
+        if (session && session.userId && session.role) {
+          return session;
+        }
+      }
+      return null;
+    }
+
+    // Fallback kompatibilitas sesi dev/test sebelumnya jika bukan production
+    if (process.env.NODE_ENV !== "production") {
+      const raw = Buffer.from(cookieValue, "base64").toString("utf-8");
+      const session = JSON.parse(raw) as AuthSession;
+      if (session && session.userId && session.role) {
+        return session;
+      }
+    }
+  } catch {
+    return null;
+  }
+  return null;
+}
 
 export async function createSessionCookie(session: AuthSession) {
   const cookieStore = cookies();
-  const value = Buffer.from(JSON.stringify(session)).toString("base64");
+  const value = serializeSignedSession(session);
   cookieStore.set(SESSION_COOKIE_NAME, value, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -46,14 +95,9 @@ export async function getSession(): Promise<AuthSession | null> {
   }
 
   if (sessionCookie?.value) {
-    try {
-      const raw = Buffer.from(sessionCookie.value, "base64").toString("utf-8");
-      const session = JSON.parse(raw) as AuthSession;
-      if (session.userId && session.role) {
-        return session;
-      }
-    } catch {
-      // Fallback ke pengecekan sesi alternatif
+    const session = parseSignedSession(sessionCookie.value);
+    if (session) {
+      return session;
     }
   }
 

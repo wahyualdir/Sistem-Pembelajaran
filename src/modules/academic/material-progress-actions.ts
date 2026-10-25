@@ -1,3 +1,4 @@
+import { hasUserRole } from '@/lib/auth/server-guards';
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
@@ -269,7 +270,7 @@ export async function getMaterialDetailDirectAction(
   }
 
   // Dosen, Asisten, Kaprodi, Staf, dan Super Admin bebas akses
-  const isStudent = auth.activeRole === 'STUDENT' || auth.roles.includes('STUDENT');
+  const isStudent = hasUserRole(auth, 'STUDENT');
   if (!isStudent) {
     return {
       ok: true,

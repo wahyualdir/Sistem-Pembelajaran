@@ -28,3 +28,23 @@ export async function assertServerRole(allowedRoles: string[]) {
 
   return userContext;
 }
+
+/**
+ * Helper utilitas untuk memvalidasi apakah pengguna memiliki salah satu role yang ditentukan.
+ * Mampu menangani array string murni, relasi objek DB ({ roles: { code }, role_id }), serta activeRole.
+ */
+export function hasUserRole(
+  userContext: { roles?: any[]; activeRole?: string } | null | undefined,
+  role: string | string[]
+): boolean {
+  if (!userContext) return false;
+  const targetRoles = Array.isArray(role) ? role : [role];
+  if (userContext.activeRole && targetRoles.includes(userContext.activeRole)) {
+    return true;
+  }
+  if (!Array.isArray(userContext.roles)) return false;
+  return userContext.roles.some((r: any) => {
+    const code = typeof r === 'string' ? r : (r?.roles?.code || r?.role_id || r?.code);
+    return targetRoles.includes(code);
+  });
+}
