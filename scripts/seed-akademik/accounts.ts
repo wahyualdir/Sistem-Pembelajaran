@@ -172,16 +172,31 @@ export async function provisionAllAccounts(
 
       // Assign roles
       for (const roleItem of assignRoles) {
-        await supabaseAdmin.from('user_roles').upsert(
-          {
+        const { data: existingRole } = await supabaseAdmin
+          .from('user_roles')
+          .select('id')
+          .eq('user_id', userId)
+          .eq('role_id', roleItem.roleId)
+          .maybeSingle();
+
+        if (!existingRole) {
+          await supabaseAdmin.from('user_roles').insert({
             user_id: userId,
             role_id: roleItem.roleId,
             scope_type: roleItem.scopeType,
             scope_id: roleItem.scopeId || null,
             status: 'ACTIVE',
-          },
-          { onConflict: 'user_id,role_id,scope_type,scope_id' }
-        );
+          });
+        } else {
+          await supabaseAdmin
+            .from('user_roles')
+            .update({
+              status: 'ACTIVE',
+              scope_type: roleItem.scopeType,
+              scope_id: roleItem.scopeId || null,
+            })
+            .eq('id', existingRole.id);
+        }
       }
     } catch (err: any) {
       errors.push(`[${identType} ${identValue}] ${email}: ${err.message || String(err)}`);
