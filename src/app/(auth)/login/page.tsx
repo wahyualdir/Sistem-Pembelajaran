@@ -124,7 +124,7 @@ function LoginFormContent() {
 
   // Kata-kata unik dan kreatif untuk chat WhatsApp Helpdesk
   const waCustomMessage = encodeURIComponent(
-    'Halo Admin RuangKampus! 👋 Saya tersesat di gerbang masuk portal nih. Boleh minta tolong dibukakan jalannya? Kredensial akun saya butuh bantuan verifikasi. Terima kasih banyak ya! 🚀'
+    'Halo Admin SIAJAR! 👋 Saya mengalami kendala saat masuk ke portal akademik. Mohon bantuan verifikasi akun saya. Terima kasih.'
   );
 
   return (
@@ -153,7 +153,7 @@ function LoginFormContent() {
           {/* ======================================================== */}
           {/* SISI KIRI: COMPACT FRESH SHOWCASE & ANIMATED ROADMAP     */}
           {/* ======================================================== */}
-          <section className="lg:col-span-7 xl:col-span-7 flex flex-col justify-center space-y-4 sm:space-y-5">
+          <section className="hidden lg:flex lg:col-span-7 xl:col-span-7 flex-col justify-center space-y-4 sm:space-y-5">
             
             {/* 1. Header Identitas Kampus Bersih & Modern */}
             <div className="flex items-center justify-between gap-3">
@@ -370,13 +370,34 @@ function LoginFormContent() {
           {/* ======================================================== */}
           {/* SISI KANAN: ELEVATED AUTH CARD (CLEAN & MINIMALIST)      */}
           {/* ======================================================== */}
-          <main className="lg:col-span-5 xl:col-span-5 flex flex-col justify-center">
+          <main className="w-full max-w-md mx-auto lg:max-w-none lg:col-span-5 xl:col-span-5 flex flex-col justify-center">
             
             {/* Main Floating Elevated Card */}
             <div className="rounded-3xl bg-white border border-[#E8E4DA] p-5 sm:p-7 lg:p-7 xl:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
               
               {/* Header Card Bersih (Minimalist & Clean) */}
               <div className="mb-5">
+                {/* Mobile-only Compact Brand Header */}
+                <div className="lg:hidden flex items-center justify-between pb-3.5 mb-4 border-b border-[#EFECE6]">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-9 w-9 rounded-xl bg-[#FAF8F5] p-1.5 border border-[#E8E4DA] shadow-xs flex items-center justify-center shrink-0">
+                      <Image
+                        src="/logo-ruangkampus.png"
+                        alt="Logo RuangKampus"
+                        width={28}
+                        height={28}
+                        className="h-full w-full object-contain"
+                      />
+                    </div>
+                    <span className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-xl text-[#1C1917] tracking-tight leading-none">
+                      Ruang<span className="text-[#C2553A]">Kampus</span>
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#FAF8F5] border border-[#E8E4DA] text-[#57534E]">
+                    GANJIL 26/27
+                  </span>
+                </div>
+
                 <h2 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-2xl sm:text-3xl text-[#1C1917] tracking-tight leading-snug">
                   Masuk ke RuangKampus
                 </h2>
@@ -462,91 +483,59 @@ function LoginFormContent() {
                   )}
                 </div>
 
-                {/* Field 3: Modern Security Verification Widget - Fresh & Interactive */}
-                <div
-                  className={`p-2.5 sm:p-3 rounded-2xl border transition-all duration-200 flex items-center justify-between gap-2.5 shadow-2xs ${
-                    isCaptchaPassed
-                      ? 'bg-gradient-to-r from-emerald-50/70 via-white to-emerald-50/40 border-emerald-300'
-                      : 'bg-gradient-to-r from-[#FAF8F5] via-white to-[#FAF8F5] border-[#E8E4DA] hover:border-[#C2553A]/30'
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <div
-                      className={`h-9 w-9 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${
-                        isCaptchaPassed
-                          ? 'bg-emerald-500/10 text-emerald-600 border-emerald-400/40 scale-105 shadow-2xs'
-                          : 'bg-[#C2553A]/10 text-[#C2553A] border-[#C2553A]/20'
-                      }`}
+                {/* Field 3: Verifikasi Pengaman (Format Rapi Identik Kolom Kata Sandi) */}
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="captcha"
+                      className="block text-xs font-semibold text-[#1C1917]"
                     >
-                      {isCaptchaPassed ? (
-                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 animate-in zoom-in-75 duration-200" />
-                      ) : (
-                        <ShieldCheck className="h-4.5 w-4.5" />
-                      )}
-                    </div>
-
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <label
-                          htmlFor="captcha"
-                          className="text-xs font-bold text-[#1C1917] tracking-tight leading-none cursor-pointer"
-                        >
-                          Verifikasi Keamanan
-                        </label>
-                        <span
-                          className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider transition-colors ${
-                            isCaptchaPassed
-                              ? 'bg-emerald-100 text-emerald-700'
-                              : 'bg-[#C2553A]/10 text-[#C2553A]'
-                          }`}
-                        >
-                          {isCaptchaPassed ? 'Lolos' : 'Anti-Bot'}
-                        </span>
-                      </div>
-
-                      <div className="flex items-center gap-1.5 mt-1">
-                        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white border border-[#E8E4DA] text-xs font-mono font-bold text-[#1C1917] shadow-2xs">
-                          <span>{captchaNum1}</span>
-                          <span className="text-[#C2553A] font-black">+</span>
-                          <span>{captchaNum2}</span>
-                          <span className="text-[#8A8577]">=</span>
-                          <span className="text-[#C2553A] font-black">?</span>
-                        </div>
-
-                        <button
-                          type="button"
-                          onClick={refreshCaptcha}
-                          title="Ganti angka verifikasi"
-                          aria-label="Ganti angka verifikasi"
-                          className="h-6 w-6 rounded-md text-[#8A8577] hover:text-[#C2553A] hover:bg-[#FAF8F5] flex items-center justify-center transition-colors cursor-pointer active:rotate-180 duration-200"
-                        >
-                          <RotateCw className="h-3 w-3" />
-                        </button>
-                      </div>
-                    </div>
+                      Berapa {captchaNum1} + {captchaNum2} ?
+                    </label>
+                    <button
+                      type="button"
+                      onClick={refreshCaptcha}
+                      title="Ganti angka verifikasi"
+                      className="text-xs font-semibold text-[#C2553A] hover:text-[#853827] hover:underline focus-visible:outline-none transition-colors flex items-center gap-1 cursor-pointer"
+                    >
+                      <RotateCw className="h-3 w-3" />
+                      <span>Acak soal</span>
+                    </button>
                   </div>
 
-                  <div className="relative flex items-center shrink-0">
+                  <div className="relative flex items-center">
+                    <ShieldCheck
+                      className={`absolute left-3.5 h-4 w-4 pointer-events-none transition-colors ${
+                        isCaptchaPassed ? 'text-emerald-600' : 'text-[#8A8577]'
+                      }`}
+                    />
                     <input
                       id="captcha"
                       name="captcha"
                       type="text"
                       inputMode="numeric"
-                      placeholder="Hasil"
+                      placeholder="Masukkan hasil penjumlahan"
                       value={captchaInput}
                       onChange={(e) => setCaptchaInput(e.target.value)}
+                      disabled={isPending}
                       aria-label={`Berapa hasil dari ${captchaNum1} + ${captchaNum2}`}
-                      className={`w-16 sm:w-18 h-9 text-center rounded-xl border text-xs font-mono font-bold transition-all focus:outline-none ${
+                      className={`w-full h-11 sm:h-11.5 pl-10 pr-11 rounded-xl border text-sm font-medium transition-all focus:outline-none disabled:opacity-60 ${
                         isCaptchaPassed
-                          ? 'border-emerald-500 bg-white text-emerald-700 ring-2 ring-emerald-500/20'
-                          : 'border-[#D6D0C4] bg-white text-[#1C1917] hover:border-[#C2553A]/50 focus:border-[#C2553A] focus:ring-3 focus:ring-[#C2553A]/15 placeholder:text-[#8A8577]'
+                          ? 'border-emerald-500 bg-emerald-50/40 text-emerald-800 ring-2 ring-emerald-500/20'
+                          : 'border-[#DFDACF] bg-[#FAF8F5]/60 hover:bg-white focus:bg-white text-[#1C1B19] placeholder:text-[#8A8577] focus:ring-4 focus:ring-[#C2553A]/15 focus:border-[#C2553A]'
                       }`}
                     />
-                    {isCaptchaPassed && (
-                      <div className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs animate-in zoom-in-75 duration-150">
-                        <Check className="h-2.5 w-2.5 stroke-[3]" />
-                      </div>
-                    )}
+                    <div className="absolute right-1 w-9 h-9 flex items-center justify-center">
+                      {isCaptchaPassed ? (
+                        <div className="h-6 w-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs animate-in zoom-in-75 duration-150">
+                          <Check className="h-3.5 w-3.5 stroke-[3]" />
+                        </div>
+                      ) : (
+                        <span className="text-xs font-mono font-bold text-[#8A8577] select-none">
+                          = ?
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
@@ -579,7 +568,7 @@ function LoginFormContent() {
               <LoginDevMode onSelectIdentifier={(id) => setIdentifier(id)} />
             </div>
 
-            {/* Quick Support: Full-width WhatsApp Helpdesk Card ke 083162031942 */}
+            {/* Quick Support: Full-width Helpdesk Card */}
             <div className="pt-3">
               <a
                 href={`https://wa.me/6283162031942?text=${waCustomMessage}`}
@@ -597,12 +586,12 @@ function LoginFormContent() {
                     </span>
                     <span className="block text-[11px] text-[#25D366] font-semibold leading-tight mt-0.5 flex items-center gap-1">
                       <span className="h-1.5 w-1.5 rounded-full bg-[#25D366] animate-pulse" />
-                      WhatsApp: 0831-6203-1942
+                      Layanan Bantuan Akademik
                     </span>
                   </div>
                 </div>
                 <span className="text-xs font-semibold text-[#25D366] group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                  Chat Sekarang →
+                  Hubungi Helpdesk →
                 </span>
               </a>
             </div>
