@@ -1,5 +1,6 @@
 'use server';
 
+import * as React from 'react';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { randomUUID } from 'crypto';
@@ -1000,7 +1001,13 @@ export async function reportNotMeAction(userIdParam?: string): Promise<ActionRes
 /**
  * Helper: Ambil profil dan peran pengguna saat ini untuk Server Components
  */
-export async function getCurrentUserWithRoles() {
+function requestCache<T extends (...args: any[]) => any>(fn: T): T {
+  if (typeof (React as any).cache === 'function') {
+    return (React as any).cache(fn);
+  }
+  return fn;
+}
+const getCurrentUserWithRolesCached = requestCache(async () => {
   let cookieStore: ReturnType<typeof cookies>;
   let demoSessionId: string | undefined;
   try {
@@ -1012,7 +1019,8 @@ export async function getCurrentUserWithRoles() {
   let realUserId: string | null = null;
   let userEmail: string = '';
 
-  const isOnline = await checkSupabaseOnline();
+  const hasSupabaseCookie = cookieStore.getAll().some((c) => c.name.startsWith('sb-'));
+  const isOnline = hasSupabaseCookie ? await checkSupabaseOnline() : false;
   if (isOnline) {
     try {
       const supabase = await createServerSupabase();
@@ -1232,6 +1240,10 @@ export async function getCurrentUserWithRoles() {
     impersonatingFrom,
     isNewAccount,
   };
+});
+
+export async function getCurrentUserWithRoles() {
+  return getCurrentUserWithRolesCached();
 }
 
 import {

@@ -11,8 +11,8 @@ let lastCheckTime = 0;
 
 export async function checkSupabaseOnline(): Promise<boolean> {
   const now = Date.now();
-  // Cache status selama 15 detik agar tidak membebani network loop
-  if (cachedStatus !== null && now - lastCheckTime < 15000) {
+  // Cache status selama 30 detik agar tidak membebani network loop di serverless
+  if (cachedStatus !== null && now - lastCheckTime < 30000) {
     return cachedStatus;
   }
 
@@ -25,7 +25,7 @@ export async function checkSupabaseOnline(): Promise<boolean> {
       headers['Authorization'] = `Bearer ${anonKey}`;
     }
     const isLocal = url.includes('localhost') || url.includes('127.0.0.1');
-    const timeoutMs = isLocal ? 300 : 2500;
+    const timeoutMs = isLocal ? 300 : 1000;
     const res = await fetch(`${url}/auth/v1/health`, {
       method: 'GET',
       headers,
