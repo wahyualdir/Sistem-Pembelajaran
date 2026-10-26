@@ -75,6 +75,14 @@ function LoginFormContent() {
               minutes = Math.max(1, Math.ceil(parseInt(secondMatch[1], 10) / 60));
             }
             msg = `Terlalu banyak percobaan. Coba lagi dalam ${minutes} menit.`;
+          } else if (
+            errLower.includes('belum memiliki peran aktif') ||
+            errLower.includes('status akun') ||
+            errLower.includes('ditangguhkan') ||
+            errLower.includes('dinonaktifkan') ||
+            errLower.includes('belum diaktivasi')
+          ) {
+            msg = res.error;
           }
         }
         setErrorMessage(msg);
@@ -91,19 +99,19 @@ function LoginFormContent() {
 
   return (
     <div
-      className={`min-h-screen w-full flex flex-col min-[900px]:flex-row ${fontBricolage.variable} ${fontInter.variable} font-[family-name:var(--font-inter-login),sans-serif] overflow-x-hidden`}
+      className={`min-h-[100dvh] w-full flex flex-col md:flex-row ${fontBricolage.variable} ${fontInter.variable} font-[family-name:var(--font-inter-login),sans-serif] overflow-x-hidden bg-[#F6F2EA]`}
     >
       {/* ======================================================== */}
-      {/* 1. PANEL MEREK KIRI (55% di Layar Lebar >= 900px)         */}
+      {/* 1. PANEL MEREK (RESPONSIF MOBILE HEADER & DESKTOP PANEL) */}
       {/* ======================================================== */}
-      <aside className="w-full min-[900px]:w-[55%] bg-[#1E4638] text-[#F6F2EA] flex flex-col justify-between p-6 sm:p-10 min-[900px]:p-12 xl:p-16 min-[900px]:min-h-screen">
+      <aside className="w-full md:w-[48%] lg:w-[50%] xl:w-[55%] bg-[#1E4638] text-[#F6F2EA] flex flex-col justify-between p-4 sm:p-6 md:p-8 lg:p-12 xl:p-16 shrink-0 md:min-h-[100dvh]">
         {/* Identitas Merek Atas */}
-        <div>
+        <div className="flex items-center justify-between gap-3">
           <Link
             href="/"
-            className="inline-flex items-center gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B44A2F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E4638] rounded-lg p-1 min-h-[44px]"
+            className="inline-flex items-center gap-2.5 sm:gap-3 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B44A2F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1E4638] rounded-lg p-1 min-h-[44px]"
           >
-            <div className="h-10 w-10 rounded-[10px] bg-[#FFFFFF] p-1.5 flex items-center justify-center shrink-0">
+            <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-[10px] bg-[#FFFFFF] p-1.5 flex items-center justify-center shrink-0 shadow-2xs">
               <Image
                 src="/logo-ruangkampus.png"
                 alt="Logo RuangKampus"
@@ -113,29 +121,36 @@ function LoginFormContent() {
                 priority
               />
             </div>
-            <span className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-xl text-[#F6F2EA] tracking-tight">
+            <span className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-lg sm:text-xl text-[#F6F2EA] tracking-tight">
               RuangKampus
             </span>
           </Link>
+
+          {/* Badge Prodi di Layar Ponsel (< 768px) */}
+          <div className="md:hidden">
+            <span className="inline-flex items-center text-[11px] font-semibold text-[#D9E3DC] bg-[#FFFFFF]/10 border border-[#D9E3DC]/20 px-2.5 py-1 rounded-full">
+              Teknik Informatika UIR
+            </span>
+          </div>
         </div>
 
         {/* Konten Utama Merek Kiri */}
-        <div className="my-8 min-[900px]:my-auto space-y-6 max-w-xl">
-          <h1 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-[28px] sm:text-[36px] min-[900px]:text-[48px] leading-[1.1] text-[#F6F2EA]">
+        <div className="my-3 sm:my-4 md:my-auto space-y-2 sm:space-y-3 md:space-y-5 max-w-xl">
+          <h1 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[46px] leading-[1.18] text-[#F6F2EA]">
             Kelas, tugas, dan ujian di satu tempat.
           </h1>
-          <p className="text-sm sm:text-base min-[900px]:text-[17px] leading-relaxed text-[#D9E3DC]">
+          <p className="text-xs sm:text-sm md:text-base lg:text-[17px] leading-relaxed text-[#D9E3DC]">
             Masuk untuk melihat jadwal hari ini, tenggat yang paling dekat, dan materi dari dosenmu.
           </p>
 
-          {/* Ilustrasi Garis Peta Pulau (Hanya Tampil di >= 900px) */}
-          <div className="hidden min-[900px]:block pt-4">
+          {/* Ilustrasi Garis Peta Pulau (Tampil di Tablet/Desktop >= 1024px) */}
+          <div className="hidden lg:block pt-2 xl:pt-4">
             <IslandIllustration />
           </div>
         </div>
 
-        {/* Baris Nama Prodi & Kampus Bawah */}
-        <div className="pt-4 border-t border-[#D9E3DC]/20">
+        {/* Baris Nama Prodi & Kampus Bawah (Tablet & Desktop >= 768px) */}
+        <div className="hidden md:block pt-4 border-t border-[#D9E3DC]/20">
           <p className="text-xs sm:text-sm text-[#D9E3DC] font-medium">
             Teknik Informatika • Universitas Islam Riau
           </p>
@@ -143,27 +158,27 @@ function LoginFormContent() {
       </aside>
 
       {/* ======================================================== */}
-      {/* 2. PANEL FORMULIR KANAN (45% di Layar Lebar >= 900px)      */}
+      {/* 2. PANEL FORMULIR KANAN (RESPONSIF MOBILE & PAD)          */}
       {/* ======================================================== */}
-      <main className="w-full min-[900px]:w-[45%] bg-[#F6F2EA] text-[#1C1B19] flex flex-col justify-center px-6 py-10 sm:px-10 min-[900px]:p-12 xl:p-16 min-[900px]:min-h-screen">
-        <div className="w-full max-w-[420px] mx-auto">
+      <main className="w-full md:w-[52%] lg:w-[50%] xl:w-[45%] bg-[#F6F2EA] text-[#1C1B19] flex flex-col justify-center px-4 py-6 sm:px-8 sm:py-8 md:p-8 lg:p-12 xl:p-16 md:min-h-[100dvh]">
+        <div className="w-full max-w-[380px] sm:max-w-[420px] mx-auto">
           {/* Judul Formulir */}
-          <header className="mb-8">
-            <h2 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-[34px] leading-tight text-[#1C1B19]">
+          <header className="mb-5 sm:mb-6 md:mb-8">
+            <h2 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-2xl sm:text-3xl md:text-[34px] leading-tight text-[#1C1B19]">
               Masuk
             </h2>
-            <p className="text-sm sm:text-base text-[#4A473F] mt-2 leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base text-[#4A473F] mt-1.5 leading-relaxed">
               Gunakan NIM, NIDN, NIP, atau email kampus.
             </p>
           </header>
 
           {/* Formulir Masuk */}
-          <form onSubmit={handleSubmit} noValidate className="space-y-5">
+          <form onSubmit={handleSubmit} noValidate className="space-y-4 sm:space-y-5">
             {/* Kolom Isian 1: Identitas */}
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label
                 htmlFor="identifier"
-                className="block text-sm font-semibold text-[#1C1B19]"
+                className="block text-xs sm:text-sm font-semibold text-[#1C1917]"
               >
                 NIM, NIDN, NIP, atau email
               </label>
@@ -177,16 +192,16 @@ function LoginFormContent() {
                 onChange={(e) => setIdentifier(e.target.value)}
                 disabled={isPending}
                 required
-                className="w-full h-[48px] px-3.5 rounded-[10px] border border-[#8A8577] bg-[#FFFFFF] text-sm sm:text-base text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-2 focus:ring-[#B44A2F] focus:ring-offset-2 focus:ring-offset-[#F6F2EA] focus:border-[#B44A2F] transition-all duration-150 motion-reduce:transition-none disabled:opacity-60"
+                className="w-full h-[46px] sm:h-[48px] px-3.5 rounded-[10px] border border-[#8A8577] bg-[#FFFFFF] text-sm sm:text-base text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-2 focus:ring-[#B44A2F] focus:ring-offset-2 focus:ring-offset-[#F6F2EA] focus:border-[#B44A2F] transition-all duration-150 motion-reduce:transition-none disabled:opacity-60"
               />
             </div>
 
             {/* Kolom Isian 2: Kata Sandi */}
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-semibold text-[#1C1B19]"
+                  className="block text-xs sm:text-sm font-semibold text-[#1C1917]"
                 >
                   Kata sandi
                 </label>
@@ -211,7 +226,7 @@ function LoginFormContent() {
                   onKeyUp={handlePasswordKeyEvent}
                   disabled={isPending}
                   required
-                  className="w-full h-[48px] pl-3.5 pr-12 rounded-[10px] border border-[#8A8577] bg-[#FFFFFF] text-sm sm:text-base text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-2 focus:ring-[#B44A2F] focus:ring-offset-2 focus:ring-offset-[#F6F2EA] focus:border-[#B44A2F] transition-all duration-150 motion-reduce:transition-none disabled:opacity-60"
+                  className="w-full h-[46px] sm:h-[48px] pl-3.5 pr-12 rounded-[10px] border border-[#8A8577] bg-[#FFFFFF] text-sm sm:text-base text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-2 focus:ring-[#B44A2F] focus:ring-offset-2 focus:ring-offset-[#F6F2EA] focus:border-[#B44A2F] transition-all duration-150 motion-reduce:transition-none disabled:opacity-60"
                 />
                 <button
                   type="button"
@@ -244,13 +259,13 @@ function LoginFormContent() {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full h-[50px] px-4 rounded-[10px] bg-[#B44A2F] hover:bg-[#853827] text-[#FFFFFF] font-semibold text-sm sm:text-base flex items-center justify-center cursor-pointer transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B44A2F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F6F2EA] disabled:opacity-60 disabled:cursor-not-allowed"
+              className="w-full h-[48px] sm:h-[50px] px-4 rounded-[10px] bg-[#B44A2F] hover:bg-[#853827] text-[#FFFFFF] font-semibold text-sm sm:text-base flex items-center justify-center cursor-pointer transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B44A2F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F6F2EA] disabled:opacity-60 disabled:cursor-not-allowed shadow-2xs"
             >
               {isPending ? 'Memeriksa…' : 'Masuk'}
             </button>
 
             {/* Pemisah "atau" */}
-            <div className="relative flex items-center justify-center my-6">
+            <div className="relative flex items-center justify-center my-4 sm:my-5">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-[#8A8577]/30" />
               </div>
@@ -263,14 +278,14 @@ function LoginFormContent() {
             <button
               type="button"
               onClick={handleGoogleLogin}
-              className="w-full h-[50px] px-4 rounded-[10px] border border-[#8A8577] bg-[#FFFFFF] hover:bg-[#F6F2EA] text-[#1C1B19] font-medium text-sm flex items-center justify-center gap-3 cursor-pointer transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B44A2F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F6F2EA]"
+              className="w-full h-[48px] sm:h-[50px] px-4 rounded-[10px] border border-[#8A8577] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1B19] font-medium text-xs sm:text-sm flex items-center justify-center gap-2.5 sm:gap-3 cursor-pointer transition-colors duration-150 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B44A2F] focus-visible:ring-offset-2 focus-visible:ring-offset-[#F6F2EA] shadow-2xs"
             >
               <GoogleIcon />
               <span>Masuk dengan akun Google kampus</span>
             </button>
 
             {/* Tautan Pendaftaran Akun */}
-            <div className="text-center pt-2">
+            <div className="text-center pt-1.5 sm:pt-2">
               <span className="text-xs sm:text-sm text-[#4A473F]">
                 Belum punya akun?{' '}
               </span>
@@ -283,17 +298,17 @@ function LoginFormContent() {
             </div>
           </form>
 
-          {/* Kotak Galat di Bawah Formulir (role="alert", tanpa warna saja) */}
+          {/* Kotak Galat di Bawah Formulir (role="alert") */}
           {errorMessage && (
             <div
               key={errorKey}
               id="login-error-alert"
               role="alert"
               aria-live="assertive"
-              className="mt-6 p-3.5 rounded-[10px] border border-[#8A8577] bg-[#FFFFFF] text-[#1C1B19] text-xs sm:text-sm flex items-start gap-3"
+              className="mt-4 sm:mt-6 p-3.5 rounded-[10px] border border-[#8A8577] bg-[#FFFFFF] text-[#1C1917] text-xs sm:text-sm flex items-start gap-3 shadow-2xs"
             >
               <AlertCircle className="h-5 w-5 text-[#8F3A24] shrink-0 mt-0.5" />
-              <span className="font-medium text-[#1C1B19] leading-snug">
+              <span className="font-medium text-[#1C1917] leading-snug">
                 {errorMessage}
               </span>
             </div>

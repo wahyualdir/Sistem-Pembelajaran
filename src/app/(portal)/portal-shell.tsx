@@ -306,7 +306,7 @@ export function PortalShell({
           setHasRightPanel,
         }}
       >
-        <div className="min-h-screen bg-transparent text-[#1C1917] font-sans flex flex-col md:flex-row antialiased selection:bg-[#C2553A] selection:text-white relative">
+        <div className="min-h-screen bg-transparent text-[#1C1917] font-sans flex flex-col xl:flex-row antialiased selection:bg-[#C2553A] selection:text-white relative">
           {/* Tech Background Grid & Gradient khas Velqora */}
           <TechBackground />
 
@@ -336,7 +336,7 @@ export function PortalShell({
           >
             {/* Header Sidebar: Brand Block (Full vs Rail) */}
             {isRailActive ? (
-              <div className="flex h-header shrink-0 items-center justify-center border-b border-[#E8E5DE] bg-[#FAF8F5] px-2 box-border">
+              <div className="flex h-14 sm:h-16 xl:h-header shrink-0 items-center justify-center border-b border-[#E8E5DE] bg-[#FAF8F5] px-2 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center justify-center group focus-visible:outline-none"
@@ -348,7 +348,7 @@ export function PortalShell({
                 </Link>
               </div>
             ) : (
-              <div className="flex items-center h-header shrink-0 border-b border-[#E8E5DE] bg-[#FAF8F5] px-4 box-border">
+              <div className="flex items-center h-14 sm:h-16 xl:h-header shrink-0 border-b border-[#E8E5DE] bg-[#FAF8F5] px-4 box-border">
                 <Link
                   href={homeHref}
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0"
@@ -672,7 +672,7 @@ export function PortalShell({
             {/* ======================================================== */}
             <header
               className={cn(
-                'sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#E8E5DE] bg-[#FAF8F5]/90 backdrop-blur-md px-3.5 sm:px-5 md:px-6 h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
+                'sticky top-0 z-30 flex items-center justify-between gap-3 border-b border-[#E8E5DE] bg-[#FAF8F5]/90 backdrop-blur-md px-3.5 sm:px-5 md:px-6 h-14 sm:h-16 xl:h-header pt-[env(safe-area-inset-top,0px)] box-border transition-all duration-200',
                 isScrolled && 'shadow-2xs border-b-[#D6D3CB]'
               )}
             >
@@ -712,7 +712,7 @@ export function PortalShell({
                       value={searchQuery}
                       onFocus={() => setIsCommandCenterOpen(true)}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Cari mata kuliah, materi, tugas, atau ketik perintah..."
+                      placeholder="Cari kelas, materi, tugas, atau perintah..."
                       className="w-full bg-transparent text-xs sm:text-sm font-medium text-[#1C1917] placeholder:text-[#78716C] focus:outline-none min-w-0 truncate cursor-pointer"
                     />
                     <button

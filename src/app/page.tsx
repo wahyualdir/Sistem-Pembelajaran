@@ -79,7 +79,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#FAF8F5] text-[#1C1917] font-sans antialiased selection:bg-[#C2553A] selection:text-white flex flex-col justify-between">
       {/* 1. Navigasi Utama Editorial */}
       <header className="sticky top-0 z-30 w-full bg-[#FFFFFF]/95 backdrop-blur-xs border-b border-[#E8E5DE]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
           <Link href="/" className="flex items-center gap-2.5">
             <Image
               src="/logo-ruangkampus.png"
@@ -127,13 +127,13 @@ export default function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="border-b border-[#E8E5DE] bg-[#FFFFFF]">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-14 lg:py-20">
             <div className="max-w-3xl space-y-5">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#FAF8F5] border border-[#D6D3CB] text-xs font-mono font-semibold text-[#853827]">
                 <span>TEKNIK INFORMATIKA · UNIVERSITAS ISLAM RIAU</span>
               </div>
 
-              <h1 className="font-heading font-bold text-3xl sm:text-4xl lg:text-5xl text-[#1C1917] tracking-tight leading-[1.15]">
+              <h1 className="font-heading font-bold text-2xl sm:text-4xl lg:text-5xl text-[#1C1917] tracking-tight leading-[1.15]">
                 Ruang Belajar, Silabus, dan Evaluasi Akademik dalam Satu Kanvas.
               </h1>
 
@@ -162,22 +162,22 @@ export default function HomePage() {
             </div>
 
             {/* Ringkasan Metrik Institusi */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-10 pt-8 border-t border-[#E8E5DE]">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-[#E8E5DE]">
               <div className="space-y-1">
-                <p className="font-mono font-bold text-2xl sm:text-3xl text-[#1C1917]">8 Semester</p>
-                <p className="text-xs text-[#57534E]">Peta Kurikulum Terstruktur</p>
+                <p className="font-mono font-bold text-xl sm:text-3xl text-[#1C1917]">8 Semester</p>
+                <p className="text-[11px] sm:text-xs text-[#57534E]">Peta Kurikulum Terstruktur</p>
               </div>
               <div className="space-y-1">
-                <p className="font-mono font-bold text-2xl sm:text-3xl text-[#C2553A]">24+ Kelas</p>
-                <p className="text-xs text-[#57534E]">Rombongan Belajar Terhubung</p>
+                <p className="font-mono font-bold text-xl sm:text-3xl text-[#C2553A]">24+ Kelas</p>
+                <p className="text-[11px] sm:text-xs text-[#57534E]">Rombongan Belajar Terhubung</p>
               </div>
               <div className="space-y-1">
-                <p className="font-mono font-bold text-2xl sm:text-3xl text-[#1C1917]">CPMK &amp; OBE</p>
-                <p className="text-xs text-[#57534E]">Pemetaan Capaian Lulusan</p>
+                <p className="font-mono font-bold text-xl sm:text-3xl text-[#1C1917]">CPMK &amp; OBE</p>
+                <p className="text-[11px] sm:text-xs text-[#57534E]">Pemetaan Capaian Lulusan</p>
               </div>
               <div className="space-y-1">
-                <p className="font-mono font-bold text-2xl sm:text-3xl text-[#1C1917]">Multi-Peran</p>
-                <p className="text-xs text-[#57534E]">Mahasiswa, Dosen, Asisten, Kaprodi</p>
+                <p className="font-mono font-bold text-xl sm:text-3xl text-[#1C1917]">Multi-Peran</p>
+                <p className="text-[11px] sm:text-xs text-[#57534E]">Mahasiswa, Dosen, Asisten, Kaprodi</p>
               </div>
             </div>
           </div>
