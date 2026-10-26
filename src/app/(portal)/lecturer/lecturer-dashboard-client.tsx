@@ -54,6 +54,16 @@ const LECTURER_CATEGORIES = [
   'Nilai Akhir',
 ];
 
+const LECTURER_CHIP_DESTINATIONS: Record<string, string> = {
+  'Semua': '/lecturer',
+  'Kelas Saya': '/classes',
+  'Koreksi Tugas': '/exams/review',
+  'Presensi Kuliah': '/attendance',
+  'Jadwal Mengajar': '/calendar',
+  'Bank Soal': '/exams/question-bank',
+  'Nilai Akhir': '/analytics',
+};
+
 export interface LecturerDashboardClientProps {
   classes: number;
   items: ReviewItem[];
@@ -173,7 +183,23 @@ export function LecturerDashboardClient({
             <nav aria-label="Kategori Pengajar" className="flex flex-wrap items-center gap-1.5">
               {LECTURER_CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
-                return (
+                const dest = LECTURER_CHIP_DESTINATIONS[cat];
+                const isNavigational = dest && dest !== '/lecturer';
+
+                return isNavigational ? (
+                  <Link
+                    key={cat}
+                    href={dest}
+                    className={cn(
+                      'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-sans transition-colors focus-visible:outline-none cursor-pointer inline-flex items-center gap-1',
+                      isActive
+                        ? 'bg-[#1C1917] text-white font-semibold'
+                        : 'bg-[#ECE9D8]/70 text-[#44403C] font-medium hover:bg-[#ECE9D8] hover:text-[#1C1917]'
+                    )}
+                  >
+                    <span>{cat}</span>
+                  </Link>
+                ) : (
                   <button
                     key={cat}
                     type="button"

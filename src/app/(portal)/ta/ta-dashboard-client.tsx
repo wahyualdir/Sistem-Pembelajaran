@@ -47,6 +47,15 @@ const TA_CATEGORIES = [
   'Materi Asisten',
 ];
 
+const TA_CHIP_DESTINATIONS: Record<string, string> = {
+  'Semua': '/ta',
+  'Kelas Asistensi': '/ta/classes',
+  'Koreksi Tugas': '/ta/grading',
+  'Presensi Mahasiswa': '/ta/attendance',
+  'Jadwal Praktikum': '/calendar',
+  'Materi Asisten': '/ta/materials',
+};
+
 export interface TaDashboardClientProps {
   classes: number;
   items: ReviewItem[];
@@ -146,7 +155,23 @@ export function TaDashboardClient({
             <nav aria-label="Kategori Asisten" className="flex flex-wrap items-center gap-1.5">
               {TA_CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
-                return (
+                const dest = TA_CHIP_DESTINATIONS[cat];
+                const isNavigational = dest && dest !== '/ta';
+
+                return isNavigational ? (
+                  <Link
+                    key={cat}
+                    href={dest}
+                    className={cn(
+                      'px-3 py-1.5 rounded-lg text-xs sm:text-sm font-sans transition-colors focus-visible:outline-none cursor-pointer inline-flex items-center gap-1',
+                      isActive
+                        ? 'bg-[#1C1917] text-white font-semibold'
+                        : 'bg-[#ECE9D8]/70 text-[#44403C] font-medium hover:bg-[#ECE9D8] hover:text-[#1C1917]'
+                    )}
+                  >
+                    <span>{cat}</span>
+                  </Link>
+                ) : (
                   <button
                     key={cat}
                     type="button"

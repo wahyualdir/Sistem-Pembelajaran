@@ -143,9 +143,11 @@ export function PortalShell({
     }, 50);
   };
 
-  const closeDrawer = () => {
+  const closeDrawer = (restoreFocus = true) => {
     setIsDrawerOpen(false);
-    burgerButtonRef.current?.focus();
+    if (restoreFocus) {
+      burgerButtonRef.current?.focus();
+    }
   };
 
   const handleBurgerClick = () => {
@@ -314,7 +316,7 @@ export function PortalShell({
           {isDrawerOpen && (
             <div
               aria-hidden="true"
-              onClick={closeDrawer}
+              onClick={() => closeDrawer(true)}
               className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs xl:hidden animate-fade-in"
             />
           )}
@@ -412,7 +414,7 @@ export function PortalShell({
                                 href={item.href}
                                 title={isRailActive ? item.label : undefined}
                                 onClick={() => {
-                                  if (!isDesktop) closeDrawer();
+                                  if (!isDesktop) closeDrawer(false);
                                 }}
                                 className={cn(
                                   'flex items-center justify-between rounded-xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A]',
@@ -488,7 +490,7 @@ export function PortalShell({
                       href="/profile"
                       onClick={() => {
                         setIsProfileMenuOpen(false);
-                        if (!isDesktop) closeDrawer();
+                        if (!isDesktop) closeDrawer(false);
                       }}
                       className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
@@ -500,7 +502,7 @@ export function PortalShell({
                       href="/workspace"
                       onClick={() => {
                         setIsProfileMenuOpen(false);
-                        if (!isDesktop) closeDrawer();
+                        if (!isDesktop) closeDrawer(false);
                       }}
                       className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
@@ -512,7 +514,7 @@ export function PortalShell({
                       href="/notifications/preferences"
                       onClick={() => {
                         setIsProfileMenuOpen(false);
-                        if (!isDesktop) closeDrawer();
+                        if (!isDesktop) closeDrawer(false);
                       }}
                       className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >
@@ -551,7 +553,7 @@ export function PortalShell({
                       href="/devices"
                       onClick={() => {
                         setIsProfileMenuOpen(false);
-                        if (!isDesktop) closeDrawer();
+                        if (!isDesktop) closeDrawer(false);
                       }}
                       className="flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-gray-soft text-sm font-bold text-foreground transition-colors group"
                     >

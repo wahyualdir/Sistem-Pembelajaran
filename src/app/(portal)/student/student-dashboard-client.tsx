@@ -78,6 +78,16 @@ const RECOMMENDED_MATERIALS = [
 
 const CATEGORIES = [...BERANDA_CHIPS];
 
+const CHIP_DESTINATIONS: Record<string, string> = {
+  'Semua': '/student',
+  'Kelas Saya': '/classes',
+  'Tugas dan Kuis': '/classes',
+  'Ujian': '/exams',
+  'Presensi': '/attendance',
+  'Jadwal': '/calendar',
+  'Nilai': '/grades',
+};
+
 export interface StudentDashboardClientProps {
   bannerData?: HomeBannerData;
   deadlines?: HomeDeadlineItem[];
@@ -178,7 +188,7 @@ export function StudentDashboardClient({
   // Filter bagian yang tampil berdasarkan chip kategori (Bagian 4.8)
   const showAll = selectedCategory === 'Semua';
   const showKelasSaya = showAll || selectedCategory === 'Kelas Saya';
-  const showTugasKuis = showAll || selectedCategory === 'Tugas & Kuis';
+  const showTugasKuis = showAll || selectedCategory === 'Tugas dan Kuis' || selectedCategory === 'Tugas & Kuis';
   const showUjian = showAll || selectedCategory === 'Ujian';
   const showPresensi = showAll || selectedCategory === 'Presensi';
   const showJadwal = showAll || selectedCategory === 'Jadwal';
@@ -214,14 +224,30 @@ export function StudentDashboardClient({
               </div>
             </div>
 
-            {/* Bilah Kategori 1 Baris Utuh (Tidak Terpecah 2 Baris) */}
+            {/* Bilah Kategori Navigasi Terpadu (Akses Cepat Halaman & Filter) */}
             <nav
               aria-label="Kategori Perkuliahan"
               className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 rounded-xl bg-[#F2EFE8] border border-[#D6D3CB] w-full sm:w-fit max-w-full"
             >
               {CATEGORIES.map((cat) => {
                 const isActive = selectedCategory === cat;
-                return (
+                const dest = CHIP_DESTINATIONS[cat];
+                const isNavigational = dest && dest !== '/student';
+
+                return isNavigational ? (
+                  <Link
+                    key={cat}
+                    href={dest}
+                    className={cn(
+                      'px-3.5 py-1.5 rounded-lg text-xs font-sans transition-all focus-visible:outline-none cursor-pointer shrink-0 whitespace-nowrap inline-flex items-center gap-1',
+                      isActive
+                        ? 'bg-[#1C1917] text-white font-bold shadow-2xs'
+                        : 'text-[#44403C] font-semibold hover:bg-[#FFFFFF]/70 hover:text-[#1C1917]'
+                    )}
+                  >
+                    <span>{cat}</span>
+                  </Link>
+                ) : (
                   <button
                     key={cat}
                     type="button"
@@ -285,7 +311,7 @@ export function StudentDashboardClient({
                   <span>Lanjutkan Belajar</span>
                 </h2>
                 <Link
-                  href="/mahasiswa/tugas"
+                  href="/classes"
                   className="text-xs sm:text-sm font-bold text-primary-dark hover:text-ink transition-colors flex items-center gap-1 group"
                 >
                   <span>Lihat Semua Materi</span>
@@ -331,7 +357,7 @@ export function StudentDashboardClient({
                 </div>
 
                 <Link
-                  href="/mahasiswa/tugas"
+                  href="/classes"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-ink bg-ink text-white hover:bg-ink/90 text-xs sm:text-sm font-bold shadow-retro hover:-translate-y-0.5 transition-all shrink-0 min-h-[44px]"
                 >
                   <BookOpen className="h-4 w-4" />
