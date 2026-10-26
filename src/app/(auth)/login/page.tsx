@@ -375,15 +375,12 @@ function LoginFormContent() {
             {/* Main Floating Elevated Card */}
             <div className="rounded-3xl bg-white border border-[#E8E4DA] p-5 sm:p-7 lg:p-7 xl:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
               
-              {/* Header Card Bersih */}
-              <div className="space-y-1 mb-5">
+              {/* Header Card Bersih (Minimalist & Clean) */}
+              <div className="mb-5">
                 <h2 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-2xl sm:text-3xl text-[#1C1917] tracking-tight leading-snug">
                   Masuk ke RuangKampus
                 </h2>
-                <p className="text-xs sm:text-sm text-[#7A756D] leading-tight">
-                  Gunakan NIM untuk masuk ke portal.
-                  <span className="sr-only">Gunakan NIM, NIDN, NIP, atau email kampus.</span>
-                </p>
+                <span className="sr-only">Gunakan NIM, NIDN, NIP, atau email kampus.</span>
               </div>
 
               {/* Form Input */}
