@@ -15,9 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   BookOpen,
-  Users,
   MessageCircle,
-  X,
   CheckCircle2,
   ShieldCheck,
   Layers,
@@ -29,14 +27,6 @@ import {
 import { fontBricolage, fontInter } from './fonts';
 import { IslandIllustration } from './island-illustration';
 import { LoginDevMode } from './login-dev-mode';
-
-const STAFF_LIST = [
-  { name: 'Dr. Eng. Budi Santoso, S.T., M.T.', role: 'Dosen Pengampu / Kepala Laboratorium', nidn: '0012345678' },
-  { name: 'Ir. Rina Kurniawati, S.Kom., M.Cs.', role: 'Dosen Pengampu Algoritma & Struktur Data', nidn: '0023456789' },
-  { name: 'Dr. Siti Aminah, S.T., M.Kom.', role: 'Dosen Pengampu Basis Data & Sistem Informasi', nidn: '0034567890' },
-  { name: 'Assoc. Prof. Dr. Hendra Pratama, M.Kom.', role: 'Ketua Program Studi Teknik Informatika', nidn: '2008000307' },
-  { name: 'Rian Hidayat, S.Kom.', role: 'Staf Administrasi & Helpdesk Akademik', nidn: '198501012010121001' },
-];
 
 function LoginFormContent() {
   const searchParams = useSearchParams();
@@ -56,9 +46,6 @@ function LoginFormContent() {
 
   // Active showcase tab / slide (0: Peta Belajar, 1: Materi & Tugas, 2: Evaluasi & Ujian)
   const [activeSlide, setActiveSlide] = useState(0);
-
-  // Modal Dialogs
-  const [activeModal, setActiveModal] = useState<string | null>(null);
 
   const handlePasswordKeyEvent = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (typeof e.getModifierState === 'function') {
@@ -520,103 +507,36 @@ function LoginFormContent() {
               <LoginDevMode onSelectIdentifier={(id) => setIdentifier(id)} />
             </div>
 
-            {/* Quick Support Twin Chips (WA Helpdesk ke 083162031942 & Staff Directory) */}
-            <div className="grid grid-cols-2 gap-3 pt-3">
+            {/* Quick Support: Full-width WhatsApp Helpdesk Card ke 083162031942 */}
+            <div className="pt-3">
               <a
                 href={`https://wa.me/6283162031942?text=${waCustomMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 p-3 rounded-2xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] hover:border-[#25D366]/50 hover:-translate-y-0.5 transition-all shadow-2xs group cursor-pointer"
+                className="flex items-center justify-between p-3 rounded-2xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] hover:border-[#25D366]/50 hover:-translate-y-0.5 transition-all shadow-2xs group cursor-pointer"
               >
-                <div className="h-8 w-8 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <MessageCircle className="h-4 w-4" />
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <MessageCircle className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <span className="block text-xs font-bold text-[#1C1917] leading-tight">
+                      Butuh Bantuan Masuk?
+                    </span>
+                    <span className="block text-[11px] text-[#25D366] font-semibold leading-tight mt-0.5 flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#25D366] animate-pulse" />
+                      WhatsApp: 0831-6203-1942
+                    </span>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <span className="block text-xs font-bold text-[#1C1917] truncate leading-tight">
-                    Bantuan WA
-                  </span>
-                  <span className="block text-[11px] text-[#25D366] font-semibold leading-tight mt-0.5 flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[#25D366] animate-pulse" />
-                    0831-6203-1942
-                  </span>
-                </div>
+                <span className="text-xs font-semibold text-[#25D366] group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                  Chat Sekarang →
+                </span>
               </a>
-
-              <button
-                type="button"
-                onClick={() => setActiveModal('staff')}
-                className="flex items-center gap-2.5 p-3 rounded-2xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] hover:border-[#C2553A]/40 hover:-translate-y-0.5 transition-all shadow-2xs group cursor-pointer"
-              >
-                <div className="h-8 w-8 rounded-xl bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                  <Users className="h-4 w-4" />
-                </div>
-                <div className="min-w-0 text-left">
-                  <span className="block text-xs font-bold text-[#1C1917] truncate leading-tight">
-                    Direktori Staff
-                  </span>
-                  <span className="block text-[11px] text-[#7A756D] font-medium leading-tight mt-0.5">
-                    Dosen &amp; Tendik
-                  </span>
-                </div>
-              </button>
             </div>
           </main>
         </div>
       </div>
-
-      {/* ======================================================== */}
-      {/* MODAL DIALOGS                                            */}
-      {/* ======================================================== */}
-
-      {/* Modal: Direktori Dosen & Tendik */}
-      {activeModal === 'staff' && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5"
-        >
-          <div className="bg-white rounded-3xl border border-[#E8E4DA] max-w-xl w-full max-h-[80vh] flex flex-col shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div className="p-4 sm:p-6 border-b border-[#EFECE6] flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-base text-[#1C1917]">Direktori Dosen &amp; Tendik</h3>
-                <p className="text-xs text-[#7A756D] mt-0.5">Program Studi Teknik Informatika UIR</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="h-8 w-8 rounded-lg bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] flex items-center justify-center"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <div className="p-4 sm:p-6 overflow-y-auto space-y-2 text-xs">
-              {STAFF_LIST.map((staff, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 rounded-2xl border border-[#E8E4DA] bg-[#FAF8F5] flex items-center justify-between gap-3"
-                >
-                  <div>
-                    <p className="font-bold text-[#1C1917]">{staff.name}</p>
-                    <p className="text-[11px] text-[#7A756D]">{staff.role}</p>
-                  </div>
-                  <span className="font-mono text-[10px] bg-white px-2 py-0.5 rounded-md border border-[#E8E4DA] text-[#C2553A] font-bold">
-                    NIDN: {staff.nidn}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div className="p-4 border-t border-[#EFECE6] bg-[#FAF8F5] flex justify-end">
-              <button
-                type="button"
-                onClick={() => setActiveModal(null)}
-                className="px-4 py-2 rounded-xl bg-[#C2553A] text-white text-xs font-bold hover:bg-[#853827]"
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
