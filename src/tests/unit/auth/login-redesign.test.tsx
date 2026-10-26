@@ -83,9 +83,9 @@ describe('Redesain Halaman Masuk RuangKampus (docs/INSTRUKSI_REDESAIN_LOGIN.md)'
       // Formulir Kanan
       expect(html).toContain('Gunakan NIM, NIDN, NIP, atau email kampus.');
       expect(html).toContain('Lupa kata sandi?');
-      expect(html).toContain('Masuk dengan akun Google kampus');
-      expect(html).toContain('Belum punya akun?');
-      expect(html).toContain('Daftar di sini');
+      expect(html).not.toContain('Masuk dengan akun Google kampus');
+      expect(html).not.toContain('Belum punya akun?');
+      expect(html).not.toContain('Daftar di sini');
     });
 
     it('memuat ilustrasi garis 3 pulau (Selesai, Sedang dipelajari, Terkunci)', () => {
