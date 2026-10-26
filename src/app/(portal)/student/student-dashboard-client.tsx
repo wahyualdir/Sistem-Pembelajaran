@@ -563,6 +563,11 @@ export function StudentDashboardClient({
         aria-label="Panel Ringkasan & Detail"
         className="hidden xl:flex w-right-panel shrink-0 border-l border-[#D6D3CB] bg-[#FAF8F5] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
+        {/* KARTU IDENTITAS 3D TECH LOGO DI BAGIAN ATAS PANEL */}
+        <div className="shrink-0 w-full pb-2 border-b border-[#E8E5DE]">
+          <UirLogo3D />
+        </div>
+
         {/* PENGALIH DUA KONDISI: "Hari Ini" & "Detail Kelas" LANGSUNG DI ATAS PANEL */}
         <RightPanelSwitcher
           selectedCourse={selectedCourse}
@@ -573,11 +578,6 @@ export function StudentDashboardClient({
           activeTab={rightPanelTab}
           onTabChange={setRightPanelTab}
         />
-
-        {/* KARTU IDENTITAS KAMPUS DI BAGIAN BAWAH PANEL */}
-        <div className="shrink-0 w-full pt-2 border-t border-[#E8E5DE]">
-          <UirLogo3D />
-        </div>
       </aside>
 
       {/* Mode Slide-over Drawer (< 1280px / max-xl): Panel geser dari kanan */}

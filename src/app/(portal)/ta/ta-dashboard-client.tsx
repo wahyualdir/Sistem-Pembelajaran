@@ -327,6 +327,10 @@ export function TaDashboardClient({
         aria-label="Panel Ringkasan & Detail Asisten"
         className="hidden xl:flex w-right-panel shrink-0 border-l border-[#D6D3CB] bg-[#FAF8F5] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
+        <div className="shrink-0 w-full pb-2 border-b border-[#E8E5DE]">
+          <UirLogo3D />
+        </div>
+
         <TaRightPanel
           selectedCourse={selectedCourse}
           courses={courses}
@@ -338,10 +342,6 @@ export function TaDashboardClient({
           activeTab={rightPanelTab}
           onTabChange={setRightPanelTab}
         />
-
-        <div className="shrink-0 w-full pt-2 border-t border-[#E8E5DE]">
-          <UirLogo3D />
-        </div>
       </aside>
 
       {isRightDrawerOpen && (
@@ -374,6 +374,10 @@ export function TaDashboardClient({
             </div>
 
             <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5 pb-24">
+              <div className="shrink-0 w-full pb-2 border-b border-[#E8E5DE]">
+                <UirLogo3D />
+              </div>
+
               <TaRightPanel
                 selectedCourse={selectedCourse}
                 courses={courses}
@@ -385,9 +389,6 @@ export function TaDashboardClient({
                 activeTab={rightPanelTab}
                 onTabChange={setRightPanelTab}
               />
-              <div className="shrink-0 w-full pt-2 border-t border-[#E8E5DE]">
-                <UirLogo3D />
-              </div>
             </div>
           </div>
         </div>
