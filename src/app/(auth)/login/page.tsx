@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useTransition, Suspense } from 'react';
+import React, { useState, useTransition, Suspense, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -28,6 +28,8 @@ import {
   Layers,
   Calendar,
   Compass,
+  Activity,
+  Zap,
 } from 'lucide-react';
 import { fontBricolage, fontInter } from './fonts';
 import { IslandIllustration } from './island-illustration';
@@ -147,29 +149,31 @@ function LoginFormContent() {
     <div
       className={`min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-[#FAF8F5] text-[#1C1B19] ${fontBricolage.variable} ${fontInter.variable} font-[family-name:var(--font-inter-login),sans-serif] selection:bg-[#C2553A] selection:text-white flex flex-col justify-center relative lg:overflow-hidden`}
     >
-      {/* Subtle modern ambient background gradient decorations */}
+      {/* Animated Subtle Floating Mesh Gradient Orbs */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-40 -left-40 h-[450px] w-[450px] rounded-full bg-[#C2553A]/[0.05] blur-3xl"
+        className="pointer-events-none absolute -top-48 -left-48 h-[520px] w-[520px] rounded-full bg-gradient-to-tr from-[#C2553A]/[0.08] to-[#F59E0B]/[0.06] blur-3xl animate-pulse"
+        style={{ animationDuration: '6s' }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -right-40 h-[500px] w-[500px] rounded-full bg-[#853827]/[0.04] blur-3xl"
+        className="pointer-events-none absolute -bottom-48 -right-48 h-[560px] w-[560px] rounded-full bg-gradient-to-bl from-[#853827]/[0.06] to-[#C2553A]/[0.05] blur-3xl animate-pulse"
+        style={{ animationDuration: '8s' }}
       />
 
-      {/* Main Container - Compact single-screen layout */}
+      {/* Main Container - Compact single-screen layout with entrance animation */}
       <div className="w-full max-w-[1360px] mx-auto p-3 sm:p-5 lg:p-6 xl:p-8 flex-1 flex flex-col justify-center relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 xl:gap-10 items-center">
           
           {/* ======================================================== */}
-          {/* SISI KIRI: COMPACT FRESH SHOWCASE & ROADMAP              */}
+          {/* SISI KIRI: COMPACT FRESH SHOWCASE & ANIMATED ROADMAP     */}
           {/* ======================================================== */}
-          <section className="lg:col-span-7 xl:col-span-7 flex flex-col justify-center space-y-3.5 sm:space-y-4">
+          <section className="lg:col-span-7 xl:col-span-7 flex flex-col justify-center space-y-3 sm:space-y-3.5">
             
-            {/* 1. Header Identitas Kampus Modern */}
+            {/* 1. Header Identitas Kampus Modern dengan Glow & Micro-Badge */}
             <div className="flex items-center justify-between gap-3">
               <Link href="/" className="flex items-center gap-3 group focus-visible:outline-none">
-                <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-white p-2 border border-[#E8E4DA] shadow-xs flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-[#C2553A]/40 transition-all duration-200">
+                <div className="h-10 w-10 sm:h-11 sm:w-11 rounded-2xl bg-white p-2 border border-[#E8E4DA] shadow-xs flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-[#C2553A]/40 group-hover:shadow-md transition-all duration-300">
                   <Image
                     src="/logo-ruangkampus.png"
                     alt="Logo RuangKampus"
@@ -181,11 +185,11 @@ function LoginFormContent() {
                 </div>
                 <div className="flex flex-col">
                   <div className="flex items-center gap-2">
-                    <span className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-xl sm:text-2xl text-[#1C1917] tracking-tight leading-none">
+                    <span className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-xl sm:text-2xl text-[#1C1917] tracking-tight leading-none group-hover:text-[#C2553A] transition-colors">
                       Ruang<span className="text-[#C2553A]">Kampus</span>
                     </span>
-                    <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#C2553A]/10 text-[#C2553A] border border-[#C2553A]/20">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#C2553A] animate-pulse" />
+                    <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#C2553A]/10 text-[#C2553A] border border-[#C2553A]/20 shadow-2xs">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#C2553A] animate-ping" />
                       v2.5
                     </span>
                   </div>
@@ -195,13 +199,13 @@ function LoginFormContent() {
                 </div>
               </Link>
 
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold bg-white border border-[#E8E4DA] text-[#57534E] shadow-2xs">
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold bg-white border border-[#E8E4DA] text-[#57534E] shadow-2xs hover:border-[#C2553A]/30 transition-all">
                 <Calendar className="h-3 w-3 text-[#C2553A]" />
                 <span>GANJIL 2026/2027</span>
               </div>
             </div>
 
-            {/* 2. Headline & Subtitle */}
+            {/* 2. Headline & Subtitle dengan Visual Hierarchy Segar */}
             <div className="space-y-1">
               <h1 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-xl sm:text-2xl lg:text-3xl text-[#1C1917] tracking-tight leading-tight">
                 Kelas, tugas, dan ujian di satu tempat.
@@ -211,8 +215,8 @@ function LoginFormContent() {
               </p>
             </div>
 
-            {/* 3. Modern Compact Showcase Card */}
-            <div className="relative rounded-2xl bg-white border border-[#E8E4DA] p-3.5 sm:p-4 shadow-sm overflow-hidden">
+            {/* 3. Modern Interactive Showcase Card dengan Animasi Mengalir */}
+            <div className="relative rounded-2xl bg-white border border-[#E8E4DA] p-3 sm:p-4 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group/showcase">
               
               {/* Tab Selector & Navigation */}
               <div className="flex items-center justify-between pb-2.5 border-b border-[#EFECE6] gap-2">
@@ -222,7 +226,7 @@ function LoginFormContent() {
                     onClick={() => setActiveSlide(0)}
                     className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
                       activeSlide === 0
-                        ? 'bg-[#C2553A] text-white shadow-2xs'
+                        ? 'bg-[#C2553A] text-white shadow-2xs scale-102'
                         : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F3EFE7]'
                     }`}
                   >
@@ -234,7 +238,7 @@ function LoginFormContent() {
                     onClick={() => setActiveSlide(1)}
                     className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
                       activeSlide === 1
-                        ? 'bg-[#C2553A] text-white shadow-2xs'
+                        ? 'bg-[#C2553A] text-white shadow-2xs scale-102'
                         : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F3EFE7]'
                     }`}
                   >
@@ -246,7 +250,7 @@ function LoginFormContent() {
                     onClick={() => setActiveSlide(2)}
                     className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
                       activeSlide === 2
-                        ? 'bg-[#C2553A] text-white shadow-2xs'
+                        ? 'bg-[#C2553A] text-white shadow-2xs scale-102'
                         : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F3EFE7]'
                     }`}
                   >
@@ -260,7 +264,7 @@ function LoginFormContent() {
                   <button
                     type="button"
                     onClick={prevSlide}
-                    className="h-7 w-7 rounded-md bg-[#FAF8F5] hover:bg-[#F0ECE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-colors cursor-pointer"
+                    className="h-7 w-7 rounded-md bg-[#FAF8F5] hover:bg-[#F0ECE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
                     aria-label="Slide sebelumnya"
                   >
                     <ChevronLeft className="h-3.5 w-3.5" />
@@ -268,7 +272,7 @@ function LoginFormContent() {
                   <button
                     type="button"
                     onClick={nextSlide}
-                    className="h-7 w-7 rounded-md bg-[#FAF8F5] hover:bg-[#F0ECE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-colors cursor-pointer"
+                    className="h-7 w-7 rounded-md bg-[#FAF8F5] hover:bg-[#F0ECE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
                     aria-label="Slide berikutnya"
                   >
                     <ChevronRight className="h-3.5 w-3.5" />
@@ -276,27 +280,31 @@ function LoginFormContent() {
                 </div>
               </div>
 
-              {/* Slide 1: Peta Kurikulum 3 Pulau Berprogres (Satisfies test: Selesai, Sedang dipelajari, Terkunci, stroke-dasharray) */}
-              <div className={activeSlide === 0 ? 'py-2.5 flex flex-col items-center justify-center min-h-[160px]' : 'hidden'}>
-                <div className="w-full flex items-center justify-between pb-2">
+              {/* Slide 1: Peta Kurikulum 3 Pulau Berprogres (Full Animasi Mengalir) */}
+              <div className={activeSlide === 0 ? 'py-2 flex flex-col items-center justify-center min-h-[160px] animate-in fade-in duration-200' : 'hidden'}>
+                <div className="w-full flex items-center justify-between pb-1.5">
                   <div className="flex items-center gap-2">
                     <span className="text-[11px] font-bold text-[#1C1917]">PETA CAPAIAN KURIKULUM</span>
-                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-[#FAF8F5] text-[#C2553A] font-bold border border-[#E8E4DA]">
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded-md bg-[#FAF8F5] text-[#C2553A] font-bold border border-[#E8E4DA] flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A] animate-pulse" />
                       112 / 144 SKS
                     </span>
                   </div>
                   <span className="text-[10px] text-[#7A756D] font-medium">Semester 1 s/d 8</span>
                 </div>
-                <div className="w-full flex items-center justify-center py-1 scale-90 sm:scale-100 origin-center">
+                
+                {/* Visual Pulau Beranimasi */}
+                <div className="w-full flex items-center justify-center py-1 scale-95 sm:scale-100 origin-center">
                   <IslandIllustration />
                 </div>
-                <p className="text-[11px] text-[#7A756D] text-center max-w-sm mt-1 leading-snug">
+                
+                <p className="text-[11px] text-[#7A756D] text-center max-w-sm mt-0.5 leading-snug">
                   Pantau capaian pembelajaran bertahap dari semester awal hingga tugas akhir secara visual dan terarah.
                 </p>
               </div>
 
               {/* Slide 2: Compact Materi Perkuliahan Cards */}
-              <div className={activeSlide === 1 ? 'py-2.5 flex flex-col justify-between min-h-[160px] text-xs' : 'hidden'}>
+              <div className={activeSlide === 1 ? 'py-2 flex flex-col justify-between min-h-[160px] text-xs animate-in fade-in duration-200' : 'hidden'}>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between pb-1.5 border-b border-[#EFECE6]">
                     <div className="flex items-center gap-1.5">
@@ -309,7 +317,7 @@ function LoginFormContent() {
                   </div>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    <div className="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA]">
+                    <div className="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA] hover:border-[#C2553A]/40 hover:-translate-y-0.5 transition-all">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-[9px] font-mono font-bold text-[#C2553A] bg-white px-1.5 py-0.5 rounded border border-[#E8E4DA]">
                           Pertemuan 02
@@ -320,7 +328,7 @@ function LoginFormContent() {
                       <p className="text-[10px] text-[#7A756D] truncate">Dr. Eng. Budi Santoso</p>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA]">
+                    <div className="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA] hover:border-[#C2553A]/40 hover:-translate-y-0.5 transition-all">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-[9px] font-mono font-bold text-[#15803D] bg-white px-1.5 py-0.5 rounded border border-[#E8E4DA]">
                           Pertemuan 01
@@ -335,26 +343,30 @@ function LoginFormContent() {
 
                 <div className="pt-2 border-t border-[#EFECE6] flex items-center justify-between text-[10px] text-[#7A756D]">
                   <span>Akses modul perkuliahan 24/7 di ruang belajar Anda.</span>
-                  <span className="text-[#C2553A] font-semibold">Tersinkronisasi</span>
+                  <span className="text-[#C2553A] font-semibold flex items-center gap-1">
+                    <Zap className="h-3 w-3" />
+                    Tersinkronisasi
+                  </span>
                 </div>
               </div>
 
               {/* Slide 3: Compact Evaluasi & Ujian CBT Cards */}
-              <div className={activeSlide === 2 ? 'py-2.5 flex flex-col justify-between min-h-[160px] text-xs' : 'hidden'}>
+              <div className={activeSlide === 2 ? 'py-2 flex flex-col justify-between min-h-[160px] text-xs animate-in fade-in duration-200' : 'hidden'}>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between pb-1.5 border-b border-[#EFECE6]">
                     <div className="flex items-center gap-1.5">
                       <CheckCircle2 className="h-3.5 w-3.5 text-[#15803D]" />
                       <span className="font-bold text-[#1C1917] text-xs">Sistem Evaluasi Terpadu</span>
                     </div>
-                    <span className="text-[9px] font-mono font-bold text-[#15803D] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">
+                    <span className="text-[9px] font-mono font-bold text-[#15803D] bg-[#22C55E]/10 px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#15803D] animate-ping" />
                       TERVERIFIKASI
                     </span>
                   </div>
 
-                  <div className="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA] flex items-center justify-between">
+                  <div className="p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA] flex items-center justify-between hover:border-[#C2553A]/40 transition-all">
                     <div className="flex items-center gap-2.5">
-                      <div className="h-8 w-8 rounded-lg bg-white border border-[#E8E4DA] flex items-center justify-center text-[#C2553A] font-bold text-xs">
+                      <div className="h-8 w-8 rounded-lg bg-white border border-[#E8E4DA] flex items-center justify-center text-[#C2553A] font-bold text-xs shadow-2xs">
                         UTS
                       </div>
                       <div>
@@ -370,17 +382,20 @@ function LoginFormContent() {
 
                 <div className="pt-2 border-t border-[#EFECE6] flex items-center justify-between text-[10px] text-[#7A756D]">
                   <span>Integritas akademik terjamin dengan audit trail otomatis.</span>
-                  <span className="text-[#15803D] font-semibold">Sistem Siap</span>
+                  <span className="text-[#15803D] font-semibold flex items-center gap-1">
+                    <Activity className="h-3 w-3" />
+                    Sistem Siap
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* 4. Action Pills Compact */}
+            {/* 4. Action Pills Compact dengan Hover Lift */}
             <div className="flex flex-wrap items-center gap-2 pt-0.5">
               <button
                 type="button"
                 onClick={() => setActiveModal('kebijakan')}
-                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-[11px] font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-[11px] font-semibold flex items-center gap-1.5 shadow-2xs hover:shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer"
               >
                 <FileText className="h-3 w-3 text-[#C2553A]" />
                 <span>Kebijakan</span>
@@ -388,7 +403,7 @@ function LoginFormContent() {
               <button
                 type="button"
                 onClick={() => setActiveModal('panduan-dosen')}
-                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-[11px] font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-[11px] font-semibold flex items-center gap-1.5 shadow-2xs hover:shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer"
               >
                 <GraduationCap className="h-3 w-3 text-[#C2553A]" />
                 <span>Panduan Dosen</span>
@@ -396,7 +411,7 @@ function LoginFormContent() {
               <button
                 type="button"
                 onClick={() => setActiveModal('panduan-mhs')}
-                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-[11px] font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-[11px] font-semibold flex items-center gap-1.5 shadow-2xs hover:shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer"
               >
                 <BookOpen className="h-3 w-3 text-[#C2553A]" />
                 <span>Panduan Mahasiswa</span>
@@ -404,7 +419,7 @@ function LoginFormContent() {
               <button
                 type="button"
                 onClick={() => setActiveModal('video')}
-                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-[11px] font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-[11px] font-semibold flex items-center gap-1.5 shadow-2xs hover:shadow-xs hover:-translate-y-0.5 transition-all cursor-pointer"
               >
                 <Video className="h-3 w-3 text-[#C2553A]" />
                 <span>Video Tutorial</span>
@@ -417,32 +432,32 @@ function LoginFormContent() {
           {/* ======================================================== */}
           <main className="lg:col-span-5 xl:col-span-5 flex flex-col justify-center">
             
-            {/* Quick Action: Lihat Judul Pertemuan Per Mata Kuliah (Compact Pill) */}
+            {/* Quick Action: Lihat Judul Pertemuan Per Mata Kuliah (Compact Pill dengan Micro-Hover) */}
             <div className="mb-2">
               <button
                 type="button"
                 onClick={() => setActiveModal('syllabus')}
-                className="w-full py-2 px-3.5 rounded-xl bg-white hover:bg-[#FAF8F5] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#57534E] hover:text-[#C2553A] text-xs font-semibold flex items-center justify-between shadow-2xs transition-all cursor-pointer group"
+                className="w-full py-2 px-3.5 rounded-xl bg-white hover:bg-[#FAF8F5] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#57534E] hover:text-[#C2553A] text-xs font-semibold flex items-center justify-between shadow-2xs hover:shadow-xs transition-all cursor-pointer group"
               >
                 <div className="flex items-center gap-2">
-                  <div className="h-5 w-5 rounded-md bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0">
+                  <div className="h-5 w-5 rounded-md bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                     <BookOpen className="h-3 w-3" />
                   </div>
                   <span className="font-semibold text-[#1C1917] group-hover:text-[#C2553A] transition-colors text-xs">
                     Lihat Judul Pertemuan Per Mata Kuliah
                   </span>
                 </div>
-                <ArrowRight className="h-3.5 w-3.5 text-[#8A8577] group-hover:translate-x-0.5 group-hover:text-[#C2553A] transition-all" />
+                <ArrowRight className="h-3.5 w-3.5 text-[#8A8577] group-hover:translate-x-1 group-hover:text-[#C2553A] transition-all" />
               </button>
             </div>
 
-            {/* Main Floating Elevated Card - Compact Padding */}
-            <div className="rounded-2xl bg-white border border-[#E8E4DA] p-4 sm:p-5 lg:p-5 xl:p-6 shadow-sm">
+            {/* Main Floating Elevated Card */}
+            <div className="rounded-2xl bg-white border border-[#E8E4DA] p-4 sm:p-5 lg:p-5 xl:p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
               
               {/* Header Card */}
               <div className="space-y-1 mb-3.5">
                 <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-[#FAF8F5] border border-[#E8E4DA] text-[10px] font-semibold text-[#853827]">
-                  <Sparkles className="h-2.5 w-2.5 text-[#C2553A]" />
+                  <Sparkles className="h-2.5 w-2.5 text-[#C2553A] animate-spin" style={{ animationDuration: '4s' }} />
                   <span>Portal Akademik Mahasiswa &amp; Dosen</span>
                 </div>
                 <h2 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-xl sm:text-2xl text-[#1C1917] tracking-tight leading-snug">
@@ -532,7 +547,7 @@ function LoginFormContent() {
                   )}
                 </div>
 
-                {/* Field 3: Modern Security Verification Widget - Compact */}
+                {/* Field 3: Modern Security Verification Widget - Compact & Fresh */}
                 <div className="p-2 sm:p-2.5 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA] flex items-center justify-between gap-2.5">
                   <div className="flex items-center gap-2">
                     <div className="h-6 w-6 rounded-md bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0">
@@ -560,11 +575,11 @@ function LoginFormContent() {
                   />
                 </div>
 
-                {/* Primary Submit Button */}
+                {/* Primary Submit Button dengan Animasi Shimmer & Hover Lift */}
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="w-full h-10 sm:h-10.5 rounded-xl bg-gradient-to-r from-[#C2553A] to-[#B3452C] hover:from-[#B3452C] hover:to-[#963721] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow-md active:scale-[0.99] cursor-pointer disabled:opacity-60"
+                  className="w-full h-10 sm:h-10.5 rounded-xl bg-gradient-to-r from-[#C2553A] via-[#B84A30] to-[#A33D25] hover:from-[#B84A30] hover:to-[#8E321C] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] cursor-pointer disabled:opacity-60"
                 >
                   <LogIn className="h-3.5 w-3.5" />
                   <span>{isPending ? 'Memeriksa kredensial…' : 'Masuk ke Portal'}</span>
@@ -578,7 +593,7 @@ function LoginFormContent() {
                   id="login-error-alert"
                   role="alert"
                   aria-live="assertive"
-                  className="mt-3 p-2.5 rounded-xl border border-[#8F3A24]/30 bg-[#FEF2F2] text-[#8F3A24] text-xs flex items-start gap-2 shadow-2xs"
+                  className="mt-3 p-2.5 rounded-xl border border-[#8F3A24]/30 bg-[#FEF2F2] text-[#8F3A24] text-xs flex items-start gap-2 shadow-2xs animate-in fade-in duration-200"
                 >
                   <AlertCircle className="h-3.5 w-3.5 text-[#8F3A24] shrink-0 mt-0.5" />
                   <span className="font-medium leading-snug">{errorMessage}</span>
@@ -589,23 +604,24 @@ function LoginFormContent() {
               <LoginDevMode onSelectIdentifier={(id) => setIdentifier(id)} />
             </div>
 
-            {/* Quick Support Twin Chips (WA Helpdesk & Staff Directory) - Compact */}
+            {/* Quick Support Twin Chips (WA Helpdesk & Staff Directory) - Animated Hover */}
             <div className="grid grid-cols-2 gap-2.5 pt-2">
               <a
                 href="https://wa.me/6281234567890?text=Halo%20Admin%20RuangKampus%2C%20saya%20butuh%20bantuan%20login"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 p-2 sm:p-2.5 rounded-xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] transition-all shadow-2xs group cursor-pointer"
+                className="flex items-center gap-2 p-2 sm:p-2.5 rounded-xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] hover:border-[#25D366]/40 hover:-translate-y-0.5 transition-all shadow-2xs group cursor-pointer"
               >
-                <div className="h-7 w-7 rounded-lg bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <div className="h-7 w-7 rounded-lg bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <MessageCircle className="h-3.5 w-3.5" />
                 </div>
                 <div className="min-w-0">
                   <span className="block text-xs font-bold text-[#1C1917] truncate leading-tight">
                     Hubungi Kami
                   </span>
-                  <span className="block text-[10px] text-[#25D366] font-semibold leading-tight">
-                    WhatsApp Aktif
+                  <span className="block text-[10px] text-[#25D366] font-semibold leading-tight flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#25D366] animate-pulse" />
+                    WhatsApp
                   </span>
                 </div>
               </a>
@@ -613,9 +629,9 @@ function LoginFormContent() {
               <button
                 type="button"
                 onClick={() => setActiveModal('staff')}
-                className="flex items-center gap-2 p-2 sm:p-2.5 rounded-xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] transition-all shadow-2xs group cursor-pointer"
+                className="flex items-center gap-2 p-2 sm:p-2.5 rounded-xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] hover:border-[#C2553A]/40 hover:-translate-y-0.5 transition-all shadow-2xs group cursor-pointer"
               >
-                <div className="h-7 w-7 rounded-lg bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <div className="h-7 w-7 rounded-lg bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <Users className="h-3.5 w-3.5" />
                 </div>
                 <div className="min-w-0 text-left">
