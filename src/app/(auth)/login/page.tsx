@@ -18,6 +18,8 @@ import {
   MessageCircle,
   CheckCircle2,
   ShieldCheck,
+  RotateCw,
+  Check,
   Layers,
   Calendar,
   Compass,
@@ -40,9 +42,21 @@ function LoginFormContent() {
   const [errorKey, setErrorKey] = useState(0);
 
   // Modern verification security check
-  const [captchaNum1] = useState(6);
-  const [captchaNum2] = useState(8);
+  const [captchaNum1, setCaptchaNum1] = useState(6);
+  const [captchaNum2, setCaptchaNum2] = useState(8);
   const [captchaInput, setCaptchaInput] = useState('');
+
+  const refreshCaptcha = () => {
+    const n1 = Math.floor(Math.random() * 8) + 2;
+    const n2 = Math.floor(Math.random() * 8) + 1;
+    setCaptchaNum1(n1);
+    setCaptchaNum2(n2);
+    setCaptchaInput('');
+  };
+
+  const isCaptchaPassed =
+    captchaInput.trim() !== '' &&
+    parseInt(captchaInput.trim(), 10) === captchaNum1 + captchaNum2;
 
   // Active showcase tab / slide (0: Peta Belajar, 1: Materi & Tugas, 2: Evaluasi & Ujian)
   const [activeSlide, setActiveSlide] = useState(0);
@@ -367,7 +381,8 @@ function LoginFormContent() {
                   Masuk ke RuangKampus
                 </h2>
                 <p className="text-xs sm:text-sm text-[#7A756D] leading-tight">
-                  Gunakan NIM, NIDN, NIP, atau email kampus.
+                  Gunakan NIM untuk masuk ke portal.
+                  <span className="sr-only">Gunakan NIM, NIDN, NIP, atau email kampus.</span>
                 </p>
               </div>
 
@@ -380,7 +395,7 @@ function LoginFormContent() {
                     htmlFor="identifier"
                     className="block text-xs font-semibold text-[#1C1917]"
                   >
-                    NIM, NIDN, NIP, atau Email
+                    NIM
                   </label>
                   <div className="relative flex items-center">
                     <User className="absolute left-3.5 h-4 w-4 text-[#8A8577] pointer-events-none" />
@@ -450,32 +465,92 @@ function LoginFormContent() {
                   )}
                 </div>
 
-                {/* Field 3: Modern Security Verification Widget - Compact & Fresh */}
-                <div className="p-2.5 sm:p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DA] flex items-center justify-between gap-2.5">
-                  <div className="flex items-center gap-2.5">
-                    <div className="h-7 w-7 rounded-lg bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0">
-                      <ShieldCheck className="h-4 w-4" />
+                {/* Field 3: Modern Security Verification Widget - Fresh & Interactive */}
+                <div
+                  className={`p-2.5 sm:p-3 rounded-2xl border transition-all duration-200 flex items-center justify-between gap-2.5 shadow-2xs ${
+                    isCaptchaPassed
+                      ? 'bg-gradient-to-r from-emerald-50/70 via-white to-emerald-50/40 border-emerald-300'
+                      : 'bg-gradient-to-r from-[#FAF8F5] via-white to-[#FAF8F5] border-[#E8E4DA] hover:border-[#C2553A]/30'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div
+                      className={`h-9 w-9 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300 ${
+                        isCaptchaPassed
+                          ? 'bg-emerald-500/10 text-emerald-600 border-emerald-400/40 scale-105 shadow-2xs'
+                          : 'bg-[#C2553A]/10 text-[#C2553A] border-[#C2553A]/20'
+                      }`}
+                    >
+                      {isCaptchaPassed ? (
+                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-600 animate-in zoom-in-75 duration-200" />
+                      ) : (
+                        <ShieldCheck className="h-4.5 w-4.5" />
+                      )}
                     </div>
-                    <div>
-                      <label
-                        htmlFor="captcha"
-                        className="block text-xs font-semibold text-[#1C1917] leading-tight"
-                      >
-                        Berapa hasil dari {captchaNum1} + {captchaNum2} ?
-                      </label>
-                      <span className="text-[10px] text-[#7A756D]">Verifikasi pengaman kampus</span>
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <label
+                          htmlFor="captcha"
+                          className="text-xs font-bold text-[#1C1917] tracking-tight leading-none cursor-pointer"
+                        >
+                          Verifikasi Keamanan
+                        </label>
+                        <span
+                          className={`inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider transition-colors ${
+                            isCaptchaPassed
+                              ? 'bg-emerald-100 text-emerald-700'
+                              : 'bg-[#C2553A]/10 text-[#C2553A]'
+                          }`}
+                        >
+                          {isCaptchaPassed ? 'Lolos' : 'Anti-Bot'}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white border border-[#E8E4DA] text-xs font-mono font-bold text-[#1C1917] shadow-2xs">
+                          <span>{captchaNum1}</span>
+                          <span className="text-[#C2553A] font-black">+</span>
+                          <span>{captchaNum2}</span>
+                          <span className="text-[#8A8577]">=</span>
+                          <span className="text-[#C2553A] font-black">?</span>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={refreshCaptcha}
+                          title="Ganti angka verifikasi"
+                          aria-label="Ganti angka verifikasi"
+                          className="h-6 w-6 rounded-md text-[#8A8577] hover:text-[#C2553A] hover:bg-[#FAF8F5] flex items-center justify-center transition-colors cursor-pointer active:rotate-180 duration-200"
+                        >
+                          <RotateCw className="h-3 w-3" />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <input
-                    id="captcha"
-                    name="captcha"
-                    type="text"
-                    inputMode="numeric"
-                    placeholder="Hasil"
-                    value={captchaInput}
-                    onChange={(e) => setCaptchaInput(e.target.value)}
-                    className="w-16 h-8 text-center rounded-lg border border-[#D6D0C4] bg-white text-xs font-bold text-[#1C1917] focus:ring-2 focus:ring-[#C2553A] focus:outline-none"
-                  />
+
+                  <div className="relative flex items-center shrink-0">
+                    <input
+                      id="captcha"
+                      name="captcha"
+                      type="text"
+                      inputMode="numeric"
+                      placeholder="Hasil"
+                      value={captchaInput}
+                      onChange={(e) => setCaptchaInput(e.target.value)}
+                      aria-label={`Berapa hasil dari ${captchaNum1} + ${captchaNum2}`}
+                      className={`w-16 sm:w-18 h-9 text-center rounded-xl border text-xs font-mono font-bold transition-all focus:outline-none ${
+                        isCaptchaPassed
+                          ? 'border-emerald-500 bg-white text-emerald-700 ring-2 ring-emerald-500/20'
+                          : 'border-[#D6D0C4] bg-white text-[#1C1917] hover:border-[#C2553A]/50 focus:border-[#C2553A] focus:ring-3 focus:ring-[#C2553A]/15 placeholder:text-[#8A8577]'
+                      }`}
+                    />
+                    {isCaptchaPassed && (
+                      <div className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-xs animate-in zoom-in-75 duration-150">
+                        <Check className="h-2.5 w-2.5 stroke-[3]" />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Primary Submit Button */}
