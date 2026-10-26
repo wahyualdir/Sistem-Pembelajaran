@@ -14,16 +14,21 @@ import {
   LogIn,
   ChevronLeft,
   ChevronRight,
-  Info,
   FileText,
   BookOpen,
   GraduationCap,
   Video,
   Users,
   MessageCircle,
-  Calculator,
   X,
   CheckCircle2,
+  Sparkles,
+  ShieldCheck,
+  ArrowRight,
+  Layers,
+  Calendar,
+  Clock,
+  Compass,
 } from 'lucide-react';
 import { fontBricolage, fontInter } from './fonts';
 import { IslandIllustration } from './island-illustration';
@@ -67,12 +72,12 @@ function LoginFormContent() {
   const [errorMessage, setErrorMessage] = useState(searchParams.get('error') || '');
   const [errorKey, setErrorKey] = useState(0);
 
-  // Math Verification Challenge (matching reference screenshot: "Berapa hasil dari 6 + 8 ?")
+  // Modern verification security check
   const [captchaNum1] = useState(6);
   const [captchaNum2] = useState(8);
   const [captchaInput, setCaptchaInput] = useState('');
 
-  // Carousel slide state (0: Materi, 1: Peta Kurikulum, 2: Tugas & Ujian)
+  // Active showcase tab / slide (0: Peta Belajar, 1: Materi & Tugas, 2: Evaluasi & Ujian)
   const [activeSlide, setActiveSlide] = useState(0);
 
   // Modal Dialogs
@@ -88,7 +93,6 @@ function LoginFormContent() {
     e.preventDefault();
     setErrorMessage('');
 
-    // Optional verification check if input entered
     if (captchaInput.trim() !== '') {
       const parsed = parseInt(captchaInput.trim(), 10);
       if (parsed !== captchaNum1 + captchaNum2) {
@@ -142,430 +146,467 @@ function LoginFormContent() {
 
   return (
     <div
-      className={`min-h-[100dvh] w-full bg-[#FAF8F5] text-[#1C1B19] ${fontBricolage.variable} ${fontInter.variable} font-[family-name:var(--font-inter-login),sans-serif] selection:bg-[#C2553A] selection:text-white flex flex-col justify-between`}
+      className={`min-h-[100dvh] w-full bg-[#FAF8F5] text-[#1C1B19] ${fontBricolage.variable} ${fontInter.variable} font-[family-name:var(--font-inter-login),sans-serif] selection:bg-[#C2553A] selection:text-white flex flex-col justify-between relative overflow-hidden`}
     >
-      <div className="w-full max-w-[1480px] mx-auto p-3 sm:p-5 lg:p-8 flex-1 flex flex-col justify-center">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 xl:gap-10 items-stretch">
+      {/* Subtle modern ambient background gradient decorations */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-[#C2553A]/[0.05] blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-40 -right-40 h-[600px] w-[600px] rounded-full bg-[#853827]/[0.04] blur-3xl"
+      />
+
+      {/* Main Container */}
+      <div className="w-full max-w-[1400px] mx-auto p-4 sm:p-6 lg:p-10 flex-1 flex flex-col justify-center relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 xl:gap-12 items-center">
           
           {/* ======================================================== */}
-          {/* SISI KIRI: SHOWCASE FITUR & PREVIEW PORTAL                */}
+          {/* SISI KIRI: MODERN FRESH SHOWCASE & ROADMAP               */}
           {/* ======================================================== */}
-          <section className="lg:col-span-7 xl:col-span-7 rounded-3xl bg-[#F5F2EA] border border-[#E8E5DE] p-4 sm:p-6 lg:p-8 flex flex-col justify-between shadow-xs">
-            {/* 1. Header Identitas Kampus */}
-            <div className="flex items-center justify-between gap-3 pb-4">
-              <Link href="/" className="flex items-center gap-3 group focus-visible:outline-none">
-                <div className="h-11 w-11 rounded-2xl bg-white p-2 border border-[#E8E5DE] shadow-2xs flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+          <section className="lg:col-span-7 xl:col-span-7 flex flex-col justify-between space-y-6">
+            
+            {/* 1. Header Identitas Kampus Modern */}
+            <div className="flex items-center justify-between gap-3">
+              <Link href="/" className="flex items-center gap-3.5 group focus-visible:outline-none">
+                <div className="h-12 w-12 rounded-2xl bg-white p-2.5 border border-[#E8E4DA] shadow-xs flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-[#C2553A]/40 transition-all duration-200">
                   <Image
                     src="/logo-ruangkampus.png"
                     alt="Logo RuangKampus"
-                    width={40}
-                    height={40}
+                    width={44}
+                    height={44}
                     className="h-full w-full object-contain"
                     priority
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-xl sm:text-2xl text-[#1C1917] tracking-tight leading-none">
-                    Ruang<span className="text-[#C2553A]">Kampus</span>
-                  </span>
-                  <span className="text-[11px] font-semibold text-[#7A756D] tracking-wide mt-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-2xl sm:text-3xl text-[#1C1917] tracking-tight leading-none">
+                      Ruang<span className="text-[#C2553A]">Kampus</span>
+                    </span>
+                    <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-[#C2553A]/10 text-[#C2553A] border border-[#C2553A]/20">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#C2553A] animate-pulse" />
+                      v2.5
+                    </span>
+                  </div>
+                  <span className="text-xs font-medium text-[#7A756D] tracking-normal mt-1">
                     Teknik Informatika • Universitas Islam Riau
                   </span>
                 </div>
               </Link>
 
-              <span className="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-[11px] font-mono font-bold bg-[#FFFFFF] border border-[#D6D3CB] text-[#C2553A]">
-                TA 2026/2027 GANJIL
-              </span>
+              <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold bg-white border border-[#E8E4DA] text-[#57534E] shadow-2xs">
+                <Calendar className="h-3.5 w-3.5 text-[#C2553A]" />
+                <span>GANJIL 2026/2027</span>
+              </div>
             </div>
 
-            {/* 2. Interactive Mockup Showcase with < and > Navigation */}
-            <div className="relative my-auto py-3">
-              {/* Previous Button */}
-              <button
-                type="button"
-                onClick={prevSlide}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 sm:-translate-x-3 z-20 h-10 w-10 rounded-full bg-white border border-[#D6D3CB] text-[#1C1917] hover:text-[#C2553A] hover:border-[#C2553A] shadow-md flex items-center justify-center transition-all cursor-pointer"
-                title="Slide sebelumnya"
-                aria-label="Slide sebelumnya"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
+            {/* 2. Headline & Subtitle Inspiratif */}
+            <div className="space-y-2 pt-2">
+              <h1 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-2xl sm:text-4xl text-[#1C1917] tracking-tight leading-snug">
+                Kelas, tugas, dan ujian di satu tempat.
+              </h1>
+              <p className="text-sm sm:text-base text-[#6E6A61] leading-relaxed max-w-xl">
+                Masuk untuk melihat jadwal hari ini, tenggat yang paling dekat, dan materi dari dosenmu.
+              </p>
+            </div>
 
-              {/* Next Button */}
-              <button
-                type="button"
-                onClick={nextSlide}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 sm:translate-x-3 z-20 h-10 w-10 rounded-full bg-white border border-[#D6D3CB] text-[#1C1917] hover:text-[#C2553A] hover:border-[#C2553A] shadow-md flex items-center justify-center transition-all cursor-pointer"
-                title="Slide berikutnya"
-                aria-label="Slide berikutnya"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-
-              {/* Mockup Card Container */}
-              <div className="w-full max-w-[560px] mx-auto rounded-2xl bg-white border border-[#D6D3CB] shadow-md overflow-hidden transition-all duration-300">
-                {/* Slide 1: Mockup Layar Materi (Persis layout di screenshot CERDAS) */}
-                <div className={activeSlide === 0 ? 'flex flex-col' : 'hidden'}>
-                  {/* Topbar Mockup */}
-                  <div className="bg-[#C2553A] text-white px-3.5 py-2.5 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-2">
-                      <div className="h-4 w-4 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-bold">RK</div>
-                      <span className="font-bold tracking-tight">RuangKampus</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="bg-white/20 text-[10px] px-2 py-0.5 rounded-full font-mono font-semibold">
-                        MAHASISWA (243510001)
-                      </span>
-                      <div className="h-4 w-4 rounded-full bg-white/30 flex items-center justify-center text-[10px]">⏻</div>
-                    </div>
-                  </div>
-
-                  {/* Content Mockup: Sidebar + Content */}
-                  <div className="flex min-h-[220px]">
-                    {/* Sidebar Mini */}
-                    <div className="w-28 sm:w-32 bg-[#FAF8F5] border-r border-[#E8E5DE] p-2 space-y-1 text-[10px] text-[#7A756D]">
-                      <div className="px-2 py-1 hover:bg-[#ECE7DF] rounded cursor-default">Dashboard</div>
-                      <div className="px-2 py-1 hover:bg-[#ECE7DF] rounded cursor-default">Mata Kuliah</div>
-                      <div className="px-2 py-1 bg-white text-[#C2553A] font-bold rounded shadow-2xs border border-[#E8E5DE] flex items-center gap-1">
-                        <BookOpen className="h-3 w-3" />
-                        <span>Materi</span>
-                      </div>
-                      <div className="px-2 py-1 hover:bg-[#ECE7DF] rounded cursor-default">Tugas</div>
-                      <div className="px-2 py-1 hover:bg-[#ECE7DF] rounded cursor-default">Kuis CBT</div>
-                      <div className="px-2 py-1 hover:bg-[#ECE7DF] rounded cursor-default">Histori Studi</div>
-                    </div>
-
-                    {/* Main Table Mini */}
-                    <div className="flex-1 p-3 flex flex-col justify-between text-[11px]">
-                      <div>
-                        <div className="flex items-center justify-between pb-2 border-b border-[#E8E5DE] mb-2">
-                          <span className="font-bold text-[#1C1917] text-xs">MATERI KELAS</span>
-                          <span className="text-[10px] font-semibold bg-[#FAF8F5] px-2 py-0.5 rounded border border-[#D6D3CB] text-[#57534E]">
-                            LITERASI DATA &amp; TEKNOLOGI ▼
-                          </span>
-                        </div>
-
-                        <div className="w-full overflow-hidden rounded border border-[#E8E5DE] text-[10px]">
-                          <div className="grid grid-cols-12 bg-[#FAF8F5] p-1 font-bold text-[#7A756D] border-b border-[#E8E5DE]">
-                            <span className="col-span-1 text-center">NO</span>
-                            <span className="col-span-2 text-center">AKSI</span>
-                            <span className="col-span-5">JUDUL</span>
-                            <span className="col-span-4">PERTEMUAN</span>
-                          </div>
-                          <div className="grid grid-cols-12 p-1.5 border-b border-[#E8E5DE] items-center hover:bg-[#FAF8F5]/50">
-                            <span className="col-span-1 text-center font-mono">1</span>
-                            <span className="col-span-2 text-center">
-                              <span className="bg-[#C2553A] text-white px-1.5 py-0.5 rounded text-[9px] font-bold">Detail</span>
-                            </span>
-                            <span className="col-span-5 font-semibold text-[#1C1917] truncate">Sistem Komputer</span>
-                            <span className="col-span-4 text-[#57534E] truncate">2 - Dr. Eng. Budi Santoso</span>
-                          </div>
-                          <div className="grid grid-cols-12 p-1.5 items-center hover:bg-[#FAF8F5]/50">
-                            <span className="col-span-1 text-center font-mono">2</span>
-                            <span className="col-span-2 text-center">
-                              <span className="bg-[#C2553A] text-white px-1.5 py-0.5 rounded text-[9px] font-bold">Detail</span>
-                            </span>
-                            <span className="col-span-5 font-semibold text-[#1C1917] truncate">RPS &amp; Kontrak Kuliah</span>
-                            <span className="col-span-4 text-[#57534E] truncate">1 - Ir. Rina Kurniawati</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-between pt-2 border-t border-[#E8E5DE] text-[10px] text-[#7A756D]">
-                        <span>Showing 1 to 2 of 2 entries</span>
-                        <span className="inline-flex items-center gap-1 text-[#25D366] font-semibold">
-                          <MessageCircle className="h-3 w-3" />
-                          <span>Hubungi Kami</span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+            {/* 3. Modern Interactive Showcase Card */}
+            <div className="relative rounded-3xl bg-white border border-[#E8E4DA] p-4 sm:p-6 shadow-sm overflow-hidden">
+              
+              {/* Tab Selector & Navigation */}
+              <div className="flex items-center justify-between pb-4 border-b border-[#EFECE6] gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setActiveSlide(0)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      activeSlide === 0
+                        ? 'bg-[#C2553A] text-white shadow-2xs'
+                        : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F3EFE7]'
+                    }`}
+                  >
+                    <Compass className="h-3.5 w-3.5" />
+                    <span>Peta Belajar</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveSlide(1)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      activeSlide === 1
+                        ? 'bg-[#C2553A] text-white shadow-2xs'
+                        : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F3EFE7]'
+                    }`}
+                  >
+                    <BookOpen className="h-3.5 w-3.5" />
+                    <span>Materi Kuliah</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveSlide(2)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
+                      activeSlide === 2
+                        ? 'bg-[#C2553A] text-white shadow-2xs'
+                        : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F3EFE7]'
+                    }`}
+                  >
+                    <Layers className="h-3.5 w-3.5" />
+                    <span>Evaluasi CBT</span>
+                  </button>
                 </div>
 
-                {/* Slide 2: Peta Kurikulum Tiga Pulau (Memenuhi test: Selesai, Sedang dipelajari, Terkunci, stroke-dasharray) */}
-                <div className={activeSlide === 1 ? 'p-4 sm:p-5 flex flex-col items-center justify-center bg-white min-h-[260px]' : 'hidden'}>
-                  <div className="w-full flex items-center justify-between pb-2 border-b border-[#E8E5DE] mb-2">
+                {/* Slider Arrows */}
+                <div className="flex items-center gap-1">
+                  <button
+                    type="button"
+                    onClick={prevSlide}
+                    className="h-8 w-8 rounded-lg bg-[#FAF8F5] hover:bg-[#F0ECE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-colors cursor-pointer"
+                    aria-label="Slide sebelumnya"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={nextSlide}
+                    className="h-8 w-8 rounded-lg bg-[#FAF8F5] hover:bg-[#F0ECE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-colors cursor-pointer"
+                    aria-label="Slide berikutnya"
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Slide 1: Peta Kurikulum 3 Pulau Berprogres (Satisfies test: Selesai, Sedang dipelajari, Terkunci, stroke-dasharray) */}
+              <div className={activeSlide === 0 ? 'py-4 flex flex-col items-center justify-center min-h-[220px]' : 'hidden'}>
+                <div className="w-full flex items-center justify-between pb-3">
+                  <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-[#1C1917]">PETA CAPAIAN KURIKULUM</span>
-                    <span className="text-[10px] font-mono text-[#C2553A] font-bold">SEMESTER 1 - 8</span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#FAF8F5] text-[#C2553A] font-bold border border-[#E8E4DA]">
+                      112 / 144 SKS
+                    </span>
                   </div>
-                  <div className="w-full flex items-center justify-center py-2">
-                    <IslandIllustration />
+                  <span className="text-[11px] text-[#7A756D] font-medium">Semester 1 s/d 8</span>
+                </div>
+                <div className="w-full flex items-center justify-center py-2">
+                  <IslandIllustration />
+                </div>
+                <p className="text-xs text-[#7A756D] text-center max-w-md mt-2 leading-relaxed">
+                  Pantau capaian pembelajaran bertahap dari semester awal hingga tugas akhir secara visual dan terarah.
+                </p>
+              </div>
+
+              {/* Slide 2: Modern Materi Perkuliahan Cards */}
+              <div className={activeSlide === 1 ? 'py-4 flex flex-col justify-between min-h-[220px] text-xs' : 'hidden'}>
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between pb-2 border-b border-[#EFECE6]">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="h-4 w-4 text-[#C2553A]" />
+                      <span className="font-bold text-[#1C1917]">Materi Perkuliahan Terkini</span>
+                    </div>
+                    <span className="text-[10px] font-semibold text-[#853827] bg-[#FAF8F5] px-2.5 py-1 rounded-md border border-[#E8E4DA]">
+                      Algoritma &amp; Pemrograman
+                    </span>
                   </div>
-                  <p className="text-[11px] text-[#57534E] text-center max-w-sm mt-1">
-                    Visualisasi progres pemenuhan SKS dan capaian pembelajaran mata kuliah secara terpadu.
-                  </p>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DA] hover:border-[#C2553A]/40 transition-colors">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-mono font-bold text-[#C2553A] bg-white px-2 py-0.5 rounded-md border border-[#E8E4DA]">
+                          Pertemuan 02
+                        </span>
+                        <span className="text-[10px] text-[#7A756D]">PDF • 3.2 MB</span>
+                      </div>
+                      <p className="font-bold text-[#1C1917] text-xs truncate">Struktur Kontrol &amp; Looping</p>
+                      <p className="text-[11px] text-[#7A756D] mt-0.5 truncate">Dr. Eng. Budi Santoso</p>
+                    </div>
+
+                    <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DA] hover:border-[#C2553A]/40 transition-colors">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-mono font-bold text-[#15803D] bg-white px-2 py-0.5 rounded-md border border-[#E8E4DA]">
+                          Pertemuan 01
+                        </span>
+                        <span className="text-[10px] text-[#7A756D]">Slides • 1.8 MB</span>
+                      </div>
+                      <p className="font-bold text-[#1C1917] text-xs truncate">Kontrak Kuliah &amp; Silabus</p>
+                      <p className="text-[11px] text-[#7A756D] mt-0.5 truncate">Ir. Rina Kurniawati</p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Slide 3: Ujian & Evaluasi CBT Terverifikasi */}
-                <div className={activeSlide === 2 ? 'p-4 sm:p-5 flex flex-col justify-between bg-white min-h-[260px] text-xs' : 'hidden'}>
-                  <div>
-                    <div className="flex items-center justify-between pb-2 border-b border-[#E8E5DE] mb-3">
-                      <span className="font-bold text-[#1C1917]">SISTEM EVALUASI &amp; UJIAN CBT</span>
-                      <span className="bg-[#22C55E]/10 text-[#15803D] px-2 py-0.5 rounded-full text-[10px] font-bold">AKTIF</span>
+                <div className="pt-3 border-t border-[#EFECE6] flex items-center justify-between text-[11px] text-[#7A756D]">
+                  <span>Akses modul perkuliahan 24/7 di ruang belajar Anda.</span>
+                  <span className="text-[#C2553A] font-semibold">Tersinkronisasi</span>
+                </div>
+              </div>
+
+              {/* Slide 3: Modern Evaluasi & Ujian CBT Cards */}
+              <div className={activeSlide === 2 ? 'py-4 flex flex-col justify-between min-h-[220px] text-xs' : 'hidden'}>
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between pb-2 border-b border-[#EFECE6]">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-[#15803D]" />
+                      <span className="font-bold text-[#1C1917]">Sistem Evaluasi Terpadu</span>
                     </div>
-                    <div className="space-y-2">
-                      <div className="p-2.5 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-[#C2553A]" />
-                          <span className="font-semibold text-[#1C1917]">UTS Algoritma &amp; Pemrograman</span>
-                        </div>
-                        <span className="text-[10px] font-mono font-bold text-[#C2553A]">Token: UIR-9281</span>
+                    <span className="text-[10px] font-mono font-bold text-[#15803D] bg-[#22C55E]/10 px-2 py-0.5 rounded-full">
+                      TERVERIFIKASI
+                    </span>
+                  </div>
+
+                  <div className="p-3.5 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DA] flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="h-9 w-9 rounded-xl bg-white border border-[#E8E4DA] flex items-center justify-center text-[#C2553A] font-bold text-xs">
+                        UTS
                       </div>
-                      <div className="p-2.5 rounded-xl border border-[#D6D3CB] bg-[#FAF8F5] flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-[#C2553A]" />
-                          <span className="font-semibold text-[#1C1917]">Presensi Sesi Praktikum Lab</span>
-                        </div>
-                        <span className="text-[10px] font-mono font-bold text-[#15803D]">Terverifikasi</span>
+                      <div>
+                        <p className="font-bold text-[#1C1917] text-xs">Ujian Tengah Semester Ganjil</p>
+                        <p className="text-[11px] text-[#7A756D]">Ruang Lab Komputer 3 • Token Terbuka</p>
                       </div>
                     </div>
+                    <span className="px-2.5 py-1 rounded-lg bg-white border border-[#E8E4DA] text-[11px] font-mono font-bold text-[#C2553A]">
+                      UIR-9281
+                    </span>
                   </div>
-                  <div className="pt-2 border-t border-[#E8E5DE] text-[10px] text-[#7A756D] flex justify-between">
-                    <span>Integritas Akademik &amp; Audit Trail</span>
-                    <span className="font-semibold text-[#C2553A]">Status: Normal</span>
-                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-[#EFECE6] flex items-center justify-between text-[11px] text-[#7A756D]">
+                  <span>Integritas akademik terjamin dengan audit trail otomatis.</span>
+                  <span className="text-[#15803D] font-semibold">Sistem Siap</span>
                 </div>
               </div>
             </div>
 
-            {/* 3. Deskripsi Fitur di Bawah Mockup (Persis di screenshot CERDAS) */}
-            <div className="pt-4 border-t border-[#E8E5DE] space-y-3">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 text-[#C2553A]">
-                  <BookOpen className="h-5 w-5 shrink-0" />
-                  <h2 className="font-heading font-bold text-base sm:text-lg text-[#1C1917]">
-                    Materi Perkuliahan
-                  </h2>
-                </div>
-                <p className="text-xs text-[#57534E] leading-relaxed">
-                  Pada menu Materi, Anda dapat mengakses materi perkuliahan yang telah diunggah oleh dosen pengampu
-                  serta melihat deskripsi materi pada setiap judul perkuliahan.
-                </p>
-                <p className="text-xs text-[#57534E] leading-relaxed">
-                  Kelas, tugas, dan ujian di satu tempat. Masuk untuk melihat jadwal hari ini, tenggat yang paling dekat, dan materi dari dosenmu.
-                </p>
-              </div>
-
-              {/* 4 Tombol Pill Aksi: Kebijakan, Panduan Dosen, Panduan Mahasiswa, Video Tutorial */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setActiveModal('kebijakan')}
-                  className="px-3 py-2 rounded-xl bg-[#C2553A] hover:bg-[#853827] text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
-                >
-                  <FileText className="h-3.5 w-3.5 shrink-0" />
-                  <span>Kebijakan</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveModal('panduan-dosen')}
-                  className="px-3 py-2 rounded-xl bg-[#C2553A] hover:bg-[#853827] text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
-                >
-                  <GraduationCap className="h-3.5 w-3.5 shrink-0" />
-                  <span>Panduan Dosen</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveModal('panduan-mhs')}
-                  className="px-3 py-2 rounded-xl bg-[#C2553A] hover:bg-[#853827] text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
-                >
-                  <BookOpen className="h-3.5 w-3.5 shrink-0" />
-                  <span>Panduan Mahasiswa</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveModal('video')}
-                  className="px-3 py-2 rounded-xl bg-[#C2553A] hover:bg-[#853827] text-white text-xs font-semibold flex items-center justify-center gap-1.5 shadow-2xs transition-colors cursor-pointer"
-                >
-                  <Video className="h-3.5 w-3.5 shrink-0" />
-                  <span>Video Tutorial</span>
-                </button>
-              </div>
+            {/* 4. Action Pills Modern (Kebijakan, Panduan Dosen, Panduan Mhs, Video Tutorial) */}
+            <div className="flex flex-wrap items-center gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setActiveModal('kebijakan')}
+                className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+              >
+                <FileText className="h-3.5 w-3.5 text-[#C2553A]" />
+                <span>Kebijakan</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveModal('panduan-dosen')}
+                className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+              >
+                <GraduationCap className="h-3.5 w-3.5 text-[#C2553A]" />
+                <span>Panduan Dosen</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveModal('panduan-mhs')}
+                className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+              >
+                <BookOpen className="h-3.5 w-3.5 text-[#C2553A]" />
+                <span>Panduan Mahasiswa</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveModal('video')}
+                className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#F7F4EE] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#4A473F] hover:text-[#C2553A] text-xs font-semibold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+              >
+                <Video className="h-3.5 w-3.5 text-[#C2553A]" />
+                <span>Video Tutorial</span>
+              </button>
             </div>
           </section>
 
           {/* ======================================================== */}
-          {/* SISI KANAN: FORMULIR MASUK DENGAN GAYA KARTU ELEGAN      */}
+          {/* SISI KANAN: FRESH & SLEEK MODERN LOGIN CARD              */}
           {/* ======================================================== */}
-          <main className="lg:col-span-5 xl:col-span-5 flex flex-col justify-between space-y-4">
-            <div>
-              {/* Header Sisi Kanan (Persis format "Selamat Datang di CERDAS") */}
-              <div className="text-center space-y-1 pb-2">
-                <h1 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-2xl sm:text-3xl text-[#1C1917] tracking-tight">
-                  Selamat Datang di RuangKampus
-                </h1>
-                <p className="text-xs text-[#7A756D] font-medium">
-                  Sistem Pembelajaran &amp; Evaluasi Akademik Mahasiswa
-                </p>
-                <p className="text-[11px] font-mono font-semibold text-[#853827]">
-                  Teknik Informatika • Universitas Islam Riau
-                </p>
-              </div>
-
-              {/* Banner Pill: "Lihat Judul Pertemuan Per Mata Kuliah" */}
+          <main className="lg:col-span-5 xl:col-span-5 flex flex-col justify-center">
+            
+            {/* Quick Action: Lihat Judul Pertemuan Per Mata Kuliah (Modern Banner Pill) */}
+            <div className="mb-3">
               <button
                 type="button"
                 onClick={() => setActiveModal('syllabus')}
-                className="w-full py-2.5 px-4 rounded-xl bg-[#C2553A] hover:bg-[#853827] text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 shadow-2xs transition-all cursor-pointer mt-2 mb-4"
+                className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#FAF8F5] border border-[#E8E4DA] hover:border-[#C2553A]/40 text-[#57534E] hover:text-[#C2553A] text-xs sm:text-sm font-semibold flex items-center justify-between shadow-2xs transition-all cursor-pointer group"
               >
-                <Info className="h-4 w-4 shrink-0" />
-                <span>Lihat Judul Pertemuan Per Mata Kuliah</span>
+                <div className="flex items-center gap-2">
+                  <div className="h-6 w-6 rounded-lg bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0">
+                    <BookOpen className="h-3.5 w-3.5" />
+                  </div>
+                  <span className="font-semibold text-[#1C1917] group-hover:text-[#C2553A] transition-colors">
+                    Lihat Judul Pertemuan Per Mata Kuliah
+                  </span>
+                </div>
+                <ArrowRight className="h-4 w-4 text-[#8A8577] group-hover:translate-x-0.5 group-hover:text-[#C2553A] transition-all" />
               </button>
-
-              {/* Formulir Masuk Card Putih */}
-              <div className="rounded-2xl bg-white border border-[#E8E5DE] p-5 sm:p-7 shadow-sm">
-                <p className="text-xs text-[#7A756D] mb-4">
-                  Gunakan NIM, NIDN, NIP, atau email kampus.
-                </p>
-
-                <form onSubmit={handleSubmit} noValidate className="space-y-4">
-                  {/* Field 1: Username / NIM */}
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="identifier"
-                      className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#1C1917]"
-                    >
-                      <User className="h-4 w-4 text-[#C2553A]" />
-                      <span>Username</span>
-                    </label>
-                    <div className="relative flex items-center">
-                      <User className="absolute left-3.5 h-4 w-4 text-[#8A8577]" />
-                      <input
-                        id="identifier"
-                        name="identifier"
-                        type="text"
-                        autoComplete="username"
-                        placeholder="Contoh: 243510001"
-                        value={identifier}
-                        onChange={(e) => setIdentifier(e.target.value)}
-                        disabled={isPending}
-                        required
-                        className="w-full h-11 pl-10 pr-3.5 rounded-xl border border-[#D6D3CB] bg-white text-sm text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-2 focus:ring-[#C2553A] focus:border-[#C2553A] transition-all disabled:opacity-60"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Field 2: Password */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between">
-                      <label
-                        htmlFor="password"
-                        className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#1C1917]"
-                      >
-                        <Lock className="h-4 w-4 text-[#C2553A]" />
-                        <span>Password</span>
-                      </label>
-                      <Link
-                        href="/reset-password"
-                        className="text-xs font-medium text-[#8F3A24] hover:underline focus-visible:outline-none min-h-[44px] inline-flex items-center"
-                      >
-                        Lupa kata sandi?
-                      </Link>
-                    </div>
-
-                    <div className="relative flex items-center">
-                      <Lock className="absolute left-3.5 h-4 w-4 text-[#8A8577]" />
-                      <input
-                        id="password"
-                        name="password"
-                        type={showPassword ? 'text' : 'password'}
-                        autoComplete="current-password"
-                        placeholder="Masukkan kata sandi"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        onKeyDown={handlePasswordKeyEvent}
-                        onKeyUp={handlePasswordKeyEvent}
-                        disabled={isPending}
-                        required
-                        className="w-full h-11 pl-10 pr-12 rounded-xl border border-[#D6D3CB] bg-white text-sm text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-2 focus:ring-[#C2553A] focus:border-[#C2553A] transition-all disabled:opacity-60"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
-                        title={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
-                        className="absolute right-1 w-10 h-10 flex items-center justify-center text-[#8A8577] hover:text-[#1C1917] rounded-lg cursor-pointer transition-colors"
-                      >
-                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    </div>
-
-                    {isCapsLockOn && (
-                      <p role="status" aria-live="polite" className="text-xs text-[#8F3A24] font-medium pt-1">
-                        Caps Lock sedang aktif.
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Field 3: Verifikasi Keamanan Angka (Persis di screenshot: "Berapa hasil dari 6 + 8 ?") */}
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="captcha"
-                      className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#1C1917]"
-                    >
-                      <Calculator className="h-4 w-4 text-[#C2553A]" />
-                      <span>Berapa hasil dari {captchaNum1} + {captchaNum2} ?</span>
-                    </label>
-                    <input
-                      id="captcha"
-                      name="captcha"
-                      type="text"
-                      inputMode="numeric"
-                      placeholder="Masukkan jawaban perhitungan"
-                      value={captchaInput}
-                      onChange={(e) => setCaptchaInput(e.target.value)}
-                      className="w-full h-11 px-3.5 rounded-xl border border-[#D6D3CB] bg-white text-sm text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-2 focus:ring-[#C2553A] focus:border-[#C2553A] transition-all"
-                    />
-                  </div>
-
-                  {/* Tombol Utama: LOGIN */}
-                  <button
-                    type="submit"
-                    disabled={isPending}
-                    className="w-full h-11 rounded-xl bg-[#C2553A] hover:bg-[#853827] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer disabled:opacity-60"
-                  >
-                    <LogIn className="h-4 w-4" />
-                    <span>{isPending ? 'Memeriksa…' : 'LOGIN'}</span>
-                  </button>
-                </form>
-
-                {/* Kotak Galat */}
-                {errorMessage && (
-                  <div
-                    key={errorKey}
-                    id="login-error-alert"
-                    role="alert"
-                    aria-live="assertive"
-                    className="mt-4 p-3.5 rounded-xl border border-[#8F3A24]/30 bg-[#FEF2F2] text-[#8F3A24] text-xs sm:text-sm flex items-start gap-2.5 shadow-2xs"
-                  >
-                    <AlertCircle className="h-4 w-4 text-[#8F3A24] shrink-0 mt-0.5" />
-                    <span className="font-medium leading-snug">{errorMessage}</span>
-                  </div>
-                )}
-
-                {/* Mode Pengembang */}
-                <LoginDevMode onSelectIdentifier={(id) => setIdentifier(id)} />
-              </div>
             </div>
 
-            {/* 4. Dua Kartu Bawah: "Hubungi Kami (WA)" & "Lihat Staff Kami" (Persis di screenshot) */}
-            <div className="grid grid-cols-2 gap-3 pt-1">
+            {/* Main Floating Glass / Elevated Card */}
+            <div className="rounded-3xl bg-white border border-[#E8E4DA] p-6 sm:p-8 shadow-sm">
+              
+              {/* Header Card */}
+              <div className="space-y-1.5 mb-6">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FAF8F5] border border-[#E8E4DA] text-[11px] font-semibold text-[#853827]">
+                  <Sparkles className="h-3 w-3 text-[#C2553A]" />
+                  <span>Portal Akademik Mahasiswa &amp; Dosen</span>
+                </div>
+                <h2 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-2xl sm:text-3xl text-[#1C1917] tracking-tight">
+                  Masuk ke RuangKampus
+                </h2>
+                <p className="text-xs sm:text-sm text-[#7A756D] leading-relaxed">
+                  Gunakan NIM, NIDN, NIP, atau email kampus.
+                </p>
+              </div>
+
+              {/* Form Input */}
+              <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                
+                {/* Field 1: Identifier (NIM / NIDN / NIP) */}
+                <div className="space-y-1.5">
+                  <label
+                    htmlFor="identifier"
+                    className="block text-xs font-semibold text-[#1C1917]"
+                  >
+                    NIM, NIDN, NIP, atau Email
+                  </label>
+                  <div className="relative flex items-center">
+                    <User className="absolute left-3.5 h-4 w-4 text-[#8A8577] pointer-events-none" />
+                    <input
+                      id="identifier"
+                      name="identifier"
+                      type="text"
+                      autoComplete="username"
+                      placeholder="Contoh: 243510001"
+                      value={identifier}
+                      onChange={(e) => setIdentifier(e.target.value)}
+                      disabled={isPending}
+                      required
+                      className="w-full h-11 sm:h-12 pl-10 pr-4 rounded-xl border border-[#DFDACF] bg-[#FAF8F5]/60 hover:bg-white focus:bg-white text-sm font-medium text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-4 focus:ring-[#C2553A]/15 focus:border-[#C2553A] transition-all disabled:opacity-60"
+                    />
+                  </div>
+                </div>
+
+                {/* Field 2: Password */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label
+                      htmlFor="password"
+                      className="block text-xs font-semibold text-[#1C1917]"
+                    >
+                      Kata Sandi
+                    </label>
+                    <Link
+                      href="/reset-password"
+                      className="text-xs font-semibold text-[#C2553A] hover:text-[#853827] hover:underline focus-visible:outline-none transition-colors"
+                    >
+                      Lupa kata sandi?
+                    </Link>
+                  </div>
+
+                  <div className="relative flex items-center">
+                    <Lock className="absolute left-3.5 h-4 w-4 text-[#8A8577] pointer-events-none" />
+                    <input
+                      id="password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete="current-password"
+                      placeholder="Masukkan kata sandi"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      onKeyDown={handlePasswordKeyEvent}
+                      onKeyUp={handlePasswordKeyEvent}
+                      disabled={isPending}
+                      required
+                      className="w-full h-11 sm:h-12 pl-10 pr-11 rounded-xl border border-[#DFDACF] bg-[#FAF8F5]/60 hover:bg-white focus:bg-white text-sm font-medium text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-4 focus:ring-[#C2553A]/15 focus:border-[#C2553A] transition-all disabled:opacity-60"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
+                      title={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
+                      className="absolute right-1 w-10 h-10 flex items-center justify-center text-[#8A8577] hover:text-[#1C1917] rounded-lg cursor-pointer transition-colors"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </div>
+
+                  {isCapsLockOn && (
+                    <p role="status" aria-live="polite" className="text-xs text-[#8F3A24] font-medium pt-1">
+                      Caps Lock sedang aktif.
+                    </p>
+                  )}
+                </div>
+
+                {/* Field 3: Modern Security Verification Widget */}
+                <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DA] flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="h-7 w-7 rounded-lg bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0">
+                      <ShieldCheck className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor="captcha"
+                        className="block text-xs font-semibold text-[#1C1917] leading-tight"
+                      >
+                        Berapa hasil dari {captchaNum1} + {captchaNum2} ?
+                      </label>
+                      <span className="text-[10px] text-[#7A756D]">Verifikasi pengaman kampus</span>
+                    </div>
+                  </div>
+                  <input
+                    id="captcha"
+                    name="captcha"
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="Hasil"
+                    value={captchaInput}
+                    onChange={(e) => setCaptchaInput(e.target.value)}
+                    className="w-16 h-8 text-center rounded-lg border border-[#D6D0C4] bg-white text-xs font-bold text-[#1C1917] focus:ring-2 focus:ring-[#C2553A] focus:outline-none"
+                  />
+                </div>
+
+                {/* Primary Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isPending}
+                  className="w-full h-11 sm:h-12 rounded-xl bg-gradient-to-r from-[#C2553A] to-[#B3452C] hover:from-[#B3452C] hover:to-[#963721] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all shadow-sm hover:shadow-md active:scale-[0.99] cursor-pointer disabled:opacity-60"
+                >
+                  <LogIn className="h-4 w-4" />
+                  <span>{isPending ? 'Memeriksa kredensial…' : 'Masuk ke Portal'}</span>
+                </button>
+              </form>
+
+              {/* Error Message Alert */}
+              {errorMessage && (
+                <div
+                  key={errorKey}
+                  id="login-error-alert"
+                  role="alert"
+                  aria-live="assertive"
+                  className="mt-4 p-3.5 rounded-2xl border border-[#8F3A24]/30 bg-[#FEF2F2] text-[#8F3A24] text-xs sm:text-sm flex items-start gap-2.5 shadow-2xs"
+                >
+                  <AlertCircle className="h-4 w-4 text-[#8F3A24] shrink-0 mt-0.5" />
+                  <span className="font-medium leading-snug">{errorMessage}</span>
+                </div>
+              )}
+
+              {/* Developer Test Accounts Trigger */}
+              <LoginDevMode onSelectIdentifier={(id) => setIdentifier(id)} />
+            </div>
+
+            {/* Quick Support Twin Chips (WA Helpdesk & Staff Directory) */}
+            <div className="grid grid-cols-2 gap-3 pt-3">
               <a
                 href="https://wa.me/6281234567890?text=Halo%20Admin%20RuangKampus%2C%20saya%20butuh%20bantuan%20login"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-2xl border border-[#D6D3CB] bg-white hover:bg-[#FAF8F5] transition-all shadow-2xs group cursor-pointer"
+                className="flex items-center gap-2.5 p-3 rounded-2xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] transition-all shadow-2xs group cursor-pointer"
               >
-                <div className="h-9 w-9 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <MessageCircle className="h-5 w-5" />
+                <div className="h-8 w-8 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <MessageCircle className="h-4 w-4" />
                 </div>
-                <div className="min-w-0 text-left">
+                <div className="min-w-0">
                   <span className="block text-xs font-bold text-[#1C1917] truncate leading-tight">
                     Hubungi Kami
                   </span>
-                  <span className="block text-[11px] text-[#7A756D] font-medium leading-tight mt-0.5">
-                    (WA)
+                  <span className="block text-[10px] text-[#25D366] font-semibold leading-tight mt-0.5">
+                    WhatsApp Aktif
                   </span>
                 </div>
               </a>
@@ -573,17 +614,17 @@ function LoginFormContent() {
               <button
                 type="button"
                 onClick={() => setActiveModal('staff')}
-                className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-3.5 rounded-2xl border border-[#D6D3CB] bg-white hover:bg-[#FAF8F5] transition-all shadow-2xs group cursor-pointer"
+                className="flex items-center gap-2.5 p-3 rounded-2xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] transition-all shadow-2xs group cursor-pointer"
               >
-                <div className="h-9 w-9 rounded-xl bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                  <Users className="h-5 w-5" />
+                <div className="h-8 w-8 rounded-xl bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                  <Users className="h-4 w-4" />
                 </div>
                 <div className="min-w-0 text-left">
                   <span className="block text-xs font-bold text-[#1C1917] truncate leading-tight">
-                    Lihat Staff
+                    Direktori Staff
                   </span>
-                  <span className="block text-[11px] text-[#7A756D] font-medium leading-tight mt-0.5">
-                    Kami
+                  <span className="block text-[10px] text-[#7A756D] font-medium leading-tight mt-0.5">
+                    Dosen &amp; Tendik
                   </span>
                 </div>
               </button>
@@ -593,57 +634,64 @@ function LoginFormContent() {
       </div>
 
       {/* ======================================================== */}
-      {/* MODAL DIALOGS UNTUK TOMBOL-TOMBOL INTERAKTIF             */}
+      {/* MODAL DIALOGS                                            */}
       {/* ======================================================== */}
 
       {/* Modal 1: Judul Pertemuan Per Mata Kuliah */}
       {activeModal === 'syllabus' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-2xl bg-white rounded-3xl border border-[#D6D3CB] shadow-2xl p-6 max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E8E5DE]">
-              <div className="flex items-center gap-2.5">
-                <div className="h-9 w-9 rounded-xl bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center">
-                  <Info className="h-5 w-5" />
-                </div>
-                <div>
-                  <h3 className="font-heading font-bold text-lg text-[#1C1917]">
-                    Katalog Pertemuan Per Mata Kuliah
-                  </h3>
-                  <p className="text-xs text-[#7A756D]">
-                    Rencana Pembelajaran Semester (RPS) Program Studi Teknik Informatika
-                  </p>
-                </div>
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5"
+        >
+          <div className="bg-white rounded-3xl border border-[#E8E4DA] max-w-2xl w-full max-h-[85vh] flex flex-col shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div className="p-4 sm:p-6 border-b border-[#EFECE6] flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-base sm:text-lg text-[#1C1917]">
+                  Katalog Pertemuan Per Mata Kuliah
+                </h3>
+                <p className="text-xs text-[#7A756D] mt-0.5">
+                  Daftar silabus mata kuliah dan rancangan pertemuan semester berjalan.
+                </p>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="h-8 w-8 rounded-lg hover:bg-[#FAF8F5] flex items-center justify-center text-[#7A756D] hover:text-[#1C1917]"
+                className="h-9 w-9 rounded-xl bg-[#FAF8F5] hover:bg-[#EFECE6] text-[#7A756D] hover:text-[#1C1917] flex items-center justify-center transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto py-4 space-y-2.5 pr-1">
-              {SYLLABUS_MEETINGS.map((m) => (
-                <div key={m.no} className="p-3 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5] flex items-start gap-3">
-                  <span className="h-6 w-6 rounded-md bg-[#C2553A] text-white font-mono font-bold text-xs flex items-center justify-center shrink-0">
-                    {m.no}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-xs font-bold text-[#1C1917]">{m.title}</p>
-                    <p className="text-[11px] text-[#7A756D] mt-0.5">{m.course}</p>
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-2 text-xs">
+              {SYLLABUS_MEETINGS.map((item) => (
+                <div
+                  key={item.no}
+                  className="p-3 rounded-2xl border border-[#E8E4DA] bg-[#FAF8F5] flex items-center justify-between gap-3 hover:bg-[#F3EFE7] transition-colors"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="h-7 w-7 rounded-lg bg-white border border-[#E8E4DA] font-mono font-bold text-[#C2553A] flex items-center justify-center shrink-0">
+                      {item.no}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="font-bold text-[#1C1917] truncate">{item.title}</p>
+                      <p className="text-[11px] text-[#7A756D]">{item.course}</p>
+                    </div>
                   </div>
+                  <span className="shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#C2553A]/10 text-[#C2553A]">
+                    16 Sesi
+                  </span>
                 </div>
               ))}
             </div>
 
-            <div className="pt-3 border-t border-[#E8E5DE] flex justify-end">
+            <div className="p-4 border-t border-[#EFECE6] bg-[#FAF8F5] flex justify-end">
               <button
                 type="button"
                 onClick={() => setActiveModal(null)}
-                className="px-4 py-2 rounded-xl bg-[#1C1917] text-white text-xs font-semibold hover:bg-[#C2553A] transition-colors"
+                className="px-5 py-2 rounded-xl bg-[#C2553A] text-white text-xs font-bold hover:bg-[#853827] transition-colors cursor-pointer"
               >
-                Tutup Katalog
+                Tutup
               </button>
             </div>
           </div>
@@ -652,131 +700,230 @@ function LoginFormContent() {
 
       {/* Modal 2: Kebijakan Akademik */}
       {activeModal === 'kebijakan' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-lg bg-white rounded-3xl border border-[#D6D3CB] shadow-2xl p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E8E5DE]">
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5"
+        >
+          <div className="bg-white rounded-3xl border border-[#E8E4DA] max-w-lg w-full p-5 sm:p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3">
               <div className="flex items-center gap-2">
                 <FileText className="h-5 w-5 text-[#C2553A]" />
-                <h3 className="font-heading font-bold text-base text-[#1C1917]">Kebijakan Akademik &amp; Etika</h3>
+                <h3 className="font-bold text-base text-[#1C1917]">Kebijakan Akademik &amp; Privasi</h3>
               </div>
-              <button onClick={() => setActiveModal(null)} className="text-[#7A756D] hover:text-[#1C1917]">
-                <X className="h-5 w-5" />
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="h-8 w-8 rounded-lg bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] flex items-center justify-center"
+              >
+                <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="py-4 space-y-2.5 text-xs text-[#57534E] leading-relaxed">
+            <div className="space-y-3 text-xs text-[#57534E] leading-relaxed">
               <p>
-                <strong>1. Integritas Pengerjaan Tugas:</strong> Seluruh karya pemrograman, laporan modul, dan jawaban kuis wajib merupakan hasil mandiri mahasiswa.
+                <strong>1. Penggunaan Akun:</strong> Setiap akun RuangKampus bersifat personal. Pengguna bertanggung jawab penuh atas seluruh aktivitas yang terjadi melalui kredensial masing-masing.
               </p>
               <p>
-                <strong>2. Presensi Terverifikasi:</strong> Kehadiran praktikum dan perkuliahan minimal 75% dari total 16 pertemuan sebagai prasyarat kelayakan mengikuti ujian akhir.
+                <strong>2. Kejujuran Akademik:</strong> Seluruh kuis, tugas, dan ujian wajib dikerjakan dengan menjunjung tinggi integritas. Sistem mencatat jejak audit sesi secara otomatis.
               </p>
               <p>
-                <strong>3. Jam Tenang Komunikasi:</strong> Menghormati jam istirahat sivitas akademika pukul 21.00 – 06.00 WIB untuk pesan non-darurat.
+                <strong>3. Perlindungan Data:</strong> RuangKampus menerapkan enkripsi kredensial dan standar keamanan data akademik Universitas Islam Riau.
               </p>
             </div>
-            <div className="pt-3 border-t border-[#E8E5DE] flex justify-end">
+            <div className="pt-2 flex justify-end">
               <button
+                type="button"
                 onClick={() => setActiveModal(null)}
-                className="px-4 py-2 rounded-xl bg-[#C2553A] text-white text-xs font-semibold"
+                className="px-4 py-2 rounded-xl bg-[#C2553A] text-white text-xs font-bold hover:bg-[#853827]"
               >
-                Saya Memahami
+                Mengerti
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Modal 3: Panduan Dosen & Mahasiswa */}
-      {(activeModal === 'panduan-dosen' || activeModal === 'panduan-mhs') && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-lg bg-white rounded-3xl border border-[#D6D3CB] shadow-2xl p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E8E5DE]">
+      {/* Modal 3: Panduan Dosen */}
+      {activeModal === 'panduan-dosen' && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5"
+        >
+          <div className="bg-white rounded-3xl border border-[#E8E4DA] max-w-lg w-full p-5 sm:p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3">
               <div className="flex items-center gap-2">
-                {activeModal === 'panduan-dosen' ? (
-                  <GraduationCap className="h-5 w-5 text-[#C2553A]" />
-                ) : (
-                  <BookOpen className="h-5 w-5 text-[#C2553A]" />
-                )}
-                <h3 className="font-heading font-bold text-base text-[#1C1917]">
-                  {activeModal === 'panduan-dosen' ? 'Buku Panduan Dosen' : 'Buku Panduan Mahasiswa'}
-                </h3>
+                <GraduationCap className="h-5 w-5 text-[#C2553A]" />
+                <h3 className="font-bold text-base text-[#1C1917]">Panduan Penggunaan Dosen</h3>
               </div>
-              <button onClick={() => setActiveModal(null)} className="text-[#7A756D] hover:text-[#1C1917]">
-                <X className="h-5 w-5" />
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="h-8 w-8 rounded-lg bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] flex items-center justify-center"
+              >
+                <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="py-4 space-y-2.5 text-xs text-[#57534E] leading-relaxed">
-              <p>
-                Dokumen petunjuk teknis mencakup tata cara masuk akun, pengelolaan rombongan belajar, pengunggahan bahan kuliah (PDF, modul kode), serta penilaian berbasis CPMK OBE.
-              </p>
-              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E5DE] space-y-1">
-                <span className="font-bold text-[#1C1917] block">Pusat Unduhan Resmi:</span>
-                <span className="text-[11px] text-[#7A756D] block">Format PDF buku saku panduan sistem v2.4 (Terakhir diperbarui Oktober 2026).</span>
+            <div className="space-y-2.5 text-xs text-[#57534E] leading-relaxed">
+              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA]">
+                <p className="font-bold text-[#1C1917] mb-1">1. Pengunggahan Materi &amp; RPS</p>
+                <p>Materi dapat diunggah dalam format PDF, Slides, atau Video URL per pertemuan perkuliahan.</p>
+              </div>
+              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA]">
+                <p className="font-bold text-[#1C1917] mb-1">2. Presensi &amp; Berita Acara</p>
+                <p>Buka presensi kelas dengan token atau checklist manual dalam rentang waktu jadwal mengajar.</p>
+              </div>
+              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA]">
+                <p className="font-bold text-[#1C1917] mb-1">3. Penilaian &amp; Evaluasi Capaian</p>
+                <p>Input nilai tugas, kuis, UTS, dan UAS dengan pembobotan otomatis berbasis OBE (Outcome-Based Education).</p>
               </div>
             </div>
-            <div className="pt-3 border-t border-[#E8E5DE] flex justify-end">
+            <div className="pt-2 flex justify-end">
               <button
+                type="button"
                 onClick={() => setActiveModal(null)}
-                className="px-4 py-2 rounded-xl bg-[#1C1917] text-white text-xs font-semibold hover:bg-[#C2553A]"
+                className="px-4 py-2 rounded-xl bg-[#C2553A] text-white text-xs font-bold hover:bg-[#853827]"
               >
-                Tutup Panduan
+                Tutup
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Modal 4: Video Tutorial */}
+      {/* Modal 4: Panduan Mahasiswa */}
+      {activeModal === 'panduan-mhs' && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5"
+        >
+          <div className="bg-white rounded-3xl border border-[#E8E4DA] max-w-lg w-full p-5 sm:p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3">
+              <div className="flex items-center gap-2">
+                <BookOpen className="h-5 w-5 text-[#C2553A]" />
+                <h3 className="font-bold text-base text-[#1C1917]">Panduan Mahasiswa</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="h-8 w-8 rounded-lg bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] flex items-center justify-center"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="space-y-2.5 text-xs text-[#57534E] leading-relaxed">
+              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA]">
+                <p className="font-bold text-[#1C1917] mb-1">1. Mengakses Jadwal &amp; Kelas</p>
+                <p>Jadwal harian otomatis muncul pada beranda mahasiswa berdasarkan KRS semester aktif Anda.</p>
+              </div>
+              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA]">
+                <p className="font-bold text-[#1C1917] mb-1">2. Pengumpulan Tugas &amp; Kuis</p>
+                <p>Perhatikan tenggat waktu penyerahan berkas tugas agar tidak terkena potongan nilai otomatis.</p>
+              </div>
+              <div className="p-3 rounded-xl bg-[#FAF8F5] border border-[#E8E4DA]">
+                <p className="font-bold text-[#1C1917] mb-1">3. Ujian Online CBT</p>
+                <p>Pastikan koneksi internet stabil dan gunakan browser modern yang didukung saat ujian berlangsung.</p>
+              </div>
+            </div>
+            <div className="pt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="px-4 py-2 rounded-xl bg-[#C2553A] text-white text-xs font-bold hover:bg-[#853827]"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 5: Video Tutorial */}
       {activeModal === 'video' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-md bg-white rounded-3xl border border-[#D6D3CB] shadow-2xl p-6 text-center space-y-4">
-            <div className="h-12 w-12 rounded-2xl bg-[#C2553A]/10 text-[#C2553A] flex items-center justify-center mx-auto">
-              <Video className="h-6 w-6" />
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5"
+        >
+          <div className="bg-white rounded-3xl border border-[#E8E4DA] max-w-lg w-full p-5 sm:p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div className="flex items-center justify-between border-b border-[#EFECE6] pb-3">
+              <div className="flex items-center gap-2">
+                <Video className="h-5 w-5 text-[#C2553A]" />
+                <h3 className="font-bold text-base text-[#1C1917]">Video Tutorial Penggunaan</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="h-8 w-8 rounded-lg bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] flex items-center justify-center"
+              >
+                <X className="h-4 w-4" />
+              </button>
             </div>
-            <div>
-              <h3 className="font-heading font-bold text-base text-[#1C1917]">Video Tutorial RuangKampus</h3>
-              <p className="text-xs text-[#7A756D] mt-1">
-                Panduan singkat 3 menit cara mengakses kelas, presensi QR, dan pengumpulan tugas praktikum.
-              </p>
+            <div className="aspect-video w-full rounded-2xl bg-[#1C1917] flex items-center justify-center text-white flex-col gap-2">
+              <Video className="h-10 w-10 text-[#C2553A] animate-pulse" />
+              <p className="text-xs font-mono">Video Simulasi Pengenalan Portal RuangKampus</p>
             </div>
-            <button
-              onClick={() => setActiveModal(null)}
-              className="w-full py-2.5 rounded-xl bg-[#C2553A] hover:bg-[#853827] text-white text-xs font-semibold"
-            >
-              Kembali ke Halaman Masuk
-            </button>
+            <p className="text-xs text-[#7A756D]">
+              Video panduan resmi tata kelola KRS, presensi QR/token, dan pengumpulan tugas terpadu.
+            </p>
+            <div className="pt-2 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="px-4 py-2 rounded-xl bg-[#C2553A] text-white text-xs font-bold hover:bg-[#853827]"
+              >
+                Tutup
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Modal 5: Lihat Staff Kami */}
+      {/* Modal 6: Direktori Dosen & Tendik */}
       {activeModal === 'staff' && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-lg bg-white rounded-3xl border border-[#D6D3CB] shadow-2xl p-6">
-            <div className="flex items-center justify-between pb-3 border-b border-[#E8E5DE]">
-              <div className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-[#C2553A]" />
-                <h3 className="font-heading font-bold text-base text-[#1C1917]">Direktori Dosen &amp; Tendik</h3>
+        <div
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-5"
+        >
+          <div className="bg-white rounded-3xl border border-[#E8E4DA] max-w-xl w-full max-h-[80vh] flex flex-col shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+            <div className="p-4 sm:p-6 border-b border-[#EFECE6] flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-base text-[#1C1917]">Direktori Dosen &amp; Tendik</h3>
+                <p className="text-xs text-[#7A756D] mt-0.5">Program Studi Teknik Informatika UIR</p>
               </div>
-              <button onClick={() => setActiveModal(null)} className="text-[#7A756D] hover:text-[#1C1917]">
-                <X className="h-5 w-5" />
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="h-8 w-8 rounded-lg bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] flex items-center justify-center"
+              >
+                <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="py-4 space-y-2.5 max-h-[60vh] overflow-y-auto">
-              {STAFF_LIST.map((s) => (
-                <div key={s.nidn} className="p-3 rounded-xl border border-[#E8E5DE] bg-[#FAF8F5]">
-                  <p className="text-xs font-bold text-[#1C1917]">{s.name}</p>
-                  <p className="text-[11px] text-[#C2553A] font-medium mt-0.5">{s.role}</p>
-                  <p className="text-[10px] font-mono text-[#7A756D]">NIDN/NIP: {s.nidn}</p>
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-2 text-xs">
+              {STAFF_LIST.map((staff, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 rounded-2xl border border-[#E8E4DA] bg-[#FAF8F5] flex items-center justify-between gap-3"
+                >
+                  <div>
+                    <p className="font-bold text-[#1C1917]">{staff.name}</p>
+                    <p className="text-[11px] text-[#7A756D]">{staff.role}</p>
+                  </div>
+                  <span className="font-mono text-[10px] bg-white px-2 py-0.5 rounded-md border border-[#E8E4DA] text-[#C2553A] font-bold">
+                    NIDN: {staff.nidn}
+                  </span>
                 </div>
               ))}
             </div>
-            <div className="pt-3 border-t border-[#E8E5DE] flex justify-end">
+            <div className="p-4 border-t border-[#EFECE6] bg-[#FAF8F5] flex justify-end">
               <button
+                type="button"
                 onClick={() => setActiveModal(null)}
-                className="px-4 py-2 rounded-xl bg-[#1C1917] text-white text-xs font-semibold hover:bg-[#C2553A]"
+                className="px-4 py-2 rounded-xl bg-[#C2553A] text-white text-xs font-bold hover:bg-[#853827]"
               >
-                Tutup Direktori
+                Tutup
               </button>
             </div>
           </div>
