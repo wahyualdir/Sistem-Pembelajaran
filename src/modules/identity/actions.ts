@@ -1,6 +1,5 @@
 'use server';
 
-import * as React from 'react';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { randomUUID } from 'crypto';
@@ -1001,13 +1000,7 @@ export async function reportNotMeAction(userIdParam?: string): Promise<ActionRes
 /**
  * Helper: Ambil profil dan peran pengguna saat ini untuk Server Components
  */
-function requestCache<T extends (...args: any[]) => any>(fn: T): T {
-  if (typeof (React as any).cache === 'function') {
-    return (React as any).cache(fn);
-  }
-  return fn;
-}
-const getCurrentUserWithRolesCached = requestCache(async () => {
+export async function getCurrentUserWithRoles() {
   let cookieStore: ReturnType<typeof cookies>;
   let demoSessionId: string | undefined;
   try {
@@ -1240,10 +1233,6 @@ const getCurrentUserWithRolesCached = requestCache(async () => {
     impersonatingFrom,
     isNewAccount,
   };
-});
-
-export async function getCurrentUserWithRoles() {
-  return getCurrentUserWithRolesCached();
 }
 
 import {

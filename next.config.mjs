@@ -20,15 +20,7 @@ const nextConfig = {
     },
   },
   async headers() {
-    return [
-      { source: '/:path*', headers: securityHeaders },
-      {
-        source: '/:all*(woff|woff2|png|svg)',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
-        ],
-      },
-    ];
+    return [{ source: '/:path*', headers: securityHeaders }];
   },
 };
 

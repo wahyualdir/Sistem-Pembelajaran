@@ -413,9 +413,6 @@ export function PortalShell({
                               <Link
                                 href={item.href}
                                 title={isRailActive ? item.label : undefined}
-                                onClick={() => {
-                                  if (!isDesktop) closeDrawer(false);
-                                }}
                                 className={cn(
                                   'flex items-center justify-between rounded-xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A]',
                                   isRailActive
