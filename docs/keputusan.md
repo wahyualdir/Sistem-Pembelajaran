@@ -674,3 +674,24 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alasan**: Seluruh interaksi mikro dan elemen visual konten memberikan kejelasan status tanpa dekorasi berlebihan, mempertahankan skor CLS tetap mendekati 0, dan menghilangkan animasi tak terhingga yang menguras baterai dan memecah konsentrasi pengguna.
 - **Alternatif yang ditolak**:
   - *Membiarkan jam ujian berkedip terus-menerus selama 5 menit terakhir*: Ditolak tegas karena menimbulkan kecemasan dan mengganggu fokus peserta ujian daring.
+
+
+### [Responsif] Keputusan 09: Audit Performa, Anggaran CLS, dan Aksesibilitas Gerak (Fase 8)
+- **Tanggal**: 27 Oktober 2026
+- **Keputusan**:
+  1. **Audit Animasi Tak Terhingga (Infinite Loops)**:
+     - Mengaudit seluruh pemakaian `animate-pulse`, `animate-ping`, dan `animate-bounce` di seluruh pohon komponen.
+     - Membatasi pemakaian `animate-pulse` tak terhingga hanya pada komponen skeleton (`ui/skeleton.tsx`) dan rute pemuatan (`loading.tsx`), serta indikator status *live* operasional riil. Menghapusnya dari area konten umum, popover notifikasi, dan formulir ujian.
+  2. **Optimalisasi Canvas & Shader (Bab 5.4.7)**:
+     - Pada `sky-shader-canvas.tsx`, membatasi DPR maksimum ke 1.5 (`Math.min(window.devicePixelRatio || 1, 1.5)`) untuk menghindari pemborosan GPU pada layar Retina/High-DPI.
+     - Menambahkan `IntersectionObserver` pada kedua kanvas dekoratif (`sky-shader-canvas.tsx` dan `canvas-wireframe-cube.tsx`) agar rendering loop secara otomatis dijeda (*pause*) saat komponen berada di luar lipatan layar (*offscreen*).
+     - Menambahkan pendengar `visibilitychange` untuk menghentikan requestAnimationFrame saat tab peramban tidak aktif (`document.hidden`).
+     - Menghentikan pemutaran kanvas bila mode `data-motion="mati"` atau `prefers-reduced-motion` aktif (hanya menggambar 1 frame statis lalu berhenti).
+  3. **Verifikasi E2E Aksesibilitas Gerak & Anggaran CLS**:
+     - Menulis rangkaian pengujian otomatis `tests/e2e/motion-performance.spec.ts`.
+     - Memverifikasi bahwa atribut `data-motion="mati"` berhasil meruntuhkan seluruh token durasi (`--dur-instant`, `--dur-fast`, `--dur-base`, `--dur-slow`, `--dur-data`) menjadi `0.01ms` dan konten halaman tetap 100% terbaca tanpa efek blank.
+     - Memverifikasi preferensi `prefers-reduced-motion: reduce` mematikan penundaan stagger dan durasi data.
+     - Mengukur Cumulative Layout Shift (CLS) menggunakan `PerformanceObserver` pada rute masuk dan memastikan skor CLS <= 0,05 (memenuhi anggaran 6.7).
+- **Alasan**: Menjamin LMS SIAJAR beroperasi dengan efisiensi energi tinggi pada ponsel berdaya rendah, tidak menguras baterai, dan ramah bagi pengguna dengan gangguan vestibular.
+- **Alternatif yang ditolak**:
+  - *Menghapus total komponen shader WebGL*: Ditolak karena identitas estetika retro/OS SIAJAR tetap dihargai di desktop berkinerja tinggi, asalkan dijeda dengan cerdas saat di luar layar atau saat preferensi hemat gerak aktif.

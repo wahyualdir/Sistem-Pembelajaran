@@ -193,7 +193,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
       >
         <Bell className="h-4 w-4" />
         {unreadCount > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-primary text-xs font-bold text-white animate-pulse">
+          <span className={cn("absolute -top-1 -right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-primary text-xs font-bold text-white transition-transform duration-base", isBadgePopping && "scale-110")}>
             {unreadCount}
           </span>
         )}

@@ -318,7 +318,7 @@ export function SkyShaderCanvas({ phase, className }: SkyShaderCanvasProps) {
 
     function resizeCanvas() {
       if (!canvas || !gl) return;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       const width = canvas.clientWidth * dpr;
       const height = canvas.clientHeight * dpr;
       if (canvas.width !== width || canvas.height !== height) {
@@ -331,9 +331,16 @@ export function SkyShaderCanvas({ phase, className }: SkyShaderCanvasProps) {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
+    const isMotionOff =
+      typeof window !== 'undefined' &&
+      (window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        document.documentElement.getAttribute('data-motion') === 'mati' ||
+        document.documentElement.classList.contains('lite-performance-mode'));
+
     let currentPhaseVal = phase === 'DAWN' ? 0.0 : phase === 'DAY' ? 1.0 : phase === 'SUNSET' ? 2.0 : 3.0;
     let animId: number;
     let startTime = performance.now();
+    let isIntersecting = true;
 
     function render() {
       if (!gl || !canvas) return;
@@ -349,14 +356,40 @@ export function SkyShaderCanvas({ phase, className }: SkyShaderCanvasProps) {
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
 
-      animId = requestAnimationFrame(render);
+      if (!isMotionOff && isIntersecting && !document.hidden) {
+        animId = requestAnimationFrame(render);
+      }
     }
 
-    animId = requestAnimationFrame(render);
+    // IntersectionObserver to pause offscreen (5.4.7)
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting && !document.hidden && !isMotionOff) {
+          animId = requestAnimationFrame(render);
+        }
+      });
+      observer.observe(canvas);
+    }
+
+    // Visibility change to pause on background tab (5.4.7)
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animId);
+      } else if (isIntersecting && !isMotionOff) {
+        animId = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    render();
 
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resizeCanvas);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      if (observer) observer.disconnect();
       if (gl) {
         gl.deleteProgram(program);
         gl.deleteShader(vertShader);

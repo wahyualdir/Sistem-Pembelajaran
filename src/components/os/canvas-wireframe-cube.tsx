@@ -134,13 +134,44 @@ export function CanvasWireframeCube() {
       ctx.lineTo(canvas.width - 15, 25);
       ctx.stroke();
 
-      animationFrameId = requestAnimationFrame(render);
+      if (!isMotionOff && isIntersecting && !document.hidden) {
+        animationFrameId = requestAnimationFrame(render);
+      }
     };
+
+    const isMotionOff =
+      typeof window !== 'undefined' &&
+      (window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        document.documentElement.getAttribute('data-motion') === 'mati' ||
+        document.documentElement.classList.contains('lite-performance-mode'));
+
+    let isIntersecting = true;
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (isIntersecting && !document.hidden && !isMotionOff) {
+          animationFrameId = requestAnimationFrame(render);
+        }
+      });
+      observer.observe(canvas);
+    }
+
+    const handleVisibility = () => {
+      if (document.hidden) {
+        cancelAnimationFrame(animationFrameId);
+      } else if (isIntersecting && !isMotionOff) {
+        animationFrameId = requestAnimationFrame(render);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
 
     render();
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      if (observer) observer.disconnect();
     };
   }, []);
 

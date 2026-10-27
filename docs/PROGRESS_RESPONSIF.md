@@ -74,7 +74,20 @@
   - **M21 Lencana Notifikasi Naik**: Menghapus `animate-pulse` tak berujung pada lonceng `notifikasi-popover.tsx`; menggantikannya dengan transisi lonjakan skala 1→1,10→1 (`isBadgePopping`) selama 220ms hanya saat `unreadCount` berubah nilainya.
   - **M22 Gambar Halus**: Membuat komponen pembungkus `SmoothImage` (`src/components/shared/smooth-image.tsx`) dengan penjagaan rasio aspek dan transisi pudar masuk (`opacity: 0 -> 1`) berdurasi `--dur-base` saat kejadian `onLoad` selesai.
   - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (621 berkas lolos), `npm run typecheck` (0 error), `npm run lint` (0 error).
-- [ ] **Fase 8 — Performa dan Aksesibilitas Gerak (CPU Throttling, CLS, Reduced Motion)**
+- [x] **Fase 8 — Performa dan Aksesibilitas Gerak (CPU Throttling, CLS, Reduced Motion)**
+  - **Audit Loop Animasi Tak Terhingga**: Mengaudit pohon komponen; memastikan pemakaian `animate-pulse` hanya berada pada skeleton/indikator memuat atau status live penting. Formulir ujian (`take-quiz-form.tsx`) dan lencana lonceng (`notifikasi-popover.tsx`) telah dibersihkan dari pulse tak berujung.
+  - **Optimalisasi Canvas & Shader (Bab 5.4.7)**:
+    - Batas DPR kanvas dibatasi maksimal ke 1.5 (`Math.min(window.devicePixelRatio || 1, 1.5)`) pada `sky-shader-canvas.tsx` untuk menghemat alokasi memori grafis dan daya baterai.
+    - Menambahkan `IntersectionObserver` pada `sky-shader-canvas.tsx` dan `canvas-wireframe-cube.tsx` untuk menjeda loop animasi saat kanvas berada di luar viewport.
+    - Menambahkan pendengar `visibilitychange` untuk menghentikan kanvas saat tab latar belakang tidak aktif.
+    - Menghentikan pemutaran kanvas saat mode `data-motion="mati"` atau `prefers-reduced-motion` aktif.
+  - **Pengujian E2E Gerak & Anggaran CLS**:
+    - Berkas pengujian `tests/e2e/motion-performance.spec.ts` memverifikasi 4 skenario kritis (4/4 lulus di Playwright Chromium):
+      1. Preferensi `data-motion="mati"` meruntuhkan seluruh token `--dur-*` menjadi `0.01ms` dan konten tetap terlihat.
+      2. Preferensi `prefers-reduced-motion: reduce` memadamkan durasi data dan penundaan stagger.
+      3. Pengukuran Cumulative Layout Shift (CLS) menggunakan `PerformanceObserver` memenuhi target `<= 0.05`.
+      4. Tidak ada animasi loop tak berujung yang mengganggu di area konten utama.
+  - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (621 berkas lolos), `npm run typecheck` (0 error), `npm run lint` (0 error), Playwright Motion (4/4 lulus).
 - [ ] **Fase 9 — Verifikasi Akhir, Matriks Lengkap & Serah Terima**
 
 ---
