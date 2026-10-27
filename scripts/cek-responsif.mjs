@@ -137,7 +137,8 @@ for (const relFile of files) {
           const num = parseInt(m.match(/\d+/)[0], 10);
           return num >= 360;
         });
-        if (large.length > 0 && !line.includes('max-w-') && !content.includes('max-w-full')) {
+        const isTableInScroll = (line.includes('<table') || line.includes('caption-bottom')) && (content.includes('overflow-x') || content.includes('table-scroll'));
+        if (large.length > 0 && !line.includes('max-w-') && !content.includes('max-w-full') && !isTableInScroll) {
           violations.push({
             file: relFile,
             line: idx + 1,

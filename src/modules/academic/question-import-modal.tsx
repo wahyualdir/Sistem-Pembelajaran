@@ -184,8 +184,8 @@ export function QuestionImportExportModal() {
       </div>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
-          <div className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
+          <div className="w-full max-w-4xl max-h-[90dvh] overflow-y-auto rounded-t-2xl sm:rounded-none">
             <RetroWindow
               title="Pusat Impor & Ekspor Bank Soal"
               badge="Standar Mutu"
@@ -202,7 +202,7 @@ export function QuestionImportExportModal() {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="p-1 rounded-lg hover:bg-gray-soft text-black border border-black cursor-pointer"
+                  className="p-1 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-lg hover:bg-gray-soft text-black border border-black cursor-pointer"
                 >
                   <X className="h-5 w-5" />
                 </button>

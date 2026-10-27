@@ -49,8 +49,9 @@ export function ExamAnalyticsModal({ examId }: { examId: string }) {
       </button>
 
       {isOpen && analytics && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-          <div className="rounded-control border-2 border-black bg-surface p-6 space-y-4 max-w-2xl w-full shadow-retro max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 p-0 sm:p-4">
+          <div className="rounded-t-2xl sm:rounded-control rounded-b-none sm:rounded-b-control border-2 border-black bg-surface p-5 sm:p-6 space-y-4 max-w-2xl w-full shadow-retro max-h-[90dvh] overflow-y-auto">
+            <div className="sm:hidden flex justify-center -mt-2 pb-1" data-sheet-handle aria-hidden="true"><div className="h-1.5 w-12 rounded-full bg-border" /></div>
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div>
                 <h3 className="font-bold text-base text-foreground">Analisis Hasil: {analytics.exam_title}</h3>
@@ -59,7 +60,7 @@ export function ExamAnalyticsModal({ examId }: { examId: string }) {
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="text-xs font-sans font-bold hover:opacity-70 px-2 py-1"
+                className="text-xs font-sans font-bold hover:opacity-70 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center px-2 py-1"
               >
                 [X]
               </button>
@@ -98,8 +99,8 @@ export function ExamAnalyticsModal({ examId }: { examId: string }) {
                 </button>
               </div>
 
-              <div className="border border-border rounded-control overflow-hidden">
-                <table className="w-full text-xs text-left">
+              <div className="border border-border rounded-control overflow-hidden overflow-x-auto overscroll-x-contain table-scroll">
+                <table className="w-full text-xs text-left min-w-[480px]">
                   <thead className="bg-muted text-muted-foreground uppercase text-xs">
                     <tr>
                       <th className="p-2.5">Teks Soal</th>

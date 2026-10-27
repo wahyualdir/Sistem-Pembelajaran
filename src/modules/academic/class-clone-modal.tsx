@@ -91,8 +91,8 @@ export function ClassCloneModal({ myClasses, availableTargetClasses }: ClassClon
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
-          <div className="w-full max-w-xl max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
+          <div className="w-full max-w-xl max-h-[90dvh] overflow-y-auto rounded-t-2xl sm:rounded-none">
             <RetroWindow
               title="Salin Isi Kelas Perkuliahan"
               badge="Penggunaan Ulang"

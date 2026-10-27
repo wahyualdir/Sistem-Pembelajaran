@@ -179,7 +179,7 @@ export function SemesterWeave({
         </div>
 
         {/* Matriks Kisi Tabel (Wrap dengan overflow-x-auto untuk layar kecil) */}
-        <div className="overflow-x-auto -mx-1 px-1">
+        <div className="overflow-x-auto overscroll-x-contain table-scroll -mx-1 px-1">
           <table role="table" className="w-full border-collapse select-none min-w-[560px] sm:min-w-[640px]">
             <thead>
               <tr className="border-b border-[#E8E5DE]">

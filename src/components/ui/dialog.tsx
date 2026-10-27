@@ -42,10 +42,14 @@ const DialogContent = React.forwardRef<
       )}
       {...props}
     >
+      {/* Mobile sheet drag handle */}
+      <div className="sm:hidden flex justify-center -mt-2 pb-1" aria-hidden="true">
+        <div className="h-1.5 w-12 rounded-full bg-border" />
+      </div>
       {children}
-      <DialogPrimitive.Close className="absolute right-3.5 top-3.5 flex h-9 w-9 min-h-[36px] min-w-[36px] items-center justify-center rounded-md border border-black bg-gray-soft opacity-80 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-black disabled:pointer-events-none cursor-pointer">
+      <DialogPrimitive.Close className="absolute right-3.5 top-3.5 flex h-11 w-11 sm:h-9 sm:w-9 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 items-center justify-center rounded-md border border-black bg-gray-soft opacity-80 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-black disabled:pointer-events-none cursor-pointer">
         <X className="h-4 w-4 text-black" />
-        <span className="sr-only">Tutup</span>
+        <span className="sr-only">Tutup dialog</span>
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
@@ -72,7 +76,7 @@ const DialogFooter = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-2",
+      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2 pt-2 sticky bottom-0 bg-surface/95 backdrop-blur-xs pb-[max(0.5rem,env(safe-area-inset-bottom,0px))]",
       className
     )}
     {...props}

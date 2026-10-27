@@ -327,8 +327,8 @@ export function ClassProgressTab({
             <span>Seluruh mahasiswa berada dalam jadwal yang sesuai target perkuliahan.</span>
           </div>
         ) : (
-          <div className="rounded-xl border-2 border-black overflow-hidden shadow-retro-sm">
-            <table className="w-full text-xs text-left">
+          <div className="rounded-xl border-2 border-black overflow-hidden shadow-retro-sm overflow-x-auto overscroll-x-contain table-scroll">
+            <table className="w-full text-xs text-left min-w-[560px]">
               <thead className="bg-gray-soft border-b-2 border-black text-black uppercase font-mono font-bold">
                 <tr>
                   <th className="p-3">Nama Mahasiswa</th>

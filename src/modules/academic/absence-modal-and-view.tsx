@@ -118,6 +118,7 @@ export function StudentAbsenceModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in font-sans">
       <div className="bg-white border-2 border-black rounded-2xl shadow-retro-lg w-full max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="sm:hidden flex justify-center pt-2 pb-1 bg-gray-soft" data-sheet-handle-absence aria-hidden="true"><div className="h-1.5 w-12 rounded-full bg-border" /></div>
         {/* Retro Window Header */}
         <div className="flex items-center justify-between border-b-2 border-black bg-gray-soft p-4 shrink-0">
           <div className="flex items-center gap-2">

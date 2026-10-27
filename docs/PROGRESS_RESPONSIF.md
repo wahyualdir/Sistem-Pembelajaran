@@ -23,7 +23,15 @@
   - **Panel Kanan 3-Kolom di iPad Landscape (1024px)**: Breakpoint panel kanan digeser dari `xl` (1280px) ke `lg` (1024px), mengembalikan tata letak 3-kolom yang disukai di iPad landscape.
   - **Elevasi Elemen Mengambang**: AI Assistant FAB dan toast dinaikkan di atas navigasi bawah pada layar mobile.
   - **Uji & Verifikasi**: Vitest (3/3 lulus), Typecheck (0 error), Lint (0 warning), Cek Hex (lolos), Cek Responsif (lolos), Playwright 11/11 viewport halaman masuk lulus.
-- [ ] **Fase 3 — Komponen Dasar: Dialog/Sheet, Tabel Scroll, Tab, Form**
+- [x] **Fase 3 — Komponen Dasar: Dialog/Sheet, Tabel Scroll, Tab, Form**
+  - **Dialog & Sheet Responsif**: `src/components/ui/dialog.tsx` bertransformasi menjadi bottom sheet pada mobile (`< sm`) dengan visual drag handle, batas tinggi `max-h-[90dvh]`, scroll internal, sticky footer safe area, dan tombol tutup >= 44x44px.
+  - **Standardisasi Modal Kustom**: 8 modal kustom (`calendar-sync-modal`, `class-clone-modal`, `ai-quiz-generator-modal`, `exam-analytics-modal`, `absence-modal-and-view`, `evaluation-form-modal`, `question-import-modal`, `staff-archive-semester-modal`) kini mengadopsi pola bottom sheet mobile dengan pegangan visual dan tombol sentuh >= 44px.
+  - **Tabel Bergulir**:
+    - Komponen `ResponsiveTable` (`src/components/shared/responsive-table.tsx`) dengan pembungkus `overflow-x-auto`, kelas `.table-scroll`, bayangan pudar tepi dinamis, dan petunjuk visual sentuh.
+    - Komponen dasar `Table` (`src/components/ui/table.tsx`) diperbarui dengan `overflow-x-auto overscroll-x-contain table-scroll` dan `min-w-[560px]`.
+    - Membungkus tabel yang belum memiliki pembungkus di `class-progress-tab.tsx`, `cbt/exam-analytics-modal.tsx`, dan `semester-weave.tsx`.
+  - **Tab Bergulir**: Komponen `ScrollableTabs` (`src/components/shared/scrollable-tabs.tsx`) dengan `snap-x`, `scrollbar-none`, bayangan pudar tepi kiri/kanan, dan pemusatan otomatis (`scrollTo`) pada tab atau chip filter aktif.
+  - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (lolos), `npm run typecheck` (0 error), `npm run lint` (0 error), Playwright responsif 11 viewport (11/11 lulus).
 - [ ] **Fase 4 — Halaman per Peran dan Fitur (10 Kelompok Fitur)**
 - [ ] **Fase 5 — Fondasi Sistem Animasi (Token, Hook, Utilitas, Sakelar)**
 - [ ] **Fase 6 — Animasi Shell dan Navigasi (M01–M08, M19)**
@@ -40,8 +48,8 @@
 | **M01** | Masuk Halaman (Page Enter) | `template.tsx` portal / main | [ ] | Pudar + naik 8px (--dur-base) |
 | **M02** | Drawer Kiri (Sidebar Mobile) | `portal-shell.tsx` aside | [ ] | translateX(-100%→0) + swipe to close |
 | **M03** | Panel Kanan (Right Drawer) | `*-dashboard-client.tsx` | [ ] | slide-in-right (--dur-slow) |
-| **M04** | Bottom Sheet Dialog | `ui/dialog.tsx` & modal kustom | [ ] | slide-in-from-bottom di mobile (<sm) |
-| **M05** | Indikator Navigasi Bawah | `MobileBottomNav` slot | [ ] | Sliding pill / underline transition |
+| **M04** | Bottom Sheet Dialog | `ui/dialog.tsx` & modal kustom | [x] | slide-in-from-bottom di mobile (<sm) dengan drag handle |
+| **M05** | Indikator Navigasi Bawah | `MobileBottomNav` slot | [x] | Sliding pill / underline transition |
 | **M06** | Garis Tab Aktif | `class-hub-tabs.tsx`, filter chip | [ ] | Smooth indicator slide & scaleX |
 | **M07** | Akordeon / Lipat | Sidebar groups, filter sheet | [ ] | grid-template-rows: 0fr→1fr |
 | **M08** | Dropdown / Popover / Tooltip | Radix UI primitives | [ ] | Transform-origin scale & fade |

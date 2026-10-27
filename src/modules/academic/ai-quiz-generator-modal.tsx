@@ -148,8 +148,9 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 overflow-y-auto">
-          <div className="w-full max-w-3xl rounded-2xl border-2 border-black bg-white p-6 sm:p-8 shadow-retro-window space-y-6 my-8 animate-fade-up font-sans">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 p-0 sm:p-4 overflow-y-auto">
+          <div className="w-full max-w-3xl rounded-t-2xl sm:rounded-2xl rounded-b-none sm:rounded-b-2xl border-2 border-black border-b-0 sm:border-b-2 bg-white p-5 sm:p-8 shadow-retro-window space-y-6 my-0 sm:my-8 max-h-[90dvh] overflow-y-auto animate-fade-up font-sans">
+            <div className="sm:hidden flex justify-center -mt-2 pb-1" data-sheet-handle aria-hidden="true"><div className="h-1.5 w-12 rounded-full bg-border" /></div>
             {/* Header Modal */}
             <div className="flex items-center justify-between border-b-2 border-black pb-4">
               <div className="flex items-center gap-3">
@@ -176,7 +177,7 @@ export function AiQuizGeneratorModal({ classes, onQuestionsApproved }: AiQuizGen
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="p-1 rounded-lg border border-black hover:bg-gray-soft text-black cursor-pointer"
+                className="p-1 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-lg border border-black hover:bg-gray-soft text-black cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>

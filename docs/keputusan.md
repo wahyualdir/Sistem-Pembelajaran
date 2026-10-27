@@ -578,3 +578,19 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alasan**: Memberikan pengalaman navigasi satu tangan yang cepat di ponsel, mengembalikan layout 3-kolom di tablet landscape tanpa mengubah tampilan desktop >= 1280px (paritas visual 100%), serta menjamin isolasi proses pengerjaan tanpa risiko konflik berkas antar-cabang.
 - **Alternatif yang ditolak**:
   - *Memakai deteksi user-agent untuk navigasi ponsel*: Ditolak karena melanggar aturan nomor 8; tata letak harus berbasis query lebar viewport dan pointer.
+
+
+### [Responsif] Keputusan 04: Komponen Dasar Responsif — Bottom Sheet Modal, Scrollable Table, dan Tabs (Fase 3)
+- **Tanggal**: 27 Oktober 2026
+- **Keputusan**:
+  1. **Dialog & Sheet Responsif**: Mengembangkan `src/components/ui/dialog.tsx` sehingga pada viewport mobile (`< sm`) otomatis bertransformasi menjadi bottom sheet dengan pegangan visual (drag handle), batas tinggi `max-h-[90dvh]`, body bergulir internal (`overflow-y-auto`), footer tombol lengket (`sticky bottom-0`) dengan padding safe area iOS, serta target sentuh tombol tutup minimal 44x44px.
+  2. **Standardisasi Modal Kustom**: Memperbarui 8 modal kustom (`calendar-sync-modal`, `class-clone-modal`, `ai-quiz-generator-modal`, `exam-analytics-modal`, `absence-modal-and-view`, `evaluation-form-modal`, `question-import-modal`, `staff-archive-semester-modal`) agar mengadopsi pola bottom sheet mobile dengan pegangan visual dan tombol sentuh >= 44px.
+  3. **Tabel Bergulir Responsif**:
+     - Membuat komponen `ResponsiveTable` (`src/components/shared/responsive-table.tsx`) dengan pembungkus `overflow-x-auto`, kelas `.table-scroll` (`overscroll-behavior-x: contain`), bayangan pudar tepi dinamis saat ada kolom tersembunyi, dan petunjuk visual sentuh "geser ke samping".
+     - Memperbarui komponen dasar `Table` (`src/components/ui/table.tsx`) dengan `overflow-x-auto`, `overscroll-x-contain table-scroll`, dan lebar minimum masuk akal (`min-w-[560px]`) untuk mencegah pemampatan kolom di layar sempit 360px.
+     - Membungkus tabel yang belum memiliki scrollbar di `class-progress-tab.tsx`, `cbt/exam-analytics-modal.tsx`, dan `semester-weave.tsx`.
+  4. **Tab Bergulir Responsif**: Membuat komponen `ScrollableTabs` (`src/components/shared/scrollable-tabs.tsx`) dengan `snap-x`, `scrollbar-none`, bayangan pudar tepi kiri/kanan berbasis deteksi scroll/resize, dan pemusatan otomatis (`scrollIntoView / scrollTo`) pada tab atau chip filter yang aktif.
+  5. **Verifikasi Gerbang Otomatis**: Memutakhirkan aturan AST `scripts/cek-responsif.mjs` untuk mendukung lebar minimum tabel di dalam kontainer gulir resmi. Seluruh gerbang `cek:hex`, `cek:responsif`, `typecheck` (0 error), `lint` (0 warning), dan Playwright responsif 11 viewport lulus 100%.
+- **Alasan**: Memastikan dialog dan tabel data akademik yang padat dapat digunakan dengan nyaman di ponsel 360–430px tanpa memicu zoom atau scroll horizontal di level halaman, serta memenuhi target sentuh minimum WCAG (>= 44px).
+- **Alternatif yang ditolak**:
+  - *Menghilangkan kolom tabel di mobile secara diam-diam*: Ditolak karena melanggar prinsip paritas fitur; seluruh informasi harus tetap dapat diakses via scroll horizontal terkontrol atau representasi kartu.

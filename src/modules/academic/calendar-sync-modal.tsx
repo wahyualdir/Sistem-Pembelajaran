@@ -72,8 +72,10 @@ export function CalendarSyncModal() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-xl max-h-[90vh] flex flex-col rounded-xl border-4 border-black bg-white shadow-retro overflow-hidden">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-xl max-h-[90dvh] flex flex-col rounded-t-2xl sm:rounded-xl rounded-b-none sm:rounded-b-xl border-2 sm:border-4 border-b-0 sm:border-b-4 border-black bg-white shadow-retro overflow-hidden">
+                    {/* Mobile Drag Handle */}
+            <div className="sm:hidden flex justify-center pt-2 pb-1 bg-gray-soft" data-sheet-handle aria-hidden="true"><div className="h-1.5 w-12 rounded-full bg-border" /></div>
             {/* Modal Header */}
             <div className="p-4 sm:p-5 bg-gray-soft border-b-2 border-black flex items-center justify-between">
               <div className="flex items-center gap-2.5">
@@ -92,7 +94,7 @@ export function CalendarSyncModal() {
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg border-2 border-black bg-white hover:bg-neutral-100 cursor-pointer"
+                className="p-1.5 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-lg border-2 border-black bg-white hover:bg-neutral-100 cursor-pointer"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -178,7 +180,7 @@ export function CalendarSyncModal() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 bg-white border-t-2 border-black flex items-center justify-end">
+            <div className="p-4 bg-white border-t-2 border-black flex items-center justify-end sticky bottom-0 pb-[calc(1rem+env(safe-area-inset-bottom,0px))]">
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}

@@ -49,8 +49,8 @@ export function StaffArchiveSemesterModal({ activeCount }: StaffArchiveSemesterM
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
-          <div className="w-full max-w-lg">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/60 backdrop-blur-xs animate-fade-in">
+          <div className="w-full max-w-lg max-h-[90dvh] overflow-y-auto rounded-t-2xl sm:rounded-none">
             <RetroWindow
               title="Tutup Semester & Arsipkan Kelas"
               badge="Administratif"
@@ -65,7 +65,7 @@ export function StaffArchiveSemesterModal({ activeCount }: StaffArchiveSemesterM
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1 rounded-md hover:bg-neutral-100 text-black border border-black"
+                  className="p-1 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-md hover:bg-neutral-100 text-black border border-black cursor-pointer"
                 >
                   <X className="h-5 w-5" />
                 </button>
