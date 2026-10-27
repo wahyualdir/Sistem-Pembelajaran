@@ -539,3 +539,13 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
   4. **Pola Respons & Ketiadaan Data Palsu**: Jika persistensi nonaktif atau Supabase offline, aksi mengembalikan pesan netral atau data kosong jujur tanpa membuat data rekayasa di jalur produksi.
   5. **Feature Flag**: Dikunci di balik flag server-side `FF_KAIN_SEMESTER` (default `false`). Bila mati, antarmuka beranda mahasiswa 100% identik dengan kondisi sebelumnya.
 - **Alasan**: Memberikan visibilitas terpadu atas progres kehadiran dan tugas tiap pekan bagi mahasiswa secara etis, netral, dan aman tanpa beban migrasi database baru.
+
+
+---
+
+### [Responsif] Keputusan 01: Matriks Perangkat Playwright dan Baseline Audit Responsif (Fase 0)
+- **Tanggal**: 26 Oktober 2026
+- **Keputusan**: Mengonfirmasi baseline branch `responsif/mobile-ipad-animasi` dari `main` (`0f57e5d`). Menginstal binary Playwright Chromium dan WebKit lokal untuk mencakup pengujian mesin WebKit (Safari iOS/iPadOS) dan Chromium (Android/Desktop). Menginventarisasi 125 rute aktif di `docs/routes-inventory.json` serta memverifikasi 12 temuan awal (T1–T12) dengan audit nyata di `docs/RESPONSIF_AUDIT.md`.
+- **Alasan**: Menghindari spekulasi dan menjamin seluruh pekerjaan tata letak dan animasi memiliki titik referensi yang dapat diuji secara objektif pada browser engine nyata sebelum menyentuh kode aplikasi.
+- **Alternatif yang ditolak**:
+  - *Hanya menguji pada Chromium Desktop*: Ditolak karena WebKit Safari memiliki perilaku khusus pada touch scrolling, safe area, viewport height (`dvh`), dan font input zoom yang tidak dapat disimulasikan sempurna di Chromium biasa.

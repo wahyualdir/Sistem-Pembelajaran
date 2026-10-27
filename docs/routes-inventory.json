@@ -1,0 +1,1435 @@
+[
+  {
+    "path": "/",
+    "file": "src/app/page.tsx",
+    "group": "landing",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PUBLIC"
+    ]
+  },
+  {
+    "path": "/achievements",
+    "file": "src/app/(portal)/achievements/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/admin",
+    "file": "src/app/(portal)/admin/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/[...slug]",
+    "file": "src/app/(portal)/admin/[...slug]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/announcements",
+    "file": "src/app/(portal)/admin/announcements/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/audit",
+    "file": "src/app/(dashboard)/admin/audit/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/dashboard",
+    "file": "src/app/(dashboard)/admin/dashboard/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/jadwal",
+    "file": "src/app/(dashboard)/admin/jadwal/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/kalender",
+    "file": "src/app/(dashboard)/admin/kalender/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/kurikulum",
+    "file": "src/app/(dashboard)/admin/kurikulum/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/master",
+    "file": "src/app/(dashboard)/admin/master/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/nilai",
+    "file": "src/app/(dashboard)/admin/nilai/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/pengumuman",
+    "file": "src/app/(dashboard)/admin/pengumuman/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/policies",
+    "file": "src/app/(portal)/admin/policies/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/roles",
+    "file": "src/app/(portal)/admin/roles/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/surat",
+    "file": "src/app/(dashboard)/admin/surat/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/system",
+    "file": "src/app/(portal)/admin/system/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/system/audit",
+    "file": "src/app/(portal)/admin/system/audit/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/system/backup",
+    "file": "src/app/(portal)/admin/system/backup/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/system/integrations",
+    "file": "src/app/(portal)/admin/system/integrations/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/system/monitoring",
+    "file": "src/app/(portal)/admin/system/monitoring/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/system/security",
+    "file": "src/app/(portal)/admin/system/security/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/system/settings",
+    "file": "src/app/(portal)/admin/system/settings/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/ujian",
+    "file": "src/app/(dashboard)/admin/ujian/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/ukt",
+    "file": "src/app/(dashboard)/admin/ukt/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/admin/users",
+    "file": "src/app/(portal)/admin/users/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/ai-assistant",
+    "file": "src/app/(portal)/ai-assistant/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/analytics",
+    "file": "src/app/(portal)/analytics/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/analytics/[...slug]",
+    "file": "src/app/(portal)/analytics/[...slug]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/announcements",
+    "file": "src/app/(portal)/announcements/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/attendance",
+    "file": "src/app/(portal)/attendance/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/attendance/[...slug]",
+    "file": "src/app/(portal)/attendance/[...slug]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/attendance/history",
+    "file": "src/app/(portal)/attendance/history/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/calendar",
+    "file": "src/app/(portal)/calendar/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/certificates",
+    "file": "src/app/(portal)/certificates/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/classes",
+    "file": "src/app/(portal)/classes/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/classes/[id]",
+    "file": "src/app/(portal)/classes/[id]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/classes/[id]/assignments/[aid]",
+    "file": "src/app/(portal)/classes/[id]/assignments/[aid]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/classes/[id]/attendance",
+    "file": "src/app/(portal)/classes/[id]/attendance/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/classes/[id]/discussions/[did]",
+    "file": "src/app/(portal)/classes/[id]/discussions/[did]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/classes/[id]/gradebook",
+    "file": "src/app/(portal)/classes/[id]/gradebook/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/classes/[id]/quizzes",
+    "file": "src/app/(portal)/classes/[id]/quizzes/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/classes/[id]/quizzes/[quizId]",
+    "file": "src/app/(portal)/classes/[id]/quizzes/[quizId]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/community",
+    "file": "src/app/(portal)/community/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/community/events",
+    "file": "src/app/(portal)/community/events/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/community/forum",
+    "file": "src/app/(portal)/community/forum/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/community/groups",
+    "file": "src/app/(portal)/community/groups/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/community/mentoring",
+    "file": "src/app/(portal)/community/mentoring/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/coordinator",
+    "file": "src/app/(portal)/coordinator/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/coordinator/[...slug]",
+    "file": "src/app/(portal)/coordinator/[...slug]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/coordinator/approvals",
+    "file": "src/app/(portal)/coordinator/approvals/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/coordinator/assignments",
+    "file": "src/app/(portal)/coordinator/assignments/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/coordinator/evaluations",
+    "file": "src/app/(portal)/coordinator/evaluations/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/coordinator/monitoring",
+    "file": "src/app/(portal)/coordinator/monitoring/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/coordinator/reports",
+    "file": "src/app/(portal)/coordinator/reports/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/devices",
+    "file": "src/app/(portal)/devices/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/dosen/dashboard",
+    "file": "src/app/(dashboard)/dosen/dashboard/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/dosen/kelas",
+    "file": "src/app/(dashboard)/dosen/kelas/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/dosen/laporan",
+    "file": "src/app/(dashboard)/dosen/laporan/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/dosen/materi-tugas",
+    "file": "src/app/(dashboard)/dosen/materi-tugas/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/dosen/nilai",
+    "file": "src/app/(dashboard)/dosen/nilai/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/dosen/perwalian",
+    "file": "src/app/(dashboard)/dosen/perwalian/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/dosen/presensi",
+    "file": "src/app/(dashboard)/dosen/presensi/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/evaluations",
+    "file": "src/app/(portal)/evaluations/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/exams",
+    "file": "src/app/(portal)/exams/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/exams/[...slug]",
+    "file": "src/app/(portal)/exams/[...slug]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/exams/analysis",
+    "file": "src/app/(portal)/exams/analysis/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/exams/history",
+    "file": "src/app/(portal)/exams/history/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/flashcards",
+    "file": "src/app/(portal)/flashcards/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/grades",
+    "file": "src/app/(portal)/grades/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/grades/[...slug]",
+    "file": "src/app/(portal)/grades/[...slug]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/help",
+    "file": "src/app/(portal)/help/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/lecturer",
+    "file": "src/app/(portal)/lecturer/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/lecturer/[...slug]",
+    "file": "src/app/(portal)/lecturer/[...slug]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/lecturer/content-review",
+    "file": "src/app/(portal)/lecturer/content-review/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/lecturer/disputes",
+    "file": "src/app/(portal)/lecturer/disputes/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/lecturer/evaluations",
+    "file": "src/app/(portal)/lecturer/evaluations/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/lecturer/journals",
+    "file": "src/app/(portal)/lecturer/journals/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/lecturer/rubrics",
+    "file": "src/app/(portal)/lecturer/rubrics/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "LECTURER",
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/library",
+    "file": "src/app/(portal)/library/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/login",
+    "file": "src/app/(auth)/login/page.tsx",
+    "group": "auth",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PUBLIC"
+    ]
+  },
+  {
+    "path": "/mahasiswa/bimbingan",
+    "file": "src/app/(dashboard)/mahasiswa/bimbingan/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/dashboard",
+    "file": "src/app/(dashboard)/mahasiswa/dashboard/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/jadwal",
+    "file": "src/app/(dashboard)/mahasiswa/jadwal/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/krs",
+    "file": "src/app/(dashboard)/mahasiswa/krs/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/nilai",
+    "file": "src/app/(dashboard)/mahasiswa/nilai/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/pengumuman",
+    "file": "src/app/(dashboard)/mahasiswa/pengumuman/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/preferensi-notifikasi",
+    "file": "src/app/(dashboard)/mahasiswa/preferensi-notifikasi/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/presensi",
+    "file": "src/app/(dashboard)/mahasiswa/presensi/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/simulasi-ipk",
+    "file": "src/app/(dashboard)/mahasiswa/simulasi-ipk/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/surat",
+    "file": "src/app/(dashboard)/mahasiswa/surat/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/tugas",
+    "file": "src/app/(dashboard)/mahasiswa/tugas/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/ujian",
+    "file": "src/app/(dashboard)/mahasiswa/ujian/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/mahasiswa/ukt",
+    "file": "src/app/(dashboard)/mahasiswa/ukt/page.tsx",
+    "group": "legacy-dashboard",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "TEACHING_ASSISTANT",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/messages",
+    "file": "src/app/(portal)/messages/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/must-change-password",
+    "file": "src/app/(auth)/must-change-password/page.tsx",
+    "group": "auth",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PUBLIC"
+    ]
+  },
+  {
+    "path": "/notifications",
+    "file": "src/app/(portal)/notifications/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/notifications/preferences",
+    "file": "src/app/(portal)/notifications/preferences/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/portfolio",
+    "file": "src/app/(portal)/portfolio/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/profile",
+    "file": "src/app/(portal)/profile/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/register",
+    "file": "src/app/(auth)/register/page.tsx",
+    "group": "auth",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PUBLIC"
+    ]
+  },
+  {
+    "path": "/requests",
+    "file": "src/app/(portal)/requests/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/reset-password",
+    "file": "src/app/(auth)/reset-password/page.tsx",
+    "group": "auth",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PUBLIC"
+    ]
+  },
+  {
+    "path": "/settings",
+    "file": "src/app/(portal)/settings/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/settings/appearance",
+    "file": "src/app/(portal)/settings/appearance/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/skill-exchange",
+    "file": "src/app/(portal)/skill-exchange/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR"
+    ]
+  },
+  {
+    "path": "/staff",
+    "file": "src/app/(portal)/staff/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/staff/[...slug]",
+    "file": "src/app/(portal)/staff/[...slug]/page.tsx",
+    "group": "portal",
+    "isDynamic": true,
+    "allowedRoles": [
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/staff/announcements",
+    "file": "src/app/(portal)/staff/announcements/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/staff/classes",
+    "file": "src/app/(portal)/staff/classes/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/staff/content",
+    "file": "src/app/(portal)/staff/content/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/staff/grades",
+    "file": "src/app/(portal)/staff/grades/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/staff/master",
+    "file": "src/app/(portal)/staff/master/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/staff/moderation",
+    "file": "src/app/(portal)/staff/moderation/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/staff/schedules",
+    "file": "src/app/(portal)/staff/schedules/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/student",
+    "file": "src/app/(portal)/student/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF"
+    ]
+  },
+  {
+    "path": "/ta",
+    "file": "src/app/(portal)/ta/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "TEACHING_ASSISTANT"
+    ]
+  },
+  {
+    "path": "/ta/attendance",
+    "file": "src/app/(portal)/ta/attendance/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "TEACHING_ASSISTANT"
+    ]
+  },
+  {
+    "path": "/ta/classes",
+    "file": "src/app/(portal)/ta/classes/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "TEACHING_ASSISTANT"
+    ]
+  },
+  {
+    "path": "/ta/exam-monitor",
+    "file": "src/app/(portal)/ta/exam-monitor/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "TEACHING_ASSISTANT"
+    ]
+  },
+  {
+    "path": "/ta/forum",
+    "file": "src/app/(portal)/ta/forum/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "TEACHING_ASSISTANT"
+    ]
+  },
+  {
+    "path": "/ta/grading",
+    "file": "src/app/(portal)/ta/grading/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "TEACHING_ASSISTANT"
+    ]
+  },
+  {
+    "path": "/ta/materials",
+    "file": "src/app/(portal)/ta/materials/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "TEACHING_ASSISTANT"
+    ]
+  },
+  {
+    "path": "/transparency",
+    "file": "src/app/(portal)/transparency/page.tsx",
+    "group": "portal",
+    "isDynamic": false,
+    "allowedRoles": [
+      "STUDENT",
+      "LECTURER",
+      "TEACHING_ASSISTANT",
+      "PROGRAM_COORDINATOR",
+      "ACADEMIC_STAFF",
+      "SYSTEM_ADMIN",
+      "SUPER_ADMIN"
+    ]
+  },
+  {
+    "path": "/workspace",
+    "file": "src/app/(auth)/workspace/page.tsx",
+    "group": "auth",
+    "isDynamic": false,
+    "allowedRoles": [
+      "PUBLIC"
+    ]
+  }
+]
