@@ -77,6 +77,30 @@ const SAMPLE_USERS: UserItem[] = [
     email: 'sysadmin@utsn.ac.id',
     status: 'ACTIVE',
   },
+  {
+    id: 'a0000011-0000-0000-0000-000000000011',
+    name: 'Siti Rahma, M.Kom.',
+    role: 'PROGRAM_SECRETARY',
+    identifier: 'NIDN: 0011223344',
+    email: 'sekprodi@siajar.test',
+    status: 'ACTIVE',
+  },
+  {
+    id: 'a0000012-0000-0000-0000-000000000012',
+    name: 'Ir. Hendra Wijaya, M.T.',
+    role: 'LAB_HEAD',
+    identifier: 'NIDN: 0022334455',
+    email: 'kalab@siajar.test',
+    status: 'ACTIVE',
+  },
+  {
+    id: 'a0000013-0000-0000-0000-000000000013',
+    name: 'Prof. Dr. Ir. H. Mansyur, M.T.',
+    role: 'DEAN',
+    identifier: 'NIDN: 0033445566',
+    email: 'dekan@siajar.test',
+    status: 'ACTIVE',
+  },
 ];
 
 export function SuperadminUsersHubView() {
@@ -238,6 +262,9 @@ export function SuperadminUsersHubView() {
               <option value="LECTURER">Dosen Pengampu</option>
               <option value="TEACHING_ASSISTANT">Asisten Dosen</option>
               <option value="PROGRAM_COORDINATOR">Kaprodi</option>
+              <option value="PROGRAM_SECRETARY">Sekretaris Prodi</option>
+              <option value="LAB_HEAD">Kepala Lab</option>
+              <option value="DEAN">Dekan</option>
               <option value="ACADEMIC_STAFF">Staf Akademik</option>
               <option value="SYSTEM_ADMIN">System Admin</option>
             </select>
@@ -295,6 +322,9 @@ export function SuperadminUsersHubView() {
                         <option value="LECTURER">LECTURER</option>
                         <option value="TEACHING_ASSISTANT">TEACHING_ASSISTANT</option>
                         <option value="PROGRAM_COORDINATOR">PROGRAM_COORDINATOR</option>
+                        <option value="PROGRAM_SECRETARY">PROGRAM_SECRETARY</option>
+                        <option value="LAB_HEAD">LAB_HEAD</option>
+                        <option value="DEAN">DEAN</option>
                         <option value="ACADEMIC_STAFF">ACADEMIC_STAFF</option>
                         <option value="SYSTEM_ADMIN">SYSTEM_ADMIN</option>
                       </select>

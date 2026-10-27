@@ -87,6 +87,19 @@ export function StaffMasterHubView({ isDemo = true }: StaffMasterHubViewProps) {
   const courses = isDemo ? COURSES : [];
   const academicYears = isDemo ? ACADEMIC_YEARS : [];
   const rooms = isDemo ? ROOMS : [];
+  const FACULTIES = [
+    { code: 'FT', name: 'Fakultas Teknik', dean: 'Prof. Dr. Ir. H. Mansyur, M.T.', programsCount: 4, activeStatus: 'AKTIF' },
+    { code: 'FASILKOM', name: 'Fakultas Ilmu Komputer', dean: 'Dr. Ahmad Fauzi, M.Kom.', programsCount: 2, activeStatus: 'AKTIF' },
+  ];
+
+  const LABORATORIES = [
+    { code: 'LAB-RPL', name: 'Laboratorium Rekayasa Perangkat Lunak', program: 'Teknik Informatika', head: 'Ir. Hendra Wijaya, M.T.', room: 'LAB-RPL (Lt. 3)', activeStatus: 'AKTIF' },
+    { code: 'LAB-NET', name: 'Laboratorium Jaringan & Keamanan Siber', program: 'Teknik Informatika', head: 'Ir. Hendra Wijaya, M.T.', room: 'LAB-NET (Lt. 3)', activeStatus: 'AKTIF' },
+  ];
+
+  const faculties = isDemo ? FACULTIES : [];
+  const laboratories = isDemo ? LABORATORIES : [];
+
 
   return (
     <div className="p-4 sm:p-6 lg:p-9 w-full space-y-6 sm:space-y-8 animate-fade-up">

@@ -1,7 +1,7 @@
 # Snapshot Skema Database SIAJAR (Single Source of Truth)
 
 > **Tanggal Dihasilkan**: 12 Oktober 2026  
-> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..40 dijalankan dari nol.  
+> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..44 dijalankan dari nol.  
 > **Tujuan**: Sumber kebenaran tunggal (*Single Source of Truth*) nama tabel, kolom, tipe data, foreign key, dan kebijakan RLS untuk perencanaan dan implementasi Fase 3.
 
 ---
@@ -19,7 +19,7 @@
 | `identifier_type` | `NIM`, `NIDN`, `NIP`, `EMAIL`, `USERNAME` |
 | `material_status` | `DRAFT`, `PUBLISHED`, `HIDDEN` |
 | `risk_level` | `LOW`, `MEDIUM`, `HIGH` |
-| `scope_type` | `GLOBAL`, `PROGRAM`, `CLASS` |
+| `scope_type` | `GLOBAL`, `PROGRAM`, `CLASS`, `FACULTY`, `LAB` |
 | `submission_status` | `DRAFT`, `SUBMITTED`, `RETURNED`, `REVIEWED`, `GRADED` |
 | `user_role_status` | `ACTIVE`, `REVOKED`, `EXPIRED` |
 | `user_status` | `PENDING`, `ACTIVE`, `LOCKED`, `SUSPENDED`, `DEACTIVATED` |
@@ -973,6 +973,31 @@
 |---|---|---|---|
 | `class_gamification_settings_manage` | `ALL` | `authenticated` | PERMISSIVE |
 | `class_gamification_settings_select` | `SELECT` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.class_laboratories`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 3
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `class_id` | `uuid` | NO | - |
+| `laboratory_id` | `uuid` | NO | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `class_id` -> `public.classes(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `laboratory_id` -> `public.laboratories(id)` (ON DELETE CASCADE)
+- PRIMARY KEY: `class_id`
+- PRIMARY KEY: `laboratory_id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `class_laboratories_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `class_laboratories_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 
@@ -2255,6 +2280,32 @@
 
 ---
 
+### Tabel: `public.faculties`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 6
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `code` | `character varying` | NO | - |
+| `name` | `text` | NO | - |
+| `is_active` | `boolean` | NO | `true` |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- PRIMARY KEY: `id`
+- UNIQUE: `code`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `faculties_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `faculties_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
 ### Tabel: `public.feedback_comments`
 
 - **Status Row Level Security (RLS)**: AKTIF (Enabled)
@@ -2931,6 +2982,36 @@
 
 ---
 
+### Tabel: `public.laboratories`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 8
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `program_id` | `uuid` | NO | - |
+| `code` | `character varying` | NO | - |
+| `name` | `text` | NO | - |
+| `room_id` | `uuid` | YES | - |
+| `is_active` | `boolean` | NO | `true` |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `program_id` -> `public.programs(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `room_id` -> `public.rooms(id)` (ON DELETE SET NULL)
+- PRIMARY KEY: `id`
+- UNIQUE: `code`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `laboratories_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `laboratories_write` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
 ### Tabel: `public.leave_permits`
 
 - **Status Row Level Security (RLS)**: AKTIF (Enabled)
@@ -3485,7 +3566,7 @@
 ### Tabel: `public.programs`
 
 - **Status Row Level Security (RLS)**: AKTIF (Enabled)
-- **Jumlah Kolom**: 6
+- **Jumlah Kolom**: 7
 
 | Nama Kolom | Tipe Data | Nullable | Nilai Default |
 |---|---|---|---|
@@ -3495,8 +3576,10 @@
 | `is_active` | `boolean` | NO | `true` |
 | `created_at` | `timestamp with time zone` | NO | `now()` |
 | `updated_at` | `timestamp with time zone` | NO | `now()` |
+| `faculty_id` | `uuid` | YES | - |
 
 **Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `faculty_id` -> `public.faculties(id)` (ON DELETE SET NULL)
 - PRIMARY KEY: `id`
 - UNIQUE: `code`
 

@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles, switchWorkspaceAction } from '@/modules/identity/actions';
 import { cn } from '@/lib/utils';
 import {
+  Layers,
   GraduationCap,
   BookOpen,
   Users,
@@ -44,6 +45,21 @@ const ROLE_METADATA: Record<
     label: 'Ruang Staf Akademik',
     desc: 'Administrasi data master, tahun akademik, semester, mata kuliah, jadwal dan kelas.',
     icon: FileSpreadsheet,
+  },
+  PROGRAM_SECRETARY: {
+    label: 'Ruang Sekretaris Prodi',
+    desc: 'Membantu koordinasi akademik, operasional perkuliahan prodi, dan verifikasi berkas.',
+    icon: Compass,
+  },
+  LAB_HEAD: {
+    label: 'Ruang Kepala Laboratorium',
+    desc: 'Pengelolaan sarana laboratorium, pemantauan praktikum, dan penugasan asisten lab.',
+    icon: Layers,
+  },
+  DEAN: {
+    label: 'Ruang Dekan',
+    desc: 'Pemantauan capaian perkuliahan agregat, risiko mahasiswa, dan laporan mutu fakultas.',
+    icon: GraduationCap,
   },
   SYSTEM_ADMIN: {
     label: 'Ruang System Administrator',

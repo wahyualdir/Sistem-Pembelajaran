@@ -412,7 +412,75 @@ const SUPER_ADMIN_GROUPS: MenuGroup[] = [
   },
 ];
 
+
+/**
+ * 6.8 Menu bersama semua peran (Grup Akun di paling bawah sidebar) - 3 item
+ */
+export const SHARED_SUPPORT_GROUP: MenuGroup = {
+  id: 'shared-akun',
+  title: 'Akun',
+  roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'PROGRAM_SECRETARY', 'LAB_HEAD', 'DEAN', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'],
+  collapsible: true,
+  defaultCollapsed: true,
+  items: [
+    { id: 'shared-pengaturan', label: 'Pengaturan', href: '/settings', icon: Settings, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
+    { id: 'shared-bantuan', label: 'Bantuan', href: '/help', icon: LifeBuoy, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
+    { id: 'shared-privasi', label: 'Privasi', href: '/transparency', icon: Eye, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
+  ],
+};
+
+// 6.7a Sekretaris Prodi (PROGRAM_SECRETARY) - Kerangka Fase 1
+const PROGRAM_SECRETARY_GROUPS: MenuGroup[] = [
+  {
+    id: 'sek-utama',
+    title: '',
+    roles: ['PROGRAM_SECRETARY'],
+    items: [
+      { id: 'sek-beranda', label: 'Beranda', href: '/secretary', icon: GraduationCap, roles: ['PROGRAM_SECRETARY'] },
+      { id: 'sek-kalender', label: 'Kalender', href: '/calendar', icon: CalendarDays, roles: ['PROGRAM_SECRETARY'] },
+      { id: 'sek-notifikasi', label: 'Notifikasi', href: '/notifications', icon: Bell, roles: ['PROGRAM_SECRETARY'] },
+      { id: 'sek-pengumuman', label: 'Pengumuman', href: '/announcements', icon: Megaphone, roles: ['PROGRAM_SECRETARY'] },
+    ],
+  },
+  SHARED_SUPPORT_GROUP,
+];
+
+// 6.7b Kepala Laboratorium (LAB_HEAD) - Kerangka Fase 1
+const LAB_HEAD_GROUPS: MenuGroup[] = [
+  {
+    id: 'lab-utama',
+    title: '',
+    roles: ['LAB_HEAD'],
+    items: [
+      { id: 'lab-beranda', label: 'Beranda', href: '/lab', icon: GraduationCap, roles: ['LAB_HEAD'] },
+      { id: 'lab-kalender', label: 'Kalender', href: '/calendar', icon: CalendarDays, roles: ['LAB_HEAD'] },
+      { id: 'lab-notifikasi', label: 'Notifikasi', href: '/notifications', icon: Bell, roles: ['LAB_HEAD'] },
+      { id: 'lab-pengumuman', label: 'Pengumuman', href: '/announcements', icon: Megaphone, roles: ['LAB_HEAD'] },
+    ],
+  },
+  SHARED_SUPPORT_GROUP,
+];
+
+// 6.7c Dekan (DEAN) - Kerangka Fase 1
+const DEAN_GROUPS: MenuGroup[] = [
+  {
+    id: 'dkn-utama',
+    title: '',
+    roles: ['DEAN'],
+    items: [
+      { id: 'dkn-beranda', label: 'Beranda', href: '/dean', icon: GraduationCap, roles: ['DEAN'] },
+      { id: 'dkn-kalender', label: 'Kalender', href: '/calendar', icon: CalendarDays, roles: ['DEAN'] },
+      { id: 'dkn-notifikasi', label: 'Notifikasi', href: '/notifications', icon: Bell, roles: ['DEAN'] },
+      { id: 'dkn-pengumuman', label: 'Pengumuman', href: '/announcements', icon: Megaphone, roles: ['DEAN'] },
+    ],
+  },
+  SHARED_SUPPORT_GROUP,
+];
+
 export const MENU_CONFIG: Record<string, MenuGroup[]> = {
+  PROGRAM_SECRETARY: PROGRAM_SECRETARY_GROUPS,
+  LAB_HEAD: LAB_HEAD_GROUPS,
+  DEAN: DEAN_GROUPS,
   STUDENT: STUDENT_GROUPS,
   TEACHING_ASSISTANT: TEACHING_ASSISTANT_GROUPS,
   LECTURER: LECTURER_GROUPS,
@@ -422,21 +490,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
   SUPER_ADMIN: SUPER_ADMIN_GROUPS,
 };
 
-/**
- * 6.8 Menu bersama semua peran (Grup Akun di paling bawah sidebar) - 3 item
- */
-export const SHARED_SUPPORT_GROUP: MenuGroup = {
-  id: 'shared-akun',
-  title: 'Akun',
-  roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'],
-  collapsible: true,
-  defaultCollapsed: true,
-  items: [
-    { id: 'shared-pengaturan', label: 'Pengaturan', href: '/settings', icon: Settings, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
-    { id: 'shared-bantuan', label: 'Bantuan', href: '/help', icon: LifeBuoy, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
-    { id: 'shared-privasi', label: 'Privasi', href: '/transparency', icon: Eye, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
-  ],
-};
+
 
 /**
  * Normalisasi kode role dari berbagai format input
@@ -447,6 +501,9 @@ export function normalizeRoleCode(role?: string | null): string {
   if (r === 'ADMIN' || r === 'SYSTEM_ADMIN' || r === 'SYSADMIN') return 'SYSTEM_ADMIN';
   if (r === 'DOSEN' || r === 'LECTURER' || r === 'TEACHER') return 'LECTURER';
   if (r === 'KAPRODI' || r === 'PROGRAM_COORDINATOR' || r === 'COORDINATOR' || r === 'PRODI') return 'PROGRAM_COORDINATOR';
+  if (r === 'SEKPRODI' || r === 'PROGRAM_SECRETARY' || r === 'SECRETARY') return 'PROGRAM_SECRETARY';
+  if (r === 'KALAB' || r === 'LAB_HEAD' || r === 'LAB_CHIEF') return 'LAB_HEAD';
+  if (r === 'DEKAN' || r === 'DEAN') return 'DEAN';
   if (r === 'STAFF' || r === 'ACADEMIC_STAFF' || r === 'BAAK') return 'ACADEMIC_STAFF';
   if (r === 'TA' || r === 'ASDOS' || r === 'TEACHING_ASSISTANT' || r === 'ASISTEN') return 'TEACHING_ASSISTANT';
   return 'STUDENT';
@@ -630,6 +687,12 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
       pathname.startsWith('/grades') ||
       pathname.startsWith('/exams') ||
       pathname.startsWith('/classes') ||
+      pathname.startsWith('/secretary') ||
+      pathname.startsWith('/lab') ||
+      pathname.startsWith('/dean') ||
+      pathname.startsWith('/secretary') ||
+      pathname.startsWith('/lab') ||
+      pathname.startsWith('/dean') ||
       pathname.startsWith('/coordinator') ||
       pathname.startsWith('/student') ||
       pathname.startsWith('/lecturer') ||
@@ -673,6 +736,21 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
   // Proteksi admin
   if (pathname.startsWith('/admin')) {
     return norm === 'SYSTEM_ADMIN' || norm === 'SUPER_ADMIN';
+  }
+
+  // Proteksi sekretaris prodi
+  if (pathname.startsWith('/secretary')) {
+    return norm === 'PROGRAM_SECRETARY';
+  }
+
+  // Proteksi kepala lab
+  if (pathname.startsWith('/lab')) {
+    return norm === 'LAB_HEAD';
+  }
+
+  // Proteksi dekan
+  if (pathname.startsWith('/dean')) {
+    return norm === 'DEAN';
   }
 
   // Proteksi kaprodi
@@ -731,7 +809,7 @@ export function isNavItemActive(
   }
 
   // Rute utama / root / dashboard tidak menggunakan prefix matching
-  const nonPrefixPaths = ['/', '/admin', '/student', '/lecturer', '/coordinator', '/staff', '/ta'];
+  const nonPrefixPaths = ['/', '/admin', '/student', '/lecturer', '/coordinator', '/staff', '/ta', '/secretary', '/lab', '/dean'];
   if (nonPrefixPaths.includes(itemPath)) {
     return false;
   }

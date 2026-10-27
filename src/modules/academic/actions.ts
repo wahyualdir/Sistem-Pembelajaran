@@ -1571,14 +1571,18 @@ export async function createMaterialAction(input: unknown): Promise<ActionRespon
 }
 
 // ---------- Master data akademik (Staf Akademik) ----------
-export interface ProgramItem { id: string; code: string; name: string }
+export interface FacultyItem { id: string; code: string; name: string; is_active: boolean }
+export interface LaboratoryItem { id: string; program_id: string; code: string; name: string; is_active: boolean }
+export interface ProgramItem { id: string; code: string; name: string; faculty_id?: string | null }
 export interface SemesterItem { id: string; label: string; is_active: boolean }
 export interface CourseItem { id: string; program_id: string; program_code: string; code: string; name: string; credits: number }
-export interface MasterData { programs: ProgramItem[]; semesters: SemesterItem[]; courses: CourseItem[] }
+export interface MasterData { programs: ProgramItem[]; semesters: SemesterItem[]; courses: CourseItem[]; faculties?: FacultyItem[]; laboratories?: LaboratoryItem[] }
 
 const masterSchemas = {
   program: z.object({ code: z.string().trim().toUpperCase().min(2, 'Kode minimal 2 karakter.').max(20), name: z.string().trim().min(3, 'Nama minimal 3 karakter.').max(120) }),
   semester: z.object({ label: z.string().trim().min(5, 'Isi label, contoh: 2026/2027 Ganjil.').max(40) }),
+  faculty: z.object({ code: z.string().trim().toUpperCase().min(2, 'Kode minimal 2 karakter.').max(50), name: z.string().trim().min(3, 'Nama minimal 3 karakter.').max(120) }),
+  laboratory: z.object({ program_id: z.string().uuid('Pilih program studi.'), code: z.string().trim().toUpperCase().min(2, 'Kode minimal 2 karakter.').max(50), name: z.string().trim().min(3, 'Nama minimal 3 karakter.').max(120), room_id: z.string().uuid().optional().nullable() }),
   course: z.object({
     program_id: z.string().uuid('Pilih program studi.'),
     code: z.string().trim().toUpperCase().min(3, 'Kode minimal 3 karakter.').max(20),
@@ -1586,7 +1590,7 @@ const masterSchemas = {
     credits: z.coerce.number().int().min(1, 'SKS antara 1 dan 6.').max(6, 'SKS antara 1 dan 6.'),
   }),
 };
-const TABLE = { program: 'programs', semester: 'semesters', course: 'courses' } as const;
+const TABLE = { program: 'programs', semester: 'semesters', course: 'courses', faculty: 'faculties', laboratory: 'laboratories' } as const;
 const mdata: Record<keyof typeof masterSchemas, any[]> = ((globalThis as any).__siajarMaster ??= { program: [], semester: [], course: [] });
 
 // Inisialisasi Master Data Kurikulum Informatika UIR (63 Mata Kuliah & Semester Aktif)
@@ -1647,6 +1651,8 @@ async function createMaster(kind: keyof typeof masterSchemas, input: unknown): P
 export async function createProgramAction(input: unknown) { return createMaster('program', input); }
 export async function createSemesterAction(input: unknown) { return createMaster('semester', input); }
 export async function createCourseAction(input: unknown) { return createMaster('course', input); }
+export async function createFacultyAction(input: unknown) { return createMaster('faculty', input); }
+export async function createLaboratoryAction(input: unknown) { return createMaster('laboratory', input); }
 
 export async function listMasterDataAction(): Promise<MasterData> {
   const c = await getCurrentUserWithRoles();

@@ -36,33 +36,43 @@ BEGIN
     SELECT id INTO r_dean FROM public.roles WHERE code = 'DEAN';
     SELECT id INTO r_staff FROM public.roles WHERE code = 'ACADEMIC_STAFF';
 
-    -- Tambahan izin advisory untuk PROGRAM_COORDINATOR dan ACADEMIC_STAFF
-    INSERT INTO public.role_permissions (role_id, permission_id)
-    SELECT r_coord, id FROM public.permissions WHERE code IN ('advisory.assign', 'advisory.view')
-    ON CONFLICT DO NOTHING;
+    -- Tambahan izin advisory untuk PROGRAM_COORDINATOR dan ACADEMIC_STAFF (bila role sudah ada di DB)
+    IF r_coord IS NOT NULL THEN
+        INSERT INTO public.role_permissions (role_id, permission_id)
+        SELECT r_coord, id FROM public.permissions WHERE code IN ('advisory.assign', 'advisory.view')
+        ON CONFLICT DO NOTHING;
+    END IF;
 
-    INSERT INTO public.role_permissions (role_id, permission_id)
-    SELECT r_staff, id FROM public.permissions WHERE code IN ('advisory.assign', 'advisory.view')
-    ON CONFLICT DO NOTHING;
+    IF r_staff IS NOT NULL THEN
+        INSERT INTO public.role_permissions (role_id, permission_id)
+        SELECT r_staff, id FROM public.permissions WHERE code IN ('advisory.assign', 'advisory.view')
+        ON CONFLICT DO NOTHING;
+    END IF;
 
     -- PROGRAM_SECRETARY permissions (menyiapkan & verifikasi, TANPA grade.change_approve dan audit.view)
-    INSERT INTO public.role_permissions (role_id, permission_id)
-    SELECT r_sec, id FROM public.permissions WHERE code IN (
-        'class.view', 'class.update', 'class.manage_members', 'class.assign_staff',
-        'material.view', 'announcement.manage', 'analytics.program', 'report.export',
-        'advisory.assign', 'advisory.view'
-    ) ON CONFLICT DO NOTHING;
+    IF r_sec IS NOT NULL THEN
+        INSERT INTO public.role_permissions (role_id, permission_id)
+        SELECT r_sec, id FROM public.permissions WHERE code IN (
+            'class.view', 'class.update', 'class.manage_members', 'class.assign_staff',
+            'material.view', 'announcement.manage', 'analytics.program', 'report.export',
+            'advisory.assign', 'advisory.view'
+        ) ON CONFLICT DO NOTHING;
+    END IF;
 
     -- LAB_HEAD permissions (kelola lab, asisten lab, rekap praktikum, TANPA ubah nilai)
-    INSERT INTO public.role_permissions (role_id, permission_id)
-    SELECT r_lab, id FROM public.permissions WHERE code IN (
-        'class.view', 'material.view', 'analytics.class', 'report.export',
-        'lab.manage'
-    ) ON CONFLICT DO NOTHING;
+    IF r_lab IS NOT NULL THEN
+        INSERT INTO public.role_permissions (role_id, permission_id)
+        SELECT r_lab, id FROM public.permissions WHERE code IN (
+            'class.view', 'material.view', 'analytics.class', 'report.export',
+            'lab.manage'
+        ) ON CONFLICT DO NOTHING;
+    END IF;
 
     -- DEAN permissions (hanya baca agregat fakultas & ekspor laporan, TANPA nilai per mahasiswa / audit log)
-    INSERT INTO public.role_permissions (role_id, permission_id)
-    SELECT r_dean, id FROM public.permissions WHERE code IN (
-        'analytics.program', 'report.export', 'faculty.view'
-    ) ON CONFLICT DO NOTHING;
+    IF r_dean IS NOT NULL THEN
+        INSERT INTO public.role_permissions (role_id, permission_id)
+        SELECT r_dean, id FROM public.permissions WHERE code IN (
+            'analytics.program', 'report.export', 'faculty.view'
+        ) ON CONFLICT DO NOTHING;
+    END IF;
 END $$;

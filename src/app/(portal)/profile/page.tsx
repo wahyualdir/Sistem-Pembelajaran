@@ -47,6 +47,10 @@ export default async function ProfilePage() {
     LECTURER: 'Dosen Pengampu',
     TEACHING_ASSISTANT: 'Asisten Dosen',
     PROGRAM_COORDINATOR: 'Koordinator Prodi',
+    PROGRAM_SECRETARY: 'Sekretaris Prodi',
+    LAB_HEAD: 'Kepala Laboratorium',
+    DEAN: 'Dekan',
+    SUPER_ADMIN: 'Super Administrator',
     ACADEMIC_STAFF: 'Staf Akademik',
     SYSTEM_ADMIN: 'System Administrator',
   };
