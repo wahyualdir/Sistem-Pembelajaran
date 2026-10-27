@@ -1,5 +1,6 @@
-import { CountUpNumber } from '@/components/shared/count-up-number';
 'use client';
+
+import { CountUpNumber } from '@/components/shared/count-up-number';
 
 import React, { useState, useEffect } from 'react';
 import {

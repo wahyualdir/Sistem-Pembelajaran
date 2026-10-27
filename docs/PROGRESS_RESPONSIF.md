@@ -88,7 +88,13 @@
       3. Pengukuran Cumulative Layout Shift (CLS) menggunakan `PerformanceObserver` memenuhi target `<= 0.05`.
       4. Tidak ada animasi loop tak berujung yang mengganggu di area konten utama.
   - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (621 berkas lolos), `npm run typecheck` (0 error), `npm run lint` (0 error), Playwright Motion (4/4 lulus).
-- [ ] **Fase 9 — Verifikasi Akhir, Matriks Lengkap & Serah Terima**
+- [x] **Fase 9 — Verifikasi Akhir, Matriks Lengkap & Serah Terima**
+  - **Kompilasi Produksi (`next build`)**: Memverifikasi pembuatan build produksi Next.js 14.2 berhasil optimal tanpa error kompilasi dan penambahan bundle JS first-load tetap di bawah batas anggaran (+8 KB gzip).
+  - **Verifikasi Rantai Penuh**: `npm run cek:hex` (lolos), `npm run cek:responsif` (621 berkas lolos), `npm run typecheck` (0 error), `npm run lint` (0 error), Playwright Responsive & Motion hijau.
+  - **Dokumentasi Lengkap**:
+    - `docs/LAPORAN_RESPONSIF.md` memuat laporan komprehensif temuan T1–T12, ringkasan per fase, matriks 125 rute, anggaran CLS, daftar keputusan 01–09, batasan kerja, dan panduan uji fisik.
+    - `README.md` diperbarui dengan petunjuk `cek:responsif`, `NEXT_PUBLIC_FF_MOBILE_NAV`, dan `NEXT_PUBLIC_FF_MOTION`.
+    - Tag git akhir `resp-fase-9` disematkan pada branch `responsif/mobile-ipad-animasi`. Tidak di-merge ke `main` sesuai mandat.
 
 ---
 

@@ -48,12 +48,19 @@ cp .env.example .env.local   # isi kunci dari `supabase status`
 npm run dev
 ```
 
+**Konfigurasi Responsif & Sistem Gerak (Feature Flags).**
+Dua variabel lingkungan opsional dapat diatur di `.env.local` (lihat `.env.example`):
+- `NEXT_PUBLIC_FF_MOBILE_NAV`: Mengontrol bilah navigasi bawah ponsel (`true` secara default). Bila diatur ke `false`, ponsel kembali ke navigasi drawer hamburger klasik.
+- `NEXT_PUBLIC_FF_MOTION`: Mengontrol status awal sistem gerak (`true` = mode penuh, `false` = mode mati total). Pengguna juga dapat mengubah preferensi secara langsung di menu *Pengaturan > Tampilan*.
+
 ## Pengujian
 
 ```bash
 npm run typecheck && npm run lint && npm run cek:hex && npm run check:rls && npm test
+npm run cek:responsif # Audit otomatis responsif, ukuran font sentuh, dan ketersediaan kelas animasi
+npm run cek           # Rantai verifikasi komprehensif (typecheck, lint, rls, snapshot, hex, responsif, vitest)
 supabase test db      # pgTAP: RLS dan aturan bisnis
-npx playwright test   # E2E, memakai mode demo
+npx playwright test   # E2E, mencakup matriks responsif 11 viewport dan performa gerak
 ```
 
 ## Cadangan dan pemulihan
