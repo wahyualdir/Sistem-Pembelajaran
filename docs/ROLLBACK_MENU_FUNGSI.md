@@ -12,6 +12,7 @@ Dokumen ini mencatat titik balik (*rollback checkpoints*), tag git, migrasi data
 | Fase 0 — Jaring Pengaman & Baseline | `fase-0-baseline` | Tidak ada | `git revert fase-0-baseline` |
 | Fase 1 — Perbaikan Keamanan | `fase-1-keamanan` | Tidak ada | `git revert fase-0-baseline..fase-1-keamanan` |
 | Fase 2 — Inventaris & Audit Menu Otomatis | `fase-2-audit` | Tidak ada | `git revert fase-1-keamanan..fase-2-audit` |
+| Fase 3 — Rute dan Akses per Role | `fase-3-rute-akses` | Tidak ada | `git revert fase-2-audit..fase-3-rute-akses` |
 
 ---
 

@@ -18,6 +18,7 @@ import {
   BERANDA_CHIPS,
   LEGACY_ROUTE_REDIRECTS,
   MENU_CONFIG,
+  isRouteAllowedForRole,
   SHARED_SUPPORT_GROUP,
 } from '../src/lib/config/menu-config';
 
@@ -377,4 +378,129 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
       }
     });
   });
+
+  describe('Matriks Akses Peran dan Proteksi Rute (Fase 3.3)', () => {
+    const ALL_ROLES = [
+      'STUDENT',
+      'TEACHING_ASSISTANT',
+      'LECTURER',
+      'PROGRAM_COORDINATOR',
+      'ACADEMIC_STAFF',
+      'SYSTEM_ADMIN',
+      'SUPER_ADMIN',
+    ];
+
+    it('(c) memastikan tidak ada href di sidebar suatu peran yang ditolak untuk peran tersebut (bebas menu mati)', () => {
+      for (const role of ALL_ROLES) {
+        const groups = getNavGroups(role);
+        const hrefs = groups.flatMap((g) => g.items.map((i) => i.href));
+        for (const href of hrefs) {
+          const isAllowed = isRouteAllowedForRole(href, role);
+          expect(
+            isAllowed,
+            `Menu ${href} di sidebar role ${role} ditolak oleh isRouteAllowedForRole!`
+          ).toBe(true);
+        }
+      }
+    });
+
+    it('(b) memastikan rute terproteksi menolak peran yang tidak berhak (redirect / 403)', () => {
+      // Mahasiswa dilarang mengakses portal lain dan admin
+      expect(isRouteAllowedForRole('/admin', 'STUDENT')).toBe(false);
+      expect(isRouteAllowedForRole('/coordinator', 'STUDENT')).toBe(false);
+      expect(isRouteAllowedForRole('/coordinator/curriculum', 'STUDENT')).toBe(false);
+      expect(isRouteAllowedForRole('/staff', 'STUDENT')).toBe(false);
+      expect(isRouteAllowedForRole('/lecturer', 'STUDENT')).toBe(false);
+      expect(isRouteAllowedForRole('/ta', 'STUDENT')).toBe(false);
+
+      // Dosen dilarang mengakses admin, staf, asisten, atau portal mahasiswa
+      expect(isRouteAllowedForRole('/admin', 'LECTURER')).toBe(false);
+      expect(isRouteAllowedForRole('/staff', 'LECTURER')).toBe(false);
+      expect(isRouteAllowedForRole('/ta', 'LECTURER')).toBe(false);
+      expect(isRouteAllowedForRole('/student', 'LECTURER')).toBe(false);
+
+      // Kaprodi dilarang mengakses admin atau staf
+      expect(isRouteAllowedForRole('/admin', 'PROGRAM_COORDINATOR')).toBe(false);
+      expect(isRouteAllowedForRole('/staff', 'PROGRAM_COORDINATOR')).toBe(false);
+      expect(isRouteAllowedForRole('/student', 'PROGRAM_COORDINATOR')).toBe(false);
+      expect(isRouteAllowedForRole('/ta', 'PROGRAM_COORDINATOR')).toBe(false);
+
+      // Asisten Dosen dilarang mengakses kaprodi, staf, admin, atau mahasiswa
+      expect(isRouteAllowedForRole('/admin', 'TEACHING_ASSISTANT')).toBe(false);
+      expect(isRouteAllowedForRole('/coordinator', 'TEACHING_ASSISTANT')).toBe(false);
+      expect(isRouteAllowedForRole('/staff', 'TEACHING_ASSISTANT')).toBe(false);
+      expect(isRouteAllowedForRole('/student', 'TEACHING_ASSISTANT')).toBe(false);
+
+      // Staf Akademik dilarang mengakses koordinator, dosen, asisten, admin, atau mahasiswa
+      expect(isRouteAllowedForRole('/admin', 'ACADEMIC_STAFF')).toBe(false);
+      expect(isRouteAllowedForRole('/coordinator', 'ACADEMIC_STAFF')).toBe(false);
+      expect(isRouteAllowedForRole('/lecturer', 'ACADEMIC_STAFF')).toBe(false);
+      expect(isRouteAllowedForRole('/ta', 'ACADEMIC_STAFF')).toBe(false);
+      expect(isRouteAllowedForRole('/student', 'ACADEMIC_STAFF')).toBe(false);
+
+      // System Admin dilarang mengakses rute akademik
+      expect(isRouteAllowedForRole('/student', 'SYSTEM_ADMIN')).toBe(false);
+      expect(isRouteAllowedForRole('/classes', 'SYSTEM_ADMIN')).toBe(false);
+      expect(isRouteAllowedForRole('/exams', 'SYSTEM_ADMIN')).toBe(false);
+      expect(isRouteAllowedForRole('/grades', 'SYSTEM_ADMIN')).toBe(false);
+      expect(isRouteAllowedForRole('/attendance', 'SYSTEM_ADMIN')).toBe(false);
+      expect(isRouteAllowedForRole('/coordinator', 'SYSTEM_ADMIN')).toBe(false);
+      expect(isRouteAllowedForRole('/lecturer', 'SYSTEM_ADMIN')).toBe(false);
+      expect(isRouteAllowedForRole('/ta', 'SYSTEM_ADMIN')).toBe(false);
+      expect(isRouteAllowedForRole('/staff', 'SYSTEM_ADMIN')).toBe(false);
+
+      // Super Admin tanpa impersonasi dilarang membuka rute akademik langsung
+      expect(isRouteAllowedForRole('/classes', 'SUPER_ADMIN', false)).toBe(false);
+      expect(isRouteAllowedForRole('/exams', 'SUPER_ADMIN', false)).toBe(false);
+      expect(isRouteAllowedForRole('/grades', 'SUPER_ADMIN', false)).toBe(false);
+    });
+
+    it('(a) memastikan peran yang berhak selalu diizinkan mengakses rute perannya (200 / lolos)', () => {
+      // Mahasiswa
+      expect(isRouteAllowedForRole('/student', 'STUDENT')).toBe(true);
+      expect(isRouteAllowedForRole('/classes', 'STUDENT')).toBe(true);
+      expect(isRouteAllowedForRole('/exams', 'STUDENT')).toBe(true);
+      expect(isRouteAllowedForRole('/grades', 'STUDENT')).toBe(true);
+      expect(isRouteAllowedForRole('/calendar', 'STUDENT')).toBe(true);
+      expect(isRouteAllowedForRole('/notifications', 'STUDENT')).toBe(true);
+
+      // Dosen
+      expect(isRouteAllowedForRole('/lecturer', 'LECTURER')).toBe(true);
+      expect(isRouteAllowedForRole('/lecturer/mentoring', 'LECTURER')).toBe(true);
+      expect(isRouteAllowedForRole('/exams/question-bank', 'LECTURER')).toBe(true);
+      expect(isRouteAllowedForRole('/exams/review', 'LECTURER')).toBe(true);
+      expect(isRouteAllowedForRole('/classes', 'LECTURER')).toBe(true);
+
+      // Kaprodi
+      expect(isRouteAllowedForRole('/coordinator', 'PROGRAM_COORDINATOR')).toBe(true);
+      expect(isRouteAllowedForRole('/coordinator/curriculum', 'PROGRAM_COORDINATOR')).toBe(true);
+      expect(isRouteAllowedForRole('/coordinator/courses', 'PROGRAM_COORDINATOR')).toBe(true);
+      expect(isRouteAllowedForRole('/coordinator/monitoring/at-risk', 'PROGRAM_COORDINATOR')).toBe(true);
+      expect(isRouteAllowedForRole('/coordinator/approvals', 'PROGRAM_COORDINATOR')).toBe(true);
+
+      // Asisten Dosen
+      expect(isRouteAllowedForRole('/ta', 'TEACHING_ASSISTANT')).toBe(true);
+      expect(isRouteAllowedForRole('/ta/classes', 'TEACHING_ASSISTANT')).toBe(true);
+      expect(isRouteAllowedForRole('/ta/grading', 'TEACHING_ASSISTANT')).toBe(true);
+
+      // Staf Akademik
+      expect(isRouteAllowedForRole('/staff', 'ACADEMIC_STAFF')).toBe(true);
+      expect(isRouteAllowedForRole('/staff/master/students', 'ACADEMIC_STAFF')).toBe(true);
+      expect(isRouteAllowedForRole('/staff/master/lecturers', 'ACADEMIC_STAFF')).toBe(true);
+      expect(isRouteAllowedForRole('/staff/services/verification', 'ACADEMIC_STAFF')).toBe(true);
+      expect(isRouteAllowedForRole('/staff/schedules', 'ACADEMIC_STAFF')).toBe(true);
+
+      // System Admin
+      expect(isRouteAllowedForRole('/admin/system', 'SYSTEM_ADMIN')).toBe(true);
+      expect(isRouteAllowedForRole('/admin/monitoring', 'SYSTEM_ADMIN')).toBe(true);
+      expect(isRouteAllowedForRole('/admin/integrations', 'SYSTEM_ADMIN')).toBe(true);
+      expect(isRouteAllowedForRole('/admin/audit-log', 'SYSTEM_ADMIN')).toBe(true);
+
+      // Super Admin
+      expect(isRouteAllowedForRole('/admin', 'SUPER_ADMIN')).toBe(true);
+      expect(isRouteAllowedForRole('/admin/users', 'SUPER_ADMIN')).toBe(true);
+      expect(isRouteAllowedForRole('/admin/roles', 'SUPER_ADMIN')).toBe(true);
+    });
+  });
+
 });

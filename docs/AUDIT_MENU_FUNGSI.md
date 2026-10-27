@@ -87,15 +87,17 @@ Titik awal audit: commit `9d2a590` (`pra-menu-fungsi`) pada cabang `perbaikan/me
 
 ---
 
+---
+
 ## 2. Hasil Audit Inventaris Menu Otomatis (Fase 2)
 
 Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 
 ### 2.1. Ringkasan Status Menu
 - **Total Entri Menu**: 122
-- **BERFUNGSI**: 86
-- **SEBAGIAN**: 2
-- **TIRUAN**: 34
+- **BERFUNGSI**: 90
+- **SEBAGIAN**: 7
+- **TIRUAN**: 25
 - **RUSAK**: 0
 - **TIDAK DIVERIFIKASI**: 0
 
@@ -157,14 +159,14 @@ Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 | `LECTURER` | Tinjau Konten | `/lecturer/content-review` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/content-review/page.tsx |
 | `LECTURER` | Perpustakaan | `/library` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/library/page.tsx |
 | `LECTURER` | Ujian dan Kuis | `/exams` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/exams/page.tsx |
-| `LECTURER` | Bank Soal | `/exams/question-bank` | `CATCH_ALL` | Data Tiruan Statis (DEFAULT_SAMPLE_QUESTIONS (page.tsx:31)) | - | **TIRUAN** | File: src/app/(portal)/exams/[...slug]/page.tsx / Konstanta tiruan: DEFAULT_SAMPLE_QUESTIONS (page.tsx:31) |
-| `LECTURER` | Periksa Jawaban | `/exams/review` | `CATCH_ALL` | Data Tiruan Statis (DEFAULT_SAMPLE_QUESTIONS (page.tsx:31)) | - | **TIRUAN** | File: src/app/(portal)/exams/[...slug]/page.tsx / Konstanta tiruan: DEFAULT_SAMPLE_QUESTIONS (page.tsx:31) |
+| `LECTURER` | Bank Soal | `/exams/question-bank` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/exams/question-bank/page.tsx |
+| `LECTURER` | Periksa Jawaban | `/exams/review` | `KHUSUS` | Server Actions Real | setTimeout palsu di review-view.tsx | **SEBAGIAN** | File: src/app/(portal)/exams/review/page.tsx / Aksi palsu: setTimeout palsu di review-view.tsx |
 | `LECTURER` | Analisis Soal | `/exams/analysis` | `KHUSUS` | Supabase / Prisma | - | **BERFUNGSI** | File: src/app/(portal)/exams/analysis/page.tsx |
 | `LECTURER` | Rubrik | `/lecturer/rubrics` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/rubrics/page.tsx |
 | `LECTURER` | Buku Nilai | `/analytics` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/analytics/page.tsx |
 | `LECTURER` | Sanggahan | `/lecturer/disputes` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/disputes/page.tsx |
 | `LECTURER` | Pesan | `/messages` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/messages/page.tsx |
-| `LECTURER` | Mahasiswa Bimbingan | `/lecturer/mentoring` | `CATCH_ALL` | Data Tiruan Statis (LECTURER_CLASSES (page.tsx:21)) | - | **TIRUAN** | File: src/app/(portal)/lecturer/[...slug]/page.tsx / Konstanta tiruan: LECTURER_CLASSES (page.tsx:21) |
+| `LECTURER` | Mahasiswa Bimbingan | `/lecturer/mentoring` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/mentoring/page.tsx |
 | `LECTURER` | Hasil Evaluasi | `/lecturer/evaluations` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/evaluations/page.tsx |
 | `LECTURER` | Komunitas | `/community` | `KHUSUS` | Data Tiruan Statis (ANNOUNCEMENTS (page.tsx:4), THREADS (page.tsx:47)) | - | **TIRUAN** | File: src/app/(portal)/community/page.tsx / Konstanta tiruan: ANNOUNCEMENTS (page.tsx:4), THREADS (page.tsx:47) |
 | `LECTURER` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
@@ -174,12 +176,12 @@ Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 | `PROGRAM_COORDINATOR` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
 | `PROGRAM_COORDINATOR` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
 | `PROGRAM_COORDINATOR` | Pengumuman | `/announcements` | `KHUSUS` | Data Tiruan Statis (ANNOUNCEMENTS (page.tsx:15)) | - | **TIRUAN** | File: src/app/(portal)/announcements/page.tsx / Konstanta tiruan: ANNOUNCEMENTS (page.tsx:15) |
-| `PROGRAM_COORDINATOR` | Kurikulum | `/coordinator/curriculum` | `CATCH_ALL` | Data Tiruan Statis (COORDINATOR_METRICS (page.tsx:29), CONNECTED_PRODI_COURSES (page.tsx:60)) | - | **TIRUAN** | File: src/app/(portal)/coordinator/[...slug]/page.tsx / Konstanta tiruan: COORDINATOR_METRICS (page.tsx:29), CONNECTED_PRODI_COURSES (page.tsx:60) |
-| `PROGRAM_COORDINATOR` | Mata Kuliah | `/coordinator/courses` | `CATCH_ALL` | Data Tiruan Statis (COORDINATOR_METRICS (page.tsx:29), CONNECTED_PRODI_COURSES (page.tsx:60)) | - | **TIRUAN** | File: src/app/(portal)/coordinator/[...slug]/page.tsx / Konstanta tiruan: COORDINATOR_METRICS (page.tsx:29), CONNECTED_PRODI_COURSES (page.tsx:60) |
+| `PROGRAM_COORDINATOR` | Kurikulum | `/coordinator/curriculum` | `KHUSUS` | Server Actions Real | setTimeout palsu di curriculum-view.tsx | **SEBAGIAN** | File: src/app/(portal)/coordinator/curriculum/page.tsx / Aksi palsu: setTimeout palsu di curriculum-view.tsx |
+| `PROGRAM_COORDINATOR` | Mata Kuliah | `/coordinator/courses` | `KHUSUS` | Server Actions Real | setTimeout palsu di courses-view.tsx | **SEBAGIAN** | File: src/app/(portal)/coordinator/courses/page.tsx / Aksi palsu: setTimeout palsu di courses-view.tsx |
 | `PROGRAM_COORDINATOR` | Penugasan Dosen | `/coordinator/assignments` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/assignments/page.tsx |
 | `PROGRAM_COORDINATOR` | Evaluasi Dosen | `/coordinator/evaluations` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/evaluations/page.tsx |
 | `PROGRAM_COORDINATOR` | Perkuliahan | `/coordinator/monitoring` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/monitoring/page.tsx |
-| `PROGRAM_COORDINATOR` | Mahasiswa Berisiko | `/coordinator/monitoring/at-risk` | `CATCH_ALL` | Data Tiruan Statis (COORDINATOR_METRICS (page.tsx:29), CONNECTED_PRODI_COURSES (page.tsx:60)) | - | **TIRUAN** | File: src/app/(portal)/coordinator/[...slug]/page.tsx / Konstanta tiruan: COORDINATOR_METRICS (page.tsx:29), CONNECTED_PRODI_COURSES (page.tsx:60) |
+| `PROGRAM_COORDINATOR` | Mahasiswa Berisiko | `/coordinator/monitoring/at-risk` | `KHUSUS` | Server Actions Real | setTimeout palsu di at-risk-view.tsx | **SEBAGIAN** | File: src/app/(portal)/coordinator/monitoring/at-risk/page.tsx / Aksi palsu: setTimeout palsu di at-risk-view.tsx |
 | `PROGRAM_COORDINATOR` | Persetujuan Nilai | `/coordinator/approvals` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/approvals/page.tsx |
 | `PROGRAM_COORDINATOR` | Laporan | `/coordinator/reports` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/reports/page.tsx |
 | `PROGRAM_COORDINATOR` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
@@ -188,13 +190,13 @@ Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 | `ACADEMIC_STAFF` | Beranda | `/staff` | `KHUSUS` | Data Tiruan Statis (STAFF_CATEGORIES (staff-dashboard-client.tsx:29)) | - | **TIRUAN** | File: src/app/(portal)/staff/page.tsx / Konstanta tiruan: STAFF_CATEGORIES (staff-dashboard-client.tsx:29) |
 | `ACADEMIC_STAFF` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
 | `ACADEMIC_STAFF` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
-| `ACADEMIC_STAFF` | Mahasiswa | `/staff/master/students` | `CATCH_ALL` | Data Tiruan Statis (STAFF_STATS (page.tsx:21)) | - | **TIRUAN** | File: src/app/(portal)/staff/[...slug]/page.tsx / Konstanta tiruan: STAFF_STATS (page.tsx:21) |
-| `ACADEMIC_STAFF` | Dosen | `/staff/master/lecturers` | `CATCH_ALL` | Data Tiruan Statis (STAFF_STATS (page.tsx:21)) | - | **TIRUAN** | File: src/app/(portal)/staff/[...slug]/page.tsx / Konstanta tiruan: STAFF_STATS (page.tsx:21) |
+| `ACADEMIC_STAFF` | Mahasiswa | `/staff/master/students` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/master/students/page.tsx |
+| `ACADEMIC_STAFF` | Dosen | `/staff/master/lecturers` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/master/lecturers/page.tsx |
 | `ACADEMIC_STAFF` | Data Akademik | `/staff/master` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/master/page.tsx |
 | `ACADEMIC_STAFF` | Jadwal | `/staff/schedules` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/schedules/page.tsx |
 | `ACADEMIC_STAFF` | Kelas dan Peserta | `/staff/classes` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/classes/page.tsx |
 | `ACADEMIC_STAFF` | Nilai dan Presensi | `/staff/grades` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/grades/page.tsx |
-| `ACADEMIC_STAFF` | Pengajuan Masuk | `/staff/services/verification` | `CATCH_ALL` | Data Tiruan Statis (STAFF_STATS (page.tsx:21)) | - | **TIRUAN** | File: src/app/(portal)/staff/[...slug]/page.tsx / Konstanta tiruan: STAFF_STATS (page.tsx:21) |
+| `ACADEMIC_STAFF` | Pengajuan Masuk | `/staff/services/verification` | `KHUSUS` | Server Actions Real | setTimeout palsu di verification-client.tsx | **SEBAGIAN** | File: src/app/(portal)/staff/services/verification/page.tsx / Aksi palsu: setTimeout palsu di verification-client.tsx |
 | `ACADEMIC_STAFF` | Pengumuman dan Acara | `/staff/announcements` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/announcements/page.tsx |
 | `ACADEMIC_STAFF` | Berkas dan Sertifikat | `/staff/content` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/content/page.tsx |
 | `ACADEMIC_STAFF` | Moderasi | `/staff/moderation` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/moderation/page.tsx |
@@ -291,15 +293,3 @@ Sesuai aturan arsitektur, seluruh rute legacy tidak boleh dihapus melainkan haru
 | `/mahasiswa/tugas` | `src/app/(dashboard)/mahasiswa/tugas/page.tsx` | `/classes` | **TERALIHKAN** |
 | `/mahasiswa/ujian` | `src/app/(dashboard)/mahasiswa/ujian/page.tsx` | `/exams` | **TERALIHKAN** |
 | `/mahasiswa/ukt` | `src/app/(dashboard)/mahasiswa/ukt/page.tsx` | `/student` | **TERALIHKAN** |
-
----
-
-### 2.5. Hasil Live HTTP & Browser Probe (${143} Rute Lolos 200 OK)
-
-Pengujian live HTTP dijalankan terhadap server produksi lokal (`http://localhost:3008`) dengan autentikasi cookie per peran (`demo_session` & `active_role`):
-
-- **Server Status**: Berjalan normal (`Next.js 14.2.35`).
-- **Total Permintaan**: 143 rute (mencakup seluruh navigasi 7 role).
-- **Hasil**: **143 / 143 (100%) menjawab HTTP 200 OK**.
-- **Galat Runtime / Crash**: 0 galat.
-- **Log Lengkap**: Tersimpan di `docs/baseline-menu-fungsi/live-probe-fase2.json`.

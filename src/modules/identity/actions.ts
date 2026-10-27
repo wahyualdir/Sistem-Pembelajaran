@@ -49,7 +49,7 @@ const ROLE_PORTAL_MAP: Record<string, string> = {
   TEACHING_ASSISTANT: '/ta',
   PROGRAM_COORDINATOR: '/coordinator',
   ACADEMIC_STAFF: '/staff',
-  SYSTEM_ADMIN: '/admin',
+  SYSTEM_ADMIN: '/admin/system',
   SUPER_ADMIN: '/admin',
   SUPERADMIN: '/admin',
 };

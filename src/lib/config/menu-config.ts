@@ -700,6 +700,11 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
     return norm === 'TEACHING_ASSISTANT';
   }
 
+  // Proteksi mahasiswa
+  if (pathname.startsWith('/student')) {
+    return norm === 'STUDENT';
+  }
+
   // Proteksi flashcard dan tukar keahlian
   if (pathname.startsWith('/flashcards') || pathname.startsWith('/skill-exchange')) {
     return norm === 'STUDENT' || norm === 'TEACHING_ASSISTANT' || norm === 'LECTURER' || norm === 'PROGRAM_COORDINATOR' || norm === 'SUPER_ADMIN';
