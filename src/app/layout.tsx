@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { VIEWPORT_THEME_COLORS } from "@/lib/config/viewport-theme";
+import { ScrollAnimationProvider } from "@/components/ui/scroll-animation-provider";
 
 const sfPro = localFont({
   src: [
@@ -73,16 +75,16 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
+  interactiveWidget: "resizes-content",
+  themeColor: [...VIEWPORT_THEME_COLORS],
 };
-
-import { ScrollAnimationProvider } from "@/components/ui/scroll-animation-provider";
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="id" className={`${sfPro.variable} ${inter.variable}`}>
-      <body className="min-h-[100dvh] overflow-x-hidden bg-background font-sans font-bold text-ink antialiased">
+      <body className="min-h-[100dvh] bg-background font-sans font-bold text-ink antialiased">
         <ScrollAnimationProvider>{children}</ScrollAnimationProvider>
       </body>
     </html>

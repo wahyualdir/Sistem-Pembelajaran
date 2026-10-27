@@ -8,7 +8,15 @@
 ## 1. Kemajuan Fase Pengerjaan
 
 - [x] **Fase 0 — Pengaman dan Baseline**
-- [ ] **Fase 1 — Fondasi CSS dan Viewport**
+- [x] **Fase 1 — Fondasi CSS dan Viewport**
+  - **Tinggi layar & DVH**: Seluruh 14 pemakaian `100vh` / `h-screen` / `min-h-screen` digantikan dengan `dvh` dan `svh`. Keenam dashboard client (`admin`, `coordinator`, `lecturer`, `staff`, `student`, `ta`) kini menggunakan tinggi berbasis token `min-h-[calc(100dvh-var(--layout-header-height-mobile))] xl:min-h-[calc(100dvh-var(--layout-header-height))]`.
+  - **Jaring pengaman scroll horizontal**: Menghapus `overflow-x: hidden` dari `body` dan menerapkan `overflow-x: clip` pada `html` sehingga elemen lengket (sticky) tetap stabil.
+  - **Pencegahan auto-zoom**: Aturan font 16px diperluas ke `@media (pointer: coarse)` mencakup `input`, `select`, `textarea`, `[contenteditable]`, dan `.field` (mencegah auto-zoom di iPhone dan iPad).
+  - **Sentuhan & scroll**: Menambahkan `touch-action: manipulation`, `-webkit-tap-highlight-color: transparent`, `-webkit-text-size-adjust: 100%`, dan `scroll-padding-top` pada `html`.
+  - **Utilitas**: Menambahkan token `--mobile-nav-h: 3.5rem;`, kelas `.touch-reveal`, `.table-scroll`, `.grid-adaptif`, `.heading-balance`, dan penyesuaian landscape pendek (`max-height: 500px`).
+  - **Viewport**: Menambahkan `interactiveWidget: 'resizes-content'` dan `themeColor` terpusat dari `src/lib/config/viewport-theme.ts`.
+  - **Skrip pengawas**: `scripts/cek-responsif.mjs` terdaftar di `package.json` (`npm run cek:responsif` dan rantai `npm run cek`) serta terverifikasi 100% lolos.
+  - **Verifikasi Playwright**: Pengujian 11 viewport (`mobile-small` 360x640 s.d. `desktop-fhd` 1920x1080) pada halaman masuk lolos 11/11 tanpa scroll horizontal.
 - [ ] **Fase 2 — Shell: Navigasi Bawah, Rail, Panel Kanan, Header**
 - [ ] **Fase 3 — Komponen Dasar: Dialog/Sheet, Tabel Scroll, Tab, Form**
 - [ ] **Fase 4 — Halaman per Peran dan Fitur (10 Kelompok Fitur)**

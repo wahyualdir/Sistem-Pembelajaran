@@ -549,3 +549,19 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alasan**: Menghindari spekulasi dan menjamin seluruh pekerjaan tata letak dan animasi memiliki titik referensi yang dapat diuji secara objektif pada browser engine nyata sebelum menyentuh kode aplikasi.
 - **Alternatif yang ditolak**:
   - *Hanya menguji pada Chromium Desktop*: Ditolak karena WebKit Safari memiliki perilaku khusus pada touch scrolling, safe area, viewport height (`dvh`), dan font input zoom yang tidak dapat disimulasikan sempurna di Chromium biasa.
+
+
+### [Responsif] Keputusan 02: Fondasi CSS, Viewport Token, dan Skrip Pengawas Responsif (Fase 1)
+- **Tanggal**: 26 Oktober 2026
+- **Keputusan**:
+  1. Mengganti seluruh 100vh/h-screen/min-h-screen pada shell tata letak dan 6 berkas klien dashboard (admin, coordinator, lecturer, staff, student, ta) menjadi dvh berbasis token (min-h-[calc(100dvh-var(--layout-header-height-mobile))] xl:min-h-[calc(100dvh-var(--layout-header-height))]) dan 100svh untuk login hero.
+  2. Menerapkan overflow-x: clip pada elemen html sebagai jaring pengaman dan menghapus overflow-x: hidden dari body agar tidak memutus konteks sticky header/elemen lengket.
+  3. Memperluas aturan ukuran font input 16px dari @media (max-width: 767px) menjadi @media (pointer: coarse) untuk menghentikan auto-zoom Safari iOS pada ponsel maupun iPad.
+  4. Menambahkan token --mobile-nav-h: 3.5rem; di :root globals.css serta utilitas fondasi responsif: .touch-reveal (@media (hover: none)), .table-scroll (overscroll-behavior-x: contain), .grid-adaptif (repeat(auto-fill, minmax(min(100%, 16rem), 1fr))), .heading-balance, dan penyesuaian landscape pendek (max-height: 500px).
+  5. Menambahkan interactiveWidget: 'resizes-content' dan themeColor terpusat dari konstanta VIEWPORT_THEME_COLORS (src/lib/config/viewport-theme.ts) di src/app/layout.tsx.
+  6. Memperbaiki kontainer pembungkus halaman masuk dengan overflow-hidden penuh untuk mencegah orbs dekoratif meluap ke luar layar pada viewport 360px.
+  7. Membangun skrip pengawas otomatis scripts/cek-responsif.mjs terhubung dengan scripts/cek-responsif.allowlist.json dan mendaftarkannya pada rantai npm run cek.
+- **Alasan**: Memastikan fondasi CSS stabil di perangkat sentuh dan Safari iOS/iPadOS tanpa reflow yang tidak perlu, mencegah layout shift saat URL bar menyusut, serta menjamin seluruh aturan responsif Fase 1 dapat diverifikasi secara otomatis pada CI/CD lokal.
+- **Alternatif yang ditolak**:
+  - *Membiarkan 100vh dan menggunakan JS resize listener*: Ditolak karena menyebabkan jank dan reflow berat pada rendering awal browser mobile.
+  - *Memakai overflow-x: hidden pada body*: Ditolak karena melanggar spesifikasi nomor 5 dan dapat memicu bug posisi sticky pada layout mobile.

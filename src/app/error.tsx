@@ -18,7 +18,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center p-4 sm:p-6 bg-[#FAF8F5] text-[#1C1917] font-sans antialiased relative selection:bg-[#C2553A] selection:text-white">
+    <div className="min-h-[100dvh] w-full flex items-center justify-center p-4 sm:p-6 bg-[#FAF8F5] text-[#1C1917] font-sans antialiased relative selection:bg-[#C2553A] selection:text-white">
       <TechBackground />
       <div className="max-w-md w-full bg-[#FFFFFF] border border-[#D6D3CB] rounded-3xl p-6 sm:p-8 shadow-md text-center space-y-5 relative overflow-hidden z-10">
         <div className="absolute top-0 inset-x-0 h-1.5 bg-[#DC2626]" />

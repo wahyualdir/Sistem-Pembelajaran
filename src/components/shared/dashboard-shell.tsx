@@ -69,7 +69,7 @@ export function DashboardShell({
 
   return (
     <ShellContext.Provider value={true}>
-      <div className="flex min-h-screen bg-retro-bg text-foreground selection:bg-ink selection:text-white font-sans antialiased">
+      <div className="flex min-h-[100dvh] bg-retro-bg text-foreground selection:bg-ink selection:text-white font-sans antialiased">
         {/* Sidebar Navigation */}
         <Sidebar
           role={role}

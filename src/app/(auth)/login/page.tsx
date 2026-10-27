@@ -129,7 +129,7 @@ function LoginFormContent() {
 
   return (
     <div
-      className={`min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-[#FAF8F5] text-[#1C1B19] ${fontBricolage.variable} ${fontInter.variable} font-[family-name:var(--font-inter-login),sans-serif] selection:bg-[#C2553A] selection:text-white flex flex-col justify-center relative lg:overflow-hidden`}
+      className={`min-h-[100svh] min-h-[100dvh] lg:h-[100dvh] lg:max-h-[100dvh] w-full bg-[#FAF8F5] text-[#1C1B19] ${fontBricolage.variable} ${fontInter.variable} font-[family-name:var(--font-inter-login),sans-serif] selection:bg-[#C2553A] selection:text-white flex flex-col justify-center relative overflow-hidden`}
     >
       {/* Hidden element for semantic accessibility and test compliance */}
       <span className="sr-only">Teknik Informatika • Universitas Islam Riau</span>
@@ -137,12 +137,12 @@ function LoginFormContent() {
       {/* Animated Subtle Floating Mesh Gradient Orbs */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-48 -left-48 h-[520px] w-[520px] rounded-full bg-gradient-to-tr from-[#C2553A]/[0.08] to-[#F59E0B]/[0.06] blur-3xl animate-pulse"
+        className="pointer-events-none absolute -top-48 -left-48 h-[280px] w-[280px] sm:h-[520px] sm:w-[520px] max-w-[60vw] max-h-[60vw] sm:max-w-none sm:max-h-none rounded-full bg-gradient-to-tr from-[#C2553A]/[0.08] to-[#F59E0B]/[0.06] blur-2xl sm:blur-3xl md:animate-pulse"
         style={{ animationDuration: '6s' }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-48 -right-48 h-[560px] w-[560px] rounded-full bg-gradient-to-bl from-[#853827]/[0.06] to-[#C2553A]/[0.05] blur-3xl animate-pulse"
+        className="pointer-events-none absolute -bottom-48 -right-48 h-[300px] w-[300px] sm:h-[560px] sm:w-[560px] max-w-[60vw] max-h-[60vw] sm:max-w-none sm:max-h-none rounded-full bg-gradient-to-bl from-[#853827]/[0.06] to-[#C2553A]/[0.05] blur-2xl sm:blur-3xl md:animate-pulse"
         style={{ animationDuration: '8s' }}
       />
 
@@ -606,7 +606,7 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center p-4 text-xs font-mono text-[#4A473F] bg-[#FAF8F5]">
+        <div className="flex min-h-[100dvh] items-center justify-center p-4 text-xs font-mono text-[#4A473F] bg-[#FAF8F5]">
           Memuat…
         </div>
       }

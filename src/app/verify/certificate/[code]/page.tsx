@@ -29,7 +29,7 @@ export default async function VerifyCertificatePage({ params }: VerifyCertificat
   const result = await verifyCertificateByCodeAction(decodedCode);
 
   return (
-    <div className="min-h-screen bg-bg p-4 sm:p-8 flex flex-col items-center justify-center font-sans antialiased text-black">
+    <div className="min-h-[100dvh] bg-bg p-4 sm:p-8 flex flex-col items-center justify-center font-sans antialiased text-black">
       <div className="w-full max-w-2xl space-y-6">
         {/* Navigasi Kembali */}
         <div className="flex items-center justify-between">

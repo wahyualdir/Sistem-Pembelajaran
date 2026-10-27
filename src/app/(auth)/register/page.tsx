@@ -390,7 +390,7 @@ export default function RegisterPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center p-4 text-sm font-sans text-muted-foreground bg-retro-bg">
+        <div className="flex min-h-[100dvh] items-center justify-center p-4 text-sm font-sans text-muted-foreground bg-retro-bg">
           Memuat halaman pendaftaran RuangKampus...
         </div>
       }

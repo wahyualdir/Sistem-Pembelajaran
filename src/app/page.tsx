@@ -76,7 +76,7 @@ const FEATURED_CURRICULUM = [
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#FAF8F5] text-[#1C1917] font-sans antialiased selection:bg-[#C2553A] selection:text-white flex flex-col justify-between">
+    <div className="min-h-[100dvh] bg-[#FAF8F5] text-[#1C1917] font-sans antialiased selection:bg-[#C2553A] selection:text-white flex flex-col justify-between">
       {/* 1. Navigasi Utama Editorial */}
       <header className="sticky top-0 z-30 w-full bg-[#FFFFFF]/95 backdrop-blur-xs border-b border-[#E8E5DE]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">

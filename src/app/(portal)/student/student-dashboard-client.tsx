@@ -195,7 +195,7 @@ export function StudentDashboardClient({
   const showNilai = showAll || selectedCategory === 'Nilai';
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[calc(100vh-72px)]">
+    <div className="flex flex-col xl:flex-row min-h-[calc(100dvh-var(--layout-header-height-mobile))] xl:min-h-[calc(100dvh-var(--layout-header-height))]">
       {/* ========================================================= */}
       {/* 1. BAGIAN TENGAH: "HARI INI + KELAS SAYA" (LAPANG & BESAR)  */}
       {/* ========================================================= */}

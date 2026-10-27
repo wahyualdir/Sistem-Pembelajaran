@@ -217,6 +217,7 @@
   --layout-right-panel-width: clamp(310px, 25vw, 360px);
   --layout-header-height: 4.5rem;
   --layout-header-height-mobile: 3.5rem;
+  --mobile-nav-h: 3.5rem;
 
   /* Safe Area Variables */
   --sat: env(safe-area-inset-top, 0px);
@@ -287,6 +288,14 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--layout-header-height-mobile) + 8px);
+    overflow-x: clip;
+  }
+  @media (min-width: 1280px) {
+    html {
+      scroll-padding-top: calc(var(--layout-header-height) + 8px);
+    }
   }
   @media (min-width: 1024px) {
     html {
@@ -318,7 +327,6 @@
     font-size: 1rem;
     line-height: 1.5;
     min-height: 100dvh;
-    overflow-x: hidden;
     font-weight: 600;
   }
   h1 {
@@ -360,6 +368,14 @@
     font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
     font-weight: 500;
   }
+
+  button, a, [role="button"], summary, label, input, select {
+    touch-action: manipulation;
+  }
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
   input, textarea, select, button {
     font-family: inherit;
     font-optical-sizing: inherit;
@@ -506,12 +522,24 @@
   .field:focus-visible { outline: none; border-color: #000000; box-shadow: 4px 4px 0px 0px #000000; }
   .field:disabled { opacity: 0.6; cursor: not-allowed; }
 
+  /* Pencegahan auto-zoom di iOS Safari & tablet sentuh (Fase 1: 5.1.3) */
+  @media (pointer: coarse) {
+    input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+    select,
+    textarea,
+    [contenteditable],
+    .field {
+      font-size: 16px !important;
+    }
+  }
+
   @media (max-width: 767px) {
     input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
     select,
     textarea,
+    [contenteditable],
     .field {
-      font-size: 16px !important; /* Mencegah auto-zoom iOS Safari */
+      font-size: 16px !important;
       box-shadow: 2px 2px 0px 0px #000000;
     }
   }
@@ -1546,4 +1574,45 @@ html.dark .vt-titlebar {
 
 .animate-vt-marquee:hover {
   animation-play-state: paused;
+}
+
+/* ============================================================ */
+/* Utilitas Fondasi Responsif & Sentuh (SIAJAR Fase 1)          */
+/* ============================================================ */
+
+/* Kontrol sentuh terlihat permanen pada perangkat layar sentuh (T9) */
+@media (hover: none) {
+  .touch-reveal {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* Pembungkus tabel responsif dengan proteksi overscroll (T6) */
+.table-scroll {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Grid adaptif berbasis repeat/minmax tanpa plugin container queries */
+.grid-adaptif {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+}
+
+/* Penyeimbang pembagian baris teks judul */
+.heading-balance {
+  text-wrap: balance;
+}
+
+/* Penyesuaian mode landscape pendek (tinggi <= 500px) */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --layout-header-height-mobile: 3rem;
+  }
+  .landscape-compact-header {
+    height: 3rem !important;
+  }
 }

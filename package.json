@@ -16,12 +16,13 @@
     "check:plan": "node scripts/check-plan-vs-snapshot.mjs",
     "format": "prettier --write .",
     "cek:hex": "node scripts/cek-hex.js",
-    "cek": "npm run typecheck && npm run lint && npm run check:rls && npm run check:snapshot && npm run check:plan && npm test",
+    "cek": "npm run typecheck && npm run lint && npm run check:rls && npm run check:snapshot && npm run check:plan && npm run cek:hex && npm run cek:responsif && npm test",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts",
     "postinstall": "prisma generate",
-    "seed:akademik": "tsx scripts/seed-akademik/index.ts"
+    "seed:akademik": "tsx scripts/seed-akademik/index.ts",
+    "cek:responsif": "node scripts/cek-responsif.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",

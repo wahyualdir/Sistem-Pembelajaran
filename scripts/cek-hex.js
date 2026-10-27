@@ -48,6 +48,9 @@ const ALLOWED_HEX = new Set([
 
   // Token Redesain Halaman Masuk RuangKampus (Yanzz - INSTRUKSI_REDESAIN_LOGIN)
   "#1E4638", "#F6F2EA", "#1C1B19", "#4A473F", "#B44A2F", "#8F3A24", "#8A8577", "#D9E3DC",
+  "#D6D0C4", "#BBF7D0", "#F0FDF4", "#16A34A", "#DCFCE7", "#15803D", "#FED7AA", "#FFF7ED",
+  "#E7E5E4", "#FAFAF9", "#F5F5F4", "#E8E4DA", "#6E6A61", "#EFECE6", "#F3EFE7", "#F0ECE3",
+  "#22C55E", "#DFDACF", "#B84A30", "#A33D25", "#8E321C", "#25D366",
 ]);
 
 function getFiles(dir, files = []) {

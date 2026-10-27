@@ -308,7 +308,7 @@ export function PortalShell({
           setHasRightPanel,
         }}
       >
-        <div className="min-h-screen bg-transparent text-[#1C1917] font-sans flex flex-col xl:flex-row antialiased selection:bg-[#C2553A] selection:text-white relative">
+        <div className="min-h-[100dvh] bg-transparent text-[#1C1917] font-sans flex flex-col xl:flex-row antialiased selection:bg-[#C2553A] selection:text-white relative">
           {/* Tech Background Grid & Gradient khas Velqora */}
           <TechBackground />
 
