@@ -1,0 +1,198 @@
+
+> siakad@0.1.0 build
+> node scripts/prebuild.js && next build
+
+> prisma generate
+Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+
+✔ Generated Prisma Client (v5.22.0) to .\node_modules\@prisma\client in 1.18s
+
+Start by importing your Prisma Client (See: https://pris.ly/d/importing-client)
+
+Tip: Curious about the SQL queries Prisma ORM generates? Optimize helps you enhance your visibility: https://pris.ly/tip-2-optimize
+
+  ▲ Next.js 14.2.35
+  - Environments: .env.local, .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/142) ...
+   Generating static pages (35/142) 
+   Generating static pages (70/142) 
+   Generating static pages (106/142) 
+ ✓ Generating static pages (142/142)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                               Size     First Load JS
+┌ ƒ /                                     193 B           102 kB
+├ ○ /_not-found                           200 B          87.8 kB
+├ ƒ /achievements                         5.39 kB         100 kB
+├ ƒ /admin                                7.11 kB         146 kB
+├ ƒ /admin/[...slug]                      3.75 kB         100 kB
+├ ƒ /admin/announcements                  3.29 kB        98.1 kB
+├ ƒ /admin/audit                          3.23 kB         138 kB
+├ ƒ /admin/dashboard                      101 kB          225 kB
+├ ƒ /admin/jadwal                         4.76 kB         142 kB
+├ ƒ /admin/kalender                       4.11 kB         147 kB
+├ ƒ /admin/kurikulum                      5.67 kB         143 kB
+├ ƒ /admin/master                         23 kB           199 kB
+├ ƒ /admin/nilai                          6.22 kB         154 kB
+├ ƒ /admin/pengumuman                     4.88 kB         148 kB
+├ ƒ /admin/policies                       6.54 kB         101 kB
+├ ƒ /admin/roles                          2.6 kB         97.4 kB
+├ ƒ /admin/surat                          2.93 kB         148 kB
+├ ƒ /admin/system                         4.45 kB         101 kB
+├ ƒ /admin/system/audit                   4.15 kB          99 kB
+├ ƒ /admin/system/backup                  3.83 kB        98.6 kB
+├ ƒ /admin/system/integrations            5.75 kB         101 kB
+├ ƒ /admin/system/monitoring              5.68 kB         100 kB
+├ ƒ /admin/system/security                4.32 kB        99.1 kB
+├ ƒ /admin/system/settings                4.43 kB        99.2 kB
+├ ƒ /admin/ujian                          5.84 kB         153 kB
+├ ƒ /admin/ukt                            5.16 kB         142 kB
+├ ƒ /admin/users                          6.79 kB         102 kB
+├ ƒ /ai-assistant                         4.57 kB         108 kB
+├ ƒ /analytics                            12.6 kB         107 kB
+├ ƒ /analytics/[...slug]                  199 B          87.8 kB
+├ ƒ /announcements                        200 B          87.8 kB
+├ ƒ /api/auth/callback                    0 B                0 B
+├ ƒ /api/auth/logout                      0 B                0 B
+├ ƒ /api/calendar/feed                    0 B                0 B
+├ ƒ /api/cron/activity_purge              0 B                0 B
+├ ƒ /api/cron/ai_content_jobs             0 B                0 B
+├ ƒ /api/cron/ai-reminders                0 B                0 B
+├ ƒ /api/cron/auto-archive-classes        0 B                0 B
+├ ƒ /api/cron/content_review_digest       0 B                0 B
+├ ƒ /api/cron/content_stale_check         0 B                0 B
+├ ƒ /api/cron/early-warning               0 B                0 B
+├ ƒ /api/cron/end-impersonation-sessions  0 B                0 B
+├ ƒ /api/cron/finalize-expired-attempts   0 B                0 B
+├ ƒ /api/cron/journal-reminders           0 B                0 B
+├ ƒ /api/cron/morning_summary             0 B                0 B
+├ ƒ /api/cron/purge-absence-proofs        0 B                0 B
+├ ƒ /api/cron/purge-import-staging        0 B                0 B
+├ ƒ /api/cron/recap_generate              0 B                0 B
+├ ƒ /api/cron/reminders                   0 B                0 B
+├ ƒ /api/cron/rotate-exam-tokens          0 B                0 B
+├ ƒ /api/cron/scheduled-notifications     0 B                0 B
+├ ƒ /api/cron/skill_request_expire        0 B                0 B
+├ ƒ /api/cron/tts_jobs                    0 B                0 B
+├ ƒ /api/export/laporan-akademik          0 B                0 B
+├ ƒ /api/pdf/kartu-ujian                  0 B                0 B
+├ ƒ /api/pdf/khs                          0 B                0 B
+├ ƒ /api/pdf/surat                        0 B                0 B
+├ ƒ /api/pdf/transkrip                    0 B                0 B
+├ ○ /api/smoke-actions                    0 B                0 B
+├ ƒ /api/storage/file                     0 B                0 B
+├ ƒ /attendance                           200 B          87.8 kB
+├ ƒ /attendance/[...slug]                 213 B          96.5 kB
+├ ƒ /attendance/history                   213 B          96.5 kB
+├ ƒ /calendar                             5.64 kB         109 kB
+├ ƒ /certificates                         3.29 kB         107 kB
+├ ƒ /classes                              4.62 kB         119 kB
+├ ƒ /classes/[id]                         308 kB          454 kB
+├ ƒ /classes/[id]/assignments/[aid]       10.2 kB         116 kB
+├ ƒ /classes/[id]/attendance              4.72 kB         107 kB
+├ ƒ /classes/[id]/discussions/[did]       4.89 kB         108 kB
+├ ƒ /classes/[id]/gradebook               213 B          96.5 kB
+├ ƒ /classes/[id]/gradebook/export        0 B                0 B
+├ ƒ /classes/[id]/quizzes                 4.78 kB         122 kB
+├ ƒ /classes/[id]/quizzes/[quizId]        4.78 kB         122 kB
+├ ƒ /community                            4.12 kB        98.9 kB
+├ ƒ /community/events                     201 B          87.8 kB
+├ ƒ /community/forum                      200 B          87.8 kB
+├ ƒ /community/groups                     200 B          87.8 kB
+├ ƒ /community/mentoring                  200 B          87.8 kB
+├ ƒ /coordinator                          10.4 kB         151 kB
+├ ƒ /coordinator/[...slug]                213 B          96.5 kB
+├ ƒ /coordinator/approvals                7.08 kB         102 kB
+├ ƒ /coordinator/assignments              4.18 kB          99 kB
+├ ƒ /coordinator/evaluations              3.25 kB        90.8 kB
+├ ƒ /coordinator/monitoring               4.84 kB        99.7 kB
+├ ƒ /coordinator/reports                  6.86 kB         102 kB
+├ ƒ /devices                              4.58 kB         101 kB
+├ ƒ /dosen/dashboard                      203 B           125 kB
+├ ƒ /dosen/kelas                          218 B           125 kB
+├ ƒ /dosen/laporan                        218 B           125 kB
+├ ƒ /dosen/materi-tugas                   9.16 kB         169 kB
+├ ƒ /dosen/nilai                          6.73 kB         162 kB
+├ ƒ /dosen/perwalian                      6.89 kB         144 kB
+├ ƒ /dosen/presensi                       5.98 kB         153 kB
+├ ƒ /evaluations                          1.46 kB        99.6 kB
+├ ƒ /exams                                10.6 kB         114 kB
+├ ƒ /exams/[...slug]                      12.2 kB         129 kB
+├ ƒ /exams/analysis                       4.69 kB        99.5 kB
+├ ƒ /exams/history                        213 B          96.5 kB
+├ ƒ /flashcards                           4.78 kB         108 kB
+├ ƒ /grades                               7.11 kB         111 kB
+├ ƒ /grades/[...slug]                     213 B          96.5 kB
+├ ƒ /help                                 8.24 kB         105 kB
+├ ƒ /lecturer                             8.75 kB         163 kB
+├ ƒ /lecturer/[...slug]                   2.7 kB          106 kB
+├ ƒ /lecturer/content-review              6.07 kB         110 kB
+├ ƒ /lecturer/disputes                    4.62 kB        92.2 kB
+├ ƒ /lecturer/evaluations                 2.95 kB        90.5 kB
+├ ƒ /lecturer/journals                    5.25 kB        92.8 kB
+├ ƒ /lecturer/rubrics                     4.47 kB        92.1 kB
+├ ƒ /library                              6.02 kB         101 kB
+├ ○ /login                                9.34 kB         111 kB
+├ ƒ /mahasiswa/bimbingan                  8.15 kB         146 kB
+├ ƒ /mahasiswa/dashboard                  1.38 kB         126 kB
+├ ƒ /mahasiswa/jadwal                     200 B          87.8 kB
+├ ƒ /mahasiswa/krs                        5.72 kB         130 kB
+├ ƒ /mahasiswa/nilai                      7 kB            150 kB
+├ ƒ /mahasiswa/pengumuman                 1.57 kB         132 kB
+├ ƒ /mahasiswa/preferensi-notifikasi      4.84 kB         129 kB
+├ ƒ /mahasiswa/presensi                   2.43 kB         136 kB
+├ ƒ /mahasiswa/simulasi-ipk               5.08 kB         130 kB
+├ ƒ /mahasiswa/surat                      2.58 kB         148 kB
+├ ƒ /mahasiswa/tugas                      6.56 kB         167 kB
+├ ƒ /mahasiswa/ujian                      5.06 kB         148 kB
+├ ƒ /mahasiswa/ukt                        217 B           125 kB
+├ ƒ /messages                             6.13 kB        93.7 kB
+├ ○ /must-change-password                 4.17 kB         104 kB
+├ ƒ /notifications                        5.27 kB         102 kB
+├ ƒ /notifications/preferences            143 B           101 kB
+├ ƒ /portfolio                            200 B          87.8 kB
+├ ƒ /profile                              1.27 kB         109 kB
+├ ○ /register                             6.24 kB         115 kB
+├ ƒ /requests                             6.61 kB         110 kB
+├ ○ /reset-password                       4.09 kB         113 kB
+├ ƒ /settings                             143 B           101 kB
+├ ƒ /settings/appearance                  213 B          96.5 kB
+├ ƒ /skill-exchange                       4.79 kB        99.6 kB
+├ ƒ /staff                                9 kB            150 kB
+├ ƒ /staff/[...slug]                      213 B          96.5 kB
+├ ƒ /staff/announcements                  4.02 kB        98.8 kB
+├ ƒ /staff/classes                        13.6 kB         111 kB
+├ ƒ /staff/content                        4.14 kB          99 kB
+├ ƒ /staff/grades                         8.61 kB         103 kB
+├ ƒ /staff/master                         5.26 kB         100 kB
+├ ƒ /staff/moderation                     4.71 kB        99.5 kB
+├ ƒ /staff/schedules                      4.89 kB        99.7 kB
+├ ƒ /student                              18.4 kB         185 kB
+├ ƒ /ta                                   169 B           157 kB
+├ ƒ /ta/attendance                        213 B          96.5 kB
+├ ƒ /ta/classes                           3.77 kB         115 kB
+├ ƒ /ta/exam-monitor                      4.79 kB        92.4 kB
+├ ƒ /ta/forum                             213 B          96.5 kB
+├ ƒ /ta/grading                           171 B           157 kB
+├ ƒ /ta/materials                         200 B          87.8 kB
+├ ƒ /transparency                         6.27 kB         110 kB
+├ ƒ /verify/certificate/[code]            213 B          96.5 kB
+└ ƒ /workspace                            193 B           102 kB
++ First Load JS shared by all             87.6 kB
+  ├ chunks/2117-2bdd98362518666b.js       31.9 kB
+  ├ chunks/fd9d1056-cec092eedd6ffd7e.js   53.6 kB
+  └ other shared chunks (total)           2.03 kB
+
+
+ƒ Middleware                              93.1 kB
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

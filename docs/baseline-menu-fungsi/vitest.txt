@@ -1,0 +1,925 @@
+
+> siakad@0.1.0 test
+> vitest run
+
+[33mThe CJS build of Vite's Node API is deprecated. See https://vite.dev/guide/troubleshooting.html#vite-cjs-node-api-deprecated for more details.[39m
+
+[1m[7m[36m RUN [39m[27m[22m [36mv2.1.9 [39m[90mC:/Users/ACER/Downloads/implementasi[39m
+
+ [32m✓[39m src/tests/unit/peta-pulau/tahap2-content.test.ts [2m([22m[2m39 tests[22m[2m)[22m[90m 246[2mms[22m[39m
+ [32m✓[39m src/tests/unit/peta-pulau/tahap1-core.test.ts [2m([22m[2m42 tests[22m[2m)[22m[90m 161[2mms[22m[39m
+[90mstdout[2m | src/tests/unit/forum/forum.test.ts[2m > [22m[2mSIAJAR Fitur 1: Forum Diskusi per Kelas & Moderasi[2m > [22m[2m1. Akses & Pembuatan Topik Diskusi[2m > [22m[2mmenolak akses baca, tulis, dan moderasi bagi mahasiswa non-anggota, dosen non-pengampu, TA tidak ditugaskan, dan SYSTEM_ADMIN
+[22m[39m[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] [Forum Kelas] Balasan Baru di Topik Anda: Topik Rahasia Internal Kelas IF-3A
+
+[90mstdout[2m | src/tests/unit/forum/forum.test.ts[2m > [22m[2mSIAJAR Fitur 1: Forum Diskusi per Kelas & Moderasi[2m > [22m[2m2. Balasan Diskusi & Penandaan Jawaban Terbaik (Best Answer)[2m > [22m[2manggota kelas dapat membalas topik dan memperbarui reply_count
+[22m[39m[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] [Forum Kelas] Balasan Baru di Topik Anda: Tanya mengenai optimasi indeks B-Tree vs Hash pada PostgreSQL
+
+[90mstdout[2m | src/tests/unit/forum/forum.test.ts[2m > [22m[2mSIAJAR Fitur 1: Forum Diskusi per Kelas & Moderasi[2m > [22m[2m2. Balasan Diskusi & Penandaan Jawaban Terbaik (Best Answer)[2m > [22m[2mpenanya atau dosen dapat menandai jawaban terbaik (Best Answer)
+[22m[39m[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] [Forum Kelas] Balasan Baru di Topik Anda: Masalah async await pada useEffect React
+[Email-Channel] [Simulasi] Ke: a0000003-0000-0000-0000-000000000003@siajar.ac.id | Subjek: [SIAJAR] [Forum Kelas] Jawaban Anda Ditandai Sebagai Jawaban Terbaik! 🌟
+
+ [32m✓[39m src/tests/unit/forum/forum.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 1166[2mms[22m[39m
+   [33m[2m✓[22m[39m SIAJAR Fitur 1: Forum Diskusi per Kelas & Moderasi[2m > [22m1. Akses & Pembuatan Topik Diskusi[2m > [22mmahasiswa kelas berhasil membuat topik baru dengan tag dan lampiran berkas [33m1112[2mms[22m[39m
+ [32m✓[39m src/tests/unit/ai-exam/ai-exam.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 1172[2mms[22m[39m
+   [33m[2m✓[22m[39m SIAJAR Fitur 2: Generator Draf Soal AI di Bank Soal & Keamanan Ujian[2m > [22m1. Kontrol Akses & Pembatasan Role (RBAC & Aturan A2)[2m > [22mmengizinkan role LECTURER pengampu kelas untuk menghasilkan draf soal AI [33m1052[2mms[22m[39m
+[90mstdout[2m | src/tests/unit/notifications/notifications.test.ts[2m > [22m[2mSistem Notifikasi & Pengingat Otomatis SIAJAR[2m > [22m[2m2. Deduplikasi Persisten Tanpa Kedaluwarsa (Tahap C1)[2m > [22m[2mmencegah pengiriman notifikasi ganda untuk dedupKey yang sama meski jeda waktu > 5 menit / berhari-hari
+[22m[39m[Email-Channel] [Simulasi] Ke: test-user-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] Pengingat Tugas H-1
+
+ [32m✓[39m src/tests/unit/semester-weave/semester-weave.test.ts [2m([22m[2m18 tests[22m[2m)[22m[90m 236[2mms[22m[39m
+[90mstdout[2m | src/tests/unit/notifications/notifications.test.ts[2m > [22m[2mSistem Notifikasi & Pengingat Otomatis SIAJAR[2m > [22m[2m3. Multi-Channel, Nomor WhatsApp Profil & Preferensi Pengguna (Tahap C6 & D)[2m > [22m[2mmenghormati preferensi penonaktifan kategori event termasuk grades dan forum_and_early_warning
+[22m[39m[Email-Channel] [Simulasi] Ke: test-user-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] Nilai Tugas 2 Terbit
+[Email-Channel] [Simulasi] Ke: test-user-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] Balasan Baru di Forum 2
+
+[90mstderr[2m | src/tests/unit/notifications/notifications.test.ts[2m > [22m[2mSistem Notifikasi & Pengingat Otomatis SIAJAR[2m > [22m[2m3. Multi-Channel, Nomor WhatsApp Profil & Preferensi Pengguna (Tahap C6 & D)[2m > [22m[2mmenghormati preferensi penonaktifan kategori event termasuk grades dan forum_and_early_warning
+[22m[39m[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39msrc\tests\unit\notifications\notifications.test.ts:217:31
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+    at runTest [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1056:11[90m)[39m
+    at runSuite [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1205:15[90m)[39m
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39msrc\tests\unit\notifications\notifications.test.ts:225:31
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+    at runTest [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1056:11[90m)[39m
+    at runSuite [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1205:15[90m)[39m
+
+[90mstderr[2m | src/tests/unit/notifications/notifications.test.ts[2m > [22m[2mSistem Notifikasi & Pengingat Otomatis SIAJAR[2m > [22m[2m3. Multi-Channel, Nomor WhatsApp Profil & Preferensi Pengguna (Tahap C6 & D)[2m > [22m[2mmengirim WhatsApp memakai nomor dari profil/preferensi pengguna, dan melewati tanpa error jika nomor tidak ada
+[22m[39m[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39msrc\tests\unit\notifications\notifications.test.ts:243:26
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+    at runTest [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1056:11[90m)[39m
+    at runSuite [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1205:15[90m)[39m
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39msrc\tests\unit\notifications\notifications.test.ts:261:28
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+    at runTest [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1056:11[90m)[39m
+    at runSuite [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1205:15[90m)[39m
+
+[90mstdout[2m | src/tests/unit/notifications/notifications.test.ts[2m > [22m[2mSistem Notifikasi & Pengingat Otomatis SIAJAR[2m > [22m[2m3. Multi-Channel, Nomor WhatsApp Profil & Preferensi Pengguna (Tahap C6 & D)[2m > [22m[2mkanal email menangani fallback simulasi saat SMTP belum disetel tanpa crashing
+[22m[39m[Email-Channel] [Simulasi] Ke: user@siajar.test | Subjek: Uji Email
+
+ [31m❯[39m src/tests/unit/notifications/notifications.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 2537[2mms[22m[39m
+   [33m[2m✓[22m[39m Sistem Notifikasi & Pengingat Otomatis SIAJAR[2m > [22m1. In-App Notifications & Read Status[2m > [22mberhasil membuat notifikasi in-app dengan atribut lengkap [33m1051[2mms[22m[39m
+   [33m[2m✓[22m[39m Sistem Notifikasi & Pengingat Otomatis SIAJAR[2m > [22m2. Deduplikasi Persisten Tanpa Kedaluwarsa (Tahap C1)[2m > [22mmencegah pengiriman notifikasi ganda untuk dedupKey yang sama meski jeda waktu > 5 menit / berhari-hari [33m1197[2mms[22m[39m
+[31m   [31m×[31m Sistem Notifikasi & Pengingat Otomatis SIAJAR[2m > [22m4. Automated Scheduler & Sinkronisasi Store Kuis (__siajarKuis) (Tahap C2)[2m > [22mmengirim EXAM_UPCOMING untuk ujian yang dibuat lewat createQuizAction[90m 55[2mms[22m[31m[39m
+[31m     → `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+ [32m✓[39m tests/nav-roles.test.ts [2m([22m[2m18 tests[22m[2m)[22m[33m 788[2mms[22m[39m
+   [33m[2m✓[22m[39m Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)[2m > [22mmemastikan tidak ada kata terlarang atau pola terlarang di seluruh nama menu dan judul grup [33m597[2mms[22m[39m
+[90mstdout[2m | src/tests/unit/early-warning/early-warning.test.ts[2m > [22m[2mSistem Peringatan Dini Mahasiswa Berisiko SIAJAR[2m > [22m[2m4. Batch Evaluasi Terjadwal Harian & Sumber Data Riil Store Aplikasi (Tahap C8)[2m > [22m[2mmengevaluasi hanya mahasiswa riil dari store aplikasi (tanpa data hardcode demo) dan mengirim notifikasi hanya saat eskalasi
+[22m[39m[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] [Status Akademik] Peringatan: Tingkat Risiko Tinggi di Kelas Pemrograman Web & Arsitektur Cloud
+[Email-Channel] [Simulasi] Ke: a0000002-0000-0000-0000-000000000002@siajar.ac.id | Subjek: [SIAJAR] [Monitoring Kelas] Mahasiswa Ahmad Mahasiswa Memerlukan Risiko Tinggi
+
+[90mstdout[2m | src/tests/unit/early-warning/early-warning.test.ts[2m > [22m[2mSistem Peringatan Dini Mahasiswa Berisiko SIAJAR[2m > [22m[2m5. Otorisasi Kelas & Kepemilikan Data (Tahap B3 & Tahap D)[2m > [22m[2mDosen A ditolak untuk kelas Dosen B, serta SYSTEM_ADMIN dan STUDENT ditolak di getClassRiskSummaryAction
+[22m[39m[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] [Status Akademik] Peringatan: Tingkat Risiko Tinggi di Kelas Pemrograman Web & Arsitektur Cloud
+[Email-Channel] [Simulasi] Ke: a0000002-0000-0000-0000-000000000002@siajar.ac.id | Subjek: [SIAJAR] [Monitoring Kelas] Mahasiswa Ahmad Mahasiswa Memerlukan Risiko Tinggi
+
+ [32m✓[39m src/tests/unit/early-warning/early-warning.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 332[2mms[22m[39m
+ [32m✓[39m tests/ujian-kuis.test.ts [2m([22m[2m9 tests[22m[2m)[22m[90m 242[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase4/exam-utils.test.ts [2m([22m[2m14 tests[22m[2m)[22m[90m 94[2mms[22m[39m
+ [32m✓[39m src/tests/unit/peta-pulau/p0-foundation.test.ts [2m([22m[2m19 tests[22m[2m)[22m[90m 77[2mms[22m[39m
+ [32m✓[39m src/tests/unit/peta-pulau/tahap3-social.test.ts [2m([22m[2m21 tests[22m[2m)[22m[90m 44[2mms[22m[39m
+ [31m❯[39m src/tests/unit/evaluation/evaluation.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m6 failed[39m[2m)[22m[33m 974[2mms[22m[39m
+[31m   [31m×[31m Kuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m1. Siklus Hidup Periode Evaluasi[2m > [22mdapat membuat dan mengaktifkan periode evaluasi baru[33m 675[2mms[22m[31m[39m
+[31m     → AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[31m   [31m×[31m Kuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m1. Siklus Hidup Periode Evaluasi[2m > [22mdapat menutup periode evaluasi secara manual[90m 57[2mms[22m[31m[39m
+[31m     → AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[31m   [31m×[31m Kuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m2. Arsitektur Anonimitas Nyata (True Anonymity Decoupling)[2m > [22mmemisahkan bukti pengisian (Receipt) dengan rekaman evaluasi (Response) tanpa menyimpan studentId[90m 31[2mms[22m[31m[39m
+[31m     → AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[31m   [31m×[31m Kuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m2. Arsitektur Anonimitas Nyata (True Anonymity Decoupling)[2m > [22mmencegah pengisian berulang (ganda) oleh mahasiswa yang sama pada kelas dan periode yang sama[90m 132[2mms[22m[31m[39m
+[31m     → AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[31m   [31m×[31m Kuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m3. Batas Responden (Threshold >= 5) & Hak Akses Dosen[2m > [22mdosen tidak dapat melihat rekap komentar jika responden kurang dari 5 atau periode masih buka[90m 31[2mms[22m[31m[39m
+[31m     → AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[31m   [31m×[31m Kuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m3. Batas Responden (Threshold >= 5) & Hak Akses Dosen[2m > [22mdosen dapat melihat rekap dan komentar saat responden >= 5 dan periode telah ditutup[90m 25[2mms[22m[31m[39m
+[31m     → AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[90mstdout[2m | src/tests/unit/phase1/phase1-foundation.test.ts[2m > [22m[2mSIAJAR Fase 1: Fondasi Bersama[2m > [22m[2m3. Notifikasi Terjadwal (scheduled_notifications)[2m > [22m[2mmemproses notifikasi terjadwal yang jatuh tempo dan mengisi sent_at
+[22m[39m[Email-Channel] [Simulasi] Ke: mhs-101@siajar.ac.id | Subjek: [SIAJAR] Tenggat Tugas Diperpanjang
+[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] Modul Perkuliahan Terbuka
+
+[90mstderr[2m | src/tests/unit/phase1/phase1-foundation.test.ts[2m > [22m[2mSIAJAR Fase 1: Fondasi Bersama[2m > [22m[2m3. Notifikasi Terjadwal (scheduled_notifications)[2m > [22m[2mmemproses notifikasi terjadwal yang jatuh tempo dan mengisi sent_at
+[22m[39m[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at Module.processScheduledNotifications [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduled.ts:122:7[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39msrc\tests\unit\phase1\phase1-foundation.test.ts:229:26
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+    at runTest [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1056:11[90m)[39m
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at Module.processScheduledNotifications [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduled.ts:122:7[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39msrc\tests\unit\phase1\phase1-foundation.test.ts:229:26
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+    at runTest [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1056:11[90m)[39m
+
+ [31m❯[39m src/tests/unit/phase1/phase1-foundation.test.ts [2m([22m[2m9 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 997[2mms[22m[39m
+   [33m[2m✓[22m[39m SIAJAR Fase 1: Fondasi Bersama[2m > [22m1. Kebijakan Institusi Terkonfigurasi (institution_policies & Lampiran A)[2m > [22mmembaca seluruh nilai bawaan Lampiran A melalui getPolicy<T>() [33m485[2mms[22m[39m
+[31m   [31m×[31m SIAJAR Fase 1: Fondasi Bersama[2m > [22m1. Kebijakan Institusi Terkonfigurasi (institution_policies & Lampiran A)[2m > [22mmengizinkan pengubahan kebijakan oleh SUPER_ADMIN dan mencatat audit log[90m 131[2mms[22m[31m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m SIAJAR Fase 1: Fondasi Bersama[2m > [22m1. Kebijakan Institusi Terkonfigurasi (institution_policies & Lampiran A)[2m > [22mevaluasiKelayakanUjianAsync membaca ambang batas dari kebijakan institusi[90m 49[2mms[22m[31m[39m
+[31m     → expected true to be false // Object.is equality[39m
+ [32m✓[39m src/tests/unit/phase3/meeting-and-material-direct.test.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 258[2mms[22m[39m
+ [32m✓[39m src/tests/unit/ai-rag/ai-rag.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 313[2mms[22m[39m
+ [32m✓[39m tests/aktivitas.test.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 240[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase3/perkuliahan-utils.test.ts [2m([22m[2m18 tests[22m[2m)[22m[90m 38[2mms[22m[39m
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m1. Idempotensi Layanan buatNotifikasi()[2m > [22m[2mmenghasilkan satu notifikasi unik ketika dipanggil berulang kali dengan kunciDedup yang sama
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.findUnique()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:192:58
+
+  189 getPreferensi: async (penggunaId: string): Promise<PreferensiNotifikasiItem> => {
+  190   if (process.env.DATABASE_URL) {
+  191     try {
+→ 192       const dbPref = await prisma.preferensiNotifikasi.findUnique(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+ [32m✓[39m src/tests/unit/phase2/phase2-assignments-grades.test.ts [2m([22m[2m14 tests[22m[2m)[22m[90m 48[2mms[22m[39m
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m1. Idempotensi Layanan buatNotifikasi()[2m > [22m[2mmenghasilkan satu notifikasi unik ketika dipanggil berulang kali dengan kunciDedup yang sama
+[22m[39mprisma:error 
+Invalid `prisma.notifikasi.upsert()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:349:35
+
+  346 if (process.env.DATABASE_URL) {
+  347   try {
+  348     if (isAppChannelActive) {
+→ 349       await prisma.notifikasi.upsert(
+The table `public.Notifikasi` does not exist in the current database.
+[Email-Channel] [Simulasi] Ke: mhs-test-alpha@student.uir.ac.id | Subjek: [SIAKAD UIR] KRS Disetujui Dosen Wali
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m2. Aturan Jam Tenang (Quiet Hours)[2m > [22m[2mmenahan notifikasi non-mendesak selama jam tenang (ditundaSampai terisi)
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.findUnique()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:192:58
+
+  189 getPreferensi: async (penggunaId: string): Promise<PreferensiNotifikasiItem> => {
+  190   if (process.env.DATABASE_URL) {
+  191     try {
+→ 192       const dbPref = await prisma.preferensiNotifikasi.findUnique(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m2. Aturan Jam Tenang (Quiet Hours)[2m > [22m[2mmenahan notifikasi non-mendesak selama jam tenang (ditundaSampai terisi)
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.upsert()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:269:43
+
+  266 
+  267 if (process.env.DATABASE_URL) {
+  268   try {
+→ 269     await prisma.preferensiNotifikasi.upsert(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m2. Aturan Jam Tenang (Quiet Hours)[2m > [22m[2mmenahan notifikasi non-mendesak selama jam tenang (ditundaSampai terisi)
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.findUnique()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:192:58
+
+  189 getPreferensi: async (penggunaId: string): Promise<PreferensiNotifikasiItem> => {
+  190   if (process.env.DATABASE_URL) {
+  191     try {
+→ 192       const dbPref = await prisma.preferensiNotifikasi.findUnique(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+ [32m✓[39m src/tests/unit/peta-pulau/activity-event-kinds.test.ts [2m([22m[2m13 tests[22m[2m)[22m[90m 61[2mms[22m[39m
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m2. Aturan Jam Tenang (Quiet Hours)[2m > [22m[2mmenahan notifikasi non-mendesak selama jam tenang (ditundaSampai terisi)
+[22m[39mprisma:error 
+Invalid `prisma.notifikasi.upsert()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:349:35
+
+  346 if (process.env.DATABASE_URL) {
+  347   try {
+  348     if (isAppChannelActive) {
+→ 349       await prisma.notifikasi.upsert(
+The table `public.Notifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m2. Aturan Jam Tenang (Quiet Hours)[2m > [22m[2mtidak menahan notifikasi MENDESAK atau KEAMANAN saat jam tenang (bypass)
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.findUnique()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:192:58
+
+  189 getPreferensi: async (penggunaId: string): Promise<PreferensiNotifikasiItem> => {
+  190   if (process.env.DATABASE_URL) {
+  191     try {
+→ 192       const dbPref = await prisma.preferensiNotifikasi.findUnique(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m2. Aturan Jam Tenang (Quiet Hours)[2m > [22m[2mtidak menahan notifikasi MENDESAK atau KEAMANAN saat jam tenang (bypass)
+[22m[39mprisma:error 
+Invalid `prisma.notifikasi.upsert()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:349:35
+
+  346 if (process.env.DATABASE_URL) {
+  347   try {
+  348     if (isAppChannelActive) {
+→ 349       await prisma.notifikasi.upsert(
+The table `public.Notifikasi` does not exist in the current database.
+[Email-Channel] [Simulasi] Ke: mhs-test-alpha@student.uir.ac.id | Subjek: [SIAKAD UIR] Tugas Segera Berakhir!
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m2. Aturan Jam Tenang (Quiet Hours)[2m > [22m[2mtidak menahan notifikasi MENDESAK atau KEAMANAN saat jam tenang (bypass)
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.findUnique()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:192:58
+
+  189 getPreferensi: async (penggunaId: string): Promise<PreferensiNotifikasiItem> => {
+  190   if (process.env.DATABASE_URL) {
+  191     try {
+→ 192       const dbPref = await prisma.preferensiNotifikasi.findUnique(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m2. Aturan Jam Tenang (Quiet Hours)[2m > [22m[2mtidak menahan notifikasi MENDESAK atau KEAMANAN saat jam tenang (bypass)
+[22m[39mprisma:error 
+Invalid `prisma.notifikasi.upsert()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:349:35
+
+  346 if (process.env.DATABASE_URL) {
+  347   try {
+  348     if (isAppChannelActive) {
+→ 349       await prisma.notifikasi.upsert(
+The table `public.Notifikasi` does not exist in the current database.
+[Email-Channel] [Simulasi] Ke: mhs-test-alpha@student.uir.ac.id | Subjek: [SIAKAD UIR] Percobaan Login Baru
+
+ [32m✓[39m src/tests/unit/phase3/phase3-attendance-teaching.test.ts [2m([22m[2m13 tests[22m[2m)[22m[90m 42[2mms[22m[39m
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m3. Isolasi Otorisasi Data Antar Mahasiswa[2m > [22m[2mmenolak mahasiswa B membaca atau mengubah status notifikasi mahasiswa A
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.findUnique()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:192:58
+
+  189 getPreferensi: async (penggunaId: string): Promise<PreferensiNotifikasiItem> => {
+  190   if (process.env.DATABASE_URL) {
+  191     try {
+→ 192       const dbPref = await prisma.preferensiNotifikasi.findUnique(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m3. Isolasi Otorisasi Data Antar Mahasiswa[2m > [22m[2mmenolak mahasiswa B membaca atau mengubah status notifikasi mahasiswa A
+[22m[39mprisma:error 
+Invalid `prisma.notifikasi.upsert()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:349:35
+
+  346 if (process.env.DATABASE_URL) {
+  347   try {
+  348     if (isAppChannelActive) {
+→ 349       await prisma.notifikasi.upsert(
+The table `public.Notifikasi` does not exist in the current database.
+[Email-Channel] [Simulasi] Ke: mhs-test-alpha@student.uir.ac.id | Subjek: [SIAKAD UIR] Nilai Basis Data Terbit
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m4. Aturan Keamanan Kanal In-App[2m > [22m[2mmenolak penonaktifan kanal aplikasi untuk peringatan KEAMANAN
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.findUnique()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:192:58
+
+  189 getPreferensi: async (penggunaId: string): Promise<PreferensiNotifikasiItem> => {
+  190   if (process.env.DATABASE_URL) {
+  191     try {
+→ 192       const dbPref = await prisma.preferensiNotifikasi.findUnique(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m4. Aturan Keamanan Kanal In-App[2m > [22m[2mmenolak penonaktifan kanal aplikasi untuk peringatan KEAMANAN
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.upsert()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:269:43
+
+  266 
+  267 if (process.env.DATABASE_URL) {
+  268   try {
+→ 269     await prisma.preferensiNotifikasi.upsert(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m5. Fitur Tunda (Snooze) & Tandai Dibaca[2m > [22m[2mberhasil menunda notifikasi selama durasi menit yang ditentukan
+[22m[39mprisma:error 
+Invalid `prisma.preferensiNotifikasi.findUnique()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:192:58
+
+  189 getPreferensi: async (penggunaId: string): Promise<PreferensiNotifikasiItem> => {
+  190   if (process.env.DATABASE_URL) {
+  191     try {
+→ 192       const dbPref = await prisma.preferensiNotifikasi.findUnique(
+The table `public.PreferensiNotifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m5. Fitur Tunda (Snooze) & Tandai Dibaca[2m > [22m[2mberhasil menunda notifikasi selama durasi menit yang ditentukan
+[22m[39mprisma:error 
+Invalid `prisma.notifikasi.upsert()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:349:35
+
+  346 if (process.env.DATABASE_URL) {
+  347   try {
+  348     if (isAppChannelActive) {
+→ 349       await prisma.notifikasi.upsert(
+The table `public.Notifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m5. Fitur Tunda (Snooze) & Tandai Dibaca[2m > [22m[2mberhasil menunda notifikasi selama durasi menit yang ditentukan
+[22m[39mprisma:error 
+Invalid `prisma.notifikasi.update()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:498:33
+
+  495 
+  496 if (process.env.DATABASE_URL) {
+  497   try {
+→ 498     await prisma.notifikasi.update(
+The table `public.Notifikasi` does not exist in the current database.
+
+[90mstdout[2m | tests/notifikasi.test.ts[2m > [22m[2mInfrastruktur Notifikasi (Fase 5)[2m > [22m[2m5. Fitur Tunda (Snooze) & Tandai Dibaca[2m > [22m[2mberhasil menandai semua notifikasi aktif sebagai sudah dibaca
+[22m[39mprisma:error 
+Invalid `prisma.notifikasi.updateMany()` invocation in
+C:\Users\ACER\Downloads\implementasi\src\modules\notifications\legacy-bridge.ts:465:33
+
+  462 
+  463 if (process.env.DATABASE_URL) {
+  464   try {
+→ 465     await prisma.notifikasi.updateMany(
+The table `public.Notifikasi` does not exist in the current database.
+
+ [32m✓[39m tests/notifikasi.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 6567[2mms[22m[39m
+   [33m[2m✓[22m[39m Infrastruktur Notifikasi (Fase 5)[2m > [22m1. Idempotensi Layanan buatNotifikasi()[2m > [22mmenghasilkan satu notifikasi unik ketika dipanggil berulang kali dengan kunciDedup yang sama [33m1948[2mms[22m[39m
+   [33m[2m✓[22m[39m Infrastruktur Notifikasi (Fase 5)[2m > [22m2. Aturan Jam Tenang (Quiet Hours)[2m > [22mmenahan notifikasi non-mendesak selama jam tenang (ditundaSampai terisi) [33m1141[2mms[22m[39m
+   [33m[2m✓[22m[39m Infrastruktur Notifikasi (Fase 5)[2m > [22m2. Aturan Jam Tenang (Quiet Hours)[2m > [22mtidak menahan notifikasi MENDESAK atau KEAMANAN saat jam tenang (bypass) [33m1133[2mms[22m[39m
+   [33m[2m✓[22m[39m Infrastruktur Notifikasi (Fase 5)[2m > [22m3. Isolasi Otorisasi Data Antar Mahasiswa[2m > [22mmenolak mahasiswa B membaca atau mengubah status notifikasi mahasiswa A [33m665[2mms[22m[39m
+   [33m[2m✓[22m[39m Infrastruktur Notifikasi (Fase 5)[2m > [22m4. Aturan Keamanan Kanal In-App[2m > [22mmenolak penonaktifan kanal aplikasi untuk peringatan KEAMANAN [33m546[2mms[22m[39m
+   [33m[2m✓[22m[39m Infrastruktur Notifikasi (Fase 5)[2m > [22m5. Fitur Tunda (Snooze) & Tandai Dibaca[2m > [22mberhasil menunda notifikasi selama durasi menit yang ditentukan [33m824[2mms[22m[39m
+ [31m❯[39m src/tests/unit/security/cross-feature-security.test.ts [2m([22m[2m8 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 6318[2mms[22m[39m
+   [33m[2m✓[22m[39m Lintas Fitur: Privasi Email Pribadi, Otorisasi Peserta Kelas, dan Proteksi Endpoint Ekspor[2m > [22m1. Kebijakan Tanpa Email Pribadi di Seluruh Repositori[2m > [22mtidak memuat email pribadi di fixture maupun berkas kode/migrasi aplikasi [33m2347[2mms[22m[39m
+   [33m[2m✓[22m[39m Lintas Fitur: Privasi Email Pribadi, Otorisasi Peserta Kelas, dan Proteksi Endpoint Ekspor[2m > [22m1. Kebijakan Tanpa Email Pribadi di Seluruh Repositori[2m > [22mtidak pernah memakai store palsu legacy di seluruh kode maupun tes [33m2422[2mms[22m[39m
+[31m   [31m×[31m Lintas Fitur: Privasi Email Pribadi, Otorisasi Peserta Kelas, dan Proteksi Endpoint Ekspor[2m > [22m2. Otorisasi dan Sanitasi Email pada listClassMembersAction[2m > [22mmenolak tanpa sesi, SYSTEM_ADMIN, mahasiswa non-anggota, dosen non-pengampu, dan TA tidak ditugaskan[33m 464[2mms[22m[31m[39m
+[31m     → `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+[31m   [31m×[31m Lintas Fitur: Privasi Email Pribadi, Otorisasi Peserta Kelas, dan Proteksi Endpoint Ekspor[2m > [22m2. Otorisasi dan Sanitasi Email pada listClassMembersAction[2m > [22mmengembalikan daftar anggota kelas bagi anggota sah TANPA field email atau alamat email pribadi[90m 6[2mms[22m[31m[39m
+[31m     → `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+   [33m[2m✓[22m[39m Lintas Fitur: Privasi Email Pribadi, Otorisasi Peserta Kelas, dan Proteksi Endpoint Ekspor[2m > [22m3. Proteksi Endpoint /api/export/laporan-akademik & Sanitasi Ekspor[2m > [22mmengizinkan ACADEMIC_STAFF, PROGRAM_COORDINATOR, dan SUPER_ADMIN serta memastikan isi Excel bebas email pribadi [33m1010[2mms[22m[39m
+ [32m✓[39m src/tests/unit/live-interaction/live-interaction.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 59[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase2/grade-disputes.test.ts [2m([22m[2m18 tests[22m[2m)[22m[90m 60[2mms[22m[39m
+[90mstderr[2m | src/tests/unit/fake-gps/fake-gps.test.ts[2m > [22m[2mDeteksi Lokasi Palsu pada Presensi GPS (Mock Location Detection)[2m > [22m[2m3. Verifikasi Pengajar & Kepatuhan Aturan A2[2m > [22m[2mdosen atau asdos dapat memverifikasi presensi sah atau menolak menjadi Alpa dengan audit trail
+[22m[39m[Audit] Failed to log attendance verification: Error: AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed
+    at Module.recordSystemAuditLog [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\audit.ts:96:13[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.verifyAttendanceAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\academic\attendance-actions.ts:779:5[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39msrc\tests\unit\fake-gps\fake-gps.test.ts:175:25
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+    at runTest [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1056:11[90m)[39m
+    at runSuite [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1205:15[90m)[39m
+    at runSuite [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1205:15[90m)[39m
+    at runSuite [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1205:15[90m)[39m
+    at runFiles [90m(file:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:1262:5[90m)[39m
+
+ [32m✓[39m src/tests/unit/fake-gps/fake-gps.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1024[2mms[22m[39m
+   [33m[2m✓[22m[39m Deteksi Lokasi Palsu pada Presensi GPS (Mock Location Detection)[2m > [22m2. Prinsip Non-Punitive & Penandaan "Perlu diverifikasi"[2m > [22mpresensi mahasiswa TIDAK ditolak otomatis saat anomali, melainkan ditandai perlu diverifikasi [33m338[2mms[22m[39m
+   [33m[2m✓[22m[39m Deteksi Lokasi Palsu pada Presensi GPS (Mock Location Detection)[2m > [22m3. Verifikasi Pengajar & Kepatuhan Aturan A2[2m > [22mdosen atau asdos dapat memverifikasi presensi sah atau menolak menjadi Alpa dengan audit trail [33m627[2mms[22m[39m
+[90mstdout[2m | tests/fitur-lanjutan.test.ts[2m > [22m[2mSIAJAR Fitur Lanjutan: Presensi, Kuis, AI & Pengingat[2m > [22m[2m3. Mesin Pengingat H-1 Tenggat Waktu[2m > [22m[2mmendeteksi tugas dalam rentang 24 jam dan mengabaikan tugas yang masih lama
+[22m[39m[Email-Channel] [Simulasi] Ke: mhs-test-h1@siajar.ac.id | Subjek: [SIAJAR] [Pengingat H-1] Tenggat Tugas: Tugas Segera Dikumpulkan
+[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] [Pengingat H-1] Ujian: Kuis 1 Pemrograman Web
+[Email-Channel] [Simulasi] Ke: mhs-1@siajar.ac.id | Subjek: [SIAJAR] [Pengingat H-1] Ujian: Kuis 1 Pemrograman Web
+[Email-Channel] [Simulasi] Ke: a0000003-0000-0000-0000-000000000003@siajar.ac.id | Subjek: [SIAJAR] [Pengingat H-1] Ujian: Kuis 1 Pemrograman Web
+[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] Sesi Presensi Dibuka: Pertemuan ke-1
+[Email-Channel] [Simulasi] Ke: a0000003-0000-0000-0000-000000000003@siajar.ac.id | Subjek: [SIAJAR] Sesi Presensi Dibuka: Pertemuan ke-1
+[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] Sesi Presensi Dibuka: Pertemuan ke-2
+[Email-Channel] [Simulasi] Ke: a0000003-0000-0000-0000-000000000003@siajar.ac.id | Subjek: [SIAJAR] Sesi Presensi Dibuka: Pertemuan ke-2
+[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] Sesi Presensi Dibuka: Pertemuan ke-3
+[Email-Channel] [Simulasi] Ke: a0000003-0000-0000-0000-000000000003@siajar.ac.id | Subjek: [SIAJAR] Sesi Presensi Dibuka: Pertemuan ke-3
+[Email-Channel] [Simulasi] Ke: a0000001-0000-0000-0000-000000000001@siajar.ac.id | Subjek: [SIAJAR] Sesi Presensi Dibuka: Pertemuan ke-4
+[Email-Channel] [Simulasi] Ke: mhs-1@siajar.ac.id | Subjek: [SIAJAR] Sesi Presensi Dibuka: Pertemuan ke-4
+[Email-Channel] [Simulasi] Ke: a0000003-0000-0000-0000-000000000003@siajar.ac.id | Subjek: [SIAJAR] Sesi Presensi Dibuka: Pertemuan ke-4
+
+[90mstderr[2m | tests/fitur-lanjutan.test.ts[2m > [22m[2mSIAJAR Fitur Lanjutan: Presensi, Kuis, AI & Pengingat[2m > [22m[2m3. Mesin Pengingat H-1 Tenggat Waktu[2m > [22m[2mmendeteksi tugas dalam rentang 24 jam dan mengabaikan tugas yang masih lama
+[22m[39m[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:103:23[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:161:23[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:161:23[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:161:23[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:204:21[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:204:21[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:204:21[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:204:21[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:204:21[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:204:21[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:204:21[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:204:21[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+[InApp-Channel] Gagal simpan ke Supabase, fallback ke in-memory: Error: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context
+    at getExpectedRequestStore [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\request-async-storage.external.ts:31:9[90m)[39m
+    at Proxy.cookies [90m(C:\Users\ACER\Downloads\implementasi\[39mnode_modules\[4mnext[24m\src\client\components\headers.ts:53:47[90m)[39m
+    at Module.createClient [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\lib\supabase\server.ts:5:23[90m)[39m
+    at Module.createInAppNotification [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\channels\in-app.ts:196:30[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at Module.notify [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\service.ts:162:16[90m)[39m
+    at runScheduledReminders [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:204:21[90m)[39m
+    at Module.triggerDeadlineRemindersAction [90m(C:\Users\ACER\Downloads\implementasi\[39msrc\modules\notifications\scheduler.ts:234:18[90m)[39m
+    at [90mC:\Users\ACER\Downloads\implementasi\[39mtests\fitur-lanjutan.test.ts:143:19
+    at [90mfile:///C:/Users/ACER/Downloads/implementasi/[39mnode_modules/[4m@vitest/runner[24m/dist/index.js:533:5
+
+ [32m✓[39m tests/fitur-lanjutan.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 795[2mms[22m[39m
+   [33m[2m✓[22m[39m SIAJAR Fitur Lanjutan: Presensi, Kuis, AI & Pengingat[2m > [22m3. Mesin Pengingat H-1 Tenggat Waktu[2m > [22mmendeteksi tugas dalam rentang 24 jam dan mengabaikan tugas yang masih lama [33m769[2mms[22m[39m
+ [32m✓[39m tests/identity.test.ts [2m([22m[2m11 tests[22m[2m)[22m[90m 75[2mms[22m[39m
+ [32m✓[39m tests/integrasi-krs-nilai.test.ts [2m([22m[2m12 tests[22m[2m)[22m[90m 58[2mms[22m[39m
+ [32m✓[39m src/tests/unit/item-analysis/item-analysis.test.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 50[2mms[22m[39m
+ [32m✓[39m src/tests/unit/semester-weave/verification.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 462[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase2/late-penalty.test.ts [2m([22m[2m17 tests[22m[2m)[22m[90m 46[2mms[22m[39m
+ [32m✓[39m tests/beranda-fase1.test.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 164[2mms[22m[39m
+ [32m✓[39m src/tests/unit/auth/login-redesign.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[90m 227[2mms[22m[39m
+ [32m✓[39m tests/presensi-terpadu.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 348[2mms[22m[39m
+   [33m[2m✓[22m[39m FASE 5: Modul Presensi Terpadu Tests[2m > [22m3. Validasi Geolocation & Radius Kelas[2m > [22mmendeteksi anomali jika perangkat sama dipakai oleh banyak akun [33m306[2mms[22m[39m
+ [32m✓[39m src/tests/unit/semester-weave/actions.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 135[2mms[22m[39m
+ [32m✓[39m tests/nilai.test.ts [2m([22m[2m14 tests[22m[2m)[22m[90m 65[2mms[22m[39m
+ [31m❯[39m tests/asisten-dosen-dan-lab.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[33m 638[2mms[22m[39m
+[31m   [31m×[31m Manajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)[2m > [22m1. Dosen Pengampu dapat menugaskan Asisten Dosen secara langsung[33m 588[2mms[22m[31m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Manajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)[2m > [22m2. Dosen Pengampu dapat menugaskan Asisten Lab secara langsung[90m 6[2mms[22m[31m[39m
+[31m     → expected false to be true // Object.is equality[39m
+[31m   [31m×[31m Manajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)[2m > [22m6. getClassDetailAction mengembalikan rincian asisten lengkap dengan tipe asisten[90m 14[2mms[22m[31m[39m
+[31m     → expected null not to be null[39m
+[31m   [31m×[31m Manajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)[2m > [22m7. Pencabutan asisten dengan permissions kosong berhasil[90m 7[2mms[22m[31m[39m
+[31m     → expected false to be true // Object.is equality[39m
+ [32m✓[39m src/tests/unit/peta-pulau/cron-jobs.test.ts [2m([22m[2m9 tests[22m[2m)[22m[90m 139[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase5/phase5-interaction.test.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 43[2mms[22m[39m
+ [32m✓[39m tests/classes-curriculum-connected.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 120[2mms[22m[39m
+ [32m✓[39m tests/jadwal-terdekat.test.ts [2m([22m[2m8 tests[22m[2m)[22m[90m 32[2mms[22m[39m
+ [32m✓[39m src/tests/unit/similarity/similarity.test.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 261[2mms[22m[39m
+ [32m✓[39m src/tests/unit/seed-akademik/guard.test.ts [2m([22m[2m9 tests[22m[2m)[22m[90m 41[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase6/moodle-xml.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 48[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase4/phase4-exams-autograder.test.ts [2m([22m[2m7 tests[22m[2m)[22m[90m 53[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase4/exam-autosave.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 29[2mms[22m[39m
+ [32m✓[39m tests/progres-belajar.test.ts [2m([22m[2m11 tests[22m[2m)[22m[90m 30[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase2/feedback-comments.test.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 33[2mms[22m[39m
+ [32m✓[39m tests/simulasi-ipk.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 26[2mms[22m[39m
+ [32m✓[39m tests/syarat-ujian.test.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 31[2mms[22m[39m
+ [32m✓[39m src/tests/unit/semester-weave/components.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[90m 266[2mms[22m[39m
+ [32m✓[39m src/tests/unit/seed-akademik/legacy-layer.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 50[2mms[22m[39m
+ [31m❯[39m tests/lecturer-ta-dashboard.test.ts [2m([22m[2m6 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[33m 2574[2mms[22m[39m
+[31m   [31m×[31m Redesain Modern Retro Portal Dosen & Asisten (Fase 1)[2m > [22m1. Akses & Antrean Penilaian Dosen (listPendingReviewsAction)[2m > [22mmengembalikan daftar tugas pending ketika aktor adalah LECTURER[33m 482[2mms[22m[31m[39m
+[31m     → `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+[31m   [31m×[31m Redesain Modern Retro Portal Dosen & Asisten (Fase 1)[2m > [22m1. Akses & Antrean Penilaian Dosen (listPendingReviewsAction)[2m > [22mmengembalikan antrean peninjauan ketika aktor adalah TEACHING_ASSISTANT[90m 5[2mms[22m[31m[39m
+[31m     → `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+   [33m[2m✓[22m[39m Redesain Modern Retro Portal Dosen & Asisten (Fase 1)[2m > [22m2. Struktur Komponen Beranda Dosen & Asisten[2m > [22mmemastikan LecturerDashboardClient dan TaDashboardClient dapat diimpor tanpa crash [33m2038[2mms[22m[39m
+ [32m✓[39m src/tests/unit/badges-certs/badges-certs.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 28[2mms[22m[39m
+ [32m✓[39m src/tests/unit/semester-weave/dashboard-integration.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 942[2mms[22m[39m
+   [33m[2m✓[22m[39m Integrasi Beranda Mahasiswa di Belakang Feature Flag (Fase G)[2m > [22m1. Dengan feature flag MATI (semesterWeave = null): merender kartu lama dan TIDAK merender Kain Semester [33m401[2mms[22m[39m
+ [32m✓[39m tests/all-roles-dashboard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 4075[2mms[22m[39m
+   [33m[2m✓[22m[39m Redesain Modern Retro Portal Semua Role Actor (Mahasiswa, Dosen, Asisten, Staf, Kaprodi, Admin)[2m > [22m1. Komponen Kartu Identitas Akademik Retro (Academic Identity Passes)[2m > [22mmemastikan StudentAcademicStatusCard, LecturerIdentityCard, StaffIdentityCard, CoordinatorIdentityCard, AdminIdentityCard terdefinisi [33m885[2mms[22m[39m
+   [33m[2m✓[22m[39m Redesain Modern Retro Portal Semua Role Actor (Mahasiswa, Dosen, Asisten, Staf, Kaprodi, Admin)[2m > [22m2. Komponen Panel Kanan Khusus Setiap Aktor (Right Panels)[2m > [22mmemastikan RightPanel Switcher, Dosen, TA, Staff, Coordinator, dan Admin terdefinisi [33m306[2mms[22m[39m
+   [33m[2m✓[22m[39m Redesain Modern Retro Portal Semua Role Actor (Mahasiswa, Dosen, Asisten, Staf, Kaprodi, Admin)[2m > [22m3. Komponen Dashboard Klien 2-Panel Setiap Aktor (Dashboard Clients)[2m > [22mmemastikan Student, Lecturer, TA, Staff, Coordinator, dan Admin Dashboard Client dapat diimpor tanpa crash [33m2877[2mms[22m[39m
+ [32m✓[39m src/tests/unit/calendar-sync/calendar-sync.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 158[2mms[22m[39m
+ [32m✓[39m tests/innovative-features.test.ts [2m([22m[2m8 tests[22m[2m)[22m[33m 877[2mms[22m[39m
+   [33m[2m✓[22m[39m Inovasi Pembelajaran Web: Tatap Muka Terpadu, Pembaca Modul, dan Mode Cepat[2m > [22m1. Komponen Tatap Muka Daring Langsung (RetroLiveClassroom - Jitsi WebRTC)[2m > [22mmemastikan RetroLiveClassroom terdefinisi dan dapat diimpor tanpa crash [33m558[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase6/qti-parser.test.ts [2m([22m[2m1 test[22m[2m)[22m[90m 118[2mms[22m[39m
+ [32m✓[39m tests/administrasi.test.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 23[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase4/exam-makeup.test.ts [2m([22m[2m10 tests[22m[2m)[22m[90m 54[2mms[22m[39m
+ [32m✓[39m tests/progres-kelulusan.test.ts [2m([22m[2m4 tests[22m[2m)[22m[90m 22[2mms[22m[39m
+ [32m✓[39m src/tests/unit/security/seed-safeguard.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 17[2mms[22m[39m
+ [31m❯[39m src/tests/unit/security/demo-login.test.ts [2m([22m[2m3 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[33m 15165[2mms[22m[39m
+[31m   [31m×[31m Uji Keamanan Login Demo & Kata Sandi Lingkungan (Task 3)[2m > [22mmenolak login demo jika ALLOW_DEMO_AUTH tidak diatur dan NODE_ENV=production[33m 5141[2mms[22m[31m[39m
+[31m     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[31m   [31m×[31m Uji Keamanan Login Demo & Kata Sandi Lingkungan (Task 3)[2m > [22mmenolak login demo jika DEMO_PASSWORD dan SUPERADMIN_PASSWORD kosong / tidak diatur (meski di non-production)[33m 5009[2mms[22m[31m[39m
+[31m     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[31m   [31m×[31m Uji Keamanan Login Demo & Kata Sandi Lingkungan (Task 3)[2m > [22mmenerima login demo hanya dengan nilai DEMO_PASSWORD atau SUPERADMIN_PASSWORD dari env pada mode non-production[33m 5009[2mms[22m[31m[39m
+[31m     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+ [32m✓[39m src/tests/unit/phase6/word-parser.test.ts [2m([22m[2m2 tests[22m[2m)[22m[90m 37[2mms[22m[39m
+ [32m✓[39m src/tests/unit/seed-akademik/ruang.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 43[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase6/excel-parser.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 875[2mms[22m[39m
+   [33m[2m✓[22m[39m Excel Question Template & Parser (13.2)[2m > [22mberhasil membuat template Excel resmi dengan kolom dan baris contoh yang valid [33m603[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase6/class-clone-archive.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 25[2mms[22m[39m
+ [32m✓[39m tests/prasyarat.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 24[2mms[22m[39m
+ [32m✓[39m src/tests/unit/phase6/question-sanitizer.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 27[2mms[22m[39m
+ [32m✓[39m tests/bentrok.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 20[2mms[22m[39m
+ [32m✓[39m tests/validasi-email.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 21[2mms[22m[39m
+ [32m✓[39m src/tests/unit/security/login-email-allowlist.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 533[2mms[22m[39m
+   [33m[2m✓[22m[39m Validasi Email Login & Allowlist (allowed_email_domains dan email_allowlist)[2m > [22mmenerima email mahasiswa dengan domain resmi student.uir.ac.id [33m513[2mms[22m[39m
+ [32m✓[39m src/tests/unit/seed-akademik/load.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 318[2mms[22m[39m
+ [32m✓[39m src/tests/unit/resilience/resilience-guard.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 29[2mms[22m[39m
+ [32m✓[39m src/tests/unit/semester-weave/features.test.ts [2m([22m[2m3 tests[22m[2m)[22m[90m 54[2mms[22m[39m
+ [32m✓[39m tests/aturan-sks.test.ts [2m([22m[2m6 tests[22m[2m)[22m[90m 23[2mms[22m[39m
+ [32m✓[39m src/tests/unit/security/no-student-messaging.test.ts [2m([22m[2m5 tests[22m[2m)[22m[90m 11[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[1m[7m Failed Tests 20 [27m[22m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/asisten-dosen-dan-lab.test.ts[2m > [22mManajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)[2m > [22m1. Dosen Pengampu dapat menugaskan Asisten Dosen secara langsung
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m tests/asisten-dosen-dan-lab.test.ts:[2m64:24[22m[39m
+    [90m 62| [39m
+    [90m 63| [39m    [35mconst[39m members [33m=[39m [35mawait[39m [34mlistClassMembersAction[39m(classId)[33m;[39m
+    [90m 64| [39m    [34mexpect[39m(members[33m.[39mok)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m 65| [39m    [35mconst[39m asdos [33m=[39m members[33m.[39mdata[33m?.[39massistants[33m.[39m[34mfind[39m((a) [33m=>[39m a[33m.[39mnim [33m===[39m [32m'2024[39m…
+    [90m 66| [39m    [34mexpect[39m(asdos)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/asisten-dosen-dan-lab.test.ts[2m > [22mManajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)[2m > [22m2. Dosen Pengampu dapat menugaskan Asisten Lab secara langsung
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m tests/asisten-dosen-dan-lab.test.ts:[2m80:24[22m[39m
+    [90m 78| [39m
+    [90m 79| [39m    [35mconst[39m members [33m=[39m [35mawait[39m [34mlistClassMembersAction[39m(classId)[33m;[39m
+    [90m 80| [39m    [34mexpect[39m(members[33m.[39mok)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m 81| [39m    [35mconst[39m aslab [33m=[39m members[33m.[39mdata[33m?.[39massistants[33m.[39m[34mfind[39m((a) [33m=>[39m a[33m.[39mnim [33m===[39m [32m'2024[39m…
+    [90m 82| [39m    [34mexpect[39m(aslab)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/asisten-dosen-dan-lab.test.ts[2m > [22mManajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)[2m > [22m6. getClassDetailAction mengembalikan rincian asisten lengkap dengan tipe asisten
+[31m[1mAssertionError[22m: expected null not to be null[39m
+[36m [2m❯[22m tests/asisten-dosen-dan-lab.test.ts:[2m159:24[22m[39m
+    [90m157| [39m
+    [90m158| [39m    [35mconst[39m detail [33m=[39m [35mawait[39m [34mgetClassDetailAction[39m(classId)[33m;[39m
+    [90m159| [39m    [34mexpect[39m(detail)[33m.[39mnot[33m.[39m[34mtoBeNull[39m()[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m160| [39m    [34mexpect[39m(detail[33m?.[39massistants)[33m.[39m[34mtoBeDefined[39m()[33m;[39m
+    [90m161| [39m    [34mexpect[39m(detail[33m?.[39massistants[33m?.[39mlength)[33m.[39m[34mtoBeGreaterThan[39m([34m0[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/asisten-dosen-dan-lab.test.ts[2m > [22mManajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)[2m > [22m7. Pencabutan asisten dengan permissions kosong berhasil
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m tests/asisten-dosen-dan-lab.test.ts:[2m185:24[22m[39m
+    [90m183| [39m
+    [90m184| [39m    [35mconst[39m members [33m=[39m [35mawait[39m [34mlistClassMembersAction[39m(classId)[33m;[39m
+    [90m185| [39m    [34mexpect[39m(members[33m.[39mok)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                       [31m^[39m
+    [90m186| [39m    [35mconst[39m revoked [33m=[39m members[33m.[39mdata[33m?.[39massistants[33m.[39m[34mfind[39m((a) [33m=>[39m a[33m.[39mnim [33m===[39m [32m'20[39m…
+    [90m187| [39m    [34mexpect[39m(revoked)[33m.[39m[34mtoBeUndefined[39m()[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/lecturer-ta-dashboard.test.ts[2m > [22mRedesain Modern Retro Portal Dosen & Asisten (Fase 1)[2m > [22m1. Akses & Antrean Penilaian Dosen (listPendingReviewsAction)[2m > [22mmengembalikan daftar tugas pending ketika aktor adalah LECTURER
+[31m[1mError[22m: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+[90m [2m❯[22m getExpectedRequestStore node_modules/next/src/client/components/request-async-storage.external.ts:[2m31:9[22m[39m
+[90m [2m❯[22m Proxy.cookies node_modules/next/src/client/components/headers.ts:[2m53:47[22m[39m
+[36m [2m❯[22m Module.createClient src/lib/supabase/server.ts:[2m5:23[22m[39m
+    [90m  3| [39m
+    [90m  4| [39m[35mexport[39m [35masync[39m [35mfunction[39m [34mcreateClient[39m() {
+    [90m  5| [39m  [35mconst[39m cookieStore [33m=[39m [34mcookies[39m()[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m  6| [39m  [35mconst[39m supabaseUrl [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_URL[39m [33m||[39m [32m'http://[39m…
+    [90m  7| [39m  [35mconst[39m supabaseAnonKey [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_ANON_KEY[39m [33m||[39m…
+[90m [2m❯[22m Module.listPendingReviewsAction src/modules/academic/actions.ts:[2m1371:28[22m[39m
+[90m [2m❯[22m tests/lecturer-ta-dashboard.test.ts:[2m22:19[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m tests/lecturer-ta-dashboard.test.ts[2m > [22mRedesain Modern Retro Portal Dosen & Asisten (Fase 1)[2m > [22m1. Akses & Antrean Penilaian Dosen (listPendingReviewsAction)[2m > [22mmengembalikan antrean peninjauan ketika aktor adalah TEACHING_ASSISTANT
+[31m[1mError[22m: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+[90m [2m❯[22m getExpectedRequestStore node_modules/next/src/client/components/request-async-storage.external.ts:[2m31:9[22m[39m
+[90m [2m❯[22m Proxy.cookies node_modules/next/src/client/components/headers.ts:[2m53:47[22m[39m
+[36m [2m❯[22m Module.createClient src/lib/supabase/server.ts:[2m5:23[22m[39m
+    [90m  3| [39m
+    [90m  4| [39m[35mexport[39m [35masync[39m [35mfunction[39m [34mcreateClient[39m() {
+    [90m  5| [39m  [35mconst[39m cookieStore [33m=[39m [34mcookies[39m()[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m  6| [39m  [35mconst[39m supabaseUrl [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_URL[39m [33m||[39m [32m'http://[39m…
+    [90m  7| [39m  [35mconst[39m supabaseAnonKey [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_ANON_KEY[39m [33m||[39m…
+[90m [2m❯[22m Module.listPendingReviewsAction src/modules/academic/actions.ts:[2m1371:28[22m[39m
+[90m [2m❯[22m tests/lecturer-ta-dashboard.test.ts:[2m39:19[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/evaluation/evaluation.test.ts[2m > [22mKuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m1. Siklus Hidup Periode Evaluasi[2m > [22mdapat membuat dan mengaktifkan periode evaluasi baru
+[31m[1mError[22m: AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[36m [2m❯[22m Module.recordSystemAuditLog src/lib/audit.ts:[2m96:13[22m[39m
+    [90m 94| [39m
+    [90m 95| [39m    [35mif[39m (error) {
+    [90m 96| [39m      [35mthrow[39m [35mnew[39m [33mError[39m([32m`AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak a[39m…
+    [90m   | [39m            [31m^[39m
+    [90m 97| [39m    }
+    [90m 98| [39m  }
+[90m [2m❯[22m Module.createEvaluationPeriodAction src/modules/academic/evaluation-actions.ts:[2m172:3[22m[39m
+[90m [2m❯[22m src/tests/unit/evaluation/evaluation.test.ts:[2m53:25[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/evaluation/evaluation.test.ts[2m > [22mKuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m1. Siklus Hidup Periode Evaluasi[2m > [22mdapat menutup periode evaluasi secara manual
+[31m[1mError[22m: AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[36m [2m❯[22m Module.recordSystemAuditLog src/lib/audit.ts:[2m96:13[22m[39m
+    [90m 94| [39m
+    [90m 95| [39m    [35mif[39m (error) {
+    [90m 96| [39m      [35mthrow[39m [35mnew[39m [33mError[39m([32m`AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak a[39m…
+    [90m   | [39m            [31m^[39m
+    [90m 97| [39m    }
+    [90m 98| [39m  }
+[90m [2m❯[22m Module.createEvaluationPeriodAction src/modules/academic/evaluation-actions.ts:[2m172:3[22m[39m
+[90m [2m❯[22m src/tests/unit/evaluation/evaluation.test.ts:[2m75:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/evaluation/evaluation.test.ts[2m > [22mKuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m2. Arsitektur Anonimitas Nyata (True Anonymity Decoupling)[2m > [22mmemisahkan bukti pengisian (Receipt) dengan rekaman evaluasi (Response) tanpa menyimpan studentId
+[31m[1mError[22m: AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[36m [2m❯[22m Module.recordSystemAuditLog src/lib/audit.ts:[2m96:13[22m[39m
+    [90m 94| [39m
+    [90m 95| [39m    [35mif[39m (error) {
+    [90m 96| [39m      [35mthrow[39m [35mnew[39m [33mError[39m([32m`AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak a[39m…
+    [90m   | [39m            [31m^[39m
+    [90m 97| [39m    }
+    [90m 98| [39m  }
+[90m [2m❯[22m Module.createEvaluationPeriodAction src/modules/academic/evaluation-actions.ts:[2m172:3[22m[39m
+[90m [2m❯[22m src/tests/unit/evaluation/evaluation.test.ts:[2m99:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/evaluation/evaluation.test.ts[2m > [22mKuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m2. Arsitektur Anonimitas Nyata (True Anonymity Decoupling)[2m > [22mmencegah pengisian berulang (ganda) oleh mahasiswa yang sama pada kelas dan periode yang sama
+[31m[1mError[22m: AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[36m [2m❯[22m Module.recordSystemAuditLog src/lib/audit.ts:[2m96:13[22m[39m
+    [90m 94| [39m
+    [90m 95| [39m    [35mif[39m (error) {
+    [90m 96| [39m      [35mthrow[39m [35mnew[39m [33mError[39m([32m`AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak a[39m…
+    [90m   | [39m            [31m^[39m
+    [90m 97| [39m    }
+    [90m 98| [39m  }
+[90m [2m❯[22m Module.createEvaluationPeriodAction src/modules/academic/evaluation-actions.ts:[2m172:3[22m[39m
+[90m [2m❯[22m src/tests/unit/evaluation/evaluation.test.ts:[2m144:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/evaluation/evaluation.test.ts[2m > [22mKuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m3. Batas Responden (Threshold >= 5) & Hak Akses Dosen[2m > [22mdosen tidak dapat melihat rekap komentar jika responden kurang dari 5 atau periode masih buka
+[31m[1mError[22m: AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[36m [2m❯[22m Module.recordSystemAuditLog src/lib/audit.ts:[2m96:13[22m[39m
+    [90m 94| [39m
+    [90m 95| [39m    [35mif[39m (error) {
+    [90m 96| [39m      [35mthrow[39m [35mnew[39m [33mError[39m([32m`AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak a[39m…
+    [90m   | [39m            [31m^[39m
+    [90m 97| [39m    }
+    [90m 98| [39m  }
+[90m [2m❯[22m Module.createEvaluationPeriodAction src/modules/academic/evaluation-actions.ts:[2m172:3[22m[39m
+[90m [2m❯[22m src/tests/unit/evaluation/evaluation.test.ts:[2m185:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/evaluation/evaluation.test.ts[2m > [22mKuesioner Evaluasi Dosen oleh Mahasiswa (EDOM)[2m > [22m3. Batas Responden (Threshold >= 5) & Hak Akses Dosen[2m > [22mdosen dapat melihat rekap dan komentar saat responden >= 5 dan periode telah ditutup
+[31m[1mError[22m: AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: TypeError: fetch failed[39m
+[36m [2m❯[22m Module.recordSystemAuditLog src/lib/audit.ts:[2m96:13[22m[39m
+    [90m 94| [39m
+    [90m 95| [39m    [35mif[39m (error) {
+    [90m 96| [39m      [35mthrow[39m [35mnew[39m [33mError[39m([32m`AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak a[39m…
+    [90m   | [39m            [31m^[39m
+    [90m 97| [39m    }
+    [90m 98| [39m  }
+[90m [2m❯[22m Module.createEvaluationPeriodAction src/modules/academic/evaluation-actions.ts:[2m172:3[22m[39m
+[90m [2m❯[22m src/tests/unit/evaluation/evaluation.test.ts:[2m224:25[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/notifications/notifications.test.ts[2m > [22mSistem Notifikasi & Pengingat Otomatis SIAJAR[2m > [22m4. Automated Scheduler & Sinkronisasi Store Kuis (__siajarKuis) (Tahap C2)[2m > [22mmengirim EXAM_UPCOMING untuk ujian yang dibuat lewat createQuizAction
+[31m[1mError[22m: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+[90m [2m❯[22m getExpectedRequestStore node_modules/next/src/client/components/request-async-storage.external.ts:[2m31:9[22m[39m
+[90m [2m❯[22m Proxy.cookies node_modules/next/src/client/components/headers.ts:[2m53:47[22m[39m
+[36m [2m❯[22m Module.createClient src/lib/supabase/server.ts:[2m5:23[22m[39m
+    [90m  3| [39m
+    [90m  4| [39m[35mexport[39m [35masync[39m [35mfunction[39m [34mcreateClient[39m() {
+    [90m  5| [39m  [35mconst[39m cookieStore [33m=[39m [34mcookies[39m()[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m  6| [39m  [35mconst[39m supabaseUrl [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_URL[39m [33m||[39m [32m'http://[39m…
+    [90m  7| [39m  [35mconst[39m supabaseAnonKey [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_ANON_KEY[39m [33m||[39m…
+[90m [2m❯[22m Module.assertClassOwner src/lib/auth/class-access.ts:[2m579:28[22m[39m
+[90m [2m❯[22m Module.createQuizAction src/modules/academic/cbt/cbt-exam-actions.ts:[2m105:5[22m[39m
+[90m [2m❯[22m src/tests/unit/notifications/notifications.test.ts:[2m327:25[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/phase1/phase1-foundation.test.ts[2m > [22mSIAJAR Fase 1: Fondasi Bersama[2m > [22m1. Kebijakan Institusi Terkonfigurasi (institution_policies & Lampiran A)[2m > [22mmengizinkan pengubahan kebijakan oleh SUPER_ADMIN dan mencatat audit log
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m src/tests/unit/phase1/phase1-foundation.test.ts:[2m85:22[22m[39m
+    [90m 83| [39m
+    [90m 84| [39m      [35mconst[39m res [33m=[39m [35mawait[39m [34mupdatePolicyAction[39m([32m'min_attendance_percent'[39m[33m,[39m [34m8[39m…
+    [90m 85| [39m      [34mexpect[39m(res[33m.[39mok)[33m.[39m[34mtoBe[39m([35mtrue[39m)[33m;[39m
+    [90m   | [39m                     [31m^[39m
+    [90m 86| [39m      [34mexpect[39m(res[33m.[39mdata[33m?.[39mvalue)[33m.[39m[34mtoBe[39m([34m80[39m)[33m;[39m
+    [90m 87| [39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/phase1/phase1-foundation.test.ts[2m > [22mSIAJAR Fase 1: Fondasi Bersama[2m > [22m1. Kebijakan Institusi Terkonfigurasi (institution_policies & Lampiran A)[2m > [22mevaluasiKelayakanUjianAsync membaca ambang batas dari kebijakan institusi
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m src/tests/unit/phase1/phase1-foundation.test.ts:[2m119:40[22m[39m
+    [90m117| [39m      })[33m;[39m
+    [90m118| [39m
+    [90m119| [39m      [34mexpect[39m(hasil[33m.[39mkehadiranTerpenuhi)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m   | [39m                                       [31m^[39m
+    [90m120| [39m      [34mexpect[39m(hasil[33m.[39mlayak)[33m.[39m[34mtoBe[39m([35mfalse[39m)[33m;[39m
+    [90m121| [39m      [34mexpect[39m(hasil[33m.[39malasanTidakLayak[[34m0[39m])[33m.[39m[34mtoContain[39m([32m'kurang dari batas m[39m…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/security/cross-feature-security.test.ts[2m > [22mLintas Fitur: Privasi Email Pribadi, Otorisasi Peserta Kelas, dan Proteksi Endpoint Ekspor[2m > [22m2. Otorisasi dan Sanitasi Email pada listClassMembersAction[2m > [22mmenolak tanpa sesi, SYSTEM_ADMIN, mahasiswa non-anggota, dosen non-pengampu, dan TA tidak ditugaskan
+[31m[1mError[22m: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+[90m [2m❯[22m getExpectedRequestStore node_modules/next/src/client/components/request-async-storage.external.ts:[2m31:9[22m[39m
+[90m [2m❯[22m Proxy.cookies node_modules/next/src/client/components/headers.ts:[2m53:47[22m[39m
+[36m [2m❯[22m Module.createClient src/lib/supabase/server.ts:[2m5:23[22m[39m
+    [90m  3| [39m
+    [90m  4| [39m[35mexport[39m [35masync[39m [35mfunction[39m [34mcreateClient[39m() {
+    [90m  5| [39m  [35mconst[39m cookieStore [33m=[39m [34mcookies[39m()[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m  6| [39m  [35mconst[39m supabaseUrl [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_URL[39m [33m||[39m [32m'http://[39m…
+    [90m  7| [39m  [35mconst[39m supabaseAnonKey [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_ANON_KEY[39m [33m||[39m…
+[90m [2m❯[22m Module.assertClassMember src/lib/auth/class-access.ts:[2m412:28[22m[39m
+[90m [2m❯[22m Module.listClassMembersAction src/modules/academic/actions.ts:[2m1066:7[22m[39m
+[90m [2m❯[22m src/tests/unit/security/cross-feature-security.test.ts:[2m156:27[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/security/cross-feature-security.test.ts[2m > [22mLintas Fitur: Privasi Email Pribadi, Otorisasi Peserta Kelas, dan Proteksi Endpoint Ekspor[2m > [22m2. Otorisasi dan Sanitasi Email pada listClassMembersAction[2m > [22mmengembalikan daftar anggota kelas bagi anggota sah TANPA field email atau alamat email pribadi
+[31m[1mError[22m: `cookies` was called outside a request scope. Read more: https://nextjs.org/docs/messages/next-dynamic-api-wrong-context[39m
+[90m [2m❯[22m getExpectedRequestStore node_modules/next/src/client/components/request-async-storage.external.ts:[2m31:9[22m[39m
+[90m [2m❯[22m Proxy.cookies node_modules/next/src/client/components/headers.ts:[2m53:47[22m[39m
+[36m [2m❯[22m Module.createClient src/lib/supabase/server.ts:[2m5:23[22m[39m
+    [90m  3| [39m
+    [90m  4| [39m[35mexport[39m [35masync[39m [35mfunction[39m [34mcreateClient[39m() {
+    [90m  5| [39m  [35mconst[39m cookieStore [33m=[39m [34mcookies[39m()[33m;[39m
+    [90m   | [39m                      [31m^[39m
+    [90m  6| [39m  [35mconst[39m supabaseUrl [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_URL[39m [33m||[39m [32m'http://[39m…
+    [90m  7| [39m  [35mconst[39m supabaseAnonKey [33m=[39m process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_SUPABASE_ANON_KEY[39m [33m||[39m…
+[90m [2m❯[22m Module.assertClassMember src/lib/auth/class-access.ts:[2m412:28[22m[39m
+[90m [2m❯[22m Module.listClassMembersAction src/modules/academic/actions.ts:[2m1066:7[22m[39m
+[90m [2m❯[22m src/tests/unit/security/cross-feature-security.test.ts:[2m191:22[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/20]⎯[22m[39m
+
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/security/demo-login.test.ts[2m > [22mUji Keamanan Login Demo & Kata Sandi Lingkungan (Task 3)[2m > [22mmenolak login demo jika ALLOW_DEMO_AUTH tidak diatur dan NODE_ENV=production
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/security/demo-login.test.ts[2m > [22mUji Keamanan Login Demo & Kata Sandi Lingkungan (Task 3)[2m > [22mmenolak login demo jika DEMO_PASSWORD dan SUPERADMIN_PASSWORD kosong / tidak diatur (meski di non-production)
+[31m[1m[7m FAIL [27m[22m[39m src/tests/unit/security/demo-login.test.ts[2m > [22mUji Keamanan Login Demo & Kata Sandi Lingkungan (Task 3)[2m > [22mmenerima login demo hanya dengan nilai DEMO_PASSWORD atau SUPERADMIN_PASSWORD dari env pada mode non-production
+[31m[1mError[22m: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/20]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m7 failed[39m[22m[2m | [22m[1m[32m72 passed[39m[22m[90m (79)[39m
+[2m      Tests [22m [1m[31m20 failed[39m[22m[2m | [22m[1m[32m681 passed[39m[22m[90m (701)[39m
+[2m   Start at [22m 07:09:32
+[2m   Duration [22m 97.11s[2m (transform 17.38s, setup 0ms, collect 89.50s, tests 54.44s, environment 107ms, prepare 52.12s)[22m
+
