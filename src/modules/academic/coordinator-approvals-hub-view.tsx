@@ -436,7 +436,7 @@ export function CoordinatorApprovalsHubView({
 
       {/* TOAST NOTIFIKASI IN-APP */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-md animate-fade-in font-sans">
+        <div className="fixed bottom-[calc(var(--mobile-nav-h,3.5rem)+env(safe-area-inset-bottom,0px)+1rem)] md:bottom-6 right-4 sm:right-6 z-50 max-w-md animate-fade-in font-sans">
           <div className="p-4 border-2 border-black shadow-retro flex items-start gap-3 bg-white text-[#111111]">
             {toastMessage.type === 'success' ? (
               <CheckCircle2 className="h-5 w-5 text-[#111111] shrink-0 mt-0.5" />

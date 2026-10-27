@@ -81,7 +81,7 @@ export function AiAcademicAssistant() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          className="ai-assistant-btn fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center justify-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full border-2 border-black bg-black px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-retro hover:bg-neutral-800 transition-all hover:scale-105 active:scale-95 group cursor-pointer"
+          className="ai-assistant-btn fixed bottom-[calc(var(--mobile-nav-h,3.5rem)+env(safe-area-inset-bottom,0px)+0.75rem)] md:bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-40 flex items-center justify-center min-h-[44px] min-w-[44px] gap-2 sm:gap-2.5 rounded-full border-2 border-black bg-black px-3.5 py-2.5 sm:px-4 sm:py-3 text-white shadow-retro hover:bg-neutral-800 transition-all hover:scale-105 active:scale-95 group cursor-pointer"
           aria-label="Buka Asisten AI Akademik"
         >
           <div className="relative shrink-0 flex items-center justify-center">
@@ -96,7 +96,7 @@ export function AiAcademicAssistant() {
 
       {/* Floating Chat Modal */}
       {isOpen && (
-        <div className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-50 flex h-[min(78dvh,32rem)] w-[calc(100vw-2rem)] sm:w-96 max-w-sm flex-col rounded-2xl border-2 border-ink bg-surface shadow-retro-window overflow-hidden animate-fade-up">
+        <div className="fixed bottom-[calc(var(--mobile-nav-h,3.5rem)+env(safe-area-inset-bottom,0px)+0.75rem)] md:bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-[calc(1rem+env(safe-area-inset-right,0px))] sm:bottom-6 sm:right-6 z-50 flex h-[min(78dvh,32rem)] w-[calc(100vw-2rem)] sm:w-96 max-w-sm flex-col rounded-2xl border-2 border-ink bg-surface shadow-retro-window overflow-hidden animate-fade-up">
           {/* Header */}
           <div className="flex items-center justify-between border-b-2 border-ink bg-gray-soft px-4 py-3">
             <div className="flex items-center gap-2.5">

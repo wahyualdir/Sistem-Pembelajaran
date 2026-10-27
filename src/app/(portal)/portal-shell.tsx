@@ -33,6 +33,8 @@ import {
 import { ShellContext } from '@/components/shared/dashboard-shell';
 import { TechBackground } from '@/components/ui/tech-background';
 import { CommandCenterOS } from '@/components/shared/command-center-os';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { MobileBottomNav } from '@/components/shared/mobile-bottom-nav';
 
 export interface PortalLayoutContextValue {
   isSidebarCollapsed: boolean;
@@ -86,7 +88,9 @@ export function PortalShell({
   const [isMounted, setIsMounted] = useState(false);
   const [hasUserPreference, setHasUserPreference] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(true);
+  // State responsif berbasis useSyncExternalStore dengan server snapshot aman false
+  const isTablet = useMediaQuery('(min-width: 768px) and (max-width: 1279px)', false);
+  const isDesktop = useMediaQuery('(min-width: 1280px)', false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isRightDrawerOpen, setIsRightDrawerOpen] = useState(false);
   const [hasRightPanel, setHasRightPanel] = useState(false);
@@ -184,22 +188,12 @@ export function PortalShell({
     return () => clearTimeout(timer);
   }, []);
 
-  // Responsif terhadap perubahan ukuran layar
+    // Tutup drawer mobile jika viewport membesar ke desktop
   useEffect(() => {
-    const handleResize = () => {
-      const desktop = window.innerWidth >= 1280;
-      setIsDesktop(desktop);
-      if (desktop && isDrawerOpen) {
-        setIsDrawerOpen(false);
-      }
-      if (!hasUserPreference && desktop && isCollapsed) {
-        setIsCollapsed(false);
-      }
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [hasUserPreference, isCollapsed, isDrawerOpen]);
+    if (isDesktop && isDrawerOpen) {
+      setIsDrawerOpen(false);
+    }
+  }, [isDesktop, isDrawerOpen]);
 
   // Keyboard shortcut: Esc untuk menutup drawer geser atau popover
   useEffect(() => {
@@ -253,6 +247,7 @@ export function PortalShell({
 
   // Mode rail hanya aktif pada desktop (>= 1280px) saat collapsed
   const isRailActive = isDesktop && isCollapsed;
+  const isRailRender = isTablet || isRailActive;
 
   // Grup navigasi dinamis terdedikasi untuk masing-masing peran/aktor
   const navGroups = getNavGroups(role, badges ?? unread);
@@ -308,7 +303,7 @@ export function PortalShell({
           setHasRightPanel,
         }}
       >
-        <div className="min-h-[100dvh] bg-transparent text-[#1C1917] font-sans flex flex-col xl:flex-row antialiased selection:bg-[#C2553A] selection:text-white relative">
+        <div className="min-h-[100dvh] bg-transparent text-[#1C1917] font-sans flex flex-col md:flex-row antialiased selection:bg-[#C2553A] selection:text-white relative">
           {/* Tech Background Grid & Gradient khas Velqora */}
           <TechBackground />
 
@@ -332,12 +327,12 @@ export function PortalShell({
               'xl:sticky xl:top-0 xl:h-[100dvh] xl:z-40 shadow-xs',
               'transition-all duration-200 ease-in-out motion-reduce:transition-none',
               'pl-[env(safe-area-inset-left,0px)] pb-[env(safe-area-inset-bottom,0px)]',
-              isRailActive ? 'w-sidebar xl:w-rail' : 'w-sidebar',
-              isDrawerOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full xl:translate-x-0'
+              isRailRender ? 'w-sidebar md:w-rail' : 'w-sidebar',
+              isDrawerOpen ? 'translate-x-0 shadow-2xl !fixed !z-50 !w-sidebar' : '-translate-x-full md:translate-x-0'
             )}
           >
             {/* Header Sidebar: Brand Block (Full vs Rail) */}
-            {isRailActive ? (
+            {isRailRender ? (
               <div className="flex h-14 sm:h-16 xl:h-header shrink-0 items-center justify-center border-b border-[#E8E5DE] bg-[#FAF8F5] px-2 box-border">
                 <Link
                   href={homeHref}
@@ -379,7 +374,7 @@ export function PortalShell({
                   : !!group.defaultCollapsed;
                 return (
                   <div key={group.id || group.title} className="space-y-1">
-                    {!isRailActive && group.title ? (
+                    {!isRailRender && group.title ? (
                       <div className="flex items-center justify-between px-3 py-1 mb-0.5">
                         <p className="text-[11px] font-sans font-semibold tracking-wider text-[#7A756D] uppercase">
                           {group.title}
@@ -412,7 +407,7 @@ export function PortalShell({
                             <div key={item.href} className="relative group">
                               <Link
                                 href={item.href}
-                                title={isRailActive ? item.label : undefined}
+                                title={isRailRender ? item.label : undefined}
                                 className={cn(
                                   'flex items-center justify-between rounded-xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A]',
                                   isRailActive
@@ -430,9 +425,9 @@ export function PortalShell({
                                       isActive ? 'text-white' : 'text-[#6E675F] group-hover:text-[#1A1816]'
                                     )}
                                   />
-                                  {!isRailActive && <span className="truncate">{item.label}</span>}
+                                  {!isRailRender && <span className="truncate">{item.label}</span>}
                                 </span>
-                                {!isRailActive && item.badge !== undefined && (
+                                {!isRailRender && item.badge !== undefined && (
                                   <span
                                     className={cn(
                                       'inline-flex min-w-5 items-center justify-center px-2 py-0.5 text-xs font-sans font-extrabold shrink-0',
@@ -580,7 +575,7 @@ export function PortalShell({
                     'flex items-center rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] shadow-2xs hover:bg-[#FAF8F5] hover:border-[#D6D3CB] transition-all group focus-visible:outline-none w-full text-left',
                     isRailActive ? 'justify-center p-2' : 'gap-2.5 p-2 sm:p-2.5 sidebar-compact-user-card'
                   )}
-                  title={isRailActive ? `Profil: ${userName}` : 'Buka Menu Profil Pengguna'}
+                  title={isRailRender ? `Profil: ${userName}` : 'Buka Menu Profil Pengguna'}
                 >
                   {/* Box Kotak Inisial Avatar */}
                   <div className="relative h-9 w-9 sm:h-10 sm:w-10 rounded-lg border border-[#E8E5DE] bg-[#1C1917] text-white overflow-hidden flex items-center justify-center text-xs sm:text-sm font-bold shrink-0 shadow-2xs sidebar-compact-avatar">
@@ -588,7 +583,7 @@ export function PortalShell({
                   </div>
 
                   {/* Nama dan Subtitle Role */}
-                  {!isRailActive && (
+                  {!isRailRender && (
                     <div className="text-left min-w-0 flex-1">
                       <p className="text-base font-extrabold text-black leading-tight truncate transition-colors">
                         {userName}
@@ -600,7 +595,7 @@ export function PortalShell({
                   )}
 
                   {/* Panah Dropdown Chevron v */}
-                  {!isRailActive && (
+                  {!isRailRender && (
                     <ChevronDown
                       className={cn(
                         'h-4 w-4 text-black group-hover:text-black shrink-0 transition-transform ml-1',
@@ -612,7 +607,7 @@ export function PortalShell({
               </div>
 
               {/* Tombol Logout Ramping */}
-              {!isRailActive ? (
+              {!isRailRender ? (
                 <div className="w-full sidebar-compact-hide-logout">
                   <form action={logoutAction} className="w-full">
                     <button
@@ -681,7 +676,7 @@ export function PortalShell({
                   ref={burgerButtonRef}
                   type="button"
                   onClick={handleBurgerClick}
-                  className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E8E5DE] hover:border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] shadow-2xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A] shrink-0 cursor-pointer"
+                  className="flex md:hidden xl:flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-[#E8E5DE] hover:border-[#D6D3CB] bg-[#FFFFFF] hover:bg-[#FAF8F5] text-[#1C1917] shadow-2xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C2553A] shrink-0 cursor-pointer"
                   title={isCollapsed ? 'Perbesar Bilah Samping' : 'Kecilkan Bilah Samping'}
                   aria-label="Toggle Sidebar"
                 >
@@ -757,7 +752,7 @@ export function PortalShell({
                   <button
                     type="button"
                     onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                    className="xl:hidden relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] shadow-2xs hover:bg-[#FAF8F5] hover:border-[#D6D3CB] transition-all focus-visible:outline-none cursor-pointer"
+                    className="lg:hidden relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] shadow-2xs hover:bg-[#FAF8F5] hover:border-[#D6D3CB] transition-all focus-visible:outline-none cursor-pointer"
                     title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan dan Detail'}
                     aria-label="Panel Ringkasan dan Detail"
                   >
@@ -768,7 +763,7 @@ export function PortalShell({
             </header>
 
             {/* VIEWPORT KONTEN HALAMAN */}
-            <main className="flex-1 bg-transparent min-w-0 pb-20 sm:pb-24 relative z-10">
+            <main className="flex-1 bg-transparent min-w-0 pb-[calc(var(--mobile-nav-h,3.5rem)+env(safe-area-inset-bottom,0px)+1rem)] md:pb-20 sm:pb-24 relative z-10">
               {children}
             </main>
 

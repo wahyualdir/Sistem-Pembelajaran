@@ -342,7 +342,7 @@ export function StaffDashboardClient({
       {/* 2. BAGIAN KANAN: DETAIL & ACTION PANEL */}
       <aside
         aria-label="Panel Ringkasan & Detail BAAK"
-        className="hidden xl:flex w-right-panel shrink-0 border-l border-[#D6D3CB] bg-[#FAF8F5] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
+        className="hidden lg:flex w-right-panel shrink-0 border-l border-[#D6D3CB] bg-[#FAF8F5] p-5 flex flex-col gap-5 sticky top-header h-[calc(100dvh-var(--layout-header-height))] overflow-y-auto pb-24"
       >
         <StaffRightPanel
           programsCount={programs.length}
@@ -368,7 +368,7 @@ export function StaffDashboardClient({
           role="dialog"
           aria-modal="true"
           aria-label="Panel Ringkasan & Detail BAAK"
-          className="fixed inset-0 z-50 flex justify-end xl:hidden"
+          className="fixed inset-0 z-50 flex justify-end lg:hidden"
         >
           <div
             aria-hidden="true"

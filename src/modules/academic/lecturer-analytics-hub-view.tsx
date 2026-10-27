@@ -852,7 +852,7 @@ export function LecturerAnalyticsHubView({
 
       {/* TOAST NOTIFIKASI IN-APP (Ganti alert bawaan) */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 max-w-md animate-fade-in">
+        <div className="fixed bottom-[calc(var(--mobile-nav-h,3.5rem)+env(safe-area-inset-bottom,0px)+1rem)] md:bottom-6 right-4 sm:right-6 z-50 max-w-md animate-fade-in">
           <div
             className={cn(
               'p-4 rounded-xl border-2 border-black shadow-retro flex items-start gap-3',
