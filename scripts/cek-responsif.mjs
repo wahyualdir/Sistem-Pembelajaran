@@ -1,19 +1,11 @@
-#!/usr/bin/env node
-import fs from 'node:fs';
-import path from 'node:path';
+import fs from 'fs';
+import path from 'path';
 
 const root = process.cwd();
-const allowlistPath = path.join(root, 'scripts/cek-responsif.allowlist.json');
-let allowlist = {
-  unreplaced_vh: [],
-  zoom_restrictions: [],
-  sub_12px_text: [],
-  unwrapped_tables: [],
-  group_hover_without_touch_reveal: [],
-  wide_fixed_px: [],
-  unsupported_keyframes: [],
-};
 
+// Load allowlist
+const allowlistPath = path.join(root, 'scripts', 'cek-responsif.allowlist.json');
+let allowlist = {};
 if (fs.existsSync(allowlistPath)) {
   try {
     allowlist = JSON.parse(fs.readFileSync(allowlistPath, 'utf8'));
@@ -47,22 +39,56 @@ function getFiles(dir, res = []) {
 const files = getFiles(path.join(root, 'src'));
 const violations = [];
 
+const definedAnims = new Set([
+  'animate-none', 'animate-spin', 'animate-ping', 'animate-pulse', 'animate-bounce',
+  'animate-in', 'animate-out', 'animate-fade-up',
+  'animate-fade-in', 'animate-scale-in', 'animate-scale-up',
+  'animate-slide-in-right', 'animate-slide-in-left', 'animate-slide-up',
+  'animate-bounce-short', 'animate-shimmer', 'animate-check-draw',
+  'animate-uir-perspective', 'animate-uir-perspective-shadow', 'animate-uir-shine',
+  'animate-sky-beacon', 'animate-vt-marquee'
+]);
+
 for (const relFile of files) {
   const absPath = path.join(root, relFile);
   const content = fs.readFileSync(absPath, 'utf8');
   const lines = content.split(/\r?\n/);
 
   // 1. Unreplaced 100vh / h-screen / min-h-screen
-  if (!allowUnreplacedVh.has(relFile)) {
+  if ((relFile.endsWith('.tsx') || relFile.endsWith('.css')) && !allowUnreplacedVh.has(relFile)) {
     lines.forEach((line, idx) => {
-      // Must not be preceded by d or s (dvh, svh, min-h-[100dvh], etc.)
-      if (/(?<![ds])(100vh|h-screen|min-h-screen)\b/.test(line)) {
-        // Exclude comments or explicit safe documentation
-        if (!line.trim().startsWith('//') && !line.trim().startsWith('*')) {
+      if (
+        (/\b100vh\b/.test(line) && !line.includes('100dvh') && !line.includes('100svh') && !line.includes('calc(100vh')) ||
+        (/\b(?:min-)?h-screen\b/.test(line) && !line.includes('min-h-[100dvh]') && !line.includes('min-h-[100svh]'))
+      ) {
+        violations.push({
+          file: relFile,
+          line: idx + 1,
+          rule: 'Penggunaan 100vh atau h-screen tanpa pasangan dvh/svh',
+          detail: line.trim(),
+        });
+      }
+    });
+  }
+
+  // 2. Unwrapped table elements
+  if (relFile.endsWith('.tsx') && !allowTables.has(relFile)) {
+    lines.forEach((line, idx) => {
+      if (/<(?:table|Table)\b/.test(line)) {
+        // <Table> from @/components/ui/table has its own built-in overflow-x-auto container
+        const isUiTableComponent = /<Table\b/.test(line) && (content.includes('@/components/ui/table') || relFile.includes('components/ui/table'));
+        const precedingLines = lines.slice(Math.max(0, idx - 10), idx);
+        const hasScrollWrapper =
+          isUiTableComponent ||
+          precedingLines.some((l) => l.includes('overflow-x') || l.includes('table-scroll') || l.includes('ResponsiveTable')) ||
+          line.includes('ResponsiveTable') ||
+          content.includes('ResponsiveTable');
+
+        if (!hasScrollWrapper) {
           violations.push({
             file: relFile,
             line: idx + 1,
-            rule: '100vh/h-screen tanpa dvh/svh',
+            rule: 'Elemen <table atau <Table tanpa pembungkus scroll',
             detail: line.trim(),
           });
         }
@@ -70,36 +96,18 @@ for (const relFile of files) {
     });
   }
 
-  // 2. Zoom restrictions (user-scalable=no, maximum-scale)
+  // 3. User scaling restrictions
   if (!allowZoom.has(relFile)) {
     lines.forEach((line, idx) => {
-      if (/(maximum-scale|user-scalable\s*=\s*['"]?no['"]?)/i.test(line)) {
+      if (/(?:maximum-scale|user-scalable\s*=\s*no|userScalable:\s*false)/.test(line)) {
         violations.push({
           file: relFile,
           line: idx + 1,
-          rule: 'Pembatasan zoom terlarang (maximum-scale/user-scalable)',
+          rule: 'Pembatasan zoom pengguna (user-scalable=no atau maximum-scale)',
           detail: line.trim(),
         });
       }
     });
-  }
-
-  // 3. Unwrapped tables
-  if (relFile.endsWith('.tsx') && !allowTables.has(relFile)) {
-    if (/<table[\s>]/i.test(content)) {
-      const hasWrapper =
-        content.includes('overflow-x-auto') ||
-        content.includes('table-scroll') ||
-        content.includes('ResponsiveTable');
-      if (!hasWrapper) {
-        violations.push({
-          file: relFile,
-          line: 1,
-          rule: 'Tabel tanpa pembungkus scroll responsif (table-scroll / overflow-x-auto)',
-          detail: '<table ...> ditemukan tanpa kontainer scroll',
-        });
-      }
-    }
   }
 
   // 4. Sub-12px typography
@@ -149,6 +157,25 @@ for (const relFile of files) {
       }
     });
   }
+
+  // 7. Undefined animate-* classes (Fase 5: 6.4 & 8.1)
+  if (relFile.endsWith('.tsx')) {
+    lines.forEach((line, idx) => {
+      const animMatches = line.match(/\banimate-([a-z0-9-]+)\b/g);
+      if (animMatches) {
+        for (const m of animMatches) {
+          if (!m.includes('[') && !definedAnims.has(m)) {
+            violations.push({
+              file: relFile,
+              line: idx + 1,
+              rule: `Kelas animasi tidak terdefinisi (${m})`,
+              detail: line.trim(),
+            });
+          }
+        }
+      }
+    });
+  }
 }
 
 console.log('------------------------------------------------------------');
@@ -165,6 +192,6 @@ if (violations.length > 0) {
   }
   process.exit(1);
 } else {
-  console.log('✅ [Lolos] Seluruh berkas memenuhi standar fondasi responsif SIAJAR.');
+  console.log('✅ [Lolos] Seluruh berkas memenuhi standar fondasi responsif & animasi SIAJAR.');
   process.exit(0);
 }

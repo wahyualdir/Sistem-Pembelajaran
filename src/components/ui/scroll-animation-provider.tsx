@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { ArrowUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function ScrollProgressBar() {
@@ -64,11 +63,21 @@ export function ScrollReveal({
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  // Tandai elemen yang sudah terlihat saat paint pertama (menghindari kedipan)
+  useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    // Check if IntersectionObserver is supported
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      el.classList.add('is-visible');
+    }
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || el.classList.contains('is-visible')) return;
+
     if (!('IntersectionObserver' in window)) {
       el.classList.add('is-visible');
       return;
@@ -85,7 +94,7 @@ export function ScrollReveal({
       },
       {
         threshold,
-        rootMargin: '0px 0px -40px 0px',
+        rootMargin: '0px 0px -30px 0px',
       }
     );
 
@@ -120,8 +129,41 @@ export function ScrollReveal({
 export function ScrollAnimationProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
+  // 1. Pasang kelas motion-ready di <html> setelah hidrasi (Fase 5: 6.4)
+  useLayoutEffect(() => {
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.add('motion-ready');
+    }
+  }, []);
+
   useEffect(() => {
-    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) return;
+    if (typeof window === 'undefined') return;
+
+    // Aktifkan elemen yang berada di dalam viewport saat pertama kali halaman terbuka
+    const revealVisibleNow = () => {
+      const windowH = window.innerHeight;
+      document
+        .querySelectorAll(
+          '.reveal-on-scroll:not(.is-visible), .reveal-scale:not(.is-visible), .reveal-slide-left:not(.is-visible), .reveal-slide-right:not(.is-visible)'
+        )
+        .forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < windowH && rect.bottom > 0) {
+            el.classList.add('is-visible');
+          }
+        });
+    };
+
+    revealVisibleNow();
+
+    if (!('IntersectionObserver' in window)) {
+      document
+        .querySelectorAll(
+          '.reveal-on-scroll, .reveal-scale, .reveal-slide-left, .reveal-slide-right'
+        )
+        .forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -145,10 +187,18 @@ export function ScrollAnimationProvider({ children }: { children: React.ReactNod
       elements.forEach((el) => observer.observe(el));
     };
 
-    // Run initial observe
     const timer = setTimeout(observeElements, 100);
 
-    // Watch for DOM mutations
+    // Pengaman waktu mutlak: setelah 1.500ms seluruh elemen dipaksa tampil agar tidak pernah terjadi layar kosong
+    const safetyTimer = setTimeout(() => {
+      document
+        .querySelectorAll(
+          '.reveal-on-scroll:not(.is-visible), .reveal-scale:not(.is-visible), .reveal-slide-left:not(.is-visible), .reveal-slide-right:not(.is-visible)'
+        )
+        .forEach((el) => el.classList.add('is-visible'));
+    }, 1500);
+
+    // Awasi perubahan elemen dinamis
     const mutationObserver = new MutationObserver(() => {
       observeElements();
     });
@@ -160,6 +210,7 @@ export function ScrollAnimationProvider({ children }: { children: React.ReactNod
 
     return () => {
       clearTimeout(timer);
+      clearTimeout(safetyTimer);
       observer.disconnect();
       mutationObserver.disconnect();
     };

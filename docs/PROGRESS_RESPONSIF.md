@@ -39,7 +39,15 @@
   - **Presensi & Nilai**: Kolom nama mata kuliah `grades-hub-view.tsx` dibuat lengket (`sticky left-0`) dan tabel presensi dibungkus `.table-scroll`.
   - **Pesan & Forum**: Pola master-detail 2 layar di ponsel untuk kotak masuk pesan dan perbaikan tombol hover-only dengan `.touch-reveal` (T9).
   - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (lolos), `npm run typecheck` (0 error), `npm run lint` (0 error).
-- [ ] **Fase 5 — Fondasi Sistem Animasi (Token, Hook, Utilitas, Sakelar)**
+- [x] **Fase 5 — Fondasi Sistem Animasi (Token, Hook, Utilitas, Sakelar)**
+  - **Token Gerak CSS**: Didefinisikan di `:root` `src/app/globals.css`: `--dur-instant: 80ms`, `--dur-fast: 140ms`, `--dur-base: 220ms`, `--dur-slow: 300ms`, `--dur-data: 600ms`, plus `--ease-out`, `--ease-in`, `--ease-inout`, `--stagger: 30ms`, `--stagger-max: 240ms`.
+  - **Mode Gerak & Aksesibilitas**: Menerapkan selektor `html[data-motion="hemat"]` (durasi separuh, data/stagger `0.01ms`) dan `html[data-motion="mati"]` (semua durasi `0.01ms`), terikat ke `prefers-reduced-motion: reduce`, `lite-performance-mode`, dan `Save-Data`.
+  - **Definisi Utilitas Animasi (T4)**: Menambahkan keyframe & animasi di `tailwind.config.ts`: `animate-fade-in`, `animate-scale-in`, `animate-scale-up`, `animate-slide-in-right`, `animate-slide-in-left`, `animate-slide-up`, `animate-bounce-short`, `animate-shimmer`, `animate-check-draw`, serta animasi widget di `globals.css` (`.animate-uir-perspective`, `.animate-uir-perspective-shadow`, `.animate-uir-shine`, `.animate-sky-beacon`, `.animate-vt-marquee`).
+  - **Hook React Kustom**: Dibuat di `src/hooks/use-motion-preference.ts` (`penuh` | `hemat` | `mati`), `src/hooks/use-count-up.ts` (interpolasi angka dengan easing out), dan `src/hooks/use-in-view.ts` (IntersectionObserver dengan fallback).
+  - **Perbaikan ScrollReveal (T5)**: Elemen hanya disembunyikan saat `html.motion-ready:not([data-motion="mati"])`, langsung diberi `.is-visible` sebelum paint pertama bila sudah di viewport, dengan fallback timer 1500ms agar konten tidak pernah hilang.
+  - **Pengaturan & Lingkungan**: Kartu preferensi gerak `src/components/settings/motion-settings-card.tsx` terintegrasi di `/settings/appearance`, variabel `NEXT_PUBLIC_FF_MOTION` dan `NEXT_PUBLIC_FF_MOBILE_NAV` terdaftar di `.env.example`, dan panduan lengkap dicatat di `docs/MOTION.md`.
+  - **Aturan Gerbang**: Ditambahkan Aturan 7 pada `scripts/cek-responsif.mjs` untuk memverifikasi kelas `animate-*` selalu terdaftar.
+  - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (614 berkas lolos), `npm run typecheck` (0 error), `npm run lint` (0 error).
 - [ ] **Fase 6 — Animasi Shell dan Navigasi (M01–M08, M19)**
 - [ ] **Fase 7 — Animasi Konten dan Mikro-interaksi (M09–M18, M20–M22)**
 - [ ] **Fase 8 — Performa dan Aksesibilitas Gerak (CPU Throttling, CLS, Reduced Motion)**

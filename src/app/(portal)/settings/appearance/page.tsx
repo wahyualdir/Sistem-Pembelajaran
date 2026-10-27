@@ -1,3 +1,4 @@
+import { MotionSettingsCard } from '@/components/settings/motion-settings-card';
 import React from 'react';
 import Link from 'next/link';
 import {
@@ -113,7 +114,10 @@ export default function AppearanceSettingsPage() {
           </div>
         </div>
 
-        {/* 2. BAHASA & AKSESIBILITAS */}
+        {/* 2. PREFERENSI SISTEM GERAK & ANIMASI (FASE 5) */}
+        <MotionSettingsCard />
+
+        {/* 3. BAHASA & AKSESIBILITAS */}
         <div className="rounded-xl border-2 border-ink bg-surface p-4 sm:p-5 shadow-retro space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
             {/* Bahasa */}

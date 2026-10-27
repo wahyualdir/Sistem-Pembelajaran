@@ -211,6 +211,18 @@
 
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
+  /* Sistem Token Gerak & Animasi SIAJAR (Fase 5: 6.2) */
+  --dur-instant: 80ms;   /* umpan balik sentuh */
+  --dur-fast: 140ms;     /* hover, fokus, popover */
+  --dur-base: 220ms;     /* tab, akordeon, masuk kecil */
+  --dur-slow: 300ms;     /* drawer, sheet, halaman */
+  --dur-data: 600ms;     /* grafik, progres, count-up */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --stagger: 40ms;
+  --stagger-max: 6;
+
   /* Layout Dimension Tokens (Rem-based Responsive Scaling) */
   --layout-sidebar-width: 16.5rem;
   --layout-rail-width: 4.75rem;
@@ -224,6 +236,34 @@
   --sab: env(safe-area-inset-bottom, 0px);
   --sal: env(safe-area-inset-left, 0px);
   --sar: env(safe-area-inset-right, 0px);
+}
+
+
+/* Mode Preferensi Gerak & Aksesibilitas (Fase 5) */
+html[data-motion="hemat"],
+html.lite-performance-mode {
+  --dur-base: 120ms;
+  --dur-slow: 160ms;
+  --dur-data: 0.01ms;
+  --stagger: 0ms;
+}
+
+html[data-motion="mati"] {
+  --dur-instant: 0.01ms;
+  --dur-fast: 0.01ms;
+  --dur-base: 0.01ms;
+  --dur-slow: 0.01ms;
+  --dur-data: 0.01ms;
+  --stagger: 0ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:not([data-motion="penuh"]) {
+    --dur-base: 120ms;
+    --dur-slow: 160ms;
+    --dur-data: 0.01ms;
+    --stagger: 0ms;
+  }
 }
 
 /* Kepadatan Vertikal Khusus Viewport Tinggi < 720px (Baseline ~650px) */
@@ -487,6 +527,24 @@
   .page-enter > :nth-child(4) { animation-delay: 135ms; }
   .page-enter > :nth-child(n + 5) { animation-delay: 180ms; }
   .animate-fade-up { animation: rise 0.34s var(--ease) backwards; }
+
+/* Utilitas Animasi Khusus Komponen OS & Widget (Fase 5: 6.4) */
+.animate-uir-perspective {
+  animation: uir-perspective-float 8s ease-in-out infinite;
+}
+.animate-uir-perspective-shadow {
+  animation: uir-perspective-shadow 8s ease-in-out infinite;
+}
+.animate-uir-shine {
+  animation: uir-shine 6s ease-in-out infinite;
+}
+.animate-sky-beacon {
+  animation: sky-beacon-pulse 3s ease-in-out infinite;
+}
+.animate-vt-marquee {
+  animation: vt-marquee 25s linear infinite;
+}
+
   .animation-delay-100 { animation-delay: 100ms; }
   .animation-delay-200 { animation-delay: 200ms; }
   .animation-delay-300 { animation-delay: 300ms; }

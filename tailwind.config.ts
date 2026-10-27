@@ -112,6 +112,67 @@ const config: Config = {
         'title': ['clamp(1.35rem, 1.8vw + 0.4rem, 1.85rem)', { lineHeight: '1.3' }],
         'section': ['clamp(1.15rem, 1.2vw + 0.4rem, 1.45rem)', { lineHeight: '1.4' }],
       },
+      transitionDuration: {
+        instant: "var(--dur-instant)",
+        fast: "var(--dur-fast)",
+        base: "var(--dur-base)",
+        slow: "var(--dur-slow)",
+        data: "var(--dur-data)",
+      },
+      transitionTimingFunction: {
+        "ease-out-custom": "var(--ease-out)",
+        "ease-in-custom": "var(--ease-in)",
+        "ease-inout-custom": "var(--ease-inout)",
+      },
+      keyframes: {
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        "scale-in": {
+          from: { opacity: "0", transform: "scale(0.95)" },
+          to: { opacity: "1", transform: "scale(1)" },
+        },
+        "scale-up": {
+          from: { transform: "scale(0.9)" },
+          to: { transform: "scale(1)" },
+        },
+        "slide-in-right": {
+          from: { transform: "translateX(100%)" },
+          to: { transform: "translateX(0)" },
+        },
+        "slide-in-left": {
+          from: { transform: "translateX(-100%)" },
+          to: { transform: "translateX(0)" },
+        },
+        "slide-up": {
+          from: { transform: "translateY(100%)" },
+          to: { transform: "translateY(0)" },
+        },
+        "bounce-short": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-4px)" },
+        },
+        shimmer: {
+          from: { backgroundPosition: "-200% 0" },
+          to: { backgroundPosition: "200% 0" },
+        },
+        "check-draw": {
+          from: { strokeDashoffset: "24" },
+          to: { strokeDashoffset: "0" },
+        },
+      },
+      animation: {
+        "fade-in": "fade-in var(--dur-base) var(--ease-out) backwards",
+        "scale-in": "scale-in var(--dur-base) var(--ease-out) backwards",
+        "scale-up": "scale-up var(--dur-fast) var(--ease-out) backwards",
+        "slide-in-right": "slide-in-right var(--dur-slow) var(--ease-out) backwards",
+        "slide-in-left": "slide-in-left var(--dur-slow) var(--ease-out) backwards",
+        "slide-up": "slide-up var(--dur-slow) var(--ease-out) backwards",
+        "bounce-short": "bounce-short var(--dur-fast) var(--ease-out) 1",
+        shimmer: "shimmer 1.8s linear infinite",
+        "check-draw": "check-draw var(--dur-base) var(--ease-out) forwards",
+      },
       fontFamily: {
         sans: [
           "var(--font-sf-pro)",

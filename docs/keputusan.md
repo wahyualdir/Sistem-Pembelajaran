@@ -615,3 +615,24 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alasan**: Menjamin setiap area fitur utama SIAJAR dapat digunakan dengan nyaman, paritas fitur lengkap di perangkat sentuh, dan tidak ada elemen penting yang tersembunyi atau terpotong.
 - **Alternatif yang ditolak**:
   - *Menampilkan daftar pesan dan balon percakapan bertumpuk di ponsel*: Ditolak karena membuat halaman sangat panjang dan membingungkan pengguna saat mengetik pesan di keyboard virtual.
+
+
+### [Responsif] Keputusan 06: Fondasi Sistem Animasi, Token Gerak, dan Sakelar data-motion (Fase 5)
+- **Tanggal**: 27 Oktober 2026
+- **Keputusan**:
+  1. **Token Gerak Terpusat**: Mendefinisikan token `--dur-instant` (80ms), `--dur-fast` (140ms), `--dur-base` (220ms), `--dur-slow` (300ms), `--dur-data` (600ms), serta kurva `--ease-out`, `--ease-in`, `--ease-inout`, dan stagger di `:root` `src/app/globals.css`.
+  2. **Hierarki Sakelar Gerak**:
+     - Mode `penuh`: Seluruh animasi dan transisi aktif normal.
+     - Mode `hemat`: Durasi dipercepat (≤ 160ms), count-up dan stagger dipadamkan (`0.01ms`). Otomatis aktif saat `prefers-reduced-motion: reduce`, `html.lite-performance-mode`, atau koneksi `Save-Data`.
+     - Mode `mati`: Seluruh durasi runtuh menjadi `0.01ms`, mematikan seluruh gerak tanpa menghapus kode antarmuka. Nilai awal dapat dikunci via `NEXT_PUBLIC_FF_MOTION="false"`.
+  3. **Penyelesaian Masalah Utilitas Hilang (Temuan T4)**:
+     - Mendaftarkan keyframes dan utilitas animasi yang hilang ke `tailwind.config.ts`: `animate-fade-in`, `animate-scale-in`, `animate-scale-up`, `animate-slide-in-right`, `animate-slide-in-left`, `animate-slide-up`, `animate-bounce-short`, `animate-shimmer`, `animate-check-draw`.
+     - Mendefinisikan utilitas khusus komponen OS: `animate-uir-perspective`, `animate-uir-perspective-shadow`, `animate-uir-shine`, `animate-sky-beacon`, `animate-vt-marquee`.
+  4. **Perbaikan ScrollReveal (Temuan T5)**: Mengubah aturan CSS agar elemen `reveal-*` hanya tersembunyi jika kelas `motion-ready` aktif pada peramban non-`mati`. Komponen `ScrollAnimationProvider` memasang `motion-ready` setelah hidrasi, menandai elemen dalam viewport secara instan sebelum paint, dan menerapkan batas waktu pengaman 1.500ms agar tidak pernah terjadi layar kosong.
+  5. **Hook dan Komponen Pengaturan**:
+     - Mengembangkan `src/hooks/use-motion-preference.ts`, `src/hooks/use-count-up.ts`, dan `src/hooks/use-in-view.ts`.
+     - Menambahkan kartu pengaturan `MotionSettingsCard` pada `/settings/appearance` dengan penyimpanan `localStorage` kunci `siajar_motion`.
+     - Menulis dokumentasi lengkap pengembang di `docs/MOTION.md`.
+- **Alasan**: Memberikan antarmuka yang hidup dan responsif secara hemat komputasi, menjamin tidak ada kelas animasi rusak/hilang, serta menghormati aksesibilitas pengguna dengan sensitivitas gerak (vestibular).
+- **Alternatif yang ditolak**:
+  - *Menginstal framer-motion atau GSAP*: Ditolak keras karena aturan nomor 3 melarang dependensi npm baru; seluruh sistem dibangun murni dengan CSS variables, Tailwind, dan React hooks internal.
