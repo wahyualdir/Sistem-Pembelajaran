@@ -101,6 +101,30 @@ export async function getSession(): Promise<AuthSession | null> {
     }
   }
 
+  // Fallback sinkronisasi dari portal identity (Supabase Auth / demo_session / active_role)
+  try {
+    const { getCurrentUserWithRoles } = await import('@/modules/identity/actions');
+    const userContext = await getCurrentUserWithRoles();
+    if (userContext) {
+      const role: Role =
+        userContext.activeRole === 'STUDENT'
+          ? 'MAHASISWA'
+          : userContext.activeRole === 'LECTURER' || userContext.activeRole === 'TEACHING_ASSISTANT'
+          ? 'DOSEN'
+          : 'ADMIN';
+
+      return {
+        userId: userContext.user.id,
+        email: userContext.user.email || userContext.profile?.email || '',
+        name: userContext.profile?.full_name || 'Pengguna RuangKampus',
+        role,
+        subId: userContext.user.id,
+      };
+    }
+  } catch {
+    // Abaikan jika dalam konteks statis
+  }
+
   // Fallback sinkronisasi dari portal identity (demo_session / active_role)
   // Di production, demo_session hanya diizinkan jika ALLOW_DEMO_AUTH === 'true'
   const isProd = process.env.NODE_ENV === 'production';

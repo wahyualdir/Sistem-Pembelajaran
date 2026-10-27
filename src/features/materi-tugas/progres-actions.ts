@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { requireAuth } from "@/lib/auth/session";
+import { requireAuth, getSession } from "@/lib/auth/session";
 import { MateriTugasStore } from "./materi-tugas-store";
 
 const CatatMateriDibukaSchema = z.object({
@@ -104,10 +104,12 @@ export async function ambilRekapProgresDosenAction(kelasId: string) {
 }
 
 export async function ambilMateriTerakhirDibukaAction() {
-  const session = await requireAuth();
-  const mahasiswaId = session.subId || session.userId;
-
   try {
+    const session = await getSession();
+    if (!session) {
+      return { success: false, message: "Tidak terautentikasi" };
+    }
+    const mahasiswaId = session.subId || session.userId;
     const result = MateriTugasStore.getMateriTerakhirDibuka(mahasiswaId);
     return { success: true, data: result };
   } catch (err) {
