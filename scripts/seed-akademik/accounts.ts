@@ -45,15 +45,29 @@ async function getOrCreateAuthUser(
   fullName: string,
   password: string
 ): Promise<{ userId: string; isNew: boolean }> {
-  // Cek apakah user sudah terdaftar di auth.users lewat pencarian Admin API
-  const { data: listData } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 });
-  const existing = listData?.users?.find((u) => u.email?.toLowerCase() === email.toLowerCase());
+  // 1. Cek dulu dari tabel profiles jika user sudah ada di database
+  const { data: prof } = await supabaseAdmin
+    .from('profiles')
+    .select('id')
+    .eq('email', email)
+    .maybeSingle();
 
-  if (existing) {
-    return { userId: existing.id, isNew: false };
+  if (prof && prof.id) {
+    return { userId: prof.id, isNew: false };
   }
 
-  // Buat user baru lewat Admin API Supabase
+  // 2. Cek apakah user sudah terdaftar di auth.users lewat pencarian Admin API
+  try {
+    const { data: listData } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 });
+    const existing = listData?.users?.find((u) => u.email?.toLowerCase() === email.toLowerCase());
+    if (existing) {
+      return { userId: existing.id, isNew: false };
+    }
+  } catch {
+    // Abaikan error listing
+  }
+
+  // 3. Buat user baru lewat Admin API Supabase
   const { data, error } = await supabaseAdmin.auth.admin.createUser({
     email,
     password,
@@ -65,6 +79,16 @@ async function getOrCreateAuthUser(
   });
 
   if (error || !data.user) {
+    if (error?.message?.includes('already been registered')) {
+      const { data: fallbackProf } = await supabaseAdmin
+        .from('profiles')
+        .select('id')
+        .eq('email', email)
+        .maybeSingle();
+      if (fallbackProf && fallbackProf.id) {
+        return { userId: fallbackProf.id, isNew: false };
+      }
+    }
     throw new Error(`Gagal membuat akun auth untuk ${email}: ${error?.message || 'Unknown error'}`);
   }
 
