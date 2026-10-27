@@ -242,8 +242,8 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs sm:text-sm">
+            <div className="overflow-x-auto overscroll-x-contain table-scroll">
+              <table className="w-full text-left text-xs sm:text-sm min-w-[560px]">
                 <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black">
                   <tr>
                   <th className="p-3.5 sm:p-4">Pertemuan & Mata Kuliah</th>

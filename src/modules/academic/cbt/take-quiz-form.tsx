@@ -875,7 +875,7 @@ export function TakeQuizForm({
         ))}
       </div>
 
-      <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-3 border-t-2 border-black/15">
+      <div className="pt-4 flex flex-col sm:flex-row justify-between items-center gap-3 border-t-2 border-black/15 sticky bottom-0 bg-white/95 backdrop-blur-xs p-3.5 -mx-4 sm:mx-0 sm:p-0 sm:static sm:bg-transparent pb-[calc(1rem+env(safe-area-inset-bottom,0px))] sm:pb-0 shadow-lg sm:shadow-none z-10">
         <span className="text-xs text-black/70 font-sans font-bold">
           Status: Jawaban tersimpan otomatis ke server SIAJAR.
         </span>

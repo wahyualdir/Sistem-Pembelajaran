@@ -32,7 +32,13 @@
     - Membungkus tabel yang belum memiliki pembungkus di `class-progress-tab.tsx`, `cbt/exam-analytics-modal.tsx`, dan `semester-weave.tsx`.
   - **Tab Bergulir**: Komponen `ScrollableTabs` (`src/components/shared/scrollable-tabs.tsx`) dengan `snap-x`, `scrollbar-none`, bayangan pudar tepi kiri/kanan, dan pemusatan otomatis (`scrollTo`) pada tab atau chip filter aktif.
   - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (lolos), `npm run typecheck` (0 error), `npm run lint` (0 error), Playwright responsif 11 viewport (11/11 lulus).
-- [ ] **Fase 4 — Halaman per Peran dan Fitur (10 Kelompok Fitur)**
+- [x] **Fase 4 — Halaman per Peran dan Fitur (10 Kelompok Fitur)**
+  - **Beranda 7 Peran**: Keenam dashboard client diselaraskan ke `flex-col lg:flex-row` dan batas drawer disesuaikan ke `< 1024px` agar tata letak 3-kolom tampil inline di iPad landscape (1024–1279px).
+  - **Hub Kelas & Materi**: Markdown viewer dilengkapi `[overflow-wrap:anywhere] break-words` dan pre blok bergulir horizontal agar materi kuliah tidak meluap keluar layar ponsel.
+  - **Tugas & Ujian (CBT)**: Bilah kumpul ujian `take-quiz-form.tsx` dibuat lengket di dasar layar mobile dengan padding safe-area iOS.
+  - **Presensi & Nilai**: Kolom nama mata kuliah `grades-hub-view.tsx` dibuat lengket (`sticky left-0`) dan tabel presensi dibungkus `.table-scroll`.
+  - **Pesan & Forum**: Pola master-detail 2 layar di ponsel untuk kotak masuk pesan dan perbaikan tombol hover-only dengan `.touch-reveal` (T9).
+  - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (lolos), `npm run typecheck` (0 error), `npm run lint` (0 error).
 - [ ] **Fase 5 — Fondasi Sistem Animasi (Token, Hook, Utilitas, Sakelar)**
 - [ ] **Fase 6 — Animasi Shell dan Navigasi (M01–M08, M19)**
 - [ ] **Fase 7 — Animasi Konten dan Mikro-interaksi (M09–M18, M20–M22)**

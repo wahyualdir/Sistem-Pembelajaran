@@ -106,7 +106,7 @@ export function CoordinatorDashboardClient({
   const showMonitoring = showAll || selectedCategory === 'Monitoring Perkuliahan';
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[calc(100dvh-var(--layout-header-height-mobile))] xl:min-h-[calc(100dvh-var(--layout-header-height))]">
+    <div className="flex flex-col lg:flex-row min-h-[calc(100dvh-var(--layout-header-height-mobile))] lg:min-h-[calc(100dvh-var(--layout-header-height))]">
       {/* 1. BAGIAN TENGAH: WORKSPACE UTAMA KAPRODI */}
       <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0 font-sans">
         <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">

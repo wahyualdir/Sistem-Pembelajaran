@@ -594,3 +594,24 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alasan**: Memastikan dialog dan tabel data akademik yang padat dapat digunakan dengan nyaman di ponsel 360–430px tanpa memicu zoom atau scroll horizontal di level halaman, serta memenuhi target sentuh minimum WCAG (>= 44px).
 - **Alternatif yang ditolak**:
   - *Menghilangkan kolom tabel di mobile secara diam-diam*: Ditolak karena melanggar prinsip paritas fitur; seluruh informasi harus tetap dapat diakses via scroll horizontal terkontrol atau representasi kartu.
+
+
+### [Responsif] Keputusan 05: Halaman per Peran dan Fitur — 10 Kelompok Fitur (Fase 4)
+- **Tanggal**: 27 Oktober 2026
+- **Keputusan**:
+  1. **Beranda 7 Peran (Dashboard Klien)**:
+     - Mengubah pembungkus tata letak 6 klien dashboard (`admin`, `coordinator`, `lecturer`, `staff`, `student`, `ta`) dari `flex-col xl:flex-row` menjadi `flex-col lg:flex-row` dan `lg:min-h` agar panel kanan otomatis tampil berdampingan (inline 3-kolom) pada iPad landscape (1024–1279px).
+     - Memperbarui batas pemicu drawer otomatis saat memilih kartu kelas menjadi `< 1024px`.
+     - Memperbesar target sentuh tombol buka panel kanan pada header portal shell menjadi minimal 44x44px di mobile.
+  2. **Hub Kelas & Materi**: Memastikan `MarkdownViewer` membungkus tautan panjang dengan `[overflow-wrap:anywhere] break-words` dan kontainer kode blok `pre` dengan `overflow-x-auto overscroll-x-contain table-scroll` agar tidak meluap keluar layar pada pembaca dokumen mobile.
+  3. **Tugas, Kuis, CBT & Ujian**: Mengatur bilah kumpul jawaban kuis (`take-quiz-form.tsx`) menjadi lengket di dasar layar pada tampilan mobile (`sticky bottom-0 bg-white/95 backdrop-blur-xs`) dengan padding safe area iOS, memastikan mahasiswa dapat melihat status penyimpanan dan mengumpulkan ujian tanpa perlu menggulir panjang.
+  4. **Presensi & Nilai**:
+     - Menerapkan kolom pertama lengket (`sticky left-0`) pada tabel rekap nilai (`grades-hub-view.tsx`) sehingga nama mata kuliah tetap terbaca saat mahasiswa menggulir nilai komponen ke kanan.
+     - Membungkus seluruh tabel riwayat presensi (`attendance-hub-view.tsx`) dan tabel ujian dengan `.table-scroll` dan `min-w-[560px]`.
+  5. **Forum, Pesan & Komunitas**:
+     - Menerapkan pola *master-detail* 2 layar pada tampilan pesan di ponsel (`messages-hub-view.tsx`): saat percakapan dipilih, daftar kotak masuk disembunyikan dan tombol navigasi kembali (`ArrowLeft`) ditampilkan di header percakapan.
+     - Menambahkan kelas utilitas `.touch-reveal` pada tombol aksi pesan (hapus dan laporkan) yang sebelumnya hanya muncul saat `group-hover:`, sehingga langsung terlihat dan dapat diketuk di layar sentuh ponsel dan tablet (mengatasi Temuan T9).
+  6. **Verifikasi Gerbang Otomatis**: Seluruh gerbang `cek:hex`, `cek:responsif`, `typecheck` (0 error), `lint` (0 error), dan Playwright 11 viewport lulus 100%.
+- **Alasan**: Menjamin setiap area fitur utama SIAJAR dapat digunakan dengan nyaman, paritas fitur lengkap di perangkat sentuh, dan tidak ada elemen penting yang tersembunyi atau terpotong.
+- **Alternatif yang ditolak**:
+  - *Menampilkan daftar pesan dan balon percakapan bertumpuk di ponsel*: Ditolak karena membuat halaman sangat panjang dan membingungkan pengguna saat mengetik pesan di keyboard virtual.

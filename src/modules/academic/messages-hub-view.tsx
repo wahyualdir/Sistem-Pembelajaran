@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   MessageCircle,
+  ArrowLeft,
   Calendar,
   Send,
   Paperclip,
@@ -31,6 +32,7 @@ import {
   markConsultationFinishedAction,
 } from './message-actions';
 import { isLecturerQuietHours } from '@/lib/akademik/message-utils';
+import { cn } from '@/lib/utils';
 
 interface MessagesHubViewProps {
   currentUserRole: string;
@@ -244,7 +246,7 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
       {activeTab === 'percakapan' && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-0 rounded-xl border-2 border-ink bg-surface shadow-retro overflow-hidden min-h-[550px]">
           {/* Kolom Kiri: Daftar Percakapan */}
-          <div className="border-r-2 border-ink flex flex-col h-full bg-gray-soft/30">
+          <div className={cn("border-r-2 border-ink flex-col h-full bg-gray-soft/30", selectedConvId ? "hidden md:flex" : "flex")}>
             <div className="p-3.5 border-b-2 border-ink bg-gray-soft">
               <h2 className="text-xs font-heading font-bold uppercase tracking-wider text-gray-dark">Kotak Masuk</h2>
             </div>
@@ -287,10 +289,11 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
           </div>
 
           {/* Kolom Kanan: Isi Percakapan */}
-          <div className="md:col-span-2 flex flex-col h-full">
+          <div className={cn("md:col-span-2 flex-col h-full", selectedConvId ? "flex" : "hidden md:flex")}>
             {selectedConv ? (
               <>
                 <div className="p-4 border-b border-border flex items-center justify-between bg-surface">
+                  <button type="button" data-mobile-conv-back onClick={() => setSelectedConvId('')} className="md:hidden mr-2 p-1.5 rounded-lg border border-border bg-gray-soft text-black min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer" aria-label="Kembali ke daftar percakapan"><ArrowLeft className="h-4 w-4" /></button>
                   <div>
                     <h3 className="text-sm font-bold text-foreground">{selectedConv.partnerName}</h3>
                     <p className="text-xs text-muted-foreground">{selectedConv.classTitle}</p>
@@ -345,7 +348,7 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
                               <button
                                 type="button"
                                 onClick={() => handleDeleteMessage(m.id)}
-                                className="opacity-0 group-hover:opacity-100 transition-opacity ml-1 hover:opacity-75"
+                                className="opacity-0 group-hover:opacity-100 touch-reveal transition-opacity ml-1 hover:opacity-75 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center"
                                 title="Hapus pesan"
                               >
                                 <Trash2 className="h-3 w-3" />
@@ -355,7 +358,7 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
                               <button
                                 type="button"
                                 onClick={() => setReportingMsgId(m.id)}
-                                className="opacity-0 group-hover:opacity-100 transition-opacity ml-1 hover:text-amber-500"
+                                className="opacity-0 group-hover:opacity-100 touch-reveal transition-opacity ml-1 hover:text-amber-500 min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center"
                                 title="Laporkan pesan"
                               >
                                 <AlertTriangle className="h-3 w-3" />

@@ -122,7 +122,7 @@ export function TaDashboardClient({
   const handleSelectCourse = (course: ActiveClassItem) => {
     setSelectedCourse(course);
     setRightPanelTab('detail-kelas');
-    if (typeof window !== 'undefined' && window.innerWidth < 1280) {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setIsRightDrawerOpen(true);
     }
   };
@@ -135,7 +135,7 @@ export function TaDashboardClient({
   const showMateri = showAll || selectedCategory === 'Materi Asisten';
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[calc(100dvh-var(--layout-header-height-mobile))] xl:min-h-[calc(100dvh-var(--layout-header-height))]">
+    <div className="flex flex-col lg:flex-row min-h-[calc(100dvh-var(--layout-header-height-mobile))] lg:min-h-[calc(100dvh-var(--layout-header-height))]">
       {/* 1. BAGIAN TENGAH: WORKSPACE UTAMA ASISTEN */}
       <div className="flex-1 p-4 sm:p-5 lg:p-6 pb-24 min-w-0 font-sans">
         <div className="max-w-[1280px] mx-auto space-y-5 sm:space-y-6">

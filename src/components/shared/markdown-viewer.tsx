@@ -77,7 +77,7 @@ export function MarkdownViewer({ content, className }: MarkdownViewerProps) {
             href={linkMatch[2]}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-ink font-bold underline underline-offset-4 hover:opacity-80"
+            className="text-ink font-bold underline underline-offset-4 hover:opacity-80 break-words [overflow-wrap:anywhere]"
           >
             {linkMatch[1]}
           </a>

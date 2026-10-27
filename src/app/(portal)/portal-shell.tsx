@@ -752,7 +752,7 @@ export function PortalShell({
                   <button
                     type="button"
                     onClick={() => setIsRightDrawerOpen((prev) => !prev)}
-                    className="lg:hidden relative flex h-10 w-10 min-h-[40px] min-w-[40px] items-center justify-center rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] shadow-2xs hover:bg-[#FAF8F5] hover:border-[#D6D3CB] transition-all focus-visible:outline-none cursor-pointer"
+                    className="lg:hidden relative flex h-11 w-11 sm:h-10 sm:w-10 min-h-[44px] min-w-[44px] sm:min-h-[40px] sm:min-w-[40px] items-center justify-center rounded-xl border border-[#E8E5DE] bg-[#FFFFFF] shadow-2xs hover:bg-[#FAF8F5] hover:border-[#D6D3CB] transition-all focus-visible:outline-none cursor-pointer"
                     title={isRightDrawerOpen ? 'Tutup Panel Ringkasan' : 'Buka Panel Ringkasan dan Detail'}
                     aria-label="Panel Ringkasan dan Detail"
                   >

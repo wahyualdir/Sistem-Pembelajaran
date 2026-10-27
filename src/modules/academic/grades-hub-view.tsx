@@ -253,7 +253,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
                 <table className="w-full text-left text-base font-sans">
                   <thead className="border-b-2 border-black bg-neutral-100 font-sans font-bold uppercase text-black text-sm sm:text-base tracking-wider">
                     <tr>
-                      <th className="py-4 px-4 sm:px-5">KODE & MATA KULIAH</th>
+                      <th className="py-4 px-4 sm:px-5 sticky left-0 z-10 bg-neutral-100 shadow-[1px_0_0_0_black]">KODE & MATA KULIAH</th>
                       <th className="py-4 px-3 sm:px-4 text-center">SKS</th>
                       <th className="py-4 px-3 sm:px-4 text-center">HADIR</th>
                       <th className="py-4 px-3 sm:px-4 text-center">TUGAS</th>
@@ -269,7 +269,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
                   <tbody className="divide-y-2 divide-black/15 font-sans">
                     {grades.map((c) => (
                       <tr key={c.code} className="hover:bg-gray-soft/30 transition-colors">
-                        <td className="py-4 px-4 sm:px-5">
+                        <td className="py-4 px-4 sm:px-5 sticky left-0 z-10 bg-surface shadow-[1px_0_0_0_rgba(0,0,0,0.15)]">
                           <Link
                             href={c.classId ? `/classes/${c.classId}` : '/classes'}
                             className="font-sans font-bold text-lg sm:text-xl text-black hover:text-primary hover:underline leading-snug block"

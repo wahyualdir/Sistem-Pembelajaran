@@ -141,7 +141,7 @@ export function LecturerDashboardClient({
   const handleSelectCourse = (course: ActiveClassItem) => {
     setSelectedCourse(course);
     setRightPanelTab('detail-kelas');
-    if (typeof window !== 'undefined' && window.innerWidth < 1280) {
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setIsRightDrawerOpen(true);
     }
   };
@@ -161,7 +161,7 @@ export function LecturerDashboardClient({
   const showNilai = showAll || selectedCategory === 'Nilai Akhir';
 
   return (
-    <div className="flex flex-col xl:flex-row min-h-[calc(100dvh-var(--layout-header-height-mobile))] xl:min-h-[calc(100dvh-var(--layout-header-height))]">
+    <div className="flex flex-col lg:flex-row min-h-[calc(100dvh-var(--layout-header-height-mobile))] lg:min-h-[calc(100dvh-var(--layout-header-height))]">
       {/* ========================================================= */}
       {/* 1. BAGIAN TENGAH: WORKSPACE UTAMA DOSEN                   */}
       {/* ========================================================= */}
