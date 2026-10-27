@@ -9,6 +9,8 @@ export interface ScrollableTabsProps extends React.HTMLAttributes<HTMLDivElement
   listClassName?: string;
   /** Label aksesibilitas untuk bilah tab */
   ariaLabel?: string;
+  /** Tampilkan garis indikator tab aktif bergeser (M06) */
+  showIndicator?: boolean;
 }
 
 /**
@@ -22,11 +24,17 @@ export function ScrollableTabs({
   className,
   listClassName,
   ariaLabel = 'Daftar tab navigasi',
+  showIndicator = false,
   ...props
 }: ScrollableTabsProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const [indicator, setIndicator] = useState<{ left: number; width: number; visible: boolean }>({
+    left: 0,
+    width: 0,
+    visible: false,
+  });
 
   const checkScroll = useCallback(() => {
     const el = scrollRef.current;
@@ -77,6 +85,14 @@ export function ScrollableTabs({
         left: Math.max(0, targetScroll),
         behavior: 'smooth',
       });
+
+      setIndicator({
+        left: itemOffset,
+        width: itemWidth,
+        visible: true,
+      });
+    } else {
+      setIndicator((prev) => ({ ...prev, visible: false }));
     }
   }, [children]);
 
@@ -106,11 +122,23 @@ export function ScrollableTabs({
         role="tablist"
         aria-label={ariaLabel}
         className={cn(
-          'flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-1 px-1 touch-pan-x',
+          'relative flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory py-1 px-1 touch-pan-x',
           listClassName
         )}
       >
         {children}
+
+        {/* Indikator Garis Tab Aktif Geser (M06) */}
+        {showIndicator && indicator.visible && (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute bottom-0 h-0.5 bg-primary rounded-full transition-[left,width] duration-base ease-inout motion-reduce:transition-none z-10"
+            style={{
+              left: `${indicator.left}px`,
+              width: `${indicator.width}px`,
+            }}
+          />
+        )}
       </div>
     </div>
   );

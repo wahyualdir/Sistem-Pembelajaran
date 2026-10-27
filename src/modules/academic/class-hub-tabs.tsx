@@ -51,6 +51,7 @@ import {
 import { cn } from '@/lib/utils';
 import { RetroWindow } from '@/components/retro/retro-window';
 import { MarkdownViewer } from '@/components/shared/markdown-viewer';
+import { ScrollableTabs } from '@/components/shared/scrollable-tabs';
 import { ClassIslandMap } from './class-island-map';
 import { ClassChaptersTab } from './class-chapters-tab';
 import { ClassProgressTab } from './class-progress-tab';
@@ -443,7 +444,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
 
         {/* Baris Bawah: 5 Tab Inti + Menu Lainnya yang Ringkas */}
         <div className="px-4 py-2 bg-[#FFFFFF] flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          <ScrollableTabs className="flex-1 min-w-0" listClassName="gap-1.5 py-0.5" ariaLabel="Daftar tab kelas utama">
             {roleTabs.slice(0, 5).map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -506,7 +507,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                 </button>
               );
             })()}
-          </div>
+          </ScrollableTabs>
 
           {isMoreTabsOpen && roleTabs.length > 5 && (
             <div className="w-full pt-2 border-t border-[#E8E5DE] flex flex-wrap items-center gap-1.5">

@@ -670,11 +670,34 @@ html[data-motion="mati"] {
   }
 }
 
-/* Halaman portal: blok di dalam halaman naik berurutan saat berpindah menu */
-.portal-enter > * > * { animation: rise 0.4s var(--ease) backwards; }
-.portal-enter > * > :nth-child(2) { animation-delay: 60ms; }
-.portal-enter > * > :nth-child(3) { animation-delay: 120ms; }
-.portal-enter > * > :nth-child(n + 4) { animation-delay: 180ms; }
+/* ======================================================== */
+/* M01: Masuk Halaman Portal (Page Enter Transition)        */
+/* ======================================================== */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.portal-page-enter {
+  animation: page-enter var(--dur-base) var(--ease-out) both;
+}
+
+html[data-motion="hemat"] .portal-page-enter,
+html.lite-performance-mode .portal-page-enter {
+  animation: fade-in 120ms var(--ease-out) both;
+}
+
+html[data-motion="mati"] .portal-page-enter {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
 
 /* Baris perangkat yang dicabut menutup sebelum daftar dimuat ulang */
 @keyframes collapse-out {

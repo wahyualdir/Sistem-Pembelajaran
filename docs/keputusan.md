@@ -636,3 +636,20 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alasan**: Memberikan antarmuka yang hidup dan responsif secara hemat komputasi, menjamin tidak ada kelas animasi rusak/hilang, serta menghormati aksesibilitas pengguna dengan sensitivitas gerak (vestibular).
 - **Alternatif yang ditolak**:
   - *Menginstal framer-motion atau GSAP*: Ditolak keras karena aturan nomor 3 melarang dependensi npm baru; seluruh sistem dibangun murni dengan CSS variables, Tailwind, dan React hooks internal.
+
+
+### [Responsif] Keputusan 07: Implementasi Animasi Shell dan Navigasi M01–M08, M19 (Fase 6)
+- **Tanggal**: 27 Oktober 2026
+- **Keputusan**:
+  1. **M01 Masuk Halaman (Page Enter)**: Menggunakan `src/app/(portal)/template.tsx` untuk me-remount setiap perpindahan rute portal Next.js App Router, menerapkan kelas `.portal-page-enter` dengan keyframe CSS `@keyframes page-enter` (`opacity: 0, translateY(8px)` ke `opacity: 1, translateY(0)`) dengan durasi `--dur-base` dan `--ease-out`. Runtuh ke fade murni pada mode `hemat` dan non-animasi pada `mati`.
+  2. **M02 Drawer Kiri (Sidebar Mobile)**: Memperbarui bilah samping `portal-shell.tsx` dengan transisi `transition-transform duration-slow ease-out` saat dibuka dan `duration-base ease-in` saat ditutup. Menambahkan pendengar gestur sentuh `onTouchStart` dan `onTouchEnd` untuk menutup drawer saat pengguna menggeser ke kiri sebesar >= 60px.
+  3. **M03 Panel Kanan (Right Drawer)**: Memverifikasi pemakaian `animate-slide-in-right` dengan durasi `--dur-slow` pada keenam dashboard role (`admin`, `coordinator`, `lecturer`, `staff`, `student`, `ta`).
+  4. **M04 Bottom Sheet Dialog**: Memperbarui `src/components/ui/dialog.tsx` sehingga pada layar ponsel (`< sm`) beranimasi `slide-in-from-bottom` dengan `--dur-slow`, dan pada desktop (`sm+`) beranimasi pudar dan zoom 0,95→1 dengan `--dur-base`.
+  5. **M05 Indikator Navigasi Bawah (Mobile Bottom Nav)**: Mengubah indikator aktif `MobileBottomNav` menjadi garis/pil aktif melayang yang bergeser secara halus melintasi slot navigasi (`left: calc(activeSlotIndex * 20% + 2%)`, `width: 16%`) dengan transisi `duration-base ease-inout`.
+  6. **M06 Garis Tab Aktif (Scrollable Tabs)**: Menambahkan fitur pelacakan indikator aktif geser `showIndicator` pada `ScrollableTabs` (`src/components/shared/scrollable-tabs.tsx`) yang mengukur posisi `activeItem` (`offsetLeft`, `offsetWidth`) dan membungkus 5 tab utama di `class-hub-tabs.tsx` dengan `ScrollableTabs`.
+  7. **M07 Akordeon / Lipat (Sidebar Groups & Details)**: Menggantikan render kondisional grup navigasi sidebar di `portal-shell.tsx` dengan teknik CSS Grid `grid-template-rows: 0fr -> 1fr` dan `opacity` (`transition-[grid-template-rows,opacity] duration-base ease-out`), sehingga animasi membuka/menutup berlangsung mulus tanpa reflow layout atau hardcoded height.
+  8. **M08 Dropdown / Popover / Tooltip**: Mengonfigurasi menu profil di `portal-shell.tsx` dan popover notifikasi di `notifikasi-popover.tsx` menggunakan `animate-scale-in` dari titik asal (`origin-bottom-left` / `origin-top-right`) dengan durasi `--dur-fast`.
+  9. **M19 Header Saat Digulir**: Memperbarui bilah atas (topbar) di `portal-shell.tsx` dengan transisi elevasi `transition-[border-color,box-shadow,background-color] duration-fast ease-out` saat `isScrolled` bernilai true.
+- **Alasan**: Memberikan umpan balik spasial yang jelas bagi pengguna saat bernavigasi tanpa mengorbankan performa (menghindari reflow layout pada CPU ponsel) dan konsisten di seluruh perangkat.
+- **Alternatif yang ditolak**:
+  - *Menganimasikan height langsung pada akordeon*: Ditolak karena menganimasikan properti `height` memicu reflow berat; teknik CSS Grid `grid-template-rows: 0fr -> 1fr` jauh lebih hemat komputasi.

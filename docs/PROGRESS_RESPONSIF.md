@@ -48,7 +48,17 @@
   - **Pengaturan & Lingkungan**: Kartu preferensi gerak `src/components/settings/motion-settings-card.tsx` terintegrasi di `/settings/appearance`, variabel `NEXT_PUBLIC_FF_MOTION` dan `NEXT_PUBLIC_FF_MOBILE_NAV` terdaftar di `.env.example`, dan panduan lengkap dicatat di `docs/MOTION.md`.
   - **Aturan Gerbang**: Ditambahkan Aturan 7 pada `scripts/cek-responsif.mjs` untuk memverifikasi kelas `animate-*` selalu terdaftar.
   - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (614 berkas lolos), `npm run typecheck` (0 error), `npm run lint` (0 error).
-- [ ] **Fase 6 — Animasi Shell dan Navigasi (M01–M08, M19)**
+- [x] **Fase 6 — Animasi Shell dan Navigasi (M01–M08, M19)**
+  - **M01 Masuk Halaman (Page Enter)**: `src/app/(portal)/template.tsx` me-remount setiap perpindahan rute portal Next.js App Router, menerapkan kelas `.portal-page-enter` dengan keyframe CSS `@keyframes page-enter` (opacity 0->1, translateY 8px->0) dengan durasi `--dur-base` dan `--ease-out`. Runtuh ke fade murni pada mode `hemat` dan non-animasi pada `mati`.
+  - **M02 Drawer Kiri (Sidebar Mobile)**: Memperbarui bilah samping `portal-shell.tsx` dengan transisi `transition-transform duration-slow ease-out` saat dibuka dan `duration-base ease-in` saat ditutup. Menambahkan pendengar gestur sentuh `onTouchStart` dan `onTouchEnd` untuk menutup drawer saat pengguna menggeser ke kiri sebesar >= 60px.
+  - **M03 Panel Kanan (Right Drawer)**: Memverifikasi pemakaian `animate-slide-in-right` dengan durasi `--dur-slow` pada keenam dashboard role (`admin`, `coordinator`, `lecturer`, `staff`, `student`, `ta`).
+  - **M04 Bottom Sheet Dialog**: Memperbarui `src/components/ui/dialog.tsx` sehingga pada layar ponsel (`< sm`) beranimasi `slide-in-from-bottom` dengan `--dur-slow`, dan pada desktop (`sm+`) beranimasi pudar dan zoom 0,95→1 dengan `--dur-base`.
+  - **M05 Indikator Navigasi Bawah (Mobile Bottom Nav)**: Mengubah indikator aktif `MobileBottomNav` menjadi garis/pil aktif melayang yang bergeser secara halus melintasi slot navigasi (`left: calc(activeSlotIndex * 20% + 2%)`, `width: 16%`) dengan transisi `duration-base ease-inout`.
+  - **M06 Garis Tab Aktif (Scrollable Tabs)**: Menambahkan fitur pelacakan indikator aktif geser `showIndicator` pada `ScrollableTabs` (`src/components/shared/scrollable-tabs.tsx`) yang mengukur posisi `activeItem` (`offsetLeft`, `offsetWidth`) dan membungkus 5 tab utama di `class-hub-tabs.tsx` dengan `ScrollableTabs`.
+  - **M07 Akordeon / Lipat (Sidebar Groups & Details)**: Menggantikan render kondisional grup navigasi sidebar di `portal-shell.tsx` dengan teknik CSS Grid `grid-template-rows: 0fr -> 1fr` dan `opacity` (`transition-[grid-template-rows,opacity] duration-base ease-out`), sehingga animasi membuka/menutup berlangsung mulus tanpa reflow layout atau hardcoded height.
+  - **M08 Dropdown / Popover / Tooltip**: Mengonfigurasi menu profil di `portal-shell.tsx` dan popover notifikasi di `notifikasi-popover.tsx` menggunakan `animate-scale-in` dari titik asal (`origin-bottom-left` / `origin-top-right`) dengan durasi `--dur-fast`.
+  - **M19 Header Saat Digulir**: Memperbarui bilah atas (topbar) di `portal-shell.tsx` dengan transisi elevasi `transition-[border-color,box-shadow,background-color] duration-fast ease-out` saat `isScrolled` bernilai true.
+  - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (615 berkas lolos), `npm run typecheck` (0 error), `npm run lint` (0 error).
 - [ ] **Fase 7 — Animasi Konten dan Mikro-interaksi (M09–M18, M20–M22)**
 - [ ] **Fase 8 — Performa dan Aksesibilitas Gerak (CPU Throttling, CLS, Reduced Motion)**
 - [ ] **Fase 9 — Verifikasi Akhir, Matriks Lengkap & Serah Terima**
@@ -59,14 +69,14 @@
 
 | ID | Nama Animasi | Target Komponen / Halaman | Status | Bukti / Catatan |
 |---|---|---|:---:|---|
-| **M01** | Masuk Halaman (Page Enter) | `template.tsx` portal / main | [ ] | Pudar + naik 8px (--dur-base) |
-| **M02** | Drawer Kiri (Sidebar Mobile) | `portal-shell.tsx` aside | [ ] | translateX(-100%→0) + swipe to close |
-| **M03** | Panel Kanan (Right Drawer) | `*-dashboard-client.tsx` | [ ] | slide-in-right (--dur-slow) |
+| **M01** | Masuk Halaman (Page Enter) | `template.tsx` portal / main | [x] | Pudar + naik 8px (--dur-base) |
+| **M02** | Drawer Kiri (Sidebar Mobile) | `portal-shell.tsx` aside | [x] | translateX(-100%→0) + swipe to close |
+| **M03** | Panel Kanan (Right Drawer) | `*-dashboard-client.tsx` | [x] | slide-in-right (--dur-slow) |
 | **M04** | Bottom Sheet Dialog | `ui/dialog.tsx` & modal kustom | [x] | slide-in-from-bottom di mobile (<sm) dengan drag handle |
 | **M05** | Indikator Navigasi Bawah | `MobileBottomNav` slot | [x] | Sliding pill / underline transition |
-| **M06** | Garis Tab Aktif | `class-hub-tabs.tsx`, filter chip | [ ] | Smooth indicator slide & scaleX |
-| **M07** | Akordeon / Lipat | Sidebar groups, filter sheet | [ ] | grid-template-rows: 0fr→1fr |
-| **M08** | Dropdown / Popover / Tooltip | Radix UI primitives | [ ] | Transform-origin scale & fade |
+| **M06** | Garis Tab Aktif | `class-hub-tabs.tsx`, filter chip | [x] | Smooth indicator slide & scaleX |
+| **M07** | Akordeon / Lipat | Sidebar groups, filter sheet | [x] | grid-template-rows: 0fr→1fr |
+| **M08** | Dropdown / Popover / Tooltip | Radix UI primitives | [x] | Transform-origin scale & fade |
 | **M09** | Reveal Saat Gulir | `ScrollReveal`, kartu aktivitas | [ ] | Fade + translate 12px (motion-ready) |
 | **M10** | Count-up Angka Statistik | IPK, CPL, Presensi, Ringkasan | [ ] | useCountUp tabular-nums |
 | **M11** | Bar / Cincin Progres | Progress bar materi & CPL | [ ] | scaleX dari kiri (bukan width) |
@@ -77,7 +87,7 @@
 | **M16** | Sorotan Ketukan Baris | List row & menu item | [ ] | Highlight flash (tap substitute) |
 | **M17** | Aksi Berhasil / Gagal | Submit tugas, presensi, form error | [ ] | SVG check-draw & error shake |
 | **M18** | Pewaktu Hampir Habis | CBT / Kuis countdown timer | [ ] | Pulsa 400ms tunggal di 5:00 & 1:00 |
-| **M19** | Header Saat Digulir | `portal-shell.tsx` topbar | [ ] | Smooth subtle border & shadow |
+| **M19** | Header Saat Digulir | `portal-shell.tsx` topbar | [x] | Smooth subtle border & shadow |
 | **M20** | Hero Login / Landing | `login/page.tsx`, `app/page.tsx` | [ ] | Calm sequence, pulse stop di mobile |
 | **M21** | Lencana Notifikasi Naik | Bell icon unread badge | [ ] | Pop scale 1→1.15→1 saat berubah |
 | **M22** | Gambar / Media Dimuat | Materi image & avatar | [ ] | Smooth fade-in saat onLoad |

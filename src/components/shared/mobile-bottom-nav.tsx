@@ -118,6 +118,10 @@ export function MobileBottomNav({
     return null;
   }
 
+  const activeSlotIndex = primarySlots.findIndex((item) =>
+    isNavItemActive(item.href, pathname)
+  );
+
   return (
     <nav
       aria-label="Navigasi Bawah Ponsel"
@@ -127,7 +131,18 @@ export function MobileBottomNav({
         'pb-[env(safe-area-inset-bottom,0px)] shadow-lg'
       )}
     >
-      <div className="grid grid-cols-5 h-[var(--mobile-nav-h,3.5rem)] items-center px-1">
+      <div className="relative grid grid-cols-5 h-[var(--mobile-nav-h,3.5rem)] items-center px-1">
+        {/* Indikator Garis Aktif Geser Antarslot (M05) */}
+        {activeSlotIndex !== -1 && (
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute top-0 h-0.5 bg-[#C2553A] rounded-full transition-[left] duration-base ease-inout"
+            style={{
+              width: '16%',
+              left: `calc(${activeSlotIndex * 20}% + 2%)`,
+            }}
+          />
+        )}
         {primarySlots.map((item) => {
           const isActive = isNavItemActive(item.href, pathname);
           const Icon = item.icon;
@@ -144,13 +159,7 @@ export function MobileBottomNav({
                   : 'text-[#7A756D] font-medium hover:text-[#1C1917]'
               )}
             >
-              {/* Indikator Garis Aktif (M05) */}
-              {isActive && (
-                <span
-                  aria-hidden="true"
-                  className="absolute top-0 left-2 right-2 h-0.5 bg-[#C2553A] rounded-full transition-all duration-200"
-                />
-              )}
+
 
               <div className="relative flex items-center justify-center">
                 <Icon className={cn('h-5 w-5 transition-transform', isActive && 'scale-105')} />

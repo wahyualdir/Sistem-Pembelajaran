@@ -189,7 +189,7 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
 
       {/* Popover Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-[12px] border border-border bg-surface shadow-md z-50 overflow-hidden animate-fade-up">
+        <div className="absolute right-0 mt-2 w-80 sm:w-96 rounded-[12px] border border-border bg-surface shadow-md z-50 overflow-hidden animate-scale-in origin-top-right duration-fast">
           {/* Header Popover */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
             <div className="flex items-center gap-2">
