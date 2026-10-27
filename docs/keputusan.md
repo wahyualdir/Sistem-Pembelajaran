@@ -565,3 +565,16 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alternatif yang ditolak**:
   - *Membiarkan 100vh dan menggunakan JS resize listener*: Ditolak karena menyebabkan jank dan reflow berat pada rendering awal browser mobile.
   - *Memakai overflow-x: hidden pada body*: Ditolak karena melanggar spesifikasi nomor 5 dan dapat memicu bug posisi sticky pada layout mobile.
+
+
+### [Responsif] Keputusan 03: Shell Navigasi Bawah, Tablet Rail, Panel Kanan, Header, dan Isolasi Worktree (Fase 2)
+- **Tanggal**: 27 Oktober 2026
+- **Keputusan**:
+  1. **Navigasi Bawah (Mobile Bottom Nav)**: Mengimplementasikan `MobileBottomNav` di `src/components/shared/mobile-bottom-nav.tsx` dengan konfigurasi 4 slot per peran di `src/lib/config/mobile-nav.ts`, tinggi 56px (`--mobile-nav-h`), dukungan safe-area-inset-bottom, deteksi keyboard virtual via visualViewport & form focus, dan indikator aktif M05. Menambahkan feature flag `NEXT_PUBLIC_FF_MOBILE_NAV`.
+  2. **Tablet Icon Rail (768–1279px)**: Mengaktifkan mode rail 72px (`w-rail`) pada breakpoint tablet secara otomatis melalui hook `useMediaQuery('(min-width: 768px) and (max-width: 1279px)')` dengan server snapshot aman (`false`) via `useSyncExternalStore`.
+  3. **Panel Kanan Inline pada `lg` (1024px)**: Menggeser breakpoint inline panel kanan dari `xl` (1280px) menjadi `lg` (1024px) di seluruh 6 klien dashboard (`admin`, `coordinator`, `lecturer`, `staff`, `student`, `ta`) untuk mengembalikan tata letak 3-kolom pada iPad landscape (1024–1180px).
+  4. **Pembersihan dan Elevasi Elemen Mengambang**: Menaikkan posisi tombol AI Assistant (`ai-academic-assistant.tsx`) dan toast notifikasi di atas navigasi bawah pada `< md`.
+  5. **Isolasi Lingkungan Kerja (Git Worktree)**: Menerapkan `git worktree` di `c:\Users\ACER\Downloads\implementasi-responsif` untuk melindungi pengerjaan branch `responsif/mobile-ipad-animasi` dari potensi tabrakan proses paralel pada branch `fitur/peran-baru` di folder utama.
+- **Alasan**: Memberikan pengalaman navigasi satu tangan yang cepat di ponsel, mengembalikan layout 3-kolom di tablet landscape tanpa mengubah tampilan desktop >= 1280px (paritas visual 100%), serta menjamin isolasi proses pengerjaan tanpa risiko konflik berkas antar-cabang.
+- **Alternatif yang ditolak**:
+  - *Memakai deteksi user-agent untuk navigasi ponsel*: Ditolak karena melanggar aturan nomor 8; tata letak harus berbasis query lebar viewport dan pointer.

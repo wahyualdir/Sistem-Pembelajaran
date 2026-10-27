@@ -17,7 +17,12 @@
   - **Viewport**: Menambahkan `interactiveWidget: 'resizes-content'` dan `themeColor` terpusat dari `src/lib/config/viewport-theme.ts`.
   - **Skrip pengawas**: `scripts/cek-responsif.mjs` terdaftar di `package.json` (`npm run cek:responsif` dan rantai `npm run cek`) serta terverifikasi 100% lolos.
   - **Verifikasi Playwright**: Pengujian 11 viewport (`mobile-small` 360x640 s.d. `desktop-fhd` 1920x1080) pada halaman masuk lolos 11/11 tanpa scroll horizontal.
-- [ ] **Fase 2 — Shell: Navigasi Bawah, Rail, Panel Kanan, Header**
+- [x] **Fase 2 — Shell: Navigasi Bawah, Rail, Panel Kanan, Header**
+  - **Navigasi Bawah (Mobile Bottom Nav)**: Komponen `MobileBottomNav` 56px (`--mobile-nav-h`) dengan 4 slot terpilih per peran, indikator geser aktif M05, padding safe area iOS, auto-hide saat keyboard virtual muncul atau saat drawer/fokus dibuka.
+  - **Tablet Icon Rail (768–1279px)**: Sidebar mengecil menjadi icon rail 72px secara otomatis di tablet portrait & Split View, menjaga area kerja tetap lapang.
+  - **Panel Kanan 3-Kolom di iPad Landscape (1024px)**: Breakpoint panel kanan digeser dari `xl` (1280px) ke `lg` (1024px), mengembalikan tata letak 3-kolom yang disukai di iPad landscape.
+  - **Elevasi Elemen Mengambang**: AI Assistant FAB dan toast dinaikkan di atas navigasi bawah pada layar mobile.
+  - **Uji & Verifikasi**: Vitest (3/3 lulus), Typecheck (0 error), Lint (0 warning), Cek Hex (lolos), Cek Responsif (lolos), Playwright 11/11 viewport halaman masuk lulus.
 - [ ] **Fase 3 — Komponen Dasar: Dialog/Sheet, Tabel Scroll, Tab, Form**
 - [ ] **Fase 4 — Halaman per Peran dan Fitur (10 Kelompok Fitur)**
 - [ ] **Fase 5 — Fondasi Sistem Animasi (Token, Hook, Utilitas, Sakelar)**
