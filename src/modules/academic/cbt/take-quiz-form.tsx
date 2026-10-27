@@ -66,6 +66,7 @@ export function TakeQuizForm({
 
   // Countdown timer in seconds
   const [timeLeft, setTimeLeft] = useState(quiz.duration_minutes * 60);
+  const [isWarningPulse, setIsWarningPulse] = useState(false);
 
   const handleSubmitAuto = useCallback(() => {
     startTransition(async () => {
@@ -79,6 +80,10 @@ export function TakeQuizForm({
     if (existingAttempt || !hasConsented || !passcodeVerified) return;
     const interval = setInterval(() => {
       setTimeLeft((prev) => {
+        if (prev === 301 || prev === 61) {
+          setIsWarningPulse(true);
+          setTimeout(() => setIsWarningPulse(false), 400);
+        }
         if (prev <= 1) {
           clearInterval(interval);
           // Auto submit when time runs out
@@ -698,7 +703,7 @@ export function TakeQuizForm({
       <div className="sticky top-2 z-20 rounded-xl border-2 border-black bg-gray-soft/95 backdrop-blur px-5 py-3 flex flex-wrap items-center justify-between gap-3 shadow-retro">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <Clock className={`h-5 w-5 ${timeLeft <= 300 ? 'text-primary-dark animate-pulse' : 'text-primary'}`} />
+            <Clock className={`h-5 w-5 ${timeLeft <= 60 ? 'text-danger' : timeLeft <= 300 ? 'text-primary-dark' : 'text-primary'} ${isWarningPulse ? 'animate-bounce-short' : ''}`} />
             <span className="text-xs sm:text-sm text-black font-bold">Sisa Waktu:</span>
             <span className={`font-sans text-base sm:text-lg font-bold ${timeLeft <= 300 ? 'text-primary-dark' : 'text-black'}`}>
               {formatTimer(timeLeft)}

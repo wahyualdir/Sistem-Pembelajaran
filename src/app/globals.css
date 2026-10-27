@@ -842,14 +842,34 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Base fade-up scroll reveal: Selalu opacity 1 secara default agar tidak terjadi blank putih / hilang */
+/* M09: Scroll Reveal (T5 Fix: Hanya sembunyikan jika peramban siap dengan motion-ready dan bukan data-motion="mati") */
 .reveal-on-scroll,
 .reveal-scale,
 .reveal-slide-left,
 .reveal-slide-right {
   opacity: 1;
   transform: none;
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
+}
+
+html.motion-ready:not([data-motion="mati"]) .reveal-on-scroll:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+html.motion-ready:not([data-motion="mati"]) .reveal-scale:not(.is-visible) {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+html.motion-ready:not([data-motion="mati"]) .reveal-slide-left:not(.is-visible) {
+  opacity: 0;
+  transform: translateX(-16px);
+}
+
+html.motion-ready:not([data-motion="mati"]) .reveal-slide-right:not(.is-visible) {
+  opacity: 0;
+  transform: translateX(16px);
 }
 
 .reveal-on-scroll.is-visible,
@@ -1696,4 +1716,50 @@ html.dark .vt-titlebar {
   .landscape-compact-header {
     height: 3rem !important;
   }
+}
+
+
+/* ======================================================== */
+/* FASE 7: M11, M15, M16, M17 MIKRO-INTERAKSI & KONTEN      */
+/* ======================================================== */
+
+/* M11: Bar Progres scaleX dari kiri tanpa reflow */
+.progress-bar-scale {
+  transform-origin: left center;
+  transition: transform var(--dur-data) var(--ease-out);
+}
+
+/* M15: Umpan balik tekan (Press feedback) & Hover lift */
+@media (hover: hover) {
+  .hover-lift {
+    transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08);
+  }
+}
+.active-press {
+  transition: transform var(--dur-instant) var(--ease-out);
+}
+.active-press:active {
+  transform: scale(0.98);
+}
+
+/* M16: Sorotan ketukan baris (Row tap highlight substitute) */
+.row-tap-highlight {
+  transition: background-color var(--dur-instant) var(--ease-out);
+}
+.row-tap-highlight:active {
+  background-color: var(--muted);
+}
+
+/* M17: Centang tergambar SVG (Check-draw) & Error shake */
+@keyframes check-draw {
+  from { stroke-dashoffset: 24; }
+  to { stroke-dashoffset: 0; }
+}
+.animate-check-draw {
+  stroke-dasharray: 24;
+  animation: check-draw 360ms var(--ease-out) forwards;
 }

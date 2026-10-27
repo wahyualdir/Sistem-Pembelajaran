@@ -1,3 +1,4 @@
+import { CountUpNumber } from '@/components/shared/count-up-number';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -115,11 +116,11 @@ export function AdminDashboardClient({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
             <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]">
               <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Peristiwa Audit</p>
-              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917] mt-1">{totalLogs}</p>
+              <p className="mt-1"><CountUpNumber value={totalLogs} className="font-heading font-bold text-2xl sm:text-3xl text-[#1C1917]" /></p>
             </div>
             <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]">
               <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Sesi Login Aktif</p>
-              <p className="font-heading font-bold text-2xl sm:text-3xl text-[#C2553A] mt-1">{totalLogins}</p>
+              <p className="mt-1"><CountUpNumber value={totalLogins} className="font-heading font-bold text-2xl sm:text-3xl text-[#C2553A]" /></p>
             </div>
             <div className="p-4 rounded-xl border border-[#D6D3CB] bg-[#FFFFFF]">
               <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Status Proteksi</p>

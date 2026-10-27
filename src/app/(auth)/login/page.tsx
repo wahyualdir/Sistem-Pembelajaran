@@ -137,12 +137,12 @@ function LoginFormContent() {
       {/* Animated Subtle Floating Mesh Gradient Orbs */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-48 -left-48 h-[280px] w-[280px] sm:h-[520px] sm:w-[520px] max-w-[60vw] max-h-[60vw] sm:max-w-none sm:max-h-none rounded-full bg-gradient-to-tr from-[#C2553A]/[0.08] to-[#F59E0B]/[0.06] blur-2xl sm:blur-3xl md:animate-pulse"
+        className="pointer-events-none absolute -top-48 -left-48 h-[280px] w-[280px] sm:h-[520px] sm:w-[520px] max-w-[60vw] max-h-[60vw] sm:max-w-none sm:max-h-none rounded-full bg-gradient-to-tr from-[#C2553A]/[0.08] to-[#F59E0B]/[0.06] blur-2xl sm:blur-3xl md:animate-pulse motion-reduce:animate-none"
         style={{ animationDuration: '6s' }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-48 -right-48 h-[300px] w-[300px] sm:h-[560px] sm:w-[560px] max-w-[60vw] max-h-[60vw] sm:max-w-none sm:max-h-none rounded-full bg-gradient-to-bl from-[#853827]/[0.06] to-[#C2553A]/[0.05] blur-2xl sm:blur-3xl md:animate-pulse"
+        className="pointer-events-none absolute -bottom-48 -right-48 h-[300px] w-[300px] sm:h-[560px] sm:w-[560px] max-w-[60vw] max-h-[60vw] sm:max-w-none sm:max-h-none rounded-full bg-gradient-to-bl from-[#853827]/[0.06] to-[#C2553A]/[0.05] blur-2xl sm:blur-3xl md:animate-pulse motion-reduce:animate-none"
         style={{ animationDuration: '8s' }}
       />
 

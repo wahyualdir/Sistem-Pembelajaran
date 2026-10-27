@@ -342,9 +342,12 @@ export function HeatmapKontribusi({
                             });
                           }}
                           onBlur={() => setHoveredCell(null)}
+                          style={{
+                            animationDelay: `${Math.min(600, (week.weekIndex * 7 + dayIdx) * 8)}ms`,
+                          }}
                           className={cn(
                             cellDimClass,
-                            'rounded-[3px] border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-ink focus:z-10',
+                            'rounded-[3px] border transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-ink focus:z-10 animate-fade-in',
                             sel.isCurrentPeriod
                               ? KELAS_WARNA_LEVEL[sel.level]
                               : 'border border-dashed border-stone-200/90 bg-stone-100/40 pointer-events-none'

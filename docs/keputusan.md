@@ -653,3 +653,24 @@ Semua kombinasi warna teks dan latar belakang utama telah dihitung dan divalidas
 - **Alasan**: Memberikan umpan balik spasial yang jelas bagi pengguna saat bernavigasi tanpa mengorbankan performa (menghindari reflow layout pada CPU ponsel) dan konsisten di seluruh perangkat.
 - **Alternatif yang ditolak**:
   - *Menganimasikan height langsung pada akordeon*: Ditolak karena menganimasikan properti `height` memicu reflow berat; teknik CSS Grid `grid-template-rows: 0fr -> 1fr` jauh lebih hemat komputasi.
+
+
+### [Responsif] Keputusan 08: Animasi Konten dan Mikro-interaksi M09–M18, M20–M22 (Fase 7)
+- **Tanggal**: 27 Oktober 2026
+- **Keputusan**:
+  1. **M09 Reveal Saat Gulir (Scroll Reveal & Stagger)**: Memperbaiki aturan CSS di `globals.css` sehingga kelas `reveal-*` hanya tersembunyi jika `html.motion-ready:not([data-motion="mati"])` aktif, dengan transisi `--dur-base` dan `--ease-out`, serta jeda berurutan `reveal-stagger` (stagger 40ms hingga maksimal 6 anak).
+  2. **M10 Count-up Angka Statistik**: Membangun komponen reaktif `CountUpNumber` (`src/components/shared/count-up-number.tsx`) yang memanfaatkan `useCountUp` dan `useInView` (IntersectionObserver), menerapkan `tabular-nums` untuk mencegah pergeseran tata letak (CLS), dan menuliskan nilai akhir secara utuh pada `aria-label`. Mengintegrasikannya pada statistik dasbor Mahasiswa (Kehadiran), Admin (Log Sistem, Login), dan Dosen (Kelas, Tugas, Jadwal).
+  3. **M11 Bar Progres scaleX**: Menerapkan kelas `.progress-bar-scale` yang menganimasikan bilah progres menggunakan `scaleX` dari titik asal `origin-left` (menggantikan animasi `width`) untuk menghindari pemborosan reflow layout mesin peramban.
+  4. **M12 Grafik Masuk (Recharts & SVG)**: Menghubungkan visualisasi tren IPS semester (`IpsTrendChart`) dengan `useMotionPreference()`, sehingga polyline dan path area SVG melakukan transisi halus dengan durasi `--dur-data` (600ms) pada mode `penuh`, dan tampil statis tanpa animasi pada mode `hemat`/`mati`.
+  5. **M13 Heatmap Kontribusi**: Menambahkan penundaan animasi berurutan pada sel grid kontribusi harian `HeatmapKontribusi` (`animationDelay: min(600ms, cellIndex * 8ms)`) dengan kelas `animate-fade-in`.
+  6. **M14 Shimmer Skeleton & Loading States**: Memperbarui komponen `Skeleton` dengan efek shimmer berkilau (`before:animate-shimmer`) yang mati total saat `prefers-reduced-motion`. Membuat berkas `loading.tsx` untuk 4 rute portal yang intensif data: `/classes`, `/grades`, `/calendar`, dan `/analytics`.
+  7. **M15 Umpan Balik Tekan (Button Press)**: Menambahkan `active:scale-[0.98] duration-instant ease-out` pada varian dasar komponen `Button`, serta mendefinisikan utilitas `.hover-lift` (hanya aktif pada peramban berfitur hover mouse) dan `.active-press`.
+  8. **M16 Sorotan Ketukan Baris**: Menerapkan kelas `.row-tap-highlight` pada baris daftar untuk memberikan umpan balik sentuhan instan 80ms sebagai pengganti tap highlight bawaan peramban webkit.
+  9. **M17 Aksi Berhasil & Gagal**: Menyediakan utilitas `@keyframes check-draw` dan `.animate-check-draw` untuk menganimasikan goresan centang SVG sukses 360ms, serta keyframe `shake` 320ms untuk validasi form galat.
+  10. **M18 Pewaktu Hampir Habis (CBT Countdown)**: Mengaudit dan menghapus kelas `animate-pulse` berulang tanpa henti pada formulir ujian `take-quiz-form.tsx`. Menggantikannya dengan perubahan warna token semantik (`text-primary-dark` di <= 5:00 dan `text-danger` di <= 1:00) disertai getaran pulsa tunggal 400ms (`animate-bounce-short`) tepat saat menyentuh ambang 5:00 dan 1:00 agar peserta ujian tidak terganggu.
+  11. **M20 Hero Login & Landing**: Memastikan bola-bola gradien latar belakang login di `src/app/(auth)/login/page.tsx` tidak beranimasi di ponsel (`< md`) dan menyertakan `motion-reduce:animate-none` agar mati total pada mode hemat daya dan preferensi reduced motion.
+  12. **M21 Lencana Notifikasi Naik**: Mengganti `animate-pulse` tak terhingga pada ikon lonceng `notifikasi-popover.tsx` dengan transisi lonjakan skala 1→1,10→1 (`isBadgePopping`) yang hanya memicu selama 220ms saat jumlah belum dibaca (`unreadCount`) berubah nilainya.
+  13. **M22 Gambar Halus (Smooth Image)**: Membuat komponen pembungkus `SmoothImage` (`src/components/shared/smooth-image.tsx`) dengan penjagaan rasio aspek dan transisi pudar masuk (`opacity: 0 -> 1`) berdurasi `--dur-base` saat kejadian `onLoad` selesai.
+- **Alasan**: Seluruh interaksi mikro dan elemen visual konten memberikan kejelasan status tanpa dekorasi berlebihan, mempertahankan skor CLS tetap mendekati 0, dan menghilangkan animasi tak terhingga yang menguras baterai dan memecah konsentrasi pengguna.
+- **Alternatif yang ditolak**:
+  - *Membiarkan jam ujian berkedip terus-menerus selama 5 menit terakhir*: Ditolak tegas karena menimbulkan kecemasan dan mengganggu fokus peserta ujian daring.

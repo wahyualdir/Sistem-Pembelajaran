@@ -1,3 +1,4 @@
+import { CountUpNumber } from '@/components/shared/count-up-number';
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -229,7 +230,7 @@ export function LecturerDashboardClient({
               </div>
               <div>
                 <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Kelas Aktif</p>
-                <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{classes}</p>
+                <CountUpNumber value={classes} className="font-heading font-bold text-2xl text-[#1C1917] leading-tight" />
               </div>
             </div>
 
@@ -239,7 +240,7 @@ export function LecturerDashboardClient({
               </div>
               <div>
                 <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Tugas Menunggu Koreksi</p>
-                <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{items.length}</p>
+                <CountUpNumber value={items.length} className="font-heading font-bold text-2xl text-[#1C1917] leading-tight" />
               </div>
             </div>
 
@@ -249,7 +250,7 @@ export function LecturerDashboardClient({
               </div>
               <div>
                 <p className="text-xs font-mono font-semibold text-[#57534E] uppercase">Total Submisi Mahasiswa</p>
-                <p className="font-heading font-bold text-2xl text-[#1C1917] leading-tight">{totalPending}</p>
+                <CountUpNumber value={totalPending} className="font-heading font-bold text-2xl text-[#1C1917] leading-tight" />
               </div>
             </div>
           </div>

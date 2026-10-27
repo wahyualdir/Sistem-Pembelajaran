@@ -59,7 +59,21 @@
   - **M08 Dropdown / Popover / Tooltip**: Mengonfigurasi menu profil di `portal-shell.tsx` dan popover notifikasi di `notifikasi-popover.tsx` menggunakan `animate-scale-in` dari titik asal (`origin-bottom-left` / `origin-top-right`) dengan durasi `--dur-fast`.
   - **M19 Header Saat Digulir**: Memperbarui bilah atas (topbar) di `portal-shell.tsx` dengan transisi elevasi `transition-[border-color,box-shadow,background-color] duration-fast ease-out` saat `isScrolled` bernilai true.
   - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (615 berkas lolos), `npm run typecheck` (0 error), `npm run lint` (0 error).
-- [ ] **Fase 7 — Animasi Konten dan Mikro-interaksi (M09–M18, M20–M22)**
+- [x] **Fase 7 — Animasi Konten dan Mikro-interaksi (M09–M18, M20–M22)**
+  - **M09 Reveal Saat Gulir**: Kelas `.reveal-*` di `globals.css` diperbaiki (T5) dengan syarat `html.motion-ready:not([data-motion="mati"])` dan jeda bertahap `.reveal-stagger` (40ms hingga maksimal 6 anak).
+  - **M10 Count-up Angka Statistik**: Komponen `CountUpNumber` (`src/components/shared/count-up-number.tsx`) berbasis `useCountUp` dan `useInView` dengan `tabular-nums` diterapkan pada statistik dasbor Mahasiswa (Kehadiran), Admin (Log Sistem, Login), dan Dosen (Kelas, Tugas, Jadwal).
+  - **M11 Bar Progres**: Utilitas `.progress-bar-scale` menganimasikan `scaleX` dari titik `origin-left` menggantikan `width` untuk menghindari reflow layout.
+  - **M12 Grafik Masuk**: Visualisasi tren IPS semester (`IpsTrendChart`) terhubung dengan `useMotionPreference()`, menganimasikan polyline dan area SVG dengan durasi `--dur-data` (600ms) pada mode `penuh`.
+  - **M13 Heatmap Kontribusi**: Sel grid kontribusi harian `HeatmapKontribusi` menganimasikan fade-in berurutan (`animationDelay: min(600ms, cellIndex * 8ms)`).
+  - **M14 Shimmer Skeleton & Loading**: Komponen `Skeleton` dilengkapi efek shimmer halus. Menambahkan berkas `loading.tsx` untuk 4 rute portal: `/classes`, `/grades`, `/calendar`, dan `/analytics`.
+  - **M15 Umpan Balik Tekan**: Menambahkan `active:scale-[0.98]` dan `duration-instant` pada komponen dasar `Button` serta utilitas `.hover-lift` dan `.active-press` di `globals.css`.
+  - **M16 Sorotan Ketukan Baris**: Menerapkan kelas `.row-tap-highlight` sebagai pengganti tap highlight webkit.
+  - **M17 Aksi Berhasil & Gagal**: Menambahkan keyframe `.animate-check-draw` untuk goresan centang SVG sukses 360ms dan keyframe `shake` 320ms untuk validasi form galat.
+  - **M18 Pewaktu Hampir Habis**: Mengaudit dan menghapus `animate-pulse` tak terhingga pada formulir ujian `take-quiz-form.tsx`; menggantikannya dengan penanda warna semantik dan getaran pulsa tunggal 400ms (`animate-bounce-short`) pada ambang batas 5:00 dan 1:00.
+  - **M20 Hero Login & Landing**: Menghentikan animasi pulse bola gradien pada ponsel (`< md`) dan menyertakan `motion-reduce:animate-none` pada `login/page.tsx`.
+  - **M21 Lencana Notifikasi Naik**: Menghapus `animate-pulse` tak berujung pada lonceng `notifikasi-popover.tsx`; menggantikannya dengan transisi lonjakan skala 1→1,10→1 (`isBadgePopping`) selama 220ms hanya saat `unreadCount` berubah nilainya.
+  - **M22 Gambar Halus**: Membuat komponen pembungkus `SmoothImage` (`src/components/shared/smooth-image.tsx`) dengan penjagaan rasio aspek dan transisi pudar masuk (`opacity: 0 -> 1`) berdurasi `--dur-base` saat kejadian `onLoad` selesai.
+  - **Uji & Verifikasi**: `npm run cek:hex` (lolos), `npm run cek:responsif` (621 berkas lolos), `npm run typecheck` (0 error), `npm run lint` (0 error).
 - [ ] **Fase 8 — Performa dan Aksesibilitas Gerak (CPU Throttling, CLS, Reduced Motion)**
 - [ ] **Fase 9 — Verifikasi Akhir, Matriks Lengkap & Serah Terima**
 
@@ -77,20 +91,20 @@
 | **M06** | Garis Tab Aktif | `class-hub-tabs.tsx`, filter chip | [x] | Smooth indicator slide & scaleX |
 | **M07** | Akordeon / Lipat | Sidebar groups, filter sheet | [x] | grid-template-rows: 0fr→1fr |
 | **M08** | Dropdown / Popover / Tooltip | Radix UI primitives | [x] | Transform-origin scale & fade |
-| **M09** | Reveal Saat Gulir | `ScrollReveal`, kartu aktivitas | [ ] | Fade + translate 12px (motion-ready) |
-| **M10** | Count-up Angka Statistik | IPK, CPL, Presensi, Ringkasan | [ ] | useCountUp tabular-nums |
-| **M11** | Bar / Cincin Progres | Progress bar materi & CPL | [ ] | scaleX dari kiri (bukan width) |
-| **M12** | Grafik Masuk (Recharts) | Grafik tren IPK, radar CPMK | [ ] | isAnimationActive di mode penuh |
-| **M13** | Heatmap Kontribusi | `heatmap-kontribusi.tsx` | [ ] | Sel fade-in berurutan (stagger 8ms) |
-| **M14** | Shimmer Skeleton → Konten | `ui/skeleton.tsx`, `loading.tsx` | [ ] | Shimmer saat memuat, crossfade 160ms |
-| **M15** | Umpan Balik Tekan (Press) | Tombol & kartu interaktif | [ ] | :active scale 0.98, hover lift |
-| **M16** | Sorotan Ketukan Baris | List row & menu item | [ ] | Highlight flash (tap substitute) |
-| **M17** | Aksi Berhasil / Gagal | Submit tugas, presensi, form error | [ ] | SVG check-draw & error shake |
-| **M18** | Pewaktu Hampir Habis | CBT / Kuis countdown timer | [ ] | Pulsa 400ms tunggal di 5:00 & 1:00 |
+| **M09** | Reveal Saat Gulir | `ScrollReveal`, kartu aktivitas | [x] | Fade + translate 12px (motion-ready) |
+| **M10** | Count-up Angka Statistik | IPK, CPL, Presensi, Ringkasan | [x] | useCountUp tabular-nums |
+| **M11** | Bar / Cincin Progres | Progress bar materi & CPL | [x] | scaleX dari kiri (bukan width) |
+| **M12** | Grafik Masuk (Recharts) | Grafik tren IPK, radar CPMK | [x] | isAnimationActive di mode penuh |
+| **M13** | Heatmap Kontribusi | `heatmap-kontribusi.tsx` | [x] | Sel fade-in berurutan (stagger 8ms) |
+| **M14** | Shimmer Skeleton → Konten | `ui/skeleton.tsx`, `loading.tsx` | [x] | Shimmer saat memuat, crossfade 160ms |
+| **M15** | Umpan Balik Tekan (Press) | Tombol & kartu interaktif | [x] | :active scale 0.98, hover lift |
+| **M16** | Sorotan Ketukan Baris | List row & menu item | [x] | Highlight flash (tap substitute) |
+| **M17** | Aksi Berhasil / Gagal | Submit tugas, presensi, form error | [x] | SVG check-draw & error shake |
+| **M18** | Pewaktu Hampir Habis | CBT / Kuis countdown timer | [x] | Pulsa 400ms tunggal di 5:00 & 1:00 |
 | **M19** | Header Saat Digulir | `portal-shell.tsx` topbar | [x] | Smooth subtle border & shadow |
-| **M20** | Hero Login / Landing | `login/page.tsx`, `app/page.tsx` | [ ] | Calm sequence, pulse stop di mobile |
-| **M21** | Lencana Notifikasi Naik | Bell icon unread badge | [ ] | Pop scale 1→1.15→1 saat berubah |
-| **M22** | Gambar / Media Dimuat | Materi image & avatar | [ ] | Smooth fade-in saat onLoad |
+| **M20** | Hero Login / Landing | `login/page.tsx`, `app/page.tsx` | [x] | Calm sequence, pulse stop di mobile |
+| **M21** | Lencana Notifikasi Naik | Bell icon unread badge | [x] | Pop scale 1→1.15→1 saat berubah |
+| **M22** | Gambar / Media Dimuat | Materi image & avatar | [x] | Smooth fade-in saat onLoad |
 
 ---
 

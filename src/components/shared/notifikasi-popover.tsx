@@ -75,6 +75,18 @@ export function NotifikasiPopover({ userId = "mhs-1" }: NotifikasiPopoverProps) 
   }, [isOpen]);
 
   const unreadCount = daftarNotifikasi.filter((n) => !n.dibacaPada).length;
+  // M21: Lencana naik skala 1->1.15->1 hanya saat angka berubah (220ms)
+  const prevCountRef = useRef(unreadCount);
+  const [isBadgePopping, setIsBadgePopping] = useState(false);
+
+  useEffect(() => {
+    if (prevCountRef.current !== unreadCount) {
+      prevCountRef.current = unreadCount;
+      setIsBadgePopping(true);
+      const timer = setTimeout(() => setIsBadgePopping(false), 220);
+      return () => clearTimeout(timer);
+    }
+  }, [unreadCount]);
 
   const handleTandaiSemuaDibaca = async () => {
     setLoading(true);

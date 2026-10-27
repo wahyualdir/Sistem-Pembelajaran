@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useMotionPreference } from "@/hooks/use-motion-preference";
+import { cn } from "@/lib/utils";
 
 export interface DataSemesterIps {
   semester: number;
@@ -15,6 +17,8 @@ interface IpsTrendChartProps {
 
 export function IpsTrendChart({ data }: IpsTrendChartProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const { isMotionFull } = useMotionPreference();
+  const isAnimated = isMotionFull;
 
   if (!data || data.length === 0) {
     return (
@@ -97,7 +101,7 @@ export function IpsTrendChart({ data }: IpsTrendChartProps) {
           />
 
           {/* Area bawah garis */}
-          <path d={areaPath} fill="url(#areaGradient)" />
+          <path d={areaPath} fill="url(#areaGradient)" className={cn("transition-opacity duration-data ease-out", isAnimated && "animate-fade-in")} />
 
           {/* Garis tren utama */}
           <polyline
