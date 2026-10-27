@@ -1,0 +1,1289 @@
+[
+  {
+    "role": "STUDENT",
+    "label": "Beranda",
+    "href": "/student",
+    "httpStatus": 200,
+    "finalUrl": "/student",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Kalender",
+    "href": "/calendar",
+    "httpStatus": 200,
+    "finalUrl": "/calendar",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Notifikasi",
+    "href": "/notifications",
+    "httpStatus": 200,
+    "finalUrl": "/notifications",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Pengumuman",
+    "href": "/announcements",
+    "httpStatus": 200,
+    "finalUrl": "/announcements",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Kelas Saya",
+    "href": "/classes",
+    "httpStatus": 200,
+    "finalUrl": "/classes",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Ujian",
+    "href": "/exams",
+    "httpStatus": 200,
+    "finalUrl": "/exams",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Perpustakaan",
+    "href": "/library",
+    "httpStatus": 200,
+    "finalUrl": "/library",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Tanya AI",
+    "href": "/ai-assistant",
+    "httpStatus": 200,
+    "finalUrl": "/ai-assistant",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Pesan",
+    "href": "/messages",
+    "httpStatus": 200,
+    "finalUrl": "/messages",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Flashcard",
+    "href": "/flashcards",
+    "httpStatus": 200,
+    "finalUrl": "/flashcards",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Tukar Keahlian",
+    "href": "/skill-exchange",
+    "httpStatus": 200,
+    "finalUrl": "/skill-exchange",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Nilai Saya",
+    "href": "/grades",
+    "httpStatus": 200,
+    "finalUrl": "/grades",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Pencapaian",
+    "href": "/achievements",
+    "httpStatus": 200,
+    "finalUrl": "/achievements",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Sertifikat",
+    "href": "/certificates",
+    "httpStatus": 200,
+    "finalUrl": "/certificates",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Komunitas",
+    "href": "/community",
+    "httpStatus": 200,
+    "finalUrl": "/community",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Evaluasi Dosen",
+    "href": "/evaluations",
+    "httpStatus": 200,
+    "finalUrl": "/evaluations",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Pengajuan",
+    "href": "/requests",
+    "httpStatus": 200,
+    "finalUrl": "/requests",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "STUDENT",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Beranda",
+    "href": "/ta",
+    "httpStatus": 200,
+    "finalUrl": "/ta",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Kalender",
+    "href": "/calendar",
+    "httpStatus": 200,
+    "finalUrl": "/calendar",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Notifikasi",
+    "href": "/notifications",
+    "httpStatus": 200,
+    "finalUrl": "/notifications",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Pengumuman",
+    "href": "/announcements",
+    "httpStatus": 200,
+    "finalUrl": "/announcements",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Kelas Asistensi",
+    "href": "/ta/classes",
+    "httpStatus": 200,
+    "finalUrl": "/ta/classes",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Koreksi",
+    "href": "/ta/grading",
+    "httpStatus": 200,
+    "finalUrl": "/ta/grading",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Pantau Ujian",
+    "href": "/ta/exam-monitor",
+    "httpStatus": 200,
+    "finalUrl": "/ta/exam-monitor",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Kelas Saya",
+    "href": "/classes",
+    "httpStatus": 200,
+    "finalUrl": "/classes",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Ujian",
+    "href": "/exams",
+    "httpStatus": 200,
+    "finalUrl": "/exams",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Perpustakaan",
+    "href": "/library",
+    "httpStatus": 200,
+    "finalUrl": "/library",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Tanya AI",
+    "href": "/ai-assistant",
+    "httpStatus": 200,
+    "finalUrl": "/ai-assistant",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Pesan",
+    "href": "/messages",
+    "httpStatus": 200,
+    "finalUrl": "/messages",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Flashcard",
+    "href": "/flashcards",
+    "httpStatus": 200,
+    "finalUrl": "/flashcards",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Tukar Keahlian",
+    "href": "/skill-exchange",
+    "httpStatus": 200,
+    "finalUrl": "/skill-exchange",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Nilai Saya",
+    "href": "/grades",
+    "httpStatus": 200,
+    "finalUrl": "/grades",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Pencapaian",
+    "href": "/achievements",
+    "httpStatus": 200,
+    "finalUrl": "/achievements",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Sertifikat",
+    "href": "/certificates",
+    "httpStatus": 200,
+    "finalUrl": "/certificates",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Komunitas",
+    "href": "/community",
+    "httpStatus": 200,
+    "finalUrl": "/community",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Evaluasi Dosen",
+    "href": "/evaluations",
+    "httpStatus": 200,
+    "finalUrl": "/evaluations",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Pengajuan",
+    "href": "/requests",
+    "httpStatus": 200,
+    "finalUrl": "/requests",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "TEACHING_ASSISTANT",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Beranda",
+    "href": "/lecturer",
+    "httpStatus": 200,
+    "finalUrl": "/lecturer",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Kalender",
+    "href": "/calendar",
+    "httpStatus": 200,
+    "finalUrl": "/calendar",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Notifikasi",
+    "href": "/notifications",
+    "httpStatus": 200,
+    "finalUrl": "/notifications",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Pengumuman",
+    "href": "/announcements",
+    "httpStatus": 200,
+    "finalUrl": "/announcements",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Kelas Saya",
+    "href": "/classes",
+    "httpStatus": 200,
+    "finalUrl": "/classes",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Berita Acara",
+    "href": "/lecturer/journals",
+    "httpStatus": 200,
+    "finalUrl": "/lecturer/journals",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Tinjau Konten",
+    "href": "/lecturer/content-review",
+    "httpStatus": 200,
+    "finalUrl": "/lecturer/content-review",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Perpustakaan",
+    "href": "/library",
+    "httpStatus": 200,
+    "finalUrl": "/library",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Ujian dan Kuis",
+    "href": "/exams",
+    "httpStatus": 200,
+    "finalUrl": "/exams",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Bank Soal",
+    "href": "/exams/question-bank",
+    "httpStatus": 200,
+    "finalUrl": "/exams/question-bank",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Periksa Jawaban",
+    "href": "/exams/review",
+    "httpStatus": 200,
+    "finalUrl": "/exams/review",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Analisis Soal",
+    "href": "/exams/analysis",
+    "httpStatus": 200,
+    "finalUrl": "/exams/analysis",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Rubrik",
+    "href": "/lecturer/rubrics",
+    "httpStatus": 200,
+    "finalUrl": "/lecturer/rubrics",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Buku Nilai",
+    "href": "/analytics",
+    "httpStatus": 200,
+    "finalUrl": "/analytics",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Sanggahan",
+    "href": "/lecturer/disputes",
+    "httpStatus": 200,
+    "finalUrl": "/lecturer/disputes",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Pesan",
+    "href": "/messages",
+    "httpStatus": 200,
+    "finalUrl": "/messages",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Mahasiswa Bimbingan",
+    "href": "/lecturer/mentoring",
+    "httpStatus": 200,
+    "finalUrl": "/lecturer/mentoring",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Hasil Evaluasi",
+    "href": "/lecturer/evaluations",
+    "httpStatus": 200,
+    "finalUrl": "/lecturer/evaluations",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Komunitas",
+    "href": "/community",
+    "httpStatus": 200,
+    "finalUrl": "/community",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "LECTURER",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Beranda",
+    "href": "/coordinator",
+    "httpStatus": 200,
+    "finalUrl": "/coordinator",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Kalender",
+    "href": "/calendar",
+    "httpStatus": 200,
+    "finalUrl": "/calendar",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Notifikasi",
+    "href": "/notifications",
+    "httpStatus": 200,
+    "finalUrl": "/notifications",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Pengumuman",
+    "href": "/announcements",
+    "httpStatus": 200,
+    "finalUrl": "/announcements",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Kurikulum",
+    "href": "/coordinator/curriculum",
+    "httpStatus": 200,
+    "finalUrl": "/coordinator/curriculum",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Mata Kuliah",
+    "href": "/coordinator/courses",
+    "httpStatus": 200,
+    "finalUrl": "/coordinator/courses",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Penugasan Dosen",
+    "href": "/coordinator/assignments",
+    "httpStatus": 200,
+    "finalUrl": "/coordinator/assignments",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Evaluasi Dosen",
+    "href": "/coordinator/evaluations",
+    "httpStatus": 200,
+    "finalUrl": "/coordinator/evaluations",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Perkuliahan",
+    "href": "/coordinator/monitoring",
+    "httpStatus": 200,
+    "finalUrl": "/coordinator/monitoring",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Mahasiswa Berisiko",
+    "href": "/coordinator/monitoring/at-risk",
+    "httpStatus": 200,
+    "finalUrl": "/coordinator/monitoring/at-risk",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Persetujuan Nilai",
+    "href": "/coordinator/approvals",
+    "httpStatus": 200,
+    "finalUrl": "/coordinator/approvals",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Laporan",
+    "href": "/coordinator/reports",
+    "httpStatus": 200,
+    "finalUrl": "/coordinator/reports",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "PROGRAM_COORDINATOR",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Beranda",
+    "href": "/staff",
+    "httpStatus": 200,
+    "finalUrl": "/staff",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Kalender",
+    "href": "/calendar",
+    "httpStatus": 200,
+    "finalUrl": "/calendar",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Notifikasi",
+    "href": "/notifications",
+    "httpStatus": 200,
+    "finalUrl": "/notifications",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Mahasiswa",
+    "href": "/staff/master/students",
+    "httpStatus": 200,
+    "finalUrl": "/staff/master/students",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Dosen",
+    "href": "/staff/master/lecturers",
+    "httpStatus": 200,
+    "finalUrl": "/staff/master/lecturers",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Data Akademik",
+    "href": "/staff/master",
+    "httpStatus": 200,
+    "finalUrl": "/staff/master",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Jadwal",
+    "href": "/staff/schedules",
+    "httpStatus": 200,
+    "finalUrl": "/staff/schedules",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Kelas dan Peserta",
+    "href": "/staff/classes",
+    "httpStatus": 200,
+    "finalUrl": "/staff/classes",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Nilai dan Presensi",
+    "href": "/staff/grades",
+    "httpStatus": 200,
+    "finalUrl": "/staff/grades",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Pengajuan Masuk",
+    "href": "/staff/services/verification",
+    "httpStatus": 200,
+    "finalUrl": "/staff/services/verification",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Pengumuman dan Acara",
+    "href": "/staff/announcements",
+    "httpStatus": 200,
+    "finalUrl": "/staff/announcements",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Berkas dan Sertifikat",
+    "href": "/staff/content",
+    "httpStatus": 200,
+    "finalUrl": "/staff/content",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Moderasi",
+    "href": "/staff/moderation",
+    "httpStatus": 200,
+    "finalUrl": "/staff/moderation",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "ACADEMIC_STAFF",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Beranda",
+    "href": "/admin/system",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Notifikasi",
+    "href": "/notifications",
+    "httpStatus": 200,
+    "finalUrl": "/notifications",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Pemantauan",
+    "href": "/admin/system/monitoring",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/monitoring",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Integrasi",
+    "href": "/admin/system/integrations",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/integrations",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Sesi Login",
+    "href": "/admin/system/security",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/security",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Cadangan Data",
+    "href": "/admin/system/backup",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/backup",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Pengaturan Sistem",
+    "href": "/admin/system/settings",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Log Audit",
+    "href": "/admin/system/audit",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/audit",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SYSTEM_ADMIN",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Beranda",
+    "href": "/admin",
+    "httpStatus": 200,
+    "finalUrl": "/admin",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Notifikasi",
+    "href": "/notifications",
+    "httpStatus": 200,
+    "finalUrl": "/notifications",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Akun Pengguna",
+    "href": "/admin/users",
+    "httpStatus": 200,
+    "finalUrl": "/admin/users",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Peran dan Akses",
+    "href": "/admin/roles",
+    "httpStatus": 200,
+    "finalUrl": "/admin/roles",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Aturan Akademik",
+    "href": "/admin/policies",
+    "httpStatus": 200,
+    "finalUrl": "/admin/policies",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Pengumuman Kampus",
+    "href": "/admin/announcements",
+    "httpStatus": 200,
+    "finalUrl": "/admin/announcements",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Pemantauan",
+    "href": "/admin/system/monitoring",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/monitoring",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Integrasi",
+    "href": "/admin/system/integrations",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/integrations",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Sesi Login",
+    "href": "/admin/system/security",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/security",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Cadangan Data",
+    "href": "/admin/system/backup",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/backup",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Pengaturan Sistem",
+    "href": "/admin/system/settings",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Log Audit",
+    "href": "/admin/system/audit",
+    "httpStatus": 200,
+    "finalUrl": "/admin/system/audit",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Pengaturan",
+    "href": "/settings",
+    "httpStatus": 200,
+    "finalUrl": "/settings",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Bantuan",
+    "href": "/help",
+    "httpStatus": 200,
+    "finalUrl": "/help",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  },
+  {
+    "role": "SUPER_ADMIN",
+    "label": "Privasi",
+    "href": "/transparency",
+    "httpStatus": 200,
+    "finalUrl": "/transparency",
+    "statusCategory": "OK",
+    "bodySnippet": "<!DOCTYPE html><html lang=\"id\" class=\"__variable_7b2c2c __variable_9a7ad0\"><head><meta charSet=\"utf-"
+  }
+]

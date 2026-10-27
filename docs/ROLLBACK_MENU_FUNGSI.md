@@ -11,6 +11,7 @@ Dokumen ini mencatat titik balik (*rollback checkpoints*), tag git, migrasi data
 | Titik Awal | `pra-menu-fungsi` | Tidak ada | `git checkout pra-menu-fungsi` |
 | Fase 0 — Jaring Pengaman & Baseline | `fase-0-baseline` | Tidak ada | `git revert fase-0-baseline` |
 | Fase 1 — Perbaikan Keamanan | `fase-1-keamanan` | Tidak ada | `git revert fase-0-baseline..fase-1-keamanan` |
+| Fase 2 — Inventaris & Audit Menu Otomatis | `fase-2-audit` | Tidak ada | `git revert fase-1-keamanan..fase-2-audit` |
 
 ---
 

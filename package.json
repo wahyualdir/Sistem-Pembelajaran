@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "check:rls": "tsx scripts/check-rls.ts",
+    "audit:menu": "tsx scripts/audit-menu.ts",
     "snapshot": "node scripts/generate-schema-snapshot.mjs",
     "check:snapshot": "node scripts/generate-schema-snapshot.mjs && git diff --exit-code docs/schema-snapshot.md",
     "check:plan": "node scripts/check-plan-vs-snapshot.mjs",
