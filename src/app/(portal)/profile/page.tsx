@@ -21,6 +21,8 @@ import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import { getStudentBadgesAction } from '@/modules/academic/badge-certificate-actions';
 import { getAktivitasSayaAction } from '@/modules/academic/aktivitas-actions';
 import { ProfileAktivitasSection } from '@/components/aktivitas/profile-aktivitas-section';
+import { getMyAdvisorAction } from '@/modules/academic/advisory-actions';
+import { DosenWaliCard } from '@/components/home/dosen-wali-card';
 
 export default async function ProfilePage() {
   const userContext = await getCurrentUserWithRoles();
@@ -33,6 +35,8 @@ export default async function ProfilePage() {
   const fullName = profile?.full_name || 'Wahyu Aldiriyanto';
   const badges = await getStudentBadgesAction(user.id).catch(() => []);
   const { aktivitas, daftarKelas } = await getAktivitasSayaAction().catch(() => ({ aktivitas: [], daftarKelas: [] }));
+  const isStudent = activeRole === 'STUDENT' || roles.some((r: any) => (r.roles as any)?.code === 'STUDENT');
+  const myAdvisor = isStudent ? await getMyAdvisorAction().catch(() => null) : null;
 
   const initials =
     fullName
@@ -192,7 +196,7 @@ export default async function ProfilePage() {
                 </div>
                 <div className="flex justify-between p-3">
                   <span className="text-gray-dark font-bold">Dosen Pembimbing Akademik (Wali)</span>
-                  <span className="font-bold text-ink">Dr. Ardiansyah, S.T., M.Kom.</span>
+                  <span className="font-bold text-ink">{myAdvisor?.advisor_name || 'Belum Ditetapkan'}</span>
                 </div>
                 <div className="flex justify-between p-3 bg-gray-soft/40">
                   <span className="text-gray-dark font-bold">Status Keaktifan Kuliah</span>
@@ -203,6 +207,9 @@ export default async function ProfilePage() {
                   <span className="font-bold text-ink">Seleksi Mandiri Prestasi (2024)</span>
                 </div>
               </div>
+
+              {/* KARTU DOSEN WALI SAYA */}
+              {isStudent && <DosenWaliCard advisor={myAdvisor} />}
 
               {/* Tombol Aksi Cepat ke Fitur Akademik */}
               <div className="pt-2 flex flex-wrap gap-2">

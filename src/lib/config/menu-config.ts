@@ -238,6 +238,7 @@ const LECTURER_GROUPS: MenuGroup[] = [
     items: [
       { id: 'dsn-pesan', label: 'Pesan', href: '/messages', icon: MessageCircle, roles: ['LECTURER'] },
       { id: 'dsn-mhs-bimbingan', label: 'Mahasiswa Bimbingan', href: '/lecturer/mentoring', icon: Users, roles: ['LECTURER'] },
+      { id: 'dsn-perwalian', label: 'Perwalian', href: '/lecturer/advisory', icon: GraduationCap, roles: ['LECTURER'] },
       { id: 'dsn-hasil-evaluasi', label: 'Hasil Evaluasi', href: '/lecturer/evaluations', icon: ClipboardCheck, roles: ['LECTURER'] },
       { id: 'dsn-komunitas', label: 'Komunitas', href: '/community', icon: MessageSquare, roles: ['LECTURER'] },
     ],

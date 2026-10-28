@@ -40,3 +40,24 @@ Dokumen ini mencatat keputusan arsitektural dan teknis yang diambil selama imple
 5. **Pembatalan & Penghapusan Peran Dekan (DEAN)**:
    - Berdasarkan instruksi pengguna (*"hapus saja role dekan dan push dan commit semua codenya"*), peran `DEAN` dihapus dari kode aplikasi (`menu-config.ts`, `workspace/page.tsx`, `actions.ts`, `demo-users.ts`, `superadmin-users-hub-view.tsx`) dan database (`20261028000043_remove_dean_role.sql`).
    - Rencana Fase 5 (Dekan) ditiadakan; alur kerja berlanjut langsung dari Fase 4 ke Fase 6.
+
+
+---
+
+## Keputusan Fase 2: Dosen Wali sebagai Tugas Melekat pada LECTURER
+
+1. **Skema Relasi Perwalian & Catatan Internal**:
+   - Dibuatkan tabel `academic_advisories` dengan partial unique index pada `(student_user_id) WHERE (status = 'ACTIVE')` untuk menjamin bahwa 1 mahasiswa hanya memiliki 1 Dosen Wali aktif pada satu waktu.
+   - Dibuatkan tabel `advisory_notes` untuk mencatat konsultasi dan bimbingan akademik secara internal (hanya dapat dibaca oleh dosen wali yang bersangkutan, Kaprodi, Sekprodi, dan Super Admin). Kolom `note_for_student` disediakan apabila dosen ingin meninggalkan catatan yang secara eksplisit dapat dibaca mahasiswa.
+2. **Fungsi Atomik Pergantian Dosen Wali**:
+   - Dibuatkan fungsi Postgres `assign_academic_advisor(p_student_id, p_advisor_id, p_program_id, p_angkatan, p_assigned_by)` yang secara otomatis mengakhiri perwalian aktif sebelumnya (`status = 'ENDED'`, `valid_until = now()`) dan menyisipkan perwalian aktif baru secara transaksional.
+   - Helper `is_advisor_of(student_id)` dan `advisor_of_current_student()` didefinisikan dengan `SECURITY DEFINER`, `SET search_path = ''`, `STABLE` dan hak eksekusi hanya untuk `authenticated`.
+3. **Penyempitan Otorisasi Peringatan Dini**:
+   - Otorisasi pada `getMentoringRiskListAction` diperketat agar membatasi data hanya untuk `advisor_user_id = pengguna saat ini`. Peran lain yang kebetulan memiliki wewenang jabatan tetap hanya melihat mahasiswa bimbingannya sendiri lewat jalur ini.
+4. **Navigasi & UI Dosen Wali**:
+   - Menu `dsn-perwalian` ditambahkan pada `LECTURER_GROUPS` dengan tautan `/lecturer/advisory` tanpa mengubah, memindahkan, atau menghapus menu dosen yang sudah ada (`dsn-mhs-bimbingan`).
+   - Halaman `/lecturer/advisory` dan `/lecturer/mentoring` menyajikan hub terpadu dengan 3 tab: Mahasiswa Bimbingan & Status Risiko, Antrean Persetujuan KRS Mahasiswa Perwalian, dan Catatan Konsultasi Perwalian.
+5. **Kartu Dosen Wali Sisi Mahasiswa**:
+   - Dosen Wali ditampilkan di Beranda Mahasiswa (`/student`) dan Profil Pengguna (`/profile`) via `getMyAdvisorAction`. Jika belum ada wali aktif, menampilkan status 'Belum Ditetapkan'.
+6. **Migrasi Data Legacy**:
+   - Disediakan skrip migrasi sekali jalan `scripts/migrate-legacy-advisories.js` untuk memindahkan data relasi legacy `dosenWaliId` ke `academic_advisories`.

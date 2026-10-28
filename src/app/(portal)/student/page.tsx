@@ -13,6 +13,7 @@ import { getAktivitasSayaAction } from '@/modules/academic/aktivitas-actions';
 import { isFeatureFlagActive } from '@/lib/config/features';
 import { getSemesterWeaveAction } from '@/modules/academic/semester-weave-actions';
 import type { SemesterWeaveData } from '@/lib/akademik/semester-weave';
+import { getMyAdvisorAction } from '@/modules/academic/advisory-actions';
 import { StudentDashboardClient } from './student-dashboard-client';
 
 export default async function StudentPortalPage() {
@@ -29,6 +30,7 @@ export default async function StudentPortalPage() {
     academicStatusRes,
     dailyPrioritiesRes,
     aktivitasRes,
+    advisorRes,
     kainSemesterRes,
   ] = await Promise.allSettled([
     getHomeBannerAction(),
@@ -40,6 +42,7 @@ export default async function StudentPortalPage() {
     getStudentAcademicStatusAction(),
     getDailyPrioritiesAction(),
     getAktivitasSayaAction(),
+    getMyAdvisorAction(),
     ...(isKainSemesterActive ? [getSemesterWeaveAction()] : []),
   ]);
 
@@ -52,6 +55,7 @@ export default async function StudentPortalPage() {
   const academicStatus = academicStatusRes.status === 'fulfilled' ? academicStatusRes.value : [];
   const dailyPriorities = dailyPrioritiesRes.status === 'fulfilled' ? dailyPrioritiesRes.value : [];
   const aktivitas = aktivitasRes.status === 'fulfilled' ? aktivitasRes.value.aktivitas : [];
+  const myAdvisor = advisorRes && advisorRes.status === 'fulfilled' ? advisorRes.value : null;
 
   let semesterWeave: SemesterWeaveData | null = null;
   if (isKainSemesterActive && kainSemesterRes && kainSemesterRes.status === 'fulfilled') {
@@ -73,6 +77,7 @@ export default async function StudentPortalPage() {
       dailyPriorities={dailyPriorities}
       aktivitas={aktivitas}
       semesterWeave={semesterWeave}
+      myAdvisor={myAdvisor}
     />
   );
 }

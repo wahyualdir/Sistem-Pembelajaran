@@ -678,7 +678,11 @@ export async function canViewStudent(
     return isEnrolledInLecturerClass;
   }
 
-  if (role === 'PROGRAM_COORDINATOR') {
+  if (role === 'ACADEMIC_STAFF' || role === 'SUPER_ADMIN') {
+    return true;
+  }
+
+  if (role === 'PROGRAM_COORDINATOR' || role === 'PROGRAM_SECRETARY') {
     const coordProdi =
       (viewer as AuthenticatedViewer).prodiId ??
       (viewer as any).profile?.prodi_id ??

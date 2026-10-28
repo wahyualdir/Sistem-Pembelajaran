@@ -77,16 +77,7 @@ export async function getClassRiskSummaryAction(
  */
 export async function getMentoringRiskListAction(): Promise<StudentRiskEvaluation[]> {
   const userContext = await getCurrentUserWithRoles();
-  if (!userContext?.user || userContext.activeRole === 'SYSTEM_ADMIN') return [];
-
-  const role = userContext.activeRole;
-  const isAuthorized =
-    role === 'LECTURER' ||
-    role === 'PROGRAM_COORDINATOR' ||
-    role === 'ACADEMIC_STAFF' ||
-    role === 'SUPER_ADMIN';
-
-  if (!isAuthorized) return [];
+  if (!userContext?.user || userContext.activeRole === 'SYSTEM_ADMIN' || userContext.activeRole === 'STUDENT') return [];
 
   return getMentoringAdviseesRisk(userContext.user.id);
 }

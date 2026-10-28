@@ -109,13 +109,19 @@ Titik awal audit: commit `9d2a590` (`pra-menu-fungsi`) pada cabang `perbaikan/me
 
 ---
 
+---
+
+---
+
+---
+
 ## 2. Hasil Audit Inventaris Menu Otomatis (Fase 2)
 
 Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 
 ### 2.1. Ringkasan Status Menu
-- **Total Entri Menu**: 122
-- **BERFUNGSI**: 122
+- **Total Entri Menu**: 123
+- **BERFUNGSI**: 123
 - **SEBAGIAN**: 0
 - **TIRUAN**: 0
 - **RUSAK**: 0
@@ -123,7 +129,7 @@ Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 
 ---
 
-### 2.2. Tabel Hasil Audit Menu per Peran (122 Entri)
+### 2.2. Tabel Hasil Audit Menu per Peran (123 Entri)
 
 | Role | Menu | href | Jenis Rute | Sumber Data | Aksi Palsu | Status | Bukti |
 |---|---|---|---|---|---|---|---|
@@ -187,6 +193,7 @@ Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 | `LECTURER` | Sanggahan | `/lecturer/disputes` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/disputes/page.tsx |
 | `LECTURER` | Pesan | `/messages` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/messages/page.tsx |
 | `LECTURER` | Mahasiswa Bimbingan | `/lecturer/mentoring` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/mentoring/page.tsx |
+| `LECTURER` | Perwalian | `/lecturer/advisory` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/advisory/page.tsx |
 | `LECTURER` | Hasil Evaluasi | `/lecturer/evaluations` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/evaluations/page.tsx |
 | `LECTURER` | Komunitas | `/community` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/community/page.tsx |
 | `LECTURER` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |

@@ -34,6 +34,8 @@ import {
   getHomeBannerAction,
 } from '@/modules/academic/home-actions';
 import { StudentAcademicStatusCard } from '@/components/home/student-academic-status-card';
+import { DosenWaliCard } from '@/components/home/dosen-wali-card';
+import type { MyAdvisorData } from '@/modules/academic/advisory-actions';
 import { SemesterWeave } from '@/components/home/semester-weave';
 import { DailyPriorityCard } from '@/components/home/daily-priority-card';
 import { KartuAktivitasDashboard } from '@/components/aktivitas/kartu-aktivitas-dashboard';
@@ -64,6 +66,7 @@ export interface StudentDashboardClientProps {
   dailyPriorities?: DailyPriorityItem[];
   aktivitas?: ItemAktivitasHarian[];
   semesterWeave?: SemesterWeaveData | null;
+  myAdvisor?: MyAdvisorData | null;
 }
 
 export function StudentDashboardClient({
@@ -77,6 +80,7 @@ export function StudentDashboardClient({
   dailyPriorities = [],
   aktivitas = [],
   semesterWeave = null,
+  myAdvisor = null,
 }: StudentDashboardClientProps) {
   const currentBannerData: HomeBannerData = bannerData || {
     primary: {
@@ -346,6 +350,9 @@ export function StudentDashboardClient({
           {/* ========================================================= */}
           {/* ZONA 3: REFLEKSI SEMESTER, RITME & KONSISTENSI BELAJAR    */}
           {/* ========================================================= */}
+          {/* KARTU DOSEN WALI SAYA */}
+          <DosenWaliCard advisor={myAdvisor} />
+
           {/* PERINGATAN RISIKO AKADEMIK / KAIN SEMESTER */}
           {semesterWeave ? (
             <SemesterWeave

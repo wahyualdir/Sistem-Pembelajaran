@@ -1,7 +1,7 @@
 # Snapshot Skema Database SIAJAR (Single Source of Truth)
 
 > **Tanggal Dihasilkan**: 12 Oktober 2026  
-> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..45 dijalankan dari nol.  
+> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..46 dijalankan dari nol.  
 > **Tujuan**: Sumber kebenaran tunggal (*Single Source of Truth*) nama tabel, kolom, tipe data, foreign key, dan kebijakan RLS untuk perencanaan dan implementasi Fase 3.
 
 ---
@@ -90,6 +90,40 @@
 | `absence_requests_insert` | `INSERT` | `authenticated` | PERMISSIVE |
 | `absence_requests_select` | `SELECT` | `authenticated` | PERMISSIVE |
 | `absence_requests_update` | `UPDATE` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.academic_advisories`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 11
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `advisor_user_id` | `uuid` | NO | - |
+| `student_user_id` | `uuid` | NO | - |
+| `program_id` | `uuid` | YES | - |
+| `angkatan` | `integer` | YES | - |
+| `valid_from` | `timestamp with time zone` | NO | `now()` |
+| `valid_until` | `timestamp with time zone` | YES | - |
+| `status` | `text` | NO | `'ACTIVE'` |
+| `assigned_by` | `uuid` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `advisor_user_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- FOREIGN KEY: `assigned_by` -> `public.profiles(id)` (ON DELETE SET NULL)
+- FOREIGN KEY: `program_id` -> `public.programs(id)` (ON DELETE SET NULL)
+- FOREIGN KEY: `student_user_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `academic_advisories_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `academic_advisories_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 
@@ -191,6 +225,34 @@
 | `activity_logging_prefs_insert` | `INSERT` | `authenticated` | PERMISSIVE |
 | `activity_logging_prefs_select` | `SELECT` | `authenticated` | PERMISSIVE |
 | `activity_logging_prefs_update` | `ALL` | `authenticated` | PERMISSIVE |
+
+---
+
+### Tabel: `public.advisory_notes`
+
+- **Status Row Level Security (RLS)**: AKTIF (Enabled)
+- **Jumlah Kolom**: 7
+
+| Nama Kolom | Tipe Data | Nullable | Nilai Default |
+|---|---|---|---|
+| `id` | `uuid` | NO | `gen_random_uuid()` |
+| `advisory_id` | `uuid` | NO | - |
+| `author_id` | `uuid` | NO | - |
+| `content` | `text` | NO | - |
+| `note_for_student` | `text` | YES | - |
+| `created_at` | `timestamp with time zone` | NO | `now()` |
+| `updated_at` | `timestamp with time zone` | NO | `now()` |
+
+**Batasan Integritas & Foreign Key**:
+- FOREIGN KEY: `advisory_id` -> `public.academic_advisories(id)` (ON DELETE CASCADE)
+- FOREIGN KEY: `author_id` -> `public.profiles(id)` (ON DELETE RESTRICT)
+- PRIMARY KEY: `id`
+
+**Kebijakan RLS (Security Policies)**:
+| Nama Kebijakan | Operasi | Peran (*Roles*) | Tipe |
+|---|---|---|---|
+| `advisory_notes_select` | `SELECT` | `authenticated` | PERMISSIVE |
+| `advisory_notes_write` | `ALL` | `authenticated` | PERMISSIVE |
 
 ---
 
