@@ -174,12 +174,13 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
 
       if (
         authError &&
-        (password === process.env.SUPERADMIN_PASSWORD || password === 'wahyu11') &&
+        process.env.SUPERADMIN_PASSWORD &&
+        password === process.env.SUPERADMIN_PASSWORD &&
         (isSuperAdminByIdentifier || targetEmail === 'admin@ruangkampus.test' || targetEmail === '20120009@staf.siajar.test')
       ) {
         const retry = await supabase.auth.signInWithPassword({
           email: targetEmail,
-          password: 'Password123!',
+          password: process.env.SUPERADMIN_PASSWORD,
         });
         if (!retry.error && retry.data?.user) {
           authData = retry.data;

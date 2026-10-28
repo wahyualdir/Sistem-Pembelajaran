@@ -1,70 +1,75 @@
-# Peta Persistensi Data SIAJAR (Audit Arsitektur & Perencanaan Fase 3)
+# Peta Persistensi Data SIAJAR (Fase 6 — Inventarisasi Penuh In-Memory ke Database)
 
-Dokumen ini disusun sebagai audit menyeluruh baca-saja (*read-only architecture audit*) terhadap lapisan persistensi data aplikasi SIAJAR per 11 Oktober 2026. Audit ini memetakan setiap domain fungsional terhadap skema tabel database Supabase, berkas migrasi (`supabase/migrations/`), dan realitas pemanggilan kode di mode non-demo (`NODE_ENV=production` atau `ALLOW_DEMO_AUTH=false`).
+Dokumen ini disusun sebagai audit dan inventarisasi menyeluruh lapisan persistensi data aplikasi SIAJAR per 27 Oktober 2026 sesuai mandat **Fase 6 Instruksi Menu Berfungsi**. Dokumen ini memetakan seluruh store memori `globalThis.__siajar*` terhadap skema tabel Supabase, berkas migrasi (`supabase/migrations/`), flag `FF_PERSISTENCE_*`, dan arsitektur repository dengan dua adapter (Supabase saat online & store memori ber-seed saat mode demo offline).
 
 ---
 
-## 1. Tabel Matriks Persistensi Per Domain
+## 1. Inventarisasi Lengkap Store In-Memory (`globalThis.__siajar*`)
 
-| No | Domain Fungsional | Tabel Database Supabase + File Migrasi | Sudah Ada Migrasi? | Pemakaian Kode Non-Demo (DB / In-Memory / Campuran) | Status Domain Inti di Produksi | Keterangan & Rujukan File |
+Total ditemukan **47 store unik** di 95 titik kode aktif:
+
+| No | Nama Store (`globalThis`) | Modul & Berkas Utama | Tabel Supabase Padanan | Flag Persistensi | Status Skema DB | Pola Adapter & Mekanisme Sinkronisasi |
 |---|---|---|---|---|---|---|
-| 1 | **Identitas & Autentikasi** | `auth.users`, `public.profiles`, `public.roles`, `public.user_roles`, `public.audit_logs`<br>`20260930000001_identity_schema.sql`<br>`20261011000015_audit_logs_hardening.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | `src/modules/identity/actions.ts` menggunakan Supabase Auth & table `profiles`/`user_roles`. Demo auth diblokir di production. |
-| 2 | **Master Data Akademik** (Prodi, TA, Kurikulum) | `public.programs`, `public.academic_years`, `public.courses`<br>`20260930000003_academic_core.sql`<br>`20260930000008_master_data.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | `src/modules/academic/actions.ts` memanggil relasi ke `courses` dan `academic_years`. Tabel prodi adalah `programs` (bukan `study_programs`). |
-| 3 | **Master Data Fasilitas & Pengguna** (Ruang, Gedung, Profil) | `rooms`, `buildings`, `lecturers`, `students`<br>`20260930000008_master_data.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Menampung NIP/NIDN dosen, NIM mahasiswa, serta titik koordinat GPS ruang untuk geofencing. |
-| 4 | **Kelas Perkuliahan** | `classes`<br>`20260930000003_academic_core.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | `listMyClassesAction()` membaca langsung tabel `classes` dengan RLS sesuai dosen/mahasiswa/asisten. |
-| 5 | **Peserta Kelas (Enrollment)** | `enrollments`<br>`20260930000003_academic_core.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Hubungan many-to-many mahasiswa terhadap rombongan belajar kelas. |
-| 6 | **Materi Pembelajaran** | `materials`, `material_attachments`<br>`20260930000007_materials.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Mendukung tautan dokumen, video, slide, dan unduhan materi perkuliahan per pertemuan. |
-| 7 | **Tugas & Pengumpulan** | `assignments`, `submissions`<br>`20260930000004_assignments.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Mendukung tenggat waktu, upload berkas tugas mahasiswa, serta penilaian tugas oleh dosen/asisten. |
-| 8 | **Nilai & Gradebook** | `public.grades`, `public.grade_history`<br>`20260930000005_grading.sql` | **YA** | **Campuran** | ⚠️ **Sebagian In-Memory** | Tabel riil di database adalah `public.grades` (bukan `student_grades`). Struktur skema DB sudah lengkap dengan item_type, score, max_score, dan riwayat revisi; beberapa komponen visual cepat memiliki fallback in-memory. |
-| 9 | **Presensi (Sesi & Kehadiran)** | *Belum ada tabel di DB* (usulan: `attendance_sessions`, `attendance_records`) | **TIDAK** | **In-Memory** | 🚨 **KRITIS: HANYA IN-MEMORY** | `src/modules/academic/attendance-actions.ts` saat ini menyimpan sesi presensi, QR token, dan kehadiran mahasiswa pada variabel memori `AttendanceStore`. **Hilang saat restart container/serverless.** |
-| 10 | **Izin & Sakit (Dispensasi)** | *Belum ada tabel di DB* (usulan: `leave_permits`, `leave_attachments`) | **TIDAK** | **In-Memory** | 🚨 **KRITIS: HANYA IN-MEMORY** | Disimpan di array `AttendanceStore.leaves`. Bukti surat dokter & status approval belum tersimpan ke PostgreSQL. |
-| 11 | **Kuis & Ujian (CBT)** | *Belum ada tabel di DB* (usulan: `quizzes`, `quiz_questions`, `quiz_options`) | **TIDAK** | **In-Memory** | 🚨 **KRITIS: HANYA IN-MEMORY** | `src/modules/academic/quiz-actions.ts` menyimpan bank soal dan konfigurasi ujian di `QuizStore.quizzes`. |
-| 12 | **Attempt Ujian & Lembar Jawaban** | *Belum ada tabel di DB* (usulan: `exam_attempts`, `exam_answers`) | **TIDAK** | **In-Memory** | 🚨 **KRITIS: HANYA IN-MEMORY** | `QuizStore.attempts` dan `QuizStore.answers` beroperasi in-memory. Skor autograder kuis hilang saat server redeploy. |
-| 13 | **Telemetri Proctoring & Anomali** | *Belum ada tabel di DB* (usulan: `exam_events`, `proctoring_logs`) | **TIDAK** | **In-Memory** | 🚨 **KRITIS: HANYA IN-MEMORY** | Event `TAB_SWITCH`, `WINDOW_BLUR`, `EXIT_FULLSCREEN`, dan `LECTURER_INTERVENTION` disimpan di `QuizStore.events`. Audit proctoring belum persisten ke database. |
-| 14 | **Sanggahan / Keberatan Nilai Ujian** | *Belum ada tabel di DB* (usulan: `exam_disputes`) | **TIDAK** | **In-Memory** | 🚨 **KRITIS: HANYA IN-MEMORY** | Sanggahan nilai ujian mahasiswa disimpan di `QuizStore.disputes`. |
-| 15 | **Perubahan Nilai Final (Grade Change)** | `public.grade_change_requests` (kolom: `old_score`, `proposed_score`, `executed_by`)<br>`20260930000009_grade_changes.sql`<br>`20261011000010_grade_status_executed.sql`<br>`20261011000014_grade_change_decision_and_execution.sql` | **YA** | **Campuran** | **Siap DB (Migrasi Dibuat)** | Skema tabel menggunakan kolom `old_score` (bukan `previous_score`), RLS prodi, RPC `decide_grade_change` dan `execute_grade_change` sudah lengkap di berkas migrasi; kode memiliki fallback ke `NilaiStore` jika Supabase offline. |
-| 16 | **Asisten Dosen (TA)** | `teaching_assistants`, `ta_assignments`<br>`20260930000011_assistants.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Penugasan asisten ke kelas dan batasan wewenang koreksi tugas/kuis. |
-| 17 | **Forum & Diskusi Kelas** | `forums`, `threads`, `posts`<br>`20260930000012_discussions.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Diskusi perkuliahan, komentar mahasiswa, dan penandaan postingan dosen. |
-| 18 | **Pengumuman Kampus** | `announcements`<br>`20260930000010_announcements.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Broadcast pengumuman tingkat prodi maupun universitas. |
-| 19 | **Notifikasi Sistem** | `notifications`<br>`20260930000006_notifications.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Notifikasi inbox pengguna dengan status `is_read`. |
-| 20 | **Audit Ekspor Nilai** | `grade_export_logs`<br>`20260930000013_grade_export_audit.sql` | **YA** | **DB** | **Persisten Penuh (DB)** | Jejak forensik ekspor nilai format Excel/PDF oleh dosen. |
-| 21 | **Event & Webinar Kampus** | *Belum ada tabel di DB* (usulan: `campus_events`, `event_registrations`) | **TIDAK** | **In-Memory** | ⚠️ **Fitur Baru (In-Memory / Demo)** | Ditampilkan via mock demo data di `src/app/(portal)/community/events`. |
-| 22 | **Pustaka Digital (Library)** | *Belum ada tabel di DB* (usulan: `library_items`, `library_loans`) | **TIDAK** | **In-Memory** | ⚠️ **Fitur Baru (In-Memory / Demo)** | Katalog buku, jurnal open access, dan status pinjaman masih berupa demo array. |
-| 23 | **Sertifikat & Lencana (Badges)** | *Belum ada tabel di DB* (usulan: `certificates`, `student_badges`) | **TIDAK** | **In-Memory** | ⚠️ **Fitur Baru (In-Memory / Demo)** | Template sertifikat dan klaim lencana mahasiswa masih statis/in-memory. |
-| 24 | **Portofolio Mahasiswa** | *Belum ada tabel di DB* (usulan: `portfolios`, `portfolio_items`) | **TIDAK** | **In-Memory** | ⚠️ **Fitur Baru (In-Memory / Demo)** | Portofolio proyek mandiri dan repositori GitHub mahasiswa belum disimpan ke DB. |
+| 1 | `__siajarAkademik` | `src/lib/auth/class-access.ts`, `src/modules/academic/actions.ts`, `ai-material-rag.ts` | `public.classes`, `public.enrollments`, `public.courses`, `public.semesters`, `public.programs` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: Supabase RPC / table query saat online; fallback array in-memory saat demo offline |
+| 2 | `__siajarAsdos` | `src/lib/auth/class-access.ts`, `src/modules/academic/actions.ts` | `public.class_assistants` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: tabel `class_assistants` dengan RLS; fallback memori kanonis |
+| 3 | `__siajarMaster` | `src/modules/academic/actions.ts` | `public.programs`, `public.semesters`, `public.courses` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: master kurikulum & prodi |
+| 4 | `__siajarTugas` | `src/lib/auth/class-access.ts`, `src/modules/academic/actions.ts`, `similarity-actions.ts` | `public.assignments`, `public.submissions` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: penugasan kelas, deadline, lampiran, dan pengumpulan mahasiswa |
+| 5 | `__siajarMateri` | `src/lib/auth/class-access.ts`, `src/modules/academic/actions.ts`, `ai-material-rag.ts` | `public.materials`, `public.material_progress` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: modul perkuliahan markdown/file |
+| 6 | `__siajarMateriProgres` | `src/lib/auth/class-access.ts`, `src/modules/early-warning/evaluator.ts` | `public.materi_progres` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: persentase pembacaan modul per mahasiswa |
+| 7 | `__siajarNilai` | `src/modules/academic/actions.ts` | `public.grades`, `public.grade_history`, `public.grade_items` | `FF_PERSISTENCE_GRADES` | **Sudah Ada** | Dual Adapter: penilaian tugas, kuis, UTS, UAS, dan pembukuan nilai |
+| 8 | `__siajarUbah` | `src/modules/academic/actions.ts`, `src/app/api/smoke-actions/route.ts` | `public.grade_change_requests` | `FF_PERSISTENCE_GRADES` | **Sudah Ada** | Dual Adapter: permohonan koreksi nilai pasca finalisasi |
+| 9 | `__siajarPresensi` | `src/lib/auth/class-access.ts`, `src/modules/academic/attendance-actions.ts` | `public.attendance_sessions`, `public.attendance_records`, `public.leave_permits` | `FF_PERSISTENCE_ATTENDANCE` | **Sudah Ada** | Dual Adapter: sesi presensi GPS/QR, pencatatan hadir, dan perizinan sakit/dispensasi |
+| 10 | `__siajarKuis` | `src/lib/auth/class-access.ts`, `src/modules/academic/quiz-store.ts`, `cbt-exam-actions.ts` | `public.quizzes`, `public.quiz_questions`, `public.quiz_options`, `public.exam_attempts`, `public.exam_answers` | `FF_PERSISTENCE_QUIZ` | **Sudah Ada** | Dual Adapter: bank soal, sesi ujian CBT, kunci jawaban, dan rekaman jawaban |
+| 11 | `__siajarDisputes` | `src/modules/academic/dispute-actions.ts`, `cbt-dispute-actions.ts` | `public.exam_disputes`, `public.grade_disputes` | `FF_PERSISTENCE_DISPUTES` | **Sudah Ada** | Dual Adapter: sanggahan nomor soal CBT & sanggahan nilai final |
+| 12 | `__siajarDisputeMessages` | `src/modules/academic/dispute-actions.ts` | `public.grade_dispute_messages` | `FF_PERSISTENCE_DISPUTES` | **Sudah Ada** | Dual Adapter: utas percakapan sanggah nilai antara mahasiswa & dosen |
+| 13 | `__siajarForumTopics` | `src/modules/academic/actions.ts`, `forum-actions.ts` | `public.discussions` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: utas forum diskusi kelas dan forum terbuka |
+| 14 | `__siajarForumReplies` | `src/modules/academic/actions.ts`, `forum-actions.ts` | `public.discussion_replies` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: balasan komentar forum diskusi |
+| 15 | `__siajarDiskusi` | `src/modules/academic/forum-actions.ts` | `public.discussions` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Alias kompatibilitas internal forum |
+| 16 | `__siajarBalasan` | `src/modules/academic/forum-actions.ts` | `public.discussion_replies` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Alias kompatibilitas internal balasan forum |
+| 17 | `__siajarUmum` | `src/modules/academic/actions.ts` | `public.announcements` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: pengumuman kelas & institusi |
+| 18 | `__siajarNotif` | `src/modules/academic/actions.ts`, `channels/in-app.ts` | `public.notifications` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: notifikasi in-app pengguna |
+| 19 | `__siajarNotifDedup` | `src/modules/notifications/channels/in-app.ts` | Dedup via DB unique constraint `notifications` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Cache pencegah duplikasi notifikasi in-app |
+| 20 | `__siajarNotifPrefs` | `src/modules/notifications/preferences.ts` | `public.notification_preferences` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: preferensi kanal (email, WhatsApp, in-app) per pengguna |
+| 21 | `__siajarNotifLegacyItems` | `src/modules/notifications/legacy-bridge.ts` | `public.notifications` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Jembatan kompatibilitas notifikasi sistem legacy |
+| 22 | `__siajarNotifLegacyPrefs` | `src/modules/notifications/legacy-bridge.ts` | `public.notification_preferences` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Jembatan kompatibilitas preferensi notifikasi legacy |
+| 23 | `__siajarScheduledNotifications` | `src/modules/notifications/scheduled.ts` | `public.scheduled_notifications` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: antrean notifikasi terjadwal (reminder tugas, kuis) |
+| 24 | `__siajarLibraryCatalog` | `src/modules/academic/actions.ts` | `public.library_items`, `public.library_loans` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: katalog repositori digital buku & modul perkuliahan |
+| 25 | `__siajarCertificates` | `src/modules/academic/badge-certificate-actions.ts` | `public.certificates`, `public.student_badges` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: sertifikat kelulusan mata kuliah & lencana gamifikasi |
+| 26 | `__siajarAktivitasHarian` | `src/lib/aktivitas/pencatat.ts`, `seed.ts` | `public.daily_activities` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: pelacakan aktivitas harian mahasiswa & dosen |
+| 27 | `__siajarCustomPasswords` | `src/modules/identity/actions.ts` | `auth.users` via Supabase Auth | `FF_PERSISTENCE_IDENTITY` | **Sudah Ada** | **Keamanan Ketat**: Di production sandi wajib disimpan dan diverifikasi via Supabase Auth; dilarang keras menyimpan sandi di memori |
+| 28 | `__siajarEarlyWarningPolicy` | `src/modules/early-warning/policies.ts` | `public.institution_policies` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: kebijakan ambang batas IPK & kehadiran drop-out early warning |
+| 29 | `__siajarRiskEvaluations` | `src/modules/early-warning/evaluator.ts` | `public.student_risk_evaluations` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: rekaman evaluasi mahasiswa berisiko akademik |
+| 30 | `__siajarEvalPeriods` | `src/modules/academic/evaluation-actions.ts` | `public.evaluation_periods` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: periode survei EDOM (Evaluasi Dosen oleh Mahasiswa) |
+| 31 | `__siajarEvalReceipts` | `src/modules/academic/evaluation-actions.ts` | `public.evaluation_completions` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: bukti anonim partisipasi pengisian kuesioner evaluasi |
+| 32 | `__siajarEvalResponses` | `src/modules/academic/evaluation-actions.ts` | `public.evaluation_responses`, `public.evaluation_answers` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: agregasi skor kuesioner dan umpan balik kualitatif EDOM |
+| 33 | `__siajarExtensions` | `src/modules/academic/assignment-late-actions.ts` | `public.assignment_extensions` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: dispensasi penambahan waktu pengumpulan tugas |
+| 34 | `__siajarFeedbackComments` | `src/modules/academic/feedback-comment-actions.ts`, `rubric-actions.ts` | `public.feedback_comments` | `FF_PERSISTENCE_GRADES` | **Sudah Ada** | Dual Adapter: komentar umpan balik terinci pada penilaian tugas |
+| 35 | `__siajarRubrics` | `src/modules/academic/rubric-actions.ts` | `public.rubrics`, `public.rubric_criteria`, `public.rubric_levels` | `FF_PERSISTENCE_GRADES` | **Sudah Ada** | Dual Adapter: rubrik penilaian multi-kriteria berbasis CPL/CPMK |
+| 36 | `__siajarRubricScores` | `src/modules/academic/rubric-actions.ts` | `public.rubric_scores` | `FF_PERSISTENCE_GRADES` | **Sudah Ada** | Dual Adapter: skor rubrik per kriteria pada tugas mahasiswa |
+| 37 | `__siajarGroupSets` | `src/modules/academic/group-actions.ts` | `public.group_sets` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: konfigurasi himpunan kelompok tugas kelas |
+| 38 | `__siajarGroups` | `src/modules/academic/group-actions.ts` | `public.groups`, `public.group_members` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: kelompok belajar mahasiswa dan keanggotaan tim |
+| 39 | `__siajarSimilarityConfigs` | `src/modules/academic/similarity-engine.ts` | `public.similarity_runs` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: sesi komputasi kemiripan tugas & esai |
+| 40 | `__siajarSimilarityPairs` | `src/modules/academic/similarity-engine.ts` | `public.similarity_pairs` | `FF_PERSISTENCE_CONTENT` | **Sudah Ada** | Dual Adapter: pasangan submission yang terindikasi plagiarisme |
+| 41 | `__siajarQuestionRevisionFlags` | `src/modules/academic/item-analysis-actions.ts` | `public.exam_item_stats` | `FF_PERSISTENCE_QUIZ` | **Sudah Ada** | Dual Adapter: status butir soal anomali (daya pembeda buruk / terlalu sulit) |
+| 42 | `__siajarUserProfiles` | `src/modules/notifications/service.ts` | `public.profiles` | `FF_PERSISTENCE_IDENTITY` | **Sudah Ada** | Cache pembacaan nama dan kontak profil pengguna |
+| 43 | `__siajarCalendarTokens` | `src/modules/academic/calendar-sync-actions.ts` | `public.user_identifiers` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Dual Adapter: token privat iCal sinkronisasi kalender perkuliahan |
+| 44 | `__siajarTokenToUserMap` | `src/modules/academic/calendar-sync-actions.ts` | `public.user_identifiers` | `FF_PERSISTENCE_ACADEMIC` | **Sudah Ada** | Pemetaan token iCal ke user ID |
+| 45 | `__siajarAiChatHistory` | `src/modules/academic/ai-material-rag.ts` | Memori Sesi RAG | - | **In-Memory Sesi** | Riwayat percakapan asistensi RAG berbasis sesi kontekstual aktif |
+| 46 | `__siajarAiExamRateLimit` | `src/modules/academic/ai-quiz-generator.ts` | Distributed Redis / Memori | - | **Distributed Cache** | Pembatasan pemanggilan AI Exam Generator per dosen per hari |
+| 47 | `__siajarJoinFails` | `src/modules/academic/actions.ts` | Upstash Redis (`join_class:<uid>`) / Memori | - | **Distributed Rate Limit** | Pembatasan percobaan kode gabung kelas (maksimal 8 kegagalan per 10 menit) |
 
 ---
 
-## 2. Ringkasan Temuan Kritis (Critical Core Domains)
+## 2. Pola Arsitektur: Repository dengan Dua Adapter
 
-Domain inti akademik berikut **berjalan in-memory di lingkungan produksi saat ini** dan memerlukan prioritas pembuatan migrasi skema database di **Fase 3**:
-
-1. **Presensi Kuliah & Izin Sakit**: 
-   - Komponen: Validasi Geofencing, Dynamic QR Code, Rekap Kehadiran, Surat Keterangan Sakit/Izin.
-   - Dampak: Rekap 75% kehadiran untuk syarat ujian akan terhapus saat instance server restart.
-2. **CBT Ujian & Kuis**:
-   - Komponen: Bank Soal, Lembar Jawaban Mahasiswa, Skor Autograder, Batas Waktu Sesi.
-   - Dampak: Nilai pengerjaan ujian mahasiswa hilang jika container Next.js berputar (*recycle*).
-3. **Telemetri Proctoring & Log Intervensi**:
-   - Komponen: Deteksi blur layar, tab switch, peringatan pengawas, tambah waktu, diskualifikasi.
-   - Dampak: Bukti kecurangan dan integritas evaluasi tidak tersimpan dalam audit permanen database.
-4. **Keberatan / Sanggahan Nilai**:
-   - Komponen: Sanggahan mahasiswa terhadap soal kuis/tugas dan tanggapan dosen.
-   - Dampak: Riwayat klarifikasi hilang, berpotensi memicu sengketa nilai tidak terdokumentasi.
+Setiap modul domain mengimplementasikan pemisahan tegas antara logika bisnis (server action) dengan sumber data:
+1. **Supabase Adapter**: Aktif ketika koneksi database Supabase tersedia (`checkSupabaseOnline() === true`) dan feature flag domain terkait aktif (`FF_PERSISTENCE_*`). Seluruh manipulasi data diverifikasi oleh Row Level Security (RLS) di level Postgres.
+2. **In-Memory Demo Adapter**: Aktif saat aplikasi dijalankan secara lokal tanpa database Supabase atau dalam skenario demo offline. Menyediakan data seed yang konsisten sehingga seluruh fitur antarmuka tetap berfungsi tanpa error.
+3. **Penyembunyian Abstraksi**: Komponen UI tidak pernah memeriksa `if (isOnline)`. Seluruh pemanggilan antarmuka menerima bentuk respons standar yang sama (`ActionResponse<T>`).
 
 ---
 
-## 3. Rekomendasi Rencana Kerja Fase 3 (Database Persistence)
+## 3. Pembatas Laju Terdistribusi (Rate Limiter)
 
-Untuk menuntaskan Fase 3 tanpa mengganggu stabilitas:
-1. **Migration Batch 1 (Presensi & Izin)**:
-   - Buat tabel `attendance_sessions` (geofence lat/lng, radius, qr_secret, valid_until).
-   - Buat tabel `attendance_records` (student_id, session_id, check_in_time, method, status).
-   - Buat tabel `leave_permits` (student_id, class_id, permit_type, permit_date, reason, file_url, status, reviewer_id).
-2. **Migration Batch 2 (CBT & Proctoring)**:
-   - Buat tabel `quizzes`, `quiz_questions`, `quiz_options`.
-   - Buat tabel `exam_attempts`, `exam_answers`.
-   - Buat tabel `exam_events` (proctoring telemetry & lecturer interventions dengan constraint tipe event).
-   - Buat tabel `exam_disputes`.
-3. **Migration Batch 3 (Konten Kampus & Layanan Staf)**:
-   - Buat tabel `library_items`, `campus_events`, `certificates`, `student_portfolios`.
+- **Login Lockout**: Membatasi 5 kegagalan autentikasi beruntun per akun. Terhubung ke Upstash Redis REST API (`siajar:rl:lockout:<identifier>`) saat `UPSTASH_REDIS_REST_URL` dikonfigurasi, dengan fallback memori lokal terisolasi saat offline.
+- **Join Class Lockout**: Membatasi maksimal 8 kesalahan kode kelas per 10 menit per mahasiswa. Terhubung ke Upstash Redis REST API (`siajar:rl:join_class:<userId>`) secara transparan.

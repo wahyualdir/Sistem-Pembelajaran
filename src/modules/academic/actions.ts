@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
+import { syncDistributedRateLimit, getDistributedRateLimit } from '@/modules/identity/rate-limiter';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import type { ActionResponse } from '@/modules/identity/types';
 import { SYNTHETIC_DEMO_USERS } from '@/modules/identity/demo-users';
@@ -338,19 +339,19 @@ export async function joinClassAction(code: unknown): Promise<ActionResponse<Cla
   const me = await actor('STUDENT');
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
 
-  if (joinBlocked(me.id)) return { ok: false, error: 'Terlalu banyak kode yang salah. Coba lagi dalam beberapa menit.' };
+  if (await joinBlocked(me.id)) return { ok: false, error: 'Terlalu banyak kode yang salah. Coba lagi dalam beberapa menit.' };
 
   let item: ClassItem;
   if (me.online) {
     const supabase = await createClient();
     const { data, error } = await supabase.rpc('join_class_by_code', { p_code: parsed.data });
-    if (error?.message?.includes('CODE_INVALID')) joinFailed(me.id);
+    if (error?.message?.includes('CODE_INVALID')) await joinFailed(me.id);
     if (error || !data) return { ok: false, error: pesan(error?.message) };
     item = data as ClassItem;
   } else {
     const c = mem.classes.find((x) => x.join_code === parsed.data && x.status === 'OPEN');
     if (!c) {
-      joinFailed(me.id);
+      await joinFailed(me.id);
       return { ok: false, error: ERR.CODE_INVALID };
     }
     if (mem.enrollments.some((e) => e.class_id === c.id && e.student_id === me.id))
@@ -359,6 +360,7 @@ export async function joinClassAction(code: unknown): Promise<ActionResponse<Cla
       return { ok: false, error: ERR.CLASS_FULL };
     mem.enrollments.push({ class_id: c.id, student_id: me.id, student_name: me.name, enrolled_at: new Date().toISOString() });
     item = pub(c);
+    await joinReset(me.id);
   }
   revalidatePath('/classes');
   return { ok: true, data: item };
@@ -2623,15 +2625,22 @@ export async function getDiscussionAction(classId: string, did: string): Promise
 // 8 kode salah dalam 10 menit memblokir percobaan berikutnya. Penyimpanan memori per instance, sama seperti pembatas login;
 // pada serverless gunakan Redis eksternal (Bagian 9.2).
 const joinFails: Map<string, { n: number; reset: number }> = ((globalThis as any).__siajarJoinFails ??= new Map());
-function joinBlocked(uid: string) {
+async function joinBlocked(uid: string): Promise<boolean> {
+  const redisCount = await getDistributedRateLimit(`join_class:${uid}`);
+  if (redisCount !== null && redisCount >= 8) return true;
   const e = joinFails.get(uid);
   return !!e && Date.now() < e.reset && e.n >= 8;
 }
-function joinFailed(uid: string) {
+async function joinFailed(uid: string): Promise<void> {
   const now = Date.now();
   const e = joinFails.get(uid);
   if (!e || now >= e.reset) joinFails.set(uid, { n: 1, reset: now + 10 * 60_000 });
   else e.n += 1;
+  void syncDistributedRateLimit(`join_class:${uid}`, 600);
+}
+async function joinReset(uid: string): Promise<void> {
+  joinFails.delete(uid);
+  void syncDistributedRateLimit(`join_class:${uid}`, 0, true);
 }
 
 // ---------- Rekap nilai kelas (Bagian 5.1, 8.4) ----------
