@@ -1,4 +1,5 @@
 'use client';
+import { toast } from '@/components/ui/toast';
 
 import React, { useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -94,7 +95,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
       return;
     }
     if (!selectedAttemptId) {
-      alert('Pilih sesi ujian yang ingin diajukan keberatan.');
+      toast.error('Pilih sesi ujian yang ingin diajukan keberatan.');
       return;
     }
     startTransition(async () => {
@@ -107,7 +108,7 @@ export function GradesHubView({ grades, attempts, quizzes, isDemo = true }: Grad
           setDisputeReason('');
         }, 1500);
       } else {
-        alert(res.error || 'Gagal mengajukan keberatan nilai.');
+        toast.error(res.error || 'Gagal mengajukan keberatan nilai.');
       }
     });
   };

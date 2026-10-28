@@ -18,6 +18,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { toast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
 import {
   getCoordinatorEvaluationReportAction,
@@ -135,7 +136,7 @@ export function CoordinatorReportsHubView({
     });
   };
 
-  const PRODI_REPORTS = isDemo
+  const prodiReports = isDemo
     ? [
         {
           id: 'rep-1',
@@ -164,7 +165,7 @@ export function CoordinatorReportsHubView({
       ]
     : [];
 
-  const CPL_ACHIEVEMENTS = isDemo
+  const cplAchievements = isDemo
     ? [
         {
           code: 'CPL-01',
@@ -268,7 +269,7 @@ export function CoordinatorReportsHubView({
             </div>
           </div>
 
-          {PRODI_REPORTS.length === 0 ? (
+          {prodiReports.length === 0 ? (
             <div className="p-10 text-center space-y-3 border-2 border-dashed border-black/30 bg-white">
               <FileSpreadsheet className="h-10 w-10 text-[#111111]/40 mx-auto" />
               <h3 className="font-heading font-black text-base sm:text-lg text-[#111111]">Belum Ada Dokumen Laporan</h3>
@@ -278,7 +279,7 @@ export function CoordinatorReportsHubView({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {PRODI_REPORTS.map((rep) => (
+              {prodiReports.map((rep) => (
                 <div key={rep.id} className="border-2 border-black bg-white p-5 shadow-retro space-y-3 flex flex-col justify-between">
                   <div className="space-y-2">
                     <span className="px-2.5 py-0.5 border-2 border-black bg-gray-soft text-xs font-bold shadow-retro-sm">
@@ -291,7 +292,19 @@ export function CoordinatorReportsHubView({
                     <span className="text-xs font-bold text-[#111111]">{rep.date}</span>
                     <button
                       type="button"
-                      onClick={() => alert(`Mengunduh dokumen: ${rep.title}`)}
+                      onClick={() => {
+                        const content = `LAPORAN PROGRAM STUDI\nJudul: ${rep.title}\nPeriode: ${rep.period}\nMetrik Ringkasan: ${rep.metrics}\nTanggal Terbit: ${rep.date}\n`;
+                        const blob = new Blob([content], { type: 'text/plain;charset=utf-8;' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${rep.title.replace(/[^a-zA-Z0-9_-]/g, '_')}.txt`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        toast.success(`Dokumen ${rep.title} berhasil diunduh.`, 'Laporan Prodi');
+                      }}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 border-2 border-black bg-white text-[#111111] text-xs font-bold hover:bg-gray-soft transition-all cursor-pointer shadow-retro-sm"
                     >
                       <Download className="h-3.5 w-3.5 text-[#ED1C24]" />
@@ -453,7 +466,7 @@ export function CoordinatorReportsHubView({
             </span>
           </div>
 
-          {CPL_ACHIEVEMENTS.length === 0 ? (
+          {cplAchievements.length === 0 ? (
             <div className="p-10 text-center space-y-3 border-2 border-dashed border-black/30 bg-white">
               <TrendingUp className="h-10 w-10 text-[#111111]/40 mx-auto" />
               <h3 className="font-heading font-black text-base sm:text-lg text-[#111111]">Belum Ada Pemetaan CPL</h3>
@@ -463,7 +476,7 @@ export function CoordinatorReportsHubView({
             </div>
           ) : (
             <div className="space-y-4">
-              {CPL_ACHIEVEMENTS.map((cpl) => (
+              {cplAchievements.map((cpl) => (
                 <div key={cpl.code} className="border-2 border-black bg-white p-5 shadow-retro space-y-3">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div className="flex items-center gap-2.5">

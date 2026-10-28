@@ -17,6 +17,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { toast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
 import { createLibraryItemAction } from '@/modules/academic/actions';
 
@@ -224,7 +225,7 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
                   <div className="pt-4 border-t-2 border-black/10 flex items-center justify-between">
                     <button
                       type="button"
-                      onClick={() => alert(`Buku "${book.title}" disimpan ke daftar bacaan pribadi.`)}
+                      onClick={() => toast.success(`Buku "${book.title}" disimpan ke daftar bacaan pribadi.`, 'Daftar Bacaan')}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-white text-black text-xs font-bold hover:bg-gray-soft shadow-xs transition-colors cursor-pointer"
                     >
                       <Bookmark className="h-3.5 w-3.5" />
@@ -233,7 +234,19 @@ export function LibraryHubView({ books, isStaffOrLecturer, isDemo = true }: Libr
 
                     <button
                       type="button"
-                      onClick={() => alert(`Mengunduh berkas pustaka: ${book.title}.pdf`)}
+                      onClick={() => {
+                        const content = `%PDF-1.4\n1 0 obj << /Title (${book.title}) /Author (${book.author}) >>\nstream\nPustaka Digital SIAJAR: ${book.title} oleh ${book.author} (${book.year})\nendstream\nendobj\ntrailer << /Root 1 0 R >> %%EOF`;
+                        const blob = new Blob([content], { type: 'application/pdf' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${book.title.replace(/[^a-zA-Z0-9_-]/g, '_')}.pdf`;
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+                        toast.success(`Berkas pustaka "${book.title}.pdf" berhasil diunduh.`, 'Pustaka Digital');
+                      }}
                       className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border-2 border-black bg-gray-soft text-black text-xs font-bold shadow-xs hover:bg-black hover:text-white transition-all cursor-pointer"
                     >
                       <Download className="h-3.5 w-3.5" />

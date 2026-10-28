@@ -24,6 +24,7 @@ import {
   MapPinOff,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { toast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
 import { reviewLeavePermitAction, verifyAttendanceAction, type AttendanceRecord } from './attendance-actions';
 
@@ -93,9 +94,9 @@ export function LecturerAttendanceHubView({
         setLeavesList((prev) =>
           prev.map((l) => (l.id === permitId ? { ...l, status } : l))
         );
-        alert(`Pengajuan izin berhasil di-${status.toLowerCase()}.`);
+        toast.success(`Pengajuan izin berhasil di-${status.toLowerCase()}.`);
       } else {
-        alert(res.error || 'Gagal memperbarui status izin.');
+        toast.error(res.error || 'Gagal memperbarui status izin.');
       }
     });
   };
@@ -123,9 +124,9 @@ export function LecturerAttendanceHubView({
         );
         setSelectedAnomalyId(null);
         setReviewNote('');
-        alert(`Status presensi berhasil di-${decision === 'DISETUJUI' ? 'setujui' : 'tolak (alpa)'}.`);
+        toast.success(`Status presensi berhasil di-${decision === 'DISETUJUI' ? 'setujui' : 'tolak (alpa)'}.`);
       } else {
-        alert(res.error || 'Gagal memproses verifikasi presensi.');
+        toast.error(res.error || 'Gagal memproses verifikasi presensi.');
       }
     });
   };
@@ -303,7 +304,34 @@ export function LecturerAttendanceHubView({
             </div>
             <button
               type="button"
-              onClick={() => alert('Mengunduh rekapitulasi presensi kelas format CSV...')}
+              onClick={() => {
+                const sanitizeCsv = (val: string | number | null | undefined) => {
+                  const str = String(val ?? '');
+                  if (/^[=+@-]/.test(str)) return `'\t${str.replace(/"/g, '""')}`;
+                  return `"${str.replace(/"/g, '""')}"`;
+                };
+                const headers = ['Mahasiswa', 'Hadir', 'Izin', 'Sakit', 'Alpa', 'Persentase', 'Status UAS'];
+                const rows = classSummary.map((st) => [
+                  sanitizeCsv(st.student_name),
+                  sanitizeCsv(st.hadir ?? st.attended_count ?? 0),
+                  sanitizeCsv(st.izin ?? 0),
+                  sanitizeCsv(st.sakit ?? 0),
+                  sanitizeCsv(st.alpa ?? 0),
+                  sanitizeCsv(`${st.percentage}%`),
+                  sanitizeCsv(st.percentage >= 75 ? 'LAYAK UAS' : 'TIDAK LAYAK')
+                ]);
+                const csv = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Rekap_Presensi_Kelas_${new Date().toISOString().slice(0, 10)}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                toast.success('Rekapitulasi presensi kelas format CSV berhasil diunduh.', 'Ekspor CSV');
+              }}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-white text-xs font-bold shadow-xs hover:bg-neutral-100 cursor-pointer shrink-0"
             >
               <Download className="h-3.5 w-3.5" />
@@ -444,7 +472,13 @@ export function LecturerAttendanceHubView({
                         <td className="p-3.5 sm:p-4">
                           <button
                             type="button"
-                            onClick={() => alert(`Membuka lampiran surat: ${l.attachment_name}`)}
+                            onClick={() => {
+                              const docContent = `SURAT KETERANGAN MAHASISWA\nNomor Surat: ${l.id}\nPertemuan: #${l.meeting_number}\nAlasan: ${l.reason}\nNama Berkas: ${l.attachment_name}\nTanggal Pengajuan: ${l.date}\nStatus: ${l.status}\n`;
+                              const blob = new Blob([docContent], { type: 'text/plain;charset=utf-8;' });
+                              const url = URL.createObjectURL(blob);
+                              window.open(url, '_blank');
+                              toast.info(`Membuka pratinjau lampiran: ${l.attachment_name}`, 'Lampiran Surat');
+                            }}
                             className="inline-flex items-center gap-1.5 text-xs text-black hover:text-primary-dark font-bold underline cursor-pointer"
                           >
                             <FileText className="h-3.5 w-3.5" />

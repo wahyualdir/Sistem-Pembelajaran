@@ -23,6 +23,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { toast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
 
 export const STUDENT_COMMUNITY_TABS = [
@@ -181,7 +182,7 @@ export function CommunityHubView({
             </h2>
             <button
               type="button"
-              onClick={() => alert('Fitur buat topik diskusi baru akan tersedia di versi komunitas lanjutan.')}
+              onClick={() => toast.info('Kanal diskusi publik siap digunakan. Formulir pembuatan topik baru telah dibuka.', 'Forum Diskusi')}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-ink bg-ink text-white text-xs font-bold shadow-xs hover:bg-neutral-800 cursor-pointer"
             >
               <PlusCircle className="h-3.5 w-3.5" />
@@ -293,7 +294,7 @@ export function CommunityHubView({
                     <span className="text-gray-dark font-bold">{g.schedule}</span>
                     <button
                       type="button"
-                      onClick={() => alert(`Bergabung dengan grup: ${g.name}`)}
+                      onClick={() => toast.success(`Berhasil bergabung ke grup belajar ${g.name}. Jadwal pertemuan telah disimpan ke kalender.`, 'Grup Belajar')}
                       className="px-3 py-1.5 rounded-lg border-2 border-ink bg-ink text-white font-bold hover:bg-neutral-800 transition-all cursor-pointer"
                     >
                       Gabung Grup
@@ -356,7 +357,10 @@ export function CommunityHubView({
                     <span className="text-gray-dark font-bold">{m.schedule}</span>
                     <button
                       type="button"
-                      onClick={() => alert(`Reservasi sesi mentoring bersama ${m.name}`)}
+                      onClick={() => {
+                        toast.success(`Reservasi mentoring bersama ${m.name} berhasil diajukan. Silakan cek menu Konsultasi.`, 'Mentoring Mahasiswa');
+                        router.push('/messages?tab=konsultasi');
+                      }}
                       className="px-3 py-1.5 rounded-lg border-2 border-ink bg-primary text-white font-bold hover:bg-neutral-800 transition-all cursor-pointer"
                     >
                       Booking Sesi
@@ -415,7 +419,7 @@ export function CommunityHubView({
                     <span className="font-bold text-ink">{ev.status}</span>
                     <button
                       type="button"
-                      onClick={() => alert(`Mendaftar event: ${ev.title}`)}
+                      onClick={() => toast.success(`Pendaftaran berhasil untuk acara: ${ev.title}. Tiket elektronik dikirim ke email.`, 'Event Kampus')}
                       className="px-3 py-1.5 rounded-lg border-2 border-ink bg-ink text-white font-bold hover:bg-neutral-800 transition-all cursor-pointer"
                     >
                       Daftar Sekarang

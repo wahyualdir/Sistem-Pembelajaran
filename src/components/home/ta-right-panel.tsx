@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { toast } from '@/components/ui/toast';
 import Link from 'next/link';
 import {
   Play,
@@ -379,7 +380,19 @@ export function TaRightPanel({
               <div className="grid grid-cols-3 gap-2 border-y border-[#E8E5DE] py-3">
                 <button
                   type="button"
-                  onClick={() => alert(`Modul Praktikum & Panduan Asistensi ${effectiveCourse.code} (${effectiveCourse.title}) siap diunduh.`)}
+                  onClick={() => {
+                    const content = `PANDUAN ASISTENSI & MODUL PRAKTIKUM\nMata Kuliah: ${effectiveCourse.title}\nKode: ${effectiveCourse.code}\nSemester: Ganjil 2026/2027\n`;
+                    const blob = new Blob([content], { type: 'text/plain;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `Modul_Praktikum_${effectiveCourse.code}.txt`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                    toast.success(`Modul Praktikum & Panduan Asistensi ${effectiveCourse.code} (${effectiveCourse.title}) berhasil diunduh.`, 'Unduh Dokumen');
+                  }}
                   className="flex flex-col items-center justify-center py-1.5 rounded-lg hover:bg-[#FAF8F5] transition-colors text-ink focus-visible:outline-none cursor-pointer"
                   title="Unduh Panduan Praktikum"
                 >

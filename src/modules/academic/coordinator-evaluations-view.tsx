@@ -1,4 +1,5 @@
 'use client';
+import { toast } from '@/components/ui/toast';
 
 import React, { useState, useEffect } from 'react';
 import {
@@ -51,7 +52,7 @@ export function CoordinatorEvaluationsView() {
     if (res.ok) {
       setPeriod({ ...period, status: nextStatus });
     } else {
-      alert(res.error || 'Gagal mengubah status periode.');
+      toast.error(res.error || 'Gagal mengubah status periode.');
     }
   };
 
@@ -63,7 +64,7 @@ export function CoordinatorEvaluationsView() {
       setReminderMessage(res.message || 'Pengingat berhasil dikirim.');
       setTimeout(() => setReminderMessage(null), 3000);
     } else {
-      alert(res.error || 'Gagal mengirim pengingat.');
+      toast.error(res.error || 'Gagal mengirim pengingat.');
     }
   };
 
@@ -79,7 +80,7 @@ export function CoordinatorEvaluationsView() {
       link.click();
       document.body.removeChild(link);
     } else {
-      alert(res.error || 'Gagal mengekspor CSV.');
+      toast.error(res.error || 'Gagal mengekspor CSV.');
     }
   };
 
