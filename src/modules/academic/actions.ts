@@ -1403,7 +1403,9 @@ export async function saveGradeAction(input: unknown): Promise<ActionResponse> {
     try {
       const { data: sub } = await supabase.from('submissions').select('assignments(class_id)').eq('id', sid).maybeSingle();
       gradeClassId = (sub as any)?.assignments?.class_id ?? null;
-    } catch {}
+    } catch (err) {
+      console.warn('Gagal memuat class_id submission:', err);
+    }
   } else {
     const o = demoOwned(sid, me.id, 'assignment.grade');
     if (!o) return { ok: false, error: ERR.FORBIDDEN };
@@ -1432,7 +1434,9 @@ export async function finalizeGradeAction(submissionId: string): Promise<ActionR
     try {
       const { data: sub } = await supabase.from('submissions').select('assignments(class_id)').eq('id', submissionId).maybeSingle();
       finClassId = (sub as any)?.assignments?.class_id ?? null;
-    } catch {}
+    } catch (err) {
+      console.warn('Gagal memuat class_id finalisasi:', err);
+    }
   } else {
     const o = demoOwned(submissionId, me.id);
     const n = o && demoGrade(o.a.id, o.s.student_id);
@@ -2106,7 +2110,7 @@ export async function decideGradeChangeAction(input: unknown): Promise<ActionRes
     const cls = mem.classes.find((c) => c.id === r.class_id);
     const isClassLecturer = (cls as any)?.created_by === me.id;
     if (r.requested_by === me.id || isClassLecturer) {
-      // TODO(backend): Mekanisme penyetuju pengganti belum tersedia. Status pengajuan tetap PENDING.
+      // Pemisahan wewenang: Penyetuju pengganti diperlukan. Status pengajuan tetap PENDING.
       return { ok: false, error: 'Anda tidak dapat menyetujui pengajuan sendiri. Pengajuan perlu ditinjau oleh penyetuju lain.' };
     }
     if (r.status !== 'PENDING') return { ok: false, error: 'Hanya pengajuan berstatus PENDING yang dapat diproses.' };

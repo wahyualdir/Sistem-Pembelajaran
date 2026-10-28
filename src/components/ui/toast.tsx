@@ -91,8 +91,8 @@ export function Toaster() {
             role="alert"
             className={cn(
               'pointer-events-auto flex items-start gap-3 p-3.5 sm:p-4 rounded-xl border-2 border-black shadow-retro bg-surface text-ink transition-all animate-fade-in',
-              isSuccess && 'border-black bg-[#F4F9F4]',
-              isDestructive && 'border-black bg-[#FFF5F5] text-red-900',
+              isSuccess && 'border-black bg-[#E8F5E9]',
+              isDestructive && 'border-black bg-[#FEF2F2] text-red-900',
               isInfo && 'border-black bg-gray-soft'
             )}
           >

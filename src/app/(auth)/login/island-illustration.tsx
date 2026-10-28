@@ -57,7 +57,7 @@ export function IslandIllustration() {
         {/* Jalur Penghubung 2 ke 3 (Garis Putus-Putus Animasi Menuju Terkunci) */}
         <path
           d="M 272 56 C 305 42, 340 70, 368 56"
-          stroke="#D6D0C4"
+          stroke="#D6D3CB"
           strokeWidth="2"
           strokeDasharray="6 6"
           strokeLinecap="round"
@@ -69,15 +69,15 @@ export function IslandIllustration() {
           {/* Kontur Garis Pulau */}
           <path
             d="M 18 44 C 18 24, 38 18, 52 18 C 68 18, 86 26, 86 44 C 86 64, 68 70, 52 70 C 34 70, 18 64, 18 44 Z"
-            stroke="#BBF7D0"
+            stroke="#E8F5E9"
             strokeWidth="1.5"
-            fill="#F0FDF4"
+            fill="#E8F5E9"
           />
           {/* Node Lingkaran Selesai dengan Tanda Centang */}
-          <circle cx="52" cy="44" r="15" stroke="#16A34A" strokeWidth="2.5" fill="#DCFCE7" />
+          <circle cx="52" cy="44" r="15" stroke="#059669" strokeWidth="2.5" fill="#E8F5E9" />
           <path
             d="M 46 44 L 50 48 L 58 40"
-            stroke="#15803D"
+            stroke="#047857"
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -87,7 +87,7 @@ export function IslandIllustration() {
             x="52"
             y="96"
             textAnchor="middle"
-            fill="#15803D"
+            fill="#047857"
             fontSize="13"
             fontWeight="700"
             fontFamily="inherit"
@@ -101,9 +101,9 @@ export function IslandIllustration() {
           {/* Kontur Garis Pulau Aktif */}
           <path
             d="M 16 44 C 16 22, 38 16, 54 16 C 72 16, 92 24, 92 44 C 92 66, 72 72, 54 72 C 34 72, 16 66, 16 44 Z"
-            stroke="#FED7AA"
+            stroke="#FDE68A"
             strokeWidth="2"
-            fill="#FFF7ED"
+            fill="#FEF2F0"
           />
           {/* Efek Radar Beacon Animasi */}
           <circle cx="54" cy="44" r="22" fill="#C2553A" className="pulse-beacon" />
@@ -129,13 +129,13 @@ export function IslandIllustration() {
           {/* Kontur Garis Pulau Terkunci */}
           <path
             d="M 18 44 C 18 24, 38 18, 52 18 C 68 18, 86 26, 86 44 C 86 64, 68 70, 52 70 C 34 70, 18 64, 18 44 Z"
-            stroke="#E7E5E4"
+            stroke="#EDEAE3"
             strokeWidth="1.5"
             strokeDasharray="4 3"
-            fill="#FAFAF9"
+            fill="#FAFAF8"
           />
           {/* Node Lingkaran dengan Ikon Gembok Garis */}
-          <circle cx="52" cy="44" r="14" stroke="#A8A29E" strokeWidth="2" fill="#F5F5F4" />
+          <circle cx="52" cy="44" r="14" stroke="#A8A29E" strokeWidth="2" fill="#F5F3EE" />
           {/* Gembok Garis Minimalis */}
           <rect
             x="46"

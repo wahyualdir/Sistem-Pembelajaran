@@ -436,7 +436,17 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
     };
   }
 
-  // Banyak role -> arahkan ke halaman pilih workspace
+  // Banyak role -> periksa apakah ada preferredRole / parameter role
+  const preferredRole = (formData as any)?.preferredRole || (formData as any)?.role;
+  if (preferredRole && activeRolesList.includes(preferredRole) && ROLE_PORTAL_MAP[preferredRole]) {
+    cookieStore.set('active_role', preferredRole, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
+    return {
+      ok: true,
+      redirectTo: ROLE_PORTAL_MAP[preferredRole],
+    };
+  }
+
+  // Jika tidak ada pilihan langsung, arahkan ke halaman pilih workspace
   return {
     ok: true,
     redirectTo: '/workspace',

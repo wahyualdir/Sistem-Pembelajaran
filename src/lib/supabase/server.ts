@@ -2,7 +2,12 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 export async function createClient() {
-  const cookieStore = cookies();
+  let cookieStore: any = null;
+  try {
+    cookieStore = cookies();
+  } catch {
+    // Penanganan saat dijalankan di luar request scope (misalnya unit test runner Vitest)
+  }
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321';
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'dummy-anon-key';
 
@@ -10,7 +15,7 @@ export async function createClient() {
     cookies: {
       getAll() {
         try {
-          if (typeof cookieStore.getAll === 'function') {
+          if (cookieStore && typeof cookieStore.getAll === 'function') {
             return cookieStore.getAll();
           }
         } catch {
@@ -21,7 +26,7 @@ export async function createClient() {
       setAll(cookiesToSet: Array<{ name: string; value: string; options?: CookieOptions }>) {
         try {
           cookiesToSet.forEach(({ name, value, options }) => {
-            if (typeof cookieStore.set === 'function') {
+            if (cookieStore && typeof cookieStore.set === 'function') {
               cookieStore.set(name, value, options as CookieOptions);
             }
           });
