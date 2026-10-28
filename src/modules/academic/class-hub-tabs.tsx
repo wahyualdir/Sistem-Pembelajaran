@@ -50,6 +50,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { toast } from '@/components/ui/toast';
 import { MarkdownViewer } from '@/components/shared/markdown-viewer';
 import { ClassIslandMap } from './class-island-map';
 import { ClassChaptersTab } from './class-chapters-tab';
@@ -1526,7 +1527,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                                   setRemindSuccess(`Pengingat membaca modul '${m.title}' berhasil dikirim.`);
                                   setTimeout(() => setRemindSuccess(null), 4000);
                                 } else {
-                                  alert(res.error);
+                                  toast.error(res.error || 'Gagal mengirim pengingat.');
                                 }
                               }}
                               className="btn-outline !w-auto text-xs px-2.5 py-1"

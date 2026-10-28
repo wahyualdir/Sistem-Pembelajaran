@@ -44,7 +44,7 @@ export interface ReviewItem {
   pending: number;
 }
 
-const LECTURER_CATEGORIES = [
+const lecturerCategories = [
   'Semua',
   'Kelas Saya',
   'Koreksi Tugas',
@@ -54,7 +54,7 @@ const LECTURER_CATEGORIES = [
   'Nilai Akhir',
 ];
 
-const LECTURER_CHIP_DESTINATIONS: Record<string, string> = {
+const lecturerChipDestinations: Record<string, string> = {
   'Semua': '/lecturer',
   'Kelas Saya': '/classes',
   'Koreksi Tugas': '/exams/review',
@@ -181,9 +181,9 @@ export function LecturerDashboardClient({
             </div>
 
             <nav aria-label="Kategori Pengajar" className="flex flex-wrap items-center gap-1.5">
-              {LECTURER_CATEGORIES.map((cat) => {
+              {lecturerCategories.map((cat) => {
                 const isActive = selectedCategory === cat;
-                const dest = LECTURER_CHIP_DESTINATIONS[cat];
+                const dest = lecturerChipDestinations[cat];
                 const isNavigational = dest && dest !== '/lecturer';
 
                 return isNavigational ? (

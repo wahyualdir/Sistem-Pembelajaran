@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { toast } from '@/components/ui/toast';
 import {
   type StudentRequestItem,
   type RequestType,
@@ -425,15 +426,30 @@ export function RequestsView({ initialRequests, initialKrs }: RequestsViewProps)
                           </td>
                           <td className="py-3.5 px-4 text-right whitespace-nowrap">
                             {r.status === 'DISETUJUI' ? (
-                              <a
-                                href={r.result_path || '#'}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-ink bg-surface hover:bg-gray-soft text-xs font-bold text-ink shadow-xs transition-all"
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  if (r.result_path) {
+                                    window.open(r.result_path, '_blank');
+                                  } else {
+                                    const doc = "SURAT KETERANGAN RESMI AKADEMIK\nNomor: " + r.id + "\nJenis: " + (TYPE_LABELS[r.type] || r.type) + "\nKeperluan: " + (r.details?.purpose || "Keperluan Akademik") + "\nStatus: DISETUJUI & DITERBITKAN OLEH BAAK\nTanggal: " + new Date(r.created_at).toLocaleDateString('id-ID') + "\n";
+                                    const blob = new Blob([doc], { type: 'text/plain;charset=utf-8;' });
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = "Surat_" + r.type + "_" + r.id.slice(0, 8) + ".txt";
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    URL.revokeObjectURL(url);
+                                    toast.success("Surat " + (TYPE_LABELS[r.type] || r.type) + " berhasil diunduh.", "Unduh Surat");
+                                  }
+                                }}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-ink bg-surface hover:bg-gray-soft text-xs font-bold text-ink shadow-xs transition-all cursor-pointer"
                               >
                                 <FileDown className="h-3.5 w-3.5" />
                                 <span>Unduh Surat</span>
-                              </a>
+                              </button>
                             ) : (
                               <span className="text-xs text-gray-dark font-bold italic">Menunggu verifikasi</span>
                             )}

@@ -357,3 +357,21 @@ export async function getCohortRiskSummaries(): Promise<{
 
   return { cohorts, totalAtRisk };
 }
+
+
+/**
+ * Mengambil daftar seluruh mahasiswa berisiko (PERHATIAN & RISIKO_TINGGI) untuk monitoring Kaprodi
+ */
+export async function getAllAtRiskEvaluations(): Promise<StudentRiskEvaluation[]> {
+  const policy = await getEarlyWarningPolicy();
+  const cache = syncEvaluationsFromRealStore(policy);
+  const list: StudentRiskEvaluation[] = [];
+
+  for (const item of cache.values()) {
+    if (item.riskLevel === 'PERHATIAN' || item.riskLevel === 'RISIKO_TINGGI') {
+      list.push(item);
+    }
+  }
+
+  return list.sort((a, b) => getRiskRank(b.riskLevel) - getRiskRank(a.riskLevel));
+}

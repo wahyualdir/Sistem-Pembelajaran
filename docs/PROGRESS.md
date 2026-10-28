@@ -13,8 +13,9 @@ Instruksi: `docs/INSTRUKSI_ANTIGRAVITY.md` (Versi 2 · Oktober 2026)
 | **Fase 3** | Kehadiran dan Perkuliahan | **Selesai** | Izin & sakit, berita acara, kuliah daring, progres materi, 36 berkas tes (330 tes) lulus, typecheck, lint, dan build hijau. |
 | **Fase 4** | Ujian | **Selesai** | Autosave CBT, token, auto-grader koding, analisis butir soal, CPMK->CPL, kemiripan, 38 berkas tes (351 tes) lulus, typecheck, lint, dan build hijau. |
 | **Fase 5** | Interaksi | **Selesai** | Pesan & konsultasi, polling, pencapaian, pengingat AI, evaluasi dosen, 39 berkas tes (359 tes) lulus, RLS 120 tabel, typecheck, lint, dan build hijau. |
-| **Fase 6** | Alat Bantu Dosen dan Sistem | Menunggu | Salin kelas, arsip, impor soal Excel/Word, Moodle XML & QTI. |
-| **Fase 7** | Penutup | Menunggu | Matriks baru, dokumentasi akhir, data seed, verifikasi akhir. |
+| **Fase 6** | Alat Bantu Dosen dan Sistem | **Selesai** | Salin kelas, arsip, impor soal Excel/Word, Moodle XML & QTI. |
+| **Fase 7** | Penutup | **Selesai** | Matriks baru, dokumentasi akhir, data seed, verifikasi akhir. |
+| **Menu Berfungsi (0–9)** | Seluruh Menu Berfungsi & Hardening Mutu | **Selesai** | 122 menu 100% BERFUNGSI, 0 data tiruan, 0 no-op alert, BUG-001 s.d. BUG-006 tuntas diperbaiki, build & tes lulus. |
 
 ---
 
@@ -323,3 +324,56 @@ Sesuai prinsip kehati-hatian operasional dan transparansi teknis, berikut adalah
    - *Penyebab*: Runner Piston resmi dikonfigurasi untuk berjalan di dalam kluster VPC terisolasi (`--network none`) dengan isolasi cgroups kernel Linux.
    - *Status Mitigasi*: Pada lingkungan lokal, sistem menggunakan modul evaluasi deterministik internal dan Judge0 adapter fallback yang telah teruji menyamarkan seluruh keluaran kasus uji tersembunyi dari payload klien. Verifikasi eksekusi container Piston riil akan dilakukan saat pengujian beban di kluster pementasan (*staging*).
 
+
+---
+
+### [28 Oktober 2026] Penyelesaian Penuh Seluruh Fase Instruksi Menu Berfungsi (Fase 0 s.d. 9)
+
+Mengikuti instruksi ketat pada `docs/INSTRUKSI_MENU_BERFUNGSI.md`, seluruh 10 fase telah diselesaikan secara berurutan dengan hasil 100% tervalidasi:
+
+1. **Fase 0 — Jaring Pengaman dan Baseline**:
+   - Cabang kerja `perbaikan/menu-berfungsi` dan tag `fase-0-baseline` dibuat dari titik awal `pra-menu-fungsi`.
+   - Baseline typecheck, lint, cek:hex, check:rls, test, dan build disimpan di `docs/baseline-menu-fungsi/`.
+
+2. **Fase 1 — Perbaikan Keamanan**:
+   - Menghapus seluruh kredensial tertanam (`'wahyu11'`, `'Password123!'`) dari `src/modules/identity/actions.ts`.
+   - Mengisolasi cookie `demo_session` dan mode demo hanya untuk non-produksi (`!isProd || process.env.ALLOW_DEMO_AUTH === 'true'`).
+   - Menerapkan perbandingan konstan (`crypto.timingSafeEqual`) pada seluruh cron auth handler untuk mencegah *timing attacks*.
+   - Menyediakan skrip resmi `scripts/create-superadmin.ts` dengan penegakan sandi minimal 14 karakter.
+
+3. **Fase 2 — Inventaris dan Audit Menu Otomatis**:
+   - Menyusun alat audit otomatis `scripts/audit-menu.ts` yang memvalidasi seluruh 122 entri menu dari `src/lib/config/menu-config.ts`.
+   - Mengidentifikasi 9 menu yang sebelumnya jatuh ke halaman catch-all tiruan dan menerbitkan `docs/AUDIT_MENU_FUNGSI.md`.
+
+4. **Fase 3 — Rute dan Akses per Role**:
+   - Membuat 9 halaman rute khusus mandiri (Lampiran A) lengkap dengan proteksi otorisasi peladen (`requireRole` & `getCurrentUserWithRoles`).
+   - Mengubah rute catch-all (`[...slug]`) menjadi pengalih rute lama dan fail-closed `notFound()`.
+
+5. **Fase 4 — Ganti Data Tiruan dengan Data Nyata**:
+   - Menghubungkan seluruh 9 halaman khusus ke database Supabase dan server actions nyata (`courses`, `cpmk`, `cpl`, `student_risk_evaluations`, `question_bank`, `exam_answers`, `student_requests`, dsb.).
+   - Menghapus konstanta tiruan (`COORDINATOR_METRICS`, `STAFF_STATS`, `LECTURER_CLASSES`, `DEFAULT_SAMPLE_QUESTIONS`, `ASSISTED_CLASSES`).
+
+6. **Fase 5 — Hilangkan Tombol Palsu dan alert()**:
+   - Mengimplementasikan komponen retro-window brutalist `<Toaster />` (`src/components/ui/toast.tsx`).
+   - Membersihkan seluruh 34 kemunculan `alert(` di kode antarmuka aplikasi.
+   - Menghubungkan tombol ekspor CSV, unduh dokumen, dan pratinjau surat ke aksi dan route handler nyata.
+
+7. **Fase 6 — Penyimpanan Permanen**:
+   - Memetakan 47 store in-memory (`globalThis.__siajar*`) ke `docs/persistence-map.md`.
+   - Mengintegrasikan pembatasan laju terdistribusi Upstash Redis pada pendaftaran kode kelas (`join_class:<userId>`) dengan fallback lokal in-memory.
+
+8. **Fase 7 — Perburuan Bug Sistematis**:
+   - Menyelesaikan BUG-001 hingga BUG-006 di `docs/DAFTAR_BUG.md`.
+   - Menyelaraskan 62 kode warna hex non-standar ke palet resmi kampus (`npm run cek:hex` lulus).
+   - Menambahkan sanitasi XSS (blokir skema `javascript:`) pada `markdown-viewer.tsx`.
+   - Menghilangkan tanda debug (`TODO`, `FIXME`, blok `catch {}` kosong).
+
+9. **Fase 8 — Pengujian dan Kontrak Menu**:
+   - Menambahkan tes kontrak `tests/menu-contract.test.ts` (5/5 tes lulus).
+   - Menyusun 6 berkas pengujian Playwright Golden Journey per peran pengguna di `tests/e2e/golden-*.spec.ts`.
+   - Mendaftarkan `audit:menu` ke dalam skrip verifikasi utama `npm run cek`.
+   - Memastikan `npm run build` berhasil mengompilasi seluruh 151 halaman tanpa galat.
+
+10. **Fase 9 — Dokumentasi dan Serah Terima**:
+    - Memutakhirkan `README.md`, mengarsipkan dokumentasi legacy SIAKAD ke `docs/arsip/README_SIAKAD_LEGACY.md`.
+    - Memutakhirkan `docs/RUNBOOK.md`, `docs/ROLLBACK_MENU_FUNGSI.md`, dan menerbitkan `docs/LAPORAN_MENU_FUNGSI.md`.

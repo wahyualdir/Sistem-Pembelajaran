@@ -39,7 +39,7 @@ export default async function ProfilePage() {
       .split(' ')
       .filter(Boolean)
       .slice(0, 2)
-      .map((n) => n[0].toUpperCase())
+      .map((n: string) => n[0].toUpperCase())
       .join('') || 'WA';
 
   const ROLE_NAMES: Record<string, string> = {

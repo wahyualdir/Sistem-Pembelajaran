@@ -1,4 +1,5 @@
 'use client';
+import { toast } from '@/components/ui/toast';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
@@ -81,7 +82,7 @@ export function AchievementsView() {
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 2000);
     } else {
-      alert(res.error || 'Gagal menyimpan pengaturan.');
+      toast.error(res.error || 'Gagal menyimpan pengaturan.');
     }
   };
 

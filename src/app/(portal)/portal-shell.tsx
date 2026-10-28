@@ -341,6 +341,7 @@ export function PortalShell({
               <div className="flex h-14 sm:h-16 xl:h-header shrink-0 items-center justify-center border-b border-[#E8E5DE] bg-[#FAF8F5] px-2 box-border">
                 <Link
                   href={homeHref}
+                  prefetch={false}
                   className="flex items-center justify-center group focus-visible:outline-none"
                   title={`RuangKampus - ${userSubtitle}`}
                 >
@@ -353,6 +354,7 @@ export function PortalShell({
               <div className="flex items-center h-14 sm:h-16 xl:h-header shrink-0 border-b border-[#E8E5DE] bg-[#FAF8F5] px-4 box-border">
                 <Link
                   href={homeHref}
+                  prefetch={false}
                   className="flex items-center gap-2.5 group focus-visible:outline-none min-w-0"
                   title={`RuangKampus - ${userSubtitle}`}
                 >
@@ -412,6 +414,7 @@ export function PortalShell({
                             <div key={item.href} className="relative group">
                               <Link
                                 href={item.href}
+                                prefetch={false}
                                 title={isRailActive ? item.label : undefined}
                                 onClick={() => {
                                   setIsDrawerOpen(false);
@@ -488,6 +491,7 @@ export function PortalShell({
 
                     <Link
                       href="/profile"
+                      prefetch={false}
                       onClick={() => {
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer(false);
@@ -500,6 +504,7 @@ export function PortalShell({
 
                     <Link
                       href="/workspace"
+                      prefetch={false}
                       onClick={() => {
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer(false);
@@ -512,6 +517,7 @@ export function PortalShell({
 
                     <Link
                       href="/notifications/preferences"
+                      prefetch={false}
                       onClick={() => {
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer(false);
@@ -551,6 +557,7 @@ export function PortalShell({
 
                     <Link
                       href="/devices"
+                      prefetch={false}
                       onClick={() => {
                         setIsProfileMenuOpen(false);
                         if (!isDesktop) closeDrawer(false);
@@ -746,6 +753,7 @@ export function PortalShell({
                 {availableRoles && availableRoles.length > 1 && (
                   <Link
                     href="/workspace"
+                    prefetch={false}
                     className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl text-xs font-sans font-bold text-[#1C1917] bg-[#FFFFFF] hover:bg-[#FAF8F5] border border-[#E8E5DE] hover:border-[#D6D3CB] transition-all shadow-2xs"
                     title="Beralih peran pengguna"
                   >

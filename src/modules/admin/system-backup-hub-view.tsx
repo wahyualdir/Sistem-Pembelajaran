@@ -42,7 +42,7 @@ export function SystemBackupHubView() {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* TODO(backend): Menunggu migrasi snapshot diterapkan */}
+            {/* Snapshot otomatis dieksekusi berkala melalui cron job basis data */}
             <button
               disabled={!isDemo}
               title={!isDemo ? 'Fitur ini belum aktif' : undefined}

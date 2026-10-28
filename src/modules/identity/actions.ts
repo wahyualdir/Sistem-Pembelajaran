@@ -1,5 +1,18 @@
 'use server';
 
+import {
+  getCurrentUserWithRoles as getCachedCurrentUserWithRoles,
+  type CurrentUserContext,
+} from './current-user';
+export type { CurrentUserContext };
+import {
+  type ImpersonationTokenPayload,
+  signImpersonationToken,
+  verifyImpersonationToken,
+} from './impersonation-token';
+export type { ImpersonationTokenPayload };
+
+
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { randomUUID } from 'crypto';
@@ -36,7 +49,7 @@ const ROLE_PORTAL_MAP: Record<string, string> = {
   TEACHING_ASSISTANT: '/ta',
   PROGRAM_COORDINATOR: '/coordinator',
   ACADEMIC_STAFF: '/staff',
-  SYSTEM_ADMIN: '/admin',
+  SYSTEM_ADMIN: '/admin/system',
   SUPER_ADMIN: '/admin',
   SUPERADMIN: '/admin',
   PROGRAM_SECRETARY: '/secretary',
@@ -91,12 +104,9 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   const defaultAdminEmail = (process.env.SUPERADMIN_EMAIL || 'superadmin@siajar.ac.id').trim().toLowerCase();
   const superAdminEnvEmail = defaultAdminEmail;
   const isSuperAdminByIdentifier =
-    normalizedId.toLowerCase() === 'superadmin' ||
-    normalizedId === '20120009' ||
-    Boolean(superAdminEnvEmail && normalizedId.toLowerCase() === superAdminEnvEmail) ||
+    normalizedId.toLowerCase() === 'superadmin' ||    Boolean(superAdminEnvEmail && normalizedId.toLowerCase() === superAdminEnvEmail) ||
     normalizedId.toLowerCase() === 'superadmin@siajar.test' ||
-    normalizedId.toLowerCase() === 'superadmin@siajar.ac.id' ||
-    normalizedId.toLowerCase() === '20120009@staf.siajar.test';
+    normalizedId.toLowerCase() === 'superadmin@siajar.ac.id' ;
 
   let demoUser = SYNTHETIC_DEMO_USERS[normalizedId] || SYNTHETIC_DEMO_USERS[normalizedId.toLowerCase()];
   if (!demoUser && isSuperAdminByIdentifier) {
@@ -146,7 +156,7 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   const isProd = process.env.NODE_ENV === 'production';
   const allowDemo = !isProd || process.env.ALLOW_DEMO_AUTH === 'true';
 
-  if (!userId && demoUser && (allowDemo || isSuperAdminByIdentifier)) {
+  if (!userId && demoUser && allowDemo) {
     targetEmail = demoUser.email;
     userId = demoUser.id;
     profileStatus = demoUser.status;
@@ -165,19 +175,19 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
         password,
       });
 
-      if (authError && (password === 'Password123!' || password === 'Password123' || password === 'DemoSiajar2026Secure!' || password === 'DemoSiajar2026Secure' || password === 'wahyu11')) {
-        const altPasswords = ['DemoSiajar2026Secure!', 'Password123!'];
-        for (const alt of altPasswords) {
-          if (alt === password) continue;
-          const retry = await supabase.auth.signInWithPassword({
-            email: targetEmail,
-            password: alt,
-          });
-          if (!retry.error && retry.data?.user) {
-            authData = retry.data;
-            authError = null;
-            break;
-          }
+      if (
+        authError &&
+        process.env.SUPERADMIN_PASSWORD &&
+        password === process.env.SUPERADMIN_PASSWORD &&
+        (isSuperAdminByIdentifier || targetEmail === 'admin@ruangkampus.test' || targetEmail === '20120009@staf.siajar.test')
+      ) {
+        const retry = await supabase.auth.signInWithPassword({
+          email: targetEmail,
+          password: process.env.SUPERADMIN_PASSWORD,
+        });
+        if (!retry.error && retry.data?.user) {
+          authData = retry.data;
+          authError = null;
         }
       }
 
@@ -196,12 +206,12 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   const isSuperAdminUser =
     Boolean(
       isSuperAdminByIdentifier ||
-      (demoUser && (demoUser.id === 'a0000010-0000-0000-0000-000000000010' || demoUser.roles.includes('SUPER_ADMIN')))
+      (demoUser && demoUser.roles.includes('SUPER_ADMIN'))
     );
 
   const customPass = demoUser ? (customPasswords.get(demoUser.id) || customPasswords.get(normalizedId.toLowerCase())) : null;
 
-  if (!currentUserId && (allowDemo || isSuperAdminUser)) {
+  if (!currentUserId && allowDemo) {
     if (demoUser) {
       let isMatch = false;
 
@@ -210,9 +220,7 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
       } else if (isSuperAdminUser) {
         if (
           (superAdminPassword && password === superAdminPassword) ||
-          (demoPassword && password === demoPassword) ||
-          password === 'wahyu11' ||
-          password === 'Password123!'
+          (demoPassword && password === demoPassword) 
         ) {
           isMatch = true;
         }
@@ -431,7 +439,17 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
     };
   }
 
-  // Banyak role -> arahkan ke halaman pilih workspace
+  // Banyak role -> periksa apakah ada preferredRole / parameter role
+  const preferredRole = (formData as any)?.preferredRole || (formData as any)?.role;
+  if (preferredRole && activeRolesList.includes(preferredRole) && ROLE_PORTAL_MAP[preferredRole]) {
+    cookieStore.set('active_role', preferredRole, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
+    return {
+      ok: true,
+      redirectTo: ROLE_PORTAL_MAP[preferredRole],
+    };
+  }
+
+  // Jika tidak ada pilihan langsung, arahkan ke halaman pilih workspace
   return {
     ok: true,
     redirectTo: '/workspace',
@@ -703,7 +721,7 @@ export async function changePasswordAction(formData: unknown): Promise<ActionRes
   const expectedOfflinePass =
     customPasswordsStore.get(user.id) ||
     customPasswordsStore.get(user.email) ||
-    (isSuperAdminUser ? (customPasswordsStore.get('superadmin') || 'Admin123!') : 'Password123!');
+    (isSuperAdminUser ? (customPasswordsStore.get('superadmin') || process.env.SUPERADMIN_PASSWORD || process.env.DEMO_PASSWORD) : process.env.DEMO_PASSWORD);
 
   if (isOnline) {
     const supabase = await createServerSupabase();
@@ -1006,258 +1024,12 @@ export async function reportNotMeAction(userIdParam?: string): Promise<ActionRes
 
 /**
  * Helper: Ambil profil dan peran pengguna saat ini untuk Server Components
+ * Menggunakan deduplikasi berbasis react cache() dari current-user.ts (berjalan 1x per request).
  */
-export async function getCurrentUserWithRoles() {
-  let cookieStore: ReturnType<typeof cookies>;
-  let demoSessionId: string | undefined;
-  try {
-    cookieStore = cookies();
-    demoSessionId = cookieStore.get('demo_session')?.value;
-  } catch {
-    return null;
-  }
-  let realUserId: string | null = null;
-  let userEmail: string = '';
-
-  const hasSupabaseCookie = cookieStore.getAll().some((c) => c.name.startsWith('sb-'));
-  const isOnline = hasSupabaseCookie ? await checkSupabaseOnline() : false;
-  if (isOnline) {
-    try {
-      const supabase = await createServerSupabase();
-      const {
-        data: { user },
-        error: authError,
-      } = await supabase.auth.getUser();
-
-      if (!authError && user) {
-        realUserId = user.id;
-        userEmail = user.email || '';
-      }
-    } catch {
-      // Supabase offline
-    }
-  }
-
-  // Di production, demo_session hanya diterima jika (!isProd || ALLOW_DEMO_AUTH === 'true').
-  const isProd = process.env.NODE_ENV === 'production';
-  if (!realUserId && demoSessionId) {
-    if (
-      !isProd ||
-      process.env.ALLOW_DEMO_AUTH === 'true' ||
-      demoSessionId === 'a0000010-0000-0000-0000-000000000010' ||
-      demoSessionId.startsWith('u-staf-20120009') ||
-      SYNTHETIC_DEMO_USERS[demoSessionId]?.roles?.includes('SUPER_ADMIN')
-    ) {
-      realUserId = demoSessionId;
-    }
-  }
-
-  if (!realUserId) {
-    return null;
-  }
-
-  // A3a: Identitas efektif TIDAK boleh berasal dari cookie demo_session.
-  // Turunkan di server dari token bertanda tangan, dan HANYA berlaku jika:
-  // (1) sesi NYATA pengguna = originalAdminId, dan
-  // (2) originalAdminId memiliki role SUPER_ADMIN di DB (user_roles).
-  // Hapus kepercayaan pada cookie tak bertanda tangan impersonating_from dan impersonating_expires_at.
-  const impersonationToken = cookieStore.get('impersonation_token')?.value;
-  let verifiedPayload: ImpersonationTokenPayload | null = null;
-  let isImpersonating = false;
-  let impersonatingFrom: string | null = null;
-  let effectiveUserId = realUserId;
-
-  if (impersonationToken) {
-    verifiedPayload = verifyImpersonationToken(impersonationToken);
-    if (verifiedPayload && verifiedPayload.originalAdminId === realUserId) {
-      // Verifikasi bahwa admin asli memiliki role SUPER_ADMIN di DB
-      let isOriginalSuperAdmin = false;
-      if (isOnline) {
-        try {
-          const { data: adminRoles } = await supabaseAdmin
-            .from('user_roles')
-            .select('roles(code), role_id')
-            .eq('user_id', verifiedPayload.originalAdminId)
-            .eq('status', 'ACTIVE');
-          isOriginalSuperAdmin = !!adminRoles?.some(
-            (r: any) => r.roles?.code === 'SUPER_ADMIN' || r.role_id === 'SUPER_ADMIN'
-          );
-        } catch {
-          // DB offline
-        }
-      }
-      if (!isOriginalSuperAdmin && !isOnline) {
-        const adminDemo = Object.values(SYNTHETIC_DEMO_USERS).find(
-          (u) => u.id === verifiedPayload!.originalAdminId
-        );
-        isOriginalSuperAdmin = !!adminDemo?.roles.includes('SUPER_ADMIN');
-      }
-
-      if (isOriginalSuperAdmin) {
-        effectiveUserId = verifiedPayload.targetUserId;
-        isImpersonating = true;
-        impersonatingFrom = verifiedPayload.originalAdminId;
-      }
-    }
-  }
-
-  // Cookie tak bertanda tangan impersonating_from & impersonating_expires_at
-  // diabaikan sepenuhnya di server (A3a). Jangan memanggil cookieStore.delete
-  // tanpa try-catch agar Server Components tidak melempar error read-only.
-  try {
-    if (!isImpersonating && cookieStore.has('impersonation_token')) {
-      cookieStore.delete('impersonation_token');
-    }
-    if (cookieStore.has('impersonating_from')) {
-      cookieStore.delete('impersonating_from');
-    }
-    if (cookieStore.has('impersonating_expires_at')) {
-      cookieStore.delete('impersonating_expires_at');
-    }
-  } catch {
-    // Read-only context di Server Components
-  }
-
-  const userId = effectiveUserId;
-
-  // Cari di synthetic users jika ada
-  let matchedDemo =
-    SYNTHETIC_DEMO_USERS[userId] ||
-    SYNTHETIC_DEMO_USERS[userId.toLowerCase()] ||
-    Object.values(SYNTHETIC_DEMO_USERS).find(
-      (u) =>
-        u.id === userId ||
-        u.nim === userId ||
-        u.nidn === userId ||
-        u.email?.toLowerCase() === userId.toLowerCase()
-    );
-
-  let profile = matchedDemo
-    ? {
-        id: matchedDemo.id,
-        full_name: matchedDemo.name,
-        email: matchedDemo.email,
-        status: matchedDemo.status,
-        must_change_password: !!matchedDemo.mustChangePassword,
-      }
-    : null;
-
-  if (isOnline) {
-    try {
-      const { data: dbProfile } = await supabaseAdmin
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (dbProfile) {
-        profile = dbProfile;
-      }
-    } catch {
-      // DB offline
-    }
-  }
-
-  let rolesList: any[] = [];
-  if (isOnline) {
-    try {
-      const { data: userRoles } = await supabaseAdmin
-        .from('user_roles')
-        .select('id, role_id, scope_type, scope_id, roles(code, name, description)')
-        .eq('user_id', userId)
-        .eq('status', 'ACTIVE');
-
-      if (userRoles && userRoles.length > 0) {
-        rolesList = userRoles;
-      }
-    } catch {
-      // DB offline
-    }
-  }
-
-  if (rolesList.length === 0 && matchedDemo) {
-    rolesList = matchedDemo.roles.map((r) => ({
-      id: `${matchedDemo!.id}-${r}`,
-      role_id: r,
-      scope_type: 'GLOBAL',
-      scope_id: null,
-      roles: { code: r, name: r, description: `${r} role` },
-    }));
-  }
-
-  if (!profile) {
-    const sessionCookie = cookieStore.get('siakad_session')?.value;
-    if (sessionCookie) {
-      try {
-        const decoded = parseSignedSession(sessionCookie) as any;
-        if (decoded && decoded.name) {
-          profile = {
-            id: decoded.userId || userId,
-            full_name: decoded.name,
-            email: decoded.email || userEmail,
-            status: 'ACTIVE',
-            must_change_password: false,
-          };
-          if (rolesList.length === 0 && decoded.role) {
-            const roleCode = decoded.role === 'MAHASISWA' ? 'STUDENT' : decoded.role === 'DOSEN' ? 'LECTURER' : 'ADMIN';
-            rolesList = [{
-              id: `${userId}-${roleCode}`,
-              role_id: roleCode,
-              scope_type: 'GLOBAL',
-              scope_id: null,
-              roles: { code: roleCode, name: roleCode, description: `${roleCode} role` },
-            }];
-          }
-        }
-      } catch {
-        // ignore parse error
-      }
-    }
-  }
-
-  const activeRoleCode = cookieStore.get('active_role')?.value;
-  // Validasi peran aktif di sisi server dari daftar peran resmi pengguna (rolesList)
-  const allowedRoleCodes = rolesList.map((r) => (r.roles as any)?.code || r.role_id);
-  const validatedActiveRole =
-    activeRoleCode && allowedRoleCodes.includes(activeRoleCode)
-      ? activeRoleCode
-      : allowedRoleCodes[0] || 'STUDENT';
-
-  const isNewAccount =
-    !!matchedDemo?.isNewAccount ||
-    cookieStore.get('is_new_account')?.value === 'true' ||
-    (() => {
-      try {
-        const s = cookieStore.get('siakad_session')?.value;
-        if (!s) return false;
-        const dec = parseSignedSession(s) as any;
-        return !!dec.isNewAccount;
-      } catch {
-        return false;
-      }
-    })();
-
-  return {
-    user: { id: userId, email: userEmail || profile?.email || '' },
-    profile,
-    roles: rolesList,
-    activeRole: validatedActiveRole,
-    isImpersonating,
-    impersonatingFrom,
-    isNewAccount,
-  };
+export async function getCurrentUserWithRoles(): Promise<CurrentUserContext | null> {
+  return getCachedCurrentUserWithRoles();
 }
 
-import {
-  type ImpersonationTokenPayload,
-  signImpersonationToken,
-  verifyImpersonationToken,
-} from './impersonation-token';
-export type { ImpersonationTokenPayload };
-
-/**
- * Super Admin Impersonation Action (A3: Durasi Maksimal 30 Menit, Alasan Wajib Min 10 Karakter)
- */
 export async function impersonateUserAction(
   targetUserId: string,
   reason?: string

@@ -158,7 +158,7 @@ function LoginFormContent() {
             {/* 1. Header Identitas Kampus Bersih & Modern */}
             <div className="flex items-center justify-between gap-3">
               <Link href="/" className="flex items-center gap-3.5 group focus-visible:outline-none">
-                <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-2xl bg-white p-2.5 border border-[#E8E4DA] shadow-xs flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-[#C2553A]/40 group-hover:shadow-md transition-all duration-300">
+                <div className="h-11 w-11 sm:h-12 sm:w-12 rounded-2xl bg-white p-2.5 border border-[#E8E5DE] shadow-xs flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-[#C2553A]/40 group-hover:shadow-md transition-all duration-300">
                   <Image
                     src="/logo-ruangkampus.png"
                     alt="Logo RuangKampus"
@@ -175,7 +175,7 @@ function LoginFormContent() {
                 </div>
               </Link>
 
-              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold bg-white border border-[#E8E4DA] text-[#57534E] shadow-2xs hover:border-[#C2553A]/30 transition-all">
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold bg-white border border-[#E8E5DE] text-[#57534E] shadow-2xs hover:border-[#C2553A]/30 transition-all">
                 <Calendar className="h-3 w-3 text-[#C2553A]" />
                 <span>GANJIL 2026/2027</span>
               </div>
@@ -186,16 +186,16 @@ function LoginFormContent() {
               <h1 className="font-[family-name:var(--font-bricolage-login),sans-serif] font-bold text-2xl sm:text-3xl lg:text-4xl text-[#1C1917] tracking-tight leading-tight">
                 Kelas, tugas, dan ujian di satu tempat.
               </h1>
-              <p className="text-sm sm:text-base text-[#6E6A61] leading-relaxed max-w-lg">
+              <p className="text-sm sm:text-base text-[#6E675F] leading-relaxed max-w-lg">
                 Masuk untuk melihat jadwal hari ini, tenggat yang paling dekat, dan materi dari dosenmu.
               </p>
             </div>
 
             {/* 3. Modern Interactive Showcase Card dengan Animasi Mengalir */}
-            <div className="relative rounded-3xl bg-white border border-[#E8E4DA] p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group/showcase">
+            <div className="relative rounded-3xl bg-white border border-[#E8E5DE] p-4 sm:p-5 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden group/showcase">
               
               {/* Tab Selector & Navigation */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#EFECE6] gap-2">
+              <div className="flex items-center justify-between pb-3 border-b border-[#EDEAE3] gap-2">
                 <div className="flex items-center gap-1.5">
                   <button
                     type="button"
@@ -203,7 +203,7 @@ function LoginFormContent() {
                     className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
                       activeSlide === 0
                         ? 'bg-[#C2553A] text-white shadow-2xs scale-102'
-                        : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F3EFE7]'
+                        : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F2EFE8]'
                     }`}
                   >
                     <Compass className="h-3.5 w-3.5" />
@@ -215,7 +215,7 @@ function LoginFormContent() {
                     className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
                       activeSlide === 1
                         ? 'bg-[#C2553A] text-white shadow-2xs scale-102'
-                        : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F3EFE7]'
+                        : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F2EFE8]'
                     }`}
                   >
                     <BookOpen className="h-3.5 w-3.5" />
@@ -227,7 +227,7 @@ function LoginFormContent() {
                     className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer flex items-center gap-1.5 ${
                       activeSlide === 2
                         ? 'bg-[#C2553A] text-white shadow-2xs scale-102'
-                        : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F3EFE7]'
+                        : 'bg-[#FAF8F5] text-[#7A756D] hover:text-[#1C1917] hover:bg-[#F2EFE8]'
                     }`}
                   >
                     <Layers className="h-3.5 w-3.5" />
@@ -240,7 +240,7 @@ function LoginFormContent() {
                   <button
                     type="button"
                     onClick={prevSlide}
-                    className="h-8 w-8 rounded-lg bg-[#FAF8F5] hover:bg-[#F0ECE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
+                    className="h-8 w-8 rounded-lg bg-[#FAF8F5] hover:bg-[#F0EAE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
                     aria-label="Slide sebelumnya"
                   >
                     <ChevronLeft className="h-4 w-4" />
@@ -248,7 +248,7 @@ function LoginFormContent() {
                   <button
                     type="button"
                     onClick={nextSlide}
-                    className="h-8 w-8 rounded-lg bg-[#FAF8F5] hover:bg-[#F0ECE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
+                    className="h-8 w-8 rounded-lg bg-[#FAF8F5] hover:bg-[#F0EAE3] text-[#57534E] hover:text-[#1C1917] flex items-center justify-center transition-all cursor-pointer hover:scale-105 active:scale-95"
                     aria-label="Slide berikutnya"
                   >
                     <ChevronRight className="h-4 w-4" />
@@ -261,8 +261,8 @@ function LoginFormContent() {
                 <div className="w-full flex items-center justify-between pb-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-[#1C1917]">PETA CAPAIAN KURIKULUM</span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#FAF8F5] text-[#C2553A] font-bold border border-[#E8E4DA] flex items-center gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#16A34A] animate-pulse" />
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-[#FAF8F5] text-[#C2553A] font-bold border border-[#E8E5DE] flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#059669] animate-pulse" />
                       112 / 144 SKS
                     </span>
                   </div>
@@ -282,20 +282,20 @@ function LoginFormContent() {
               {/* Slide 2: Compact Materi Perkuliahan Cards */}
               <div className={activeSlide === 1 ? 'py-3 flex flex-col justify-between min-h-[175px] text-xs animate-in fade-in duration-200' : 'hidden'}>
                 <div className="space-y-2.5">
-                  <div className="flex items-center justify-between pb-2 border-b border-[#EFECE6]">
+                  <div className="flex items-center justify-between pb-2 border-b border-[#EDEAE3]">
                     <div className="flex items-center gap-1.5">
                       <BookOpen className="h-4 w-4 text-[#C2553A]" />
                       <span className="font-bold text-[#1C1917] text-xs">Materi Perkuliahan Terkini</span>
                     </div>
-                    <span className="text-[10px] font-semibold text-[#853827] bg-[#FAF8F5] px-2 py-0.5 rounded-md border border-[#E8E4DA]">
+                    <span className="text-[10px] font-semibold text-[#853827] bg-[#FAF8F5] px-2 py-0.5 rounded-md border border-[#E8E5DE]">
                       Algoritma &amp; Pemrograman
                     </span>
                   </div>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DA] hover:border-[#C2553A]/40 hover:-translate-y-0.5 transition-all">
+                    <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E5DE] hover:border-[#C2553A]/40 hover:-translate-y-0.5 transition-all">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-[9px] font-mono font-bold text-[#C2553A] bg-white px-1.5 py-0.5 rounded border border-[#E8E4DA]">
+                        <span className="text-[9px] font-mono font-bold text-[#C2553A] bg-white px-1.5 py-0.5 rounded border border-[#E8E5DE]">
                           Pertemuan 02
                         </span>
                         <span className="text-[9px] text-[#7A756D]">PDF • 3.2 MB</span>
@@ -304,9 +304,9 @@ function LoginFormContent() {
                       <p className="text-[11px] text-[#7A756D] truncate">Dr. Eng. Budi Santoso</p>
                     </div>
 
-                    <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DA] hover:border-[#C2553A]/40 hover:-translate-y-0.5 transition-all">
+                    <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E5DE] hover:border-[#C2553A]/40 hover:-translate-y-0.5 transition-all">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-[9px] font-mono font-bold text-[#15803D] bg-white px-1.5 py-0.5 rounded border border-[#E8E4DA]">
+                        <span className="text-[9px] font-mono font-bold text-[#047857] bg-white px-1.5 py-0.5 rounded border border-[#E8E5DE]">
                           Pertemuan 01
                         </span>
                         <span className="text-[9px] text-[#7A756D]">Slides • 1.8 MB</span>
@@ -317,7 +317,7 @@ function LoginFormContent() {
                   </div>
                 </div>
 
-                <div className="pt-2.5 border-t border-[#EFECE6] flex items-center justify-between text-xs text-[#7A756D]">
+                <div className="pt-2.5 border-t border-[#EDEAE3] flex items-center justify-between text-xs text-[#7A756D]">
                   <span>Akses modul perkuliahan 24/7 di ruang belajar Anda.</span>
                   <span className="text-[#C2553A] font-semibold flex items-center gap-1">
                     <Zap className="h-3 w-3" />
@@ -329,20 +329,20 @@ function LoginFormContent() {
               {/* Slide 3: Compact Evaluasi & Ujian CBT Cards */}
               <div className={activeSlide === 2 ? 'py-3 flex flex-col justify-between min-h-[175px] text-xs animate-in fade-in duration-200' : 'hidden'}>
                 <div className="space-y-2.5">
-                  <div className="flex items-center justify-between pb-2 border-b border-[#EFECE6]">
+                  <div className="flex items-center justify-between pb-2 border-b border-[#EDEAE3]">
                     <div className="flex items-center gap-1.5">
-                      <CheckCircle2 className="h-4 w-4 text-[#15803D]" />
+                      <CheckCircle2 className="h-4 w-4 text-[#047857]" />
                       <span className="font-bold text-[#1C1917] text-xs">Sistem Evaluasi Terpadu</span>
                     </div>
-                    <span className="text-[10px] font-mono font-bold text-[#15803D] bg-[#22C55E]/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#15803D] animate-ping" />
+                    <span className="text-[10px] font-mono font-bold text-[#047857] bg-[#10B981]/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#047857] animate-ping" />
                       TERVERIFIKASI
                     </span>
                   </div>
 
-                  <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E4DA] flex items-center justify-between hover:border-[#C2553A]/40 transition-all">
+                  <div className="p-3 rounded-2xl bg-[#FAF8F5] border border-[#E8E5DE] flex items-center justify-between hover:border-[#C2553A]/40 transition-all">
                     <div className="flex items-center gap-2.5">
-                      <div className="h-9 w-9 rounded-xl bg-white border border-[#E8E4DA] flex items-center justify-center text-[#C2553A] font-bold text-xs shadow-2xs">
+                      <div className="h-9 w-9 rounded-xl bg-white border border-[#E8E5DE] flex items-center justify-center text-[#C2553A] font-bold text-xs shadow-2xs">
                         UTS
                       </div>
                       <div>
@@ -350,15 +350,15 @@ function LoginFormContent() {
                         <p className="text-[11px] text-[#7A756D]">Ruang Lab Komputer 3 • Token Terbuka</p>
                       </div>
                     </div>
-                    <span className="px-2.5 py-1 rounded-lg bg-white border border-[#E8E4DA] text-xs font-mono font-bold text-[#C2553A]">
+                    <span className="px-2.5 py-1 rounded-lg bg-white border border-[#E8E5DE] text-xs font-mono font-bold text-[#C2553A]">
                       UIR-9281
                     </span>
                   </div>
                 </div>
 
-                <div className="pt-2.5 border-t border-[#EFECE6] flex items-center justify-between text-xs text-[#7A756D]">
+                <div className="pt-2.5 border-t border-[#EDEAE3] flex items-center justify-between text-xs text-[#7A756D]">
                   <span>Integritas akademik terjamin dengan audit trail otomatis.</span>
-                  <span className="text-[#15803D] font-semibold flex items-center gap-1">
+                  <span className="text-[#047857] font-semibold flex items-center gap-1">
                     <Activity className="h-3 w-3" />
                     Sistem Siap
                   </span>
@@ -373,14 +373,14 @@ function LoginFormContent() {
           <main className="w-full max-w-md mx-auto lg:max-w-none lg:col-span-5 xl:col-span-5 flex flex-col justify-center">
             
             {/* Main Floating Elevated Card */}
-            <div className="rounded-3xl bg-white border border-[#E8E4DA] p-5 sm:p-7 lg:p-7 xl:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div className="rounded-3xl bg-white border border-[#E8E5DE] p-5 sm:p-7 lg:p-7 xl:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
               
               {/* Header Card Bersih (Minimalist & Clean) */}
               <div className="mb-5">
                 {/* Mobile-only Compact Brand Header */}
-                <div className="lg:hidden flex items-center justify-between pb-3.5 mb-4 border-b border-[#EFECE6]">
+                <div className="lg:hidden flex items-center justify-between pb-3.5 mb-4 border-b border-[#EDEAE3]">
                   <div className="flex items-center gap-2.5">
-                    <div className="h-9 w-9 rounded-xl bg-[#FAF8F5] p-1.5 border border-[#E8E4DA] shadow-xs flex items-center justify-center shrink-0">
+                    <div className="h-9 w-9 rounded-xl bg-[#FAF8F5] p-1.5 border border-[#E8E5DE] shadow-xs flex items-center justify-center shrink-0">
                       <Image
                         src="/logo-ruangkampus.png"
                         alt="Logo RuangKampus"
@@ -393,7 +393,7 @@ function LoginFormContent() {
                       Ruang<span className="text-[#C2553A]">Kampus</span>
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#FAF8F5] border border-[#E8E4DA] text-[#57534E]">
+                  <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-full bg-[#FAF8F5] border border-[#E8E5DE] text-[#57534E]">
                     GANJIL 26/27
                   </span>
                 </div>
@@ -427,7 +427,7 @@ function LoginFormContent() {
                       onChange={(e) => setIdentifier(e.target.value)}
                       disabled={isPending}
                       required
-                      className="w-full h-11 sm:h-11.5 pl-10 pr-3.5 rounded-xl border border-[#DFDACF] bg-[#FAF8F5]/60 hover:bg-white focus:bg-white text-sm font-medium text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-4 focus:ring-[#C2553A]/15 focus:border-[#C2553A] transition-all disabled:opacity-60"
+                      className="w-full h-11 sm:h-11.5 pl-10 pr-3.5 rounded-xl border border-[#DFD8CB] bg-[#FAF8F5]/60 hover:bg-white focus:bg-white text-sm font-medium text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-4 focus:ring-[#C2553A]/15 focus:border-[#C2553A] transition-all disabled:opacity-60"
                     />
                   </div>
                 </div>
@@ -463,7 +463,7 @@ function LoginFormContent() {
                       onKeyUp={handlePasswordKeyEvent}
                       disabled={isPending}
                       required
-                      className="w-full h-11 sm:h-11.5 pl-10 pr-11 rounded-xl border border-[#DFDACF] bg-[#FAF8F5]/60 hover:bg-white focus:bg-white text-sm font-medium text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-4 focus:ring-[#C2553A]/15 focus:border-[#C2553A] transition-all disabled:opacity-60"
+                      className="w-full h-11 sm:h-11.5 pl-10 pr-11 rounded-xl border border-[#DFD8CB] bg-[#FAF8F5]/60 hover:bg-white focus:bg-white text-sm font-medium text-[#1C1B19] placeholder:text-[#8A8577] focus:outline-none focus:ring-4 focus:ring-[#C2553A]/15 focus:border-[#C2553A] transition-all disabled:opacity-60"
                     />
                     <button
                       type="button"
@@ -522,7 +522,7 @@ function LoginFormContent() {
                       className={`w-full h-11 sm:h-11.5 pl-10 pr-11 rounded-xl border text-sm font-medium transition-all focus:outline-none disabled:opacity-60 ${
                         isCaptchaPassed
                           ? 'border-emerald-500 bg-emerald-50/40 text-emerald-800 ring-2 ring-emerald-500/20'
-                          : 'border-[#DFDACF] bg-[#FAF8F5]/60 hover:bg-white focus:bg-white text-[#1C1B19] placeholder:text-[#8A8577] focus:ring-4 focus:ring-[#C2553A]/15 focus:border-[#C2553A]'
+                          : 'border-[#DFD8CB] bg-[#FAF8F5]/60 hover:bg-white focus:bg-white text-[#1C1B19] placeholder:text-[#8A8577] focus:ring-4 focus:ring-[#C2553A]/15 focus:border-[#C2553A]'
                       }`}
                     />
                     <div className="absolute right-1 w-9 h-9 flex items-center justify-center">
@@ -543,7 +543,7 @@ function LoginFormContent() {
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="w-full h-11 sm:h-11.5 rounded-xl bg-gradient-to-r from-[#C2553A] via-[#B84A30] to-[#A33D25] hover:from-[#B84A30] hover:to-[#8E321C] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] cursor-pointer disabled:opacity-60"
+                  className="w-full h-11 sm:h-11.5 rounded-xl bg-gradient-to-r from-[#C2553A] via-[#B84A2B] to-[#A34530] hover:from-[#B84A2B] hover:to-[#853827] text-white font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] cursor-pointer disabled:opacity-60"
                 >
                   <LogIn className="h-4 w-4" />
                   <span>{isPending ? 'Memeriksa kredensial…' : 'Masuk ke Portal'}</span>
@@ -574,23 +574,23 @@ function LoginFormContent() {
                 href={`https://wa.me/6283162031942?text=${waCustomMessage}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between p-3 rounded-2xl border border-[#E8E4DA] bg-white hover:bg-[#FAF8F5] hover:border-[#25D366]/50 hover:-translate-y-0.5 transition-all shadow-2xs group cursor-pointer"
+                className="flex items-center justify-between p-3 rounded-2xl border border-[#E8E5DE] bg-white hover:bg-[#FAF8F5] hover:border-[#059669]/50 hover:-translate-y-0.5 transition-all shadow-2xs group cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <div className="h-8 w-8 rounded-xl bg-[#059669]/10 text-[#059669] flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                     <MessageCircle className="h-4 w-4" />
                   </div>
                   <div>
                     <span className="block text-xs font-bold text-[#1C1917] leading-tight">
                       Butuh Bantuan Masuk?
                     </span>
-                    <span className="block text-[11px] text-[#25D366] font-semibold leading-tight mt-0.5 flex items-center gap-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#25D366] animate-pulse" />
+                    <span className="block text-[11px] text-[#059669] font-semibold leading-tight mt-0.5 flex items-center gap-1">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#059669] animate-pulse" />
                       Layanan Bantuan Akademik
                     </span>
                   </div>
                 </div>
-                <span className="text-xs font-semibold text-[#25D366] group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                <span className="text-xs font-semibold text-[#059669] group-hover:translate-x-1 transition-transform flex items-center gap-1">
                   Hubungi Helpdesk →
                 </span>
               </a>

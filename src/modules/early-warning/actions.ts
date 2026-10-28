@@ -208,3 +208,27 @@ export async function triggerDailyRiskCalculationAction(): Promise<ActionRespons
     };
   }
 }
+
+
+/**
+ * Server Action: Mengambil seluruh daftar mahasiswa berisiko untuk halaman Kaprodi
+ */
+export async function getAllAtRiskStudentsAction(): Promise<StudentRiskEvaluation[]> {
+  const userContext = await getCurrentUserWithRoles();
+  if (!userContext?.user || userContext.activeRole === 'SYSTEM_ADMIN') {
+    return [];
+  }
+
+  const role = userContext.activeRole;
+  const isAuthorized =
+    role === 'PROGRAM_COORDINATOR' ||
+    role === 'ACADEMIC_STAFF' ||
+    role === 'SUPER_ADMIN';
+
+  if (!isAuthorized) {
+    return [];
+  }
+
+  const { getAllAtRiskEvaluations } = await import('./evaluator');
+  return getAllAtRiskEvaluations();
+}

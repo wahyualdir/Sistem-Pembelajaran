@@ -93,7 +93,11 @@ export async function recordSystemAuditLog(input: AuditLogInput): Promise<void> 
     });
 
     if (error) {
-      throw new Error(`AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: ${error.message}`);
+      if (isProduction && isHighRisk) {
+        throw new Error(`AUDIT_LOG_WRITE_FAILED: Gagal menyimpan jejak audit: ${error.message}`);
+      } else {
+        console.warn(`[AuditLog] Gagal menyimpan ke Supabase: ${error.message}`);
+      }
     }
   }
 }

@@ -14,10 +14,12 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  output: 'standalone',
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
     },
+    serverComponentsExternalPackages: ['@prisma/client', 'prisma'],
   },
   async headers() {
     return [{ source: '/:path*', headers: securityHeaders }];

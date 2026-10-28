@@ -1,0 +1,565 @@
+
+Running 26 tests using 1 worker
+
+[1/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 360x640 (mobile-small) - Login page checks
+[WebServer] <w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (113kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+
+[WebServer] <w> [webpack.cache.PackFileCacheStrategy] Serializing big strings (268kiB) impacts deserialization performance (consider using Buffer instead and decode when needed)
+
+  1) [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 360x640 (mobile-small) - Login page checks 
+
+    Error: Horizontal scroll terdeteksi di viewport 360x640
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      36 |         );
+      37 |       });
+    > 38 |       expect(hasHorizontalScroll, `Horizontal scroll terdeteksi di viewport ${vp.width}x${vp.height}`).toBe(false);
+         |                                                                                                        ^
+      39 |
+      40 |       // 2. Assert: Input font-size >= 16px di viewport < 768px (mencegah auto-zoom iOS)
+      41 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:38:104
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-d43c6-e-small---Login-page-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-d43c6-e-small---Login-page-checks-chromium\error-context.md
+
+
+[2/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 390x844 (mobile-iphone-12) - Login page checks
+  2) [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 390x844 (mobile-iphone-12) - Login page checks 
+
+    Error: Horizontal scroll terdeteksi di viewport 390x844
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      36 |         );
+      37 |       });
+    > 38 |       expect(hasHorizontalScroll, `Horizontal scroll terdeteksi di viewport ${vp.width}x${vp.height}`).toBe(false);
+         |                                                                                                        ^
+      39 |
+      40 |       // 2. Assert: Input font-size >= 16px di viewport < 768px (mencegah auto-zoom iOS)
+      41 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:38:104
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-5f8fd-hone-12---Login-page-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-5f8fd-hone-12---Login-page-checks-chromium\error-context.md
+
+
+[3/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 430x932 (mobile-iphone-14-pro-max) - Login page checks
+  3) [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 430x932 (mobile-iphone-14-pro-max) - Login page checks 
+
+    Error: Horizontal scroll terdeteksi di viewport 430x932
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      36 |         );
+      37 |       });
+    > 38 |       expect(hasHorizontalScroll, `Horizontal scroll terdeteksi di viewport ${vp.width}x${vp.height}`).toBe(false);
+         |                                                                                                        ^
+      39 |
+      40 |       // 2. Assert: Input font-size >= 16px di viewport < 768px (mencegah auto-zoom iOS)
+      41 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:38:104
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-2cebc-pro-max---Login-page-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-2cebc-pro-max---Login-page-checks-chromium\error-context.md
+
+
+[4/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 768x1024 (tablet-portrait) - Login page checks
+  4) [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 768x1024 (tablet-portrait) - Login page checks 
+
+    Error: Horizontal scroll terdeteksi di viewport 768x1024
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      36 |         );
+      37 |       });
+    > 38 |       expect(hasHorizontalScroll, `Horizontal scroll terdeteksi di viewport ${vp.width}x${vp.height}`).toBe(false);
+         |                                                                                                        ^
+      39 |
+      40 |       // 2. Assert: Input font-size >= 16px di viewport < 768px (mencegah auto-zoom iOS)
+      41 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:38:104
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-d5705-ortrait---Login-page-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-d5705-ortrait---Login-page-checks-chromium\error-context.md
+
+
+[5/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 820x1180 (tablet-ipad-air) - Login page checks
+  5) [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 820x1180 (tablet-ipad-air) - Login page checks 
+
+    Error: Horizontal scroll terdeteksi di viewport 820x1180
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: false
+    Received: true
+
+      36 |         );
+      37 |       });
+    > 38 |       expect(hasHorizontalScroll, `Horizontal scroll terdeteksi di viewport ${vp.width}x${vp.height}`).toBe(false);
+         |                                                                                                        ^
+      39 |
+      40 |       // 2. Assert: Input font-size >= 16px di viewport < 768px (mencegah auto-zoom iOS)
+      41 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:38:104
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-e5a08-pad-air---Login-page-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-e5a08-pad-air---Login-page-checks-chromium\error-context.md
+
+
+[6/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1024x768 (tablet-landscape) - Login page checks
+[7/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1280x720 (laptop-hd) - Login page checks
+[8/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1366x768 (laptop-standard) - Login page checks
+[9/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1440x900 (laptop-widescreen) - Login page checks
+[10/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1536x864 (desktop-fhd-scaled) - Login page checks
+[11/26] [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1920x1080 (desktop-fhd) - Login page checks
+[12/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 360x640 (mobile-small) - Student Dashboard checks
+  6) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 360x640 (mobile-small) - Student Dashboard checks 
+
+    TimeoutError: page.waitForURL: Timeout 20000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "**/student" until "domcontentloaded"
+      navigated to "http://localhost:3000/login"
+    ============================================================
+
+      70 |       await page.click('button[type="submit"]');
+      71 |
+    > 72 |       await page.waitForURL('**/student', { timeout: 20000, waitUntil: 'domcontentloaded' });
+         |                  ^
+      73 |       await page.waitForLoadState('domcontentloaded');
+      74 |
+      75 |       // 1. Assert: Tidak ada horizontal scroll
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:72:18
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-11bac----Student-Dashboard-checks-chromium\error-context.md
+
+
+[13/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 390x844 (mobile-iphone-12) - Student Dashboard checks
+  7) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 390x844 (mobile-iphone-12) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (390x844)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-e1ea6----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-e1ea6----Student-Dashboard-checks-chromium\error-context.md
+
+
+[14/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 430x932 (mobile-iphone-14-pro-max) - Student Dashboard checks
+  8) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 430x932 (mobile-iphone-14-pro-max) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (430x932)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-e8c36----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-e8c36----Student-Dashboard-checks-chromium\error-context.md
+
+
+[15/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 768x1024 (tablet-portrait) - Student Dashboard checks
+  9) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 768x1024 (tablet-portrait) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (768x1024)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-a8e57----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-a8e57----Student-Dashboard-checks-chromium\error-context.md
+
+
+[16/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 820x1180 (tablet-ipad-air) - Student Dashboard checks
+  10) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 820x1180 (tablet-ipad-air) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (820x1180)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-6e6fa----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-6e6fa----Student-Dashboard-checks-chromium\error-context.md
+
+
+[17/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1024x768 (tablet-landscape) - Student Dashboard checks
+  11) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1024x768 (tablet-landscape) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (1024x768)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-aa70a----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-aa70a----Student-Dashboard-checks-chromium\error-context.md
+
+
+[18/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1280x720 (laptop-hd) - Student Dashboard checks
+  12) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1280x720 (laptop-hd) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (1280x720)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-52c13----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-52c13----Student-Dashboard-checks-chromium\error-context.md
+
+
+[19/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1366x768 (laptop-standard) - Student Dashboard checks
+  13) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1366x768 (laptop-standard) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (1366x768)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-fca4c----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-fca4c----Student-Dashboard-checks-chromium\error-context.md
+
+
+[20/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1440x900 (laptop-widescreen) - Student Dashboard checks
+  14) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1440x900 (laptop-widescreen) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (1440x900)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-9f618----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-9f618----Student-Dashboard-checks-chromium\error-context.md
+
+
+[21/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1536x864 (desktop-fhd-scaled) - Student Dashboard checks
+  15) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1536x864 (desktop-fhd-scaled) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (1536x864)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-f8a87----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-f8a87----Student-Dashboard-checks-chromium\error-context.md
+
+
+[22/26] [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1920x1080 (desktop-fhd) - Student Dashboard checks
+  16) [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1920x1080 (desktop-fhd) - Student Dashboard checks 
+
+    Error: Ditemukan elemen dengan teks di bawah 12px di /student (1920x1080)
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 0
+    Received length: 84
+    Received array:  [{"size": 11, "tag": "SPAN", "text": "Portal Akademik Terpadu"}, {"size": 11, "tag": "P", "text": "Belajar"}, {"size": 11, "tag": "P", "text": "Nilai"}, {"size": 11, "tag": "P", "text": "Lainnya"}, {"size": 11, "tag": "P", "text": "Akun"}, {"size": 11, "tag": "SPAN", "text": "⌘"}, {"size": 11, "tag": "SPAN", "text": "K"}, {"size": 11, "tag": "SPAN", "text": "STI2544138"}, {"size": 11, "tag": "SPAN", "text": "STI2543131"}, {"size": 10, "tag": "SPAN", "text": "AKAN DATANG"}, …]
+
+      112 |         return tooSmall;
+      113 |       });
+    > 114 |       expect(smallTextElements, `Ditemukan elemen dengan teks di bawah 12px di /student (${vp.width}x${vp.height})`).toHaveLength(0);
+          |                                                                                                                      ^
+      115 |
+      116 |       // 4. Assert: Touch target interaktif di pointer: coarse / mobile (<768px)
+      117 |       if (vp.width < 768) {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:114:118
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-be1af----Student-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-be1af----Student-Dashboard-checks-chromium\error-context.md
+
+
+[23/26] [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 390x844 (mobile) - Lecturer Dashboard checks
+  17) [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 390x844 (mobile) - Lecturer Dashboard checks 
+
+    TimeoutError: page.waitForURL: Timeout 20000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "**/lecturer" until "domcontentloaded"
+      navigated to "http://localhost:3000/login"
+      navigated to "http://localhost:3000/login"
+      navigated to "http://localhost:3000/workspace"
+      navigated to "http://localhost:3000/workspace"
+    ============================================================
+
+      164 |       await page.click('button[type="submit"]');
+      165 |
+    > 166 |       await page.waitForURL('**/lecturer', { timeout: 20000, waitUntil: 'domcontentloaded' });
+          |                  ^
+      167 |       await page.waitForLoadState('domcontentloaded');
+      168 |
+      169 |       const hasHorizontalScroll = await page.evaluate(() => {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:166:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-a795f---Lecturer-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-a795f---Lecturer-Dashboard-checks-chromium\error-context.md
+
+
+[24/26] [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 768x1024 (tablet) - Lecturer Dashboard checks
+  18) [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 768x1024 (tablet) - Lecturer Dashboard checks 
+
+    TimeoutError: page.waitForURL: Timeout 20000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "**/lecturer" until "domcontentloaded"
+      navigated to "http://localhost:3000/login"
+      navigated to "http://localhost:3000/workspace"
+      navigated to "http://localhost:3000/workspace"
+    ============================================================
+
+      164 |       await page.click('button[type="submit"]');
+      165 |
+    > 166 |       await page.waitForURL('**/lecturer', { timeout: 20000, waitUntil: 'domcontentloaded' });
+          |                  ^
+      167 |       await page.waitForLoadState('domcontentloaded');
+      168 |
+      169 |       const hasHorizontalScroll = await page.evaluate(() => {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:166:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-5a334---Lecturer-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-5a334---Lecturer-Dashboard-checks-chromium\error-context.md
+
+
+[25/26] [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1366x768 (laptop) - Lecturer Dashboard checks
+  19) [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1366x768 (laptop) - Lecturer Dashboard checks 
+
+    TimeoutError: page.waitForURL: Timeout 20000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "**/lecturer" until "domcontentloaded"
+      navigated to "http://localhost:3000/login"
+      navigated to "http://localhost:3000/workspace"
+      navigated to "http://localhost:3000/workspace"
+    ============================================================
+
+      164 |       await page.click('button[type="submit"]');
+      165 |
+    > 166 |       await page.waitForURL('**/lecturer', { timeout: 20000, waitUntil: 'domcontentloaded' });
+          |                  ^
+      167 |       await page.waitForLoadState('domcontentloaded');
+      168 |
+      169 |       const hasHorizontalScroll = await page.evaluate(() => {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:166:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-ffa2c---Lecturer-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-ffa2c---Lecturer-Dashboard-checks-chromium\error-context.md
+
+
+[26/26] [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1920x1080 (desktop) - Lecturer Dashboard checks
+  20) [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1920x1080 (desktop) - Lecturer Dashboard checks 
+
+    TimeoutError: page.waitForURL: Timeout 20000ms exceeded.
+    =========================== logs ===========================
+    waiting for navigation to "**/lecturer" until "domcontentloaded"
+      navigated to "http://localhost:3000/login"
+      navigated to "http://localhost:3000/workspace"
+      navigated to "http://localhost:3000/workspace"
+    ============================================================
+
+      164 |       await page.click('button[type="submit"]');
+      165 |
+    > 166 |       await page.waitForURL('**/lecturer', { timeout: 20000, waitUntil: 'domcontentloaded' });
+          |                  ^
+      167 |       await page.waitForLoadState('domcontentloaded');
+      168 |
+      169 |       const hasHorizontalScroll = await page.evaluate(() => {
+        at C:\Users\ACER\Downloads\implementasi\tests\e2e\responsive.spec.ts:166:18
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\responsive-SIAJAR-Responsi-848c4---Lecturer-Dashboard-checks-chromium\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\responsive-SIAJAR-Responsi-848c4---Lecturer-Dashboard-checks-chromium\error-context.md
+
+
+  20 failed
+    [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 360x640 (mobile-small) - Login page checks 
+    [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 390x844 (mobile-iphone-12) - Login page checks 
+    [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 430x932 (mobile-iphone-14-pro-max) - Login page checks 
+    [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 768x1024 (tablet-portrait) - Login page checks 
+    [chromium] › tests\e2e\responsive.spec.ts:26:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 820x1180 (tablet-ipad-air) - Login page checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 360x640 (mobile-small) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 390x844 (mobile-iphone-12) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 430x932 (mobile-iphone-14-pro-max) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 768x1024 (tablet-portrait) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 820x1180 (tablet-ipad-air) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1024x768 (tablet-landscape) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1280x720 (laptop-hd) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1366x768 (laptop-standard) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1440x900 (laptop-widescreen) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1536x864 (desktop-fhd-scaled) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:63:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1920x1080 (desktop-fhd) - Student Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 390x844 (mobile) - Lecturer Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 768x1024 (tablet) - Lecturer Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1366x768 (laptop) - Lecturer Dashboard checks 
+    [chromium] › tests\e2e\responsive.spec.ts:158:9 › SIAJAR Responsive & Scale Verification Across 11 Viewports › Viewport 1920x1080 (desktop) - Lecturer Dashboard checks 
+  6 passed (6.9m)

@@ -1,4 +1,5 @@
 'use client';
+import { toast } from '@/components/ui/toast';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import {
@@ -95,7 +96,7 @@ export function ClassLivePollCard({ classId, currentUserRole }: ClassLivePollCar
     if (res.ok) {
       setHasVoted(true);
     } else {
-      alert(res.error || 'Gagal mengirim jawaban.');
+      toast.error(res.error || 'Gagal mengirim jawaban.');
     }
   };
 
@@ -134,7 +135,7 @@ export function ClassLivePollCard({ classId, currentUserRole }: ClassLivePollCar
       ]);
       loadPolls();
     } else {
-      alert(res.error || 'Gagal membuat polling.');
+      toast.error(res.error || 'Gagal membuat polling.');
     }
   };
 

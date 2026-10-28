@@ -155,3 +155,33 @@ export async function syncDistributedRateLimit(
   }
 }
 
+/**
+ * Mengambil hitungan rate limit saat ini dari Upstash Redis REST API.
+ * Mengembalikan null jika Redis tidak dikonfigurasi atau mengalami galat jaringan.
+ */
+export async function getDistributedRateLimit(key: string): Promise<number | null> {
+  const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!redisUrl || !redisToken) return null;
+
+  try {
+    const cleanUrl = redisUrl.replace(/\/$/, '');
+    const res = await fetch(`${cleanUrl}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${redisToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(['GET', `siajar:rl:${key}`]),
+      signal: AbortSignal.timeout(2000),
+    });
+
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data?.result === null || data?.result === undefined) return 0;
+    const count = parseInt(String(data.result), 10);
+    return isNaN(count) ? 0 : count;
+  } catch {
+    return null;
+  }
+}

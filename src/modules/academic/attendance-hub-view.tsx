@@ -21,6 +21,7 @@ import {
   Calendar,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { toast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
 import { submitLeavePermitAction } from './attendance-actions';
 
@@ -115,7 +116,7 @@ export function AttendanceHubView({ records, leaves, isDemo = true }: Attendance
           setPermitFile(null);
         }, 1500);
       } else {
-        alert(res.error || 'Gagal mengirim permohonan izin');
+        toast.error(res.error || 'Gagal mengirim permohonan izin');
       }
     });
   };

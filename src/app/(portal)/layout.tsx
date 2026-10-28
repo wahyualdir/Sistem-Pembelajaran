@@ -5,6 +5,7 @@ import { ChevronDown, Layers, LogOut } from 'lucide-react';
 import { getCurrentUserWithRoles, logoutAction } from '@/modules/identity/actions';
 import { getDynamicMenuBadgesAction } from '@/modules/academic/actions';
 import { AiAcademicAssistant } from '@/components/shared/ai-academic-assistant';
+import { Toaster } from '@/components/ui/toast';
 import { PortalShell } from './portal-shell';
 
 const ROLE_DISPLAY_NAMES: Record<string, string> = {
@@ -26,28 +27,25 @@ export default async function PortalLayout({ children }: { children: React.React
 
   const { profile, roles, activeRole } = userContext;
   const role = activeRole || 'STUDENT';
-  const roleName = ROLE_DISPLAY_NAMES[role] || role;
   const badges = await getDynamicMenuBadgesAction();
   const unread = badges.unreadCount;
+  const roleName = ROLE_DISPLAY_NAMES[role] || 'Pengguna';
 
-  const roleBlock =
-    roles.length > 1 ? (
-      <Link
-        href="/workspace"
-        className="flex items-center justify-between rounded-control bg-muted px-3 py-2 text-sm font-medium transition-colors hover:bg-primary-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-      >
-        <span className="flex items-center gap-2">
-          <Layers className="h-4 w-4 text-muted-foreground" />
-          {roleName}
-        </span>
-        <ChevronDown className="h-4 w-4 text-muted-foreground" />
-      </Link>
-    ) : (
-      <p className="flex items-center gap-2 text-sm text-muted-foreground">
-        <span className="h-2 w-2 rounded-full bg-gray-dark" />
-        {roleName}
-      </p>
-    );
+  const roleBlock = (
+    <div className="flex items-center gap-2 rounded-control border border-border bg-surface px-3 py-2 text-sm">
+      <Layers className="h-4 w-4 shrink-0 text-muted-foreground" />
+      <span className="font-semibold text-foreground">{roleName}</span>
+      {roles.length > 1 && (
+        <Link
+          href="/workspace"
+          className="ml-auto inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-xs text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <span>Ganti</span>
+          <ChevronDown className="h-3 w-3" />
+        </Link>
+      )}
+    </div>
+  );
 
   const account = (
     <div className="border-t border-border p-4">
@@ -79,6 +77,7 @@ export default async function PortalLayout({ children }: { children: React.React
     >
       {children}
       <AiAcademicAssistant />
+      <Toaster />
     </PortalShell>
   );
 }

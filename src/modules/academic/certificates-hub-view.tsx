@@ -19,6 +19,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
+import { toast } from '@/components/ui/toast';
 import { cn } from '@/lib/utils';
 
 export interface CertificateItem {
@@ -194,7 +195,7 @@ export function CertificatesHubView({ certificates, projects }: CertificatesHubV
                         if (typeof window !== 'undefined') {
                           const url = `${window.location.origin}/verify/certificate/${encodeURIComponent(cert.credentialId)}`;
                           navigator.clipboard?.writeText(url);
-                          alert(`Tautan verifikasi disalin:\n${url}`);
+                          toast.success('Tautan verifikasi telah disalin.', 'Verifikasi Sertifikat');
                         }
                       }}
                       className="p-2 rounded-lg border-2 border-ink bg-gray-soft text-ink hover:bg-neutral-200 transition-all cursor-pointer"

@@ -68,14 +68,16 @@ export function MarkdownViewer({ content, className }: MarkdownViewerProps) {
         continue;
       }
 
-      // Link: [text](url)
+      // Link: [text](url) - dengan sanitasi XSS (mencegah javascript: dan skema berbahaya)
       const linkMatch = remaining.match(/^\[([^\]]+)\]\(([^)]+)\)/);
       if (linkMatch) {
+        const rawHref = linkMatch[2].trim();
+        const isSafe = /^((https?:\/\/)|(mailto:)|(\/))/i.test(rawHref) && !/javascript:/i.test(rawHref);
         tokens.push(
           <a
             key={keyIdx++}
-            href={linkMatch[2]}
-            target="_blank"
+            href={isSafe ? rawHref : undefined}
+            target={isSafe && !rawHref.startsWith('/') ? '_blank' : undefined}
             rel="noopener noreferrer"
             className="text-ink font-bold underline underline-offset-4 hover:opacity-80"
           >

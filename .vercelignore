@@ -1,0 +1,17 @@
+# Dokumentasi & Riwayat Audit
+docs/
+scratch/
+
+# Pengujian
+tests/
+src/tests/
+playwright-report/
+test-results/
+
+# Skrip developer (hanya simpan prebuild.js untuk fase build)
+scripts/*
+!scripts/prebuild.js
+
+# Log & File Sementara
+*.log
+*.tmp*

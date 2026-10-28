@@ -1,4 +1,5 @@
 'use client';
+import { toast } from '@/components/ui/toast';
 
 import React, { useState, useEffect, useRef } from 'react';
 import {
@@ -122,7 +123,7 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
       const msgsRes = await getConversationMessagesAction(selectedConvId);
       if (msgsRes.ok) setMessages(msgsRes.messages);
     } else {
-      alert(res.error || 'Gagal mengirim pesan.');
+      toast.error(res.error || 'Gagal mengirim pesan.');
     }
   };
 
@@ -146,7 +147,7 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
         setReportSuccess(false);
       }, 1500);
     } else {
-      alert(res.error || 'Gagal mengirim laporan.');
+      toast.error(res.error || 'Gagal mengirim laporan.');
     }
   };
 
@@ -166,13 +167,13 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
       const slotsRes = await listConsultationSlotsAction();
       if (slotsRes.ok && slotsRes.slots) setSlots(slotsRes.slots);
     } else {
-      alert(res.error || 'Gagal membuat slot.');
+      toast.error(res.error || 'Gagal membuat slot.');
     }
   };
 
   const handleBookSlot = async (slotId: string) => {
     if (!bookingTopic.trim() || bookingTopic.trim().length < 5) {
-      alert('Topik konsultasi minimal 5 karakter.');
+      toast.error('Topik konsultasi minimal 5 karakter.');
       return;
     }
     const res = await bookConsultationSlotAction(slotId, bookingTopic.trim());
@@ -182,7 +183,7 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
       const slotsRes = await listConsultationSlotsAction();
       if (slotsRes.ok && slotsRes.slots) setSlots(slotsRes.slots);
     } else {
-      alert(res.error || 'Gagal memesan slot.');
+      toast.error(res.error || 'Gagal memesan slot.');
     }
   };
 
@@ -193,7 +194,7 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
       const slotsRes = await listConsultationSlotsAction();
       if (slotsRes.ok && slotsRes.slots) setSlots(slotsRes.slots);
     } else {
-      alert(res.error || 'Gagal membatalkan konsultasi.');
+      toast.error(res.error || 'Gagal membatalkan konsultasi.');
     }
   };
 
@@ -205,7 +206,7 @@ export function MessagesHubView({ currentUserRole, currentUserId }: MessagesHubV
       const slotsRes = await listConsultationSlotsAction();
       if (slotsRes.ok && slotsRes.slots) setSlots(slotsRes.slots);
     } else {
-      alert(res.error || 'Gagal menandai selesai.');
+      toast.error(res.error || 'Gagal menandai selesai.');
     }
   };
 

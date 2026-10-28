@@ -173,3 +173,41 @@ export async function verifyCertificateByCodeAction(code: string): Promise<{
     certificate: cert,
   };
 }
+
+
+export interface StudentProjectItem {
+  id: string;
+  title: string;
+  course: string;
+  type: string;
+  description: string;
+  tech: string[];
+  status: string;
+  repo?: string;
+}
+
+export async function getStudentProjectsAction(): Promise<StudentProjectItem[]> {
+  return [
+    {
+      id: 'proj-1',
+      title: 'RuangKampus: LMS Enterprise & Proctoring',
+      course: 'Pemrograman Web & Arsitektur Cloud (STI2544138)',
+      type: 'Tugas Akhir Proyek',
+      description:
+        'Implementasi aplikasi manajemen perkuliahan dengan Next.js App Router, live panel proctoring ujian, compiler live coding sandbox, dan presensi QR haversine.',
+      tech: ['Next.js 14', 'TypeScript', 'Prisma', 'PostgreSQL', 'Tailwind CSS'],
+      status: 'Selesai (Skor: 95/100)',
+      repo: 'github.com/wahyu/ruangkampus-lms',
+    },
+    {
+      id: 'proj-2',
+      title: 'AI Resume & Quiz Generator Engine',
+      course: 'Pengenalan Kecerdasan Buatan (STI2543129)',
+      type: 'Proyek Kelompok Riset',
+      description:
+        'Aplikasi pembaca modul PDF otomatis dan ekstraksi bank soal kuis bergradasi taksonomi Bloom menggunakan model machine learning dan semantic search.',
+      tech: ['Python', 'FastAPI', 'PyTorch', 'Transformers', 'ChromaDB'],
+      status: 'Selesai (Skor: 92/100)',
+    },
+  ];
+}

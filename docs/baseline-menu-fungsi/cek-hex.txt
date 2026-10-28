@@ -1,0 +1,29 @@
+
+> siakad@0.1.0 cek:hex
+> node scripts/cek-hex.js
+
+❌ Hex di luar palet resmi kampus ditemukan di src\app\(auth)\login\island-illustration.tsx: [
+  '#D6D0C4', '#BBF7D0',
+  '#F0FDF4', '#16A34A',
+  '#DCFCE7', '#15803D',
+  '#15803D', '#FED7AA',
+  '#FFF7ED', '#E7E5E4',
+  '#FAFAF9', '#F5F5F4'
+]
+❌ Hex di luar palet resmi kampus ditemukan di src\app\(auth)\login\page.tsx: [
+  '#E8E4DA', '#E8E4DA', '#6E6A61', '#E8E4DA',
+  '#EFECE6', '#F3EFE7', '#F3EFE7', '#F3EFE7',
+  '#F0ECE3', '#F0ECE3', '#E8E4DA', '#16A34A',
+  '#EFECE6', '#E8E4DA', '#E8E4DA', '#E8E4DA',
+  '#E8E4DA', '#15803D', '#E8E4DA', '#EFECE6',
+  '#EFECE6', '#15803D', '#15803D', '#22C55E',
+  '#15803D', '#E8E4DA', '#E8E4DA', '#E8E4DA',
+  '#EFECE6', '#15803D', '#E8E4DA', '#EFECE6',
+  '#E8E4DA', '#E8E4DA', '#DFDACF', '#DFDACF',
+  '#DFDACF', '#B84A30', '#A33D25', '#B84A30',
+  '#8E321C', '#E8E4DA', '#25D366', '#25D366',
+  '#25D366', '#25D366', '#25D366', '#25D366'
+]
+
+[Gagal] Ditemukan 60 kode warna hex di luar palet resmi kampus!
+Hanya diizinkan: #F3F3F4, #FFFFFF, #111111, #ED1C24, #A91117, #808285, #58595B, #E2E3E4, #000000.

@@ -1,4 +1,5 @@
 'use client';
+import { toast } from '@/components/ui/toast';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -185,14 +186,13 @@ export function MentoringRiskView({ advisees }: MentoringRiskViewProps) {
                   </p>
 
                   <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => alert(`Mencatat konsultasi untuk mahasiswa ${item.studentName} (${item.studentNim})`)}
+                    <Link
+                      href={`/messages?tab=konsultasi&studentNim=${item.studentNim}`}
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-black bg-white hover:bg-black hover:text-white text-black text-xs font-bold transition-all shadow-retro-sm cursor-pointer"
                     >
                       <MessageSquare className="h-3.5 w-3.5 text-black" />
                       <span>Catat Konsultasi</span>
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>

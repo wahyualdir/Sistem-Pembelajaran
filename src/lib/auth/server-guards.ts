@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getCurrentUserWithRoles } from '@/modules/identity/actions';
+import { getCurrentUserWithRoles } from '@/modules/identity/current-user';
 
 /**
  * Server-Side Role Guard (A2 Security Hardening)
