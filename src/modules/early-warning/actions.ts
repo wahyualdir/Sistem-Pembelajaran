@@ -104,6 +104,7 @@ export async function getCoordinatorCohortRiskAction(): Promise<{
   const role = userContext.activeRole;
   const isAuthorized =
     role === 'PROGRAM_COORDINATOR' ||
+    role === 'PROGRAM_SECRETARY' ||
     role === 'ACADEMIC_STAFF' ||
     role === 'SUPER_ADMIN';
 
@@ -213,6 +214,7 @@ export async function getAllAtRiskStudentsAction(): Promise<StudentRiskEvaluatio
   const role = userContext.activeRole;
   const isAuthorized =
     role === 'PROGRAM_COORDINATOR' ||
+    role === 'PROGRAM_SECRETARY' ||
     role === 'ACADEMIC_STAFF' ||
     role === 'SUPER_ADMIN';
 

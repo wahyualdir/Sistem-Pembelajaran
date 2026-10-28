@@ -28,10 +28,12 @@ export type CoordinatorMonitoringTabId = (typeof COORDINATOR_MONITORING_TABS)[nu
 
 interface CoordinatorMonitoringHubViewProps {
   isDemo?: boolean;
+  basePath?: string;
 }
 
 export function CoordinatorMonitoringHubView({
   isDemo = true,
+  basePath = '/coordinator/monitoring',
 }: CoordinatorMonitoringHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -43,7 +45,7 @@ export function CoordinatorMonitoringHubView({
   const setTab = (tab: CoordinatorMonitoringTabId) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tab);
-    router.push(`/coordinator/monitoring?${params.toString()}`);
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   const CLASS_PROGRESS = isDemo

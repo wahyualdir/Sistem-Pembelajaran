@@ -115,13 +115,17 @@ Titik awal audit: commit `9d2a590` (`pra-menu-fungsi`) pada cabang `perbaikan/me
 
 ---
 
+---
+
+---
+
 ## 2. Hasil Audit Inventaris Menu Otomatis (Fase 2)
 
 Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 
 ### 2.1. Ringkasan Status Menu
-- **Total Entri Menu**: 123
-- **BERFUNGSI**: 123
+- **Total Entri Menu**: 137
+- **BERFUNGSI**: 137
 - **SEBAGIAN**: 0
 - **TIRUAN**: 0
 - **RUSAK**: 0
@@ -129,7 +133,7 @@ Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 
 ---
 
-### 2.2. Tabel Hasil Audit Menu per Peran (123 Entri)
+### 2.2. Tabel Hasil Audit Menu per Peran (137 Entri)
 
 | Role | Menu | href | Jenis Rute | Sumber Data | Aksi Palsu | Status | Bukti |
 |---|---|---|---|---|---|---|---|
@@ -206,6 +210,7 @@ Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 | `PROGRAM_COORDINATOR` | Kurikulum | `/coordinator/curriculum` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/curriculum/page.tsx |
 | `PROGRAM_COORDINATOR` | Mata Kuliah | `/coordinator/courses` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/courses/page.tsx |
 | `PROGRAM_COORDINATOR` | Penugasan Dosen | `/coordinator/assignments` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/assignments/page.tsx |
+| `PROGRAM_COORDINATOR` | Perwalian | `/coordinator/advisory` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/advisory/page.tsx |
 | `PROGRAM_COORDINATOR` | Evaluasi Dosen | `/coordinator/evaluations` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/evaluations/page.tsx |
 | `PROGRAM_COORDINATOR` | Perkuliahan | `/coordinator/monitoring` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/monitoring/page.tsx |
 | `PROGRAM_COORDINATOR` | Mahasiswa Berisiko | `/coordinator/monitoring/at-risk` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/monitoring/at-risk/page.tsx |
@@ -214,6 +219,19 @@ Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 | `PROGRAM_COORDINATOR` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
 | `PROGRAM_COORDINATOR` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
 | `PROGRAM_COORDINATOR` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
+| `PROGRAM_SECRETARY` | Beranda | `/secretary` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/secretary/page.tsx |
+| `PROGRAM_SECRETARY` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
+| `PROGRAM_SECRETARY` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
+| `PROGRAM_SECRETARY` | Pengumuman | `/announcements` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/announcements/page.tsx |
+| `PROGRAM_SECRETARY` | Monitoring Prodi | `/secretary/monitoring` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/secretary/monitoring/page.tsx |
+| `PROGRAM_SECRETARY` | Jadwal dan Penugasan Kelas | `/secretary/classes` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/secretary/classes/page.tsx |
+| `PROGRAM_SECRETARY` | Perwalian | `/secretary/advisory` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/secretary/advisory/page.tsx |
+| `PROGRAM_SECRETARY` | Pengajuan | `/secretary/requests` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/secretary/requests/page.tsx |
+| `PROGRAM_SECRETARY` | Risiko Mahasiswa | `/secretary/risk` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/secretary/risk/page.tsx |
+| `PROGRAM_SECRETARY` | Laporan Akademik | `/secretary/reports` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/secretary/reports/page.tsx |
+| `PROGRAM_SECRETARY` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
+| `PROGRAM_SECRETARY` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
+| `PROGRAM_SECRETARY` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
 | `ACADEMIC_STAFF` | Beranda | `/staff` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/page.tsx |
 | `ACADEMIC_STAFF` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
 | `ACADEMIC_STAFF` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |

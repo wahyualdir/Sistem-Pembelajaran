@@ -30,11 +30,15 @@ export type CoordinatorApprovalsTabId = (typeof COORDINATOR_APPROVALS_TABS)[numb
 interface CoordinatorApprovalsHubViewProps {
   changeRequests: ChangeRequestItem[];
   isDemo?: boolean;
+  canApprove?: boolean;
+  basePath?: string;
 }
 
 export function CoordinatorApprovalsHubView({
   changeRequests,
   isDemo = true,
+  canApprove = true,
+  basePath = '/coordinator/approvals',
 }: CoordinatorApprovalsHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -53,7 +57,7 @@ export function CoordinatorApprovalsHubView({
   const setTab = (tab: CoordinatorApprovalsTabId) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tab);
-    router.push(`/coordinator/approvals?${params.toString()}`);
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   const [requestsList, setRequestsList] = useState<ChangeRequestItem[]>(changeRequests);

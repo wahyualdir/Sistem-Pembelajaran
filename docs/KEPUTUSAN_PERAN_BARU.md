@@ -61,3 +61,19 @@ Dokumen ini mencatat keputusan arsitektural dan teknis yang diambil selama imple
    - Dosen Wali ditampilkan di Beranda Mahasiswa (`/student`) dan Profil Pengguna (`/profile`) via `getMyAdvisorAction`. Jika belum ada wali aktif, menampilkan status 'Belum Ditetapkan'.
 6. **Migrasi Data Legacy**:
    - Disediakan skrip migrasi sekali jalan `scripts/migrate-legacy-advisories.js` untuk memindahkan data relasi legacy `dosenWaliId` ke `academic_advisories`.
+
+---
+
+### Fase 3: Sekretaris Prodi (`PROGRAM_SECRETARY`)
+
+1. **Prinsip Peran — Membantu & Memverifikasi, Bukan Memutuskan Akhir**:
+   - `PROGRAM_SECRETARY` memiliki lingkup `scope_type = 'PROGRAM'` dan menaungi operasional program studi yang sama dengan `PROGRAM_COORDINATOR`.
+   - Wewenang mencakup pemantauan perkuliahan, penyiapan jadwal dan penugasan kelas, penetapan Dosen Wali, verifikasi awal pengajuan mahasiswa, pemantauan peringatan dini (EWS) mahasiswa berisiko, serta pengunduhan laporan akademik.
+2. **Batasan Server Tegas**:
+   - `decideGradeChangeAction` dibatasi secara ketat hanya untuk aktor `PROGRAM_COORDINATOR`. Panggilan dari `PROGRAM_SECRETARY` ditolak di server dengan pesan otorisasi resmi (`Aksi ini tidak tersedia untuk peran Anda`).
+   - Tombol persetujuan/penolakan nilai dihilangkan dari tampilan Sekprodi melalui prop `canApprove={false}`.
+   - Akses log audit sistem (`/admin/system/audit`) sepenuhnya diblokir untuk Sekprodi.
+3. **Pemanfaatan Ulang Komponen Antarmuka**:
+   - Komponen `coordinator-*-hub-view` dan `CoordinatorDashboardClient` digunakan ulang dengan parameter kemampuan (`isSecretary={true}`, `canApprove={false}`, `basePath="/secretary/..."`) untuk memastikan keseragaman visual tanpa duplikasi kode.
+4. **Hub Manajemen Perwalian Terpadu**:
+   - Dibuatkan `AdvisoryManagementHubView` di `src/modules/academic/advisory-management-hub-view.tsx` yang digunakan bersama oleh Kaprodi (`/coordinator/advisory`) dan Sekprodi (`/secretary/advisory`) untuk menata distribusi Dosen Wali dan bimbingan akademik.

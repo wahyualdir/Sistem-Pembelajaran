@@ -44,10 +44,12 @@ export type CoordinatorReportsTabId = (typeof COORDINATOR_REPORTS_TABS)[number][
 
 interface CoordinatorReportsHubViewProps {
   isDemo?: boolean;
+  basePath?: string;
 }
 
 export function CoordinatorReportsHubView({
   isDemo = true,
+  basePath = '/coordinator/reports',
 }: CoordinatorReportsHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -66,7 +68,7 @@ export function CoordinatorReportsHubView({
   const setTab = (tab: CoordinatorReportsTabId) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tab);
-    router.push(`/coordinator/reports?${params.toString()}`);
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   const [edomPeriod, setEdomPeriod] = React.useState<EvaluationPeriod | null>(null);

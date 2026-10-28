@@ -27,10 +27,12 @@ export type CoordinatorAssignmentsTabId = (typeof COORDINATOR_ASSIGNMENTS_TABS)[
 
 interface CoordinatorAssignmentsHubViewProps {
   isDemo?: boolean;
+  basePath?: string;
 }
 
 export function CoordinatorAssignmentsHubView({
   isDemo = true,
+  basePath = '/coordinator/assignments',
 }: CoordinatorAssignmentsHubViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,7 +46,7 @@ export function CoordinatorAssignmentsHubView({
   const setTab = (tab: CoordinatorAssignmentsTabId) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('tab', tab);
-    router.push(`/coordinator/assignments?${params.toString()}`);
+    router.push(`${basePath}?${params.toString()}`);
   };
 
   const LECTURER_ASSIGNMENTS = isDemo

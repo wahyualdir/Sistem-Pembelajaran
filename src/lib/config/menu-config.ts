@@ -6,6 +6,7 @@ import {
   Megaphone,
   Layers,
   CalendarCheck2,
+  FileCheck,
   FileCheck2,
   Library,
   Sparkles,
@@ -266,6 +267,7 @@ const PROGRAM_COORDINATOR_GROUPS: MenuGroup[] = [
       { id: 'kaprodi-kurikulum', label: 'Kurikulum', href: '/coordinator/curriculum', icon: BookOpen, roles: ['PROGRAM_COORDINATOR'] },
       { id: 'kaprodi-matkul', label: 'Mata Kuliah', href: '/coordinator/courses', icon: Layers, roles: ['PROGRAM_COORDINATOR'] },
       { id: 'kaprodi-penugasan', label: 'Penugasan Dosen', href: '/coordinator/assignments', icon: Users, roles: ['PROGRAM_COORDINATOR'] },
+      { id: 'kaprodi-perwalian', label: 'Perwalian', href: '/coordinator/advisory', icon: GraduationCap, roles: ['PROGRAM_COORDINATOR'] },
       { id: 'kaprodi-evaluasi-dosen', label: 'Evaluasi Dosen', href: '/coordinator/evaluations', icon: ClipboardCheck, roles: ['PROGRAM_COORDINATOR'] },
     ],
   },
@@ -424,13 +426,13 @@ export const SHARED_SUPPORT_GROUP: MenuGroup = {
   collapsible: true,
   defaultCollapsed: true,
   items: [
-    { id: 'shared-pengaturan', label: 'Pengaturan', href: '/settings', icon: Settings, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
-    { id: 'shared-bantuan', label: 'Bantuan', href: '/help', icon: LifeBuoy, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
-    { id: 'shared-privasi', label: 'Privasi', href: '/transparency', icon: Eye, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
+    { id: 'shared-pengaturan', label: 'Pengaturan', href: '/settings', icon: Settings, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'PROGRAM_SECRETARY', 'LAB_HEAD', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
+    { id: 'shared-bantuan', label: 'Bantuan', href: '/help', icon: LifeBuoy, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'PROGRAM_SECRETARY', 'LAB_HEAD', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
+    { id: 'shared-privasi', label: 'Privasi', href: '/transparency', icon: Eye, roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'PROGRAM_SECRETARY', 'LAB_HEAD', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'] },
   ],
 };
 
-// 6.7a Sekretaris Prodi (PROGRAM_SECRETARY) - Kerangka Fase 1
+// 6.7a Sekretaris Prodi (PROGRAM_SECRETARY) - Fase 3
 const PROGRAM_SECRETARY_GROUPS: MenuGroup[] = [
   {
     id: 'sek-utama',
@@ -443,7 +445,19 @@ const PROGRAM_SECRETARY_GROUPS: MenuGroup[] = [
       { id: 'sek-pengumuman', label: 'Pengumuman', href: '/announcements', icon: Megaphone, roles: ['PROGRAM_SECRETARY'] },
     ],
   },
-  SHARED_SUPPORT_GROUP,
+  {
+    id: 'sek-prodi',
+    title: 'Operasional Prodi',
+    roles: ['PROGRAM_SECRETARY'],
+    items: [
+      { id: 'sek-monitoring', label: 'Monitoring Prodi', href: '/secretary/monitoring', icon: Activity, roles: ['PROGRAM_SECRETARY'] },
+      { id: 'sek-jadwal-kelas', label: 'Jadwal dan Penugasan Kelas', href: '/secretary/classes', icon: Layers, roles: ['PROGRAM_SECRETARY'] },
+      { id: 'sek-perwalian', label: 'Perwalian', href: '/secretary/advisory', icon: GraduationCap, roles: ['PROGRAM_SECRETARY'] },
+      { id: 'sek-pengajuan', label: 'Pengajuan', href: '/secretary/requests', icon: FileCheck, roles: ['PROGRAM_SECRETARY'] },
+      { id: 'sek-risiko', label: 'Risiko Mahasiswa', href: '/secretary/risk', icon: AlertCircle, roles: ['PROGRAM_SECRETARY'] },
+      { id: 'sek-laporan', label: 'Laporan Akademik', href: '/secretary/reports', icon: FileSpreadsheet, roles: ['PROGRAM_SECRETARY'] },
+    ],
+  },
 ];
 
 // 6.7b Kepala Laboratorium (LAB_HEAD) - Kerangka Fase 1
@@ -459,7 +473,6 @@ const LAB_HEAD_GROUPS: MenuGroup[] = [
       { id: 'lab-pengumuman', label: 'Pengumuman', href: '/announcements', icon: Megaphone, roles: ['LAB_HEAD'] },
     ],
   },
-  SHARED_SUPPORT_GROUP,
 ];
 
 
@@ -602,6 +615,10 @@ export function getRoleDisplayName(role?: string | null): string {
       return 'Dosen Pengampu';
     case 'PROGRAM_COORDINATOR':
       return 'Koordinator Program Studi';
+    case 'PROGRAM_SECRETARY':
+      return 'Sekretaris Program Studi';
+    case 'LAB_HEAD':
+      return 'Kepala Laboratorium';
     case 'ACADEMIC_STAFF':
       return 'Staf Akademik';
     case 'TEACHING_ASSISTANT':
@@ -698,6 +715,8 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
       pathname.startsWith('/grades') ||
       pathname.startsWith('/exams') ||
       pathname.startsWith('/classes') ||
+      pathname.startsWith('/secretary') ||
+      pathname.startsWith('/lab') ||
       pathname.startsWith('/coordinator') ||
       pathname.startsWith('/student') ||
       pathname.startsWith('/lecturer') ||

@@ -27,9 +27,11 @@ interface AtRiskViewProps {
   }>;
   totalAtRisk: number;
   students: StudentRiskEvaluation[];
+  badge?: string;
+  title?: string;
 }
 
-export function AtRiskView({ cohorts, totalAtRisk, students }: AtRiskViewProps) {
+export function AtRiskView({ cohorts, totalAtRisk, students, badge = "KAPRODI :: EARLY WARNING", title = "Pemantauan Mahasiswa Berisiko (EWS)" }: AtRiskViewProps) {
   const [search, setSearch] = useState('');
   const [selectedCohort, setSelectedCohort] = useState<number | 'ALL'>('ALL');
   const [selectedLevel, setSelectedLevel] = useState<'ALL' | 'RISIKO_TINGGI' | 'PERHATIAN'>('ALL');
@@ -53,8 +55,8 @@ export function AtRiskView({ cohorts, totalAtRisk, students }: AtRiskViewProps) 
   return (
     <div className="p-4 sm:p-6 lg:p-8 w-full max-w-7xl mx-auto space-y-6 sm:space-y-8 animate-fade-up font-sans">
       <RetroWindow
-        title="Pemantauan Mahasiswa Berisiko (EWS)"
-        badge="KAPRODI :: EARLY WARNING"
+        title={title}
+        badge={badge}
         headerClassName="bg-gray-soft"
         bodyClassName="p-5 sm:p-7 bg-white"
       >

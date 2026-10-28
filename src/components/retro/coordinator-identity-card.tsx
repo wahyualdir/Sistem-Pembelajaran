@@ -20,6 +20,7 @@ export interface CoordinatorIdentityCardProps {
   pendingApprovalsCount?: number;
   atRiskCount?: number;
   cohortsCount?: number;
+  headerTitle?: string;
 }
 
 export function CoordinatorIdentityCard({
@@ -32,6 +33,7 @@ export function CoordinatorIdentityCard({
   pendingApprovalsCount = 0,
   atRiskCount = 12,
   cohortsCount = 4,
+  headerTitle = 'Ruang Kaprodi Terpadu',
 }: CoordinatorIdentityCardProps) {
   return (
     <div className="w-full rounded-2xl border-2 border-[#7A756D] bg-white p-4 sm:p-5 shadow-xs space-y-4 font-sans relative overflow-hidden transition-all hover:shadow-xs">
@@ -52,7 +54,7 @@ export function CoordinatorIdentityCard({
               Ruang<span className="text-[#C2553A]">Kampus</span>
             </span>
             <span className="text-xs sm:text-sm font-sans font-extrabold text-[#853827] uppercase tracking-wider block leading-tight mt-0.5 truncate">
-              Ruang Kaprodi Terpadu
+              {headerTitle}
             </span>
           </div>
         </div>

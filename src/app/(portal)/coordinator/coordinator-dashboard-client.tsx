@@ -50,6 +50,8 @@ export interface CoordinatorDashboardClientProps {
   coordinatorName?: string;
   nidn?: string;
   department?: string;
+  isSecretary?: boolean;
+  canApprove?: boolean;
 }
 
 export function CoordinatorDashboardClient({
@@ -58,6 +60,8 @@ export function CoordinatorDashboardClient({
   coordinatorName = 'Dr. Ir. Kaprodi Informatika, M.Kom.',
   nidn = '1005087502',
   department = 'Teknik Informatika (S1)',
+  isSecretary = false,
+  canApprove = true,
 }: CoordinatorDashboardClientProps) {
   const [selectedCategory, setSelectedCategory] = useState('Semua');
   const { isRightDrawerOpen, setIsRightDrawerOpen, setHasRightPanel } = usePortalLayout();
@@ -114,12 +118,12 @@ export function CoordinatorDashboardClient({
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 pb-3 border-b border-[#D6D3CB]">
             <div className="space-y-1">
               <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[#853827]">
-                <span>PORTAL KOORDINATOR PROGRAM STUDI</span>
+                <span>{isSecretary ? 'PORTAL SEKRETARIS PROGRAM STUDI' : 'PORTAL KOORDINATOR PROGRAM STUDI'}</span>
                 <span className="text-[#B8B1A5]">•</span>
                 <span className="text-[#57534E]">{department}</span>
               </div>
               <h1 className="font-heading font-bold text-2xl sm:text-3xl tracking-tight text-[#1C1917]">
-                Ruang Pimpinan &amp; Evaluasi Prodi
+                {isSecretary ? 'Ruang Operasional & Verifikasi Prodi' : 'Ruang Pimpinan & Evaluasi Prodi'}
               </h1>
             </div>
 
