@@ -26,7 +26,7 @@ import {
 import { usePortalLayout } from '@/app/(portal)/portal-shell';
 import type { HomeBannerData } from '@/modules/academic/home-actions';
 
-const STAFF_CATEGORIES = [
+const staffCategories = [
   'Semua',
   'Master Data',
   'Kelas & Asisten Lab',
@@ -98,7 +98,7 @@ export function StaffDashboardClient({
             </div>
 
             <nav aria-label="Kategori BAAK" className="flex flex-wrap items-center gap-1.5">
-              {STAFF_CATEGORIES.map((cat) => {
+              {staffCategories.map((cat) => {
                 const isActive = selectedCategory === cat;
                 return (
                   <button

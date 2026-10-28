@@ -73,11 +73,9 @@ export function CoursesView({ initialCourses }: CoursesViewProps) {
         aliases: [],
       };
       setCourses([newEntry, ...courses]);
-      setTimeout(() => {
-        setIsAddOpen(false);
-        setFormMsg(null);
-        setFormData({ code: '', name: '', credits: 3, semester: 1, is_mandatory: true, prerequisite_id: '' });
-      }, 1200);
+      setIsAddOpen(false);
+      setFormMsg(null);
+      setFormData({ code: '', name: '', credits: 3, semester: 1, is_mandatory: true, prerequisite_id: '' });
     } else {
       setFormMsg({ ok: false, text: res.error || 'Gagal menyimpan mata kuliah.' });
     }

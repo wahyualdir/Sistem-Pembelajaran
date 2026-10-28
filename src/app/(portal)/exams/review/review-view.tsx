@@ -43,7 +43,7 @@ export function ExamReviewView({ initialReviews }: ReviewViewProps) {
     if (res.ok) {
       setSuccessMsg(`Jawaban milik ${item.student_name} (${item.student_nim}) berhasil dinilai: ${score}/${item.max_points}`);
       setReviews((prev) => prev.filter((r) => r.id !== item.id));
-      setTimeout(() => setSuccessMsg(null), 3500);
+      
     }
   }
 

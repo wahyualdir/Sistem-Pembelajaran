@@ -38,7 +38,7 @@ export interface ReviewItem {
   pending: number;
 }
 
-const TA_CATEGORIES = [
+const taCategories = [
   'Semua',
   'Kelas Asistensi',
   'Koreksi Tugas',
@@ -47,7 +47,7 @@ const TA_CATEGORIES = [
   'Materi Asisten',
 ];
 
-const TA_CHIP_DESTINATIONS: Record<string, string> = {
+const taChipDestinations: Record<string, string> = {
   'Semua': '/ta',
   'Kelas Asistensi': '/ta/classes',
   'Koreksi Tugas': '/ta/grading',
@@ -153,9 +153,9 @@ export function TaDashboardClient({
             </div>
 
             <nav aria-label="Kategori Asisten" className="flex flex-wrap items-center gap-1.5">
-              {TA_CATEGORIES.map((cat) => {
+              {taCategories.map((cat) => {
                 const isActive = selectedCategory === cat;
-                const dest = TA_CHIP_DESTINATIONS[cat];
+                const dest = taChipDestinations[cat];
                 const isNavigational = dest && dest !== '/ta';
 
                 return isNavigational ? (

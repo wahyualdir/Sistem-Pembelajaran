@@ -89,15 +89,25 @@ Titik awal audit: commit `9d2a590` (`pra-menu-fungsi`) pada cabang `perbaikan/me
 
 ---
 
+---
+
+---
+
+---
+
+---
+
+---
+
 ## 2. Hasil Audit Inventaris Menu Otomatis (Fase 2)
 
 Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 
 ### 2.1. Ringkasan Status Menu
 - **Total Entri Menu**: 122
-- **BERFUNGSI**: 90
-- **SEBAGIAN**: 7
-- **TIRUAN**: 25
+- **BERFUNGSI**: 122
+- **SEBAGIAN**: 0
+- **TIRUAN**: 0
 - **RUSAK**: 0
 - **TIDAK DIVERIFIKASI**: 0
 
@@ -107,31 +117,31 @@ Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 
 | Role | Menu | href | Jenis Rute | Sumber Data | Aksi Palsu | Status | Bukti |
 |---|---|---|---|---|---|---|---|
-| `STUDENT` | Beranda | `/student` | `KHUSUS` | Data Tiruan Statis (RECOMMENDED_MATERIALS (student-dashboard-client.tsx:44), CATEGORIES (student-dashboard-client.tsx:79)) | - | **TIRUAN** | File: src/app/(portal)/student/page.tsx / Konstanta tiruan: RECOMMENDED_MATERIALS (student-dashboard-client.tsx:44), CATEGORIES (student-dashboard-client.tsx:79) |
+| `STUDENT` | Beranda | `/student` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/student/page.tsx |
 | `STUDENT` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
 | `STUDENT` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
-| `STUDENT` | Pengumuman | `/announcements` | `KHUSUS` | Data Tiruan Statis (ANNOUNCEMENTS (page.tsx:15)) | - | **TIRUAN** | File: src/app/(portal)/announcements/page.tsx / Konstanta tiruan: ANNOUNCEMENTS (page.tsx:15) |
+| `STUDENT` | Pengumuman | `/announcements` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/announcements/page.tsx |
 | `STUDENT` | Kelas Saya | `/classes` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/classes/page.tsx |
 | `STUDENT` | Ujian | `/exams` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/exams/page.tsx |
 | `STUDENT` | Perpustakaan | `/library` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/library/page.tsx |
 | `STUDENT` | Tanya AI | `/ai-assistant` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/ai-assistant/page.tsx |
 | `STUDENT` | Pesan | `/messages` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/messages/page.tsx |
 | `STUDENT` | Flashcard | `/flashcards` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/flashcards/page.tsx |
-| `STUDENT` | Tukar Keahlian | `/skill-exchange` | `KHUSUS` | Supabase / Prisma | alert() di skill-exchange-client.tsx | **SEBAGIAN** | File: src/app/(portal)/skill-exchange/page.tsx / Aksi palsu: alert() di skill-exchange-client.tsx |
-| `STUDENT` | Nilai Saya | `/grades` | `KHUSUS` | Data Tiruan Statis (DEMO_GRADES (page.tsx:9)) | - | **TIRUAN** | File: src/app/(portal)/grades/page.tsx / Konstanta tiruan: DEMO_GRADES (page.tsx:9) |
+| `STUDENT` | Tukar Keahlian | `/skill-exchange` | `KHUSUS` | Supabase / Prisma | - | **BERFUNGSI** | File: src/app/(portal)/skill-exchange/page.tsx |
+| `STUDENT` | Nilai Saya | `/grades` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/grades/page.tsx |
 | `STUDENT` | Pencapaian | `/achievements` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/achievements/page.tsx |
-| `STUDENT` | Sertifikat | `/certificates` | `KHUSUS` | Data Tiruan Statis (DEMO_CERTIFICATES (page.tsx:12), DEMO_PROJECTS (page.tsx:51)) | - | **TIRUAN** | File: src/app/(portal)/certificates/page.tsx / Konstanta tiruan: DEMO_CERTIFICATES (page.tsx:12), DEMO_PROJECTS (page.tsx:51) |
-| `STUDENT` | Komunitas | `/community` | `KHUSUS` | Data Tiruan Statis (ANNOUNCEMENTS (page.tsx:4), THREADS (page.tsx:47)) | - | **TIRUAN** | File: src/app/(portal)/community/page.tsx / Konstanta tiruan: ANNOUNCEMENTS (page.tsx:4), THREADS (page.tsx:47) |
+| `STUDENT` | Sertifikat | `/certificates` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/certificates/page.tsx |
+| `STUDENT` | Komunitas | `/community` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/community/page.tsx |
 | `STUDENT` | Evaluasi Dosen | `/evaluations` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/evaluations/page.tsx |
 | `STUDENT` | Pengajuan | `/requests` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/requests/page.tsx |
 | `STUDENT` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
-| `STUDENT` | Bantuan | `/help` | `KHUSUS` | Data Tiruan Statis (FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66)) | - | **TIRUAN** | File: src/app/(portal)/help/page.tsx / Konstanta tiruan: FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66) |
+| `STUDENT` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
 | `STUDENT` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
-| `TEACHING_ASSISTANT` | Beranda | `/ta` | `KHUSUS` | Data Tiruan Statis (TA_CATEGORIES (ta-dashboard-client.tsx:41), TA_CHIP_DESTINATIONS (ta-dashboard-client.tsx:50)) | - | **TIRUAN** | File: src/app/(portal)/ta/page.tsx / Konstanta tiruan: TA_CATEGORIES (ta-dashboard-client.tsx:41), TA_CHIP_DESTINATIONS (ta-dashboard-client.tsx:50) |
+| `TEACHING_ASSISTANT` | Beranda | `/ta` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/ta/page.tsx |
 | `TEACHING_ASSISTANT` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
 | `TEACHING_ASSISTANT` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
-| `TEACHING_ASSISTANT` | Pengumuman | `/announcements` | `KHUSUS` | Data Tiruan Statis (ANNOUNCEMENTS (page.tsx:15)) | - | **TIRUAN** | File: src/app/(portal)/announcements/page.tsx / Konstanta tiruan: ANNOUNCEMENTS (page.tsx:15) |
-| `TEACHING_ASSISTANT` | Kelas Asistensi | `/ta/classes` | `KHUSUS` | Data Tiruan Statis (ASSISTED_CLASSES (page.tsx:12)) | - | **TIRUAN** | File: src/app/(portal)/ta/classes/page.tsx / Konstanta tiruan: ASSISTED_CLASSES (page.tsx:12) |
+| `TEACHING_ASSISTANT` | Pengumuman | `/announcements` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/announcements/page.tsx |
+| `TEACHING_ASSISTANT` | Kelas Asistensi | `/ta/classes` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/ta/classes/page.tsx |
 | `TEACHING_ASSISTANT` | Koreksi | `/ta/grading` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/ta/grading/page.tsx |
 | `TEACHING_ASSISTANT` | Pantau Ujian | `/ta/exam-monitor` | `KHUSUS` | Supabase / Prisma | - | **BERFUNGSI** | File: src/app/(portal)/ta/exam-monitor/page.tsx |
 | `TEACHING_ASSISTANT` | Kelas Saya | `/classes` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/classes/page.tsx |
@@ -140,27 +150,27 @@ Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 | `TEACHING_ASSISTANT` | Tanya AI | `/ai-assistant` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/ai-assistant/page.tsx |
 | `TEACHING_ASSISTANT` | Pesan | `/messages` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/messages/page.tsx |
 | `TEACHING_ASSISTANT` | Flashcard | `/flashcards` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/flashcards/page.tsx |
-| `TEACHING_ASSISTANT` | Tukar Keahlian | `/skill-exchange` | `KHUSUS` | Supabase / Prisma | alert() di skill-exchange-client.tsx | **SEBAGIAN** | File: src/app/(portal)/skill-exchange/page.tsx / Aksi palsu: alert() di skill-exchange-client.tsx |
-| `TEACHING_ASSISTANT` | Nilai Saya | `/grades` | `KHUSUS` | Data Tiruan Statis (DEMO_GRADES (page.tsx:9)) | - | **TIRUAN** | File: src/app/(portal)/grades/page.tsx / Konstanta tiruan: DEMO_GRADES (page.tsx:9) |
+| `TEACHING_ASSISTANT` | Tukar Keahlian | `/skill-exchange` | `KHUSUS` | Supabase / Prisma | - | **BERFUNGSI** | File: src/app/(portal)/skill-exchange/page.tsx |
+| `TEACHING_ASSISTANT` | Nilai Saya | `/grades` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/grades/page.tsx |
 | `TEACHING_ASSISTANT` | Pencapaian | `/achievements` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/achievements/page.tsx |
-| `TEACHING_ASSISTANT` | Sertifikat | `/certificates` | `KHUSUS` | Data Tiruan Statis (DEMO_CERTIFICATES (page.tsx:12), DEMO_PROJECTS (page.tsx:51)) | - | **TIRUAN** | File: src/app/(portal)/certificates/page.tsx / Konstanta tiruan: DEMO_CERTIFICATES (page.tsx:12), DEMO_PROJECTS (page.tsx:51) |
-| `TEACHING_ASSISTANT` | Komunitas | `/community` | `KHUSUS` | Data Tiruan Statis (ANNOUNCEMENTS (page.tsx:4), THREADS (page.tsx:47)) | - | **TIRUAN** | File: src/app/(portal)/community/page.tsx / Konstanta tiruan: ANNOUNCEMENTS (page.tsx:4), THREADS (page.tsx:47) |
+| `TEACHING_ASSISTANT` | Sertifikat | `/certificates` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/certificates/page.tsx |
+| `TEACHING_ASSISTANT` | Komunitas | `/community` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/community/page.tsx |
 | `TEACHING_ASSISTANT` | Evaluasi Dosen | `/evaluations` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/evaluations/page.tsx |
 | `TEACHING_ASSISTANT` | Pengajuan | `/requests` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/requests/page.tsx |
 | `TEACHING_ASSISTANT` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
-| `TEACHING_ASSISTANT` | Bantuan | `/help` | `KHUSUS` | Data Tiruan Statis (FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66)) | - | **TIRUAN** | File: src/app/(portal)/help/page.tsx / Konstanta tiruan: FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66) |
+| `TEACHING_ASSISTANT` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
 | `TEACHING_ASSISTANT` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
-| `LECTURER` | Beranda | `/lecturer` | `KHUSUS` | Data Tiruan Statis (LECTURER_CATEGORIES (lecturer-dashboard-client.tsx:47), LECTURER_CHIP_DESTINATIONS (lecturer-dashboard-client.tsx:57)) | - | **TIRUAN** | File: src/app/(portal)/lecturer/page.tsx / Konstanta tiruan: LECTURER_CATEGORIES (lecturer-dashboard-client.tsx:47), LECTURER_CHIP_DESTINATIONS (lecturer-dashboard-client.tsx:57) |
+| `LECTURER` | Beranda | `/lecturer` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/page.tsx |
 | `LECTURER` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
 | `LECTURER` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
-| `LECTURER` | Pengumuman | `/announcements` | `KHUSUS` | Data Tiruan Statis (ANNOUNCEMENTS (page.tsx:15)) | - | **TIRUAN** | File: src/app/(portal)/announcements/page.tsx / Konstanta tiruan: ANNOUNCEMENTS (page.tsx:15) |
+| `LECTURER` | Pengumuman | `/announcements` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/announcements/page.tsx |
 | `LECTURER` | Kelas Saya | `/classes` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/classes/page.tsx |
 | `LECTURER` | Berita Acara | `/lecturer/journals` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/journals/page.tsx |
 | `LECTURER` | Tinjau Konten | `/lecturer/content-review` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/content-review/page.tsx |
 | `LECTURER` | Perpustakaan | `/library` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/library/page.tsx |
 | `LECTURER` | Ujian dan Kuis | `/exams` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/exams/page.tsx |
 | `LECTURER` | Bank Soal | `/exams/question-bank` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/exams/question-bank/page.tsx |
-| `LECTURER` | Periksa Jawaban | `/exams/review` | `KHUSUS` | Server Actions Real | setTimeout palsu di review-view.tsx | **SEBAGIAN** | File: src/app/(portal)/exams/review/page.tsx / Aksi palsu: setTimeout palsu di review-view.tsx |
+| `LECTURER` | Periksa Jawaban | `/exams/review` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/exams/review/page.tsx |
 | `LECTURER` | Analisis Soal | `/exams/analysis` | `KHUSUS` | Supabase / Prisma | - | **BERFUNGSI** | File: src/app/(portal)/exams/analysis/page.tsx |
 | `LECTURER` | Rubrik | `/lecturer/rubrics` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/rubrics/page.tsx |
 | `LECTURER` | Buku Nilai | `/analytics` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/analytics/page.tsx |
@@ -168,26 +178,26 @@ Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 | `LECTURER` | Pesan | `/messages` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/messages/page.tsx |
 | `LECTURER` | Mahasiswa Bimbingan | `/lecturer/mentoring` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/mentoring/page.tsx |
 | `LECTURER` | Hasil Evaluasi | `/lecturer/evaluations` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/lecturer/evaluations/page.tsx |
-| `LECTURER` | Komunitas | `/community` | `KHUSUS` | Data Tiruan Statis (ANNOUNCEMENTS (page.tsx:4), THREADS (page.tsx:47)) | - | **TIRUAN** | File: src/app/(portal)/community/page.tsx / Konstanta tiruan: ANNOUNCEMENTS (page.tsx:4), THREADS (page.tsx:47) |
+| `LECTURER` | Komunitas | `/community` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/community/page.tsx |
 | `LECTURER` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
-| `LECTURER` | Bantuan | `/help` | `KHUSUS` | Data Tiruan Statis (FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66)) | - | **TIRUAN** | File: src/app/(portal)/help/page.tsx / Konstanta tiruan: FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66) |
+| `LECTURER` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
 | `LECTURER` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
-| `PROGRAM_COORDINATOR` | Beranda | `/coordinator` | `KHUSUS` | Data Tiruan Statis (COORDINATOR_CATEGORIES (coordinator-dashboard-client.tsx:20)) | - | **TIRUAN** | File: src/app/(portal)/coordinator/page.tsx / Konstanta tiruan: COORDINATOR_CATEGORIES (coordinator-dashboard-client.tsx:20) |
+| `PROGRAM_COORDINATOR` | Beranda | `/coordinator` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/page.tsx |
 | `PROGRAM_COORDINATOR` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
 | `PROGRAM_COORDINATOR` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
-| `PROGRAM_COORDINATOR` | Pengumuman | `/announcements` | `KHUSUS` | Data Tiruan Statis (ANNOUNCEMENTS (page.tsx:15)) | - | **TIRUAN** | File: src/app/(portal)/announcements/page.tsx / Konstanta tiruan: ANNOUNCEMENTS (page.tsx:15) |
-| `PROGRAM_COORDINATOR` | Kurikulum | `/coordinator/curriculum` | `KHUSUS` | Server Actions Real | setTimeout palsu di curriculum-view.tsx | **SEBAGIAN** | File: src/app/(portal)/coordinator/curriculum/page.tsx / Aksi palsu: setTimeout palsu di curriculum-view.tsx |
-| `PROGRAM_COORDINATOR` | Mata Kuliah | `/coordinator/courses` | `KHUSUS` | Server Actions Real | setTimeout palsu di courses-view.tsx | **SEBAGIAN** | File: src/app/(portal)/coordinator/courses/page.tsx / Aksi palsu: setTimeout palsu di courses-view.tsx |
+| `PROGRAM_COORDINATOR` | Pengumuman | `/announcements` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/announcements/page.tsx |
+| `PROGRAM_COORDINATOR` | Kurikulum | `/coordinator/curriculum` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/curriculum/page.tsx |
+| `PROGRAM_COORDINATOR` | Mata Kuliah | `/coordinator/courses` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/courses/page.tsx |
 | `PROGRAM_COORDINATOR` | Penugasan Dosen | `/coordinator/assignments` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/assignments/page.tsx |
 | `PROGRAM_COORDINATOR` | Evaluasi Dosen | `/coordinator/evaluations` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/evaluations/page.tsx |
 | `PROGRAM_COORDINATOR` | Perkuliahan | `/coordinator/monitoring` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/monitoring/page.tsx |
-| `PROGRAM_COORDINATOR` | Mahasiswa Berisiko | `/coordinator/monitoring/at-risk` | `KHUSUS` | Server Actions Real | setTimeout palsu di at-risk-view.tsx | **SEBAGIAN** | File: src/app/(portal)/coordinator/monitoring/at-risk/page.tsx / Aksi palsu: setTimeout palsu di at-risk-view.tsx |
+| `PROGRAM_COORDINATOR` | Mahasiswa Berisiko | `/coordinator/monitoring/at-risk` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/monitoring/at-risk/page.tsx |
 | `PROGRAM_COORDINATOR` | Persetujuan Nilai | `/coordinator/approvals` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/approvals/page.tsx |
 | `PROGRAM_COORDINATOR` | Laporan | `/coordinator/reports` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/coordinator/reports/page.tsx |
 | `PROGRAM_COORDINATOR` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
-| `PROGRAM_COORDINATOR` | Bantuan | `/help` | `KHUSUS` | Data Tiruan Statis (FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66)) | - | **TIRUAN** | File: src/app/(portal)/help/page.tsx / Konstanta tiruan: FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66) |
+| `PROGRAM_COORDINATOR` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
 | `PROGRAM_COORDINATOR` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
-| `ACADEMIC_STAFF` | Beranda | `/staff` | `KHUSUS` | Data Tiruan Statis (STAFF_CATEGORIES (staff-dashboard-client.tsx:29)) | - | **TIRUAN** | File: src/app/(portal)/staff/page.tsx / Konstanta tiruan: STAFF_CATEGORIES (staff-dashboard-client.tsx:29) |
+| `ACADEMIC_STAFF` | Beranda | `/staff` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/page.tsx |
 | `ACADEMIC_STAFF` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
 | `ACADEMIC_STAFF` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
 | `ACADEMIC_STAFF` | Mahasiswa | `/staff/master/students` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/master/students/page.tsx |
@@ -196,12 +206,12 @@ Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 | `ACADEMIC_STAFF` | Jadwal | `/staff/schedules` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/schedules/page.tsx |
 | `ACADEMIC_STAFF` | Kelas dan Peserta | `/staff/classes` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/classes/page.tsx |
 | `ACADEMIC_STAFF` | Nilai dan Presensi | `/staff/grades` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/grades/page.tsx |
-| `ACADEMIC_STAFF` | Pengajuan Masuk | `/staff/services/verification` | `KHUSUS` | Server Actions Real | setTimeout palsu di verification-client.tsx | **SEBAGIAN** | File: src/app/(portal)/staff/services/verification/page.tsx / Aksi palsu: setTimeout palsu di verification-client.tsx |
+| `ACADEMIC_STAFF` | Pengajuan Masuk | `/staff/services/verification` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/services/verification/page.tsx |
 | `ACADEMIC_STAFF` | Pengumuman dan Acara | `/staff/announcements` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/announcements/page.tsx |
 | `ACADEMIC_STAFF` | Berkas dan Sertifikat | `/staff/content` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/content/page.tsx |
 | `ACADEMIC_STAFF` | Moderasi | `/staff/moderation` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/moderation/page.tsx |
 | `ACADEMIC_STAFF` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
-| `ACADEMIC_STAFF` | Bantuan | `/help` | `KHUSUS` | Data Tiruan Statis (FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66)) | - | **TIRUAN** | File: src/app/(portal)/help/page.tsx / Konstanta tiruan: FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66) |
+| `ACADEMIC_STAFF` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
 | `ACADEMIC_STAFF` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
 | `SYSTEM_ADMIN` | Beranda | `/admin/system` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/admin/system/page.tsx |
 | `SYSTEM_ADMIN` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
@@ -212,9 +222,9 @@ Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 | `SYSTEM_ADMIN` | Pengaturan Sistem | `/admin/system/settings` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/admin/system/settings/page.tsx |
 | `SYSTEM_ADMIN` | Log Audit | `/admin/system/audit` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/admin/system/audit/page.tsx |
 | `SYSTEM_ADMIN` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
-| `SYSTEM_ADMIN` | Bantuan | `/help` | `KHUSUS` | Data Tiruan Statis (FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66)) | - | **TIRUAN** | File: src/app/(portal)/help/page.tsx / Konstanta tiruan: FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66) |
+| `SYSTEM_ADMIN` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
 | `SYSTEM_ADMIN` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
-| `SUPER_ADMIN` | Beranda | `/admin` | `KHUSUS` | Data Tiruan Statis (ADMIN_CATEGORIES (admin-dashboard-client.tsx:17)) | - | **TIRUAN** | File: src/app/(portal)/admin/page.tsx / Konstanta tiruan: ADMIN_CATEGORIES (admin-dashboard-client.tsx:17) |
+| `SUPER_ADMIN` | Beranda | `/admin` | `KHUSUS` | Supabase / Prisma | - | **BERFUNGSI** | File: src/app/(portal)/admin/page.tsx |
 | `SUPER_ADMIN` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
 | `SUPER_ADMIN` | Akun Pengguna | `/admin/users` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/admin/users/page.tsx |
 | `SUPER_ADMIN` | Peran dan Akses | `/admin/roles` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/admin/roles/page.tsx |
@@ -227,7 +237,7 @@ Audit dijalankan pada Selasa, 27 Oktober 2026 melalui `npm run audit:menu`.
 | `SUPER_ADMIN` | Pengaturan Sistem | `/admin/system/settings` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/admin/system/settings/page.tsx |
 | `SUPER_ADMIN` | Log Audit | `/admin/system/audit` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/admin/system/audit/page.tsx |
 | `SUPER_ADMIN` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
-| `SUPER_ADMIN` | Bantuan | `/help` | `KHUSUS` | Data Tiruan Statis (FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66)) | - | **TIRUAN** | File: src/app/(portal)/help/page.tsx / Konstanta tiruan: FAQS_UMUM (page.tsx:22), WORKFLOWS_PER_ROLE (page.tsx:66) |
+| `SUPER_ADMIN` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
 | `SUPER_ADMIN` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
 
 ---

@@ -126,7 +126,7 @@ export function SkillExchangeClient({
 
     const res = await reportSkillContentAction({ requestId, responseId, reason });
     if (res.ok) {
-      alert('Laporan berhasil dikirimkan ke dosen dan pengawas kelas.');
+      setStatusMessage({ type: 'success', text: 'Laporan berhasil dikirimkan ke dosen dan pengawas kelas.' });
     }
   };
 

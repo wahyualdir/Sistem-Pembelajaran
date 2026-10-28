@@ -19,7 +19,7 @@ interface FAQItem {
   jawaban: string;
 }
 
-const FAQS_UMUM: FAQItem[] = [
+const faqsUmum: FAQItem[] = [
   {
     kategori: 'PRESENSI KELAS',
     pertanyaan: 'Bagaimana cara melakukan presensi dengan QR Dinamis dan Lokasi GPS?',
@@ -63,7 +63,7 @@ interface RoleWorkflow {
   langkah: string[];
 }
 
-const WORKFLOWS_PER_ROLE: Record<string, { peran: string; ikon: React.ElementType; alur: RoleWorkflow[] }> = {
+const workflowsPerRole: Record<string, { peran: string; ikon: React.ElementType; alur: RoleWorkflow[] }> = {
   mahasiswa: {
     peran: 'Mahasiswa',
     ikon: GraduationCap,
@@ -310,7 +310,7 @@ function CompassIconWrapper(props: React.SVGProps<SVGSVGElement>) {
 export default function HelpCenterPage() {
   const [activeRole, setActiveRole] = useState<string>('mahasiswa');
 
-  const currentRoleData = WORKFLOWS_PER_ROLE[activeRole] || WORKFLOWS_PER_ROLE.mahasiswa;
+  const currentRoleData = workflowsPerRole[activeRole] || workflowsPerRole.mahasiswa;
   const ActiveRoleIcon = currentRoleData.ikon;
 
   return (
@@ -351,7 +351,7 @@ export default function HelpCenterPage() {
 
           {/* Tab Buttons Peran */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none border-b-2 border-ink/20">
-            {Object.entries(WORKFLOWS_PER_ROLE).map(([key, data]) => {
+            {Object.entries(workflowsPerRole).map(([key, data]) => {
               const isActive = activeRole === key;
               return (
                 <button
@@ -426,12 +426,12 @@ export default function HelpCenterPage() {
               <p className="text-xs text-gray-dark font-bold">Kanal informasi dan panduan teknis umum</p>
             </div>
             <span className="text-xs font-sans font-bold px-2.5 py-1 rounded-full border-2 border-ink bg-gray-soft text-ink shadow-xs">
-              {FAQS_UMUM.length} PANDUAN
+              {faqsUmum.length} PANDUAN
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {FAQS_UMUM.map((faq, i) => (
+            {faqsUmum.map((faq, i) => (
               <div
                 key={i}
                 className="rounded-xl border-2 border-ink bg-surface p-4 shadow-retro-sm flex flex-col justify-between space-y-3 hover:-translate-y-0.5 transition-all"

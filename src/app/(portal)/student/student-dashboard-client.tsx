@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
+  ArrowRight,
   BookOpen,
   Calendar,
   Clock,
@@ -41,44 +42,7 @@ import type { DailyPriorityItem } from '@/lib/akademik/daily-priorities';
 import type { StudentRiskEvaluation } from '@/modules/early-warning/types';
 import type { SemesterWeaveData } from '@/lib/akademik/semester-weave';
 
-const RECOMMENDED_MATERIALS = [
-  {
-    id: 'mat-1',
-    title: 'Modul 07: REST API & Auth Supabase',
-    course: 'Pemrograman Web Lanjut',
-    type: 'Modul Kuliah',
-    badgeColor: 'bg-primary',
-    accent: 'primary',
-  },
-  {
-    id: 'mat-2',
-    title: 'Kuis Evaluasi Algoritma Greedy',
-    course: 'Struktur Data & Algoritma',
-    type: 'Kuis Interaktif',
-    badgeColor: 'bg-gray-dark',
-    accent: 'ink',
-  },
-  {
-    id: 'mat-3',
-    title: 'Software Architecture Patterns',
-    course: 'Rekayasa Perangkat Lunak',
-    type: 'Buku Referensi',
-    badgeColor: 'bg-ink',
-    accent: 'ink',
-  },
-  {
-    id: 'mat-4',
-    title: 'Praktikum: Deep Learning Pipeline',
-    course: 'Kecerdasan Buatan',
-    type: 'Tugas Praktikum',
-    badgeColor: 'bg-gray-soft',
-    accent: 'gray',
-  },
-];
-
-const CATEGORIES = [...BERANDA_CHIPS];
-
-const CHIP_DESTINATIONS: Record<string, string> = {
+const chipDestinations: Record<string, string> = {
   'Semua': '/student',
   'Kelas Saya': '/classes',
   'Tugas dan Kuis': '/classes',
@@ -229,9 +193,9 @@ export function StudentDashboardClient({
               aria-label="Kategori Perkuliahan"
               className="flex items-center gap-1.5 overflow-x-auto no-scrollbar p-1 rounded-xl bg-[#F2EFE8] border border-[#D6D3CB] w-full sm:w-fit max-w-full"
             >
-              {CATEGORIES.map((cat) => {
+              {BERANDA_CHIPS.map((cat) => {
                 const isActive = selectedCategory === cat;
-                const dest = CHIP_DESTINATIONS[cat];
+                const dest = chipDestinations[cat];
                 const isNavigational = dest && dest !== '/student';
 
                 return isNavigational ? (
@@ -549,10 +513,10 @@ export function StudentDashboardClient({
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                  {RECOMMENDED_MATERIALS.map((mat) => (
+                  {courses.slice(0, 4).map((c) => (
                     <Link
-                      key={mat.id}
-                      href="/classes"
+                      key={c.id}
+                      href={`/classes/${c.id}`}
                       className="group rounded-xl border border-[#D6D3CB] hover:border-[#7A756D] bg-[#FFFFFF] p-4 transition-all flex items-start justify-between gap-3.5"
                     >
                       <div className="flex items-start gap-3 min-w-0">
@@ -561,17 +525,17 @@ export function StudentDashboardClient({
                         </div>
                         <div className="space-y-1 min-w-0">
                           <span className="inline-block text-[11px] font-mono font-semibold text-[#853827] uppercase">
-                            {mat.type}
+                            Modul Perkuliahan
                           </span>
                           <h4 className="font-heading font-bold text-sm sm:text-base text-[#1C1917] group-hover:text-[#C2553A] transition-colors truncate">
-                            {mat.title}
+                            {c.title}
                           </h4>
                           <p className="text-xs text-[#57534E] truncate">
-                            {mat.course}
+                            {c.code || c.title} · {c.lecturer || 'Dosen Pengampu'}
                           </p>
                         </div>
                       </div>
-                      <ChevronRight className="h-4 w-4 text-[#7A756D] group-hover:translate-x-0.5 transition-transform shrink-0 mt-1" />
+                      <ArrowRight className="h-4 w-4 text-[#7A756D] group-hover:text-[#1C1917] group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
                     </Link>
                   ))}
                 </div>

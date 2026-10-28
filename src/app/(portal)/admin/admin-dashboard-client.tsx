@@ -14,7 +14,7 @@ import { ImpersonateUserCard } from './impersonate-user-card';
 import { usePortalLayout } from '@/app/(portal)/portal-shell';
 import type { HomeBannerData } from '@/modules/academic/home-actions';
 
-const ADMIN_CATEGORIES = [
+const adminCategories = [
   'Semua',
   'Audit Keamanan',
   'Sesi Login',
@@ -87,7 +87,7 @@ export function AdminDashboardClient({
             </div>
 
             <nav aria-label="Kategori Administrator" className="flex flex-wrap items-center gap-1.5">
-              {ADMIN_CATEGORIES.map((cat) => {
+              {adminCategories.map((cat) => {
                 const isActive = selectedCategory === cat;
                 return (
                   <button

@@ -75,11 +75,9 @@ export function VerificationClient({ initialRequests }: VerificationClientProps)
             : r
         )
       );
-      setTimeout(() => {
-        setSelectedItem(null);
-        setStaffNote('');
-        setFeedback(null);
-      }, 1500);
+      setSelectedItem(null);
+      setStaffNote('');
+      setFeedback(null);
     } else {
       setFeedback({ ok: false, text: res.error || 'Gagal memperbarui status pengajuan.' });
     }

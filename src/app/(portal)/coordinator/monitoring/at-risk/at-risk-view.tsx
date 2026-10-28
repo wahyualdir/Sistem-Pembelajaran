@@ -47,7 +47,7 @@ export function AtRiskView({ cohorts, totalAtRisk, students }: AtRiskViewProps) 
 
   function handleScheduleMentoring(studentName: string) {
     setActionSuccess(`Undangan bimbingan akademik untuk ${studentName} berhasil dijadwalkan.`);
-    setTimeout(() => setActionSuccess(null), 3000);
+    
   }
 
   return (

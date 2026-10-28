@@ -17,7 +17,7 @@ import { CoordinatorCohortRiskView } from '@/modules/early-warning/coordinator-c
 import { usePortalLayout } from '@/app/(portal)/portal-shell';
 import type { HomeBannerData } from '@/modules/academic/home-actions';
 
-const COORDINATOR_CATEGORIES = [
+const coordinatorCategories = [
   'Semua',
   'Persetujuan Nilai',
   'Early Warning Mahasiswa',
@@ -124,7 +124,7 @@ export function CoordinatorDashboardClient({
             </div>
 
             <nav aria-label="Kategori Kaprodi" className="flex flex-wrap items-center gap-1.5">
-              {COORDINATOR_CATEGORIES.map((cat) => {
+              {coordinatorCategories.map((cat) => {
                 const isActive = selectedCategory === cat;
                 return (
                   <button

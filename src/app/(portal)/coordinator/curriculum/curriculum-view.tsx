@@ -56,10 +56,8 @@ export function CurriculumView({ cpl, cpmk, coursesPerSemester }: CurriculumView
 
     if (res.ok) {
       setFormMsg({ ok: true, text: 'CPMK berhasil disimpan dan dipetakan ke CPL!' });
-      setTimeout(() => {
-        setIsAddOpen(false);
-        setFormMsg(null);
-      }, 1200);
+      setIsAddOpen(false);
+      setFormMsg(null);
     } else {
       setFormMsg({ ok: false, text: res.error || 'Gagal menyimpan CPMK.' });
     }
