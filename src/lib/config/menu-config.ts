@@ -419,7 +419,7 @@ const SUPER_ADMIN_GROUPS: MenuGroup[] = [
 export const SHARED_SUPPORT_GROUP: MenuGroup = {
   id: 'shared-akun',
   title: 'Akun',
-  roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'PROGRAM_SECRETARY', 'LAB_HEAD', 'DEAN', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'],
+  roles: ['STUDENT', 'TEACHING_ASSISTANT', 'LECTURER', 'PROGRAM_COORDINATOR', 'PROGRAM_SECRETARY', 'LAB_HEAD', 'ACADEMIC_STAFF', 'SYSTEM_ADMIN', 'SUPER_ADMIN'],
   collapsible: true,
   defaultCollapsed: true,
   items: [
@@ -461,26 +461,10 @@ const LAB_HEAD_GROUPS: MenuGroup[] = [
   SHARED_SUPPORT_GROUP,
 ];
 
-// 6.7c Dekan (DEAN) - Kerangka Fase 1
-const DEAN_GROUPS: MenuGroup[] = [
-  {
-    id: 'dkn-utama',
-    title: '',
-    roles: ['DEAN'],
-    items: [
-      { id: 'dkn-beranda', label: 'Beranda', href: '/dean', icon: GraduationCap, roles: ['DEAN'] },
-      { id: 'dkn-kalender', label: 'Kalender', href: '/calendar', icon: CalendarDays, roles: ['DEAN'] },
-      { id: 'dkn-notifikasi', label: 'Notifikasi', href: '/notifications', icon: Bell, roles: ['DEAN'] },
-      { id: 'dkn-pengumuman', label: 'Pengumuman', href: '/announcements', icon: Megaphone, roles: ['DEAN'] },
-    ],
-  },
-  SHARED_SUPPORT_GROUP,
-];
 
 export const MENU_CONFIG: Record<string, MenuGroup[]> = {
   PROGRAM_SECRETARY: PROGRAM_SECRETARY_GROUPS,
   LAB_HEAD: LAB_HEAD_GROUPS,
-  DEAN: DEAN_GROUPS,
   STUDENT: STUDENT_GROUPS,
   TEACHING_ASSISTANT: TEACHING_ASSISTANT_GROUPS,
   LECTURER: LECTURER_GROUPS,
@@ -503,7 +487,6 @@ export function normalizeRoleCode(role?: string | null): string {
   if (r === 'KAPRODI' || r === 'PROGRAM_COORDINATOR' || r === 'COORDINATOR' || r === 'PRODI') return 'PROGRAM_COORDINATOR';
   if (r === 'SEKPRODI' || r === 'PROGRAM_SECRETARY' || r === 'SECRETARY') return 'PROGRAM_SECRETARY';
   if (r === 'KALAB' || r === 'LAB_HEAD' || r === 'LAB_CHIEF') return 'LAB_HEAD';
-  if (r === 'DEKAN' || r === 'DEAN') return 'DEAN';
   if (r === 'STAFF' || r === 'ACADEMIC_STAFF' || r === 'BAAK') return 'ACADEMIC_STAFF';
   if (r === 'TA' || r === 'ASDOS' || r === 'TEACHING_ASSISTANT' || r === 'ASISTEN') return 'TEACHING_ASSISTANT';
   return 'STUDENT';
@@ -689,10 +672,8 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
       pathname.startsWith('/classes') ||
       pathname.startsWith('/secretary') ||
       pathname.startsWith('/lab') ||
-      pathname.startsWith('/dean') ||
       pathname.startsWith('/secretary') ||
       pathname.startsWith('/lab') ||
-      pathname.startsWith('/dean') ||
       pathname.startsWith('/coordinator') ||
       pathname.startsWith('/student') ||
       pathname.startsWith('/lecturer') ||
@@ -748,10 +729,6 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
     return norm === 'LAB_HEAD';
   }
 
-  // Proteksi dekan
-  if (pathname.startsWith('/dean')) {
-    return norm === 'DEAN';
-  }
 
   // Proteksi kaprodi
   if (pathname.startsWith('/coordinator')) {
@@ -814,7 +791,7 @@ export function isNavItemActive(
   }
 
   // Rute utama / root / dashboard tidak menggunakan prefix matching
-  const nonPrefixPaths = ['/', '/admin', '/student', '/lecturer', '/coordinator', '/staff', '/ta', '/secretary', '/lab', '/dean'];
+  const nonPrefixPaths = ['/', '/admin', '/student', '/lecturer', '/coordinator', '/staff', '/ta', '/secretary', '/lab'];
   if (nonPrefixPaths.includes(itemPath)) {
     return false;
   }

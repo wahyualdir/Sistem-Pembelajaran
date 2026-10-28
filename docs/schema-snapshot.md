@@ -1,7 +1,7 @@
 # Snapshot Skema Database SIAJAR (Single Source of Truth)
 
 > **Tanggal Dihasilkan**: 12 Oktober 2026  
-> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..44 dijalankan dari nol.  
+> **Lingkungan**: PGlite (PostgreSQL 16) setelah migrasi 1..45 dijalankan dari nol.  
 > **Tujuan**: Sumber kebenaran tunggal (*Single Source of Truth*) nama tabel, kolom, tipe data, foreign key, dan kebijakan RLS untuk perencanaan dan implementasi Fase 3.
 
 ---

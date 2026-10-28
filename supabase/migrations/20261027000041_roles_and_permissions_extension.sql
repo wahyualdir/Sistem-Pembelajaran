@@ -1,14 +1,13 @@
--- Migration: Seed Peran Baru (PROGRAM_SECRETARY, LAB_HEAD, DEAN) dan Matriks Izin (Fase 1.1)
+-- Migration: Seed Peran Baru (PROGRAM_SECRETARY, LAB_HEAD) dan Matriks Izin (Fase 1.1)
 -- Rollback:
---   DELETE FROM public.role_permissions WHERE role_id IN ('10000000-0000-0000-0000-000000000011', '10000000-0000-0000-0000-000000000012', '10000000-0000-0000-0000-000000000013');
---   DELETE FROM public.roles WHERE id IN ('10000000-0000-0000-0000-000000000011', '10000000-0000-0000-0000-000000000012', '10000000-0000-0000-0000-000000000013');
---   DELETE FROM public.permissions WHERE code IN ('advisory.assign', 'advisory.view', 'lab.manage', 'faculty.view');
+--   DELETE FROM public.role_permissions WHERE role_id IN ('10000000-0000-0000-0000-000000000011', '10000000-0000-0000-0000-000000000012');
+--   DELETE FROM public.roles WHERE id IN ('10000000-0000-0000-0000-000000000011', '10000000-0000-0000-0000-000000000012');
+--   DELETE FROM public.permissions WHERE code IN ('advisory.assign', 'advisory.view', 'lab.manage');
 
--- 1. Insert New Roles
+-- 1. Insert New Roles (PROGRAM_SECRETARY, LAB_HEAD; peran DEAN dibatalkan per instruksi)
 INSERT INTO public.roles (id, code, name, description) VALUES
     ('10000000-0000-0000-0000-000000000011', 'PROGRAM_SECRETARY', 'Sekretaris Program Studi', 'Membantu koordinasi akademik dan operasional program studi'),
-    ('10000000-0000-0000-0000-000000000012', 'LAB_HEAD', 'Kepala Laboratorium', 'Mengelola fasilitas laboratorium, praktikum, dan asisten lab'),
-    ('10000000-0000-0000-0000-000000000013', 'DEAN', 'Dekan', 'Memantau capaian akademik, risiko, dan evaluasi agregat tingkat fakultas')
+    ('10000000-0000-0000-0000-000000000012', 'LAB_HEAD', 'Kepala Laboratorium', 'Mengelola fasilitas laboratorium, praktikum, dan asisten lab')
 ON CONFLICT (code) DO UPDATE SET
     name = EXCLUDED.name,
     description = EXCLUDED.description;
@@ -17,8 +16,7 @@ ON CONFLICT (code) DO UPDATE SET
 INSERT INTO public.permissions (code, resource, action, description) VALUES
     ('advisory.assign', 'advisory', 'assign', 'Menetapkan dan mengganti penugasan Dosen Wali'),
     ('advisory.view', 'advisory', 'view', 'Melihat data relasi perwalian akademik'),
-    ('lab.manage', 'lab', 'manage', 'Mengelola fasilitas laboratorium dan penugasan asisten lab'),
-    ('faculty.view', 'faculty', 'view', 'Melihat pemantauan dan analitik agregat tingkat fakultas')
+    ('lab.manage', 'lab', 'manage', 'Mengelola fasilitas laboratorium dan penugasan asisten lab')
 ON CONFLICT (code) DO NOTHING;
 
 -- 3. Hubungkan Role Permissions
@@ -27,13 +25,11 @@ DECLARE
     r_coord UUID;
     r_sec UUID;
     r_lab UUID;
-    r_dean UUID;
     r_staff UUID;
 BEGIN
     SELECT id INTO r_coord FROM public.roles WHERE code = 'PROGRAM_COORDINATOR';
     SELECT id INTO r_sec FROM public.roles WHERE code = 'PROGRAM_SECRETARY';
     SELECT id INTO r_lab FROM public.roles WHERE code = 'LAB_HEAD';
-    SELECT id INTO r_dean FROM public.roles WHERE code = 'DEAN';
     SELECT id INTO r_staff FROM public.roles WHERE code = 'ACADEMIC_STAFF';
 
     -- Tambahan izin advisory untuk PROGRAM_COORDINATOR dan ACADEMIC_STAFF (bila role sudah ada di DB)
@@ -65,14 +61,6 @@ BEGIN
         SELECT r_lab, id FROM public.permissions WHERE code IN (
             'class.view', 'material.view', 'analytics.class', 'report.export',
             'lab.manage'
-        ) ON CONFLICT DO NOTHING;
-    END IF;
-
-    -- DEAN permissions (hanya baca agregat fakultas & ekspor laporan, TANPA nilai per mahasiswa / audit log)
-    IF r_dean IS NOT NULL THEN
-        INSERT INTO public.role_permissions (role_id, permission_id)
-        SELECT r_dean, id FROM public.permissions WHERE code IN (
-            'analytics.program', 'report.export', 'faculty.view'
         ) ON CONFLICT DO NOTHING;
     END IF;
 END $$;

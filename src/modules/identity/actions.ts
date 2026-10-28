@@ -54,7 +54,6 @@ const ROLE_PORTAL_MAP: Record<string, string> = {
   SUPERADMIN: '/admin',
   PROGRAM_SECRETARY: '/secretary',
   LAB_HEAD: '/lab',
-  DEAN: '/dean',
 };
 
 import { checkSupabaseOnline } from '@/lib/supabase/status';

@@ -56,11 +56,6 @@ const ROLE_METADATA: Record<
     desc: 'Pengelolaan sarana laboratorium, pemantauan praktikum, dan penugasan asisten lab.',
     icon: Layers,
   },
-  DEAN: {
-    label: 'Ruang Dekan',
-    desc: 'Pemantauan capaian perkuliahan agregat, risiko mahasiswa, dan laporan mutu fakultas.',
-    icon: GraduationCap,
-  },
   SYSTEM_ADMIN: {
     label: 'Ruang System Administrator',
     desc: 'Manajemen pengguna, penugasan peran, audit log keamanan, dan konfigurasi sistem.',

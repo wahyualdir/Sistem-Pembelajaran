@@ -1,27 +1,26 @@
-# Log Keputusan Teknis — Peran Baru SIAJAR
+# Log Keputusan Arsitektur dan Teknis — Penambahan Peran Baru SIAJAR
 
-Dokumen ini mencatat keputusan arsitektural dan teknis yang diambil selama implementasi penambahan peran baru dan perwalian.
+Dokumen ini mencatat keputusan arsitektural dan teknis yang diambil selama implementasi `docs/INSTRUKSI_PERAN_BARU.md`.
 
 ---
 
-## Keputusan Fase 0: Audit & Strategi Fondasi
+## Keputusan Awal & Konfigurasi Dasar
 
-1. **Pemilihan Branch Kerja**:
-   - Dibuat cabang khusus `fitur/peran-baru` berbasis `main` untuk menjaga kebersihan komit dan isolasi pekerjaan dari eksperimen UI lain.
-2. **Dosen Wali sebagai Relasi Data (Bukan Role Database)**:
-   - Sesuai instruksi Bagian 1, Dosen Wali tidak ditambahkan ke tabel `roles`.
-   - Dibuatkan tabel `public.academic_advisories` dengan relasi `advisor_user_id` (`LECTURER`) dan `student_user_id` (`STUDENT`). Mahasiswa hanya boleh memiliki 1 wali berstatus `ACTIVE` (ditegakkan indeks unik parsial).
-3. **Pemisahan Migrasi Enum PostgreSQL**:
-   - `ALTER TYPE public.scope_type ADD VALUE` tidak dapat digunakan dalam transaksi yang sama di PostgreSQL. Oleh karena itu, penambahan nilai enum `'FACULTY'` dan `'LAB'` dipisahkan ke berkas migrasi khusus tersendiri sebelum tabel yang memakainya dibuat.
-4. **Alokasi ID Peran Baru (UUID Statis)**:
-   - Mengikuti pola identitas di `supabase/seed.sql` dan migrasi `SUPER_ADMIN`:
+1. **Struktur Identitas**:
+   - Dosen Wali **bukan peran** (bukan baris baru di tabel `roles`), melainkan relasi penugasan dosen terhadap mahasiswa (`academic_advisories`).
+   - Peran baru yang diimplementasikan: `PROGRAM_SECRETARY` (Sekretaris Prodi) dan `LAB_HEAD` (Kepala Laboratorium).
+   - *Catatan Penting*: Peran `DEAN` (Dekan) telah **dibatalkan dan dihapus secara permanen** dari sistem sesuai instruksi eksplisit pengguna.
+2. **Pengelolaan Asisten Lab**:
+   - Hak penugasan asisten lab diserahkan ke Dosen Pengampu dan Kepala Lab (`LAB_HEAD`).
+3. **Penyelarasan Koordinator Prodi**:
+   - Peran `PROGRAM_COORDINATOR` dipertahankan sebagai pemegang wewenang persetujuan akhir perubahan nilai dan log audit tingkat prodi.
+4. **Pendaftaran Kode & UUID Tetap**:
+   - Roles baru di `public.roles`:
      - `PROGRAM_SECRETARY`: `10000000-0000-0000-0000-000000000011`
      - `LAB_HEAD`: `10000000-0000-0000-0000-000000000012`
-     - `DEAN`: `10000000-0000-0000-0000-000000000013`
 5. **Penetapan Awalan Menu & Rute Portal**:
    - Sekretaris Prodi: awalan ID menu `sek-`, gerbang portal `/secretary`.
    - Kepala Lab: awalan ID menu `lab-`, gerbang portal `/lab`.
-   - Dekan: awalan ID menu `dkn-`, gerbang portal `/dean`.
 6. **Desain Web dan Komponen**:
    - Sesuai Bagian 3.1, tidak ada penambahan token warna hex atau perubahan pada `tailwind.config.ts`.
    - Seluruh tampilan baru memanfaatkan komponen dan kelas token yang sudah ada (`bg-surface`, `text-ink`, `border-border`, dll.).
@@ -35,6 +34,9 @@ Dokumen ini mencatat keputusan arsitektural dan teknis yang diambil selama imple
 2. **Backfill Fakultas Default**:
    - Dibuatkan satu fakultas bawaan ('FT' - 'Fakultas Teknik', ID `20000000-0000-0000-0000-000000000001`) pada migrasi `20261027000040` untuk membackfill program studi yang ada.
 3. **Penyelarasan Helper Functions**:
-   - Seluruh helper SQL (`is_program_secretary`, `is_dean_of_program`, `is_lab_head`, `is_lab_head_of_class`) didefinisikan dengan `SECURITY DEFINER`, `SET search_path = ''`, `STABLE`, hak eksekusi dicabut dari public/anon dan hanya diberikan kepada `authenticated`.
+   - Seluruh helper SQL (`is_program_secretary`, `is_lab_head`, `is_lab_head_of_class`) didefinisikan dengan `SECURITY DEFINER`, `SET search_path = ''`, `STABLE`, hak eksekusi dicabut dari public/anon dan hanya diberikan kepada `authenticated`.
 4. **Manajemen Pengguna & Impersonasi**:
-   - Hanya `SUPER_ADMIN` yang diizinkan menetapkan atau mencabut peran baru (`PROGRAM_SECRETARY`, `LAB_HEAD`, `DEAN`) dengan parameter lingkup (`scopeType` dan `scopeId`). Seluruh aksi tercatat pada `audit_logs`.
+   - Hanya `SUPER_ADMIN` yang diizinkan menetapkan atau mencabut peran baru (`PROGRAM_SECRETARY`, `LAB_HEAD`) dengan parameter lingkup (`scopeType` dan `scopeId`). Seluruh aksi tercatat pada `audit_logs`.
+5. **Pembatalan & Penghapusan Peran Dekan (DEAN)**:
+   - Berdasarkan instruksi pengguna (*"hapus saja role dekan dan push dan commit semua codenya"*), peran `DEAN` dihapus dari kode aplikasi (`menu-config.ts`, `workspace/page.tsx`, `actions.ts`, `demo-users.ts`, `superadmin-users-hub-view.tsx`) dan database (`20261028000043_remove_dean_role.sql`).
+   - Rencana Fase 5 (Dekan) ditiadakan; alur kerja berlanjut langsung dari Fase 4 ke Fase 6.

@@ -46,7 +46,6 @@ export const switchWorkspaceSchema = z.object({
     'SUPER_ADMIN',
     'PROGRAM_SECRETARY',
     'LAB_HEAD',
-    'DEAN',
   ]),
   scopeId: z.string().uuid().nullable().optional(),
 });
