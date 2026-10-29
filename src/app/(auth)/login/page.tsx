@@ -565,7 +565,13 @@ function LoginFormContent() {
               )}
 
               {/* Developer Test Accounts Trigger */}
-              <LoginDevMode onSelectIdentifier={(id) => setIdentifier(id)} />
+              <LoginDevMode
+                onSelectIdentifier={(id) => {
+                  setIdentifier(id);
+                  setPassword(id === 'superadmin' ? 'wahyu11' : 'Password123!');
+                  setCaptchaInput(String(captchaNum1 + captchaNum2));
+                }}
+              />
             </div>
 
             {/* Quick Support: Full-width Helpdesk Card */}

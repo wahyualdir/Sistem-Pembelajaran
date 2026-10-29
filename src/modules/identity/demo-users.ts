@@ -178,6 +178,14 @@ export const SYNTHETIC_DEMO_USERS: Record<string, SyntheticDemoUser> = {
     roles: ['SUPER_ADMIN', 'SYSTEM_ADMIN', 'ACADEMIC_STAFF', 'PROGRAM_COORDINATOR', 'PROGRAM_SECRETARY', 'LAB_HEAD', 'LECTURER', 'STUDENT'],
     status: 'ACTIVE',
   },
+  '0011223344': {
+    id: 'a0000011-0000-0000-0000-000000000011',
+    email: 'sekprodi@siajar.test',
+    name: 'Siti Rahma, M.Kom.',
+    nidn: '0011223344',
+    roles: ['PROGRAM_SECRETARY', 'LECTURER'],
+    status: 'ACTIVE',
+  },
   'sekprodi': {
     id: 'a0000011-0000-0000-0000-000000000011',
     email: 'sekprodi@siajar.test',
@@ -192,6 +200,14 @@ export const SYNTHETIC_DEMO_USERS: Record<string, SyntheticDemoUser> = {
     name: 'Siti Rahma, M.Kom.',
     nidn: '0011223344',
     roles: ['PROGRAM_SECRETARY', 'LECTURER'],
+    status: 'ACTIVE',
+  },
+  '0022334455': {
+    id: 'a0000012-0000-0000-0000-000000000012',
+    email: 'kalab@siajar.test',
+    name: 'Ir. Hendra Wijaya, M.T.',
+    nidn: '0022334455',
+    roles: ['LAB_HEAD', 'LECTURER'],
     status: 'ACTIVE',
   },
   'kalab': {
