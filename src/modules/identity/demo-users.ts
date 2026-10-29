@@ -19,6 +19,45 @@ export interface SyntheticDemoUser {
 }
 
 export const SYNTHETIC_DEMO_USERS: Record<string, SyntheticDemoUser> = {
+  mhs: {
+    id: 'a0000001-0000-0000-0000-000000000001',
+    email: 'mhs2024001@siajar.test',
+    name: 'Ahmad Mahasiswa',
+    nim: '2024001',
+    roles: ['STUDENT'],
+    status: 'ACTIVE',
+  },
+  dosen: {
+    id: 'a0000002-0000-0000-0000-000000000002',
+    email: 'dosen001@siajar.test',
+    name: 'Dr. Budi Santoso, M.Kom.',
+    nidn: '0012345678',
+    roles: ['LECTURER'],
+    status: 'ACTIVE',
+  },
+  asdos: {
+    id: 'a0000003-0000-0000-0000-000000000003',
+    email: 'mhs2024002@siajar.test',
+    name: 'Citra Asisten',
+    nim: '2024002',
+    roles: ['STUDENT', 'TEACHING_ASSISTANT'],
+    status: 'ACTIVE',
+  },
+  kaprodi: {
+    id: 'a0000004-0000-0000-0000-000000000004',
+    email: 'kaprodi@siajar.test',
+    name: 'Prof. Dewi Lestari, Ph.D.',
+    nidn: '0087654321',
+    roles: ['PROGRAM_COORDINATOR', 'LECTURER'],
+    status: 'ACTIVE',
+  },
+  staf: {
+    id: 'a0000005-0000-0000-0000-000000000005',
+    email: 'staf@siajar.test',
+    name: 'Eko Staf Akademik',
+    roles: ['ACADEMIC_STAFF'],
+    status: 'ACTIVE',
+  },
   '2024001': {
     id: 'a0000001-0000-0000-0000-000000000001',
     email: 'mhs2024001@siajar.test',
