@@ -55,11 +55,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/lecturer', request.url));
   }
 
+  // Cek apakah request merupakan prefetch Next.js router
+  const isPrefetch =
+    request.headers.get('purpose') === 'prefetch' ||
+    request.headers.get('x-middleware-prefetch') === '1' ||
+    request.headers.get('sec-purpose') === 'prefetch';
+
   // Dapatkan user dengan getUser() (Aturan Keras 4) HANYA jika cookie autentikasi Supabase ('sb-') ada di browser
   let user = null;
   const hasSupabaseCookie = request.cookies.getAll().some((c) => c.name.startsWith('sb-'));
 
   if (hasSupabaseCookie) {
+    if (isPrefetch) {
+      // Untuk prefetch navigasi, jangan blokir dengan network call penuh ke Supabase Auth
+      user = { id: 'prefetch-session' } as any;
+    } else {
     const isOnline = await checkSupabaseOnline();
     if (isOnline) {
       try {
@@ -88,6 +98,7 @@ export async function middleware(request: NextRequest) {
       } catch {
         // Offline / error
       }
+    }
     }
   }
 

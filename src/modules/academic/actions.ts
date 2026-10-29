@@ -3157,8 +3157,8 @@ export async function getDynamicMenuBadgesAction(): Promise<DynamicMenuBadgesRes
     return { unreadCount: 0, taGradingCount: 0, lecturerReviewCount: 0, coordinatorApprovalsCount: 0 };
   }
 
-  const unreadCount = await countUnreadAction();
   const role = c.activeRole || 'STUDENT';
+  let unreadCount = 0;
   let taGradingCount = 0;
   let lecturerReviewCount = 0;
   let coordinatorApprovalsCount = 0;
@@ -3167,34 +3167,42 @@ export async function getDynamicMenuBadgesAction(): Promise<DynamicMenuBadgesRes
 
   if (online) {
     const supabase = await createClient();
+    const unreadPromise = countUnreadAction();
+    const rolePromises: Promise<void>[] = [];
+
     if (role === 'TEACHING_ASSISTANT') {
-      const { data: subs } = await supabase
-        .from('submissions')
-        .select('id,assignment_id,student_id')
-        .limit(100);
-      const { data: graded } = await supabase
-        .from('grades')
-        .select('assignment_id,student_id')
-        .limit(100);
-      const gradedSet = new Set((graded ?? []).map((g: any) => `${g.assignment_id}:${g.student_id}`));
-      taGradingCount = (subs ?? []).filter((s: any) => !gradedSet.has(`${s.assignment_id}:${s.student_id}`)).length;
+      rolePromises.push((async () => {
+        const [{ data: subs }, { data: graded }] = await Promise.all([
+          supabase.from('submissions').select('id,assignment_id,student_id').limit(100),
+          supabase.from('grades').select('assignment_id,student_id').limit(100),
+        ]);
+        const gradedSet = new Set((graded ?? []).map((g: any) => `${g.assignment_id}:${g.student_id}`));
+        taGradingCount = (subs ?? []).filter((s: any) => !gradedSet.has(`${s.assignment_id}:${s.student_id}`)).length;
+      })());
     }
 
     if (role === 'LECTURER' || role === 'PROGRAM_COORDINATOR') {
-      const [{ count: disputeCount }, { count: permitCount }] = await Promise.all([
-        supabase.from('exam_disputes').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
-        supabase.from('leave_permits').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
-      ]);
-      lecturerReviewCount = (disputeCount ?? 0) + (permitCount ?? 0);
+      rolePromises.push((async () => {
+        const [{ count: disputeCount }, { count: permitCount }] = await Promise.all([
+          supabase.from('exam_disputes').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
+          supabase.from('leave_permits').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
+        ]);
+        lecturerReviewCount = (disputeCount ?? 0) + (permitCount ?? 0);
+      })());
     }
 
     if (role === 'PROGRAM_COORDINATOR') {
-      const [{ count: crCount }, { count: draftClassCount }] = await Promise.all([
-        supabase.from('grade_change_requests').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
-        supabase.from('classes').select('id', { count: 'exact', head: true }).eq('status', 'DRAFT'),
-      ]);
-      coordinatorApprovalsCount = (crCount ?? 0) + (draftClassCount ?? 0);
+      rolePromises.push((async () => {
+        const [{ count: crCount }, { count: draftClassCount }] = await Promise.all([
+          supabase.from('grade_change_requests').select('id', { count: 'exact', head: true }).eq('status', 'PENDING'),
+          supabase.from('classes').select('id', { count: 'exact', head: true }).eq('status', 'DRAFT'),
+        ]);
+        coordinatorApprovalsCount = (crCount ?? 0) + (draftClassCount ?? 0);
+      })());
     }
+
+    const [resolvedUnread] = await Promise.all([unreadPromise, ...rolePromises]);
+    unreadCount = resolvedUnread;
   } else {
     // In-memory badge calculation
     if (role === 'TEACHING_ASSISTANT') {

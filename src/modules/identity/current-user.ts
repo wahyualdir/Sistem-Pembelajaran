@@ -156,33 +156,27 @@ export const getCurrentUserWithRoles = dedupe(async (): Promise<CurrentUserConte
       }
     : null;
 
-  if (isOnline) {
-    try {
-      const { data: dbProfile } = await supabaseAdmin
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-
-      if (dbProfile) {
-        profile = dbProfile;
-      }
-    } catch {
-      // DB offline
-    }
-  }
-
   let rolesList: any[] = [];
   if (isOnline) {
     try {
-      const { data: userRoles } = await supabaseAdmin
-        .from('user_roles')
-        .select('id, role_id, scope_type, scope_id, roles(code, name, description)')
-        .eq('user_id', userId)
-        .eq('status', 'ACTIVE');
+      const [profileRes, rolesRes] = await Promise.all([
+        supabaseAdmin
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .maybeSingle(),
+        supabaseAdmin
+          .from('user_roles')
+          .select('id, role_id, scope_type, scope_id, roles(code, name, description)')
+          .eq('user_id', userId)
+          .eq('status', 'ACTIVE'),
+      ]);
 
-      if (userRoles && userRoles.length > 0) {
-        rolesList = userRoles;
+      if (profileRes.data) {
+        profile = profileRes.data;
+      }
+      if (rolesRes.data && rolesRes.data.length > 0) {
+        rolesList = rolesRes.data;
       }
     } catch {
       // DB offline

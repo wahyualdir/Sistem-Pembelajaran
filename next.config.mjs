@@ -14,7 +14,6 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-  output: 'standalone',
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
