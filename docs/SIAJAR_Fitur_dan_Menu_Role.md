@@ -13,7 +13,7 @@
 
 Sistem **SIAJAR (Sistem Informasi Ajar Terpadu)** mengimplementasikan arsitektur otorisasi bertingkat berbasis *Role-Based Access Control* (RBAC) dan *PostgreSQL Row-Level Security* (RLS) dengan pemisahan wewenang ketat. Seluruh navigasi antarmuka dikendalikan secara deklaratif melalui konfigurasi tunggal terpusat di `src/lib/config/menu-config.ts`.
 
-Total terdapat **107 butir menu dan fungsionalitas terdefinisi** yang tersebar di **7 peran utama** dan **1 grup menu bersama**:
+Total terdapat **125 butir menu dan fungsionalitas terdefinisi** yang tersebar di **9 peran utama** dan **1 grup menu bersama**:
 
 ```
                        ┌───────────────────────────────┐
@@ -146,7 +146,43 @@ Penjamin mutu kurikulum, pembagian beban dosen, pemantauan keterlaksanaan pembel
 
 ---
 
-### 2.5. Staf Akademik (`ACADEMIC_STAFF`)
+
+### 2.5. Sekretaris Program Studi (`PROGRAM_SECRETARY`)
+Membantu Koordinator Program Studi dalam operasional dan verifikasi akademik tingkat program studi.
+
+| Grup | Menu Item | Rute | Ikon | Badge / State | Deskripsi Fungsionalitas Fitur |
+|---|---|---|---|---|---|
+| - | Beranda | `/secretary` | LayoutDashboard | - | Ruang kerja operasional Sekprodi: metrik kelas, pengajuan masuk, dan risiko mahasiswa. |
+| - | Kalender | `/calendar` | CalendarDays | - | Kalender agenda akademik prodi dan jadwal kuliah. |
+| - | Notifikasi | `/notifications` | Bell | unreadCount | Pusat notifikasi operasional perkuliahan dan verifikasi pengajuan. |
+| - | Pengumuman | `/announcements` | Megaphone | - | Papan pengumuman resmi tingkat universitas, fakultas, dan program studi. |
+| Tata Kelola | Monitoring Prodi | `/secretary/monitoring` | Activity | - | Pemantauan keterisian berita acara dan progres perkuliahan kelas prodi (hanya-baca). |
+| Tata Kelola | Jadwal dan Penugasan Kelas | `/secretary/classes` | CalendarClock | - | Penataan jadwal kuliah bebas bentrok dan penugasan dosen pengampu kelas prodi. |
+| Tata Kelola | Perwalian | `/secretary/advisory` | Users | - | Penetapan dan penggantian Dosen Wali untuk mahasiswa prodi secara terpadu. |
+| Tata Kelola | Pengajuan | `/secretary/requests` | FileCheck | - | Verifikasi administratif berkas pengajuan mahasiswa (dilarang menyetujui perubahan nilai). |
+| Tata Kelola | Risiko Mahasiswa | `/secretary/risk` | AlertTriangle | - | Pemantauan sistem peringatan dini (EWS) mahasiswa berisiko kendala studi pada prodi. |
+| Tata Kelola | Laporan Akademik | `/secretary/reports` | FileSpreadsheet | - | Akses dan ekspor rekapitulasi data akademik dan nilai prodi. |
+
+---
+
+### 2.6. Kepala Laboratorium (`LAB_HEAD`)
+Pengelola fasilitas sarana praktikum dan pimpinan asisten laboratorium.
+
+| Grup | Menu Item | Rute | Ikon | Badge / State | Deskripsi Fungsionalitas Fitur |
+|---|---|---|---|---|---|
+| - | Beranda | `/lab` | LayoutDashboard | - | Ruang kerja Kepala Lab: ringkasan kelas praktikum, kapasitas ruang, dan asisten lab aktif. |
+| - | Kalender | `/calendar` | CalendarDays | - | Kalender jadwal praktikum dan penggunaan ruang laboratorium. |
+| - | Notifikasi | `/notifications` | Bell | unreadCount | Pemberitahuan kegiatan praktikum dan instruksi laboratorium. |
+| - | Pengumuman | `/announcements` | Megaphone | - | Pengumuman tata tertib dan instruksi keselamatan kerja laboratorium. |
+| Kelola Lab | Laboratorium Saya | `/lab/profile` | FlaskConical | - | Profil fasilitas laboratorium, daftar ruang terkait, dan inventaris praktikum. |
+| Kelola Lab | Asisten Lab | `/lab/assistants` | Users | - | Penugasan, pengaturan wewenang, dan pencabutan Asisten Laboratorium pada kelas tertaut. |
+| Kelola Lab | Kelas Praktikum | `/lab/classes` | Layers | - | Pemantauan rombongan belajar praktikum yang terselenggara di laboratorium ini. |
+| Kelola Lab | Jadwal & Penggunaan Lab | `/lab/schedules` | CalendarClock | - | Pemantauan slot pemakaian ruang laboratorium perkuliahan secara langsung. |
+| Kelola Lab | Rekap Praktikum | `/lab/recap` | FileSpreadsheet | - | Rekapitulasi presensi praktikan dan nilai praktikum (hanya-baca, tanpa hak finalisasi). |
+
+---
+
+### 2.7. Staf Akademik (`ACADEMIC_STAFF`)
 Operator tata usaha akademik universitas: master data, penjadwalan bebas bentrok, pembentukan kelas, dan pemrosesan pengajuan surat.
 
 | Grup | Menu Item | Rute | Ikon | Badge / State | Deskripsi Fungsionalitas Fitur |
@@ -167,7 +203,7 @@ Operator tata usaha akademik universitas: master data, penjadwalan bebas bentrok
 
 ---
 
-### 2.6. System Administrator (`SYSTEM_ADMIN`)
+### 2.8. System Administrator (`SYSTEM_ADMIN`)
 Pengelola infrastruktur, keandalan server, integrasi sistem, dan perimeter keamanan siber (dilarang mengakses data nilai akademik).
 
 | Grup | Menu Item | Rute | Ikon | Badge / State | Deskripsi Fungsionalitas Fitur |
@@ -183,7 +219,7 @@ Pengelola infrastruktur, keandalan server, integrasi sistem, dan perimeter keama
 
 ---
 
-### 2.7. Super Administrator (`SUPER_ADMIN`)
+### 2.9. Super Administrator (`SUPER_ADMIN`)
 Otoritas tertinggi institusi: tata kelola pengguna, matriks perizinan, kebijakan akademik kampus, dan pengawasan audit.
 
 | Grup | Menu Item | Rute | Ikon | Badge / State | Deskripsi Fungsionalitas Fitur |

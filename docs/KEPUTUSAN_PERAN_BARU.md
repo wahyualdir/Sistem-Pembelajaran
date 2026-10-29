@@ -77,3 +77,49 @@ Dokumen ini mencatat keputusan arsitektural dan teknis yang diambil selama imple
    - Komponen `coordinator-*-hub-view` dan `CoordinatorDashboardClient` digunakan ulang dengan parameter kemampuan (`isSecretary={true}`, `canApprove={false}`, `basePath="/secretary/..."`) untuk memastikan keseragaman visual tanpa duplikasi kode.
 4. **Hub Manajemen Perwalian Terpadu**:
    - Dibuatkan `AdvisoryManagementHubView` di `src/modules/academic/advisory-management-hub-view.tsx` yang digunakan bersama oleh Kaprodi (`/coordinator/advisory`) dan Sekprodi (`/secretary/advisory`) untuk menata distribusi Dosen Wali dan bimbingan akademik.
+
+
+---
+
+## Keputusan Fase 4: Kepala Laboratorium (`LAB_HEAD`) & Reformasi Asisten Lab
+
+1. **Reformasi Otoritas Asisten Lab**:
+   - Penugasan, pengubahan izin, dan pencabutan `ASISTEN_LAB` hanya dapat dilakukan oleh **Dosen Pengampu kelas** (`is_class_lecturer`) atau **Kepala Laboratorium** dari laboratorium yang menaungi kelas praktikum tersebut (`is_lab_head_of_class`).
+   - Wewenang tulis langsung dari `ACADEMIC_STAFF` dan `SUPER_ADMIN` untuk `ASISTEN_LAB` dicabut pada tingkat fungsi database (`public.set_assistant` via migrasi `20261028000045_lab_assistant_authority.sql`) dan divalidasi pada Server Action (`setAssistantAction`).
+   - Staf Akademik dan Super Admin tetap memiliki wewenang **membaca** daftar asisten lab demi kepentingan rekapitulasi dan pemantauan kurikulum (`class_assistants_select` RLS policy dipertahankan).
+   - Penugasan `ASISTEN_DOSEN` tetap seperti sebelumnya (Dosen Pengampu kelas atau Super Admin).
+   - Pencatatan `actor_role` pada audit log: jika pelaku adalah Dosen Pengampu kelas, dicatat `'LECTURER'`; jika bukan tetapi Kepala Lab kelas tersebut, dicatat `'LAB_HEAD'`; jika seseorang merangkap keduanya, dicatat `'LECTURER'`.
+
+2. **Arsitektur Antarmuka & Portal Kepala Lab (`/lab`)**:
+   - Dibuat layout portal `/lab` yang diproteksi secara tegas oleh `assertServerRole(['LAB_HEAD'])`.
+   - Seluruh rute `/lab` (Beranda, Profil Lab, Asisten Lab, Kelas Praktikum, Jadwal Lab, dan Rekap Praktikum) diimplementasikan secara fungsional penuh di `src/modules/academic/lab-head-hub-view.tsx` menggunakan komponen retro brutalist tanpa token warna hex baru.
+   - Pengecekan isolasi data: Kepala Lab hanya dapat melihat dan mengelola kelas praktikum serta asisten lab yang terhubung ke laboratorium miliknya melalui relasi `class_laboratories`.
+
+3. **Penyelarasan UI Staf & Dosen**:
+   - Label pada `assistant-forms.tsx` diperbarui menjadi "Dosen Pengampu & Kepala Lab".
+   - Kontrol tambah/ubah/cabut pada `staff-classes-hub-view.tsx` dinonaktifkan dan diganti dengan badge read-only serta catatan kebijakan resmi.
+   - Percabangan `isStaff` pada `class-hub-tabs.tsx` untuk Asisten Lab dihapus.
+
+---
+
+## Keputusan Fase 6: Penyelarasan Koordinator, Matriks Wewenang & Penyelesaian Akhir
+
+1. **Total 9 Peran Utama SIAJAR**:
+   - Sistem kini memiliki tepat 9 peran yang tercatat di tabel `roles` dan enum RBAC:
+     1. `STUDENT` (Mahasiswa)
+     2. `TEACHING_ASSISTANT` (Asisten Dosen / Lab)
+     3. `LECTURER` (Dosen Pengampu — dengan tugas melekat Dosen Wali)
+     4. `PROGRAM_COORDINATOR` (Koordinator Program Studi / Kaprodi)
+     5. `PROGRAM_SECRETARY` (Sekretaris Program Studi / Sekprodi)
+     6. `LAB_HEAD` (Kepala Laboratorium / Kalab)
+     7. `ACADEMIC_STAFF` (Staf Akademik)
+     8. `SYSTEM_ADMIN` (Administrator Sistem)
+     9. `SUPER_ADMIN` (Super Administrator)
+   - Peran `DEAN` dibatalkan dan dihapus secara tuntas dari seluruh basis kode, basis data, dan menu navigasi.
+   - Dosen Wali diimplementasikan sebagai relasi penugasan struktural (`academic_advisories`), bukan peran.
+
+2. **Penyelarasan Rute & Resolusi Menu Global**:
+   - `getRoleHomeHref` dilengkapi rute untuk `PROGRAM_SECRETARY` (`/secretary`) dan `LAB_HEAD` (`/lab`).
+   - `getRoleDisplayName` memetakan nama bahasa Indonesia baku untuk seluruh 9 peran.
+   - Audit menu (`npm run audit:menu`) mengonfirmasi 149 menu berstatus **BERFUNGSI** penuh, 0 menu tiruan, 0 menu sebagian, dan 0 menu rusak.
+   - Seluruh 166 halaman portal dan rute dinamis berhasil dikompilasi tanpa galat (`npm run build`).

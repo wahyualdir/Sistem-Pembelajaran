@@ -36,13 +36,19 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
     expect(getHomeHref('ASDOS')).toBe('/ta');
     expect(getHomeHref('SYSTEM_ADMIN')).toBe('/admin/system');
     expect(getHomeHref('ADMIN')).toBe('/admin/system');
+    expect(getHomeHref('PROGRAM_SECRETARY')).toBe('/secretary');
+    expect(getHomeHref('SEKPRODI')).toBe('/secretary');
+    expect(getHomeHref('LAB_HEAD')).toBe('/lab');
+    expect(getHomeHref('KALAB')).toBe('/lab');
     expect(getHomeHref('SUPER_ADMIN')).toBe('/admin');
   });
 
-  it('memastikan role label akurat untuk seluruh 7 peran', () => {
+  it('memastikan role label akurat untuk seluruh 9 peran', () => {
     expect(getRoleLabel('STUDENT')).toBe('Mahasiswa');
     expect(getRoleLabel('LECTURER')).toBe('Dosen Pengampu');
     expect(getRoleLabel('PROGRAM_COORDINATOR')).toBe('Koordinator Program Studi');
+    expect(getRoleLabel('PROGRAM_SECRETARY')).toBe('Sekretaris Program Studi');
+    expect(getRoleLabel('LAB_HEAD')).toBe('Kepala Laboratorium');
     expect(getRoleLabel('ACADEMIC_STAFF')).toBe('Staf Akademik');
     expect(getRoleLabel('TEACHING_ASSISTANT')).toBe('Asisten Dosen');
     expect(getRoleLabel('SYSTEM_ADMIN')).toBe('System Administrator');
@@ -59,10 +65,15 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
     const superAdminCount = MENU_CONFIG.SUPER_ADMIN.reduce((acc, g) => acc + g.items.length, 0);
     const sharedCount = SHARED_SUPPORT_GROUP.items.length;
 
+    const secretaryCount = MENU_CONFIG.PROGRAM_SECRETARY.reduce((acc, g) => acc + g.items.length, 0);
+    const labHeadCount = MENU_CONFIG.LAB_HEAD.reduce((acc, g) => acc + g.items.length, 0);
+
     expect(studentCount).toBe(17);
     expect(taCount).toBe(20);
-    expect(lecturerCount).toBe(19);
-    expect(coordinatorCount).toBe(12);
+    expect(lecturerCount).toBe(20);
+    expect(coordinatorCount).toBe(13);
+    expect(secretaryCount).toBe(10);
+    expect(labHeadCount).toBe(9);
     expect(staffCount).toBe(13);
     expect(sysAdminCount).toBe(8);
     expect(superAdminCount).toBe(12);
@@ -73,12 +84,14 @@ describe('Navigasi Multi-Actor & Role Differentiation Tests (LMS SIAJAR)', () =>
       taCount +
       lecturerCount +
       coordinatorCount +
+      secretaryCount +
+      labHeadCount +
       staffCount +
       sysAdminCount +
       superAdminCount +
       sharedCount;
 
-    expect(totalMenu).toBe(104);
+    expect(totalMenu).toBe(125);
   });
 
   it('memastikan tidak ada kata terlarang atau pola terlarang di seluruh nama menu dan judul grup', () => {

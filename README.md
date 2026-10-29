@@ -2,13 +2,13 @@
 
 Implementasi dokumen perencanaan `docs/SIAJAR_Dokumen_Lengkap_v3.md` dan `docs/INSTRUKSI_MENU_BERFUNGSI.md` menggunakan Next.js 14 (App Router), TypeScript Strict, Supabase (PostgreSQL, Auth, Storage, RLS), Prisma ORM, dan Tailwind CSS dengan desain Window Brutalist Retro.
 
-Satu ruang kerja akademik terpadu untuk pembelajaran, perkuliahan, evaluasi, dan tata kelola perguruan tinggi yang melayani 7 peran pengguna: **Mahasiswa**, **Asisten Dosen (TA)**, **Dosen**, **Koordinator Program Studi (Kaprodi)**, **Staf Akademik**, **Administrator Sistem**, dan **Super Administrator**.
+Satu ruang kerja akademik terpadu untuk pembelajaran, perkuliahan, evaluasi, dan tata kelola perguruan tinggi yang melayani 9 peran pengguna: **Mahasiswa**, **Asisten Dosen / Lab (TA)**, **Dosen Pengampu** (dengan tugas melekat **Dosen Wali**), **Koordinator Program Studi (Kaprodi)**, **Sekretaris Program Studi (Sekprodi)**, **Kepala Laboratorium (Kalab)**, **Staf Akademik**, **Administrator Sistem**, dan **Super Administrator**.
 
 ---
 
 ## 📌 Status Implementasi dan Verifikasi Menu
 
-Seluruh **122 menu** pada 7 peran pengguna telah diaudit dan berstatus **BERFUNGSI (100%)** dengan integrasi database nyata, server actions, penegakan otorisasi di peladen, dan 0 tampilan tiruan (*zero dummy data*).
+Seluruh **149 menu** pada 9 peran pengguna telah diaudit dan berstatus **BERFUNGSI (100%)** dengan integrasi database nyata, server actions, penegakan otorisasi di peladen, dan 0 tampilan tiruan (*zero dummy data*).
 
 | Modul & Kapabilitas | Status | Keterangan |
 | --- | --- | --- |
@@ -44,8 +44,10 @@ npm run dev   # Buka http://localhost:3000/login
 > - **Mahasiswa**: `2024001`
 > - **Asisten Dosen**: `ta@siajar.ac.id` / `2024002`
 > - **Dosen**: `0012345678`
-> - **Koordinator Prodi**: `0087654321`
-> - **Staf Akademik**: `198501012010121001`
+> - **Koordinator Prodi**: `0087654321` / `kaprodi@siajar.test`
+> - **Sekretaris Prodi**: `sekprodi` / `sekprodi@siajar.test` (NIDN: `0011223344`)
+> - **Kepala Laboratorium**: `kalab` / `kalab@siajar.test` (NIDN: `0022334455`)
+> - **Staf Akademik**: `198501012010121001` / `staf@siajar.test`
 > - **Administrator Sistem**: `sysadmin@siajar.ac.id`
 > - **Super Administrator**: `superadmin@siajar.ac.id`
 >

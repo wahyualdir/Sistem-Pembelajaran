@@ -13,6 +13,8 @@ const ROLES = [
   'TEACHING_ASSISTANT',
   'LECTURER',
   'PROGRAM_COORDINATOR',
+  'PROGRAM_SECRETARY',
+  'LAB_HEAD',
   'ACADEMIC_STAFF',
   'SYSTEM_ADMIN',
   'SUPER_ADMIN',
@@ -147,6 +149,15 @@ describe('FASE 8 — Menu Contract Test (tests/menu-contract.test.ts)', () => {
     expect(isRouteAllowedForRole('/coordinator', 'STUDENT')).toBe(false);
     expect(isRouteAllowedForRole('/staff', 'STUDENT')).toBe(false);
     expect(isRouteAllowedForRole('/admin', 'STUDENT')).toBe(false);
+
+    // PROGRAM_SECRETARY dan LAB_HEAD batas rute
+    expect(isRouteAllowedForRole('/secretary', 'STUDENT')).toBe(false);
+    expect(isRouteAllowedForRole('/secretary', 'LECTURER')).toBe(false);
+    expect(isRouteAllowedForRole('/coordinator', 'PROGRAM_SECRETARY')).toBe(false);
+    expect(isRouteAllowedForRole('/lab', 'STUDENT')).toBe(false);
+    expect(isRouteAllowedForRole('/lab', 'PROGRAM_COORDINATOR')).toBe(false);
+    expect(isRouteAllowedForRole('/lab', 'PROGRAM_SECRETARY')).toBe(false);
+    expect(isRouteAllowedForRole('/secretary', 'LAB_HEAD')).toBe(false);
 
     // Dosen tidak boleh akses rute admin sistem
     expect(isRouteAllowedForRole('/admin', 'LECTURER')).toBe(false);

@@ -604,6 +604,10 @@ export function getRoleHomeHref(role?: string | null): string {
       return '/lecturer';
     case 'PROGRAM_COORDINATOR':
       return '/coordinator';
+    case 'PROGRAM_SECRETARY':
+      return '/secretary';
+    case 'LAB_HEAD':
+      return '/lab';
     case 'ACADEMIC_STAFF':
       return '/staff';
     case 'TEACHING_ASSISTANT':
@@ -701,8 +705,6 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
       pathname.startsWith('/grades') ||
       pathname.startsWith('/exams') ||
       pathname.startsWith('/classes') ||
-      pathname.startsWith('/secretary') ||
-      pathname.startsWith('/lab') ||
       pathname.startsWith('/secretary') ||
       pathname.startsWith('/lab') ||
       pathname.startsWith('/coordinator') ||

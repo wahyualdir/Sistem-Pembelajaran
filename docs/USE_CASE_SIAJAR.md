@@ -6,7 +6,7 @@ Dokumen ini diturunkan langsung dari kode repo `wahyualdir/Sistem-Pembelajaran` 
 
 | Simbol | Arti |
 | --- | --- |
-| Kotak `👤` | Aktor manusia (7 peran, karena kode memisahkan `SYSTEM_ADMIN` dan `SUPER_ADMIN`) |
+| Kotak `👤` | Aktor manusia (9 peran: Mahasiswa, Asisten Dosen/Lab, Dosen Pengampu & Wali, Koordinator Prodi, Sekretaris Prodi, Kepala Lab, Staf Akademik, System Admin, Super Admin) |
 | Kotak `⚙` abu-abu putus-putus | Aktor sekunder: sistem eksternal atau penjadwal |
 | Oval | Use case |
 | Oval kuning putus-putus | Ada di menu atau izin, tetapi halamannya masih cangkang atau izinnya baru ditegakkan di database (belum ada antarmuka penuh) |
@@ -746,3 +746,56 @@ Hasil membandingkan dokumen buatan Antigravity dengan kode. Gunakan kolom kanan 
 ## Menyimpan di repo
 
 Simpan sebagai `docs/USE_CASE_SIAJAR.md`. GitHub dan pratinjau markdown Antigravity merender blok `mermaid` langsung. Bila pratinjau menampilkan error pada satu blok, laporkan nomor diagramnya.
+
+
+---
+
+## 13. Use Case Spesifik Peran Baru (Fase 2, 3, 4)
+
+```mermaid
+flowchart TD
+  classDef default fill:#ffffff,stroke:#555555,color:#111111
+  classDef actor fill:#e6f0ea,stroke:#1b5e43,stroke-width:2px,color:#0b2e21
+
+  DSN["👤 Dosen (Tugas Wali)"]:::actor
+  MHS["👤 Mahasiswa"]:::actor
+  KPR["👤 Koordinator Prodi"]:::actor
+  SEK["👤 Sekretaris Prodi"]:::actor
+  KALAB["👤 Kepala Lab"]:::actor
+
+  subgraph Perwalian["Paket Perwalian (Fase 2)"]
+    U_ADV1(["Lihat mahasiswa bimbingan & status risiko"])
+    U_ADV2(["Setujui / tolak KRS mahasiswa bimbingan"])
+    U_ADV3(["Tulis catatan perwalian (internal & pesan mahasiswa)"])
+    U_ADV4(["Lihat profil Dosen Wali saya"])
+    U_ADV5(["Tetapkan & ganti Dosen Wali (atomik transaksional)"])
+  end
+
+  subgraph Sekprodi["Paket Sekretaris Prodi (Fase 3)"]
+    U_SEK1(["Monitoring perkuliahan prodi (baca)"])
+    U_SEK2(["Penugasan kelas & jadwal prodi"])
+    U_SEK3(["Verifikasi awal pengajuan mahasiswa"])
+    U_SEK4(["Pantau EWS risiko mahasiswa prodi"])
+    U_SEK5(["Unduh rekap laporan akademik prodi"])
+  end
+
+  subgraph LabHead["Paket Kepala Laboratorium & Asisten Lab (Fase 4)"]
+    U_LAB1(["Kelola profil laboratorium & ruang"])
+    U_LAB2(["Tugaskan, ubah izin, & cabut Asisten Lab"])
+    U_LAB3(["Pantau kelas praktikum terkait lab"])
+    U_LAB4(["Lihat jadwal & penggunaan ruang lab"])
+    U_LAB5(["Lihat rekap presensi & nilai praktikum"])
+  end
+
+  DSN --- U_ADV1 & U_ADV2 & U_ADV3
+  MHS --- U_ADV4
+  KPR --- U_ADV5
+  SEK --- U_ADV5 & U_SEK1 & U_SEK2 & U_SEK3 & U_SEK4 & U_SEK5
+  KALAB --- U_LAB1 & U_LAB2 & U_LAB3 & U_LAB4 & U_LAB5
+  DSN --- U_LAB2
+```
+
+### Catatan Wewenang Kritis:
+1. **Asisten Lab**: Hanya dapat ditugaskan, diubah, atau dicabut oleh **Dosen Pengampu kelas** dan **Kepala Lab** kelas bersangkutan. Staf Akademik dan Super Admin tidak memiliki izin menulis (hanya membaca).
+2. **Sekretaris Prodi**: Membantu Koordinator Prodi dalam verifikasi data dan penugasan, namun **dilarang menyetujui perubahan nilai** (hak veto eksklusif Koordinator Prodi).
+3. **Dosen Wali**: Bukan entitas peran mandiri, melainkan relasi tugas fungsional pada pemegang peran `LECTURER` terhadap mahasiswa `STUDENT`.

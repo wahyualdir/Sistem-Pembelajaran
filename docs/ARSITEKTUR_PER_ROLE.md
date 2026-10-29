@@ -357,3 +357,46 @@ classDiagram
     KoordinatorProdi "1" ..> "1" StafAkademik : "Keputusan Nilai Dieksekusi Staf"
     SuperAdmin "1" ..> "1..*" PenggunaUmum : "Impersonasi Terkendali (Audit Trail)"
 ```
+
+---
+
+## 8. Arsitektur Peran Sekretaris Program Studi (`PROGRAM_SECRETARY`)
+
+### A. Filosofi & Batasan Peran
+Sekretaris Program Studi adalah **peran operasional pendukung keprodian (*Operational Verification & Execution Role*)**. Bertugas membantu Koordinator Program Studi dalam pemantauan perkuliahan, penyiapan jadwal dan penugasan kelas, penetapan Dosen Wali, serta verifikasi awal pengajuan mahasiswa. Batasan tegas di server: Sekprodi **tidak memiliki hak menyetujui atau menolak perubahan nilai** (hak veto tetap di Koordinator Prodi), **tidak mengubah nilai langsung**, dan **tidak dapat melihat log audit sistem**. Lingkup akses dibatasi secara ketat pada program studi miliknya (`scope_type = 'PROGRAM'`).
+
+### B. Hierarki Navigasi & Rute Portal
+- **Gerbang Utama**: `/secretary`
+- **Grup Menu (10 Item, Awalan ID `sek-`)**:
+  1. **Utama**: Beranda Sekprodi (`/secretary`), Kalender (`/calendar`), Notifikasi (`/notifications`), Pengumuman (`/announcements`)
+  2. **Operasional Prodi**: Monitoring Prodi (`/secretary/monitoring`), Penugasan & Jadwal Kelas (`/secretary/classes`), Pengelolaan Perwalian (`/secretary/advisory`), Verifikasi Pengajuan (`/secretary/requests`), Peringatan Dini / EWS (`/secretary/risk`), Laporan Akademik (`/secretary/reports`)
+
+---
+
+## 9. Arsitektur Peran Kepala Laboratorium (`LAB_HEAD`) & Reformasi Asisten Lab
+
+### A. Filosofi & Batasan Peran
+Kepala Laboratorium adalah **pengelola sarana praktikum dan asisten lab (*Laboratory & Practicum Governance Role*)**. Kepala Lab mengelola profil laboratorium, jadwal penggunaan ruang praktikum, rekapitulasi presensi dan nilai praktikum (baca saja), serta memiliki **otoritas eksklusif bersama Dosen Pengampu** dalam menugaskan, mengatur hak izin, dan mencabut Asisten Laboratorium (`ASISTEN_LAB`). Batasan tegas: Kepala Lab **tidak mengubah nilai**, **tidak menyetujui perubahan nilai**, dan **hanya mengakses kelas praktikum yang tertaut ke lab miliknya via `class_laboratories`**.
+
+### B. Hierarki Navigasi & Rute Portal
+- **Gerbang Utama**: `/lab`
+- **Grup Menu (9 Item, Awalan ID `lab-`)**:
+  1. **Utama**: Beranda Kepala Lab (`/lab`), Kalender (`/calendar`), Notifikasi (`/notifications`), Pengumuman (`/announcements`)
+  2. **Kelola Lab**: Profil Laboratorium (`/lab/profile`), Asisten Lab (`/lab/assistants`), Kelas Praktikum (`/lab/classes`), Jadwal & Penggunaan Lab (`/lab/schedules`), Rekap Praktikum (`/lab/recap`)
+
+### C. Reformasi Otoritas Asisten Lab
+- `ASISTEN_LAB` kini **hanya** dapat ditugaskan, diubah, atau dicabut oleh **Dosen Pengampu kelas** (`is_class_lecturer`) atau **Kepala Lab** kelas bersangkutan (`is_lab_head_of_class`).
+- Staf Akademik (`ACADEMIC_STAFF`) dan Super Admin (`SUPER_ADMIN`) dicabut hak tulisnya untuk Asisten Lab (hanya memiliki hak baca).
+
+---
+
+## 10. Arsitektur Relasi Dosen Wali (Tugas Melekat pada `LECTURER`)
+
+### A. Filosofi & Struktur Relasi
+Dosen Wali **bukan peran mandiri**, melainkan penugasan struktural bimbingan akademik yang melekat pada dosen pengampu (`LECTURER`) melalui tabel `academic_advisories`. Mahasiswa hanya dapat memiliki 1 Dosen Wali aktif (`status = 'ACTIVE'`) yang ditegakkan melalui indeks parsial unik di basis data.
+
+### B. Kemampuan Dosen Wali
+1. Memantau daftar mahasiswa bimbingan aktif beserta riwayat IPK, SKS tempuh, dan skor peringatan dini (`advisory-actions.ts`).
+2. Menyetujui atau menolak permohonan Kartu Rencana Studi (KRS) mahasiswa perwalian (`/lecturer/advisory`).
+3. Menulis catatan perwalian berkala di tabel `advisory_notes` (tersedia opsi catatan internal dan catatan untuk mahasiswa).
+4. Mahasiswa melihat kartu profil Dosen Wali di Beranda Mahasiswa (`/student`) dan Profil Pengguna (`/profile`).
