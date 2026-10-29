@@ -119,13 +119,15 @@ Titik awal audit: commit `9d2a590` (`pra-menu-fungsi`) pada cabang `perbaikan/me
 
 ---
 
+---
+
 ## 2. Hasil Audit Inventaris Menu Otomatis (Fase 2)
 
 Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 
 ### 2.1. Ringkasan Status Menu
-- **Total Entri Menu**: 137
-- **BERFUNGSI**: 137
+- **Total Entri Menu**: 149
+- **BERFUNGSI**: 149
 - **SEBAGIAN**: 0
 - **TIRUAN**: 0
 - **RUSAK**: 0
@@ -133,7 +135,7 @@ Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 
 ---
 
-### 2.2. Tabel Hasil Audit Menu per Peran (137 Entri)
+### 2.2. Tabel Hasil Audit Menu per Peran (149 Entri)
 
 | Role | Menu | href | Jenis Rute | Sumber Data | Aksi Palsu | Status | Bukti |
 |---|---|---|---|---|---|---|---|
@@ -232,6 +234,18 @@ Audit dijalankan pada Rabu, 28 Oktober 2026 melalui `npm run audit:menu`.
 | `PROGRAM_SECRETARY` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
 | `PROGRAM_SECRETARY` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
 | `PROGRAM_SECRETARY` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
+| `LAB_HEAD` | Beranda | `/lab` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/lab/page.tsx |
+| `LAB_HEAD` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
+| `LAB_HEAD` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |
+| `LAB_HEAD` | Pengumuman | `/announcements` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/announcements/page.tsx |
+| `LAB_HEAD` | Laboratorium Saya | `/lab/profile` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/lab/profile/page.tsx |
+| `LAB_HEAD` | Asisten Lab | `/lab/assistants` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/lab/assistants/page.tsx |
+| `LAB_HEAD` | Kelas Praktikum | `/lab/classes` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/lab/classes/page.tsx |
+| `LAB_HEAD` | Jadwal dan Penggunaan Lab | `/lab/schedules` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/lab/schedules/page.tsx |
+| `LAB_HEAD` | Rekap Praktikum | `/lab/recap` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/lab/recap/page.tsx |
+| `LAB_HEAD` | Pengaturan | `/settings` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/settings/page.tsx |
+| `LAB_HEAD` | Bantuan | `/help` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/help/page.tsx |
+| `LAB_HEAD` | Privasi | `/transparency` | `KHUSUS` | Server Action / Komponen Real | - | **BERFUNGSI** | File: src/app/(portal)/transparency/page.tsx |
 | `ACADEMIC_STAFF` | Beranda | `/staff` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/staff/page.tsx |
 | `ACADEMIC_STAFF` | Kalender | `/calendar` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/calendar/page.tsx |
 | `ACADEMIC_STAFF` | Notifikasi | `/notifications` | `KHUSUS` | Server Actions Real | - | **BERFUNGSI** | File: src/app/(portal)/notifications/page.tsx |

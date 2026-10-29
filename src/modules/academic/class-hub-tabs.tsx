@@ -1247,7 +1247,7 @@ export function ClassHubTabs({ data }: { data: ClassDetailData }) {
                           Asisten Dosen
                         </span>
                       )}
-                      {(isActualLecturer || (isStaff && ast.assistant_type === 'ASISTEN_LAB')) && (
+                      {(isActualLecturer || (data.userRole === 'LAB_HEAD' && ast.assistant_type === 'ASISTEN_LAB')) && (
                         <RevokeAssistant
                           classId={cls.id}
                           identifier={ast.nim || ast.nidn || ast.user_id}

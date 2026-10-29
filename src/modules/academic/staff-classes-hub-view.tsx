@@ -415,11 +415,11 @@ export function StaffClassesHubView({ isDemo = true, isPersistenceActive = false
                 <span>Penugasan Asisten Laboratorium (Praktikum)</span>
               </h2>
               <p className="text-xs text-black/70 mt-1">
-                Sesuai kebijakan akademik: Staf Akademik dan Dosen Pengampu berwenang menugaskan atau mencabut Asisten Lab untuk mendampingi sesi praktikum.
+                Sesuai kebijakan akademik terbaru: Penugasan dan pengelolaan Asisten Lab dilakukan oleh Kepala Laboratorium dan Dosen Pengampu kelas praktikum.
               </p>
             </div>
             <span className="text-xs font-sans font-bold px-3 py-1 bg-white border border-black rounded-lg self-start sm:self-auto">
-              Wewenang: Staf Akademik & Dosen
+              Wewenang: Kepala Lab & Dosen Pengampu (Staf: Baca Saja)
             </span>
           </div>
 

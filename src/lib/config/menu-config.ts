@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   GraduationCap,
+  Building2,
   CalendarDays,
   Bell,
   Megaphone,
@@ -460,7 +461,7 @@ const PROGRAM_SECRETARY_GROUPS: MenuGroup[] = [
   },
 ];
 
-// 6.7b Kepala Laboratorium (LAB_HEAD) - Kerangka Fase 1
+// 6.7b Kepala Laboratorium (LAB_HEAD) - Fase 4
 const LAB_HEAD_GROUPS: MenuGroup[] = [
   {
     id: 'lab-utama',
@@ -471,6 +472,18 @@ const LAB_HEAD_GROUPS: MenuGroup[] = [
       { id: 'lab-kalender', label: 'Kalender', href: '/calendar', icon: CalendarDays, roles: ['LAB_HEAD'] },
       { id: 'lab-notifikasi', label: 'Notifikasi', href: '/notifications', icon: Bell, roles: ['LAB_HEAD'] },
       { id: 'lab-pengumuman', label: 'Pengumuman', href: '/announcements', icon: Megaphone, roles: ['LAB_HEAD'] },
+    ],
+  },
+  {
+    id: 'lab-manajemen',
+    title: 'Manajemen Laboratorium',
+    roles: ['LAB_HEAD'],
+    items: [
+      { id: 'lab-profil', label: 'Laboratorium Saya', href: '/lab/profile', icon: Building2, roles: ['LAB_HEAD'] },
+      { id: 'lab-asisten', label: 'Asisten Lab', href: '/lab/assistants', icon: Users, roles: ['LAB_HEAD'] },
+      { id: 'lab-kelas', label: 'Kelas Praktikum', href: '/lab/classes', icon: Layers, roles: ['LAB_HEAD'] },
+      { id: 'lab-jadwal', label: 'Jadwal dan Penggunaan Lab', href: '/lab/schedules', icon: CalendarClock, roles: ['LAB_HEAD'] },
+      { id: 'lab-rekap', label: 'Rekap Praktikum', href: '/lab/recap', icon: FileSpreadsheet, roles: ['LAB_HEAD'] },
     ],
   },
 ];

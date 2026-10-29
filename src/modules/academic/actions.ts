@@ -2485,13 +2485,17 @@ const assistantSchema = z.object({
 export async function setAssistantAction(input: unknown): Promise<ActionResponse> {
   const p = assistantSchema.safeParse(input);
   if (!p.success) return { ok: false, error: p.error.issues[0].message };
-  const me = await actor(['LECTURER', 'ACADEMIC_STAFF', 'SUPER_ADMIN']);
+  const me = await actor(['LECTURER', 'LAB_HEAD', 'ACADEMIC_STAFF', 'SUPER_ADMIN']);
   if (!me) return { ok: false, error: ERR.FORBIDDEN };
   const { class_id, identifier, permissions } = p.data;
   const assistant_type = p.data.assistant_type || 'ASISTEN_DOSEN';
 
   if (assistant_type === 'ASISTEN_DOSEN' && me.role !== 'LECTURER' && me.role !== 'SUPER_ADMIN') {
     return { ok: false, error: 'Penugasan Asisten Dosen hanya dapat dilakukan langsung oleh Dosen Pengampu.' };
+  }
+
+  if (assistant_type === 'ASISTEN_LAB' && me.role !== 'LECTURER' && me.role !== 'LAB_HEAD') {
+    return { ok: false, error: 'Asisten Lab hanya dapat ditugaskan oleh Dosen Pengampu atau Kepala Lab.' };
   }
 
   if (me.online) {
@@ -2508,6 +2512,16 @@ export async function setAssistantAction(input: unknown): Promise<ActionResponse
     if (!targetClass) return { ok: false, error: ERR.NOT_FOUND };
     if (me.role === 'LECTURER' && targetClass.created_by !== me.id) {
       return { ok: false, error: ERR.FORBIDDEN };
+    }
+    if (me.role === 'LAB_HEAD') {
+      const g = globalThis as any;
+      const classLabs: Array<{ class_id: string; laboratory_id: string }> = g.__siajarClassLaboratories ?? [];
+      const userLabs: Record<string, string> = g.__siajarUserLabMap ?? {};
+      const userLabId = userLabs[me.id];
+      const matched = classLabs.some((cl) => cl.class_id === class_id && (!userLabId || cl.laboratory_id === userLabId));
+      if (!matched && classLabs.length > 0) {
+        return { ok: false, error: 'Kepala Lab hanya dapat mengelola Asisten Lab pada kelas praktikum di laboratoriumnya.' };
+      }
     }
     const key = identifier.toLowerCase();
     const u =
@@ -2538,6 +2552,8 @@ export async function setAssistantAction(input: unknown): Promise<ActionResponse
   }
   revalidatePath('/classes/[id]', 'page');
   revalidatePath('/staff/classes', 'page');
+  revalidatePath('/lab/assistants', 'page');
+  revalidatePath('/lab/classes', 'page');
   return { ok: true };
 }
 

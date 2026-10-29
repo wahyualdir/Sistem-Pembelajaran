@@ -100,7 +100,7 @@ export function AssistantForm({
                 )}
               </div>
               <p className="text-xs text-black/70 font-normal leading-relaxed">
-                Ditugaskan untuk praktikum laboratorium. Dapat ditugaskan oleh Staf Akademik & Dosen.
+                Ditugaskan untuk praktikum laboratorium. Ditugaskan oleh Dosen Pengampu & Kepala Lab.
               </p>
             </button>
           </div>
@@ -114,7 +114,7 @@ export function AssistantForm({
             </span>
           </div>
           <span className="text-[10px] font-sans px-2 py-0.5 rounded bg-gray-soft border border-black/20 text-black/70">
-            {allowedTypes[0] === 'ASISTEN_LAB' ? 'Staf Akademik & Dosen' : 'Dosen Pengampu'}
+            {allowedTypes[0] === 'ASISTEN_LAB' ? 'Dosen Pengampu & Kepala Lab' : 'Dosen Pengampu'}
           </span>
         </div>
       )}
