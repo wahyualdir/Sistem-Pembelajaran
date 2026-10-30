@@ -1693,7 +1693,7 @@ export async function listNotificationsAction(): Promise<NotificationItem[]> {
   if (!c) return [];
   if (await checkSupabaseOnline()) {
     const supabase = await createClient();
-    const { data } = await supabase.from('notifications').select('id,type,title,body,class_id,read_at,created_at').order('created_at', { ascending: false }).limit(50);
+    const { data } = await supabase.from('notifications').select('id,type,title,body,class_id,read_at,created_at').eq('user_id', c.user.id).order('created_at', { ascending: false }).limit(50);
     return (data ?? []) as NotificationItem[];
   }
   return notifs.filter((n) => n.user_id === c.user.id).sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, 50);
@@ -1704,7 +1704,7 @@ export async function countUnreadAction(): Promise<number> {
   if (!c) return 0;
   if (await checkSupabaseOnline()) {
     const supabase = await createClient();
-    const { count } = await supabase.from('notifications').select('id', { count: 'exact', head: true }).is('read_at', null);
+    const { count } = await supabase.from('notifications').select('id', { count: 'exact', head: true }).eq('user_id', c.user.id).is('read_at', null);
     return count ?? 0;
   }
   return notifs.filter((n) => n.user_id === c.user.id && !n.read_at).length;
@@ -1721,6 +1721,7 @@ export async function markNotificationsReadAction(): Promise<ActionResponse> {
     const now = new Date().toISOString();
     notifs.filter((n) => n.user_id === c.user.id && !n.read_at).forEach((n) => (n.read_at = now));
   }
+  invalidateBadgeCache(c.user.id);
   revalidatePath('/', 'layout');
   return { ok: true };
 }
@@ -3151,6 +3152,22 @@ export interface DynamicMenuBadgesResult {
   coordinatorApprovalsCount: number;
 }
 
+interface BadgeCacheItem {
+  data: DynamicMenuBadgesResult;
+  timestamp: number;
+}
+const badgeCache: Map<string, BadgeCacheItem> = ((globalThis as any).__siajarBadgeCache ??= new Map());
+
+export function invalidateBadgeCache(userId?: string) {
+  if (userId) {
+    for (const k of badgeCache.keys()) {
+      if (k.startsWith(`${userId}:`)) badgeCache.delete(k);
+    }
+  } else {
+    badgeCache.clear();
+  }
+}
+
 export async function getDynamicMenuBadgesAction(): Promise<DynamicMenuBadgesResult> {
   const c = await getCurrentUserWithRoles();
   if (!c) {
@@ -3158,6 +3175,13 @@ export async function getDynamicMenuBadgesAction(): Promise<DynamicMenuBadgesRes
   }
 
   const role = c.activeRole || 'STUDENT';
+  const cacheKey = `${c.user.id}:${role}`;
+  const now = Date.now();
+  const cachedBadge = badgeCache.get(cacheKey);
+  if (cachedBadge && now - cachedBadge.timestamp < 10000) {
+    return cachedBadge.data;
+  }
+
   let unreadCount = 0;
   let taGradingCount = 0;
   let lecturerReviewCount = 0;
@@ -3236,12 +3260,14 @@ export async function getDynamicMenuBadgesAction(): Promise<DynamicMenuBadgesRes
     }
   }
 
-  return {
+  const badgeResult: DynamicMenuBadgesResult = {
     unreadCount,
     taGradingCount,
     lecturerReviewCount,
     coordinatorApprovalsCount,
   };
+  badgeCache.set(cacheKey, { data: badgeResult, timestamp: Date.now() });
+  return badgeResult;
 }
 
 // =========================================================================

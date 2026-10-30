@@ -29,6 +29,13 @@ const dedupe = typeof cache === 'function' ? cache : <T extends (...args: any[])
  * Deduplicated retrieval of current authenticated user, profile, and roles.
  * Wrapped with React cache() to guarantee a single execution per request.
  */
+interface UserProfileCacheItem {
+  profile: any;
+  rolesList: any[];
+  timestamp: number;
+}
+const userProfileCache: Map<string, UserProfileCacheItem> = ((globalThis as any).__siajarUserProfileCache ??= new Map());
+
 export const getCurrentUserWithRoles = dedupe(async (): Promise<CurrentUserContext | null> => {
   let cookieStore: ReturnType<typeof cookies>;
   let demoSessionId: string | undefined;
@@ -157,7 +164,13 @@ export const getCurrentUserWithRoles = dedupe(async (): Promise<CurrentUserConte
     : null;
 
   let rolesList: any[] = [];
-  if (isOnline) {
+  const cachedUser = userProfileCache.get(userId);
+  const now = Date.now();
+
+  if (cachedUser && now - cachedUser.timestamp < 15000) {
+    profile = cachedUser.profile;
+    rolesList = cachedUser.rolesList;
+  } else if (isOnline) {
     try {
       const [profileRes, rolesRes] = await Promise.all([
         supabaseAdmin
@@ -177,6 +190,9 @@ export const getCurrentUserWithRoles = dedupe(async (): Promise<CurrentUserConte
       }
       if (rolesRes.data && rolesRes.data.length > 0) {
         rolesList = rolesRes.data;
+      }
+      if (profile) {
+        userProfileCache.set(userId, { profile, rolesList, timestamp: now });
       }
     } catch {
       // DB offline
