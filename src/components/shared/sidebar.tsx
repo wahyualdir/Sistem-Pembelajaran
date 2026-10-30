@@ -51,6 +51,8 @@ export const MAHASISWA_NAV_GROUPS: NavGroup[] = getNavGroups("STUDENT");
 export const KAPRODI_NAV_GROUPS: NavGroup[] = getNavGroups("PROGRAM_COORDINATOR");
 export const STAFF_NAV_GROUPS: NavGroup[] = getNavGroups("ACADEMIC_STAFF");
 export const TA_NAV_GROUPS: NavGroup[] = getNavGroups("TEACHING_ASSISTANT");
+export const SEKPRODI_NAV_GROUPS: NavGroup[] = getNavGroups("PROGRAM_SECRETARY");
+export const KALAB_NAV_GROUPS: NavGroup[] = getNavGroups("LAB_HEAD");
 
 export interface SidebarProps {
   role: "ADMIN" | "DOSEN" | "MAHASISWA" | "SYSTEM_ADMIN" | "SUPER_ADMIN" | "SUPERADMIN" | "LECTURER" | "STUDENT" | "PROGRAM_COORDINATOR" | "ACADEMIC_STAFF" | "TEACHING_ASSISTANT" | string;
@@ -97,6 +99,10 @@ export function Sidebar({
       ? "Eko Staf Akademik"
       : normalizedRole === "TEACHING_ASSISTANT"
       ? "Citra Asisten"
+      : normalizedRole === "PROGRAM_SECRETARY"
+      ? "Dr. Siti Aminah, M.Kom"
+      : normalizedRole === "LAB_HEAD"
+      ? "Ir. Hendra Wijaya, M.T."
       : "Wahyu Aldiriyanto");
 
   const initials =

@@ -4,19 +4,10 @@ import Link from 'next/link';
 import { ChevronDown, Layers, LogOut } from 'lucide-react';
 import { getCurrentUserWithRoles, logoutAction } from '@/modules/identity/actions';
 import { getDynamicMenuBadgesAction } from '@/modules/academic/actions';
+import { getRoleDisplayName } from '@/lib/config/menu-config';
 import { AiAcademicAssistant } from '@/components/shared/ai-academic-assistant';
 import { Toaster } from '@/components/ui/toast';
 import { PortalShell } from './portal-shell';
-
-const ROLE_DISPLAY_NAMES: Record<string, string> = {
-  STUDENT: 'Mahasiswa',
-  LECTURER: 'Dosen Pengampu',
-  TEACHING_ASSISTANT: 'Asisten',
-  PROGRAM_COORDINATOR: 'Prodi',
-  ACADEMIC_STAFF: 'Staf Akademik',
-  SYSTEM_ADMIN: 'System Administrator',
-  SUPER_ADMIN: 'Super Admin',
-};
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const userContext = await getCurrentUserWithRoles();
@@ -29,7 +20,7 @@ export default async function PortalLayout({ children }: { children: React.React
   const role = activeRole || 'STUDENT';
   const badges = await getDynamicMenuBadgesAction();
   const unread = badges.unreadCount;
-  const roleName = ROLE_DISPLAY_NAMES[role] || 'Pengguna';
+  const roleName = getRoleDisplayName(role);
 
   const roleBlock = (
     <div className="flex items-center gap-2 rounded-control border border-border bg-surface px-3 py-2 text-sm">

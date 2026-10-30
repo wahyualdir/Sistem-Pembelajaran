@@ -35,9 +35,6 @@ export default async function CertificatesPage({ searchParams }: CertificatesPag
   if (role === 'ACADEMIC_STAFF') {
     redirect('/staff');
   }
-  if (role === 'TEACHING_ASSISTANT') {
-    redirect('/ta');
-  }
 
   const realCerts = await getStudentCertificatesAction().catch(() => []);
   const projects = await getStudentProjectsAction().catch(() => []);

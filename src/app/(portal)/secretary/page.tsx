@@ -25,6 +25,7 @@ export default async function SecretaryPortalPage() {
     if (role === 'STUDENT') redirect('/student');
     if (role === 'TEACHING_ASSISTANT') redirect('/ta');
     if (role === 'ACADEMIC_STAFF') redirect('/staff');
+    if (role === 'LAB_HEAD') redirect('/lab');
     redirect('/login');
   }
 

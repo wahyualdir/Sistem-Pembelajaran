@@ -25,9 +25,6 @@ export default async function GradesPage() {
   if (role === 'ACADEMIC_STAFF') {
     redirect('/staff');
   }
-  if (role === 'TEACHING_ASSISTANT') {
-    redirect('/ta/grading');
-  }
 
   const isNew = user?.isNewAccount ?? false;
   const attempts = isNew ? [] : await getAllAttemptsAction().catch(() => []);

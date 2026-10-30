@@ -12,9 +12,20 @@ const ROLE_PORTAL_MAP: Record<string, string> = {
   SYSTEM_ADMIN: '/admin/system',
   SUPER_ADMIN: '/admin',
   SUPERADMIN: '/admin',
+  PROGRAM_SECRETARY: '/secretary',
+  LAB_HEAD: '/lab',
 };
 
-const PORTAL_PREFIXES = ['/student', '/lecturer', '/ta', '/coordinator', '/staff', '/admin'];
+const PORTAL_PREFIXES = [
+  '/student',
+  '/lecturer',
+  '/ta',
+  '/coordinator',
+  '/staff',
+  '/admin',
+  '/secretary',
+  '/lab',
+];
 
 const ACADEMIC_ROUTES = [
   '/attendance',
@@ -23,6 +34,8 @@ const ACADEMIC_ROUTES = [
   '/exams',
   '/classes',
   '/coordinator',
+  '/secretary',
+  '/lab',
 ];
 
 export async function middleware(request: NextRequest) {
