@@ -14,6 +14,15 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  outputFileTracingExcludes: {
+    '*': [
+      './playwright-report/**',
+      './test-results/**',
+      './docs/**',
+      './scratch/**',
+      './tests/**',
+    ],
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "10mb",
