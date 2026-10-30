@@ -218,17 +218,13 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
       } else if (isSuperAdminUser) {
         if (
           (superAdminPassword && password === superAdminPassword) ||
-          (demoPassword && password === demoPassword) ||
-          password === 'Password123!' ||
-          password === 'wahyu11'
+          (demoPassword && password === demoPassword)
         ) {
           isMatch = true;
         }
       } else {
         if (
-          (demoPassword && password === demoPassword) ||
-          password === 'Password123!' ||
-          password === 'wahyu11'
+          (demoPassword && password === demoPassword)
         ) {
           isMatch = true;
         }

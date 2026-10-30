@@ -5,15 +5,15 @@ interface LoginDevModeProps {
 }
 
 const DEMO_ACCOUNTS = [
-  { role: 'Mahasiswa', desc: 'NIM 2024001', id: '2024001' },
-  { role: 'Asisten Dosen / Lab', desc: 'NIM 2024002', id: '2024002' },
+  { role: 'Mahasiswa', desc: 'NIM 243510001', id: '243510001' },
+  { role: 'Asisten Dosen / Lab', desc: 'NIM 243510002', id: '243510002' },
   { role: 'Dosen & Wali', desc: 'NIDN 0012345678', id: '0012345678' },
   { role: 'Kaprodi', desc: 'NIDN 0087654321', id: '0087654321' },
   { role: 'Sekretaris Prodi', desc: 'NIDN 0011223344', id: '0011223344' },
   { role: 'Kepala Lab', desc: 'NIDN 0022334455', id: '0022334455' },
   { role: 'Staf Akademik', desc: 'NIP 198501012010121001', id: '198501012010121001' },
   { role: 'System Admin', desc: 'sysadmin', id: 'sysadmin' },
-  { role: 'Super Admin', desc: 'superadmin', id: 'superadmin' },
+  { role: 'Super Admin', desc: 'NIP 20120009', id: '20120009' },
 ] as const;
 
 export function LoginDevMode({ onSelectIdentifier }: LoginDevModeProps) {

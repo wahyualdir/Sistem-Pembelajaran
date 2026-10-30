@@ -10,6 +10,11 @@ let cachedStatus: boolean | null = null;
 let lastCheckTime = 0;
 
 export async function checkSupabaseOnline(): Promise<boolean> {
+  // Dalam lingkungan unit test (Vitest / Jest), fallback ke in-memory store
+  if (process.env.NODE_ENV === 'test' || process.env.VITEST) {
+    return false;
+  }
+
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321';
   const isLocal = url.includes('localhost') || url.includes('127.0.0.1');
 

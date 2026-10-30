@@ -3158,7 +3158,7 @@ interface BadgeCacheItem {
 }
 const badgeCache: Map<string, BadgeCacheItem> = ((globalThis as any).__siajarBadgeCache ??= new Map());
 
-export function invalidateBadgeCache(userId?: string) {
+export async function invalidateBadgeCache(userId?: string) {
   if (userId) {
     for (const k of badgeCache.keys()) {
       if (k.startsWith(`${userId}:`)) badgeCache.delete(k);

@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
+import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { getCurrentUserWithRoles } from '@/modules/identity/actions';
 import type {
   LiveQuestionItem,
@@ -36,8 +37,10 @@ export async function listLiveQuestionsAction(
   const auth = await getCurrentUserWithRoles();
   const currentUserId = auth?.user?.id;
 
-  try {
-    const supabase = await createClient();
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createClient();
     let query = supabase
       .from('class_live_questions')
       .select('*')
@@ -103,7 +106,8 @@ export async function listLiveQuestionsAction(
     });
 
     return { ok: true, questions: sanitizedQuestions };
-  } catch {
+    } catch {}
+  }
     // Fallback in-memory
     const classQuestions = liveQuestionsStore[classId] || [];
     let filtered = classQuestions.filter((q) => q.status !== 'diarsipkan');
@@ -133,7 +137,6 @@ export async function listLiveQuestionsAction(
     });
 
     return { ok: true, questions: mapped };
-  }
 }
 
 /**
@@ -156,11 +159,13 @@ export async function createLiveQuestionAction(
   const studentName = auth.profile?.full_name || auth.user.email?.split('@')[0] || 'Mahasiswa';
   const now = new Date().toISOString();
 
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from('class_live_questions')
-      .insert({
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createClient();
+      const { data, error } = await supabase
+        .from('class_live_questions')
+        .insert({
         class_id: classId,
         session_id: sessionId || null,
         student_id: auth.user.id,
@@ -180,7 +185,8 @@ export async function createLiveQuestionAction(
 
     revalidatePath(`/classes/${classId}`);
     return { ok: true, questionId: data.id };
-  } catch {
+    } catch {}
+  }
     // In-memory fallback
     const id = `lq-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     const newItem: LiveQuestionItem = {
@@ -206,7 +212,6 @@ export async function createLiveQuestionAction(
     liveQuestionsStore[classId].unshift(newItem);
 
     return { ok: true, questionId: id };
-  }
 }
 
 /**
@@ -221,9 +226,11 @@ export async function toggleUpvoteLiveQuestionAction(
     return { ok: false, error: 'Silakan masuk terlebih dahulu untuk memberikan dukungan.' };
   }
 
-  try {
-    const supabase = await createClient();
-    const { data, error } = await (supabase as any).rpc('toggle_live_question_upvote', {
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createClient();
+      const { data, error } = await (supabase as any).rpc('toggle_live_question_upvote', {
       p_question_id: questionId,
     });
 
@@ -240,7 +247,8 @@ export async function toggleUpvoteLiveQuestionAction(
       upvoted: data?.upvoted,
       totalUpvotes: data?.upvotes_count,
     };
-  } catch {
+    } catch {}
+  }
     // In-memory fallback
     if (!liveUpvotesStore[questionId]) {
       liveUpvotesStore[questionId] = new Set();
@@ -268,7 +276,6 @@ export async function toggleUpvoteLiveQuestionAction(
     }
 
     return { ok: true, upvoted, totalUpvotes: set.size };
-  }
 }
 
 /**
@@ -295,9 +302,11 @@ export async function updateLiveQuestionStatusAction(
 
   const now = new Date().toISOString();
 
-  try {
-    const supabase = await createClient();
-    const updates: any = {
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createClient();
+      const updates: any = {
       status,
       updated_at: now,
     };
@@ -318,7 +327,8 @@ export async function updateLiveQuestionStatusAction(
     }
 
     return { ok: true };
-  } catch {
+    } catch {}
+  }
     // In-memory fallback
     for (const cId of Object.keys(liveQuestionsStore)) {
       const q = liveQuestionsStore[cId].find((item) => item.id === questionId);
@@ -332,7 +342,6 @@ export async function updateLiveQuestionStatusAction(
       }
     }
     return { ok: true };
-  }
 }
 
 /**
@@ -355,10 +364,12 @@ export async function togglePinLiveQuestionAction(
     return { ok: false, error: 'Hanya pengajar yang dapat menyematkan pertanyaan di layar kelas.' };
   }
 
-  try {
-    const supabase = await createClient();
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createClient();
 
-    // Cek status pin saat ini
+      // Cek status pin saat ini
     const { data: curr } = await supabase
       .from('class_live_questions')
       .select('is_pinned')
@@ -379,7 +390,8 @@ export async function togglePinLiveQuestionAction(
     }
 
     return { ok: true, isPinned: nextPin };
-  } catch {
+    } catch {}
+  }
     for (const cId of Object.keys(liveQuestionsStore)) {
       const q = liveQuestionsStore[cId].find((item) => item.id === questionId);
       if (q) {
@@ -388,7 +400,6 @@ export async function togglePinLiveQuestionAction(
       }
     }
     return { ok: true, isPinned: true };
-  }
 }
 
 /**
@@ -403,9 +414,11 @@ export async function deleteLiveQuestionAction(
     return { ok: false, error: 'Akses ditolak.' };
   }
 
-  try {
-    const supabase = await createClient();
-    const { error } = await supabase
+  const isOnline = await checkSupabaseOnline();
+  if (isOnline) {
+    try {
+      const supabase = await createClient();
+      const { error } = await supabase
       .from('class_live_questions')
       .delete()
       .eq('id', questionId);
@@ -417,7 +430,8 @@ export async function deleteLiveQuestionAction(
     }
 
     return { ok: true };
-  } catch {
+    } catch {}
+  }
     for (const cId of Object.keys(liveQuestionsStore)) {
       const idx = liveQuestionsStore[cId].findIndex((item) => item.id === questionId);
       if (idx !== -1) {
@@ -426,5 +440,4 @@ export async function deleteLiveQuestionAction(
       }
     }
     return { ok: true };
-  }
 }

@@ -115,8 +115,11 @@ export async function validasiEmailKampusAsync({
   }
 
   try {
-    const { createClient } = await import('@/lib/supabase/server');
-    const supabase = await createClient();
+    const { checkSupabaseOnline } = await import('@/lib/supabase/status');
+    const isOnline = await checkSupabaseOnline();
+    if (isOnline) {
+      const { createClient } = await import('@/lib/supabase/server');
+      const supabase = await createClient();
 
     // 1. Cek allowlist spesifik
     const { data: allowlistMatch, error: err1 } = await supabase
@@ -148,6 +151,7 @@ export async function validasiEmailKampusAsync({
         valid: false,
         pesanError: `Domain email @${domain} atau alamat surel tidak diizinkan untuk masuk. Gunakan domain institusi resmi.`,
       };
+    }
     }
   } catch {
     // Fallback saat offline/unit test tanpa koneksi database

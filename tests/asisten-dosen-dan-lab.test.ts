@@ -83,7 +83,7 @@ describe('Manajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)', (
     expect(aslab?.assistant_type).toBe('ASISTEN_LAB');
   });
 
-  it('3. Staf Akademik (ACADEMIC_STAFF) berwenang menugaskan Asisten Lab', async () => {
+  it('3. Staf Akademik (ACADEMIC_STAFF) DITOLAK saat menugaskan Asisten Lab (Reformasi Fase 4)', async () => {
     mockCurrentUser.value = {
       user: { id: 'staff-001', email: 'staf.akademik@siajar.test' },
       profile: { full_name: 'Staf Akademik BAA' },
@@ -98,7 +98,8 @@ describe('Manajemen Asisten Dosen & Asisten Lab (Dual Category & Delegation)', (
       permissions: ['submission.review', 'material.manage'],
       assistant_type: 'ASISTEN_LAB',
     });
-    expect(res.ok).toBe(true);
+    expect(res.ok).toBe(false);
+    expect(res.error).toContain('hanya dapat ditugaskan oleh Dosen Pengampu atau Kepala Lab');
   });
 
   it('4. Staf Akademik (ACADEMIC_STAFF) DITOLAK saat mencoba menugaskan Asisten Dosen', async () => {
