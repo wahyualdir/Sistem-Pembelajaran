@@ -213,7 +213,7 @@ export const getCurrentUserResolution = dedupe(async (): Promise<UserResolutionR
     roleCodesFromDb = rolesList.map((r) => (r.roles as any)?.code || r.role_id);
     source = 'db';
     rolesStatus = rolesList.length > 0 ? 'OK' : 'EMPTY';
-  } else if (isOnline) {
+  } else if (isOnline && (!demoSessionId || !matchedDemo)) {
     try {
       const [profileRes, rolesRes] = await Promise.all([
         supabaseAdmin
@@ -229,7 +229,11 @@ export const getCurrentUserResolution = dedupe(async (): Promise<UserResolutionR
       ]);
 
       if (rolesRes.error) {
-        rolesStatus = 'ERROR';
+        if ((rolesRes.error as any).code === '22P02' && matchedDemo) {
+          rolesStatus = 'EMPTY';
+        } else {
+          rolesStatus = 'ERROR';
+        }
       } else if (rolesRes.data && rolesRes.data.length > 0) {
         rolesList = rolesRes.data;
         roleCodesFromDb = rolesList.map((r) => (r.roles as any)?.code || r.role_id);
@@ -250,8 +254,8 @@ export const getCurrentUserResolution = dedupe(async (): Promise<UserResolutionR
     }
   }
 
-  // Fallback peran demo hanya jika autentikasi demo diizinkan dan query DB bukan ERROR
-  if (rolesList.length === 0 && matchedDemo && allowDemo && rolesStatus !== 'ERROR') {
+  // Fallback peran demo jika autentikasi demo diizinkan dan profil demo terdeteksi
+  if (rolesList.length === 0 && matchedDemo && allowDemo && (rolesStatus !== 'ERROR' || demoSessionId)) {
     source = 'demo';
     rolesList = matchedDemo.roles.map((r) => ({
       id: `${matchedDemo!.id}-${r}`,

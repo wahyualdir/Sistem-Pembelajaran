@@ -63,6 +63,13 @@ const ROLE_PORTAL_MAP: Record<string, string> = {
 import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { parseSignedSession } from '@/lib/auth/session';
 
+async function withTimeout<T>(promise: PromiseLike<T>, ms = 2500): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error('TIMEOUT')), ms)),
+  ]);
+}
+
 
 /**
  * Server Action: login
@@ -131,12 +138,12 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
 
   if (isOnline) {
     try {
-      const { data: identData } = await supabaseAdmin
+      const { data: identData } = await withTimeout(supabaseAdmin
         .from('user_identifiers')
         .select('user_id, value, type, profiles:user_id(id, email, status, locked_until, must_change_password)')
         .ilike('value', normalizedId)
         .limit(1)
-        .maybeSingle();
+        .maybeSingle());
 
       if (identData && identData.profiles) {
         targetEmail = (identData.profiles as any).email;
@@ -173,20 +180,20 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   if (isOnline) {
     try {
       const supabase = await createServerSupabase();
-      let { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+      let { data: authData, error: authError } = await withTimeout(supabase.auth.signInWithPassword({
         email: targetEmail,
         password,
-      });
+      }));
 
       if (
         authError &&
         (password === 'wahyu11' || password === process.env.SUPERADMIN_PASSWORD || password === 'Password123!')
       ) {
         const altPassword = (password === 'wahyu11' || password === process.env.SUPERADMIN_PASSWORD) ? 'Password123!' : (process.env.SUPERADMIN_PASSWORD || 'wahyu11');
-        const retry = await supabase.auth.signInWithPassword({
+        const retry = await withTimeout(supabase.auth.signInWithPassword({
           email: targetEmail,
           password: altPassword,
-        });
+        }));
         if (!retry.error && retry.data?.user) {
           authData = retry.data;
           authError = null;
@@ -324,18 +331,18 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
 
   if (isOnline) {
     try {
-      const { data: existingDevice } = await supabaseAdmin
+      const { data: existingDevice } = await withTimeout(supabaseAdmin
         .from('user_devices')
         .select('id, revoked_at')
         .eq('user_id', currentUserId)
         .eq('device_id_hash', deviceHash)
-        .maybeSingle();
+        .maybeSingle());
 
       let registeredDeviceId: string;
 
       if (!existingDevice) {
         isNewDevice = true;
-        const { data: newDev } = await supabaseAdmin
+        const { data: newDev } = await withTimeout(supabaseAdmin
           .from('user_devices')
           .insert({
             user_id: currentUserId,
@@ -347,11 +354,11 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
             trusted: false,
           })
           .select('id')
-          .single();
+          .single());
         registeredDeviceId = newDev?.id || randomUUID();
       } else {
         registeredDeviceId = existingDevice.id;
-        await supabaseAdmin
+        await withTimeout(supabaseAdmin
           .from('user_devices')
           .update({
             last_seen_at: new Date().toISOString(),
@@ -360,10 +367,10 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
             last_city: city,
             revoked_at: null,
           })
-          .eq('id', existingDevice.id);
+          .eq('id', existingDevice.id));
       }
 
-      await supabaseAdmin.from('login_events').insert({
+      await withTimeout(supabaseAdmin.from('login_events').insert({
         user_id: currentUserId,
         device_id: registeredDeviceId,
         event_type: 'LOGIN_SUCCESS',
@@ -373,7 +380,7 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
         country,
         city,
         notified_at: isNewDevice ? new Date().toISOString() : null,
-      });
+      }));
     } catch {
       // DB offline fallback
     }
@@ -391,11 +398,11 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   let activeRolesList: string[] = [];
   if (isOnline) {
     try {
-      const { data: userRoles } = await supabaseAdmin
+      const { data: userRoles } = await withTimeout(supabaseAdmin
         .from('user_roles')
         .select('role_id, scope_type, scope_id, roles:role_id(code, name)')
         .eq('user_id', currentUserId)
-        .eq('status', 'ACTIVE');
+        .eq('status', 'ACTIVE'));
 
       if (userRoles && userRoles.length > 0) {
         activeRolesList = userRoles

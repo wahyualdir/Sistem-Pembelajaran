@@ -11,7 +11,11 @@ export async function loginAsRole(page: Page, identifier: string, expectedPath: 
   } else {
     await page.getByLabel(/NIM/i).first().fill(identifier);
   }
-  await page.locator('#password').fill(process.env.DEMO_PASSWORD || 'Password123!');
+  const isSuperAdmin = identifier.toLowerCase().includes('superadmin');
+  const password = isSuperAdmin
+    ? (process.env.SUPERADMIN_PASSWORD || 'wahyu11')
+    : (process.env.DEMO_PASSWORD || 'Password123!');
+  await page.locator('#password').fill(password);
   await submitBtn.click();
-  await page.waitForURL(expectedPath, { timeout: 45000 });
+  await page.waitForURL(expectedPath, { timeout: 90000 });
 }

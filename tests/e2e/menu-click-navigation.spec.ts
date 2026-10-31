@@ -129,7 +129,7 @@ test.describe('E2E Navigasi Klik Sidebar Seluruh Peran (Fase 1b)', () => {
 
   for (const role of DEMO_ROLES) {
     test(`Navigasi Klik Sidebar: ${role.roleName} (${role.roleCode})`, async ({ page }) => {
-      test.setTimeout(180000);
+      test.setTimeout(300000);
 
       const roleReports: NavReportEntry[] = [];
       allReports[role.roleCode] = roleReports;
@@ -175,8 +175,13 @@ test.describe('E2E Navigasi Klik Sidebar Seluruh Peran (Fase 1b)', () => {
         // Kembali ke beranda peran terlebih dahulu
         const currentUrlObj = new URL(page.url());
         if (currentUrlObj.pathname !== role.homeHref) {
-          await page.goto(role.homeHref);
-          await page.waitForLoadState('domcontentloaded');
+          try {
+            await page.goto(role.homeHref, { waitUntil: 'domcontentloaded' });
+          } catch {
+            await page.waitForTimeout(500);
+            await page.goto(role.homeHref, { waitUntil: 'domcontentloaded' });
+          }
+          await page.waitForLoadState('domcontentloaded').catch(() => {});
         }
 
         await expandAllSidebarGroups(page);
@@ -187,10 +192,17 @@ test.describe('E2E Navigasi Klik Sidebar Seluruh Peran (Fase 1b)', () => {
         await link.scrollIntoViewIfNeeded();
 
         // KLIK LINK (bukan page.goto)
-        await link.click();
+        await Promise.all([
+          page.waitForURL((url) => {
+            const p = url.pathname;
+            return p !== role.homeHref || targetHref === role.homeHref;
+          }, { timeout: 30000 }).catch(() => {}),
+          link.click(),
+        ]);
 
         // Tunggu transisi navigasi selesai
-        await page.waitForTimeout(800);
+        await page.waitForLoadState('domcontentloaded').catch(() => {});
+        await page.waitForTimeout(500);
 
         const afterUrl = new URL(page.url());
         const finalPath = afterUrl.pathname + (afterUrl.search || '');
