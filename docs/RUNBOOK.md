@@ -503,3 +503,36 @@ npm test tests/menu-contract.test.ts tests/demo-session-security.test.ts
 npm run build
 # Memastikan seluruh 151 halaman statis dan dinamis terkompilasi bersih tanpa peringatan ketik.
 ```
+
+
+---
+
+## 10. Diagnosa Navigasi dan Troubleshooting Rute (Nav Debug)
+
+Untuk mendiagnosa masalah pengalihan rute (*route redirects*), bouncing ke beranda, atau kendala otorisasi peran, sistem menyediakan telemetri diagnostik navigasi terstruktur.
+
+### 10.1. Mengaktifkan Log Diagnostik Navigasi (`NAV_DEBUG=1`)
+Aktifkan variabel lingkungan `NAV_DEBUG=1` di server atau lingkungan lokal:
+```bash
+# PowerShell
+$env:NAV_DEBUG="1"
+npm run dev
+
+# Bash / Linux
+NAV_DEBUG=1 npm run dev
+```
+
+Saat aktif, sistem akan mencetak log JSON terstruktur di konsol peladen dengan prefix `[NAV_DEBUG]`:
+- `middleware_redirect`: Jejak langkah pengalihan oleh middleware Next.js (`from`, `to`, `step`).
+- `portal_layout_redirect_login`: Alasan pengalihan portal layout ke halaman login saat sesi tidak valid.
+- `portal_layout_role_mismatch`: Terdeteksi ketidakcocokan cookie peran aktif dengan peran resmi di database.
+- `current_user_resolved`: Ringkasan identitas dan daftar peran yang berhasil diselesaikan per permintaan.
+
+### 10.2. Parameter Alasan URL (`?alasan=...`)
+Sistem menambahkan parameter kueri `?alasan=` secara eksplisit saat mengalihkan pengguna, mempermudah identifikasi penyebab:
+
+| Nilai Parameter `alasan` | Lokasi / Pemicu | Arti Teknis | Tindakan Pengguna / Staf |
+| :--- | :--- | :--- | :--- |
+| `sesi` | `/login?alasan=sesi` | Sesi pengguna telah kedaluwarsa, tidak ditemukan, atau cookie sesi terhapus. | Pengguna diminta masuk kembali (*re-login*) menggunakan NIM/NIDN/email dan kata sandi yang sah. |
+| `peran-tidak-cocok` | `/workspace?alasan=peran-tidak-cocok` | Nilai cookie `active_role` di peramban tidak cocok atau tidak terdaftar dalam peran aktif pengguna di database. | Pengguna diarahkan ke halaman Ruang Kerja (*Workspace*) untuk memilih salah satu peran resmi yang dimiliki. |
+| `akses-ditolak` | `/workspace?alasan=akses-ditolak` | Pengguna mencoba membuka portal atau mengeksekusi server action yang di luar batas otorisasi perannya (misal: Mahasiswa membuka portal `/staff` atau `/admin`). | Pengguna tetap di Ruang Kerja perannya. Jika memerlukan akses tambahan, hubungi Staf Administrasi / Administrator Kampus untuk penugasan peran. |
