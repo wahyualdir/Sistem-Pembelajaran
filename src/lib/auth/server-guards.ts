@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/current-user';
 import { navDebug } from '@/lib/auth/nav-debug';
+import { normalizeRoleCode } from '@/lib/config/menu-config';
 
 /**
  * Server-Side Role Guard (A2 Security Hardening)
@@ -16,12 +17,16 @@ export async function assertServerRole(allowedRoles: string[]) {
     redirect('/login');
   }
 
-  // Ambil kode role tervalidasi dari basis data
+  // Ambil kode role tervalidasi dari basis data dan normalisasi
   const userRoleCodes: string[] = userContext.roles.map(
     (r: any) => (r.roles as any)?.code || r.role_id
   );
+  const normalizedUserRoleCodes = userRoleCodes.map((c) => normalizeRoleCode(c));
+  const normalizedAllowedRoles = allowedRoles.map((r) => normalizeRoleCode(r));
 
-  const hasAuthorizedRole = allowedRoles.some((role) => userRoleCodes.includes(role));
+  const hasAuthorizedRole = normalizedAllowedRoles.some((role) =>
+    normalizedUserRoleCodes.includes(role)
+  );
   if (!hasAuthorizedRole) {
     navDebug('server_role_rejected', {
       allowedRoles,
@@ -44,13 +49,13 @@ export function hasUserRole(
   role: string | string[]
 ): boolean {
   if (!userContext) return false;
-  const targetRoles = Array.isArray(role) ? role : [role];
-  if (userContext.activeRole && targetRoles.includes(userContext.activeRole)) {
+  const targetRoles = (Array.isArray(role) ? role : [role]).map((r) => normalizeRoleCode(r));
+  if (userContext.activeRole && targetRoles.includes(normalizeRoleCode(userContext.activeRole))) {
     return true;
   }
   if (!Array.isArray(userContext.roles)) return false;
   return userContext.roles.some((r: any) => {
     const code = typeof r === 'string' ? r : (r?.roles?.code || r?.role_id || r?.code);
-    return targetRoles.includes(code);
+    return targetRoles.includes(normalizeRoleCode(code));
   });
 }

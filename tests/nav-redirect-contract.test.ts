@@ -84,9 +84,9 @@ describe('Nav Redirect Contract Tests (Langkah 4 Middleware)', () => {
       expect(target).toBeNull();
     });
 
-    // H4: diperbaiki di Fase 2
+    // Normalisasi role di Fase 2
     // Peran 'superadmin' huruf kecil atau tanpa underscore harus selalu diperlakukan identik dengan 'SUPER_ADMIN'
-    it.fails('// H4: diperbaiki di Fase 2 - peran superadmin (variasi) harus diperlakukan sama dengan SUPER_ADMIN', () => {
+    it('peran superadmin (variasi) harus diperlakukan sama dengan SUPER_ADMIN', () => {
       const target = decideRoleRedirect({
         pathname: '/grades',
         activeRole: 'superadmin',

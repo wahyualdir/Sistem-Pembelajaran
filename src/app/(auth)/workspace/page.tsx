@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles, switchWorkspaceAction } from '@/modules/identity/actions';
 import { cn } from '@/lib/utils';
+import { normalizeRoleCode } from '@/lib/config/menu-config';
+import { ROLE_PORTAL_MAP } from '@/lib/auth/route-guard';
 import {
   Layers,
   GraduationCap,
@@ -111,17 +113,25 @@ export default async function WorkspacePage() {
 
   // Jika pengguna hanya memiliki 1 role, alihkan langsung
   if (!isSuperAdmin && roles.length === 1) {
-    const singleRole = (roles[0].roles as { code?: string })?.code as string;
-    const portalMap: Record<string, string> = {
-      STUDENT: '/student',
-      LECTURER: '/lecturer',
-      TEACHING_ASSISTANT: '/ta',
-      PROGRAM_COORDINATOR: '/coordinator',
-      ACADEMIC_STAFF: '/staff',
-      SYSTEM_ADMIN: '/admin',
-      SUPER_ADMIN: '/admin',
-    };
-    redirect(portalMap[singleRole] || '/student');
+    const rawRole = (roles[0].roles as { code?: string })?.code || roles[0]?.role_id;
+    const singleRole = rawRole ? normalizeRoleCode(rawRole) : null;
+    const targetPortal = singleRole ? ROLE_PORTAL_MAP[singleRole] : null;
+
+    if (targetPortal) {
+      redirect(targetPortal);
+    }
+
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-[#FAF8F5]">
+        <div className="max-w-md w-full p-6 bg-white border border-[#DFD8CB] rounded-xl text-center space-y-4">
+          <h1 className="text-lg font-bold text-[#1C1917]">Peran tidak dikenali</h1>
+          <p className="text-sm text-[#57534E]">Peran tidak dikenali, hubungi administrator.</p>
+          <Link href="/login" className="inline-block px-4 py-2 bg-[#C2553A] text-white rounded text-sm font-semibold">
+            Kembali ke Login
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -175,7 +185,7 @@ export default async function WorkspacePage() {
             <div className="vt-titlebar flex items-center justify-between px-3 py-1.5 select-none shrink-0">
               <div className="flex items-center gap-2 min-w-0 flex-1">
                 <span className="font-mono text-xs sm:text-sm font-bold text-white tracking-wide uppercase truncate">
-                  WORKSPACE_MANAGER.EXE — RuangKampus OS
+                  WORKSPACE_MANAGER.EXE â€” RuangKampus OS
                 </span>
                 <span className="font-mono text-[10px] font-bold bg-black/25 text-white border border-white/30 px-1.5 py-0.2 shrink-0">
                   Multi-Peran
@@ -184,8 +194,8 @@ export default async function WorkspacePage() {
 
               <div className="flex items-center gap-1 shrink-0 ml-2">
                 <span className="vt-window-btn" title="Minimalkan">_</span>
-                <span className="vt-window-btn" title="Perbesar">□</span>
-                <span className="vt-window-btn vt-window-btn-close" title="Tutup">×</span>
+                <span className="vt-window-btn" title="Perbesar">â–¡</span>
+                <span className="vt-window-btn vt-window-btn-close" title="Tutup">Ã—</span>
               </div>
             </div>
 

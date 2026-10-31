@@ -42,6 +42,7 @@ import type { ActionResponse } from './types';
 import { SYNTHETIC_DEMO_USERS, type SyntheticDemoUser } from './demo-users';
 import { recordSystemAuditLog } from '@/lib/audit';
 import { isDemoMode } from '@/lib/config/features';
+import { normalizeRoleCode } from '@/lib/config/menu-config';
 
 const ROLE_PORTAL_MAP: Record<string, string> = {
   STUDENT: '/student',
@@ -394,7 +395,10 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
         .eq('status', 'ACTIVE');
 
       if (userRoles && userRoles.length > 0) {
-        activeRolesList = userRoles.map((ur) => (ur.roles as any)?.code);
+        activeRolesList = userRoles
+          .map((ur) => (ur.roles as any)?.code || ur.role_id)
+          .filter((code): code is string => Boolean(code && typeof code === 'string' && code.trim().length > 0))
+          .map((code) => normalizeRoleCode(code));
       }
     } catch {
       // DB offline fallback
@@ -402,7 +406,7 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   }
 
   if (activeRolesList.length === 0 && demoUser) {
-    activeRolesList = demoUser.roles;
+    activeRolesList = demoUser.roles.map((r) => normalizeRoleCode(r));
   }
 
   if (activeRolesList.length === 0) {

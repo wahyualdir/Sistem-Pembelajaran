@@ -1,3 +1,5 @@
+import { normalizeRoleCode } from '@/lib/config/menu-config';
+
 export interface RoleRedirectInput {
   pathname: string;
   search?: string; // contoh: '?tab=kelola'
@@ -13,7 +15,6 @@ export const ROLE_PORTAL_MAP: Record<string, string> = {
   ACADEMIC_STAFF: '/staff',
   SYSTEM_ADMIN: '/admin/system',
   SUPER_ADMIN: '/admin',
-  SUPERADMIN: '/admin',
   PROGRAM_SECRETARY: '/secretary',
   LAB_HEAD: '/lab',
 };
@@ -51,11 +52,12 @@ export function decideRoleRedirect(input: RoleRedirectInput): string | null {
     return null;
   }
 
+  const normalizedRole = normalizeRoleCode(activeRole);
   const searchParams = new URLSearchParams(search ? (search.startsWith('?') ? search.slice(1) : search) : '');
   const tabParam = searchParams.get('tab');
 
   // A2: SYSTEM_ADMIN dilarang membuka rute data akademik & portal non-admin
-  if (activeRole === 'SYSTEM_ADMIN') {
+  if (normalizedRole === 'SYSTEM_ADMIN') {
     const isAcademic =
       ACADEMIC_ROUTES.some((route) => pathname.startsWith(route)) ||
       pathname.startsWith('/student') ||
@@ -71,7 +73,7 @@ export function decideRoleRedirect(input: RoleRedirectInput): string | null {
   }
 
   // A2: SUPER_ADMIN tidak merender tampilan dosen/mahasiswa/akademik kecuali sesi impersonate aktif
-  if ((activeRole === 'SUPER_ADMIN' || activeRole === 'SUPERADMIN') && !isImpersonating) {
+  if (normalizedRole === 'SUPER_ADMIN' && !isImpersonating) {
     const isAcademicOrRolePortal =
       ACADEMIC_ROUTES.some((route) => pathname.startsWith(route)) ||
       pathname.startsWith('/student') ||
@@ -85,7 +87,7 @@ export function decideRoleRedirect(input: RoleRedirectInput): string | null {
     }
   }
 
-  const expectedPrefix = ROLE_PORTAL_MAP[activeRole];
+  const expectedPrefix = ROLE_PORTAL_MAP[normalizedRole];
   const matchedPrefix = PORTAL_PREFIXES.find((p) => pathname.startsWith(p));
   if (matchedPrefix && expectedPrefix && !expectedPrefix.startsWith(matchedPrefix) && matchedPrefix !== expectedPrefix) {
     return expectedPrefix;
