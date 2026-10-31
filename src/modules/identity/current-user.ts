@@ -246,25 +246,38 @@ export const getCurrentUserResolution = dedupe(async (): Promise<UserResolutionR
       if (profileRes.data) {
         profile = profileRes.data;
       }
-      if (profile && rolesStatus === 'OK') {
-        userProfileCache.set(userId, { profile, rolesList, timestamp: now });
-      }
     } catch {
       rolesStatus = 'ERROR';
     }
   }
 
-  // Fallback peran demo jika autentikasi demo diizinkan dan profil demo terdeteksi
-  if (rolesList.length === 0 && matchedDemo && allowDemo && (rolesStatus !== 'ERROR' || demoSessionId)) {
-    source = 'demo';
-    rolesList = matchedDemo.roles.map((r) => ({
-      id: `${matchedDemo!.id}-${r}`,
-      role_id: r,
-      scope_type: 'GLOBAL',
-      scope_id: null,
-      roles: { code: r, name: r, description: `${r} role` },
-    }));
+  // Lengkapi atau fallback peran demo jika autentikasi demo diizinkan dan profil demo terdeteksi
+  if (matchedDemo && allowDemo && (rolesStatus !== 'ERROR' || demoSessionId)) {
+    const existingCodes = rolesList.map((r) =>
+      normalizeRoleCode((r.roles as { code?: string } | null)?.code || r.role_id)
+    );
+    for (const r of matchedDemo.roles) {
+      const norm = normalizeRoleCode(r);
+      if (!existingCodes.includes(norm)) {
+        rolesList.push({
+          id: `${matchedDemo.id}-${r}`,
+          role_id: r,
+          scope_type: 'GLOBAL',
+          scope_id: null,
+          roles: { code: r, name: r, description: `${r} role` },
+        });
+        existingCodes.push(norm);
+      }
+    }
+    roleCodesFromDb = existingCodes;
+    if (source !== 'db') {
+      source = 'demo';
+    }
     rolesStatus = rolesList.length > 0 ? 'OK' : 'EMPTY';
+  }
+
+  if (profile && rolesStatus === 'OK') {
+    userProfileCache.set(userId, { profile, rolesList, timestamp: now });
   }
 
   if (!profile && allowDemo) {

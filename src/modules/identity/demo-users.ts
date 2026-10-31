@@ -130,6 +130,14 @@ export const SYNTHETIC_DEMO_USERS: Record<string, SyntheticDemoUser> = {
     roles: ['STUDENT', 'TEACHING_ASSISTANT'],
     status: 'ACTIVE',
   },
+  'ta@siajar.ac.id': {
+    id: 'a0000003-0000-0000-0000-000000000003',
+    email: 'mhs2024002@siajar.test',
+    name: 'Citra Asisten',
+    nim: '2024002',
+    roles: ['STUDENT', 'TEACHING_ASSISTANT'],
+    status: 'ACTIVE',
+  },
   '0087654321': {
     id: 'a0000004-0000-0000-0000-000000000004',
     email: 'kaprodi@siajar.test',
@@ -190,6 +198,13 @@ export const SYNTHETIC_DEMO_USERS: Record<string, SyntheticDemoUser> = {
     status: 'ACTIVE',
   },
   'admin@siajar.ac.id': {
+    id: 'a0000006-0000-0000-0000-000000000006',
+    email: 'sysadmin@siajar.test',
+    name: 'System Administrator',
+    roles: ['SYSTEM_ADMIN'],
+    status: 'ACTIVE',
+  },
+  'sysadmin@siajar.ac.id': {
     id: 'a0000006-0000-0000-0000-000000000006',
     email: 'sysadmin@siajar.test',
     name: 'System Administrator',

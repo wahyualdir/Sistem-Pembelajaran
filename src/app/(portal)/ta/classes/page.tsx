@@ -2,10 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Layers, Users, ArrowRight, Clock, BookOpen } from 'lucide-react';
 import { RetroWindow } from '@/components/retro/retro-window';
-import {
-  getClassroomBannerTheme,
-  ClassroomBannerPattern,
-} from '@/modules/academic/classroom-cards';
+import { getClassroomBannerTheme } from '@/modules/academic/classroom-banner-themes';
+import { ClassroomBannerPattern } from '@/modules/academic/classroom-cards';
 import { listMyClassesAction } from '@/modules/academic/actions';
 
 export default async function AssistantClassesPage() {

@@ -285,9 +285,11 @@ export function PortalShell({
     }
   }, [normalizedRole, navGroups]);
 
-  const toggleGroupCollapse = (groupId: string) => {
+  const toggleGroupCollapse = (groupId: string, defaultCollapsed?: boolean) => {
     setCollapsedGroups((prev) => {
-      const next = { ...prev, [groupId]: !prev[groupId] };
+      const currentlyCollapsed =
+        prev[groupId] !== undefined ? prev[groupId] : !!defaultCollapsed;
+      const next = { ...prev, [groupId]: !currentlyCollapsed };
       try {
         const storageKey = `siajar_collapsed_groups_${normalizedRole}`;
         localStorage.setItem(storageKey, JSON.stringify(next));
@@ -389,7 +391,7 @@ export function PortalShell({
                         {group.collapsible && (
                           <button
                             type="button"
-                            onClick={() => toggleGroupCollapse(group.id)}
+                            onClick={() => toggleGroupCollapse(group.id, group.defaultCollapsed)}
                             className="p-1 rounded hover:bg-[#ECE7DF] text-[#7A756D] hover:text-[#1C1917] transition-transform cursor-pointer"
                             title={`Buka/Tutup grup ${group.title}`}
                             aria-label={`Toggle grup ${group.title}`}

@@ -315,7 +315,7 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
     });
   }
 
-  if (isOfflineAuthSuccess) {
+  if (isOfflineAuthSuccess || (allowDemo && !!demoUser)) {
     cookieStore.set('demo_session', currentUserId, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -415,7 +415,14 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
     }
   }
 
-  if (activeRolesList.length === 0 && demoUser) {
+  if (demoUser && isOfflineAuthSuccess) {
+    for (const r of demoUser.roles) {
+      const norm = normalizeRoleCode(r);
+      if (!activeRolesList.includes(norm)) {
+        activeRolesList.push(norm);
+      }
+    }
+  } else if (activeRolesList.length === 0 && demoUser) {
     activeRolesList = demoUser.roles.map((r) => normalizeRoleCode(r));
   }
 
@@ -652,15 +659,16 @@ export async function switchWorkspaceAction(formData: FormData | unknown): Promi
     redirect('/login');
   }
 
+  const normValidated = normalizeRoleCode(validatedRole);
   // Validasi apakah user benar-benar memiliki role tersebut
   const ownsRole = userContext.roles.some((r) => {
-    const code = (r.roles as { code?: string })?.code;
-    return code === validatedRole;
+    const raw = (r.roles as { code?: string })?.code || r.role_id;
+    return raw ? normalizeRoleCode(raw) === normValidated : false;
   });
 
   const isSuperAdmin = userContext.roles.some((r) => {
-    const code = (r.roles as { code?: string })?.code;
-    return code === 'SUPER_ADMIN';
+    const raw = (r.roles as { code?: string })?.code || r.role_id;
+    return raw ? normalizeRoleCode(raw) === 'SUPER_ADMIN' : false;
   });
 
   if (!ownsRole && !isSuperAdmin) {
@@ -678,6 +686,17 @@ export async function switchWorkspaceAction(formData: FormData | unknown): Promi
     subId: mappedRole === 'MAHASISWA' ? 'mhs-1' : mappedRole === 'DOSEN' ? 'dsn-1' : undefined,
   })).toString('base64');
   cookieStore.set('siakad_session', sessionPayload, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
+
+  const allowDemo = process.env.NODE_ENV !== 'production' || process.env.ALLOW_DEMO_AUTH === 'true';
+  if (allowDemo) {
+    cookieStore.set('demo_session', userContext.user.id, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60,
+      path: '/',
+    });
+  }
 
   const targetPortal = ROLE_PORTAL_MAP[validatedRole] || '/student';
   redirect(targetPortal);
