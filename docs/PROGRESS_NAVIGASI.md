@@ -32,11 +32,11 @@ Dokumen pelacakan progres perbaikan navigasi menu berdasarkan `docs/INSTRUKSI_PE
 | | 1b. Tes E2E Klik Sidebar | Selesai | `16cc8fb` | test(nav): e2e klik sidebar semua peran |
 | | 1c. Logging Diagnostik | Selesai | `753a4c3` | chore(nav): pasang logging diagnostik navDebug |
 | | 1d. Laporan Bukti Hipotesis | Selesai | pending | Dokumentasi bukti H1-H4 & loop PortalShell |
-| **Fase 2** | 2.1 Single Source of Truth Role | Sedang | - | `normalizeRoleCode` menyeluruh |
-| | 2.2 Stop Silent Fallback STUDENT | Belum | - | `getCurrentUserResolution` & layout portal |
-| | 2.3 Sinkronisasi Middleware & Guard | Belum | - | Boundary prefix & handling cookie mismatch |
-| | 2.4 Health Check Supabase Resilient | Belum | - | Timeout 3000ms & cache error 5s |
-| | 2.5 Cegah Loop Login <-> Beranda | Belum | - | Parameter `?alasan=` di middleware & layout |
+| **Fase 2** | 2.1 Single Source of Truth Role | Selesai | `bbdd2b0` | `normalizeRoleCode` menyeluruh |
+| | 2.2 Stop Silent Fallback STUDENT | Selesai | `438afc1` | `getCurrentUserResolution` & layout portal & fix loop PortalShell |
+| | 2.3 Sinkronisasi Middleware & Guard | Selesai | `0fb8d1a` | Boundary prefix & handling cookie mismatch |
+| | 2.4 Health Check Supabase Resilient | Selesai | `a311e01` | Timeout 3000ms & cache error 5s |
+| | 2.5 Cegah Loop Login <-> Beranda | Selesai | `c1e9685` | Parameter `?alasan=` di middleware & layout |
 | | 2.6 Rapikan Guard Halaman (Opsional)| Ditunda | - | Sesuai persetujuan pengguna |
 | **Fase 3** | Verifikasi Menyeluruh | Belum | - | Semua tes hijau & no regresi |
 | **Fase 4** | Dokumentasi & Penutupan | Belum | - | Runbook, daftar bug, progres final |
