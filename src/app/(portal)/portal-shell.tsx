@@ -255,7 +255,7 @@ export function PortalShell({
   const isRailActive = isDesktop && isCollapsed;
 
   // Grup navigasi dinamis terdedikasi untuk masing-masing peran/aktor
-  const navGroups = getNavGroups(role, badges ?? unread);
+  const navGroups = useMemo(() => getNavGroups(role, badges ?? unread), [role, badges, unread]);
   const homeHref = getHomeHref(role);
   const allNavHrefs = useMemo(() => navGroups.flatMap((g) => g.items.map((i) => i.href)), [navGroups]);
 

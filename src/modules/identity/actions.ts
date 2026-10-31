@@ -2,8 +2,11 @@
 
 import {
   getCurrentUserWithRoles as getCachedCurrentUserWithRoles,
+  getCurrentUserResolution,
   type CurrentUserContext,
 } from './current-user';
+
+export { getCurrentUserResolution };
 export type { CurrentUserContext };
 import {
   type ImpersonationTokenPayload,

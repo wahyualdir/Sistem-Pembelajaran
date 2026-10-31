@@ -2,7 +2,7 @@ import React from 'react';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronDown, Layers, LogOut } from 'lucide-react';
-import { getCurrentUserWithRoles, logoutAction } from '@/modules/identity/actions';
+import { getCurrentUserResolution, logoutAction } from '@/modules/identity/actions';
 import { getDynamicMenuBadgesAction } from '@/modules/academic/actions';
 import { getRoleDisplayName } from '@/lib/config/menu-config';
 import { AiAcademicAssistant } from '@/components/shared/ai-academic-assistant';
@@ -11,15 +11,67 @@ import { PortalShell } from './portal-shell';
 import { navDebug } from '@/lib/auth/nav-debug';
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
-  const userContext = await getCurrentUserWithRoles();
+  const resolution = await getCurrentUserResolution();
 
-  if (!userContext) {
-    navDebug('portal_layout_redirect_login', { reason: 'userContext is null' });
-    redirect('/login');
+  // 1. Kasus layanan Supabase / DB tidak dapat diakses
+  if (resolution.status === 'UNAVAILABLE' || resolution.rolesStatus === 'ERROR') {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-[#FAF8F5]">
+        <div className="max-w-md w-full p-6 bg-white border border-[#DFD8CB] rounded-xl text-center space-y-4 shadow-sm">
+          <h1 className="text-lg font-bold text-[#1C1917]">Layanan sementara tidak tersedia</h1>
+          <p className="text-sm text-[#57534E]">
+            Terjadi kendala saat menghubungkan ke basis data. Silakan muat ulang halaman atau coba beberapa saat lagi.
+          </p>
+          <a
+            href="/"
+            className="inline-block px-4 py-2 bg-[#C2553A] text-white rounded text-sm font-semibold hover:bg-[#A8432B] transition-colors"
+          >
+            Muat ulang
+          </a>
+        </div>
+      </div>
+    );
   }
 
+  // 2. Kasus belum terautentikasi -> redirect ke login dengan alasan sesi
+  if (resolution.status === 'UNAUTHENTICATED' || !resolution.context) {
+    navDebug('portal_layout_redirect_login', { reason: 'userContext is null' });
+    redirect('/login?alasan=sesi');
+  }
+
+  // 3. Kasus terautentikasi tetapi tidak memiliki peran aktif (EMPTY)
+  if (resolution.rolesStatus === 'EMPTY' || !resolution.context.activeRole) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-[#FAF8F5]">
+        <div className="max-w-md w-full p-6 bg-white border border-[#DFD8CB] rounded-xl text-center space-y-4 shadow-sm">
+          <h1 className="text-lg font-bold text-[#1C1917]">Peran Belum Ditetapkan</h1>
+          <p className="text-sm text-[#57534E]">
+            Akun Anda belum memiliki peran aktif. Hubungi staf administrasi.
+          </p>
+          <form action={logoutAction}>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-[#1C1917] text-white rounded text-sm font-semibold hover:bg-black transition-colors cursor-pointer"
+            >
+              Keluar
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  // 4. Kasus cookie active_role tidak cocok dengan daftar peran di database
+  if (resolution.roleCookieMismatch) {
+    navDebug('portal_layout_role_mismatch', {
+      activeRole: resolution.context.activeRole,
+    });
+    redirect('/workspace?alasan=peran-tidak-cocok');
+  }
+
+  const userContext = resolution.context;
   const { profile, roles, activeRole } = userContext;
-  const role = activeRole || 'STUDENT';
+  const role = activeRole;
   const badges = await getDynamicMenuBadgesAction();
   const unread = badges.unreadCount;
   const roleName = getRoleDisplayName(role);
