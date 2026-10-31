@@ -42,6 +42,14 @@ export const ACADEMIC_ROUTES = [
 ];
 
 /**
+ * Helper batas segmen rute URL: mencocokkan path persis atau berawalan prefix + '/'.
+ * Mencegah kesalahan pencocokan prefix seperti '/tasks' yang keliru dianggap sebagai bagian dari '/ta'.
+ */
+export function matchesPrefix(pathname: string, prefix: string): boolean {
+  return pathname === prefix || pathname.startsWith(prefix + '/');
+}
+
+/**
  * Logika murni penentuan redirect berbasis role dan path (Langkah 4 middleware).
  * Mengembalikan path tujuan redirect jika path tidak diizinkan untuk activeRole,
  * atau null jika path diizinkan.
@@ -59,11 +67,11 @@ export function decideRoleRedirect(input: RoleRedirectInput): string | null {
   // A2: SYSTEM_ADMIN dilarang membuka rute data akademik & portal non-admin
   if (normalizedRole === 'SYSTEM_ADMIN') {
     const isAcademic =
-      ACADEMIC_ROUTES.some((route) => pathname.startsWith(route)) ||
-      pathname.startsWith('/student') ||
-      pathname.startsWith('/lecturer') ||
-      pathname.startsWith('/ta') ||
-      pathname.startsWith('/staff') ||
+      ACADEMIC_ROUTES.some((route) => matchesPrefix(pathname, route)) ||
+      matchesPrefix(pathname, '/student') ||
+      matchesPrefix(pathname, '/lecturer') ||
+      matchesPrefix(pathname, '/ta') ||
+      matchesPrefix(pathname, '/staff') ||
       pathname === '/admin' ||
       (pathname === '/library' && tabParam === 'kelola');
 
@@ -75,11 +83,11 @@ export function decideRoleRedirect(input: RoleRedirectInput): string | null {
   // A2: SUPER_ADMIN tidak merender tampilan dosen/mahasiswa/akademik kecuali sesi impersonate aktif
   if (normalizedRole === 'SUPER_ADMIN' && !isImpersonating) {
     const isAcademicOrRolePortal =
-      ACADEMIC_ROUTES.some((route) => pathname.startsWith(route)) ||
-      pathname.startsWith('/student') ||
-      pathname.startsWith('/lecturer') ||
-      pathname.startsWith('/ta') ||
-      pathname.startsWith('/staff') ||
+      ACADEMIC_ROUTES.some((route) => matchesPrefix(pathname, route)) ||
+      matchesPrefix(pathname, '/student') ||
+      matchesPrefix(pathname, '/lecturer') ||
+      matchesPrefix(pathname, '/ta') ||
+      matchesPrefix(pathname, '/staff') ||
       (pathname === '/library' && tabParam === 'kelola');
 
     if (isAcademicOrRolePortal) {
@@ -88,8 +96,8 @@ export function decideRoleRedirect(input: RoleRedirectInput): string | null {
   }
 
   const expectedPrefix = ROLE_PORTAL_MAP[normalizedRole];
-  const matchedPrefix = PORTAL_PREFIXES.find((p) => pathname.startsWith(p));
-  if (matchedPrefix && expectedPrefix && !expectedPrefix.startsWith(matchedPrefix) && matchedPrefix !== expectedPrefix) {
+  const matchedPrefix = PORTAL_PREFIXES.find((p) => matchesPrefix(pathname, p));
+  if (matchedPrefix && expectedPrefix && !matchesPrefix(expectedPrefix, matchedPrefix) && matchedPrefix !== expectedPrefix) {
     return expectedPrefix;
   }
 

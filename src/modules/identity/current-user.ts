@@ -7,6 +7,7 @@ import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { parseSignedSession } from '@/lib/auth/session';
 import { navDebug } from '@/lib/auth/nav-debug';
 import { normalizeRoleCode } from '@/lib/config/menu-config';
+import type { UserStatus } from '@/lib/supabase/types';
 import { SYNTHETIC_DEMO_USERS } from './demo-users';
 import {
   type ImpersonationTokenPayload,
@@ -37,9 +38,17 @@ export interface UserResolutionResult {
 // In test environments where React runs without react-server condition, fallback to pass-through.
 const dedupe = typeof cache === 'function' ? cache : <T extends (...args: unknown[]) => unknown>(fn: T): T => fn;
 
+type UserProfileType = {
+  id: string;
+  full_name: string;
+  email: string;
+  status: UserStatus;
+  must_change_password: boolean;
+} | null;
+
 interface UserProfileCacheItem {
-  profile: unknown;
-  rolesList: unknown[];
+  profile: UserProfileType;
+  rolesList: Array<{ role_id?: string; roles?: { code?: string } | null }>;
   timestamp: number;
 }
 const userProfileCache: Map<string, UserProfileCacheItem> = ((globalThis as unknown as { __siajarUserProfileCache?: Map<string, UserProfileCacheItem> }).__siajarUserProfileCache ??= new Map());
@@ -181,7 +190,7 @@ export const getCurrentUserResolution = dedupe(async (): Promise<UserResolutionR
        ))
     : null;
 
-  let profile = matchedDemo
+  let profile: UserProfileType = matchedDemo
     ? {
         id: matchedDemo.id,
         full_name: matchedDemo.name,

@@ -73,7 +73,7 @@ describe('Nav Redirect Contract Tests (Langkah 4 Middleware)', () => {
   describe('3. Kasus bug laten (H4 & normalisasi role)', () => {
     // H4: diperbaiki di Fase 2
     // Path /tasks bukan bagian dari /ta (Teaching Assistant), sehingga untuk peran non-TA tidak boleh terpental karena prefix /ta
-    it.fails('// H4: diperbaiki di Fase 2 - /tasks tidak boleh dianggap bagian dari prefix /ta', () => {
+    it('// H4: diperbaiki di Fase 2 - /tasks tidak boleh dianggap bagian dari prefix /ta', () => {
       const target = decideRoleRedirect({
         pathname: '/tasks',
         activeRole: 'STUDENT',

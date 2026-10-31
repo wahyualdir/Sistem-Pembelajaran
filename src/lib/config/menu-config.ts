@@ -520,6 +520,15 @@ export function normalizeRoleCode(role?: string | null): string {
 }
 
 /**
+ * Helper pencocokan batas segmen path URL:
+ * Memastikan pathname cocok persis atau memiliki batas slash '/' setelah prefix.
+ * Mencegah kesalahan matching seperti '/tasks' yang keliru dianggap sebagai bagian dari '/ta'.
+ */
+export function matchesPrefix(pathname: string, prefix: string): boolean {
+  return pathname === prefix || pathname.startsWith(prefix + '/');
+}
+
+/**
  * Mengambil grup navigasi untuk role yang aktif
  */
 export function getMenuGroupsForRole(
@@ -700,24 +709,24 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
   // SYSTEM_ADMIN dilarang mengakses rute akademik dan portal non-admin
   if (norm === 'SYSTEM_ADMIN') {
     const isAcademic =
-      pathname.startsWith('/attendance') ||
-      pathname.startsWith('/analytics') ||
-      pathname.startsWith('/grades') ||
-      pathname.startsWith('/exams') ||
-      pathname.startsWith('/classes') ||
-      pathname.startsWith('/secretary') ||
-      pathname.startsWith('/lab') ||
-      pathname.startsWith('/coordinator') ||
-      pathname.startsWith('/student') ||
-      pathname.startsWith('/lecturer') ||
-      pathname.startsWith('/ta') ||
-      pathname.startsWith('/staff') ||
-      pathname.startsWith('/messages') ||
-      pathname.startsWith('/achievements') ||
-      pathname.startsWith('/evaluations') ||
-      pathname.startsWith('/requests') ||
-      pathname.startsWith('/flashcards') ||
-      pathname.startsWith('/skill-exchange');
+      matchesPrefix(pathname, '/attendance') ||
+      matchesPrefix(pathname, '/analytics') ||
+      matchesPrefix(pathname, '/grades') ||
+      matchesPrefix(pathname, '/exams') ||
+      matchesPrefix(pathname, '/classes') ||
+      matchesPrefix(pathname, '/secretary') ||
+      matchesPrefix(pathname, '/lab') ||
+      matchesPrefix(pathname, '/coordinator') ||
+      matchesPrefix(pathname, '/student') ||
+      matchesPrefix(pathname, '/lecturer') ||
+      matchesPrefix(pathname, '/ta') ||
+      matchesPrefix(pathname, '/staff') ||
+      matchesPrefix(pathname, '/messages') ||
+      matchesPrefix(pathname, '/achievements') ||
+      matchesPrefix(pathname, '/evaluations') ||
+      matchesPrefix(pathname, '/requests') ||
+      matchesPrefix(pathname, '/flashcards') ||
+      matchesPrefix(pathname, '/skill-exchange');
     if (isAcademic) return false;
     return true;
   }
@@ -725,24 +734,24 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
   // SUPER_ADMIN dilarang merender rute akademik/role portals kecuali saat impersonate aktif
   if (norm === 'SUPER_ADMIN' && !isImpersonating) {
     const isAcademicOrRolePortal =
-      pathname.startsWith('/attendance') ||
-      pathname.startsWith('/analytics') ||
-      pathname.startsWith('/grades') ||
-      pathname.startsWith('/exams') ||
-      pathname.startsWith('/classes') ||
-      pathname.startsWith('/secretary') ||
-      pathname.startsWith('/lab') ||
-      pathname.startsWith('/coordinator') ||
-      pathname.startsWith('/student') ||
-      pathname.startsWith('/lecturer') ||
-      pathname.startsWith('/ta') ||
-      pathname.startsWith('/staff') ||
-      pathname.startsWith('/messages') ||
-      pathname.startsWith('/achievements') ||
-      pathname.startsWith('/evaluations') ||
-      pathname.startsWith('/requests') ||
-      pathname.startsWith('/flashcards') ||
-      pathname.startsWith('/skill-exchange');
+      matchesPrefix(pathname, '/attendance') ||
+      matchesPrefix(pathname, '/analytics') ||
+      matchesPrefix(pathname, '/grades') ||
+      matchesPrefix(pathname, '/exams') ||
+      matchesPrefix(pathname, '/classes') ||
+      matchesPrefix(pathname, '/secretary') ||
+      matchesPrefix(pathname, '/lab') ||
+      matchesPrefix(pathname, '/coordinator') ||
+      matchesPrefix(pathname, '/student') ||
+      matchesPrefix(pathname, '/lecturer') ||
+      matchesPrefix(pathname, '/ta') ||
+      matchesPrefix(pathname, '/staff') ||
+      matchesPrefix(pathname, '/messages') ||
+      matchesPrefix(pathname, '/achievements') ||
+      matchesPrefix(pathname, '/evaluations') ||
+      matchesPrefix(pathname, '/requests') ||
+      matchesPrefix(pathname, '/flashcards') ||
+      matchesPrefix(pathname, '/skill-exchange');
     if (isAcademicOrRolePortal) return false;
     return true;
   }
@@ -750,53 +759,52 @@ export function isRouteAllowedForRole(pathname: string, role?: string | null, is
   if (norm === 'SUPER_ADMIN') return true;
 
   // Proteksi admin
-  if (pathname.startsWith('/admin')) {
+  if (matchesPrefix(pathname, '/admin')) {
     return norm === 'SYSTEM_ADMIN' || norm === 'SUPER_ADMIN';
   }
 
   // Proteksi sekretaris prodi
-  if (pathname.startsWith('/secretary')) {
+  if (matchesPrefix(pathname, '/secretary')) {
     return norm === 'PROGRAM_SECRETARY';
   }
 
   // Proteksi kepala lab
-  if (pathname.startsWith('/lab')) {
+  if (matchesPrefix(pathname, '/lab')) {
     return norm === 'LAB_HEAD';
   }
 
-
   // Proteksi kaprodi
-  if (pathname.startsWith('/coordinator')) {
+  if (matchesPrefix(pathname, '/coordinator')) {
     return norm === 'PROGRAM_COORDINATOR';
   }
 
   // Proteksi staf akademik
-  if (pathname.startsWith('/staff')) {
+  if (matchesPrefix(pathname, '/staff')) {
     return norm === 'ACADEMIC_STAFF';
   }
 
   // Proteksi tinjau konten (Dosen, Asisten berizin, Kaprodi)
-  if (pathname.startsWith('/lecturer/content-review')) {
+  if (matchesPrefix(pathname, '/lecturer/content-review')) {
     return norm === 'LECTURER' || norm === 'TEACHING_ASSISTANT' || norm === 'PROGRAM_COORDINATOR' || norm === 'SUPER_ADMIN';
   }
 
   // Proteksi dosen
-  if (pathname.startsWith('/lecturer')) {
+  if (matchesPrefix(pathname, '/lecturer')) {
     return norm === 'LECTURER' || norm === 'PROGRAM_COORDINATOR';
   }
 
   // Proteksi asisten
-  if (pathname.startsWith('/ta')) {
+  if (matchesPrefix(pathname, '/ta')) {
     return norm === 'TEACHING_ASSISTANT';
   }
 
   // Proteksi mahasiswa
-  if (pathname.startsWith('/student')) {
+  if (matchesPrefix(pathname, '/student')) {
     return norm === 'STUDENT';
   }
 
   // Proteksi flashcard dan tukar keahlian
-  if (pathname.startsWith('/flashcards') || pathname.startsWith('/skill-exchange')) {
+  if (matchesPrefix(pathname, '/flashcards') || matchesPrefix(pathname, '/skill-exchange')) {
     return norm === 'STUDENT' || norm === 'TEACHING_ASSISTANT' || norm === 'LECTURER' || norm === 'PROGRAM_COORDINATOR' || norm === 'SUPER_ADMIN';
   }
 

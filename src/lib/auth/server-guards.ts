@@ -34,7 +34,7 @@ export async function assertServerRole(allowedRoles: string[]) {
       userId: userContext.user.id,
     });
     // Tolak akses secara ketat di sisi server (Defense in Depth)
-    redirect('/workspace');
+    redirect('/workspace?alasan=akses-ditolak');
   }
 
   return userContext;

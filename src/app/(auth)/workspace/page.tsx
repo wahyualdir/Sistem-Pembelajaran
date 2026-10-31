@@ -70,7 +70,11 @@ const ROLE_METADATA: Record<
   },
 };
 
-export default async function WorkspacePage() {
+export default async function WorkspacePage({
+  searchParams,
+}: {
+  searchParams?: { alasan?: string };
+}) {
   const userContext = await getCurrentUserWithRoles();
 
   if (!userContext) {
@@ -111,8 +115,8 @@ export default async function WorkspacePage() {
     }
   }
 
-  // Jika pengguna hanya memiliki 1 role, alihkan langsung
-  if (!isSuperAdmin && roles.length === 1) {
+  // Jika pengguna hanya memiliki 1 role, alihkan langsung (kecuali ada parameter alasan redirect)
+  if (!isSuperAdmin && roles.length === 1 && !searchParams?.alasan) {
     const rawRole = (roles[0].roles as { code?: string })?.code || roles[0]?.role_id;
     const singleRole = rawRole ? normalizeRoleCode(rawRole) : null;
     const targetPortal = singleRole ? ROLE_PORTAL_MAP[singleRole] : null;
@@ -194,12 +198,24 @@ export default async function WorkspacePage() {
 
               <div className="flex items-center gap-1 shrink-0 ml-2">
                 <span className="vt-window-btn" title="Minimalkan">_</span>
-                <span className="vt-window-btn" title="Perbesar">â–¡</span>
-                <span className="vt-window-btn vt-window-btn-close" title="Tutup">Ã—</span>
+                <span className="vt-window-btn" title="Perbesar">□</span>
+                <span className="vt-window-btn vt-window-btn-close" title="Tutup">×</span>
               </div>
             </div>
 
             <div className="p-6 sm:p-7 bg-[#FFFFFF] space-y-5">
+              {searchParams?.alasan && (
+                <div className="p-3 bg-[#FAF8F5] border border-[#C2553A]/30 text-[#853827] text-xs font-medium rounded-none flex items-start gap-2">
+                  <ShieldAlert className="h-4 w-4 shrink-0 text-[#C2553A] mt-0.5" />
+                  <span>
+                    {searchParams.alasan === 'peran-tidak-cocok'
+                      ? 'Sesi peran Anda tidak sesuai dengan daftar izin akun. Silakan pilih kembali ruang kerja yang sah.'
+                      : searchParams.alasan === 'akses-ditolak'
+                      ? 'Anda tidak memiliki wewenang untuk membuka halaman tersebut. Silakan pilih ruang kerja yang berhak.'
+                      : 'Silakan pilih ruang kerja yang ingin Anda jalankan.'}
+                  </span>
+                </div>
+              )}
               <div className="text-center space-y-1.5">
                 <h1 className="text-xl sm:text-2xl font-heading font-black tracking-tight text-[#1C1917]">
                   Pilih Ruang Kerja Akademik
