@@ -102,11 +102,11 @@ export async function middleware(request: NextRequest) {
   }
 
   // 2. Pengguna membuka halaman login/register
-  // Cegah redirect loop: jika ada parameter ?from (hasil pengalihan proteksi) atau tidak ada activeRole,
-  // izinkan halaman login terbuka agar user dapat melihat form & mengganti sesi.
+  // Cegah redirect loop: jika ada parameter ?from atau ?alasan (hasil pengalihan proteksi/sesi),
+  // atau tidak ada activeRole, izinkan halaman login terbuka agar user dapat melihat form & mengganti sesi.
   if (isAuthenticated && (pathname === '/login' || pathname === '/register')) {
-    const hasFrom = request.nextUrl.searchParams.has('from');
-    if (!hasFrom && activeRole && ROLE_PORTAL_MAP[activeRole]) {
+    const hasBypassParam = request.nextUrl.searchParams.has('from') || request.nextUrl.searchParams.has('alasan');
+    if (!hasBypassParam && activeRole && ROLE_PORTAL_MAP[activeRole]) {
       const to = ROLE_PORTAL_MAP[activeRole];
       navDebug('middleware_redirect', { from: pathname, to, step: 2 });
       return NextResponse.redirect(new URL(to, request.url));
