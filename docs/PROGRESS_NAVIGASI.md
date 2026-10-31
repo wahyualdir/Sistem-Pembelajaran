@@ -38,9 +38,9 @@ Dokumen pelacakan progres perbaikan navigasi menu berdasarkan `docs/INSTRUKSI_PE
 | | 2.3 Sinkronisasi Middleware & Guard | Selesai | `0fb8d1a` | Boundary prefix & handling cookie mismatch |
 | | 2.4 Health Check Supabase Resilient | Selesai | `a311e01` | Timeout 3000ms & cache error 5s |
 | | 2.5 Cegah Loop Login <-> Beranda | Selesai | `c1e9685` | Parameter `?alasan=` di middleware & layout |
-| | 2.6 Rapikan Guard Halaman (Opsional)| Ditunda | - | Sesuai persetujuan pengguna |
-| **Fase 3** | Verifikasi Menyeluruh | Selesai | `ad4d6ac` | Build lolos, vitest 86/86 lolos, lint 0 error, E2E menu lolos |
-| **Fase 4** | Dokumentasi & Penutupan | Selesai | *HEAD* | Runbook diagnosa, daftar bug lengkap, ringkasan final |
+| | 2.6 Rapikan Guard Halaman (Opsional)| Ditunda | - | Sesuai instruksi: ditunda demi batasan perubahan |
+| **Fase 3** | Verifikasi Menyeluruh & Perbaikan | Selesai | `39e9ea4`, `cae8721` | Build lolos 166 halaman, vitest 86/86 (757 tests), lint 0 error, E2E menu 124/124 OK (7 peran) |
+| **Fase 4** | Dokumentasi & Penutupan | Selesai | *HEAD* | Runbook diagnosa navigasi, daftar bug lengkap, ringkasan final 7 poin |
 
 ---
 
@@ -48,13 +48,13 @@ Dokumen pelacakan progres perbaikan navigasi menu berdasarkan `docs/INSTRUKSI_PE
 
 | Pengecekan | Metrik Baseline | Metrik Akhir | Status | Detail |
 | :--- | :--- | :--- | :--- | :--- |
-| **Utang Tipe (`any`)** | 660 | **659** | ✅ LULUS | Berkurang 1 baris, tidak ada `any` baru |
-| **Validitas Tipe (TypeScript)** | 0 error | **0 error** | ✅ LULUS | `tsc --noEmit` bersih |
+| **Utang Tipe (`any`)** | 660 | **659** | ✅ LULUS | Berkurang 1 baris (659), tidak ada `any` baru |
+| **Validitas Tipe (TypeScript)** | 0 error | **0 error** | ✅ LULUS | `tsc --noEmit` 0 errors |
 | **ESLint** | 0 warning / error | **0 warning / error** | ✅ LULUS | `✔ No ESLint warnings or errors` |
-| **Unit Tests (Vitest)** | 737 lulus (84 files) | **757 lulus (86 files)** | ✅ LULUS | +20 tests baru (user resolution & redirect contract) |
-| **Audit Menu Otomatis** | 149 BERFUNGSI, 0 RUSAK | **149 BERFUNGSI, 0 RUSAK** | ✅ LULUS | 0 SEBAGIAN, 0 TIRUAN, 0 RUSAK |
+| **Unit Tests (Vitest)** | 737 lulus (84 files) | **757 lulus (86 files)** | ✅ LULUS | 100% lulus (+20 tests baru: user resolution & redirect contract) |
+| **Audit Menu Otomatis** | 149 BERFUNGSI, 0 RUSAK | **149 BERFUNGSI, 0 RUSAK** | ✅ LULUS | 149 BERFUNGSI, 0 SEBAGIAN, 0 TIRUAN, 0 RUSAK |
 | **Next.js Production Build** | - | **Kompilasi Sukses (0)** | ✅ LULUS | 166 halaman terkompilasi, middleware 93.9 kB |
-| **E2E Sidebar Click Test** | Freeze / Bouncing | **100% Lulus (0 BUG)** | ✅ LULUS | Seluruh menu Super Admin & Mahasiswa `OK` |
+| **E2E Sidebar Click Test** | Freeze / Bouncing | **100% Lulus (124/124 OK)** | ✅ LULUS | 124 menu pada 7 peran (STUDENT, TA, LECTURER, COORDINATOR, STAFF, SYSADMIN, SUPERADMIN) 0 BUG |
 
 ---
 
@@ -79,3 +79,5 @@ Hasil awal sebelum perbaikan dependensi rendering:
 | **H4**: Prefix matching tanpa batas segmen (`/tasks` vs `/ta`) | **TERBUKTI & DIPERBAIKI** | Terbukti di `tests/nav-redirect-contract.test.ts`: `startsWith('/ta')` salah mengenali `/tasks`. Diperbaiki dengan `matchesPrefix()`. |
 | **H-BARU**: Re-render loop di `PortalShell` membatalkan navigasi klien | **TERBUKTI & DIPERBAIKI** | Diperbaiki dengan `useMemo` pada `navGroups` dan stabilisasi dependensi `useEffect` di `portal-shell.tsx`. |
 | **H-AUTH**: Hanging Supabase Query & Postgres 22P02 pada Akun Demo | **TERBUKTI & DIPERBAIKI** | Diperbaiki dengan `withTimeout(promise, 2500)` dan proteksi kueri UUID untuk sesi demo di `actions.ts` dan `current-user.ts`. |
+| **H-RSC**: Ekspor Client Component ke Server Component (`/ta/classes`) | **TERBUKTI & DIPERBAIKI** | Terbukti `TypeError: getClassroomBannerTheme is not a function` pada `/ta/classes`. Diperbaiki dengan ekstraksi fungsi murni ke `src/modules/academic/classroom-banner-themes.ts`. |
+| **H-ACCORDION**: Inversi boolean grup `defaultCollapsed: true` di Sidebar | **TERBUKTI & DIPERBAIKI** | Terbukti grup 'Akun' (`shared-akun`) tetap tertutup karena `prev[groupId]` bernilai `undefined`. Diperbaiki dengan mengevaluasi `defaultCollapsed` pada `toggleGroupCollapse`. |
