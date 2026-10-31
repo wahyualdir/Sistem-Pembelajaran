@@ -18,15 +18,10 @@ export async function checkSupabaseOnline(): Promise<boolean> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321';
   const isLocal = url.includes('localhost') || url.includes('127.0.0.1');
 
-  // Untuk Supabase Cloud (staging / production / remote), Supabase aktif sebagai basis data utama
-  // Mengembalikan true secara instan (0 ms) untuk menghilangkan blocking delay 1.000 - 1.500 ms di serverless/middleware.
-  if (!isLocal) {
-    return true;
-  }
-
   const now = Date.now();
-  // Cache status selama 30 detik untuk lingkungan lokal
-  if (cachedStatus !== null && now - lastCheckTime < 30000) {
+  // Hasil BERHASIL di-cache 30 detik; hasil GAGAL di-cache maksimal 5 detik
+  const cacheTtl = cachedStatus === true ? 30000 : 5000;
+  if (cachedStatus !== null && now - lastCheckTime < cacheTtl) {
     return cachedStatus;
   }
 
@@ -37,10 +32,12 @@ export async function checkSupabaseOnline(): Promise<boolean> {
       headers['apikey'] = anonKey;
       headers['Authorization'] = `Bearer ${anonKey}`;
     }
+    // Timeout URL remote: 3000ms, lokal: 300ms
+    const timeoutMs = isLocal ? 300 : 3000;
     const res = await fetch(`${url}/auth/v1/health`, {
       method: 'GET',
       headers,
-      signal: AbortSignal.timeout(300),
+      signal: AbortSignal.timeout(timeoutMs),
     });
     cachedStatus = res.ok;
   } catch {
