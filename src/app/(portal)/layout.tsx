@@ -8,11 +8,13 @@ import { getRoleDisplayName } from '@/lib/config/menu-config';
 import { AiAcademicAssistant } from '@/components/shared/ai-academic-assistant';
 import { Toaster } from '@/components/ui/toast';
 import { PortalShell } from './portal-shell';
+import { navDebug } from '@/lib/auth/nav-debug';
 
 export default async function PortalLayout({ children }: { children: React.ReactNode }) {
   const userContext = await getCurrentUserWithRoles();
 
   if (!userContext) {
+    navDebug('portal_layout_redirect_login', { reason: 'userContext is null' });
     redirect('/login');
   }
 

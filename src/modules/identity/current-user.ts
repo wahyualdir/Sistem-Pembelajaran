@@ -5,6 +5,7 @@ import { createClient as createServerSupabase } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { parseSignedSession } from '@/lib/auth/session';
+import { navDebug } from '@/lib/auth/nav-debug';
 import { SYNTHETIC_DEMO_USERS } from './demo-users';
 import {
   type ImpersonationTokenPayload,
@@ -164,12 +165,17 @@ export const getCurrentUserWithRoles = dedupe(async (): Promise<CurrentUserConte
     : null;
 
   let rolesList: any[] = [];
+  let dbError = false;
+  let source: 'db' | 'demo' | 'none' = 'none';
+  let roleCodesFromDb: string[] = [];
   const cachedUser = userProfileCache.get(userId);
   const now = Date.now();
 
   if (cachedUser && now - cachedUser.timestamp < 15000) {
     profile = cachedUser.profile;
     rolesList = cachedUser.rolesList;
+    roleCodesFromDb = rolesList.map((r) => (r.roles as any)?.code || r.role_id);
+    source = 'db';
   } else if (isOnline) {
     try {
       const [profileRes, rolesRes] = await Promise.all([
@@ -185,21 +191,27 @@ export const getCurrentUserWithRoles = dedupe(async (): Promise<CurrentUserConte
           .eq('status', 'ACTIVE'),
       ]);
 
+      if (rolesRes.error) {
+        dbError = true;
+      }
       if (profileRes.data) {
         profile = profileRes.data;
       }
       if (rolesRes.data && rolesRes.data.length > 0) {
         rolesList = rolesRes.data;
+        roleCodesFromDb = rolesList.map((r) => (r.roles as any)?.code || r.role_id);
+        source = 'db';
       }
       if (profile) {
         userProfileCache.set(userId, { profile, rolesList, timestamp: now });
       }
     } catch {
-      // DB offline
+      dbError = true;
     }
   }
 
   if (rolesList.length === 0 && matchedDemo) {
+    source = 'demo';
     rolesList = matchedDemo.roles.map((r) => ({
       id: `${matchedDemo!.id}-${r}`,
       role_id: r,
@@ -246,6 +258,16 @@ export const getCurrentUserWithRoles = dedupe(async (): Promise<CurrentUserConte
     activeRoleCode && allowedRoleCodes.includes(activeRoleCode)
       ? activeRoleCode
       : allowedRoleCodes[0] || 'STUDENT';
+
+  navDebug('current_user_resolved', {
+    cookieActiveRole: activeRoleCode,
+    roleCodesFromDb,
+    source,
+    dbError,
+    isOnline,
+    resolved: validatedActiveRole,
+    userId,
+  });
 
   const isNewAccount =
     !!matchedDemo?.isNewAccount ||

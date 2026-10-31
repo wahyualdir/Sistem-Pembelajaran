@@ -3,6 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { checkSupabaseOnline } from '@/lib/supabase/status';
 import { LEGACY_ROUTE_REDIRECTS, isRouteAllowedForRole } from '@/lib/config/menu-config';
 import { decideRoleRedirect, ROLE_PORTAL_MAP, PORTAL_PREFIXES } from '@/lib/auth/route-guard';
+import { navDebug } from '@/lib/auth/nav-debug';
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({
@@ -96,6 +97,7 @@ export async function middleware(request: NextRequest) {
   if (!isAuthenticated && isProtectedPortal) {
     const loginUrl = new URL('/login', request.url);
     loginUrl.searchParams.set('from', pathname);
+    navDebug('middleware_redirect', { from: pathname, to: loginUrl.pathname + loginUrl.search, step: 1 });
     return NextResponse.redirect(loginUrl);
   }
 
@@ -105,7 +107,9 @@ export async function middleware(request: NextRequest) {
   if (isAuthenticated && (pathname === '/login' || pathname === '/register')) {
     const hasFrom = request.nextUrl.searchParams.has('from');
     if (!hasFrom && activeRole && ROLE_PORTAL_MAP[activeRole]) {
-      return NextResponse.redirect(new URL(ROLE_PORTAL_MAP[activeRole], request.url));
+      const to = ROLE_PORTAL_MAP[activeRole];
+      navDebug('middleware_redirect', { from: pathname, to, step: 2 });
+      return NextResponse.redirect(new URL(to, request.url));
     }
     return response;
   }
@@ -113,11 +117,15 @@ export async function middleware(request: NextRequest) {
   // 3. Pengguna membuka root '/'
   if (pathname === '/') {
     if (!isAuthenticated) {
+      navDebug('middleware_redirect', { from: pathname, to: '/login', step: 3 });
       return NextResponse.redirect(new URL('/login', request.url));
     }
     if (activeRole && ROLE_PORTAL_MAP[activeRole]) {
-      return NextResponse.redirect(new URL(ROLE_PORTAL_MAP[activeRole], request.url));
+      const to = ROLE_PORTAL_MAP[activeRole];
+      navDebug('middleware_redirect', { from: pathname, to, step: 3 });
+      return NextResponse.redirect(new URL(to, request.url));
     }
+    navDebug('middleware_redirect', { from: pathname, to: '/workspace', step: 3 });
     return NextResponse.redirect(new URL('/workspace', request.url));
   }
 
@@ -132,6 +140,7 @@ export async function middleware(request: NextRequest) {
     });
 
     if (redirectTarget) {
+      navDebug('middleware_redirect', { from: pathname, to: redirectTarget, step: 4 });
       return NextResponse.redirect(new URL(redirectTarget, request.url));
     }
   }

@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getCurrentUserWithRoles } from '@/modules/identity/current-user';
+import { navDebug } from '@/lib/auth/nav-debug';
 
 /**
  * Server-Side Role Guard (A2 Security Hardening)
@@ -22,6 +23,11 @@ export async function assertServerRole(allowedRoles: string[]) {
 
   const hasAuthorizedRole = allowedRoles.some((role) => userRoleCodes.includes(role));
   if (!hasAuthorizedRole) {
+    navDebug('server_role_rejected', {
+      allowedRoles,
+      userRoleCodes,
+      userId: userContext.user.id,
+    });
     // Tolak akses secara ketat di sisi server (Defense in Depth)
     redirect('/workspace');
   }
