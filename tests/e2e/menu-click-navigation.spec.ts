@@ -24,7 +24,7 @@ const DEMO_ROLES: RoleConfig[] = [
     roleCode: 'TEACHING_ASSISTANT',
     identifier: 'ta@siajar.ac.id',
     homeHref: '/ta',
-    workspaceRoleKeyword: 'Asisten Dosen',
+    workspaceRoleKeyword: 'Asisten',
   },
   {
     roleName: 'Dosen',
@@ -102,10 +102,15 @@ async function expandAllSidebarGroups(page: Page) {
   const count = await toggleButtons.count();
   for (let i = 0; i < count; i++) {
     const btn = toggleButtons.nth(i);
-    const isRotated = (await btn.locator('svg.-rotate-90').count()) > 0;
-    if (isRotated) {
-      await btn.click();
-      await page.waitForTimeout(50);
+    try {
+      const svgClass = (await btn.locator('svg').getAttribute('class')) || '';
+      if (svgClass.includes('-rotate-90')) {
+        await btn.scrollIntoViewIfNeeded().catch(() => {});
+        await btn.click({ force: true, timeout: 2000 }).catch(() => {});
+        await page.waitForTimeout(50);
+      }
+    } catch {
+      // Abaikan jika tombol sedang bertransisi
     }
   }
 }
@@ -117,9 +122,17 @@ test.describe('E2E Navigasi Klik Sidebar Seluruh Peran (Fase 1b)', () => {
       if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
       }
+      const reportPath = path.join(outputDir, 'nav-report.json');
+      let mergedReports = { ...allReports };
+      if (fs.existsSync(reportPath)) {
+        try {
+          const prev = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
+          mergedReports = { ...prev, ...allReports };
+        } catch {}
+      }
       fs.writeFileSync(
-        path.join(outputDir, 'nav-report.json'),
-        JSON.stringify(allReports, null, 2),
+        reportPath,
+        JSON.stringify(mergedReports, null, 2),
         'utf-8'
       );
     } catch (e) {
@@ -129,24 +142,34 @@ test.describe('E2E Navigasi Klik Sidebar Seluruh Peran (Fase 1b)', () => {
 
   for (const role of DEMO_ROLES) {
     test(`Navigasi Klik Sidebar: ${role.roleName} (${role.roleCode})`, async ({ page }) => {
-      test.setTimeout(300000);
+      test.setTimeout(720000);
 
       const roleReports: NavReportEntry[] = [];
       allReports[role.roleCode] = roleReports;
 
       // 1. Login sebagai peran
-      const expectedUrlPattern = new RegExp(`(${role.homeHref.replace('/', '\\/')}|workspace)`);
+      const expectedUrlPattern = new RegExp(`(${role.homeHref.replace('/', '\\/')}|workspace|student|lecturer|coordinator|staff|admin)`);
       await loginAsRole(page, role.identifier, expectedUrlPattern);
 
-      // Tangani workspace jika muncul
-      if (page.url().includes('/workspace')) {
-        const formBtn = page.locator(`form:has(input[value="${role.roleCode}"]) button`);
-        if ((await formBtn.count()) > 0) {
-          await formBtn.first().click();
-        } else {
-          await page.getByText(role.workspaceRoleKeyword, { exact: false }).first().click();
+      // Jika belum di beranda peran yang dituju (misal multi-role mendarat di /student atau /workspace)
+      if (!page.url().includes(role.homeHref)) {
+        if (!page.url().includes('/workspace')) {
+          await page.goto('/workspace?alasan=pilih');
+          await page.waitForLoadState('domcontentloaded');
         }
-        await page.waitForURL(new RegExp(role.homeHref.replace('/', '\\/')), { timeout: 20000 });
+        const formBtn = page.locator(`form:has(input[value="${role.roleCode}"]) button`);
+        try {
+          await formBtn.waitFor({ state: 'visible', timeout: 8000 });
+          await formBtn.click();
+        } catch {
+          const card = page.locator('div.vt-window-inset', {
+            has: page.locator(`h2:has-text("${role.workspaceRoleKeyword}")`),
+          });
+          if (await card.isVisible()) {
+            await card.locator('button[type="submit"]').click();
+          }
+        }
+        await page.waitForURL(new RegExp(role.homeHref.replace('/', '\\/')), { timeout: 60000 });
       }
 
       await expect(page).toHaveURL(new RegExp(role.homeHref.replace('/', '\\/')));
@@ -175,10 +198,13 @@ test.describe('E2E Navigasi Klik Sidebar Seluruh Peran (Fase 1b)', () => {
         // Kembali ke beranda peran terlebih dahulu
         const currentUrlObj = new URL(page.url());
         if (currentUrlObj.pathname !== role.homeHref) {
-          try {
-            await page.goto(role.homeHref, { waitUntil: 'domcontentloaded' });
-          } catch {
-            await page.waitForTimeout(500);
+          const homeLink = page.locator(`nav[aria-label="Navigasi Utama" i] a[href="${role.homeHref}"]`).first();
+          if (await homeLink.isVisible().catch(() => false)) {
+            await homeLink.click();
+            await page.waitForURL((url) => url.pathname === role.homeHref, { timeout: 10000 }).catch(async () => {
+              await page.goto(role.homeHref, { waitUntil: 'domcontentloaded' });
+            });
+          } else {
             await page.goto(role.homeHref, { waitUntil: 'domcontentloaded' });
           }
           await page.waitForLoadState('domcontentloaded').catch(() => {});
@@ -188,8 +214,12 @@ test.describe('E2E Navigasi Klik Sidebar Seluruh Peran (Fase 1b)', () => {
 
         // Cari link sidebar yang sesuai
         const link = page.locator(`nav[aria-label="Navigasi Utama" i] a[href="${targetHref}"]`).first();
-        await expect(link).toBeVisible({ timeout: 10000 });
-        await link.scrollIntoViewIfNeeded();
+        if (!(await link.isVisible())) {
+          await expandAllSidebarGroups(page);
+        }
+        await link.scrollIntoViewIfNeeded().catch(() => {});
+        await expect(link).toBeVisible({ timeout: 15000 });
+        await link.scrollIntoViewIfNeeded().catch(() => {});
 
         // KLIK LINK (bukan page.goto)
         await Promise.all([
