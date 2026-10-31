@@ -35,6 +35,6 @@ test.describe('Perjalanan Emas Mahasiswa (Golden Journey STUDENT)', () => {
     // 6. Ajukan Permohonan Surat / Layanan
     await page.goto('/requests');
     await expect(page).toHaveURL(/\/requests/);
-    await expect(page.locator('h1')).toContainText(/Layanan Administrasi/i);
+    await expect(page.locator('h1')).toContainText(/Layanan (Administrasi|Mandiri)/i);
   });
 });

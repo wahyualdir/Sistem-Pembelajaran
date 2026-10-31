@@ -14,16 +14,16 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-  outputFileTracingExcludes: {
-    '*': [
-      './playwright-report/**',
-      './test-results/**',
-      './docs/**',
-      './scratch/**',
-      './tests/**',
-    ],
-  },
   experimental: {
+    outputFileTracingExcludes: {
+      '*': [
+        './playwright-report/**',
+        './test-results/**',
+        './docs/**',
+        './scratch/**',
+        './tests/**',
+      ],
+    },
     serverActions: {
       bodySizeLimit: "10mb",
     },
