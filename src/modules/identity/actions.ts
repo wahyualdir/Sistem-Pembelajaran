@@ -212,18 +212,18 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
   }
 
   // Fallback pengujian / demo jika Supabase offline (Hanya diizinkan di non-production atau jika ALLOW_DEMO_AUTH='true')
-  const demoPassword = process.env.DEMO_PASSWORD;
-  const superAdminPassword = process.env.SUPERADMIN_PASSWORD;
-  const customPasswords: Map<string, string> = ((globalThis as any).__siajarCustomPasswords ??= new Map<string, string>());
-  const isSuperAdminUser =
-    Boolean(
-      isSuperAdminByIdentifier ||
-      (demoUser && demoUser.roles.includes('SUPER_ADMIN'))
-    );
-
-  const customPass = demoUser ? (customPasswords.get(demoUser.id) || customPasswords.get(normalizedId.toLowerCase())) : null;
-
   if (!currentUserId && allowDemo) {
+    const demoPassword = process.env.DEMO_PASSWORD;
+    const superAdminPassword = process.env.SUPERADMIN_PASSWORD;
+    const customPasswords: Map<string, string> = ((globalThis as any).__siajarCustomPasswords ??= new Map<string, string>());
+    const isSuperAdminUser =
+      Boolean(
+        isSuperAdminByIdentifier ||
+        (demoUser && demoUser.roles.includes('SUPER_ADMIN'))
+      );
+
+    const customPass = demoUser ? (customPasswords.get(demoUser.id) || customPasswords.get(normalizedId.toLowerCase())) : null;
+
     if (demoUser) {
       let isMatch = false;
 
@@ -747,17 +747,17 @@ export async function changePasswordAction(formData: unknown): Promise<ActionRes
 
   const user = userContext.user;
   const isOnline = await checkSupabaseOnline();
+  const isProd = process.env.NODE_ENV === 'production';
+  const allowDemo = !isProd || process.env.ALLOW_DEMO_AUTH === 'true';
 
-  // Verifikasi kebenaran kata sandi saat ini sebelum mengubah ke kata sandi baru (Issue 7)
+  if (!isOnline && !allowDemo) {
+    return {
+      ok: false,
+      error: 'Layanan autentikasi sedang tidak tersedia. Silakan coba beberapa saat lagi.',
+    };
+  }
+
   const customPasswordsStore: Map<string, string> = ((globalThis as any).__siajarCustomPasswords ??= new Map<string, string>());
-  const isSuperAdminUser = userContext.roles.some((r: any) => {
-    const code = r?.roles?.code || r?.role_id || r?.code;
-    return code === 'SUPER_ADMIN';
-  });
-  const expectedOfflinePass =
-    customPasswordsStore.get(user.id) ||
-    customPasswordsStore.get(user.email) ||
-    (isSuperAdminUser ? (customPasswordsStore.get('superadmin') || process.env.SUPERADMIN_PASSWORD || process.env.DEMO_PASSWORD) : process.env.DEMO_PASSWORD);
 
   if (isOnline) {
     const supabase = await createServerSupabase();
@@ -772,6 +772,15 @@ export async function changePasswordAction(formData: unknown): Promise<ActionRes
       };
     }
   } else {
+    const isSuperAdminUser = userContext.roles.some((r: any) => {
+      const code = r?.roles?.code || r?.role_id || r?.code;
+      return code === 'SUPER_ADMIN';
+    });
+    const expectedOfflinePass =
+      customPasswordsStore.get(user.id) ||
+      customPasswordsStore.get(user.email) ||
+      (isSuperAdminUser ? (customPasswordsStore.get('superadmin') || process.env.SUPERADMIN_PASSWORD || process.env.DEMO_PASSWORD) : process.env.DEMO_PASSWORD);
+
     if (currentPassword !== expectedOfflinePass) {
       return {
         ok: false,
@@ -832,10 +841,12 @@ export async function changePasswordAction(formData: unknown): Promise<ActionRes
     });
   }
 
-  // Simpan ke in-memory store untuk offline / fallback
-  customPasswordsStore.set(user.id, newPassword);
-  if (userContext.roles.some((r: any) => r.roles?.code === 'SUPER_ADMIN' || r.code === 'SUPER_ADMIN' || r === 'SUPER_ADMIN')) {
-    customPasswordsStore.set('superadmin', newPassword);
+  // Simpan ke in-memory store untuk offline / fallback hanya jika allowDemo aktif
+  if (allowDemo) {
+    customPasswordsStore.set(user.id, newPassword);
+    if (userContext.roles.some((r: any) => r.roles?.code === 'SUPER_ADMIN' || r.code === 'SUPER_ADMIN' || r === 'SUPER_ADMIN')) {
+      customPasswordsStore.set('superadmin', newPassword);
+    }
   }
 
   return {

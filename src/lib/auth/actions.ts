@@ -74,7 +74,7 @@ export async function loginWithCredentials(
   }
 
   // Fallback untuk kata sandi demo hanya pada lingkungan pengembangan jika flag aktif dan DEMO_PASSWORD disetel
-  const demoPassword = process.env.DEMO_PASSWORD;
+  const demoPassword = (process.env.NODE_ENV !== "production" && process.env.NEXT_PUBLIC_ENABLE_DEMO_LOGIN === "true") ? process.env.DEMO_PASSWORD : null;
   if (
     !isPasswordValid &&
     process.env.NODE_ENV !== "production" &&
