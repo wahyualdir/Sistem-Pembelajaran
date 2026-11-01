@@ -35,9 +35,15 @@ import { LoginDevMode } from '@/app/(auth)/login/login-dev-mode';
 
 describe('Redesain Halaman Masuk RuangKampus (docs/INSTRUKSI_REDESAIN_LOGIN.md)', () => {
   const originalEnv = process.env.NODE_ENV;
+  const originalAllowDemo = process.env.ALLOW_DEMO_AUTH;
 
   afterEach(() => {
     (process.env as any).NODE_ENV = originalEnv;
+    if (originalAllowDemo !== undefined) {
+      process.env.ALLOW_DEMO_AUTH = originalAllowDemo;
+    } else {
+      delete process.env.ALLOW_DEMO_AUTH;
+    }
   });
 
   describe('1. Aksesibilitas Formulir & Keterhubungan Label', () => {
@@ -100,6 +106,7 @@ describe('Redesain Halaman Masuk RuangKampus (docs/INSTRUKSI_REDESAIN_LOGIN.md)'
   describe('3. Mode Pengembang (Spesifikasi Bagian 6)', () => {
     it('TIDAK memunculkan elemen "Mode pengembang" saat NODE_ENV === "production"', () => {
       (process.env as any).NODE_ENV = 'production';
+      delete process.env.ALLOW_DEMO_AUTH;
       const onSelect = vi.fn();
       const html = renderToString(<LoginDevMode onSelectIdentifier={onSelect} />);
       expect(html).toBe('');
@@ -107,8 +114,18 @@ describe('Redesain Halaman Masuk RuangKampus (docs/INSTRUKSI_REDESAIN_LOGIN.md)'
       expect(html).not.toContain('dev-mode-details');
     });
 
+    it('memunculkan elemen "Mode pengembang" saat NODE_ENV === "production" jika ALLOW_DEMO_AUTH === "true"', () => {
+      (process.env as any).NODE_ENV = 'production';
+      process.env.ALLOW_DEMO_AUTH = 'true';
+      const onSelect = vi.fn();
+      const html = renderToString(<LoginDevMode onSelectIdentifier={onSelect} />);
+      expect(html).toContain('Mode pengembang');
+      expect(html).toContain('data-testid="dev-mode-details"');
+    });
+
     it('memunculkan elemen "Mode pengembang" dalam details saat NODE_ENV === "development"', () => {
       (process.env as any).NODE_ENV = 'development';
+      delete process.env.ALLOW_DEMO_AUTH;
       const onSelect = vi.fn();
       const html = renderToString(<LoginDevMode onSelectIdentifier={onSelect} />);
       expect(html).toContain('Mode pengembang');

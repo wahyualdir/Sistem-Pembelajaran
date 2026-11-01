@@ -17,7 +17,9 @@ const DEMO_ACCOUNTS = [
 ] as const;
 
 export function LoginDevMode({ onSelectIdentifier }: LoginDevModeProps) {
-  if (process.env.NODE_ENV !== 'development') {
+  const isProd = process.env.NODE_ENV === 'production';
+  const allowDemo = !isProd || process.env.ALLOW_DEMO_AUTH === 'true';
+  if (!allowDemo) {
     return null;
   }
 

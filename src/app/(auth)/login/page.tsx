@@ -568,7 +568,7 @@ function LoginFormContent() {
               <LoginDevMode
                 onSelectIdentifier={(id) => {
                   setIdentifier(id);
-                  setPassword(id === 'superadmin' ? (process.env.NEXT_PUBLIC_DEMO_PASSWORD || 'Password123!') : 'Password123!');
+                  setPassword(process.env.NEXT_PUBLIC_DEMO_PASSWORD || 'Password123!');
                   setCaptchaInput(String(captchaNum1 + captchaNum2));
                 }}
               />
