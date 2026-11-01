@@ -21,6 +21,11 @@ jobs:
     name: Verify, Database & E2E Test
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      ALLOW_DEMO_AUTH: 'true'
+      DEMO_PASSWORD: 'Password123!'
+      SUPERADMIN_PASSWORD: 'Password123!'
+      NEXT_PUBLIC_DEMO_PASSWORD: 'Password123!'
 
     steps:
       - name: Checkout Repository
