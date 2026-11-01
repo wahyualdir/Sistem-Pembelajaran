@@ -17,10 +17,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify-and-test:
-    name: Verify, Database & E2E Test
+  verify-quality:
+    name: Typecheck, Lint, RLS & Unit Tests
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     env:
       ALLOW_DEMO_AUTH: 'true'
       DEMO_PASSWORD: 'Password123!'
@@ -66,6 +66,51 @@ jobs:
       - name: Run pgTAP Database Policies & RLS Tests
         run: supabase test db
 
+  e2e-matrix:
+    name: E2E Playwright (${{ matrix.group }})
+    needs: verify-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - group: 'mahasiswa-asdos-dosen'
+            grep: 'STUDENT|TEACHING_ASSISTANT|LECTURER'
+          - group: 'kaprodi-staf-sekprodi'
+            grep: 'PROGRAM_COORDINATOR|ACADEMIC_STAFF|PROGRAM_SECRETARY'
+          - group: 'kalab-sysadmin-superadmin'
+            grep: 'LAB_HEAD|SYSTEM_ADMIN|SUPER_ADMIN'
+    env:
+      ALLOW_DEMO_AUTH: 'true'
+      DEMO_PASSWORD: 'Password123!'
+      SUPERADMIN_PASSWORD: 'Password123!'
+      NEXT_PUBLIC_DEMO_PASSWORD: 'Password123!'
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Setup Supabase CLI
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: Start Local Supabase Engine
+        run: supabase start
+
+      - name: Reset Database and Apply All Migrations
+        run: supabase db reset
+
       - name: Export Supabase Local Environment
         run: |
           eval "$(supabase status -o env)"
@@ -93,8 +138,8 @@ jobs:
       - name: Install Playwright Browsers and Dependencies
         run: npx playwright install --with-deps chromium
 
-      - name: Execute Playwright End-to-End Tests
-        run: npx playwright test
+      - name: Execute Playwright E2E (${{ matrix.group }})
+        run: npx playwright test -g "${{ matrix.grep }}"
         env:
           CI: true
           NEXT_PUBLIC_SUPABASE_URL: ${{ env.NEXT_PUBLIC_SUPABASE_URL }}
