@@ -43,7 +43,7 @@ Dokumen ini memuat hasil audit menyeluruh terhadap seluruh rute API (`src/app/ap
 ## 2. Rincian Penguatan Keamanan Fase 1
 
 1. **Pencabutan Hardcoded Credentials & Bypasses**:
-   - Seluruh sandi literal (`'wahyu11'`, `'Password123!'`, `'DemoSiajar2026Secure!'`, `'Admin123!'`) telah dihapus total dari `src/modules/identity/actions.ts`.
+   - Seluruh sandi literal (`'w****1'`, `'Password123!'`, `'DemoSiajar2026Secure!'`, `'Admin123!'`) telah dihapus total dari `src/modules/identity/actions.ts`.
    - Gerbang autentikasi mode demo dikembalikan secara ketat: `allowDemo = !isProd || process.env.ALLOW_DEMO_AUTH === 'true'`.
    - Tidak ada lagi pelewatan berbasis identifier (`isSuperAdminByIdentifier`, `isSuperAdminUser`, `20120009`, atau UUID `a0000010-...`).
    - Di `src/lib/auth/session.ts`, fallback `userId: "usr-superadmin"` dan role default `ADMIN` tanpa sesi valid telah dihapus. Sesi yang tidak valid di production selalu menghasilkan `null`.
@@ -63,7 +63,7 @@ Dokumen ini memuat hasil audit menyeluruh terhadap seluruh rute API (`src/app/ap
 > Tindakan-tindakan berikut **hanya boleh dilakukan oleh pemilik repositori** dengan akses administratif langsung dan tidak dijalankan secara otomatis oleh asisten:
 
 1. **Rotasi Seluruh Kunci Rahasia & Kata Sandi (Credential Rotation)**:
-   - Karena sandi `'wahyu11'` dan `'Password123!'` pernah terkomit ke riwayat git di commit terdahulu (`9d2a590`), sandi tersebut dianggap **sudah terkompromi**.
+   - Karena sandi `'w****1'` dan `'Password123!'` pernah terkomit ke riwayat git di commit terdahulu (`9d2a590`), sandi tersebut dianggap **sudah terkompromi**.
    - Jika akun admin di Supabase production (`superadmin@...`) menggunakan sandi tersebut, segera perbarui melalui dashboard Supabase Auth atau jalankan `npx tsx scripts/create-superadmin.ts` dengan `SUPERADMIN_PASSWORD` baru yang kuat (minimal 14 karakter acak).
    - Pastikan `APP_SECRET`, `SESSION_SECRET`, `SUPABASE_SERVICE_ROLE_KEY`, dan `CRON_SECRET` di Vercel Environment Variables di-generate ulang jika pernah dibagikan atau tersimpan di tempat tidak aman.
 

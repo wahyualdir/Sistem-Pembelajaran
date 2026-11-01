@@ -125,7 +125,7 @@ git grep -nI "SUPERADMIN_PASSWORD"
 3. Verifikasi working tree bersih dari sandi lama (hasil harus 0):
 
 ```powershell
-git grep -c "wahyu11"
+git grep -c "w****1"
 ```
 
    Jika masih ada, ganti dengan pembacaan env/ sandi demo bersama dan laporkan. Riwayat commit tidak boleh disentuh; laporkan commit pertama yang memuatnya.
@@ -190,7 +190,7 @@ npm run audit:guards
 npm run build
 npx playwright test tests/e2e/menu-click-navigation.spec.ts tests/e2e/menu-click-strict.spec.ts
 git grep -nE ": any\b|as any\b" -- src | Measure-Object -Line     # tidak boleh naik dari 659
-git grep -c "wahyu11"                                              # harus 0 di working tree
+git grep -c "w****1"                                              # harus 0 di working tree
 ```
 
 **Kriteria selesai (semua wajib):**

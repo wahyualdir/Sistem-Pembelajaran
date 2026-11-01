@@ -103,13 +103,13 @@ describe('Uji Keamanan Login Demo & Kata Sandi Lingkungan (Fase 1)', () => {
     expect(resAdmin.error).toContain('Identifier atau password salah');
   });
 
-  it('(a) menolak sandi wahyu11 dan Password123! saat env sandi kosong, termasuk untuk akun super admin', async () => {
+  it('(a) menolak sandi lama dan Password123! saat env sandi kosong, termasuk untuk akun super admin', async () => {
     delete process.env.DEMO_PASSWORD;
     delete process.env.SUPERADMIN_PASSWORD;
     delete process.env.ALLOW_DEMO_AUTH;
     (process.env as any).NODE_ENV = 'development';
 
-    const testPasswords = ['wahyu11', 'Password123!', 'password123', '123456', '12345'];
+    const testPasswords = ['old-dev-pass', 'Password123!', 'password123', '123456', '12345'];
     const testAccounts = ['243510001', 'superadmin', '20120009'];
 
     for (const account of testAccounts) {

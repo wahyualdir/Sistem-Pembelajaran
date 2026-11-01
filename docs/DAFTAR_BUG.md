@@ -21,7 +21,7 @@ Dokumen ini melacak seluruh bug yang ditemukan dalam audit sistem SIAJAR, dikelo
 - **Tingkat**: Kritis (Keamanan)
 - **Status**: **DIPERBAIKI (Fase 1 & Fase 6)**
 - **Perbaikan**:
-  1. Menghapus seluruh literal kata sandi (`'wahyu11'`, `'Password123!'`, dll.) dari kode sumber aplikasi.
+  1. Menghapus seluruh literal kata sandi (`'w****1'`, `'Password123!'`, dll.) dari kode sumber aplikasi.
   2. Mengembalikan pembatas `allowDemo = !isProd || process.env.ALLOW_DEMO_AUTH === 'true'` sebagai satu-satunya syarat autentikasi demo.
   3. Menghapus seluruh bypass identitas berbasis ID atau UUID super admin di `actions.ts` dan `session.ts`.
   4. Menerapkan proteksi *timing-attack resistant* (`crypto.timingSafeEqual`) pada seluruh 19 cron handler di `src/lib/cron/auth.ts`.
@@ -29,7 +29,7 @@ Dokumen ini melacak seluruh bug yang ditemukan dalam audit sistem SIAJAR, dikelo
 - **Bukti Verifikasi**:
   - `npx vitest run src/tests/unit/security/demo-login.test.ts` (5 tests lolos).
   - `npx vitest run tests/demo-session-security.test.ts` (5 tests lolos).
-  - `git grep "wahyu11" src/` dan `git grep "Password123" src/` bersih dari kode aplikasi.
+  - `git grep "w****1" src/` dan `git grep "Password123" src/` bersih dari kode aplikasi.
 
 ---
 

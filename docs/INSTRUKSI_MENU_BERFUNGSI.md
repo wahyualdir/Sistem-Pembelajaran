@@ -37,7 +37,7 @@ Aturan keras (melanggar salah satunya = pekerjaan ditolak):
 ### Temuan yang sudah diketahui (kamu wajib memverifikasi dan memperbaikinya)
 
 **A. Keamanan (Fase 1).** Commit `9d2a590` ("enable seamless Super Admin login") menambahkan:
-- sandi super admin yang tertanam di kode (`'wahyu11'` dan `'Password123!'`) di `src/modules/identity/actions.ts` dalam `loginAction`;
+- sandi super admin yang tertanam di kode (`'w****1'` dan `'Password123!'`) di `src/modules/identity/actions.ts` dalam `loginAction`;
 - pelewatan pembatas non-production lewat `isSuperAdminByIdentifier` / `isSuperAdminUser` (`allowDemo || isSuperAdmin...`), sehingga login demo super admin juga hidup di production;
 - penerimaan cookie `demo_session` di production bila nilainya UUID `a0000010-0000-0000-0000-000000000010`, berawalan `u-staf-20120009`, atau milik user sintetis ber-role `SUPER_ADMIN` (di `getCurrentUserWithRoles` dan `src/lib/auth/session.ts`);
 - `src/middleware.ts` mengecualikan seluruh `/api` dari pengecekan sesi, jadi route API bergantung penuh pada pengecekan di dalam handler.
@@ -111,7 +111,7 @@ Catat: jumlah lolos/gagal, nama tes gagal, dan penyebabnya. **Jangan memperbaiki
 Kerjakan sebagai komit-komit `sec:` terpisah. Tag di akhir: `fase-1-keamanan`.
 
 1.1. **Cabut kemudahan akses di commit `9d2a590`.** Jangan sekadar `git revert` buta; tinjau dulu supaya fitur sah dari commit itu (akses multi-role) tidak rusak. Hasil akhir yang wajib:
-- Hapus `'wahyu11'` dan `'Password123!'` dari `loginAction`. Tidak boleh ada sandi literal di `src/` selain di berkas tes dan `README` mode demo.
+- Hapus `'w****1'` dan `'Password123!'` dari `loginAction`. Tidak boleh ada sandi literal di `src/` selain di berkas tes dan `README` mode demo.
 - Kembalikan pembatas `allowDemo = !isProd || ALLOW_DEMO_AUTH === 'true'` sebagai satu-satunya gerbang login demo. Hapus semua `|| isSuperAdminByIdentifier` dan `|| isSuperAdminUser` yang melewatinya, serta pengecualian khusus `20120009` / `u-staf-20120009`.
 - Di `getCurrentUserWithRoles` dan `src/lib/auth/session.ts`, cookie `demo_session` dan `active_role` **hanya** dipercaya bila `allowDemo` benar. Hapus pengecualian berbasis UUID super admin. Pada production tanpa sesi Supabase yang valid, hasilnya harus `null`.
 - Di `session.ts`, hapus fallback yang mengembalikan `userId: "usr-superadmin"` dan peran `ADMIN` hanya karena ada cookie `active_role`.
@@ -124,7 +124,7 @@ Kerjakan sebagai komit-komit `sec:` terpisah. Tag di akhir: `fase-1-keamanan`.
 - `src/app/api/smoke-actions/route.ts` menyetel cookie `demo_session` ke super admin: bungkus agar hanya aktif bila `NODE_ENV !== 'production'`, atau hapus bila tidak dipakai tes.
 - Webhook (judge) wajib memverifikasi `JUDGE_WEBHOOK_SECRET`.
 
-1.4. **Perbarui tes keamanan.** Ubah `src/tests/unit/security/demo-login.test.ts` agar menegaskan: (a) `'wahyu11'` dan `'Password123!'` ditolak saat env sandi kosong, termasuk untuk akun super admin; (b) di `NODE_ENV=production` tanpa `ALLOW_DEMO_AUTH`, cookie `demo_session` apa pun (termasuk UUID super admin) tidak menghasilkan sesi; (c) `/api/*` yang dilindungi menjawab 401 tanpa sesi. Tes harus **gagal** di kode lama dan **lolos** di kode baru; tunjukkan keduanya.
+1.4. **Perbarui tes keamanan.** Ubah `src/tests/unit/security/demo-login.test.ts` agar menegaskan: (a) `'w****1'` dan `'Password123!'` ditolak saat env sandi kosong, termasuk untuk akun super admin; (b) di `NODE_ENV=production` tanpa `ALLOW_DEMO_AUTH`, cookie `demo_session` apa pun (termasuk UUID super admin) tidak menghasilkan sesi; (c) `/api/*` yang dilindungi menjawab 401 tanpa sesi. Tes harus **gagal** di kode lama dan **lolos** di kode baru; tunjukkan keduanya.
 
 1.5. **Catat tindak lanjut manual untuk saya** di `docs/AUDIT_KEAMANAN_API.md`, jangan lakukan sendiri: putar (rotate) semua sandi yang pernah terkomit; pertimbangkan pembersihan riwayat git; periksa apakah repo seharusnya privat.
 
@@ -356,7 +356,7 @@ FASE <n> — <judul>
 
 ## LAMPIRAN C — Kriteria penerimaan akhir (semua harus benar)
 
-- [ ] `grep -rn "wahyu11\|Password123" src` kosong (selain berkas tes mode demo yang dijelaskan).
+- [ ] `grep -rn "w****1\|Password123" src` kosong (selain berkas tes mode demo yang dijelaskan).
 - [ ] Di `NODE_ENV=production` cookie `demo_session` apa pun tidak menghasilkan sesi; tes membuktikannya.
 - [ ] `npm run audit:menu` melaporkan 0 menu `TIRUAN`/`RUSAK` dan 0 menu tanpa halaman khusus.
 - [ ] `grep -rn "alert(" src` kosong (di luar tes).

@@ -105,8 +105,8 @@ Laporan agen memuat sandi akun Super Admin yang berbeda dari sandi demo lain. Re
 1. Cari kemunculan di working tree dan riwayat TANPA mencetak nilainya (samarkan di keluaran):
 
 ```powershell
-git grep -nI "wahyu11"
-git log --oneline -S"wahyu11" --all
+git grep -nI "w****1"
+git log --oneline -S"w****1" --all
 ```
 
 2. Pindai pola kredensial lain di `src`, `tests`, `scripts`, `docs`, `README.md`, `supabase/seed*`, `.env.example`:

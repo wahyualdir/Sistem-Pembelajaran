@@ -57,7 +57,7 @@ Titik awal audit: commit `9d2a590` (`pra-menu-fungsi`) pada cabang `perbaikan/me
 
 #### G. `src/tests/unit/security/demo-login.test.ts` (3 gagal)
 18. *menolak login demo jika ALLOW_DEMO_AUTH tidak diatur dan NODE_ENV=production*: Timeout 5000ms. Commit `9d2a590` meloloskan login bypass super admin dan menahan loop otentikasi.
-19. *menolak login demo jika DEMO_PASSWORD dan SUPERADMIN_PASSWORD kosong / tidak diatur*: Timeout 5000ms. Sandi `'wahyu11'` dan `'Password123!'` tertanam di kode sehingga bypass aktif.
+19. *menolak login demo jika DEMO_PASSWORD dan SUPERADMIN_PASSWORD kosong / tidak diatur*: Timeout 5000ms. Sandi `'w****1'` dan `'Password123!'` tertanam di kode sehingga bypass aktif.
 20. *menerima login demo hanya dengan nilai DEMO_PASSWORD atau SUPERADMIN_PASSWORD dari env*: Timeout 5000ms.
 
 ---
@@ -81,7 +81,7 @@ Titik awal audit: commit `9d2a590` (`pra-menu-fungsi`) pada cabang `perbaikan/me
      - `/staff/services/verification`
 3. **Keamanan Login Super Admin (`docs/PROGRESS.md`)**:
    - *Dokumen*: Menyatakan otentikasi demo terisolasi dan ditolak di production.
-   - *Kenyataan*: Commit `9d2a590` menanamkan sandi literal (`wahyu11`, `Password123!`), meloloskan cookie `demo_session` di production untuk super admin sintetis, dan mengecualikan `/api/*` di `middleware.ts`. Ini adalah temuan kritis yang wajib dibereskan di Fase 1.
+   - *Kenyataan*: Commit `9d2a590` menanamkan sandi literal (`w****1`, `Password123!`), meloloskan cookie `demo_session` di production untuk super admin sintetis, dan mengecualikan `/api/*` di `middleware.ts`. Ini adalah temuan kritis yang wajib dibereskan di Fase 1.
 
 ---
 

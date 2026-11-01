@@ -186,10 +186,13 @@ export async function loginAction(formData: unknown): Promise<ActionResponse> {
       }));
 
       if (
+        allowDemo &&
         authError &&
-        ((process.env.SUPERADMIN_PASSWORD && password === process.env.SUPERADMIN_PASSWORD) || password === 'Password123!')
+        ((process.env.SUPERADMIN_PASSWORD && password === process.env.SUPERADMIN_PASSWORD) || (process.env.DEMO_PASSWORD && password === process.env.DEMO_PASSWORD))
       ) {
-        const altPassword = (process.env.SUPERADMIN_PASSWORD && password === process.env.SUPERADMIN_PASSWORD) ? 'Password123!' : (process.env.SUPERADMIN_PASSWORD || 'Password123!');
+        const altPassword = (process.env.SUPERADMIN_PASSWORD && password === process.env.SUPERADMIN_PASSWORD)
+          ? (process.env.DEMO_PASSWORD || 'Password123!')
+          : (process.env.SUPERADMIN_PASSWORD || process.env.DEMO_PASSWORD || 'Password123!');
         const retry = await withTimeout(supabase.auth.signInWithPassword({
           email: targetEmail,
           password: altPassword,

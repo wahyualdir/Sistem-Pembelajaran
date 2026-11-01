@@ -32,7 +32,7 @@ Seluruh target keberhasilan telah dicapai:
 | **Menu SEBAGIAN** | 0 menu | **0 menu** | Seluruh menu memenuhi 11 butir Definition of Done |
 | **Menu RUSAK** | 0 menu | **0 menu** | Zero runtime crash / error boundary unhandled |
 | **Kemunculan `alert()` & Tombol Palsu** | 36 titik temuan | **0 titik** | 100% dibersihkan dan diganti toast / server action |
-| **Kredensial Tertanam (Hardcoded)** | Ditemukan (`wahyu11`, `Password123!`) | **0 (Bersih Total)** | Dieliminasi; skrip `create-superadmin.ts` disediakan |
+| **Kredensial Tertanam (Hardcoded)** | Ditemukan (`w****1`, `Password123!`) | **0 (Bersih Total)** | Dieliminasi; skrip `create-superadmin.ts` disediakan |
 | **Bypass Sesi Demo di Produksi** | Rentan pada commit `9d2a590` | **Kebal / Ditolak Mutlak** | Diuji via `demo-session-security.test.ts` |
 | **Warna Hex Non-Standar** | 62 kode warna liar | **0 kode warna liar** | `npm run cek:hex` lulus 100% |
 | **Kompilasi Next.js Build** | Tidak diverifikasi | **151 rute sukses (0 error)** | Lolos kompilasi produksi Next.js 14 |

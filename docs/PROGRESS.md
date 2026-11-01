@@ -336,7 +336,7 @@ Mengikuti instruksi ketat pada `docs/INSTRUKSI_MENU_BERFUNGSI.md`, seluruh 10 fa
    - Baseline typecheck, lint, cek:hex, check:rls, test, dan build disimpan di `docs/baseline-menu-fungsi/`.
 
 2. **Fase 1 — Perbaikan Keamanan**:
-   - Menghapus seluruh kredensial tertanam (`'wahyu11'`, `'Password123!'`) dari `src/modules/identity/actions.ts`.
+   - Menghapus seluruh kredensial tertanam (`'w****1'`, `'Password123!'`) dari `src/modules/identity/actions.ts`.
    - Mengisolasi cookie `demo_session` dan mode demo hanya untuk non-produksi (`!isProd || process.env.ALLOW_DEMO_AUTH === 'true'`).
    - Menerapkan perbandingan konstan (`crypto.timingSafeEqual`) pada seluruh cron auth handler untuk mencegah *timing attacks*.
    - Menyediakan skrip resmi `scripts/create-superadmin.ts` dengan penegakan sandi minimal 14 karakter.
