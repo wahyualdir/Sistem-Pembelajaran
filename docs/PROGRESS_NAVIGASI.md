@@ -81,3 +81,20 @@ Hasil awal sebelum perbaikan dependensi rendering:
 | **H-AUTH**: Hanging Supabase Query & Postgres 22P02 pada Akun Demo | **TERBUKTI & DIPERBAIKI** | Diperbaiki dengan `withTimeout(promise, 2500)` dan proteksi kueri UUID untuk sesi demo di `actions.ts` dan `current-user.ts`. |
 | **H-RSC**: Ekspor Client Component ke Server Component (`/ta/classes`) | **TERBUKTI & DIPERBAIKI** | Terbukti `TypeError: getClassroomBannerTheme is not a function` pada `/ta/classes`. Diperbaiki dengan ekstraksi fungsi murni ke `src/modules/academic/classroom-banner-themes.ts`. |
 | **H-ACCORDION**: Inversi boolean grup `defaultCollapsed: true` di Sidebar | **TERBUKTI & DIPERBAIKI** | Terbukti grup 'Akun' (`shared-akun`) tetap tertutup karena `prev[groupId]` bernilai `undefined`. Diperbaiki dengan mengevaluasi `defaultCollapsed` pada `toggleGroupCollapse`. |
+
+---
+
+## 8. Penutupan Catatan Audit dan Uji Peran Baru
+
+**Tanggal**: 1 November 2026  
+**Branch**: `fix/navigasi-menu`  
+**Tag Baseline**: `sebelum-penutupan-catatan`
+
+### Baseline Awal
+- `git status`: clean
+- `git grep -nE ": any\b|as any\b" -- src | Measure-Object -Line`: 659 baris (terjaga)
+- `npm run typecheck`: Lolos (0 error)
+- `npm run lint`: Lolos (0 warning / error)
+- `npm test`: 87 file lolos (762 unit tests passing)
+- `npm run audit:menu`: 149 BERFUNGSI (0 broken, 0 tiruan di luar baseline)
+

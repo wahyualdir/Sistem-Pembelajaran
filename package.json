@@ -12,6 +12,7 @@
     "test:e2e": "playwright test",
     "check:rls": "tsx scripts/check-rls.ts",
     "audit:menu": "tsx scripts/audit-menu.ts",
+    "audit:guards": "tsx scripts/audit-role-guards.ts",
     "snapshot": "node scripts/generate-schema-snapshot.mjs",
     "check:snapshot": "node scripts/generate-schema-snapshot.mjs && git diff --exit-code docs/schema-snapshot.md",
     "check:plan": "node scripts/check-plan-vs-snapshot.mjs",
