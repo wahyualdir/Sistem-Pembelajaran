@@ -132,7 +132,9 @@ Hasil pemindaian ekspresi reguler terhadap kredensial di direktori `src`, `tests
 ## 6. Rekomendasi Tindakan Pengguna Sebelum Merge
 
 1. **Rotasi Kata Sandi Superadmin**: Di Supabase Auth Dashboard produksi, pastikan kata sandi untuk `superadmin@siajar.ac.id` diperbarui ke kombinasi acak kuat baru (minimal 14 karakter).
-2. **Setel Environment Variable di Vercel Dashboard**:
-   - `ALLOW_DEMO_AUTH="false"` pada Production Environment.
-   - `SUPERADMIN_PASSWORD="<kata-sandi-baru-anda>"` (opsional, jika integrasi fallback diperlukan).
+2. **Pastikan Environment Variables di Vercel Dashboard Aman**:
+   - `ALLOW_DEMO_AUTH`: **tidak diset** di Production (dan tidak diset di Preview kecuali memakai project Supabase terpisah tanpa data nyata).
+   - `SUPERADMIN_PASSWORD`: **tidak diset** di Production maupun Preview (sandi superadmin sungguhan hanya ada di Supabase Auth).
+   - `NEXT_PUBLIC_DEMO_PASSWORD`: **tidak diset** di Production maupun Preview.
+   > **Catatan Keamanan Vercel Preview**: Preview di Vercel dapat diakses publik via URL dan mewarisi konfigurasi database. Menyetel `ALLOW_DEMO_AUTH=true` di Preview dengan basis data produksi berisiko membuka data nyata ke publik.
 3. **Uji Preview Deployment**: Buka tautan Preview Deployment dari pull request branch `fix/navigasi-menu`, lakukan login menggunakan akun dosen, mahasiswa, dan admin asli, lalu klik beberapa menu di perangkat desktop maupun seluler.

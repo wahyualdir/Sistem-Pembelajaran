@@ -57,12 +57,16 @@ Dua peran baru pada arsitektur SIAJAR telah diverifikasi secara penuh:
 
 ## 6. Daftar Environment Variables untuk Vercel & CI
 
-### Lingkungan Production (Vercel)
-| Variabel | Rekomendasi Nilai | Keterangan |
-| --- | --- | --- |
-| `ALLOW_DEMO_AUTH` | `"false"` | **Wajib**. Menutup total seluruh jalur login akun demo sintetis. |
-| `SUPERADMIN_PASSWORD` | `<kata-sandi-kuat-baru>` | Opsional. Digunakan jika script provisioning admin dijalankan. |
-| `NEXT_PUBLIC_DEMO_PASSWORD` | `""` (kosong) | Variabel ini terekspos ke klien; jangan pernah isi dengan kredensial nyata. |
+### Matriks Pengaturan Environment Variables Vercel
+
+| Variabel | Production | Preview | Keterangan |
+| --- | --- | --- | --- |
+| `ALLOW_DEMO_AUTH` | **tidak diset** | **tidak diset** (kecuali Preview memakai project Supabase TERPISAH tanpa data nyata) | Menutup total seluruh jalur login akun demo sintetis. |
+| `SUPERADMIN_PASSWORD` | **tidak diset** | **tidak diset** | Hanya untuk akun superadmin DEMO. JANGAN diset di Production/Preview. Sandi superadmin sungguhan hanya ada di Supabase Auth. |
+| `NEXT_PUBLIC_DEMO_PASSWORD` | **tidak diset** | **tidak diset** | Terekspos ke klien; jangan pernah isi dengan kredensial nyata. |
+
+> [!WARNING] Catatan Keamanan Vercel Preview
+> Preview di Vercel dapat diakses siapa pun yang tahu URL-nya, dan secara bawaan bisa mewarisi environment variables Production. Karena itu, mengaktifkan `ALLOW_DEMO_AUTH=true` dengan kunci Supabase production berarti akun demo bisa membuka data nyata. Biarkan ketiga variabel di atas tidak diset baik di Production maupun di Preview default.
 
 ### Lingkungan CI / Automated Testing (GitHub Actions)
 | Variabel | Nilai di CI Workflow | Keterangan |
