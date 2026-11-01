@@ -507,7 +507,7 @@ export const MENU_CONFIG: Record<string, MenuGroup[]> = {
  * Normalisasi kode role dari berbagai format input
  */
 export function normalizeRoleCode(role?: string | null): string {
-  const r = (role || '').toUpperCase();
+  const r = (role || '').trim().toUpperCase().replace(/\s+/g, '_');
   if (r === 'SUPERADMIN' || r === 'SUPER_ADMIN') return 'SUPER_ADMIN';
   if (r === 'ADMIN' || r === 'SYSTEM_ADMIN' || r === 'SYSADMIN') return 'SYSTEM_ADMIN';
   if (r === 'DOSEN' || r === 'LECTURER' || r === 'TEACHER') return 'LECTURER';
@@ -516,7 +516,8 @@ export function normalizeRoleCode(role?: string | null): string {
   if (r === 'KALAB' || r === 'LAB_HEAD' || r === 'LAB_CHIEF') return 'LAB_HEAD';
   if (r === 'STAFF' || r === 'ACADEMIC_STAFF' || r === 'BAAK') return 'ACADEMIC_STAFF';
   if (r === 'TA' || r === 'ASDOS' || r === 'TEACHING_ASSISTANT' || r === 'ASISTEN') return 'TEACHING_ASSISTANT';
-  return 'STUDENT';
+  if (r === 'MAHASISWA' || r === 'STUDENT' || r === 'MHS') return 'STUDENT';
+  return r;
 }
 
 /**
@@ -622,8 +623,9 @@ export function getRoleHomeHref(role?: string | null): string {
     case 'TEACHING_ASSISTANT':
       return '/ta';
     case 'STUDENT':
-    default:
       return '/student';
+    default:
+      return '/workspace';
   }
 }
 

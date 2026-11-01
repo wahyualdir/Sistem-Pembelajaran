@@ -95,9 +95,9 @@ export function decideRoleRedirect(input: RoleRedirectInput): string | null {
     }
   }
 
-  const expectedPrefix = ROLE_PORTAL_MAP[normalizedRole];
+  const expectedPrefix = ROLE_PORTAL_MAP[normalizedRole] || '/workspace';
   const matchedPrefix = PORTAL_PREFIXES.find((p) => matchesPrefix(pathname, p));
-  if (matchedPrefix && expectedPrefix && !matchesPrefix(expectedPrefix, matchedPrefix) && matchedPrefix !== expectedPrefix) {
+  if (matchedPrefix && !matchesPrefix(expectedPrefix, matchedPrefix) && matchedPrefix !== expectedPrefix) {
     return expectedPrefix;
   }
 

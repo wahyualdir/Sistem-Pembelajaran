@@ -93,6 +93,8 @@ export default async function WorkspacePage({
     'LECTURER',
     'TEACHING_ASSISTANT',
     'PROGRAM_COORDINATOR',
+    'PROGRAM_SECRETARY',
+    'LAB_HEAD',
     'ACADEMIC_STAFF',
     'SYSTEM_ADMIN',
     'SUPER_ADMIN',
