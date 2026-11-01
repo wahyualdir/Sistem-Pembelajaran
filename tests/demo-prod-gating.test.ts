@@ -68,6 +68,12 @@ describe('FASE C AUDIT: Demo Production Gating Verification', () => {
       '198501012010121001',
       'sysadmin@siajar.ac.id',
       'superadmin@siajar.ac.id',
+      'sekprodi',
+      '0011223344',
+      'sekprodi@siajar.test',
+      'kalab',
+      '0022334455',
+      'kalab@siajar.test',
     ];
 
     for (const id of testIdentifiers) {

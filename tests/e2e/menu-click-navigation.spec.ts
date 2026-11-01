@@ -61,6 +61,20 @@ const DEMO_ROLES: RoleConfig[] = [
     homeHref: '/admin',
     workspaceRoleKeyword: 'Super Administrator',
   },
+  {
+    roleName: 'Sekretaris Prodi',
+    roleCode: 'PROGRAM_SECRETARY',
+    identifier: 'sekprodi@siajar.test',
+    homeHref: '/secretary',
+    workspaceRoleKeyword: 'Sekretaris Prodi',
+  },
+  {
+    roleName: 'Kepala Laboratorium',
+    roleCode: 'LAB_HEAD',
+    identifier: 'kalab@siajar.test',
+    homeHref: '/lab',
+    workspaceRoleKeyword: 'Kepala Laboratorium',
+  },
 ];
 
 /**
@@ -148,7 +162,7 @@ test.describe('E2E Navigasi Klik Sidebar Seluruh Peran (Fase 1b)', () => {
       allReports[role.roleCode] = roleReports;
 
       // 1. Login sebagai peran
-      const expectedUrlPattern = new RegExp(`(${role.homeHref.replace('/', '\\/')}|workspace|student|lecturer|coordinator|staff|admin)`);
+      const expectedUrlPattern = new RegExp(`(${role.homeHref.replace('/', '\\/')}|workspace|student|lecturer|coordinator|staff|admin|secretary|lab)`);
       await loginAsRole(page, role.identifier, expectedUrlPattern);
 
       // Jika belum di beranda peran yang dituju (misal multi-role mendarat di /student atau /workspace)
