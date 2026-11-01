@@ -106,5 +106,25 @@ Hasil awal sebelum perbaikan dependensi rendering:
 5. `1c2b9b0` — `fix(security): fail-closed untuk superadmin demo tanpa env` (eliminasi retry sandi demo di production pada `actions.ts`, pembersihan string sandi lama dari working tree hingga 0)
 6. `979dda3` — `fix(security): panel dan sandi demo hanya di non-production` (`login-dev-mode.tsx`, `login/page.tsx`, `.env.example`, `login-redesign.test.tsx`)
 7. `3f96bde` — `ci: sediakan env demo untuk tes e2e` (`.github/workflows/ci.yml` job-level demo env)
+8. `7d9d4c8` — `docs(audit): koreksi laporan dan perbarui bahan PR`
+9. `c2f4769` — `docs(audit): samarkan referensi sandi lama dan pertahankan batas any`
+10. `31a8592` — `docs(audit): instruksi tutup catatan audit tahap 2`
+
+---
+
+## Penutupan Catatan Audit Tahap 2
+
+**Branch**: `fix/navigasi-menu`  
+**Tag Baseline**: `sebelum-penutupan-tahap-2`
+
+### Baseline Awal Tahap 2
+- `git status`: clean
+- `git grep -nE ": any\b|as any\b" -- src | Measure-Object -Line`: 659 baris (terjaga)
+- `npm run typecheck`: Lolos (0 error)
+- `npm run lint`: Lolos (0 warning / error)
+- `npm test`: 88 file lolos (770 unit tests passing)
+- `npm run audit:menu`: 149 BERFUNGSI
+- `npm run audit:guards`: 25 DIIZINKAN, 0 DITOLAK-SALAH, 0 TIDAK-PASTI
+
 
 
