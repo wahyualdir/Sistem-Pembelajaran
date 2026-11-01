@@ -13,7 +13,7 @@ export async function loginAsRole(page: Page, identifier: string, expectedPath: 
   }
   const isSuperAdmin = identifier.toLowerCase().includes('superadmin');
   const password = isSuperAdmin
-    ? (process.env.SUPERADMIN_PASSWORD || 'wahyu11')
+    ? (process.env.SUPERADMIN_PASSWORD || process.env.DEMO_PASSWORD || 'Password123!')
     : (process.env.DEMO_PASSWORD || 'Password123!');
   await page.locator('#password').fill(password);
   await submitBtn.click();
