@@ -56,11 +56,7 @@ export function matchesPrefix(pathname: string, prefix: string): boolean {
  */
 export function decideRoleRedirect(input: RoleRedirectInput): string | null {
   const { pathname, search, activeRole, isImpersonating } = input;
-  if (!activeRole) {
-    return null;
-  }
-
-  const normalizedRole = normalizeRoleCode(activeRole);
+  const normalizedRole = activeRole ? normalizeRoleCode(activeRole) : '';
   const searchParams = new URLSearchParams(search ? (search.startsWith('?') ? search.slice(1) : search) : '');
   const tabParam = searchParams.get('tab');
 
@@ -95,7 +91,7 @@ export function decideRoleRedirect(input: RoleRedirectInput): string | null {
     }
   }
 
-  const expectedPrefix = ROLE_PORTAL_MAP[normalizedRole] || '/workspace';
+  const expectedPrefix = (normalizedRole && ROLE_PORTAL_MAP[normalizedRole]) || '/workspace';
   const matchedPrefix = PORTAL_PREFIXES.find((p) => matchesPrefix(pathname, p));
   if (matchedPrefix && !matchesPrefix(expectedPrefix, matchedPrefix) && matchedPrefix !== expectedPrefix) {
     return expectedPrefix;

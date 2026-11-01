@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
 import { getCurrentUserWithRoles, switchWorkspaceAction } from '@/modules/identity/actions';
 import { cn } from '@/lib/utils';
 import { normalizeRoleCode } from '@/lib/config/menu-config';
@@ -117,8 +118,12 @@ export default async function WorkspacePage({
     }
   }
 
-  // Jika pengguna hanya memiliki 1 role, alihkan langsung (kecuali ada parameter alasan redirect)
-  if (!isSuperAdmin && roles.length === 1 && !searchParams?.alasan) {
+  // Jika pengguna hanya memiliki 1 role, alihkan langsung (kecuali ada parameter alasan redirect atau cookie tidak cocok)
+  const rawCookieRole = cookies().get('active_role')?.value;
+  const normalizedCookie = rawCookieRole ? normalizeRoleCode(rawCookieRole) : null;
+  const isRoleInvalid = Boolean(normalizedCookie && !existingRoleCodes.has(normalizedCookie));
+
+  if (!isSuperAdmin && roles.length === 1 && !searchParams?.alasan && !isRoleInvalid) {
     const rawRole = (roles[0].roles as { code?: string })?.code || roles[0]?.role_id;
     const singleRole = rawRole ? normalizeRoleCode(rawRole) : null;
     const targetPortal = singleRole ? ROLE_PORTAL_MAP[singleRole] : null;

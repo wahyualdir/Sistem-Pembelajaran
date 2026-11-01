@@ -141,7 +141,11 @@ export async function middleware(request: NextRequest) {
 
     if (redirectTarget) {
       navDebug('middleware_redirect', { from: pathname, to: redirectTarget, step: 4 });
-      return NextResponse.redirect(new URL(redirectTarget, request.url));
+      const targetUrl = new URL(redirectTarget, request.url);
+      if (redirectTarget === '/workspace' && !targetUrl.searchParams.has('alasan')) {
+        targetUrl.searchParams.set('alasan', 'role_mismatch');
+      }
+      return NextResponse.redirect(targetUrl);
     }
   }
 
