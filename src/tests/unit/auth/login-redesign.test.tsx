@@ -115,7 +115,7 @@ describe('Redesain Halaman Masuk RuangKampus (docs/INSTRUKSI_REDESAIN_LOGIN.md)'
     });
 
     it('memunculkan elemen "Mode pengembang" saat NODE_ENV === "production" jika ALLOW_DEMO_AUTH === "true"', () => {
-      (process.env as any).NODE_ENV = 'production';
+      (process.env as Record<string, string | undefined>).NODE_ENV = 'production';
       process.env.ALLOW_DEMO_AUTH = 'true';
       const onSelect = vi.fn();
       const html = renderToString(<LoginDevMode onSelectIdentifier={onSelect} />);

@@ -15,7 +15,7 @@ Berdasarkan audit menyeluruh terhadap seluruh commit pada branch `fix/navigasi-m
 Tiga alasan utama keputusan ini:
 1. **Navigasi 100% Terverifikasi Bersih dan Tanpa Pelonggaran**: Tes klik menu ketat (`tests/e2e/menu-click-strict.spec.ts` dan `tests/e2e/menu-click-navigation.spec.ts`) membuktikan **149/149 menu** yang dirender untuk seluruh **9 peran** (`STUDENT`, `TEACHING_ASSISTANT`, `LECTURER`, `PROGRAM_COORDINATOR`, `ACADEMIC_STAFF`, `SYSTEM_ADMIN`, `SUPER_ADMIN`, `PROGRAM_SECRETARY`, dan `LAB_HEAD`) berhasil mendarat persis pada URL tujuan tanpa terpental ke beranda. Tidak ada pelonggaran tes (`fixme`, `skip`, retries, atau manipulasi `INTENDED_REDIRECTS`).
 2. **Keamanan Login Demo di Lingkungan Produksi Terkunci Rapat (Fail-Closed)**: Verifikasi statis dan dinamis (`tests/demo-prod-gating.test.ts`) membuktikan bahwa saat `NODE_ENV=production` dan `ALLOW_DEMO_AUTH` tidak aktif, autentikasi demo, cookie tiruan, dan impersonasi peran ditolak 100%. Komponen `LoginDevMode` juga tidak dirender di production jika `ALLOW_DEMO_AUTH !== 'true'`.
-3. **Kredensial Hardcode Bersih Total dari Working Tree**: Kata sandi literal superadmin lama telah dihapus total dari kode sumber dan dokumentasi aktif (`git grep -c "wahyu11"` menghasilkan 0). Pembacaan kini menggunakan environment variable (`SUPERADMIN_PASSWORD` dan `NEXT_PUBLIC_DEMO_PASSWORD`), dengan fallback aman dan pencatatan template di [`.env.example`](file:///c:/Users/ACER/Downloads/implementasi/.env.example).
+3. **Kredensial Hardcode Bersih Total dari Working Tree**: Kata sandi literal superadmin lama telah dihapus total dari kode sumber dan dokumentasi aktif (pemindaian kata sandi lama menghasilkan 0). Pembacaan kini menggunakan environment variable (`SUPERADMIN_PASSWORD` dan `NEXT_PUBLIC_DEMO_PASSWORD`), dengan fallback aman dan pencatatan template di [`.env.example`](file:///c:/Users/ACER/Downloads/implementasi/.env.example).
 
 Catatan sebelum merge ke production:
 - Pengguna wajib merotasi kata sandi akun superadmin (`superadmin@siajar.ac.id`) di Supabase Production jika pernah menggunakan kata sandi default lama.
@@ -79,7 +79,7 @@ Catatan sebelum merge ke production:
      - `tests/identity.test.ts`: menggunakan dummy string terisolasi `TestSuperAdminPass1!`.
      - `src/tests/unit/security/demo-login.test.ts`: menggunakan `'old-dev-pass'`.
      - `.env.example`: didokumentasikan variabel `SUPERADMIN_PASSWORD=""` dan `NEXT_PUBLIC_DEMO_PASSWORD=""`.
-     - `git grep -c "wahyu11"` menghasilkan **0** pada working tree.
+     - Pemindaian kata sandi lama (`w****1`) menghasilkan **0** pada working tree.
 - **Kesimpulan**: Seluruh working tree bersih dari penulisan hardcode kata sandi.
 
 ---
@@ -125,7 +125,7 @@ Hasil pemindaian ekspresi reguler terhadap kredensial di direktori `src`, `tests
 | E2E Strict (Playwright) | 0 (belum ada) | 124/124 exact match | **149/149 exact match** (9 peran) | Terverifikasi Penuh |
 | Demo Prod Gating (`demo-prod-gating.test.ts`) | Belum ada | 5/5 skenario | **5/5 skenario aman** (9 peran) | Terverifikasi |
 | Jumlah penggunaan `any` di `src` | 659 | 659 | **659** | Terjaga (tidak bertambah) |
-| Hardcode sandi lama (`wahyu11`) | Ada (`w****1`) | Di kode produksi: 0 | **0 di seluruh working tree** | Bersih Total |
+| Hardcode sandi lama (`w****1`) | Ada (`w****1`) | Di kode produksi: 0 | **0 di seluruh working tree** | Bersih Total |
 
 ---
 

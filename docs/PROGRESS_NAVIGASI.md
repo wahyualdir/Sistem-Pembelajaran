@@ -103,7 +103,7 @@ Hasil awal sebelum perbaikan dependensi rendering:
 2. `fb1152c` — `chore(nav): audit statis guard halaman untuk peran baru` (`scripts/audit-role-guards.ts`, `docs/AUDIT_GUARD_PERAN_BARU.md`: 25 DIIZINKAN, 0 DITOLAK-SALAH)
 3. `58bd718` — `test(nav): tes klik peran sekretaris prodi dan kepala lab` (`tests/nav-new-roles.test.ts`, pembaruan `demo-prod-gating.test.ts`, integrasi 9 peran di `menu-click-navigation.spec.ts` dan `menu-click-strict.spec.ts`)
 4. `3027ce7` — `fix(nav): normalisasi peran baru dan cegah fallback diam-diam ke beranda mahasiswa` (`menu-config.ts`, `route-guard.ts`, `workspace/page.tsx`)
-5. `1c2b9b0` — `fix(security): fail-closed untuk superadmin demo tanpa env` (eliminasi retry sandi demo di production pada `actions.ts`, pembersihan string lama dari working tree `git grep -c "wahyu11" -> 0`)
+5. `1c2b9b0` — `fix(security): fail-closed untuk superadmin demo tanpa env` (eliminasi retry sandi demo di production pada `actions.ts`, pembersihan string sandi lama dari working tree hingga 0)
 6. `979dda3` — `fix(security): panel dan sandi demo hanya di non-production` (`login-dev-mode.tsx`, `login/page.tsx`, `.env.example`, `login-redesign.test.tsx`)
 7. `3f96bde` — `ci: sediakan env demo untuk tes e2e` (`.github/workflows/ci.yml` job-level demo env)
 

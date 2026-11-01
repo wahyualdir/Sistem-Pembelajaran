@@ -46,7 +46,7 @@ Dua peran baru pada arsitektur SIAJAR telah diverifikasi secara penuh:
 ## 5. Perubahan Kredensial & Environment Variables (Wajib Diketahui Reviewer)
 
 1. **Pembersihan Sandi Hardcode**:
-   - Seluruh penulisan kata sandi literal lama (`w****1`) telah dihapus total dari kode sumber dan dokumentasi (`git grep -c "wahyu11"` menghasilkan 0).
+   - Seluruh penulisan kata sandi literal lama (`w****1`) telah dihapus total dari kode sumber dan dokumentasi (pemindaian kata sandi lama menghasilkan 0).
    - Penggantian dilakukan menggunakan variabel lingkungan `SUPERADMIN_PASSWORD` dan `NEXT_PUBLIC_DEMO_PASSWORD`.
 2. **Pencegahan Kebocoran di Production**:
    - Komponen UI `LoginDevMode` (mode pengembang di halaman login) dipagari ketat agar tidak pernah tampil di production kecuali flag `ALLOW_DEMO_AUTH="true"` disetel.
