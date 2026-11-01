@@ -99,15 +99,33 @@ Berdasarkan audit statis guard halaman (`scripts/audit-role-guards.ts` / `npm ru
 
 ---
 
-## 4. Tabel Pemindaian Pola Kredensial (Fase 2c)
+## 4. Tabel Pemindaian Pola Kredensial & Pindai JWT Per Temuan (Fase 2c & 4b)
 
-Hasil pemindaian ekspresi reguler terhadap kredensial di direktori `src`, `tests`, `scripts`, `docs`, `supabase`, `README.md`, dan `.env.example`:
+### 4.1. Tabel Pindai JWT dan Secret Token Per Temuan
+Hasil pemindaian ekspresi reguler `eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}` dan `sk_[A-Za-z0-9]{16,}` di seluruh repositori (di luar `node_modules`):
 
+| Berkas:Baris | String Awalan (Disamarkan) | Role Klaim | ISS / REF | Klasifikasi | Keterangan |
+| --- | --- | --- | --- | --- | --- |
+| `docs/SEED_AKADEMIK.md:28` | `eyJh...` (placeholder teks) | N/A | N/A | **DUMMY-TES** | Contoh placeholder dokumentasi |
+| *Pemindaian JWT `eyJ...`* | Tidak ada token JWT aktif | - | - | **BERSIH** | 0 token JWT nyata di dalam repositori |
+| *Pemindaian Secret `sk_...`* | Tidak ada secret key aktif | - | - | **BERSIH** | 0 token API nyata di dalam repositori |
+
+### 4.2. Tabel Analisis String Literal `service_role`
+Hasil pemindaian terhadap string literal `service_role`:
+
+| Berkas / Direktori | Jumlah Kemunculan | Konteks Penggunaan | Klasifikasi | Keterangan |
+| --- | --- | --- | --- | --- |
+| `supabase/migrations/*.sql` | 24 | SQL DDL: `GRANT ... TO service_role`, `auth.role() = 'service_role'` | **SKEMA POSTGRES** | Hak akses internal PostgreSQL Supabase |
+| `scripts/test-database-security.mjs`, `run-pgtap.mjs` | 18 | `CREATE ROLE service_role`, `setAuthUser(null, 'service_role')` | **DUMMY-TES** | Mock pengujian pgTAP / pglite lokal |
+| `src/lib/audit.ts:64` | 1 | Komentar arsitektur: *"via service_role"* | **DOKUMENTASI** | Komentar desain sistem |
+| `docs/*.md` | 12 | Dokumentasi arsitektur zero-service-role | **DOKUMENTASI** | Rekomendasi keamanan & runbook |
+
+### 4.3. Ringkasan Kategori Kredensial
 | Kategori | Jumlah Temuan | Contoh Berkas & Baris | Pola yang Terdeteksi | Keterangan |
 | --- | --- | --- | --- | --- |
 | **SANDI DEMO BERSAMA** | 6 | `tests/demo-prod-gating.test.ts:82`, `tests/identity.test.ts:47` | `password: 'Pa*****!'` (12 char) | Sandi demo non-production bersama yang sah |
 | **PLACEHOLDER / DUMMY TEST** | 108 | `src/lib/audit.ts:64`, `supabase/config.toml:20`, `scripts/*.mjs` | `service_role`, `dummy-anon-key`, `AnySecretPassword123!` | Placeholder konfigurasi lokal, mock token pgtap/vitest, dan RLS policies |
-| **DICURIGAI NYATA (Diverifikasi Dummy)** | 39 | `src/app/api/smoke-actions/route.ts:466`, `tests/identity.test.ts:61` | `Password: 'Ka*****#'`, `env(SUPABASE_AUTH_...)` | Kata sandi dummy smoke testing dan template variabel env di config/docs |
+| **TEMPLATE ENV & SMOKE TEST** | 39 | `src/app/api/smoke-actions/route.ts:466`, `tests/identity.test.ts:61` | `Password: 'Ka*****#'`, `env(SUPABASE_AUTH_...)` | Kata sandi dummy smoke testing dan template variabel env di config/docs |
 | **RAHASIA NYATA PRODUKSI** | **0** | - | - | **Tidak ditemukan rahasia produksi sungguhan di repositori** |
 
 ---
