@@ -131,7 +131,9 @@ export async function middleware(request: NextRequest) {
 
   // 4. Pengalihan cepat jika role aktif tidak cocok dengan portal yang dibuka
   if (isAuthenticated && activeRole) {
-    const isImpersonating = !!request.cookies.get('impersonating_from')?.value;
+    const isImpersonating =
+      !!request.cookies.get('impersonation_token')?.value ||
+      !!request.cookies.get('impersonating_from')?.value;
     const redirectTarget = decideRoleRedirect({
       pathname,
       search: request.nextUrl.search,

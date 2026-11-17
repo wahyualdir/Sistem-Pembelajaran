@@ -30,6 +30,7 @@ import {
   isNavItemActive,
   type DynamicMenuBadges,
 } from './portal-nav';
+import { loadCollapsedGroupsState } from '@/lib/config/collapsed-groups';
 import { ShellContext } from '@/components/shared/dashboard-shell';
 import { TechBackground } from '@/components/ui/tech-background';
 import { CommandCenterOS } from '@/components/shared/command-center-os';
@@ -264,25 +265,8 @@ export function PortalShell({
   const [hasMountedCollapse, setHasMountedCollapse] = useState(false);
 
   useEffect(() => {
-    try {
-      const storageKey = `siajar_collapsed_groups_${normalizedRole}`;
-      const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        setCollapsedGroups(JSON.parse(saved));
-      } else {
-        const initial: Record<string, boolean> = {};
-        navGroups.forEach((g) => {
-          if (g.defaultCollapsed) {
-            initial[g.id] = true;
-          }
-        });
-        setCollapsedGroups(initial);
-      }
-    } catch {
-      // Fallback
-    } finally {
-      setHasMountedCollapse(true);
-    }
+    setCollapsedGroups(loadCollapsedGroupsState(normalizedRole, navGroups));
+    setHasMountedCollapse(true);
   }, [normalizedRole, navGroups]);
 
   const toggleGroupCollapse = (groupId: string, defaultCollapsed?: boolean) => {

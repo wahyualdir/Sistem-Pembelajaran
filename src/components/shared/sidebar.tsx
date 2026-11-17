@@ -41,6 +41,7 @@ import {
   type NavGroup,
   type NavItem,
 } from "@/app/(portal)/portal-nav";
+import { loadCollapsedGroupsState } from "@/lib/config/collapsed-groups";
 
 export type { NavGroup, NavItem };
 
@@ -80,7 +81,7 @@ export function Sidebar({
   const handleClose = propOnClose ?? onCloseMobile ?? (() => {});
 
   const normalizedRole = normalizeRole(role);
-  const groups = getNavGroups(role);
+  const groups = useMemo(() => getNavGroups(role), [role]);
   const allHrefs = useMemo(() => groups.flatMap((g) => g.items.map((i) => i.href)), [groups]);
   const roleLabel = getRoleLabel(role);
   const homeHref = getHomeHref(role);
@@ -121,28 +122,15 @@ export function Sidebar({
   const [hasMountedCollapse, setHasMountedCollapse] = useState(false);
 
   useEffect(() => {
-    try {
-      const storageKey = `siajar_collapsed_groups_${normalizedRole}`;
-      const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        setCollapsedGroups(JSON.parse(saved));
-      } else {
-        const initial: Record<string, boolean> = {};
-        groups.forEach((g) => {
-          if (g.defaultCollapsed) {
-            initial[g.id] = true;
-          }
-        });
-        setCollapsedGroups(initial);
-      }
-    } catch {} finally {
-      setHasMountedCollapse(true);
-    }
+    setCollapsedGroups(loadCollapsedGroupsState(normalizedRole, groups));
+    setHasMountedCollapse(true);
   }, [normalizedRole, groups]);
 
   const toggleGroupCollapse = (groupId: string) => {
     setCollapsedGroups((prev) => {
-      const next = { ...prev, [groupId]: !prev[groupId] };
+      const groupDef = groups.find((g) => g.id === groupId);
+      const current = prev[groupId] ?? Boolean(groupDef?.defaultCollapsed);
+      const next = { ...prev, [groupId]: !current };
       try {
         const storageKey = `siajar_collapsed_groups_${normalizedRole}`;
         localStorage.setItem(storageKey, JSON.stringify(next));

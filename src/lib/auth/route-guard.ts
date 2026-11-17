@@ -91,6 +91,11 @@ export function decideRoleRedirect(input: RoleRedirectInput): string | null {
     }
   }
 
+  // Selama SUPER_ADMIN dalam sesi impersonasi aktif, izinkan membuka portal target sebelum active_role diperbarui
+  if (normalizedRole === 'SUPER_ADMIN' && isImpersonating) {
+    return null;
+  }
+
   const expectedPrefix = (normalizedRole && ROLE_PORTAL_MAP[normalizedRole]) || '/workspace';
   const matchedPrefix = PORTAL_PREFIXES.find((p) => matchesPrefix(pathname, p));
   if (matchedPrefix && !matchesPrefix(expectedPrefix, matchedPrefix) && matchedPrefix !== expectedPrefix) {
